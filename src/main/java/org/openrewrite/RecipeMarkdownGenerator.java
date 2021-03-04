@@ -17,7 +17,7 @@ import java.util.Collection;
 
 import static java.util.Collections.emptyList;
 
-@Command(name = "recipe-markdown-generator", mixinStandardHelpOptions = true,
+@Command(name = "rewrite-recipe-markdown-generator", mixinStandardHelpOptions = true,
         description = "Generates documentation for OpenRewrite recipes in markdown format",
         version = "1.0.0-SNAPSHOT")
 class RecipeMarkdownGenerator implements Runnable {
