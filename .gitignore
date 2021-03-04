@@ -1,0 +1,13 @@
+build/
+.gradle/
+gradle.properties
+.java-version
+out/
+*/src/main/gen/
+*/src/main/antlr/
+.idea/
+bin/
+.project
+.classpath
+.settings/
+.DS_Store
