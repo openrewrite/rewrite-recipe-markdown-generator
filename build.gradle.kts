@@ -29,13 +29,14 @@ val rewriteVersion = "latest.integration"
 
 dependencies {
     implementation("info.picocli:picocli:latest.release")
-    implementation("org.openrewrite:rewrite-java:$rewriteVersion")
-    implementation("org.openrewrite:rewrite-xml:$rewriteVersion")
-    implementation("org.openrewrite:rewrite-maven:$rewriteVersion")
-    implementation("org.openrewrite:rewrite-properties:$rewriteVersion")
-    implementation("org.openrewrite:rewrite-yaml:$rewriteVersion")
-    implementation("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
-    implementation("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
+    implementation("org.openrewrite:rewrite-core:$rewriteVersion")
+    runtimeOnly("org.openrewrite:rewrite-java:$rewriteVersion")
+    runtimeOnly("org.openrewrite:rewrite-xml:$rewriteVersion")
+    runtimeOnly("org.openrewrite:rewrite-maven:$rewriteVersion")
+    runtimeOnly("org.openrewrite:rewrite-properties:$rewriteVersion")
+    runtimeOnly("org.openrewrite:rewrite-yaml:$rewriteVersion")
+    runtimeOnly("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
+    runtimeOnly("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
 }
 
 tasks.named<JavaCompile>("compileJava") {
