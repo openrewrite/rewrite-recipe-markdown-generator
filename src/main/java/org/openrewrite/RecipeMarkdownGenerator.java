@@ -13,7 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Collection;
+import java.util.*;
 
 import static java.util.Collections.emptyList;
 
@@ -28,54 +28,69 @@ class RecipeMarkdownGenerator implements Runnable {
     @Override
     public void run() {
         Path outputPath = Paths.get(destinationDirectoryName);
-        Environment env = Environment.builder().scanClasspath(emptyList()).build();
-        Collection<RecipeDescriptor> recipeDescriptors = env.listRecipeDescriptors();
-        for (RecipeDescriptor recipeDescriptor : recipeDescriptors) {
-            writeRecipe(recipeDescriptor, outputPath);
+        Path recipesPath = outputPath.resolve("reference/recipes");
+        if (!recipesPath.toFile().mkdirs()) {
+            throw new RuntimeException("Unable to create directory " + recipesPath);
         }
-        Path indexPath = outputPath.resolve("index.md");
-        BufferedWriter writer;
+        Environment env = Environment.builder().scanClasspath(emptyList()).build();
+        List<RecipeDescriptor> recipeDescriptors = new ArrayList<>(env.listRecipeDescriptors());
+        recipeDescriptors.sort(Comparator.comparing(RecipeDescriptor::getName));
+        for (RecipeDescriptor recipeDescriptor : recipeDescriptors) {
+            writeRecipe(recipeDescriptor, recipesPath);
+        }
+        Path summarySnippetPath = outputPath.resolve("SUMMARY_snippet.md");
+        Path recipeIndexPath = recipesPath.resolve("README.md");
+        BufferedWriter summarySnippetWriter;
+        BufferedWriter recipeIndexWriter;
         try {
-            writer = Files.newBufferedWriter(indexPath, StandardOpenOption.CREATE_NEW);
-            writer.write("# Recipes");
-            writer.newLine();
+            summarySnippetWriter = Files.newBufferedWriter(summarySnippetPath, StandardOpenOption.CREATE);
+            recipeIndexWriter = Files.newBufferedWriter(recipeIndexPath, StandardOpenOption.CREATE);
+            summarySnippetWriter.write("* [Recipes](reference/recipes/README.md)");
+            summarySnippetWriter.newLine();
+            recipeIndexWriter.write("# Recipes");
+            recipeIndexWriter.newLine();
             for (RecipeDescriptor recipe : recipeDescriptors) {
-                writer.write("- [" + recipe.getDisplayName() + "](" + recipe.getName() + ".md)");
-                writer.newLine();
+                summarySnippetWriter.write("  * [" + recipe.getDisplayName() + "](reference/recipes/" + recipe.getName().toLowerCase() + ".md)");
+                summarySnippetWriter.newLine();
+                recipeIndexWriter.write("* [" + recipe.getDisplayName() + "](" + recipe.getName().toLowerCase() + ".md)");
+                recipeIndexWriter.newLine();
             }
-            writer.close();
+            summarySnippetWriter.close();
+            recipeIndexWriter.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     private void writeRecipe(RecipeDescriptor recipeDescriptor, Path outputPath) {
-        Path recipeMarkdownPath = outputPath.resolve(recipeDescriptor.getName() + ".md");
+        Path recipeMarkdownPath = outputPath.resolve(recipeDescriptor.getName().toLowerCase() + ".md");
         BufferedWriter writer;
         try {
-            writer = Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE_NEW);
+            writer = Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE);
             writer.write("# " + recipeDescriptor.getDisplayName());
             writer.newLine();
             writer.newLine();
-            writer.write("---");
-            writer.newLine();
             writer.write("**" + recipeDescriptor.getName() + "**  ");
             writer.newLine();
-            writer.write("*"  + recipeDescriptor.getDescription() + "*");
+            writer.write("_"  + recipeDescriptor.getDescription() + "_");
+            writer.newLine();
             writer.newLine();
             if (!recipeDescriptor.getTags().isEmpty()) {
-                writer.write("## Tags");
+                writer.write("### Tags");
+                writer.newLine();
                 writer.newLine();
                 for (String tag : recipeDescriptor.getTags()) {
-                    writer.write("- " + tag);
+                    writer.write("* " + tag);
                     writer.newLine();
                 }
+                writer.newLine();
             }
             if (!recipeDescriptor.getOptions().isEmpty()) {
-                writer.write("## Options");
+                writer.write("### Options");
+                writer.newLine();
                 writer.newLine();
                 for (OptionDescriptor option : recipeDescriptor.getOptions()) {
-                    StringBuilder optionBuilder = new StringBuilder("- ")
+                    StringBuilder optionBuilder = new StringBuilder("* ")
                             .append(option.getName())
                             .append(": ")
                             .append(option.getType());
@@ -84,17 +99,27 @@ class RecipeMarkdownGenerator implements Runnable {
                     }
                     writer.write(optionBuilder.toString());
                     writer.newLine();
-                    writer.write("\t- " + option.getDescription() + "*");
+                    writer.write("\t* " + option.getDescription());
                     writer.newLine();
                 }
+                writer.newLine();
             }
-
             if (!recipeDescriptor.getRecipeList().isEmpty()) {
-                writer.write("## Dependencies");
+                writer.write("### Recipe list");
+                writer.newLine();
                 writer.newLine();
                 for (RecipeDescriptor recipe : recipeDescriptor.getRecipeList()) {
-                    writer.write("- [" + recipe.getDisplayName() + "](" + recipe.getName() + ".md)");
+                    writer.write("* [" + recipe.getDisplayName() + "](" + recipe.getName() + ".md)");
                     writer.newLine();
+                    if (!recipe.getOptions().isEmpty()) {
+                        for (OptionDescriptor option : recipe.getOptions()) {
+                            if (option.getValue() != null) {
+                                writer.write("\t* " + option.getName() + ": " + option.getValue().toString());
+                                writer.newLine();
+                            }
+                        }
+
+                    }
                 }
             }
             writer.close();

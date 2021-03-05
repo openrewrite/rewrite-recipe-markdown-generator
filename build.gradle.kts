@@ -36,7 +36,8 @@ dependencies {
     runtimeOnly("org.openrewrite:rewrite-properties:$rewriteVersion")
     runtimeOnly("org.openrewrite:rewrite-yaml:$rewriteVersion")
     runtimeOnly("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
-    runtimeOnly("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
+    // rewrite-spring needs recipe metadata filled out, skipping it for now
+//    runtimeOnly("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
 }
 
 tasks.named<JavaCompile>("compileJava") {
