@@ -16,7 +16,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toSet;
 
 @Command(name = "rewrite-recipe-markdown-generator", mixinStandardHelpOptions = true,
@@ -58,7 +57,9 @@ class RecipeMarkdownGenerator implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Environment env = Environment.builder().scanClasspath(emptyList()).build();
+        Environment env = Environment.builder()
+                .scanRuntimeClasspath()
+                .build();
         List<RecipeDescriptor> recipeDescriptors = new ArrayList<>(env.listRecipeDescriptors());
         SortedMap<String, List<RecipeDescriptor>> groupedRecipes = new TreeMap<>();
         for (RecipeDescriptor recipe : recipeDescriptors) {

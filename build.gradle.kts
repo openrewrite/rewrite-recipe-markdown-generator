@@ -25,7 +25,7 @@ configurations.all {
     }
 }
 
-val rewriteVersion = "latest.integration"
+val rewriteVersion = "latest.release"
 
 dependencies {
     implementation("info.picocli:picocli:latest.release")

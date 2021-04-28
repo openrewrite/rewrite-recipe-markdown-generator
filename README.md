@@ -1,4 +1,4 @@
-![Logo](https://github.com/openrewrite/rewrite/raw/master/doc/logo-oss.png)
+![Logo](https://github.com/openrewrite/rewrite/raw/main/doc/logo-oss.png)
 ### Migrate testing frameworks. Automatically.
 
 ### What is this?
