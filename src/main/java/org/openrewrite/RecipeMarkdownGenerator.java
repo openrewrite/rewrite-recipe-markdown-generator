@@ -63,6 +63,9 @@ class RecipeMarkdownGenerator implements Runnable {
         List<RecipeDescriptor> recipeDescriptors = new ArrayList<>(env.listRecipeDescriptors());
         SortedMap<String, List<RecipeDescriptor>> groupedRecipes = new TreeMap<>();
         for (RecipeDescriptor recipe : recipeDescriptors) {
+            if (recipe.getName().startsWith("org.openrewrite.text")) {
+                continue;
+            }
             String recipeCategory = getRecipeCategory(recipe);
             List<RecipeDescriptor> categoryRecipes = groupedRecipes.computeIfAbsent(recipeCategory, k -> new ArrayList<>());
             categoryRecipes.add(recipe);
@@ -84,6 +87,9 @@ class RecipeMarkdownGenerator implements Runnable {
         }
         groupedRecipes.putAll(missingCategories);
         for (RecipeDescriptor recipeDescriptor : recipeDescriptors) {
+            if(recipeDescriptor.getName().startsWith("org.openrewrite.text")) {
+                continue;
+            }
             writeRecipe(recipeDescriptor, recipesPath);
         }
         Path summarySnippetPath = outputPath.resolve("SUMMARY_snippet.md");
@@ -96,7 +102,7 @@ class RecipeMarkdownGenerator implements Runnable {
                 writeSnippet(summarySnippetWriter, category);
                 // get direct subcategory descendants
                 Set<String> subcategories = groupedRecipes.keySet().stream().filter(k ->
-                    !k.equals(category.getKey()) && k.startsWith(category.getKey())
+                        !k.equals(category.getKey()) && k.startsWith(category.getKey())
                 )
                         .map(k -> k.substring(category.getKey().length() + 1))
                         .filter(k -> !k.contains("/"))

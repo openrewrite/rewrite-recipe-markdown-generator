@@ -35,6 +35,7 @@ dependencies {
     runtimeOnly("org.openrewrite:rewrite-maven:$rewriteVersion")
     runtimeOnly("org.openrewrite:rewrite-properties:$rewriteVersion")
     runtimeOnly("org.openrewrite:rewrite-yaml:$rewriteVersion")
+    runtimeOnly("org.openrewrite.recipe:rewrite-kubernetes:$rewriteVersion")
     runtimeOnly("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
     runtimeOnly("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
 }
