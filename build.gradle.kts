@@ -1,6 +1,5 @@
 buildscript {
     repositories {
-        jcenter()
         gradlePluginPortal()
     }
 }
@@ -14,7 +13,7 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenLocal()
-    maven { url = uri("https://dl.bintray.com/openrewrite/maven") }
+    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
     mavenCentral()
 }
 
