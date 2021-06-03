@@ -56,6 +56,11 @@ tasks.named<JavaExec>("run") {
     val targetDir = File(project.buildDir, "docs")
     description = "Writes generated markdown docs to $targetDir"
     setArgsString(targetDir.toString())
+
+    doLast {
+        this as JavaExec
+        logger.quiet("Wrote generated docs to: $args")
+    }
 }
 
 defaultTasks = mutableListOf("run")

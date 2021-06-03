@@ -209,11 +209,12 @@ class RecipeMarkdownGenerator implements Runnable {
                 for (OptionDescriptor option : recipeDescriptor.getOptions()) {
                     StringBuilder optionBuilder = new StringBuilder("* ")
                             .append(option.getName())
-                            .append(": ")
+                            .append(": `")
                             .append(option.getType());
                     if (option.isRequired()) {
                         optionBuilder.append('!');
                     }
+                    optionBuilder.append("`");
                     writer.write(optionBuilder.toString());
                     writer.newLine();
                     if (!StringUtils.isNullOrEmpty(option.getDescription())) {
@@ -239,7 +240,7 @@ class RecipeMarkdownGenerator implements Runnable {
                     if (!recipe.getOptions().isEmpty()) {
                         for (OptionDescriptor option : recipe.getOptions()) {
                             if (option.getValue() != null) {
-                                writer.write("  * " + option.getName() + ": " + option.getValue().toString());
+                                writer.write("  * " + option.getName() + ": `" + printValue(option.getValue()) + "`");
                                 writer.newLine();
                             }
                         }
@@ -251,6 +252,14 @@ class RecipeMarkdownGenerator implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static String printValue(Object value) {
+        if(value.getClass().isArray()) {
+            return Arrays.deepToString((Object[])value);
+        }
+
+        return value.toString();
     }
 
     public static void main(String... args) {
