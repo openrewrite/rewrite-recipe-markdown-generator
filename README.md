@@ -10,8 +10,11 @@ This project implements a utility that generates OpenRewrite recipe documentatio
 Quickstart:
 
 ```sh
-./gradlew build
-./gradlew run --args="<destinationDirectoryName>"
+# Will place generated docs into build/docs 
+./gradlew run
+
+# Will place generated docs into the specified directory
+./gradlew run --args="desired/output/path"
 
 # or, generally:
 ./gradlew run --args="--help"

@@ -51,3 +51,11 @@ tasks.named<JavaCompile>("compileJava") {
 application {
     mainClass.set("org.openrewrite.RecipeMarkdownGenerator")
 }
+
+tasks.named<JavaExec>("run") {
+    val targetDir = File(project.buildDir, "docs")
+    description = "Writes generated markdown docs to $targetDir"
+    setArgsString(targetDir.toString())
+}
+
+defaultTasks = mutableListOf("run")
