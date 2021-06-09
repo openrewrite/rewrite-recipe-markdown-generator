@@ -255,6 +255,7 @@ class RecipeMarkdownGenerator : Runnable {
                     displayName: ${recipeDescriptor.displayName} example
                     recipeList:
                       - ${recipeDescriptor.name}:
+                    
                 """.trimIndent())
                 for(option in recipeDescriptor.options) {
                     writeln("      ${option.name}: ${option.example}")
