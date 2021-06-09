@@ -1,5 +1,6 @@
 package org.openrewrite
 
+import org.openrewrite.config.CategoryDescriptor
 import java.lang.Runnable
 import org.openrewrite.config.RecipeDescriptor
 import java.lang.RuntimeException
@@ -8,7 +9,6 @@ import java.io.IOException
 import java.util.stream.Collectors
 import java.io.BufferedWriter
 import java.nio.file.StandardOpenOption
-import kotlin.Throws
 import java.lang.StringBuilder
 import org.openrewrite.config.Environment
 import org.openrewrite.internal.StringUtils
@@ -56,21 +56,23 @@ class RecipeMarkdownGenerator : Runnable {
             throw RuntimeException(e)
         }
         val env: Environment
-        var recipeOrigins: Map<URI, RecipeOrigin?> = emptyMap()
+        val recipeOrigins: Map<URI, RecipeOrigin>
         if (recipeSources.isNotEmpty() && recipeClasspath.isNotEmpty()) {
             recipeOrigins = RecipeOrigin.parse(recipeSources)
-            val classpath = Arrays.stream(recipeClasspath.split(";").toTypedArray())
-                    .map { first: String -> Paths.get(first) }
-                    .collect(Collectors.toList())
+            val classpath = recipeClasspath.splitToSequence(";")
+                    .map(Paths::get)
+                    .toList()
             env = Environment.builder()
                     .scanClasspath(classpath)
                     .build()
         } else {
+            recipeOrigins = emptyMap()
             env = Environment.builder()
                     .scanRuntimeClasspath()
                     .build()
         }
         val recipeDescriptors: List<RecipeDescriptor> = ArrayList(env.listRecipeDescriptors())
+        val categoryDescriptors = ArrayList(env.listCategoryDescriptors())
         val groupedRecipes: SortedMap<String, List<RecipeDescriptor>> = TreeMap()
         for (recipe in recipeDescriptors) {
             if (recipe.name.startsWith("org.openrewrite.text")) {
@@ -120,18 +122,18 @@ class RecipeMarkdownGenerator : Runnable {
         Files.newBufferedWriter(summarySnippetPath, StandardOpenOption.CREATE).useAndApply {
             writeln("* Recipes")
             for (category in groupedRecipes.entries) {
-                writeSnippet(category)
+                writeCategorySnippet(category)
                 // get direct subcategory descendants
                 val subcategories = groupedRecipes.keys.stream().filter { k: String -> k != category.key && k.startsWith(category.key) }
                         .map { k: String -> k.substring(category.key.length + 1) }
                         .filter { k: String -> !k.contains("/") }
                         .collect(Collectors.toSet())
-                writeCategoryIndex(outputPath, category, subcategories)
+                writeCategoryIndex(outputPath, categoryDescriptors, category, subcategories)
             }
         }
     }
 
-    private fun writeCategoryIndex(outputPath: Path, categoryEntry: Map.Entry<String, List<RecipeDescriptor>>, subcategories: Set<String>) {
+    private fun writeCategoryIndex(outputPath: Path, categoryDescriptors: List<CategoryDescriptor>,  categoryEntry: Map.Entry<String, List<RecipeDescriptor>>, subcategories: Set<String>) {
         val category = categoryEntry.key
         val categoryIndexPath = outputPath.resolve("reference/recipes/$category/README.md")
         Files.newBufferedWriter(categoryIndexPath, StandardOpenOption.CREATE).useAndApply {
@@ -141,6 +143,12 @@ class RecipeMarkdownGenerator : Runnable {
                 StringUtils.capitalize(category)
             }
             writeln("# $categoryName")
+            val categoryPackage = "org.openrewrite.${categoryEntry.key.replace('/', '.')}"
+            val categoryDescriptor: CategoryDescriptor? = categoryDescriptors.find { it.packageName == categoryPackage }
+            if(categoryDescriptor != null) {
+                newLine()
+                writeln("_${categoryDescriptor.description}_")
+            }
             if (categoryEntry.value.isNotEmpty()) {
                 newLine()
                 writeln("### Recipes")
@@ -492,7 +500,7 @@ class RecipeMarkdownGenerator : Runnable {
          */
         fun BufferedWriter.useAndApply(withFun: BufferedWriter.()->Unit): Unit = use { it.apply(withFun) }
 
-        fun BufferedWriter.writeSnippet(categoryEntry: Map.Entry<String, List<RecipeDescriptor>>) {
+        fun BufferedWriter.writeCategorySnippet(categoryEntry: Map.Entry<String, List<RecipeDescriptor>>) {
             val indentBuilder = StringBuilder("  ")
             val category = categoryEntry.key
             val levels = category.chars().filter { ch: Int -> ch == '/'.code }.count()

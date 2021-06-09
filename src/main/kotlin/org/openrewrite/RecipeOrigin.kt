@@ -22,6 +22,7 @@ class RecipeOrigin(
         private val parsePattern = Pattern.compile("([^:]+):([^:]+):([^:]+):(.+)")
         private val coreLibs = setOf("rewrite-java", "rewrite-java-11", "rewrite-java-8", "rewrite-xml",
                 "rewrite-maven", "rewrite-properties", "rewrite-yaml")
+
         fun fromString(encoded: String): RecipeOrigin {
             val m = parsePattern.matcher(encoded)
             require(m.matches()) { "Couldn't parse as a RecipeOrigin: $encoded" }
