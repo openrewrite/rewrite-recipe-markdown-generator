@@ -6,6 +6,7 @@ buildscript {
 
 plugins {
     application
+    id("org.jetbrains.kotlin.jvm").version("1.5.0")
 }
 
 group = "org.example"
@@ -15,6 +16,7 @@ repositories {
     mavenLocal()
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
     mavenCentral()
+    gradlePluginPortal()
 }
 
 configurations.all {
@@ -23,20 +25,22 @@ configurations.all {
         cacheDynamicVersionsFor(0, TimeUnit.SECONDS)
     }
 }
-
-val rewriteVersion = "latest.release"
-
+val recipeConf = configurations.create("recipe")
+val rewriteVersion = "latest.integration"
 dependencies {
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("info.picocli:picocli:latest.release")
     implementation("org.openrewrite:rewrite-core:$rewriteVersion")
-    runtimeOnly("org.openrewrite:rewrite-java:$rewriteVersion")
-    runtimeOnly("org.openrewrite:rewrite-xml:$rewriteVersion")
-    runtimeOnly("org.openrewrite:rewrite-maven:$rewriteVersion")
-    runtimeOnly("org.openrewrite:rewrite-properties:$rewriteVersion")
-    runtimeOnly("org.openrewrite:rewrite-yaml:$rewriteVersion")
-    runtimeOnly("org.openrewrite.recipe:rewrite-kubernetes:$rewriteVersion")
-    runtimeOnly("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
-    runtimeOnly("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
+    runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
+
+    "recipe"("org.openrewrite:rewrite-java:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-xml:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-maven:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-properties:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-yaml:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-kubernetes:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
 }
 
 tasks.named<JavaCompile>("compileJava") {
@@ -52,14 +56,44 @@ application {
     mainClass.set("org.openrewrite.RecipeMarkdownGenerator")
 }
 
-tasks.named<JavaExec>("run") {
+tasks.named<JavaExec>("run").configure {
     val targetDir = File(project.buildDir, "docs")
-    description = "Writes generated markdown docs to $targetDir"
-    setArgsString(targetDir.toString())
+    // Collect all of the dependencies from recipeConf, then stuff them into a string representation
+    val recipeModules = recipeConf.resolvedConfiguration.firstLevelModuleDependencies.flatMap { dep ->
+        dep.moduleArtifacts.map { artifact ->
+            "${dep.moduleGroup}:${dep.moduleName}:${dep.moduleVersion}:${artifact.file}"
+        }
+    }.joinToString(";")
+    // recipeModules doesn't include transitive dependencies, but those are needed to load recipes and their descriptors
+    val recipeClasspath = recipeConf.resolvedConfiguration.files.asSequence()
+            .map { it.absolutePath }
+            .joinToString(";")
 
+    val gradlePluginVersion = configurations.detachedConfiguration(dependencies.create("org.openrewrite:plugin:latest.release"))
+            .resolvedConfiguration
+            .firstLevelModuleDependencies
+            .first()
+            .moduleVersion
+
+    val mavenPluginVersion = configurations.detachedConfiguration(dependencies.create("org.openrewrite.maven:rewrite-maven-plugin:latest.release"))
+            .resolvedConfiguration
+            .firstLevelModuleDependencies
+            .first()
+            .moduleVersion
+
+    description = "Writes generated markdown docs to $targetDir"
+    args = listOf(targetDir.toString(), recipeModules, recipeClasspath, gradlePluginVersion, mavenPluginVersion)
+    doFirst {
+        logger.lifecycle("Recipe modules: ")
+        logger.lifecycle(recipeModules)
+        logger.lifecycle("")
+        logger.lifecycle("Full classpath: ")
+        logger.lifecycle(recipeClasspath)
+        logger.lifecycle("")
+    }
     doLast {
         this as JavaExec
-        logger.quiet("Wrote generated docs to: $args")
+        logger.lifecycle("Wrote generated docs to: ${args!!.first()}")
     }
 }
 
