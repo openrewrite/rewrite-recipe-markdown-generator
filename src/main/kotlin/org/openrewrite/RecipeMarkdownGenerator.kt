@@ -420,6 +420,9 @@ class RecipeMarkdownGenerator : Runnable {
                           </build>
                         </project>
                         ```
+                        {% endcode %}
+                        {% endtab %}
+                        {% endtabs %}
                         
                     """.trimIndent())
                 } else {
