@@ -285,7 +285,7 @@ class RecipeMarkdownGenerator : Runnable {
                         }
                         
                         dependencies {
-                            rewrite("${origin.groupId}":"${origin.artifactId}":"${origin.version}")
+                            rewrite("${origin.groupId}:${origin.artifactId}:${origin.version}")
                         }
                         ```
                         {% endcode %}
@@ -448,7 +448,7 @@ class RecipeMarkdownGenerator : Runnable {
                         }
                         
                         dependencies {
-                            rewrite("${origin.groupId}":"${origin.artifactId}":"${origin.version}")
+                            rewrite("${origin.groupId}:${origin.artifactId}:${origin.version}")
                         }
                         ```
                         {% endcode %}
