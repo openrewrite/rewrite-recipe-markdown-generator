@@ -233,6 +233,7 @@ class RecipeMarkdownGenerator : Runnable {
                     }
                 }
             }
+            newLine()
             writeln("## Usage")
             val requiresConfiguration = recipeDescriptor.options.any { it.isRequired }
             val requiresDependency = !origin.isFromCoreLibrary()
