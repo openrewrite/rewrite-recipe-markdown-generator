@@ -487,7 +487,7 @@ class RecipeMarkdownGenerator : Runnable {
                         
                     """.trimIndent())
                 }
-                writeln("Recipes can also be activated directly from the commandline by adding the argument `-DactiveRecipe=${recipeDescriptor.name}`")
+                writeln("Recipes can also be activated directly from the command line by adding the argument `-DactiveRecipe=${recipeDescriptor.name}`")
             }
         }
     }
