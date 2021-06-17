@@ -26,7 +26,7 @@ configurations.all {
     }
 }
 val recipeConf = configurations.create("recipe")
-val rewriteVersion = "latest.release"
+val rewriteVersion = "latest.integration"
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("info.picocli:picocli:latest.release")
@@ -93,6 +93,10 @@ tasks.named<JavaExec>("run").configure {
         logger.lifecycle("Full classpath: ")
         logger.lifecycle(recipeClasspath)
         logger.lifecycle("")
+
+        // Ensure no stale output from previous runs is in the output directory
+        targetDir.deleteRecursively()
+        targetDir.mkdirs()
     }
     doLast {
         this as JavaExec

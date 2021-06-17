@@ -6,7 +6,6 @@ import org.openrewrite.config.RecipeDescriptor
 import java.lang.RuntimeException
 import java.nio.file.Files
 import java.io.IOException
-import java.util.stream.Collectors
 import java.io.BufferedWriter
 import java.nio.file.StandardOpenOption
 import java.lang.StringBuilder
@@ -20,6 +19,7 @@ import java.net.URI
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
+import kotlin.collections.LinkedHashMap
 import kotlin.jvm.JvmStatic
 import kotlin.system.exitProcess
 
@@ -42,10 +42,14 @@ class RecipeMarkdownGenerator : Runnable {
     lateinit var recipeClasspath: String
 
     @Parameters(index = "3", defaultValue = "latest.release", description = ["The version of the Rewrite Gradle Plugin to display in relevant samples"])
-    lateinit var gradlePluginVerison: String
+    lateinit var gradlePluginVersion: String
 
     @Parameters(index = "4", defaultValue = "", description = ["The version of the Rewrite Maven Plugin to display in relevant samples"])
-    lateinit var mavenPluginVerison: String
+    lateinit var mavenPluginVersion: String
+
+    @Parameters(index = "5", defaultValue = "https://docs.openrewrite.org/",
+            description = ["The URL the generated docs will be available under, used to make sure links between docs are correct when imported into gitbook. Should end in a slash '/'."])
+    lateinit var rootUrl: String
 
     override fun run() {
         val outputPath = Paths.get(destinationDirectoryName)
@@ -71,37 +75,10 @@ class RecipeMarkdownGenerator : Runnable {
                     .scanRuntimeClasspath()
                     .build()
         }
-        val recipeDescriptors: List<RecipeDescriptor> = ArrayList(env.listRecipeDescriptors())
+        val recipeDescriptors: List<RecipeDescriptor> = env.listRecipeDescriptors()
+                .filterNot { it.name.startsWith("org.openrewrite.text") } // These are test utilities only
         val categoryDescriptors = ArrayList(env.listCategoryDescriptors())
-        val groupedRecipes: SortedMap<String, List<RecipeDescriptor>> = TreeMap()
-        for (recipe in recipeDescriptors) {
-            if (recipe.name.startsWith("org.openrewrite.text")) {
-                continue
-            }
-            val recipeCategory = getRecipeCategory(recipe)
-            val categoryRecipes = groupedRecipes.computeIfAbsent(recipeCategory) { mutableListOf() } as MutableList<RecipeDescriptor>
-            categoryRecipes.add(recipe)
-        }
-        // insert missing parent categories
-        val missingCategories: MutableMap<String, List<RecipeDescriptor>> = HashMap()
-        for (category in groupedRecipes.keys) {
-            var p = category
-            while (p.isNotEmpty()) {
-                if (!groupedRecipes.containsKey(p)) {
-                    missingCategories[p] = emptyList()
-                }
-                p = if (p.contains("/")) {
-                    p.substring(0, p.lastIndexOf("/"))
-                } else {
-                    ""
-                }
-            }
-        }
-        groupedRecipes.putAll(missingCategories)
         for (recipeDescriptor in recipeDescriptors) {
-            if (recipeDescriptor.name.startsWith("org.openrewrite.text")) {
-                continue
-            }
             var origin: RecipeOrigin?
             var rawUri = recipeDescriptor.source.toString()
             val exclamationIndex = rawUri.indexOf('!')
@@ -109,6 +86,7 @@ class RecipeMarkdownGenerator : Runnable {
                 origin = recipeOrigins[recipeDescriptor.source]
             } else {
                 // The recipe origin includes the path to the recipe within a jar
+                // Such URIs will look something like: jar:file:/path/to/the/recipes.jar!META-INF/rewrite/some-declarative.yml
                 // Strip the "jar:" prefix and the part of the URI pointing inside the jar
                 rawUri = rawUri.substring(0, exclamationIndex)
                 rawUri = rawUri.substring(4)
@@ -116,53 +94,156 @@ class RecipeMarkdownGenerator : Runnable {
                 origin = recipeOrigins[jarOnlyUri]
             }
             requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeDescriptor.source }
-            writeRecipe(recipeDescriptor, recipesPath, origin, gradlePluginVerison, mavenPluginVerison)
+            writeRecipe(recipeDescriptor, recipesPath, origin, gradlePluginVersion, mavenPluginVersion)
         }
+        val categories = Category.fromDescriptors(recipeDescriptors, categoryDescriptors)
+
+        // Write SUMMARY_snippet.md
         val summarySnippetPath = outputPath.resolve("SUMMARY_snippet.md")
         Files.newBufferedWriter(summarySnippetPath, StandardOpenOption.CREATE).useAndApply {
-            writeln("* Recipes")
-            for (category in groupedRecipes.entries) {
-                writeCategorySnippet(category)
-                // get direct subcategory descendants
-                val subcategories = groupedRecipes.keys.stream().filter { k: String -> k != category.key && k.startsWith(category.key) }
-                        .map { k: String -> k.substring(category.key.length + 1) }
-                        .filter { k: String -> !k.contains("/") }
-                        .collect(Collectors.toSet())
-                writeCategoryIndex(outputPath, categoryDescriptors, category, subcategories)
+            for(category in categories) {
+                write(category.summarySnippet(0))
             }
+        }
+
+        // Write the README.md for each category
+        for(category in categories) {
+            val categoryIndexPath = outputPath.resolve("reference/recipes/")
+            category.writeCategoryIndex(rootUrl, categoryIndexPath)
         }
     }
 
-    private fun writeCategoryIndex(outputPath: Path, categoryDescriptors: List<CategoryDescriptor>,  categoryEntry: Map.Entry<String, List<RecipeDescriptor>>, subcategories: Set<String>) {
-        val category = categoryEntry.key
-        val categoryIndexPath = outputPath.resolve("reference/recipes/$category/README.md")
-        Files.newBufferedWriter(categoryIndexPath, StandardOpenOption.CREATE).useAndApply {
-            val categoryName: String = if (category.contains("/")) {
-                StringUtils.capitalize(category.substring(category.lastIndexOf("/") + 1))
-            } else {
-                StringUtils.capitalize(category)
-            }
-            writeln("# $categoryName")
-            val categoryPackage = "org.openrewrite.${categoryEntry.key.replace('/', '.')}"
-            val categoryDescriptor: CategoryDescriptor? = categoryDescriptors.find { it.packageName == categoryPackage }
-            if(categoryDescriptor != null) {
-                newLine()
-                writeln("_${categoryDescriptor.description}_")
-            }
-            if (categoryEntry.value.isNotEmpty()) {
-                newLine()
-                writeln("### Recipes")
-                for (recipe in categoryEntry.value) {
-                    val recipePath = getRecipePath(recipe)
-                    writeln("* [" + recipe.displayName + "](" + recipePath.substring(recipePath.lastIndexOf("/") + 1) + ".md)")
+    data class Category(
+            val simpleName: String,
+            val path: String,
+            val descriptor: CategoryDescriptor?,
+            val recipes: List<RecipeDescriptor>,
+            val subcategories: List<Category>
+    ) {
+        companion object {
+            private data class CategoryBuilder(
+                    val path: String? = null,
+                    val recipes: MutableList<RecipeDescriptor> = mutableListOf(),
+                    val subcategories: LinkedHashMap<String, CategoryBuilder> = LinkedHashMap()
+            ) {
+                fun build(categoryDescriptors: List<CategoryDescriptor>): Category {
+                    val simpleName = path!!.substring(path.lastIndexOf('/') + 1)
+                    val descriptor = findCategoryDescriptor(path, categoryDescriptors)
+                    // Do not consider backticks while sorting, they're formatting.
+                    val finalizedSubcategories = subcategories.values.asSequence()
+                            .map { it.build(categoryDescriptors) }
+                            .sortedBy { it.displayName.replace("`", "") }
+                            .toList()
+                    return Category(
+                            simpleName,
+                            path,
+                            descriptor,
+                            recipes.sortedBy { it.displayName.replace("`", "") },
+                            finalizedSubcategories)
                 }
             }
-            if (subcategories.isNotEmpty()) {
-                newLine()
-                writeln("### Subcategories")
-                for (subcategory in subcategories) {
-                    writeln("* [" + StringUtils.capitalize(subcategory) + "](" + subcategory + "/README.md)")
+
+            fun fromDescriptors(recipes: Iterable<RecipeDescriptor>, descriptors: List<CategoryDescriptor>): List<Category> {
+                val result = LinkedHashMap<String, CategoryBuilder>()
+                for(recipe in recipes) {
+                    result.putRecipe(getRecipeCategory(recipe), recipe)
                 }
+
+                return result.mapValues { it.value.build(descriptors) }
+                        .values
+                        .toList()
+            }
+
+            private fun MutableMap<String, CategoryBuilder>.putRecipe(recipeCategory: String?, recipe: RecipeDescriptor) {
+                if(recipeCategory == null) {
+                    return
+                }
+                val pathSegments = recipeCategory.split("/")
+                var category = this
+                for(i in pathSegments.indices) {
+                    val pathSegment = pathSegments[i]
+                    val pathToCurrent = pathSegments.subList(0, i + 1).joinToString("/")
+                    if(!category.containsKey(pathSegment)) {
+                        category[pathSegment] = CategoryBuilder(path = pathToCurrent)
+                    }
+                    if(i == pathSegments.size - 1) {
+                        category[pathSegment]!!.recipes.add(recipe)
+                    }
+                    category = category[pathSegment]!!.subcategories
+                }
+            }
+        }
+
+        val displayName: String =
+                if (descriptor == null) {
+                    StringUtils.capitalize(simpleName)
+                } else {
+                    descriptor.displayName
+                }
+
+        /**
+         * Produce the snippet for this category to be fitted into Gitbook's SUMMARY.md, which provides the index
+         * that makes markdown documents accessible through gitbook's interface
+         */
+        fun summarySnippet(indentationDepth: Int): String {
+            val indentBuilder = StringBuilder("  ")
+            for(i in 0 until indentationDepth) {
+                indentBuilder.append("  ")
+            }
+            val indent = indentBuilder.toString()
+            val result = StringBuilder()
+
+            result.appendLine("$indent* [$displayName](reference/recipes/$path/README.md)")
+            for(recipe in recipes) {
+                // Section headings will display backticks, rather than rendering as code. Omit them so it doesn't look terrible
+                result.appendLine("$indent  * [${recipe.displayName.replace("`", "")}](${getRecipeRelativePath(recipe)})")
+            }
+            for(category in subcategories) {
+                result.append(category.summarySnippet(indentationDepth + 1))
+            }
+            return result.toString()
+        }
+
+        /**
+         * Produce the contents of the README.md file for this category.
+         */
+        fun categoryIndex(rootUrl: String): String {
+            return StringBuilder().apply {
+                appendLine("# $displayName")
+                if(descriptor != null) {
+                    appendLine()
+                    appendLine("_${descriptor.description}_")
+                }
+                appendLine()
+                if(recipes.isNotEmpty()) {
+                    appendLine("## Recipes")
+                    appendLine()
+                    for(recipe in recipes) {
+                        val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
+                        //       |          rootUrl          |                 |    path    |   recipe name       |
+                        // e.g.: https://docs.openrewrite.org/reference/recipes/java/cleanup/unnecessaryparentheses
+                        appendLine("* [${recipe.displayName}](${rootUrl}reference/recipes/${path}/${recipeSimpleName})")
+                    }
+                    appendLine()
+                }
+                if(subcategories.isNotEmpty()) {
+                    appendLine("## Subcategories")
+                    appendLine()
+                    for(subcategory in subcategories) {
+                        appendLine("* [${subcategory.displayName}](${rootUrl}reference/recipes/${subcategory.path})")
+                    }
+                    appendLine()
+                }
+            }.toString()
+        }
+
+        fun writeCategoryIndex(rootUrl: String, outputRoot: Path) {
+            val outputPath = outputRoot.resolve("$path/README.md")
+            Files.newBufferedWriter(outputPath, StandardOpenOption.CREATE).useAndApply {
+                writeln(categoryIndex(rootUrl))
+            }
+            for(subcategory in subcategories) {
+                subcategory.writeCategoryIndex(rootUrl, outputRoot)
             }
         }
     }
@@ -190,7 +271,7 @@ class RecipeMarkdownGenerator : Runnable {
                 newLine()
             }
             writeln("""
-                ### Source
+                ## Source
                 
                 Maven Central [entry](https://search.maven.org/artifact/${origin.groupId}/${origin.artifactId}/${origin.version}/jar)
                 
@@ -202,14 +283,14 @@ class RecipeMarkdownGenerator : Runnable {
 
             if (recipeDescriptor.options.isNotEmpty()) {
                 writeln("""
-                    ### Options
+                    ## Options
                     
                     | Type | Name | Description |
                     | -- | -- | -- |
                 """.trimIndent())
                 for (option in recipeDescriptor.options) {
                     writeln("""
-                        | `${option.type}` | ${option.name} | ${option.description} |
+                        | `${option.type}` | ${option.name} | ${if(option.isRequired){""}else{"*Optional*. "}}${option.description} |
                     """.trimIndent())
                 }
             }
@@ -505,27 +586,6 @@ class RecipeMarkdownGenerator : Runnable {
          */
         fun BufferedWriter.useAndApply(withFun: BufferedWriter.()->Unit): Unit = use { it.apply(withFun) }
 
-        fun BufferedWriter.writeCategorySnippet(categoryEntry: Map.Entry<String, List<RecipeDescriptor>>) {
-            val indentBuilder = StringBuilder("  ")
-            val category = categoryEntry.key
-            val levels = category.chars().filter { ch: Int -> ch == '/'.code }.count()
-            for (i in 0 until levels) {
-                indentBuilder.append("  ")
-            }
-            val indent = indentBuilder.toString()
-            val categoryBuilder = StringBuilder(indent).append("* [")
-            if (category.contains("/")) {
-                categoryBuilder.append(StringUtils.capitalize(category.substring(category.lastIndexOf("/") + 1)))
-            } else {
-                categoryBuilder.append(StringUtils.capitalize(category))
-            }
-            categoryBuilder.append("](reference/recipes/").append(category).append("/README.md)")
-            writeln(categoryBuilder.toString())
-            for (recipe in categoryEntry.value) {
-                writeln(indent + "  * [" + recipe.displayName + "](" + getRecipeRelativePath(recipe) + ")")
-            }
-        }
-
         fun BufferedWriter.writeln(text: String) {
             write(text)
             newLine()
@@ -548,6 +608,11 @@ class RecipeMarkdownGenerator : Runnable {
 
         private fun getRecipeRelativePath(recipe: RecipeDescriptor): String =
                 "reference/recipes/" + getRecipePath(recipe) + ".md"
+
+        private fun findCategoryDescriptor(categoryPathFragment: String, categoryDescriptors: Iterable<CategoryDescriptor>): CategoryDescriptor? {
+            val categoryPackage = "org.openrewrite.${categoryPathFragment.replace('/', '.')}"
+            return categoryDescriptors.find { descriptor -> descriptor.packageName == categoryPackage}
+        }
 
         @JvmStatic
         fun main(args: Array<String>) {
