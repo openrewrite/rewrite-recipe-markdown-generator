@@ -33,6 +33,7 @@ dependencies {
     implementation("org.openrewrite:rewrite-core:$rewriteVersion")
     runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
 
+    "recipe"("org.openrewrite:rewrite-core:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-java:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-xml:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-maven:$rewriteVersion")
