@@ -47,10 +47,6 @@ class RecipeMarkdownGenerator : Runnable {
     @Parameters(index = "4", defaultValue = "", description = ["The version of the Rewrite Maven Plugin to display in relevant samples"])
     lateinit var mavenPluginVersion: String
 
-    @Parameters(index = "5", defaultValue = "https://docs.openrewrite.org/",
-            description = ["The URL the generated docs will be available under, used to make sure links between docs are correct when imported into gitbook. Should end in a slash '/'."])
-    lateinit var rootUrl: String
-
     override fun run() {
         val outputPath = Paths.get(destinationDirectoryName)
         val recipesPath = outputPath.resolve("reference/recipes")
@@ -109,7 +105,7 @@ class RecipeMarkdownGenerator : Runnable {
         // Write the README.md for each category
         for(category in categories) {
             val categoryIndexPath = outputPath.resolve("reference/recipes/")
-            category.writeCategoryIndex(rootUrl, categoryIndexPath)
+            category.writeCategoryIndex(categoryIndexPath)
         }
     }
 
@@ -207,7 +203,7 @@ class RecipeMarkdownGenerator : Runnable {
         /**
          * Produce the contents of the README.md file for this category.
          */
-        fun categoryIndex(rootUrl: String): String {
+        private fun categoryIndex(): String {
             return StringBuilder().apply {
                 appendLine("# $displayName")
                 if(descriptor != null) {
@@ -220,9 +216,9 @@ class RecipeMarkdownGenerator : Runnable {
                     appendLine()
                     for(recipe in recipes) {
                         val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
-                        //       |          rootUrl          |                 |    path    |   recipe name       |
-                        // e.g.: https://docs.openrewrite.org/reference/recipes/java/cleanup/unnecessaryparentheses
-                        appendLine("* [${recipe.displayName}](${rootUrl}reference/recipes/${path}/${recipeSimpleName})")
+                        // e.g.:                   |    path    |   recipe name       |
+                        //       /reference/recipes/java/cleanup/unnecessaryparentheses
+                        appendLine("* [${recipe.displayName}](/reference/recipes/${path}/${recipeSimpleName})")
                     }
                     appendLine()
                 }
@@ -230,20 +226,20 @@ class RecipeMarkdownGenerator : Runnable {
                     appendLine("## Subcategories")
                     appendLine()
                     for(subcategory in subcategories) {
-                        appendLine("* [${subcategory.displayName}](${rootUrl}reference/recipes/${subcategory.path})")
+                        appendLine("* [${subcategory.displayName}](/reference/recipes/${subcategory.path})")
                     }
                     appendLine()
                 }
             }.toString()
         }
 
-        fun writeCategoryIndex(rootUrl: String, outputRoot: Path) {
+        fun writeCategoryIndex(outputRoot: Path) {
             val outputPath = outputRoot.resolve("$path/README.md")
             Files.newBufferedWriter(outputPath, StandardOpenOption.CREATE).useAndApply {
-                writeln(categoryIndex(rootUrl))
+                writeln(categoryIndex())
             }
             for(subcategory in subcategories) {
-                subcategory.writeCategoryIndex(rootUrl, outputRoot)
+                subcategory.writeCategoryIndex(outputRoot)
             }
         }
     }
@@ -289,8 +285,22 @@ class RecipeMarkdownGenerator : Runnable {
                     | -- | -- | -- |
                 """.trimIndent())
                 for (option in recipeDescriptor.options) {
+                    var description = if(option.description == null) {
+                        ""
+                    } else {
+                        option.description
+                    }
+                    description = if(option.isRequired) {
+                        description
+                    } else {
+                        "*Optional*. $description"
+                    }
+                    // This should preserve casing and plurality
+                    description = description.replace("pointcut expressions?".toRegex(RegexOption.IGNORE_CASE)) { match ->
+                        "[${match.value}](/v1beta/pointcut-expressions)"
+                    }
                     writeln("""
-                        | `${option.type}` | ${option.name} | ${if(option.isRequired){""}else{"*Optional*. "}}${option.description} |
+                        | `${option.type}` | ${option.name} | $description |
                     """.trimIndent())
                 }
             }

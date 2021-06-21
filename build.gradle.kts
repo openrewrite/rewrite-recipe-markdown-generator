@@ -90,10 +90,6 @@ tasks.named<JavaExec>("run").configure {
     doFirst {
         logger.lifecycle("Recipe modules: ")
         logger.lifecycle(recipeModules)
-        logger.lifecycle("")
-        logger.lifecycle("Full classpath: ")
-        logger.lifecycle(recipeClasspath)
-        logger.lifecycle("")
 
         // Ensure no stale output from previous runs is in the output directory
         targetDir.deleteRecursively()
