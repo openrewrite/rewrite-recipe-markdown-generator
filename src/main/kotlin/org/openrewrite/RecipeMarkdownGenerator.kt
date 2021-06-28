@@ -16,10 +16,13 @@ import picocli.CommandLine
 import picocli.CommandLine.Command
 import picocli.CommandLine.Parameters
 import java.net.URI
+import java.net.URL
+import java.net.URLClassLoader
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
 import kotlin.collections.LinkedHashMap
+import kotlin.io.path.toPath
 import kotlin.jvm.JvmStatic
 import kotlin.system.exitProcess
 
@@ -59,12 +62,19 @@ class RecipeMarkdownGenerator : Runnable {
         val recipeOrigins: Map<URI, RecipeOrigin>
         if (recipeSources.isNotEmpty() && recipeClasspath.isNotEmpty()) {
             recipeOrigins = RecipeOrigin.parse(recipeSources)
-            val classpath = recipeClasspath.splitToSequence(";")
+
+            val classloader = recipeClasspath.split(";")
                     .map(Paths::get)
-                    .toList()
-            env = Environment.builder()
-                    .scanClasspath(classpath)
-                    .build()
+                    .map(Path::toUri)
+                    .map(URI::toURL)
+                    .toTypedArray()
+                    .let { URLClassLoader(it) }
+
+            val envBuilder = Environment.builder()
+            for(recipeOrigin in recipeOrigins) {
+                envBuilder.scanJar(recipeOrigin.key.toPath(), classloader)
+            }
+            env = envBuilder.build()
         } else {
             recipeOrigins = emptyMap()
             env = Environment.builder()
@@ -603,7 +613,12 @@ class RecipeMarkdownGenerator : Runnable {
 
         private fun getRecipeCategory(recipe: RecipeDescriptor): String {
             val recipePath = getRecipePath(recipe)
-            return recipePath.substring(0, recipePath.lastIndexOf("/"))
+            val slashIndex = recipePath.lastIndexOf("/")
+            return if(slashIndex == -1) {
+                "";
+            } else {
+                recipePath.substring(0, slashIndex)
+            }
         }
 
         private fun getRecipePath(recipe: RecipeDescriptor): String =
