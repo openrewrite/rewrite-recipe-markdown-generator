@@ -18,7 +18,12 @@ class RecipeOrigin(
      */
     fun isFromCoreLibrary() = groupId == "org.openrewrite" && coreLibs.contains(artifactId)
 
-    fun githubUrl() = "https://github.com/openrewrite/$artifactId"
+    fun githubUrl() =
+            if(isFromCoreLibrary()) {
+                "https://github.com/openrewrite/rewrite"
+            } else {
+                "https://github.com/openrewrite/$artifactId"
+            }
 
     fun issueTrackerUrl() = "${githubUrl()}/issues"
 

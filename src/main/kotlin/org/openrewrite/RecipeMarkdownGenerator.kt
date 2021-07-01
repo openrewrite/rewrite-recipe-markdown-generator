@@ -331,7 +331,7 @@ class RecipeMarkdownGenerator : Runnable {
                 write("Recipes with required configuration parameters cannot be activated directly. ")
                 write("To activate this recipe you must create a new recipe which fills in the required parameters. ")
                 write("In your rewrite.yml create a new recipe with a unique name. ")
-                write("For example: `$exampleRecipeName`. ")
+                write("For example: `$exampleRecipeName`.")
                 newLine()
                 writeln("Here's how you can define and customize such a recipe within your rewrite.yml:")
                 write("""
@@ -466,7 +466,7 @@ class RecipeMarkdownGenerator : Runnable {
             } else {
                 if(origin.isFromCoreLibrary()) {
                     writeln("This recipe has no required configuration parameters and comes from a rewrite core library. " +
-                            " It can be activated directly without adding any dependencies.")
+                            "It can be activated directly without adding any dependencies.")
                     writeln("""
                         
                         {% tabs %}
