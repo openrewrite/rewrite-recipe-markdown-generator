@@ -26,7 +26,7 @@ configurations.all {
     }
 }
 val recipeConf = configurations.create("recipe")
-val rewriteVersion = "latest.integration"
+val rewriteVersion = "latest.release"
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("info.picocli:picocli:latest.release")
@@ -45,6 +45,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-jhipster:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-quarkus:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-migrate-java:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-logging-frameworks:$rewriteVersion")
 }
 
 tasks.named<JavaCompile>("compileJava") {

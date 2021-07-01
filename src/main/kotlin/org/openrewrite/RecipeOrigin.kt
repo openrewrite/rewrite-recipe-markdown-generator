@@ -18,9 +18,13 @@ class RecipeOrigin(
      */
     fun isFromCoreLibrary() = groupId == "org.openrewrite" && coreLibs.contains(artifactId)
 
+    fun githubUrl() = "https://github.com/openrewrite/$artifactId"
+
+    fun issueTrackerUrl() = "${githubUrl()}/issues"
+
     companion object {
         private val parsePattern = Pattern.compile("([^:]+):([^:]+):([^:]+):(.+)")
-        private val coreLibs = setOf("rewrite-java", "rewrite-java-11", "rewrite-java-8", "rewrite-xml",
+        private val coreLibs = setOf("rewrite-core", "rewrite-java", "rewrite-java-11", "rewrite-java-8", "rewrite-xml",
                 "rewrite-maven", "rewrite-properties", "rewrite-yaml")
 
         fun fromString(encoded: String): RecipeOrigin {

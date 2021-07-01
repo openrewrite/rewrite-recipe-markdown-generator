@@ -216,7 +216,9 @@ class RecipeMarkdownGenerator : Runnable {
         private fun categoryIndex(): String {
             return StringBuilder().apply {
                 appendLine("# $displayName")
-                if(descriptor != null) {
+                // While the description is not _supposed_ to be nullable it has happened before
+                @Suppress("SENSELESS_COMPARISON")
+                if(descriptor != null && descriptor.description != null) {
                     appendLine()
                     appendLine("_${descriptor.description}_")
                 }
@@ -226,9 +228,7 @@ class RecipeMarkdownGenerator : Runnable {
                     appendLine()
                     for(recipe in recipes) {
                         val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
-                        // e.g.:                   |    path    |   recipe name       |
-                        //       /reference/recipes/java/cleanup/unnecessaryparentheses
-                        appendLine("* [${recipe.displayName}](/reference/recipes/${path}/${recipeSimpleName})")
+                        appendLine("* [${recipe.displayName}](/reference/recipes/${path}/${recipeSimpleName}.md)")
                     }
                     appendLine()
                 }
@@ -244,6 +244,10 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         fun writeCategoryIndex(outputRoot: Path) {
+            if(path.isBlank()) {
+                // Don't yet support "core" recipes that aren't in any language category
+                return;
+            }
             val outputPath = outputRoot.resolve("$path/README.md")
             Files.newBufferedWriter(outputPath, StandardOpenOption.CREATE).useAndApply {
                 writeln(categoryIndex())
@@ -279,7 +283,7 @@ class RecipeMarkdownGenerator : Runnable {
             writeln("""
                 ## Source
                 
-                Maven Central [entry](https://search.maven.org/artifact/${origin.groupId}/${origin.artifactId}/${origin.version}/jar)
+                [Github](${origin.githubUrl()}), [Issue Tracker](${origin.issueTrackerUrl()}), [Maven Central](https://search.maven.org/artifact/${origin.groupId}/${origin.artifactId}/${origin.version}/jar)
                 
                 * groupId: ${origin.groupId}
                 * artifactId: ${origin.artifactId}
@@ -313,29 +317,12 @@ class RecipeMarkdownGenerator : Runnable {
                         | `${option.type}` | ${option.name} | $description |
                     """.trimIndent())
                 }
-            }
-            if (recipeDescriptor.recipeList.isNotEmpty()) {
-                writeln("## Recipe list")
                 newLine()
-                val recipeDepth = getRecipePath(recipeDescriptor).chars().filter { ch: Int -> ch == '/'.code }.count()
-                val pathToRecipesBuilder = StringBuilder()
-                for (i in 0 until recipeDepth) {
-                    pathToRecipesBuilder.append("../")
-                }
-                val pathToRecipes = pathToRecipesBuilder.toString()
-                for (recipe in recipeDescriptor.recipeList) {
-                    writeln("* [" + recipe.displayName + "](" + pathToRecipes + getRecipePath(recipe) + ".md)")
-                    if (recipe.options.isNotEmpty()) {
-                        for (option in recipe.options) {
-                            if (option.value != null) {
-                                writeln("  * " + option.name + ": `" + printValue(option.value!!) + "`")
-                            }
-                        }
-                    }
-                }
             }
+
             newLine()
             writeln("## Usage")
+            newLine()
             val requiresConfiguration = recipeDescriptor.options.any { it.isRequired }
             val requiresDependency = !origin.isFromCoreLibrary()
             if (requiresConfiguration) {
@@ -590,6 +577,45 @@ class RecipeMarkdownGenerator : Runnable {
                 }
                 writeln("Recipes can also be activated directly from the command line by adding the argument `-DactiveRecipe=${recipeDescriptor.name}`")
             }
+
+            if (recipeDescriptor.recipeList.isNotEmpty()) {
+                writeln("""
+                    
+                    ## Definition
+                    
+                    {% tabs %}
+                    {% tab title="Recipe List" %}
+                """.trimIndent())
+                val recipeDepth = getRecipePath(recipeDescriptor).chars().filter { ch: Int -> ch == '/'.code }.count()
+                val pathToRecipesBuilder = StringBuilder()
+                for (i in 0 until recipeDepth) {
+                    pathToRecipesBuilder.append("../")
+                }
+                val pathToRecipes = pathToRecipesBuilder.toString()
+                for (recipe in recipeDescriptor.recipeList) {
+                    writeln("* [" + recipe.displayName + "](" + pathToRecipes + getRecipePath(recipe) + ".md)")
+                    if (recipe.options.isNotEmpty()) {
+                        for (option in recipe.options) {
+                            if (option.value != null) {
+                                writeln("  * " + option.name + ": `" + printValue(option.value!!) + "`")
+                            }
+                        }
+                    }
+                }
+                newLine()
+                writeln("""
+                    {% endtab %}
+
+                    {% tab title="Yaml Recipe List" %}
+                    ```yaml
+                """.trimIndent())
+                writeln(recipeDescriptor.asYaml())
+                writeln("""
+                    ```
+                    {% endtab %}
+                    {% endtabs %}
+                """.trimIndent())
+            }
         }
     }
 
@@ -632,7 +658,7 @@ class RecipeMarkdownGenerator : Runnable {
                 recipesPath.resolve(getRecipePath(recipeDescriptor) + ".md")
 
         private fun getRecipeRelativePath(recipe: RecipeDescriptor): String =
-                "reference/recipes/" + getRecipePath(recipe) + ".md"
+                "/reference/recipes/" + getRecipePath(recipe)
 
         private fun findCategoryDescriptor(categoryPathFragment: String, categoryDescriptors: Iterable<CategoryDescriptor>): CategoryDescriptor? {
             val categoryPackage = "org.openrewrite.${categoryPathFragment.replace('/', '.')}"
