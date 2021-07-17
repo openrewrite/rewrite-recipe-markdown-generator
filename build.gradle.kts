@@ -46,6 +46,8 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-quarkus:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-migrate-java:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-logging-frameworks:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-terraform:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-micronaut:$rewriteVersion")
 }
 
 tasks.named<JavaCompile>("compileJava") {

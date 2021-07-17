@@ -16,7 +16,6 @@ import picocli.CommandLine
 import picocli.CommandLine.Command
 import picocli.CommandLine.Parameters
 import java.net.URI
-import java.net.URL
 import java.net.URLClassLoader
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -202,7 +201,7 @@ class RecipeMarkdownGenerator : Runnable {
             result.appendLine("$indent* [$displayName](reference/recipes/$path/README.md)")
             for(recipe in recipes) {
                 // Section headings will display backticks, rather than rendering as code. Omit them so it doesn't look terrible
-                result.appendLine("$indent  * [${recipe.displayName.replace("`", "")}](${getRecipeRelativePath(recipe)})")
+                result.appendLine("$indent  * [${recipe.displayName.replace("`", "")}](${getRecipeRelativePath(recipe)}.md)")
             }
             for(category in subcategories) {
                 result.append(category.summarySnippet(indentationDepth + 1))
@@ -228,7 +227,9 @@ class RecipeMarkdownGenerator : Runnable {
                     appendLine()
                     for(recipe in recipes) {
                         val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
-                        appendLine("* [${recipe.displayName}](/reference/recipes/${path}/${recipeSimpleName}.md)")
+                        // Anything except a relative link ending in .md will be mangled.
+                        // If you touch this line double check that it works when imported into gitbook
+                        appendLine("* [${recipe.displayName}](${recipeSimpleName}.md)")
                     }
                     appendLine()
                 }
