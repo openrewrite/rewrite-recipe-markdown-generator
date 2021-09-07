@@ -311,8 +311,8 @@ class RecipeMarkdownGenerator : Runnable {
                         "*Optional*. $description"
                     }
                     // This should preserve casing and plurality
-                    description = description.replace("pointcut expressions?".toRegex(RegexOption.IGNORE_CASE)) { match ->
-                        "[${match.value}](/v1beta/pointcut-expressions)"
+                    description = description.replace("method patterns?".toRegex(RegexOption.IGNORE_CASE)) { match ->
+                        "[${match.value}](/reference/method-patterns)"
                     }
                     writeln("""
                         | `${option.type}` | ${option.name} | $description |
