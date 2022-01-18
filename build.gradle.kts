@@ -7,6 +7,12 @@ buildscript {
 plugins {
     application
     id("org.jetbrains.kotlin.jvm").version("1.5.0")
+    id("org.owasp.dependencycheck") version "6.5.3"
+}
+
+dependencyCheck {
+    analyzers.assemblyEnabled = false
+    failBuildOnCVSS = 9.0F
 }
 
 group = "org.example"
@@ -25,6 +31,7 @@ configurations.all {
         cacheDynamicVersionsFor(0, TimeUnit.SECONDS)
     }
 }
+
 val recipeConf = configurations.create("recipe")
 val rewriteVersion = "latest.release"
 dependencies {
