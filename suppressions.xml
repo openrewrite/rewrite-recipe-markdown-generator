@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+    <suppress>
+        <notes>
+            <![CDATA[
+        file name: rewrite-jhipster-1.0.0.jar
+        ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/org\.openrewrite\.recipe/rewrite\-jhipster@.*$</packageUrl>
+        <cpe>cpe:/a:jhipster:jhipster</cpe>
+    </suppress>
+</suppressions>
