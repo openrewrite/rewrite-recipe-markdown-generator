@@ -247,7 +247,7 @@ class RecipeMarkdownGenerator : Runnable {
         fun writeCategoryIndex(outputRoot: Path) {
             if(path.isBlank()) {
                 // Don't yet support "core" recipes that aren't in any language category
-                return;
+                return
             }
             val outputPath = outputRoot.resolve("$path/README.md")
             Files.newBufferedWriter(outputPath, StandardOpenOption.CREATE).useAndApply {
@@ -348,7 +348,12 @@ class RecipeMarkdownGenerator : Runnable {
                     
                 """.trimIndent())
                 for(option in recipeDescriptor.options) {
-                    writeln("      ${option.name}: ${option.example}")
+                    val ex = if (option.example != null && "String" == option.type && option.example.startsWith("*")) {
+                        "'" + option. example + "'"
+                    } else {
+                        option.example
+                    }
+                    writeln("      ${option.name}: $ex")
                 }
                 writeln("```")
                 writeln("{% endcode %}")
@@ -642,7 +647,7 @@ class RecipeMarkdownGenerator : Runnable {
             val recipePath = getRecipePath(recipe)
             val slashIndex = recipePath.lastIndexOf("/")
             return if(slashIndex == -1) {
-                "";
+                ""
             } else {
                 recipePath.substring(0, slashIndex)
             }
