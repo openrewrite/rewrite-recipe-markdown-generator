@@ -348,7 +348,10 @@ class RecipeMarkdownGenerator : Runnable {
                     
                 """.trimIndent())
                 for(option in recipeDescriptor.options) {
-                    val ex = if (option.example != null && "String" == option.type && option.example.startsWith("*")) {
+                    val ex = if (option.example != null && "String" == option.type
+                        && (option.example.matches("^[{}\\[\\],`|=%@*!?-].*".toRegex())
+                                || option.example.matches(".*:\\s.*".toRegex()))
+                    ) {
                         "'" + option. example + "'"
                     } else {
                         option.example
