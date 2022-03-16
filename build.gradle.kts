@@ -49,6 +49,7 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-json:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-maven:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-properties:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-protobuf:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-xml:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-yaml:$rewriteVersion")
 
