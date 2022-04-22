@@ -6,8 +6,8 @@ buildscript {
 
 plugins {
     application
-    id("org.jetbrains.kotlin.jvm").version("1.6.20")
-    id("org.owasp.dependencycheck") version "6.5.3"
+    id("org.jetbrains.kotlin.jvm").version("1.6.21")
+    id("org.owasp.dependencycheck") version "7.0.4.1"
 }
 
 dependencyCheck {
