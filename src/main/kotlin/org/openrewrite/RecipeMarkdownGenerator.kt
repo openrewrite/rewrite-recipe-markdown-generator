@@ -312,7 +312,7 @@ class RecipeMarkdownGenerator : Runnable {
                     }
                     // This should preserve casing and plurality
                     description = description.replace("method patterns?".toRegex(RegexOption.IGNORE_CASE)) { match ->
-                        "[${match.value}](/reference/method-patterns)"
+                        "[${match.value}](/reference/method-patterns.md)"
                     }
                     writeln("""
                         | `${option.type}` | ${option.name} | $description |
