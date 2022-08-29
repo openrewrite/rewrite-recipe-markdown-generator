@@ -471,7 +471,7 @@ class RecipeMarkdownGenerator : Runnable {
                         
                     """.trimIndent())
                 }
-                writeln("Recipes can also be activated directly from the commandline by adding the argument `-Drewrite.activeRecipes${exampleRecipeName}`")
+                writeln("Recipes can also be activated directly from the commandline by adding the argument `-Drewrite.activeRecipes=${exampleRecipeName}`")
             } else {
                 if(origin.isFromCoreLibrary()) {
                     writeln("This recipe has no required configuration parameters and comes from a rewrite core library. " +
