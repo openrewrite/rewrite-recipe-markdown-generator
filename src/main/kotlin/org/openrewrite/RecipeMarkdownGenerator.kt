@@ -498,7 +498,7 @@ class RecipeMarkdownGenerator : Runnable {
                         {% endcode %}
                         {% endtab %}
     
-                        {% tab title="Maven" %}
+                        {% tab title="Maven POM" %}
                         {% code title="pom.xml" %}
                         ```markup
                         <project>
@@ -517,6 +517,15 @@ class RecipeMarkdownGenerator : Runnable {
                             </plugins>
                           </build>
                         </project>
+                        ```
+                        {% endcode %}
+                        {% endtab %}
+    
+                        {% tab title="Maven Command Line" %}
+                        {% code title="shell" %}
+                        ```shell
+                        mvn org.openrewrite.maven:rewrite-maven-plugin:$mavenPluginVersion:run \
+                          -DactiveRecipes=${recipeDescriptor.name}
                         ```
                         {% endcode %}
                         {% endtab %}
@@ -551,7 +560,7 @@ class RecipeMarkdownGenerator : Runnable {
                         {% endcode %}
                         {% endtab %}
     
-                        {% tab title="Maven" %}
+                        {% tab title="Maven POM" %}
                         {% code title="pom.xml" %}
                         ```markup
                         <project>
@@ -580,11 +589,21 @@ class RecipeMarkdownGenerator : Runnable {
                         ```
                         {% endcode %}
                         {% endtab %}
+    
+                        {% tab title="Maven Command Line" %}
+                        {% code title="shell" %}
+                        ```shell
+                        mvn org.openrewrite.maven:rewrite-maven-plugin:$mavenPluginVersion:run \
+                          -Drewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:${origin.version} \
+                          -DactiveRecipes=${recipeDescriptor.name}
+                        ```
+                        {% endcode %}
+                        {% endtab %}
                         {% endtabs %}
                         
                     """.trimIndent())
                 }
-                writeln("Recipes can also be activated directly from the command line by adding the argument `-Drewrite.activeRecipes${recipeDescriptor.name}`")
+                writeln("Recipes can also be activated directly from the command line by adding the argument `-Drewrite.activeRecipes=${recipeDescriptor.name}`")
             }
 
             if (recipeDescriptor.recipeList.isNotEmpty()) {
