@@ -69,9 +69,14 @@ class RecipeMarkdownGenerator : Runnable {
                     .toTypedArray()
                     .let { URLClassLoader(it) }
 
+            val dependencies : MutableCollection<Path> = mutableListOf()
+            recipeClasspath.split(";")
+                .map(Paths::get)
+                .toCollection(dependencies)
+
             val envBuilder = Environment.builder()
             for(recipeOrigin in recipeOrigins) {
-                envBuilder.scanJar(recipeOrigin.key.toPath(), classloader)
+                envBuilder.scanJar(recipeOrigin.key.toPath(), dependencies, classloader)
             }
             env = envBuilder.build()
         } else {
