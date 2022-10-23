@@ -271,7 +271,7 @@ class RecipeMarkdownGenerator : Runnable {
             write("""
                 # ${recipeDescriptor.displayName}
                 
-                ** ${recipeDescriptor.name.replace("_".toRegex(), "\\\\_")}**
+                **${recipeDescriptor.name.replace("_".toRegex(), "\\\\_")}**
                 
             """.trimIndent())
             if (!isNullOrEmpty(recipeDescriptor.description)) {
