@@ -15,11 +15,14 @@ import org.openrewrite.internal.StringUtils.isNullOrEmpty
 import picocli.CommandLine
 import picocli.CommandLine.Command
 import picocli.CommandLine.Parameters
+import java.io.File
 import java.net.URI
 import java.net.URLClassLoader
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.collections.LinkedHashMap
 import kotlin.io.path.toPath
 import kotlin.jvm.JvmStatic
@@ -88,6 +91,8 @@ class RecipeMarkdownGenerator : Runnable {
         val recipeDescriptors: List<RecipeDescriptor> = env.listRecipeDescriptors()
                 .filterNot { it.name.startsWith("org.openrewrite.text") } // These are test utilities only
         val categoryDescriptors = ArrayList(env.listCategoryDescriptors())
+
+        val recipeNameOrigins = HashMap<RecipeOrigin, List<String>>()
         for (recipeDescriptor in recipeDescriptors) {
             var origin: RecipeOrigin?
             var rawUri = recipeDescriptor.source.toString()
@@ -105,7 +110,25 @@ class RecipeMarkdownGenerator : Runnable {
             }
             requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeDescriptor.source }
             writeRecipe(recipeDescriptor, recipesPath, origin, gradlePluginVersion, mavenPluginVersion)
+
+            val names = recipeNameOrigins.computeIfAbsent(origin) { ArrayList() } as ArrayList
+            names.add(recipeDescriptor.name)
         }
+
+        // write recipe-names to a file for comparison with the last released version
+        File("src/main/resources/recipeNames.yml")
+            .printWriter().use{ out ->
+                out.println("openrewrite-recipe-artifacts:")
+                recipeNameOrigins.entries.forEach {entry ->
+                    out.println("  " + entry.key.artifactId + ":")
+                    out.println("    version: " + entry.key.version)
+                    out.println("    recipes:")
+                    entry.value.forEach {recipeName ->
+                        out.println("      - $recipeName")
+                    }
+                }
+            }
+
         val categories = Category.fromDescriptors(recipeDescriptors, categoryDescriptors)
 
         // Write SUMMARY_snippet.md
