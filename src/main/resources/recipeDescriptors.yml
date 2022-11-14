@@ -1,0 +1,3065 @@
+- artifactId: "rewrite-circleci"
+  version: "1.14.0"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.circleci.InstallOrb"
+    options:
+    - name: "orbKey"
+      type: "String"
+      required: true
+    - name: "slug"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.circleci.UpdateImage"
+    options:
+    - name: "image"
+      type: "String"
+      required: true
+- artifactId: "rewrite-concourse"
+  version: "1.13.0"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.concourse.ChangeResourceVersion"
+    options:
+    - name: "resourceType"
+      type: "String"
+      required: true
+    - name: "version"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.concourse.ChangeValue"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "keyPath"
+      type: "String"
+      required: true
+    - name: "newValue"
+      type: "String"
+      required: true
+    - name: "oldValue"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.concourse.FindResource"
+    options:
+    - name: "type"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.concourse.UpdateGitResourceUri"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "newURI"
+      type: "String"
+      required: true
+    - name: "oldURIPattern"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.concourse.search.FindPinnedResource"
+    options:
+    - name: "resourceType"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.concourse.search.FindPrivilegedResourceType"
+    options: []
+- artifactId: "rewrite-core"
+  version: "7.32.1"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.DeleteSourceFiles"
+    options:
+    - name: "filePattern"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.FindParseFailures"
+    options: []
+  - name: "org.openrewrite.FindQuarks"
+    options: []
+  - name: "org.openrewrite.FindSourceFiles"
+    options:
+    - name: "filePattern"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.RenameFile"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: true
+    - name: "fileName"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.SetFilePermissions"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: true
+    - name: "isExecutable"
+      type: "Boolean"
+      required: true
+    - name: "isReadable"
+      type: "Boolean"
+      required: true
+    - name: "isWritable"
+      type: "Boolean"
+      required: true
+- artifactId: "rewrite-github-actions"
+  version: "1.13.0"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin"
+    options: []
+  - name: "org.openrewrite.github.AddCronTrigger"
+    options:
+    - name: "cron"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.github.AddManualTrigger"
+    options: []
+  - name: "org.openrewrite.github.AutoCancelInProgressWorkflow"
+    options:
+    - name: "accessToken"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.github.ChangeDependabotScheduleInterval"
+    options:
+    - name: "interval"
+      type: "String"
+      required: true
+    - name: "packageEcosystem"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.github.DependabotCheckForGithubActionsUpdatesDaily"
+    options: []
+  - name: "org.openrewrite.github.DependabotCheckForGithubActionsUpdatesWeekly"
+    options: []
+  - name: "org.openrewrite.github.SetupJavaCaching"
+    options: []
+- artifactId: "rewrite-gradle"
+  version: "7.32.1"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.gradle.ActivateStyle"
+    options:
+    - name: "fullyQualifiedStyleName"
+      type: "String"
+      required: true
+    - name: "overwriteExistingStyles"
+      type: "boolean"
+      required: false
+  - name: "org.openrewrite.gradle.AddDelegatesToGradleApi"
+    options: []
+  - name: "org.openrewrite.gradle.AddGradleWrapper"
+    options:
+    - name: "distribution"
+      type: "String"
+      required: false
+    - name: "version"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.gradle.ChangeDependencyArtifactId"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "configuration"
+      type: "String"
+      required: false
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "newArtifactId"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.gradle.ChangeDependencyClassifier"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "configuration"
+      type: "String"
+      required: false
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "newClassifier"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.gradle.ChangeDependencyConfiguration"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "configuration"
+      type: "String"
+      required: false
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "newConfiguration"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.gradle.ChangeDependencyExtension"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "configuration"
+      type: "String"
+      required: false
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "newExtension"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.gradle.ChangeDependencyGroupId"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "configuration"
+      type: "String"
+      required: false
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "newGroupId"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.gradle.ChangeDependencyVersion"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "configuration"
+      type: "String"
+      required: false
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "newVersion"
+      type: "String"
+      required: true
+    - name: "versionPattern"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.gradle.ChangeJavaCompatibility"
+    options:
+    - name: "compatibilityType"
+      type: "String"
+      required: true
+    - name: "newVersion"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.gradle.DependencyUseMapNotation"
+    options: []
+  - name: "org.openrewrite.gradle.DependencyUseStringNotation"
+    options: []
+  - name: "org.openrewrite.gradle.RemoveGradleDependency"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "configuration"
+      type: "String"
+      required: false
+    - name: "groupId"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.gradle.RemoveRepository"
+    options:
+    - name: "repository"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.gradle.UpdateGradleWrapper"
+    options:
+    - name: "distribution"
+      type: "String"
+      required: false
+    - name: "version"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.gradle.UpgradePluginVersion"
+    options:
+    - name: "newVersion"
+      type: "String"
+      required: true
+    - name: "pluginIdPattern"
+      type: "String"
+      required: true
+    - name: "versionPattern"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.gradle.search.FindDependency"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "configuration"
+      type: "String"
+      required: false
+    - name: "groupId"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.gradle.search.FindDependencyHandler"
+    options: []
+  - name: "org.openrewrite.gradle.search.FindPlugin"
+    options:
+    - name: "pluginId"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.gradle.security.UseHttpsForRepositories"
+    options: []
+- artifactId: "rewrite-hcl"
+  version: "7.32.1"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.hcl.DeleteContent"
+    options:
+    - name: "contentPath"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.hcl.MoveContentToFile"
+    options:
+    - name: "contentPath"
+      type: "String"
+      required: true
+    - name: "destinationPath"
+      type: "String"
+      required: true
+    - name: "fromPath"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.hcl.format.AutoFormat"
+    options: []
+  - name: "org.openrewrite.hcl.format.BlankLines"
+    options: []
+  - name: "org.openrewrite.hcl.format.NormalizeFormat"
+    options: []
+  - name: "org.openrewrite.hcl.format.RemoveTrailingWhitespace"
+    options: []
+  - name: "org.openrewrite.hcl.format.Spaces"
+    options: []
+  - name: "org.openrewrite.hcl.format.TabsAndIndents"
+    options: []
+  - name: "org.openrewrite.hcl.search.FindContent"
+    options:
+    - name: "contentPath"
+      type: "String"
+      required: true
+- artifactId: "rewrite-java"
+  version: "7.32.1"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.java.AddApache2LicenseHeader"
+    options: []
+  - name: "org.openrewrite.java.AddLicenseHeader"
+    options:
+    - name: "licenseText"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.AddOrUpdateAnnotationAttribute"
+    options:
+    - name: "addOnly"
+      type: "Boolean"
+      required: true
+    - name: "annotationType"
+      type: "String"
+      required: true
+    - name: "attributeName"
+      type: "String"
+      required: false
+    - name: "attributeValue"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.ChangeMethodAccessLevel"
+    options:
+    - name: "matchOverrides"
+      type: "Boolean"
+      required: false
+    - name: "methodPattern"
+      type: "String"
+      required: true
+    - name: "newAccessLevel"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.ChangeMethodName"
+    options:
+    - name: "ignoreDefinition"
+      type: "Boolean"
+      required: false
+    - name: "matchOverrides"
+      type: "Boolean"
+      required: false
+    - name: "methodPattern"
+      type: "String"
+      required: true
+    - name: "newMethodName"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.ChangeMethodTargetToStatic"
+    options:
+    - name: "fullyQualifiedTargetTypeName"
+      type: "String"
+      required: true
+    - name: "matchOverrides"
+      type: "Boolean"
+      required: false
+    - name: "matchUnknownTypes"
+      type: "Boolean"
+      required: false
+    - name: "methodPattern"
+      type: "String"
+      required: true
+    - name: "returnType"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.ChangeMethodTargetToVariable"
+    options:
+    - name: "matchOverrides"
+      type: "Boolean"
+      required: false
+    - name: "methodPattern"
+      type: "String"
+      required: true
+    - name: "variableName"
+      type: "String"
+      required: true
+    - name: "variableType"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.ChangePackage"
+    options:
+    - name: "newPackageName"
+      type: "String"
+      required: true
+    - name: "oldPackageName"
+      type: "String"
+      required: true
+    - name: "recursive"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.java.ChangeStaticFieldToMethod"
+    options:
+    - name: "newClassName"
+      type: "String"
+      required: false
+    - name: "newMethodName"
+      type: "String"
+      required: true
+    - name: "newTarget"
+      type: "String"
+      required: false
+    - name: "oldClassName"
+      type: "String"
+      required: true
+    - name: "oldFieldName"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.ChangeType"
+    options:
+    - name: "ignoreDefinition"
+      type: "Boolean"
+      required: false
+    - name: "newFullyQualifiedTypeName"
+      type: "String"
+      required: true
+    - name: "oldFullyQualifiedTypeName"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.DeleteMethodArgument"
+    options:
+    - name: "argumentIndex"
+      type: "int"
+      required: true
+    - name: "methodPattern"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.DoesNotUseRewriteSkip"
+    options: []
+  - name: "org.openrewrite.java.NoStaticImport"
+    options:
+    - name: "methodPattern"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.OrderImports"
+    options:
+    - name: "removeUnused"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.java.RandomizeId"
+    options: []
+  - name: "org.openrewrite.java.RecipeExceptionDemonstration"
+    options:
+    - name: "throwOnApplicableTest"
+      type: "Boolean"
+      required: false
+    - name: "throwOnApplicableTestVisitor"
+      type: "Boolean"
+      required: false
+    - name: "throwOnMethodPattern"
+      type: "String"
+      required: false
+    - name: "throwOnSingleSourceApplicableTest"
+      type: "Boolean"
+      required: false
+    - name: "throwOnSingleSourceApplicableTestVisitor"
+      type: "Boolean"
+      required: false
+    - name: "throwOnVisitAll"
+      type: "Boolean"
+      required: false
+    - name: "throwOnVisitAllVisitor"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.java.RecipeMarkupDemonstration"
+    options:
+    - name: "level"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.RemoveAnnotation"
+    options:
+    - name: "annotationPattern"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.RemoveImplements"
+    options:
+    - name: "filter"
+      type: "String"
+      required: true
+    - name: "interfaceType"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.RemoveObjectsIsNull"
+    options: []
+  - name: "org.openrewrite.java.RemoveUnusedImports"
+    options: []
+  - name: "org.openrewrite.java.ReorderMethodArguments"
+    options:
+    - name: "ignoreDefinition"
+      type: "Boolean"
+      required: false
+    - name: "methodPattern"
+      type: "String"
+      required: true
+    - name: "newParameterNames"
+      type: "String[]"
+      required: true
+    - name: "oldParameterNames"
+      type: "String[]"
+      required: false
+  - name: "org.openrewrite.java.ReplaceConstant"
+    options:
+    - name: "constantName"
+      type: "String"
+      required: true
+    - name: "literalValue"
+      type: "String"
+      required: true
+    - name: "owningType"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.SimplifyMethodChain"
+    options:
+    - name: "methodPatternChain"
+      type: "List"
+      required: true
+    - name: "newMethodName"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.UpdateSourcePositions"
+    options: []
+  - name: "org.openrewrite.java.UseStaticImport"
+    options:
+    - name: "methodPattern"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.cleanup.AddSerialVersionUidToSerializable"
+    options: []
+  - name: "org.openrewrite.java.cleanup.AtomicPrimitiveEqualsUsesGet"
+    options: []
+  - name: "org.openrewrite.java.cleanup.BigDecimalRoundingConstantsToEnums"
+    options: []
+  - name: "org.openrewrite.java.cleanup.BooleanChecksNotInverted"
+    options: []
+  - name: "org.openrewrite.java.cleanup.CaseInsensitiveComparisonsDoNotChangeCase"
+    options: []
+  - name: "org.openrewrite.java.cleanup.CatchClauseOnlyRethrows"
+    options: []
+  - name: "org.openrewrite.java.cleanup.Cleanup"
+    options: []
+  - name: "org.openrewrite.java.cleanup.CombineSemanticallyEqualCatchBlocks"
+    options: []
+  - name: "org.openrewrite.java.cleanup.CommonStaticAnalysis"
+    options: []
+  - name: "org.openrewrite.java.cleanup.CompareEnumsWithEqualityOperator"
+    options: []
+  - name: "org.openrewrite.java.cleanup.ControlFlowIndentation"
+    options: []
+  - name: "org.openrewrite.java.cleanup.CovariantEquals"
+    options: []
+  - name: "org.openrewrite.java.cleanup.DefaultComesLast"
+    options: []
+  - name: "org.openrewrite.java.cleanup.EmptyBlock"
+    options: []
+  - name: "org.openrewrite.java.cleanup.EqualsAvoidsNull"
+    options: []
+  - name: "org.openrewrite.java.cleanup.ExplicitCharsetOnStringGetBytes"
+    options:
+    - name: "encoding"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.cleanup.ExplicitInitialization"
+    options: []
+  - name: "org.openrewrite.java.cleanup.ExplicitLambdaArgumentTypes"
+    options: []
+  - name: "org.openrewrite.java.cleanup.ExternalizableHasNoArgsConstructor"
+    options: []
+  - name: "org.openrewrite.java.cleanup.FallThrough"
+    options: []
+  - name: "org.openrewrite.java.cleanup.FinalClass"
+    options: []
+  - name: "org.openrewrite.java.cleanup.FinalizeLocalVariables"
+    options: []
+  - name: "org.openrewrite.java.cleanup.FixSerializableFields"
+    options:
+    - name: "fullyQualifiedExclusions"
+      type: "List"
+      required: false
+    - name: "markAllAsTransient"
+      type: "Boolean"
+      required: true
+  - name: "org.openrewrite.java.cleanup.ForLoopControlVariablePostfixOperators"
+    options: []
+  - name: "org.openrewrite.java.cleanup.ForLoopIncrementInUpdate"
+    options: []
+  - name: "org.openrewrite.java.cleanup.HiddenField"
+    options: []
+  - name: "org.openrewrite.java.cleanup.HideUtilityClassConstructor"
+    options: []
+  - name: "org.openrewrite.java.cleanup.IndexOfChecksShouldUseAStartPosition"
+    options: []
+  - name: "org.openrewrite.java.cleanup.IndexOfReplaceableByContains"
+    options: []
+  - name: "org.openrewrite.java.cleanup.IndexOfShouldNotCompareGreaterThanZero"
+    options: []
+  - name: "org.openrewrite.java.cleanup.InlineVariable"
+    options: []
+  - name: "org.openrewrite.java.cleanup.IsEmptyCallOnCollections"
+    options: []
+  - name: "org.openrewrite.java.cleanup.JavaApiBestPractices"
+    options: []
+  - name: "org.openrewrite.java.cleanup.LambdaBlockToExpression"
+    options: []
+  - name: "org.openrewrite.java.cleanup.LowercasePackage"
+    options: []
+  - name: "org.openrewrite.java.cleanup.MethodNameCasing"
+    options:
+    - name: "includeTestSources"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.java.cleanup.MethodParamPad"
+    options: []
+  - name: "org.openrewrite.java.cleanup.MinimumSwitchCases"
+    options: []
+  - name: "org.openrewrite.java.cleanup.MissingOverrideAnnotation"
+    options:
+    - name: "ignoreAnonymousClassMethods"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.java.cleanup.ModifierOrder"
+    options: []
+  - name: "org.openrewrite.java.cleanup.MultipleVariableDeclarations"
+    options: []
+  - name: "org.openrewrite.java.cleanup.NeedBraces"
+    options: []
+  - name: "org.openrewrite.java.cleanup.NestedEnumsAreNotStatic"
+    options: []
+  - name: "org.openrewrite.java.cleanup.NewStringBuilderBufferWithCharArgument"
+    options: []
+  - name: "org.openrewrite.java.cleanup.NoDoubleBraceInitialization"
+    options: []
+  - name: "org.openrewrite.java.cleanup.NoEmptyCollectionWithRawType"
+    options: []
+  - name: "org.openrewrite.java.cleanup.NoEqualityInForCondition"
+    options: []
+  - name: "org.openrewrite.java.cleanup.NoFinalizer"
+    options: []
+  - name: "org.openrewrite.java.cleanup.NoPrimitiveWrappersForToStringOrCompareTo"
+    options: []
+  - name: "org.openrewrite.java.cleanup.NoRedundantJumpStatements"
+    options: []
+  - name: "org.openrewrite.java.cleanup.NoToStringOnStringType"
+    options: []
+  - name: "org.openrewrite.java.cleanup.NoValueOfOnStringType"
+    options: []
+  - name: "org.openrewrite.java.cleanup.NoWhitespaceAfter"
+    options: []
+  - name: "org.openrewrite.java.cleanup.NoWhitespaceBefore"
+    options: []
+  - name: "org.openrewrite.java.cleanup.ObjectFinalizeCallsSuper"
+    options: []
+  - name: "org.openrewrite.java.cleanup.OperatorWrap"
+    options: []
+  - name: "org.openrewrite.java.cleanup.PadEmptyForLoopComponents"
+    options: []
+  - name: "org.openrewrite.java.cleanup.PrimitiveWrapperClassConstructorToValueOf"
+    options: []
+  - name: "org.openrewrite.java.cleanup.RedundantFileCreation"
+    options: []
+  - name: "org.openrewrite.java.cleanup.ReferentialEqualityToObjectEquals"
+    options: []
+  - name: "org.openrewrite.java.cleanup.RemoveCallsToSystemGc"
+    options: []
+  - name: "org.openrewrite.java.cleanup.RemoveExtraSemicolons"
+    options: []
+  - name: "org.openrewrite.java.cleanup.RemoveJavaDocAuthorTag"
+    options: []
+  - name: "org.openrewrite.java.cleanup.RemoveRedundantTypeCast"
+    options: []
+  - name: "org.openrewrite.java.cleanup.RemoveUnneededAssertion"
+    options: []
+  - name: "org.openrewrite.java.cleanup.RemoveUnneededBlock"
+    options: []
+  - name: "org.openrewrite.java.cleanup.RemoveUnusedLocalVariables"
+    options:
+    - name: "ignoreVariablesNamed"
+      type: "String[]"
+      required: false
+  - name: "org.openrewrite.java.cleanup.RemoveUnusedPrivateMethods"
+    options: []
+  - name: "org.openrewrite.java.cleanup.RenameExceptionInEmptyCatch"
+    options: []
+  - name: "org.openrewrite.java.cleanup.RenameLocalVariablesToCamelCase"
+    options: []
+  - name: "org.openrewrite.java.cleanup.RenameMethodsNamedHashcodeEqualOrTostring"
+    options: []
+  - name: "org.openrewrite.java.cleanup.RenamePrivateFieldsToCamelCase"
+    options: []
+  - name: "org.openrewrite.java.cleanup.ReplaceDuplicateStringLiterals"
+    options:
+    - name: "includeTestSources"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.java.cleanup.ReplaceLambdaWithMethodReference"
+    options: []
+  - name: "org.openrewrite.java.cleanup.ReplaceStackWithDeque"
+    options: []
+  - name: "org.openrewrite.java.cleanup.SimplifyBooleanExpression"
+    options: []
+  - name: "org.openrewrite.java.cleanup.SimplifyBooleanReturn"
+    options: []
+  - name: "org.openrewrite.java.cleanup.SimplifyCompoundStatement"
+    options: []
+  - name: "org.openrewrite.java.cleanup.SimplifyConsecutiveAssignments"
+    options: []
+  - name: "org.openrewrite.java.cleanup.SimplifyConstantIfBranchExecution"
+    options: []
+  - name: "org.openrewrite.java.cleanup.StaticMethodNotFinal"
+    options: []
+  - name: "org.openrewrite.java.cleanup.StringLiteralEquality"
+    options: []
+  - name: "org.openrewrite.java.cleanup.TypecastParenPad"
+    options: []
+  - name: "org.openrewrite.java.cleanup.UnnecessaryCatch"
+    options: []
+  - name: "org.openrewrite.java.cleanup.UnnecessaryCloseInTryWithResources"
+    options: []
+  - name: "org.openrewrite.java.cleanup.UnnecessaryExplicitTypeArguments"
+    options: []
+  - name: "org.openrewrite.java.cleanup.UnnecessaryParentheses"
+    options: []
+  - name: "org.openrewrite.java.cleanup.UnnecessaryPrimitiveAnnotations"
+    options: []
+  - name: "org.openrewrite.java.cleanup.UnnecessaryThrows"
+    options: []
+  - name: "org.openrewrite.java.cleanup.UnwrapRepeatableAnnotations"
+    options: []
+  - name: "org.openrewrite.java.cleanup.UseAsBuilder"
+    options:
+    - name: "builderCreator"
+      type: "String"
+      required: false
+    - name: "builderType"
+      type: "String"
+      required: true
+    - name: "immutable"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.java.cleanup.UseCollectionInterfaces"
+    options: []
+  - name: "org.openrewrite.java.cleanup.UseDiamondOperator"
+    options: []
+  - name: "org.openrewrite.java.cleanup.UseJavaStyleArrayDeclarations"
+    options: []
+  - name: "org.openrewrite.java.cleanup.UseLambdaForFunctionalInterface"
+    options: []
+  - name: "org.openrewrite.java.cleanup.UseMapContainsKey"
+    options: []
+  - name: "org.openrewrite.java.cleanup.UseStandardCharset"
+    options: []
+  - name: "org.openrewrite.java.cleanup.UseStringReplace"
+    options: []
+  - name: "org.openrewrite.java.cleanup.WhileInsteadOfFor"
+    options: []
+  - name: "org.openrewrite.java.cleanup.WriteOctalValuesAsDecimal"
+    options: []
+  - name: "org.openrewrite.java.controlflow.ControlFlowVisualization"
+    options:
+    - name: "includeDotfile"
+      type: "boolean"
+      required: true
+  - name: "org.openrewrite.java.format.AutoFormat"
+    options: []
+  - name: "org.openrewrite.java.format.BlankLines"
+    options: []
+  - name: "org.openrewrite.java.format.EmptyNewlineAtEndOfFile"
+    options: []
+  - name: "org.openrewrite.java.format.NormalizeFormat"
+    options: []
+  - name: "org.openrewrite.java.format.NormalizeLineBreaks"
+    options: []
+  - name: "org.openrewrite.java.format.NormalizeTabsOrSpaces"
+    options: []
+  - name: "org.openrewrite.java.format.RemoveTrailingWhitespace"
+    options: []
+  - name: "org.openrewrite.java.format.SingleLineComments"
+    options: []
+  - name: "org.openrewrite.java.format.Spaces"
+    options: []
+  - name: "org.openrewrite.java.format.TabsAndIndents"
+    options: []
+  - name: "org.openrewrite.java.format.WrappingAndBraces"
+    options: []
+  - name: "org.openrewrite.java.recipes.ExecutionContextParameterName"
+    options: []
+  - name: "org.openrewrite.java.recipes.PublicGetVisitor"
+    options: []
+  - name: "org.openrewrite.java.recipes.SetDefaultEstimatedEffortPerOccurrence"
+    options: []
+  - name: "org.openrewrite.java.search.FindAnnotations"
+    options:
+    - name: "annotationPattern"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.search.FindDeprecatedClasses"
+    options:
+    - name: "ignoreDeprecatedScopes"
+      type: "Boolean"
+      required: false
+    - name: "matchInherited"
+      type: "Boolean"
+      required: false
+    - name: "typePattern"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.search.FindDeprecatedFields"
+    options:
+    - name: "ignoreDeprecatedScopes"
+      type: "Boolean"
+      required: false
+    - name: "typePattern"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.search.FindDeprecatedMethods"
+    options:
+    - name: "ignoreDeprecatedScopes"
+      type: "Boolean"
+      required: false
+    - name: "methodPattern"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.search.FindDeprecatedUses"
+    options:
+    - name: "ignoreDeprecatedScopes"
+      type: "Boolean"
+      required: false
+    - name: "matchInherited"
+      type: "Boolean"
+      required: false
+    - name: "typePattern"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.search.FindEmptyClasses"
+    options: []
+  - name: "org.openrewrite.java.search.FindEmptyMethods"
+    options:
+    - name: "matchOverrides"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.java.search.FindFields"
+    options:
+    - name: "fieldName"
+      type: "String"
+      required: true
+    - name: "fullyQualifiedTypeName"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.search.FindFieldsOfType"
+    options:
+    - name: "fullyQualifiedTypeName"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.search.FindFlowBetweenMethods"
+    options:
+    - name: "endMatchOverrides"
+      type: "Boolean"
+      required: false
+    - name: "endMethodPattern"
+      type: "String"
+      required: true
+    - name: "flow"
+      type: "String"
+      required: true
+    - name: "startMatchOverrides"
+      type: "Boolean"
+      required: false
+    - name: "startMethodPattern"
+      type: "String"
+      required: true
+    - name: "target"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.search.FindImports"
+    options:
+    - name: "typePattern"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.search.FindLiterals"
+    options:
+    - name: "pattern"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.search.FindMethods"
+    options:
+    - name: "flow"
+      type: "String"
+      required: false
+    - name: "matchOverrides"
+      type: "Boolean"
+      required: false
+    - name: "methodPattern"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.search.FindMissingTypes"
+    options: []
+  - name: "org.openrewrite.java.search.FindRepeatableAnnotations"
+    options: []
+  - name: "org.openrewrite.java.search.FindSecrets"
+    options: []
+  - name: "org.openrewrite.java.search.FindText"
+    options:
+    - name: "patterns"
+      type: "List"
+      required: true
+  - name: "org.openrewrite.java.search.FindTypes"
+    options:
+    - name: "checkAssignability"
+      type: "Boolean"
+      required: false
+    - name: "fullyQualifiedTypeName"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.search.PotentiallyDeadCode"
+    options: []
+  - name: "org.openrewrite.java.search.ResultOfMethodCallIgnored"
+    options:
+    - name: "methodPattern"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.search.UriCreatedWithHttpScheme"
+    options: []
+- artifactId: "rewrite-java-security"
+  version: "1.18.0"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.java.security.FindTextDirectionChanges"
+    options: []
+  - name: "org.openrewrite.java.security.JavaSecurityBestPractices"
+    options: []
+  - name: "org.openrewrite.java.security.PartialPathTraversalVulnerability"
+    options: []
+  - name: "org.openrewrite.java.security.RegularExpressionDenialOfService"
+    options: []
+  - name: "org.openrewrite.java.security.SecureRandom"
+    options: []
+  - name: "org.openrewrite.java.security.SecureRandomPrefersDefaultSeed"
+    options: []
+  - name: "org.openrewrite.java.security.SecureTempFileCreation"
+    options: []
+  - name: "org.openrewrite.java.security.UseFilesCreateTempDirectory"
+    options: []
+  - name: "org.openrewrite.java.security.XmlParserXXEVulnerability"
+    options: []
+  - name: "org.openrewrite.java.security.ZipSlip"
+    options:
+    - name: "debug"
+      type: "boolean"
+      required: true
+  - name: "org.openrewrite.java.security.marshalling.SecureJacksonDefaultTyping"
+    options: []
+  - name: "org.openrewrite.java.security.marshalling.SecureSnakeYamlConstructor"
+    options: []
+  - name: "org.openrewrite.java.security.search.FindJacksonDefaultTypeMapping"
+    options: []
+  - name: "org.openrewrite.java.security.search.FindVulnerableJacksonJsonTypeInfo"
+    options: []
+  - name: "org.openrewrite.java.security.spring.CsrfProtection"
+    options:
+    - name: "onlyIfSecurityConfig"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.java.security.spring.PreventClickjacking"
+    options:
+    - name: "onlyIfSecurityConfig"
+      type: "Boolean"
+      required: false
+- artifactId: "rewrite-jhipster"
+  version: "1.13.0"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.java.jhipster.FixCwe338"
+    options: []
+- artifactId: "rewrite-json"
+  version: "7.32.1"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.json.ChangeKey"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "newKey"
+      type: "String"
+      required: true
+    - name: "oldKeyPath"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.json.ChangeValue"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "oldKeyPath"
+      type: "String"
+      required: true
+    - name: "value"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.json.DeleteKey"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "keyPath"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.json.search.FindKey"
+    options:
+    - name: "key"
+      type: "String"
+      required: true
+- artifactId: "rewrite-kubernetes"
+  version: "1.24.0"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.kubernetes.AddConfiguration"
+    options:
+    - name: "apiVersion"
+      type: "String"
+      required: false
+    - name: "configurationPath"
+      type: "String"
+      required: true
+    - name: "resourceKind"
+      type: "String"
+      required: true
+    - name: "value"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.kubernetes.ImagePullPolicyAlways"
+    options: []
+  - name: "org.openrewrite.kubernetes.KubernetesBestPractices"
+    options: []
+  - name: "org.openrewrite.kubernetes.LifecycleRuleOnStorageBucket"
+    options: []
+  - name: "org.openrewrite.kubernetes.LimitContainerCapabilities"
+    options: []
+  - name: "org.openrewrite.kubernetes.MissingCpuLimits"
+    options: []
+  - name: "org.openrewrite.kubernetes.MissingCpuRequest"
+    options: []
+  - name: "org.openrewrite.kubernetes.MissingMemoryLimits"
+    options: []
+  - name: "org.openrewrite.kubernetes.MissingMemoryRequest"
+    options: []
+  - name: "org.openrewrite.kubernetes.MissingPodLivenessProbe"
+    options: []
+  - name: "org.openrewrite.kubernetes.MissingPodReadinessProbe"
+    options: []
+  - name: "org.openrewrite.kubernetes.NoHostIPCSharing"
+    options: []
+  - name: "org.openrewrite.kubernetes.NoHostNetworkSharing"
+    options: []
+  - name: "org.openrewrite.kubernetes.NoHostProcessIdSharing"
+    options: []
+  - name: "org.openrewrite.kubernetes.NoPrivilegeEscalation"
+    options: []
+  - name: "org.openrewrite.kubernetes.NoPrivilegedContainers"
+    options: []
+  - name: "org.openrewrite.kubernetes.NoRootContainers"
+    options: []
+  - name: "org.openrewrite.kubernetes.ReadOnlyRootFilesystem"
+    options: []
+  - name: "org.openrewrite.kubernetes.UpdateContainerImageName"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "imageToFind"
+      type: "String"
+      required: true
+    - name: "imageToUpdate"
+      type: "String"
+      required: false
+    - name: "includeInitContainers"
+      type: "boolean"
+      required: false
+    - name: "repoToFind"
+      type: "String"
+      required: false
+    - name: "repoToUpdate"
+      type: "String"
+      required: false
+    - name: "tagToFind"
+      type: "String"
+      required: false
+    - name: "tagToUpdate"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.kubernetes.rbac.AddRuleToRole"
+    options:
+    - name: "apiGroups"
+      type: "Set"
+      required: true
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "rbacResourceName"
+      type: "String"
+      required: true
+    - name: "rbacResourceType"
+      type: "String"
+      required: true
+    - name: "resourceNames"
+      type: "Set"
+      required: false
+    - name: "resources"
+      type: "Set"
+      required: true
+    - name: "verbs"
+      type: "Set"
+      required: true
+  - name: "org.openrewrite.kubernetes.resource.CapResourceValueToMaximum"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "resourceLimit"
+      type: "String"
+      required: true
+    - name: "resourceType"
+      type: "String"
+      required: true
+    - name: "resourceValueType"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.kubernetes.resource.FindExceedsResourceRatio"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "ratioLimit"
+      type: "String"
+      required: true
+    - name: "resourceType"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.kubernetes.resource.FindExceedsResourceValue"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "resourceLimit"
+      type: "String"
+      required: true
+    - name: "resourceType"
+      type: "String"
+      required: true
+    - name: "resourceValueType"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.kubernetes.search.FindAnnotation"
+    options:
+    - name: "annotationName"
+      type: "String"
+      required: true
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "value"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.kubernetes.search.FindDisallowedImageTags"
+    options:
+    - name: "disallowedTags"
+      type: "Set"
+      required: true
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "includeInitContainers"
+      type: "boolean"
+      required: false
+  - name: "org.openrewrite.kubernetes.search.FindImage"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "imageName"
+      type: "String"
+      required: true
+    - name: "imageTag"
+      type: "String"
+      required: false
+    - name: "includeInitContainers"
+      type: "boolean"
+      required: false
+    - name: "repository"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.kubernetes.search.FindMissingDigest"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "includeInitContainers"
+      type: "boolean"
+      required: false
+  - name: "org.openrewrite.kubernetes.search.FindMissingOrInvalidAnnotation"
+    options:
+    - name: "annotationName"
+      type: "String"
+      required: true
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "value"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.kubernetes.search.FindMissingOrInvalidLabel"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "labelName"
+      type: "String"
+      required: true
+    - name: "value"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.kubernetes.search.FindNonTlsIngress"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.kubernetes.search.FindResourceMissingConfiguration"
+    options:
+    - name: "configurationPath"
+      type: "String"
+      required: true
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "resourceKind"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.kubernetes.services.FindServiceExternalIPs"
+    options:
+    - name: "externalIPs"
+      type: "Set"
+      required: true
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "findMissing"
+      type: "boolean"
+      required: false
+  - name: "org.openrewrite.kubernetes.services.FindServicesByType"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "serviceType"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.kubernetes.services.UpdateServiceExternalIP"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "ipToFind"
+      type: "String"
+      required: true
+    - name: "ipToUpdate"
+      type: "String"
+      required: true
+- artifactId: "rewrite-logging-frameworks"
+  version: "1.14.0"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.java.logging.ParameterizedLogging"
+    options:
+    - name: "methodPattern"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.logging.PrintStackTraceToLogError"
+    options:
+    - name: "addLogger"
+      type: "Boolean"
+      required: false
+    - name: "loggerName"
+      type: "String"
+      required: false
+    - name: "loggingFramework"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.logging.SystemErrToLogging"
+    options:
+    - name: "addLogger"
+      type: "Boolean"
+      required: false
+    - name: "loggerName"
+      type: "String"
+      required: false
+    - name: "loggingFramework"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.logging.SystemOutToLogging"
+    options:
+    - name: "addLogger"
+      type: "Boolean"
+      required: false
+    - name: "level"
+      type: "String"
+      required: false
+    - name: "loggerName"
+      type: "String"
+      required: false
+    - name: "loggingFramework"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.logging.SystemPrintToLogging"
+    options:
+    - name: "addLogger"
+      type: "Boolean"
+      required: false
+    - name: "level"
+      type: "String"
+      required: false
+    - name: "loggerName"
+      type: "String"
+      required: false
+    - name: "loggingFramework"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.logging.log4j.Log4j1ToLog4j2"
+    options: []
+  - name: "org.openrewrite.java.logging.log4j.ParameterizedLogging"
+    options: []
+  - name: "org.openrewrite.java.logging.log4j.PrependRandomName"
+    options: []
+  - name: "org.openrewrite.java.logging.logback.Log4jAppenderToLogback"
+    options: []
+  - name: "org.openrewrite.java.logging.logback.Log4jLayoutToLogback"
+    options: []
+  - name: "org.openrewrite.java.logging.logback.Log4jToLogback"
+    options: []
+  - name: "org.openrewrite.java.logging.slf4j.ConvertLogMessageMessageOnlyToLogMessageAndThrowable"
+    options:
+    - name: "logMessage"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.logging.slf4j.Log4j1ToSlf4j1"
+    options: []
+  - name: "org.openrewrite.java.logging.slf4j.Log4j2ToSlf4j1"
+    options: []
+  - name: "org.openrewrite.java.logging.slf4j.Log4jToSlf4j"
+    options: []
+  - name: "org.openrewrite.java.logging.slf4j.LoggersNamedForEnclosingClass"
+    options: []
+  - name: "org.openrewrite.java.logging.slf4j.ParameterizedLogging"
+    options: []
+  - name: "org.openrewrite.java.logging.slf4j.Slf4jLogShouldBeConstant"
+    options: []
+- artifactId: "rewrite-maven"
+  version: "7.32.1"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.maven.AddCommentToMavenDependency"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "commentText"
+      type: "String"
+      required: true
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "xPath"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.AddDependency"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "classifier"
+      type: "String"
+      required: false
+    - name: "familyPattern"
+      type: "String"
+      required: false
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "onlyIfUsing"
+      type: "String"
+      required: true
+    - name: "optional"
+      type: "Boolean"
+      required: false
+    - name: "releasesOnly"
+      type: "Boolean"
+      required: false
+    - name: "scope"
+      type: "String"
+      required: false
+    - name: "type"
+      type: "String"
+      required: false
+    - name: "version"
+      type: "String"
+      required: true
+    - name: "versionPattern"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.maven.AddManagedDependency"
+    options:
+    - name: "addToRootPom"
+      type: "Boolean"
+      required: false
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "classifier"
+      type: "String"
+      required: false
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "onlyIfUsing"
+      type: "String"
+      required: false
+    - name: "releasesOnly"
+      type: "Boolean"
+      required: false
+    - name: "scope"
+      type: "String"
+      required: false
+    - name: "type"
+      type: "String"
+      required: false
+    - name: "version"
+      type: "String"
+      required: true
+    - name: "versionPattern"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.maven.AddPlugin"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "configuration"
+      type: "String"
+      required: false
+    - name: "dependencies"
+      type: "String"
+      required: false
+    - name: "executions"
+      type: "String"
+      required: false
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "version"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.AddPluginDependency"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "pluginArtifactId"
+      type: "String"
+      required: true
+    - name: "pluginGroupId"
+      type: "String"
+      required: true
+    - name: "version"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.AddProperty"
+    options:
+    - name: "key"
+      type: "String"
+      required: true
+    - name: "preserveExistingValue"
+      type: "Boolean"
+      required: false
+    - name: "trustParent"
+      type: "Boolean"
+      required: false
+    - name: "value"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.ChangeDependencyClassifier"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "newClassifier"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.maven.ChangeDependencyGroupIdAndArtifactId"
+    options:
+    - name: "newArtifactId"
+      type: "String"
+      required: false
+    - name: "newGroupId"
+      type: "String"
+      required: false
+    - name: "newVersion"
+      type: "String"
+      required: false
+    - name: "oldArtifactId"
+      type: "String"
+      required: true
+    - name: "oldGroupId"
+      type: "String"
+      required: true
+    - name: "overrideManagedVersion"
+      type: "Boolean"
+      required: false
+    - name: "versionPattern"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.maven.ChangeDependencyScope"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "newScope"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.maven.ChangeManagedDependencyGroupIdAndArtifactId"
+    options:
+    - name: "newArtifactId"
+      type: "String"
+      required: true
+    - name: "newGroupId"
+      type: "String"
+      required: true
+    - name: "newVersion"
+      type: "String"
+      required: false
+    - name: "oldArtifactId"
+      type: "String"
+      required: true
+    - name: "oldGroupId"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.ChangePackaging"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "packaging"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.ChangeParentPom"
+    options:
+    - name: "allowVersionDowngrades"
+      type: "boolean"
+      required: false
+    - name: "newArtifactId"
+      type: "String"
+      required: false
+    - name: "newGroupId"
+      type: "String"
+      required: false
+    - name: "newVersion"
+      type: "String"
+      required: true
+    - name: "oldArtifactId"
+      type: "String"
+      required: true
+    - name: "oldGroupId"
+      type: "String"
+      required: true
+    - name: "versionPattern"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.maven.ChangePluginConfiguration"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "configuration"
+      type: "String"
+      required: false
+    - name: "groupId"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.ChangePluginDependencies"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "dependencies"
+      type: "String"
+      required: false
+    - name: "groupId"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.ChangePluginExecutions"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "executions"
+      type: "String"
+      required: false
+    - name: "groupId"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.ChangePropertyValue"
+    options:
+    - name: "addIfMissing"
+      type: "Boolean"
+      required: false
+    - name: "key"
+      type: "String"
+      required: true
+    - name: "newValue"
+      type: "String"
+      required: true
+    - name: "trustParent"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.maven.ExcludeDependency"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "scope"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.maven.ManageDependencies"
+    options:
+    - name: "addToRootPom"
+      type: "Boolean"
+      required: false
+    - name: "artifactPattern"
+      type: "String"
+      required: false
+    - name: "groupPattern"
+      type: "String"
+      required: true
+    - name: "skipModelUpdate"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.maven.OrderPomElements"
+    options: []
+  - name: "org.openrewrite.maven.RemoveDependency"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "scope"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.maven.RemoveExclusion"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "exclusionArtifactId"
+      type: "String"
+      required: true
+    - name: "exclusionGroupId"
+      type: "String"
+      required: true
+    - name: "groupId"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.RemoveManagedDependency"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "scope"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.maven.RemovePlugin"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "groupId"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.RemoveProperty"
+    options:
+    - name: "propertyName"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.RemoveRedundantDependencyVersions"
+    options:
+    - name: "artifactPattern"
+      type: "String"
+      required: false
+    - name: "groupPattern"
+      type: "String"
+      required: false
+    - name: "onlyIfVersionsMatch"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.maven.UpgradeDependencyVersion"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "newVersion"
+      type: "String"
+      required: true
+    - name: "overrideManagedVersion"
+      type: "Boolean"
+      required: false
+    - name: "versionPattern"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.maven.UpgradeParentVersion"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "newVersion"
+      type: "String"
+      required: true
+    - name: "versionPattern"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.maven.UpgradePluginVersion"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "groupId"
+      type: "String"
+      required: true
+    - name: "newVersion"
+      type: "String"
+      required: true
+    - name: "trustParent"
+      type: "Boolean"
+      required: false
+    - name: "versionPattern"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.maven.cleanup.DependencyManagementDependencyRequiresVersion"
+    options: []
+  - name: "org.openrewrite.maven.search.DependencyInsight"
+    options:
+    - name: "artifactIdPattern"
+      type: "String"
+      required: true
+    - name: "groupIdPattern"
+      type: "String"
+      required: true
+    - name: "scope"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.search.FindDependency"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "groupId"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.search.FindPlugin"
+    options:
+    - name: "artifactId"
+      type: "String"
+      required: true
+    - name: "groupId"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.search.FindProperties"
+    options:
+    - name: "propertyPattern"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.maven.security.UseHttpsForRepositories"
+    options: []
+  - name: "org.openrewrite.maven.utilities.ListDependencies"
+    options:
+    - name: "scope"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.maven.utilities.PrintMavenAsDot"
+    options: []
+- artifactId: "rewrite-micronaut"
+  version: "1.18.0"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy"
+    options: []
+  - name: "org.openrewrite.java.micronaut.CopyNonInheritedAnnotations"
+    options: []
+  - name: "org.openrewrite.java.micronaut.FixDeprecatedExceptionHandlerConstructors"
+    options: []
+  - name: "org.openrewrite.java.micronaut.Micronaut2to3Migration"
+    options: []
+  - name: "org.openrewrite.java.micronaut.OncePerRequestHttpServerFilterToHttpServerFilter"
+    options: []
+  - name: "org.openrewrite.java.micronaut.ProviderImplementationsToMicronautFactories"
+    options: []
+  - name: "org.openrewrite.java.micronaut.SubclassesReturnedFromFactoriesNotInjectable"
+    options: []
+  - name: "org.openrewrite.java.micronaut.TypeRequiresIntrospection"
+    options: []
+  - name: "org.openrewrite.java.micronaut.UpgradeMicronautGradlePropertiesVersion"
+    options:
+    - name: "newVersion"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.micronaut.UpgradeMicronautMavenPropertyVersion"
+    options:
+    - name: "newVersion"
+      type: "String"
+      required: true
+- artifactId: "rewrite-migrate-java"
+  version: "1.13.0"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
+    options:
+    - name: "release"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.migrate.AddSuppressionForIllegalReflectionWarningsPlugin"
+    options:
+    - name: "version"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.migrate.ChangeJavaxAnnotationToJakarta"
+    options: []
+  - name: "org.openrewrite.java.migrate.Java8toJava11"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaVersion11"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaVersion17"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxActivationMigrationToJakartaActivation"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxAnnotationMigrationToJakartaAnnotation"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxAnnotationPackageToJakarta"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxAnnotationSecurityPackageToJakarta"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxAnnotationSqlPackageToJakarta"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxBatchMigrationToJakartaBatch"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxDecoratorToJakartaDecorator"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxEjbToJakartaEjb"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxElToJakartaEl"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxEnterpriseToJakartaEnterprise"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxFacesToJakartaFaces"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxInjectMigrationToJakartaInject"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxInterceptorToJakartaInterceptor"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxJmsToJakartaJms"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxJsonToJakartaJson"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxJwsToJakartaJws"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxMailToJakartaMail"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxMigrationToJakarta"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxPeristenceXmlToJakartaPersistenceXml"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxPersistenceToJakartaPersistence"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxResourceToJakartaResource"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxSecurityToJakartaSecurity"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxServletToJakartaServlet"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxTransactionMigrationToJakartaTransaction"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxValidationMigrationToJakartaValidation"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxWebsocketToJakartaWebsocket"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxWsToJakartaWs"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxXmlBindMigrationToJakartaXmlBind"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxXmlSoapToJakartaXmlSoap"
+    options: []
+  - name: "org.openrewrite.java.migrate.JavaxXmlWsMigrationToJakartaXmlWs"
+    options: []
+  - name: "org.openrewrite.java.migrate.UpgradeJava17"
+    options: []
+  - name: "org.openrewrite.java.migrate.UseJavaUtilBase64"
+    options: []
+  - name: "org.openrewrite.java.migrate.apache.commons.codec.ApacheBase64ToJavaBase64"
+    options: []
+  - name: "org.openrewrite.java.migrate.apache.commons.io.ApacheFileUtilsToJavaFiles"
+    options: []
+  - name: "org.openrewrite.java.migrate.apache.commons.io.ApacheIOUtilsUseExplicitCharset"
+    options:
+    - name: "encoding"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.migrate.apache.commons.io.RelocateApacheCommonsIo"
+    options: []
+  - name: "org.openrewrite.java.migrate.apache.commons.io.UseStandardCharsets"
+    options: []
+  - name: "org.openrewrite.java.migrate.apache.commons.io.UseSystemLineSeparator"
+    options: []
+  - name: "org.openrewrite.java.migrate.cobertura.RemoveCoberturaMavenPlugin"
+    options: []
+  - name: "org.openrewrite.java.migrate.concurrent.JavaConcurrentAPIs"
+    options: []
+  - name: "org.openrewrite.java.migrate.concurrent.MigrateAtomicBooleanWeakCompareAndSetToWeakCompareAndSetPlain"
+    options: []
+  - name: "org.openrewrite.java.migrate.concurrent.MigrateAtomicIntegerArrayWeakCompareAndSetToWeakCompareAndSetPlain"
+    options: []
+  - name: "org.openrewrite.java.migrate.concurrent.MigrateAtomicIntegerWeakCompareAndSetToWeakCompareAndSetPlain"
+    options: []
+  - name: "org.openrewrite.java.migrate.concurrent.MigrateAtomicLongArrayWeakCompareAndSetToWeakCompareAndSetPlain"
+    options: []
+  - name: "org.openrewrite.java.migrate.concurrent.MigrateAtomicLongWeakCompareAndSetToWeakCompareAndSetPlain"
+    options: []
+  - name: "org.openrewrite.java.migrate.concurrent.MigrateAtomicReferenceArrayWeakCompareAndSetToWeakCompareAndSetPlain"
+    options: []
+  - name: "org.openrewrite.java.migrate.concurrent.MigrateAtomicReferenceWeakCompareAndSetToWeakCompareAndSetPlain"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.NoGuava"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.NoGuavaAtomicsNewReference"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.NoGuavaCreateTempDir"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.NoGuavaDirectExecutor"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.NoGuavaImmutableListOf"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.NoGuavaImmutableMapOf"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.NoGuavaImmutableSetOf"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.NoGuavaListsNewArrayList"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.NoGuavaListsNewCopyOnWriteArrayList"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.NoGuavaListsNewLinkedList"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.NoGuavaMapsNewLinkedHashMap"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.NoGuavaSetsNewConcurrentHashSet"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.NoGuavaSetsNewHashSet"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.NoGuavaSetsNewLinkedHashSet"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferCharCompare"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferIntegerCompare"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferIntegerCompareUnsigned"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferIntegerDivideUnsigned"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferIntegerParseUnsignedInt"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferIntegerRemainderUnsigned"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferJavaUtilCollectionsSynchronizedNavigableMap"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferJavaUtilCollectionsUnmodifiableNavigableMap"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferJavaUtilFunction"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferJavaUtilObjectsEquals"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferJavaUtilObjectsHashCode"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferJavaUtilPredicate"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferJavaUtilSupplier"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferLongCompare"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferLongCompareUnsigned"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferLongDivideUnsigned"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferLongParseUnsignedLong"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferLongRemainderUnsigned"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferMathAddExact"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferMathMultiplyExact"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferMathSubtractExact"
+    options: []
+  - name: "org.openrewrite.java.migrate.guava.PreferShortCompare"
+    options: []
+  - name: "org.openrewrite.java.migrate.jacoco.UpgradeJaCoCoMavenPluginVersion"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.AddInjectDependencies"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.AddJaxbDependencies"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.AddJaxbRuntime"
+    options:
+    - name: "runtime"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.migrate.javax.AddJaxwsDependencies"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.AddJaxwsRuntime"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.JavaxLangModelUtil"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.JavaxManagementMonitorAPIs"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.JavaxXmlStreamAPIs"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.MigrateAbstractAnnotationValueVisitor6To9"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.MigrateAbstractElementVisitor6To9"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.MigrateAbstractTypeVisitor6To9"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.MigrateCounterMonitorSetThreshholdToSetInitThreshold"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.MigrateElementKindVisitor6To9"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.MigrateElementScanner6To9"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.MigrateSimpleAnnotationValueVisitor6To9"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.MigrateSimpleElementVisitor6To9"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.MigrateSimpleTypeVisitor6To9"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.MigrateTypeKindVisitor6To9"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.MigrateXMLEventFactoryNewInstanceToNewFactory"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.MigrateXMLInputFactoryNewInstanceToNewFactory"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.MigrateXMLOutputFactoryNewInstanceToNewFactory"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.ReplaceJavaxJaxbWithJakarta"
+    options: []
+  - name: "org.openrewrite.java.migrate.javax.ReplaceJavaxJaxwsWithJakarta"
+    options: []
+  - name: "org.openrewrite.java.migrate.lang.JavaLangAPIs"
+    options: []
+  - name: "org.openrewrite.java.migrate.lang.MigrateCharacterIsJavaLetterOrDigitToIsJavaIdentifierPart"
+    options: []
+  - name: "org.openrewrite.java.migrate.lang.MigrateCharacterIsJavaLetterToIsJavaIdentifierStart"
+    options: []
+  - name: "org.openrewrite.java.migrate.lang.MigrateCharacterIsSpaceToIsWhitespace"
+    options: []
+  - name: "org.openrewrite.java.migrate.lang.MigrateClassLoaderDefineClass"
+    options: []
+  - name: "org.openrewrite.java.migrate.lang.MigrateClassNewInstanceToGetDeclaredConstructorNewInstance"
+    options: []
+  - name: "org.openrewrite.java.migrate.lang.MigrateRuntimeVersionMajorToFeature"
+    options: []
+  - name: "org.openrewrite.java.migrate.lang.MigrateRuntimeVersionMinorToInterim"
+    options: []
+  - name: "org.openrewrite.java.migrate.lang.MigrateRuntimeVersionSecurityToUpdate"
+    options: []
+  - name: "org.openrewrite.java.migrate.lang.MigrateSecurityManagerMulticast"
+    options: []
+  - name: "org.openrewrite.java.migrate.lang.StringFormatted"
+    options: []
+  - name: "org.openrewrite.java.migrate.logging.JavaLoggingAPIs"
+    options: []
+  - name: "org.openrewrite.java.migrate.logging.MigrateGetLoggingMXBeanToGetPlatformMXBean"
+    options: []
+  - name: "org.openrewrite.java.migrate.logging.MigrateInterfaceLoggingMXBeanToPlatformLoggingMXBean"
+    options: []
+  - name: "org.openrewrite.java.migrate.logging.MigrateLogRecordSetMillisToSetInstant"
+    options: []
+  - name: "org.openrewrite.java.migrate.logging.MigrateLoggerGlobalToGetGlobal"
+    options: []
+  - name: "org.openrewrite.java.migrate.logging.MigrateLoggerLogrbToUseResourceBundle"
+    options: []
+  - name: "org.openrewrite.java.migrate.lombok.LombokValToFinalVar"
+    options: []
+  - name: "org.openrewrite.java.migrate.metrics.SimplifyMicrometerMeterTags"
+    options: []
+  - name: "org.openrewrite.java.migrate.net.JavaNetAPIs"
+    options: []
+  - name: "org.openrewrite.java.migrate.net.MigrateHttpURLConnectionHttpServerErrorToHttpInternalError"
+    options: []
+  - name: "org.openrewrite.java.migrate.net.MigrateMulticastSocketGetTTLToGetTimeToLive"
+    options: []
+  - name: "org.openrewrite.java.migrate.net.MigrateMulticastSocketSetTTLToSetTimeToLive"
+    options: []
+  - name: "org.openrewrite.java.migrate.net.MigrateURLDecoderDecode"
+    options: []
+  - name: "org.openrewrite.java.migrate.net.MigrateURLEncoderEncode"
+    options: []
+  - name: "org.openrewrite.java.migrate.search.AboutJavaVersion"
+    options:
+    - name: "whenUsesType"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.migrate.sql.JavaSqlAPIs"
+    options: []
+  - name: "org.openrewrite.java.migrate.sql.MigrateDriverManagerSetLogStream"
+    options: []
+  - name: "org.openrewrite.java.migrate.util.JavaUtilAPIs"
+    options: []
+  - name: "org.openrewrite.java.migrate.util.MigrateCollectionsSingletonList"
+    options: []
+  - name: "org.openrewrite.java.migrate.util.MigrateCollectionsSingletonMap"
+    options: []
+  - name: "org.openrewrite.java.migrate.util.MigrateCollectionsSingletonSet"
+    options: []
+  - name: "org.openrewrite.java.migrate.util.MigrateCollectionsUnmodifiableList"
+    options: []
+  - name: "org.openrewrite.java.migrate.util.MigrateCollectionsUnmodifiableSet"
+    options: []
+  - name: "org.openrewrite.java.migrate.util.OptionalNotEmptyToIsPresent"
+    options: []
+  - name: "org.openrewrite.java.migrate.util.OptionalNotPresentToIsEmpty"
+    options: []
+  - name: "org.openrewrite.java.migrate.util.UseEnumSetOf"
+    options: []
+  - name: "org.openrewrite.java.migrate.util.UseMapOf"
+    options: []
+  - name: "org.openrewrite.java.migrate.wro4j.UpgradeWro4jMavenPluginVersion"
+    options: []
+- artifactId: "rewrite-properties"
+  version: "7.32.1"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.properties.AddProperty"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "property"
+      type: "String"
+      required: true
+    - name: "value"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.properties.ChangePropertyKey"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "newPropertyKey"
+      type: "String"
+      required: true
+    - name: "oldPropertyKey"
+      type: "String"
+      required: true
+    - name: "relaxedBinding"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.properties.ChangePropertyValue"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "newValue"
+      type: "String"
+      required: true
+    - name: "oldValue"
+      type: "String"
+      required: false
+    - name: "propertyKey"
+      type: "String"
+      required: true
+    - name: "relaxedBinding"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.properties.DeleteProperty"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "propertyKey"
+      type: "String"
+      required: true
+    - name: "relaxedBinding"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.properties.search.FindProperties"
+    options:
+    - name: "propertyKey"
+      type: "String"
+      required: true
+    - name: "relaxedBinding"
+      type: "Boolean"
+      required: false
+- artifactId: "rewrite-quarkus"
+  version: "1.13.0"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.java.quarkus.ConfigPropertiesToConfigMapping"
+    options: []
+  - name: "org.openrewrite.java.quarkus.ConfigureQuarkusMavenPluginWithReasonableDefaults"
+    options: []
+  - name: "org.openrewrite.java.quarkus.MigrateQuarkusMavenPluginNativeImageGoal"
+    options: []
+  - name: "org.openrewrite.java.quarkus.MultiTransformHotStreamToMultiHotStream"
+    options: []
+  - name: "org.openrewrite.java.quarkus.Quarkus1to1_13Migration"
+    options: []
+  - name: "org.openrewrite.java.quarkus.quarkus2.GrpcServiceAnnotationToGrpcClient"
+    options: []
+  - name: "org.openrewrite.java.quarkus.quarkus2.Quarkus1to2Migration"
+    options: []
+  - name: "org.openrewrite.java.quarkus.quarkus2.RemoveAvroMavenPlugin"
+    options: []
+  - name: "org.openrewrite.java.quarkus.quarkus2.UseIdentifierOnDefaultKafkaBroker"
+    options: []
+  - name: "org.openrewrite.java.quarkus.quarkus2.UsePanacheEntityBaseStaticMethods"
+    options: []
+  - name: "org.openrewrite.java.quarkus.quarkus2.UsePanacheEntityBaseUniT"
+    options: []
+  - name: "org.openrewrite.java.quarkus.quarkus2.UseReactivePanacheMongoEntityBaseUniT"
+    options: []
+- artifactId: "rewrite-spring"
+  version: "4.29.0"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.java.spring.BeanMethodsNotPublic"
+    options: []
+  - name: "org.openrewrite.java.spring.ExpandProperties"
+    options: []
+  - name: "org.openrewrite.java.spring.ImplicitWebAnnotationNames"
+    options: []
+  - name: "org.openrewrite.java.spring.NoAutowiredOnConstructor"
+    options: []
+  - name: "org.openrewrite.java.spring.NoRequestMappingAnnotation"
+    options: []
+  - name: "org.openrewrite.java.spring.SeparateApplicationYamlByProfile"
+    options: []
+  - name: "org.openrewrite.java.spring.UpdateApiManifest"
+    options: []
+  - name: "org.openrewrite.java.spring.YamlPropertiesToKebabCase"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.ConditionalOnBeanAnyNestedCondition"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.DatabaseComponentAndBeanInitializationOrdering"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.GetErrorAttributes"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MergeBootstrapYamlWithApplicationYaml"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateAbstractHealthIndicatorToPingHealthIndicator"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateActuatorMediaTypeToApiVersion"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateConfigurationPropertiesBindingPostProcessorValidatorBeanName"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateDatabaseCredentials"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateDiskSpaceHealthIndicatorConstructor"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateErrorControllerPackageName"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateErrorPropertiesIncludeStackTraceConstants"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateHsqlEmbeddedDatabaseConnection"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateHttpMessageConvertersPackageName"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateLocalServerPortAnnotation"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateLoggingSystemPropertyConstants"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateMultipartConfigFactory"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateNotBlankPackageName"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateNotEmptyPackageName"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateRestClientBuilderCustomizerPackageName"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateRestTemplateBuilderBasicAuthorization"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateRestTemplateBuilderTimeoutByInt"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateSpringBootServletInitializerPackageName"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateUndertowServletWebServerFactoryIsEagerInitFilters"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateUndertowServletWebServerFactorySetEagerInitFilters"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.MigrateWebTestClientBuilderCustomizerPackageName"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.OutputCaptureExtension"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.RemoveObsoleteSpringRunners"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.ReplaceDeprecatedEnvironmentTestUtils"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.RestTemplateBuilderRequestFactory"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.SamlRelyingPartyPropertyApplicationPropertiesMove"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.SpringBoot1To2Migration"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.SpringBoot2BestPractices"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.SpringBoot2JUnit4to5Migration"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.SpringBoot2To3Migration"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.SpringBootMavenPluginMigrateAgentToAgents"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.SpringBootProperties_2_0"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.SpringBootProperties_2_1"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.SpringBootProperties_2_2"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.SpringBootProperties_2_3"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.SpringBootProperties_2_4"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.SpringBootProperties_2_5"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.SpringBootProperties_2_6"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.SpringBootProperties_2_7"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.UnnecessarySpringExtension"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.UnnecessarySpringRunWith"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_0"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_1"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_2"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_3"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_4"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_5"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_6"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_7"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.WebSecurityConfigurerAdapter"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.search.CustomizingJooqDefaultConfiguration"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.search.IntegrationSchedulerPoolRecipe"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.search.LoggingShutdownHooks"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.search.MessagesInTheDefaultErrorView"
+    options: []
+  - name: "org.openrewrite.java.spring.boot2.search.UpgradeRequirementsSpringBoot_2_5"
+    options: []
+  - name: "org.openrewrite.java.spring.boot3.MavenPomUpgrade"
+    options: []
+  - name: "org.openrewrite.java.spring.boot3.PreciseBeanType"
+    options: []
+  - name: "org.openrewrite.java.spring.boot3.RemoveConstructorBindingAnnotation"
+    options: []
+  - name: "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_0"
+    options: []
+  - name: "org.openrewrite.java.spring.cve.Spring4Shell"
+    options: []
+  - name: "org.openrewrite.java.spring.data.MigrateJpaSort"
+    options: []
+  - name: "org.openrewrite.java.spring.data.MigrateQuerydslJpaRepository"
+    options: []
+  - name: "org.openrewrite.java.spring.data.UpgradeSpringData_2_3"
+    options: []
+  - name: "org.openrewrite.java.spring.data.UpgradeSpringData_2_5"
+    options: []
+  - name: "org.openrewrite.java.spring.data.UseJpaRepositoryDeleteAllInBatch"
+    options: []
+  - name: "org.openrewrite.java.spring.data.UseJpaRepositoryGetById"
+    options: []
+  - name: "org.openrewrite.java.spring.framework.EnvironmentAcceptsProfiles"
+    options: []
+  - name: "org.openrewrite.java.spring.framework.JdbcTemplateObjectArrayArgToVarArgs"
+    options: []
+  - name: "org.openrewrite.java.spring.framework.MigrateInstantiationAwareBeanPostProcessorAdapter"
+    options: []
+  - name: "org.openrewrite.java.spring.framework.MigrateUtf8MediaTypes"
+    options: []
+  - name: "org.openrewrite.java.spring.framework.UpgradeSpringFrameworkDependencies"
+    options:
+    - name: "newVersion"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_1"
+    options: []
+  - name: "org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_2"
+    options: []
+  - name: "org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_3"
+    options: []
+  - name: "org.openrewrite.java.spring.framework.UseObjectUtilsIsEmpty"
+    options: []
+  - name: "org.openrewrite.maven.spring.UpgradeExplicitSpringBootDependencies"
+    options:
+    - name: "fromVersion"
+      type: "String"
+      required: true
+    - name: "toVersion"
+      type: "String"
+      required: true
+- artifactId: "rewrite-terraform"
+  version: "1.13.0"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.terraform.AddConfiguration"
+    options:
+    - name: "content"
+      type: "String"
+      required: true
+    - name: "resourceName"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.terraform.SecureRandom"
+    options:
+    - name: "byteLength"
+      type: "Integer"
+      required: false
+  - name: "org.openrewrite.terraform.aws.AWSBestPractices"
+    options: []
+  - name: "org.openrewrite.terraform.aws.DisableInstanceMetadataServiceV1"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnableApiGatewayCaching"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnableDynamoDbPITR"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnableECRScanOnPush"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EncryptAuroraClusters"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EncryptCodeBuild"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EncryptDAXStorage"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EncryptDocumentDB"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EncryptEBSSnapshots"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EncryptEBSVolumeLaunchConfiguration"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EncryptEBSVolumes"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EncryptEFSVolumesInECSTaskDefinitionsInTransit"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EncryptElastiCacheRedisAtRest"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EncryptElastiCacheRedisInTransit"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EncryptNeptuneStorage"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EncryptRDSClusters"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EncryptRedshift"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureAWSCMKRotationIsEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureAWSEFSWithEncryptionForDataAtRestIsEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureAWSEKSClusterEndpointAccessIsPubliclyDisabled"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureAWSElasticsearchDomainEncryptionForDataAtRestIsEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureAWSElasticsearchDomainsHaveEnforceHTTPSEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureAWSElasticsearchHasNodeToNodeEncryptionEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureAWSIAMPasswordPolicyHasAMinimumOf14Characters"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureAWSLambdaFunctionIsConfiguredForFunctionLevelConcurrentExecutionLimit"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureAWSLambdaFunctionsHaveTracingEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureAWSRDSDatabaseInstanceIsNotPubliclyAccessible"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureAWSS3ObjectVersioningIsEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureAmazonEKSControlPlaneLoggingEnabledForAllLogTypes"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureCloudTrailLogFileValidationIsEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureDataStoredInAnS3BucketIsSecurelyEncryptedAtRest"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureDetailedMonitoringForEC2InstancesIsEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureEC2IsEBSOptimized"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureECRRepositoriesAreEncrypted"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureEnhancedMonitoringForAmazonRDSInstancesIsEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureIAMPasswordPolicyExpiresPasswordsWithin90DaysOrLess"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureIAMPasswordPolicyPreventsPasswordReuse"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureIAMPasswordPolicyRequiresAtLeastOneLowercaseLetter"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureIAMPasswordPolicyRequiresAtLeastOneNumber"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureIAMPasswordPolicyRequiresAtLeastOneSymbol"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureIAMPasswordPolicyRequiresAtLeastOneUppercaseLetter"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureKinesisStreamIsSecurelyEncrypted"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureRDSDatabaseHasIAMAuthenticationEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureRDSInstancesHaveMultiAZEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureRespectiveLogsOfAmazonRDSAreEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureTheS3BucketHasAccessLoggingEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.aws.EnsureVPCSubnetsDoNotAssignPublicIPByDefault"
+    options: []
+  - name: "org.openrewrite.terraform.aws.ImmutableECRTags"
+    options: []
+  - name: "org.openrewrite.terraform.aws.UseHttpsForCloudfrontDistribution"
+    options: []
+  - name: "org.openrewrite.terraform.azure.AzureBestPractices"
+    options: []
+  - name: "org.openrewrite.terraform.azure.DisableKubernetesDashboard"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnableAzureStorageAccountTrustedMicrosoftServicesAccess"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnableAzureStorageSecureTransferRequired"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnableGeoRedundantBackupsOnPostgreSQLServer"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EncryptAzureVMDataDiskWithADECMK"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureAKSPoliciesAddOn"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureAKVSecretsHaveAnExpirationDateSet"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureASecurityContactPhoneNumberIsPresent"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureActivityLogRetentionIsSetTo365DaysOrGreater"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureAllKeysHaveAnExpirationDate"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureAppServiceEnablesDetailedErrorMessages"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureAppServiceEnablesFailedRequestTracing"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureAppServiceEnablesHTTPLogging"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureAppServicesUseAzureFiles"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureAzureAppServiceWebAppRedirectsHTTPToHTTPS"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureAzureApplicationGatewayHasWAFEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureAzureKeyVaultIsRecoverable"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureAzureNetworkWatcherNSGFlowLogsRetentionIsGreaterThan90Days"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureAzurePostgreSQLDatabaseServerWithSSLConnectionIsEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureAzureSQLServerAuditLogRetentionIsGreaterThan90Days"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureAzureSQLServerSendAlertsToFieldValueIsSet"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureAzureSQLServerThreatDetectionAlertsAreEnabledForAllThreatTypes"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureFTPDeploymentsAreDisabled"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureKeyVaultAllowsFirewallRulesSettings"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureKeyVaultEnablesPurgeProtection"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureKeyVaultKeyIsBackedByHSM"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureKeyVaultSecretsHaveContentTypeSet"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureLogProfileIsConfiguredToCaptureAllActivities"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureMSSQLServersHaveEmailServiceAndCoAdministratorsEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureManagedIdentityProviderIsEnabledForAppServices"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureMySQLIsUsingTheLatestVersionOfTLSEncryption"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureMySQLServerDatabasesHaveEnforceSSLConnectionEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureMySQLServerDisablesPublicNetworkAccess"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureMySQLServerEnablesGeoRedundantBackups"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureMySQLServerEnablesThreatDetectionPolicy"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsurePostgreSQLServerDisablesPublicNetworkAccess"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsurePostgreSQLServerEnablesInfrastructureEncryption"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsurePostgreSQLServerEnablesThreatDetectionPolicy"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsurePublicNetworkAccessEnabledIsSetToFalseForMySQLServers"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureSendEmailNotificationForHighSeverityAlertsIsEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureSendEmailNotificationForHighSeverityAlertsToAdminsIsEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureStandardPricingTierIsSelected"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureStorageAccountUsesLatestTLSVersion"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureTheStorageContainerStoringActivityLogsIsNotPubliclyAccessible"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureWebAppHasIncomingClientCertificatesEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureWebAppUsesTheLatestVersionOfHTTP"
+    options: []
+  - name: "org.openrewrite.terraform.azure.EnsureWebAppUsesTheLatestVersionOfTLSEncryption"
+    options: []
+  - name: "org.openrewrite.terraform.azure.SetAzureStorageAccountDefaultNetworkAccessToDeny"
+    options: []
+  - name: "org.openrewrite.terraform.gcp.EnablePodSecurityPolicyControllerOnGKEClusters"
+    options: []
+  - name: "org.openrewrite.terraform.gcp.EnableVPCFlowLogsAndIntranodeVisibility"
+    options: []
+  - name: "org.openrewrite.terraform.gcp.EnableVPCFlowLogsForSubnetworks"
+    options: []
+  - name: "org.openrewrite.terraform.gcp.EnsureBinaryAuthorizationIsUsed"
+    options: []
+  - name: "org.openrewrite.terraform.gcp.EnsureComputeInstancesLaunchWithShieldedVMEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.gcp.EnsureGCPCloudStorageBucketWithUniformBucketLevelAccessAreEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.gcp.EnsureGCPKubernetesClusterNodeAutoRepairConfigurationIsEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.gcp.EnsureGCPKubernetesEngineClustersHaveLegacyComputeEngineMetadataEndpointsDisabled"
+    options: []
+  - name: "org.openrewrite.terraform.gcp.EnsureGCPVMInstancesHaveBlockProjectWideSSHKeysFeatureEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.gcp.EnsureIPForwardingOnInstancesIsDisabled"
+    options: []
+  - name: "org.openrewrite.terraform.gcp.EnsurePrivateClusterIsEnabledWhenCreatingKubernetesClusters"
+    options: []
+  - name: "org.openrewrite.terraform.gcp.EnsureSecureBootForShieldedGKENodesIsEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.gcp.EnsureShieldedGKENodesAreEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.gcp.EnsureTheGKEMetadataServerIsEnabled"
+    options: []
+  - name: "org.openrewrite.terraform.gcp.GCPBestPractices"
+    options: []
+  - name: "org.openrewrite.terraform.search.FindResource"
+    options:
+    - name: "resourceName"
+      type: "String"
+      required: true
+- artifactId: "rewrite-testing-frameworks"
+  version: "1.30.0"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.java.testing.assertj.Assertj"
+    options: []
+  - name: "org.openrewrite.java.testing.assertj.JUnitAssertArrayEqualsToAssertThat"
+    options: []
+  - name: "org.openrewrite.java.testing.assertj.JUnitAssertEqualsToAssertThat"
+    options: []
+  - name: "org.openrewrite.java.testing.assertj.JUnitAssertFalseToAssertThat"
+    options: []
+  - name: "org.openrewrite.java.testing.assertj.JUnitAssertNotEqualsToAssertThat"
+    options: []
+  - name: "org.openrewrite.java.testing.assertj.JUnitAssertNotNullToAssertThat"
+    options: []
+  - name: "org.openrewrite.java.testing.assertj.JUnitAssertNullToAssertThat"
+    options: []
+  - name: "org.openrewrite.java.testing.assertj.JUnitAssertSameToAssertThat"
+    options: []
+  - name: "org.openrewrite.java.testing.assertj.JUnitAssertThrowsToAssertExceptionType"
+    options: []
+  - name: "org.openrewrite.java.testing.assertj.JUnitAssertTrueToAssertThat"
+    options: []
+  - name: "org.openrewrite.java.testing.assertj.JUnitFailToAssertJFail"
+    options: []
+  - name: "org.openrewrite.java.testing.assertj.JUnitToAssertj"
+    options: []
+  - name: "org.openrewrite.java.testing.assertj.StaticImports"
+    options: []
+  - name: "org.openrewrite.java.testing.cleanup.AssertEqualsNullToAssertNull"
+    options: []
+  - name: "org.openrewrite.java.testing.cleanup.AssertFalseEqualsToAssertNotEquals"
+    options: []
+  - name: "org.openrewrite.java.testing.cleanup.AssertFalseNegationToAssertTrue"
+    options: []
+  - name: "org.openrewrite.java.testing.cleanup.AssertFalseNullToAssertNotNull"
+    options: []
+  - name: "org.openrewrite.java.testing.cleanup.AssertTrueComparisonToAssertEquals"
+    options: []
+  - name: "org.openrewrite.java.testing.cleanup.AssertTrueEqualsToAssertEquals"
+    options: []
+  - name: "org.openrewrite.java.testing.cleanup.AssertTrueNegationToAssertFalse"
+    options: []
+  - name: "org.openrewrite.java.testing.cleanup.AssertTrueNullToAssertNull"
+    options: []
+  - name: "org.openrewrite.java.testing.cleanup.BestPractices"
+    options: []
+  - name: "org.openrewrite.java.testing.cleanup.RemoveEmptyTests"
+    options: []
+  - name: "org.openrewrite.java.testing.cleanup.RemoveTestPrefix"
+    options: []
+  - name: "org.openrewrite.java.testing.cleanup.TestsShouldIncludeAssertions"
+    options:
+    - name: "additionalAsserts"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.java.testing.cleanup.TestsShouldNotBePublic"
+    options:
+    - name: "removeProtectedModifiers"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.java.testing.cucumber.CucumberAnnotationToSuite"
+    options: []
+  - name: "org.openrewrite.java.testing.cucumber.CucumberJava8HookDefinitionToCucumberJava"
+    options: []
+  - name: "org.openrewrite.java.testing.cucumber.CucumberJava8StepDefinitionToCucumberJava"
+    options: []
+  - name: "org.openrewrite.java.testing.cucumber.CucumberJava8ToJava"
+    options: []
+  - name: "org.openrewrite.java.testing.cucumber.CucumberToJunitPlatformSuite"
+    options: []
+  - name: "org.openrewrite.java.testing.cucumber.DropSummaryPrinter"
+    options: []
+  - name: "org.openrewrite.java.testing.cucumber.RegexToCucumberExpression"
+    options: []
+  - name: "org.openrewrite.java.testing.cucumber.UpgradeCucumber2x"
+    options: []
+  - name: "org.openrewrite.java.testing.cucumber.UpgradeCucumber5x"
+    options: []
+  - name: "org.openrewrite.java.testing.cucumber.UpgradeCucumber7x"
+    options: []
+  - name: "org.openrewrite.java.testing.hamcrest.AddHamcrestIfUsed"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.AddMissingNested"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.AssertToAssertions"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.CategoryToTag"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.CleanupAssertions"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.CleanupJUnitImports"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.EnclosedToNested"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.ExpectedExceptionToAssertThrows"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.IgnoreToDisabled"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.JUnit4to5Migration"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.JUnit5BestPractices"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.JUnitParamsRunnerToParameterized"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.LifecycleNonPrivate"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.MigrateJUnitTestCase"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.MockitoJUnitToMockitoExtension"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.ParameterizedRunnerToParameterized"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.RemoveObsoleteRunners"
+    options:
+    - name: "obsoleteRunners"
+      type: "List"
+      required: true
+  - name: "org.openrewrite.java.testing.junit5.RunnerToExtension"
+    options:
+    - name: "extension"
+      type: "String"
+      required: true
+    - name: "runners"
+      type: "List"
+      required: true
+  - name: "org.openrewrite.java.testing.junit5.StaticImports"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.TempDirNonFinal"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.TemporaryFolderToTempDir"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.TestRuleToTestInfo"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.UpdateBeforeAfterAnnotations"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.UpdateMockWebServer"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.UpdateTestAnnotation"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.UseHamcrestAssertThat"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.UseMockitoExtension"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.UseTestMethodOrder"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.UseWiremockExtension"
+    options: []
+  - name: "org.openrewrite.java.testing.junit5.VertxUnitToVertxJunit5"
+    options: []
+  - name: "org.openrewrite.java.testing.mockito.CleanupMockitoImports"
+    options: []
+  - name: "org.openrewrite.java.testing.mockito.MockUtilsToStatic"
+    options: []
+  - name: "org.openrewrite.java.testing.mockito.Mockito1to3Migration"
+    options: []
+  - name: "org.openrewrite.java.testing.mockito.Mockito1to4Migration"
+    options: []
+  - name: "org.openrewrite.java.testing.mockito.MockitoJUnitRunnerSilentToExtension"
+    options: []
+- artifactId: "rewrite-xml"
+  version: "7.32.1"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.xml.AddCommentToXmlTag"
+    options:
+    - name: "commentText"
+      type: "String"
+      required: true
+    - name: "xPath"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.xml.ChangeTagAttribute"
+    options:
+    - name: "attributeName"
+      type: "String"
+      required: true
+    - name: "elementName"
+      type: "String"
+      required: true
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "newValue"
+      type: "String"
+      required: true
+    - name: "oldValue"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.xml.ChangeTagName"
+    options:
+    - name: "elementName"
+      type: "String"
+      required: true
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "newName"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.xml.RemoveTrailingWhitespace"
+    options: []
+  - name: "org.openrewrite.xml.format.AutoFormat"
+    options: []
+  - name: "org.openrewrite.xml.format.LineBreaks"
+    options: []
+  - name: "org.openrewrite.xml.format.NormalizeFormat"
+    options: []
+  - name: "org.openrewrite.xml.format.NormalizeLineBreaks"
+    options: []
+  - name: "org.openrewrite.xml.format.NormalizeTabsOrSpaces"
+    options: []
+  - name: "org.openrewrite.xml.format.TabsAndIndents"
+    options: []
+  - name: "org.openrewrite.xml.search.FindTags"
+    options:
+    - name: "xPath"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.xml.security.DateBoundSuppressions"
+    options:
+    - name: "untilDate"
+      type: "String"
+      required: false
+  - name: "org.openrewrite.xml.security.RemoveSuppressions"
+    options: []
+- artifactId: "rewrite-yaml"
+  version: "7.32.1"
+  markdownRecipeDescriptors:
+  - name: "org.openrewrite.yaml.ChangeKey"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "newKey"
+      type: "String"
+      required: true
+    - name: "oldKeyPath"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.yaml.ChangePropertyKey"
+    options:
+    - name: "except"
+      type: "List"
+      required: false
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "newPropertyKey"
+      type: "String"
+      required: true
+    - name: "oldPropertyKey"
+      type: "String"
+      required: true
+    - name: "relaxedBinding"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.yaml.ChangeValue"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "oldKeyPath"
+      type: "String"
+      required: true
+    - name: "value"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.yaml.CoalesceProperties"
+    options: []
+  - name: "org.openrewrite.yaml.CopyValue"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "newKey"
+      type: "String"
+      required: true
+    - name: "oldKeyPath"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.yaml.DeleteKey"
+    options:
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "keyPath"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.yaml.DeleteProperty"
+    options:
+    - name: "coalesce"
+      type: "Boolean"
+      required: false
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "propertyKey"
+      type: "String"
+      required: true
+    - name: "relaxedBinding"
+      type: "Boolean"
+      required: false
+  - name: "org.openrewrite.yaml.MergeYaml"
+    options:
+    - name: "acceptTheirs"
+      type: "Boolean"
+      required: false
+    - name: "fileMatcher"
+      type: "String"
+      required: false
+    - name: "key"
+      type: "String"
+      required: true
+    - name: "objectIdentifyingProperty"
+      type: "String"
+      required: false
+    - name: "yaml"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.yaml.cleanup.RemoveUnused"
+    options: []
+  - name: "org.openrewrite.yaml.format.Indents"
+    options: []
+  - name: "org.openrewrite.yaml.search.FindKey"
+    options:
+    - name: "key"
+      type: "String"
+      required: true
+  - name: "org.openrewrite.yaml.search.FindProperty"
+    options:
+    - name: "propertyKey"
+      type: "String"
+      required: true
+    - name: "relaxedBinding"
+      type: "Boolean"
+      required: false
