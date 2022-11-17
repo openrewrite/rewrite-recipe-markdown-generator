@@ -125,7 +125,12 @@ class RecipeMarkdownGenerator : Runnable {
                 recipeDescription = ""
             }
 
-            val markdownRecipeDescriptor = MarkdownRecipeDescriptor(recipeDescriptor.name, recipeDescription, recipeOptions)
+            val docBaseUrl = "https://docs.openrewrite.org/reference/recipes/"
+
+            // Changes something like org.openrewrite.circleci.InstallOrb to https://docs.openrewrite.org/reference/recipes/circleci/installorb
+            var docLink = docBaseUrl + recipeDescriptor.name.lowercase(Locale.getDefault()).removePrefix("org.openrewrite.").replace('.','/')
+
+            val markdownRecipeDescriptor = MarkdownRecipeDescriptor(recipeDescriptor.name, recipeDescription, docLink, recipeOptions)
             val markdownArtifact = markdownArtifacts.computeIfAbsent(origin.artifactId) { MarkdownRecipeArtifact(origin.artifactId, origin.version, TreeSet<MarkdownRecipeDescriptor>()) }
             markdownArtifact.markdownRecipeDescriptors.add(markdownRecipeDescriptor)
         }
