@@ -5,6 +5,7 @@ import java.util.TreeSet
 data class MarkdownRecipeDescriptor (
     val name: String,
     val description: String,
+    val docLink: String,
     val options: TreeSet<RecipeOption>
 ): Comparable<MarkdownRecipeDescriptor> {
     override fun compareTo(other: MarkdownRecipeDescriptor): Int {
