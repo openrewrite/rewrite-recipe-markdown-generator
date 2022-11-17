@@ -120,7 +120,12 @@ class RecipeMarkdownGenerator : Runnable {
                 recipeOptions.add(recipeOption)
             }
 
-            val markdownRecipeDescriptor = MarkdownRecipeDescriptor(recipeDescriptor.name, recipeOptions)
+            var recipeDescription = recipeDescriptor.description
+            if (recipeDescriptor.description.isNullOrEmpty()) {
+                recipeDescription = ""
+            }
+
+            val markdownRecipeDescriptor = MarkdownRecipeDescriptor(recipeDescriptor.name, recipeDescription, recipeOptions)
             val markdownArtifact = markdownArtifacts.computeIfAbsent(origin.artifactId) { MarkdownRecipeArtifact(origin.artifactId, origin.version, TreeSet<MarkdownRecipeDescriptor>()) }
             markdownArtifact.markdownRecipeDescriptors.add(markdownRecipeDescriptor)
         }
