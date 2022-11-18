@@ -1,12 +1,6 @@
-buildscript {
-    repositories {
-        gradlePluginPortal()
-    }
-}
-
 plugins {
     application
-    id("org.jetbrains.kotlin.jvm").version("1.6.21")
+    id("org.jetbrains.kotlin.jvm").version("1.7.20")
     id("org.owasp.dependencycheck") version "7.0.4.1"
 }
 
@@ -43,17 +37,18 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.+")
     runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
 
-    "recipe"("org.openrewrite:rewrite-core:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-groovy:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-gradle:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-hcl:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-java:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-json:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-maven:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-properties:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-protobuf:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-xml:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-yaml:$rewriteVersion")
+    "recipe"(platform("org.openrewrite:rewrite-bom:$rewriteVersion"))
+    "recipe"("org.openrewrite:rewrite-core")
+    "recipe"("org.openrewrite:rewrite-groovy")
+    "recipe"("org.openrewrite:rewrite-gradle")
+    "recipe"("org.openrewrite:rewrite-hcl")
+    "recipe"("org.openrewrite:rewrite-java")
+    "recipe"("org.openrewrite:rewrite-json")
+    "recipe"("org.openrewrite:rewrite-maven")
+    "recipe"("org.openrewrite:rewrite-properties")
+    "recipe"("org.openrewrite:rewrite-protobuf")
+    "recipe"("org.openrewrite:rewrite-xml")
+    "recipe"("org.openrewrite:rewrite-yaml")
 
     "recipe"("org.openrewrite.recipe:rewrite-circleci:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-concourse:$rewriteVersion")
@@ -68,14 +63,18 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-terraform:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-cloud-stability-analyzer:$rewriteVersion")
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 tasks.named<JavaCompile>("compileJava") {
-    sourceCompatibility = JavaVersion.VERSION_1_8.toString()
-    targetCompatibility = JavaVersion.VERSION_1_8.toString()
-
-    options.isFork = true
-    options.compilerArgs.addAll(listOf("--release", "8"))
+    sourceCompatibility = JavaVersion.VERSION_17.toString()
+    targetCompatibility = JavaVersion.VERSION_17.toString()
 }
 
 application {
@@ -119,6 +118,7 @@ tasks.named<JavaExec>("run").configure {
     }
     doLast {
         this as JavaExec
+        @Suppress("UNNECESSARY_NOT_NULL_ASSERTION") // IntelliJ says this is unnecessary, kotlin compiler disagrees
         logger.lifecycle("Wrote generated docs to: ${args!!.first()}")
     }
 }
