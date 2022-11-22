@@ -22,6 +22,130 @@ rewrite-circleci:
       - name: "image"
         type: "String"
         required: true
+rewrite-cloud-suitability-analyzer:
+  artifactId: "rewrite-cloud-suitability-analyzer"
+  version: "1.0.0"
+  markdownRecipeDescriptors:
+    org.openrewrite.cloudsuitability.FindCacheUses:
+      name: "org.openrewrite.cloudsuitability.FindCacheUses"
+      description: "Cloud readiness issue as potential state information that is not\
+        \ persisted to a backing service."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findcacheuses"
+      options: []
+    org.openrewrite.cloudsuitability.FindCorba:
+      name: "org.openrewrite.cloudsuitability.FindCorba"
+      description: "Replace with cloud-friendly framework or move to TKG."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findcorba"
+      options: []
+    org.openrewrite.cloudsuitability.FindDistributedCacheUses:
+      name: "org.openrewrite.cloudsuitability.FindDistributedCacheUses"
+      description: "Distributed caches must be remediated to function in K8S."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/finddistributedcacheuses"
+      options: []
+    org.openrewrite.cloudsuitability.FindEhcache:
+      name: "org.openrewrite.cloudsuitability.FindEhcache"
+      description: "Convert to Redis."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findehcache"
+      options: []
+    org.openrewrite.cloudsuitability.FindEjbMdb:
+      name: "org.openrewrite.cloudsuitability.FindEjbMdb"
+      description: "Consult MDB documentation."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findejbmdb"
+      options: []
+    org.openrewrite.cloudsuitability.FindEjbStateful:
+      name: "org.openrewrite.cloudsuitability.FindEjbStateful"
+      description: "Refer to platform documentation."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findejbstateful"
+      options: []
+    org.openrewrite.cloudsuitability.FindEjbStateless:
+      name: "org.openrewrite.cloudsuitability.FindEjbStateless"
+      description: "Refer to platform documentation."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findejbstateless"
+      options: []
+    org.openrewrite.cloudsuitability.FindFileIo:
+      name: "org.openrewrite.cloudsuitability.FindFileIo"
+      description: "Move to cloud friendly alternative or TKG."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findfileio"
+      options: []
+    org.openrewrite.cloudsuitability.FindFileScheme:
+      name: "org.openrewrite.cloudsuitability.FindFileScheme"
+      description: "Use backing service or use TKG."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findfilescheme"
+      options: []
+    org.openrewrite.cloudsuitability.FindHardcodedIpAddress:
+      name: "org.openrewrite.cloudsuitability.FindHardcodedIpAddress"
+      description: "Hardcoded IP addresses are problematic in K8S."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findhardcodedipaddress"
+      options: []
+    org.openrewrite.cloudsuitability.FindJCache:
+      name: "org.openrewrite.cloudsuitability.FindJCache"
+      description: "Convert to redis or consider TKG."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjcache"
+      options: []
+    org.openrewrite.cloudsuitability.FindJMS:
+      name: "org.openrewrite.cloudsuitability.FindJMS"
+      description: "Run embedded service broker as a JMS Provider."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjms"
+      options: []
+    org.openrewrite.cloudsuitability.FindJNI:
+      name: "org.openrewrite.cloudsuitability.FindJNI"
+      description: "A few conditions have to be met to make JNI calls."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjni"
+      options: []
+    org.openrewrite.cloudsuitability.FindJavaBatch:
+      name: "org.openrewrite.cloudsuitability.FindJavaBatch"
+      description: "The advice is to remove JNDI provider or move to TKG."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjavabatch"
+      options: []
+    org.openrewrite.cloudsuitability.FindJavaBatchAnnotations:
+      name: "org.openrewrite.cloudsuitability.FindJavaBatchAnnotations"
+      description: "Batch processing can include long running processes."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjavabatchannotations"
+      options: []
+    org.openrewrite.cloudsuitability.FindJavaFX:
+      name: "org.openrewrite.cloudsuitability.FindJavaFX"
+      description: "JavaFX is not cloud compatible and requires the JRE on the remote\
+        \ device."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjavafx"
+      options: []
+    org.openrewrite.cloudsuitability.FindJaxRs:
+      name: "org.openrewrite.cloudsuitability.FindJaxRs"
+      description: "Refer to platform documentation."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjaxrs"
+      options: []
+    org.openrewrite.cloudsuitability.FindJcaAnnotations:
+      name: "org.openrewrite.cloudsuitability.FindJcaAnnotations"
+      description: "Java messaging can present problems in TAS due to its emphemerality.\
+        \ Convert to a backing service or use TKG."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjcaannotations"
+      options: []
+    org.openrewrite.cloudsuitability.FindJersey:
+      name: "org.openrewrite.cloudsuitability.FindJersey"
+      description: "Refer to 3rd party organization for cloud affinity of library."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjersey"
+      options: []
+    org.openrewrite.cloudsuitability.FindJetty:
+      name: "org.openrewrite.cloudsuitability.FindJetty"
+      description: "Use managed executor."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjetty"
+      options: []
+    org.openrewrite.cloudsuitability.FindRemoteMethodInvocations:
+      name: "org.openrewrite.cloudsuitability.FindRemoteMethodInvocations"
+      description: "Remote Method Invocations are not cloud native. Move to cloud\
+        \ friendly alternatives such as REST endpoints."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findremotemethodinvocations"
+      options: []
+    org.openrewrite.cloudsuitability.FindUnhandledTermSignal:
+      name: "org.openrewrite.cloudsuitability.FindUnhandledTermSignal"
+      description: "For containerization, the TERM signal must be handled."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findunhandledtermsignal"
+      options: []
+    org.openrewrite.cloudsuitability.FindUnsuitableCode:
+      name: "org.openrewrite.cloudsuitability.FindUnsuitableCode"
+      description: "Locate patterns that may cause problems in containerized cloud\
+        \ environments."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findunsuitablecode"
+      options: []
 rewrite-concourse:
   artifactId: "rewrite-concourse"
   version: "1.14.0"
