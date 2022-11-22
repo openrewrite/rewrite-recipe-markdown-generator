@@ -63,7 +63,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-terraform:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-cloud-stability-analyzer:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-cloud-suitability-analyzer:$rewriteVersion")
 }
 
 java {
