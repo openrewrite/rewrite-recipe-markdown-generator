@@ -3,6 +3,8 @@ package org.openrewrite
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
+import com.fasterxml.jackson.module.kotlin.readValue
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.openrewrite.config.CategoryDescriptor
 import java.lang.Runnable
 import org.openrewrite.config.RecipeDescriptor
@@ -23,6 +25,8 @@ import java.net.URI
 import java.net.URLClassLoader
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashMap
@@ -131,13 +135,32 @@ class RecipeMarkdownGenerator : Runnable {
             var docLink = docBaseUrl + recipeDescriptor.name.lowercase(Locale.getDefault()).removePrefix("org.openrewrite.").replace('.','/')
 
             val markdownRecipeDescriptor = MarkdownRecipeDescriptor(recipeDescriptor.name, recipeDescription, docLink, recipeOptions)
-            val markdownArtifact = markdownArtifacts.computeIfAbsent(origin.artifactId) { MarkdownRecipeArtifact(origin.artifactId, origin.version, TreeSet<MarkdownRecipeDescriptor>()) }
-            markdownArtifact.markdownRecipeDescriptors.add(markdownRecipeDescriptor)
+            val markdownArtifact = markdownArtifacts.computeIfAbsent(origin.artifactId) { MarkdownRecipeArtifact(origin.artifactId, origin.version, TreeMap<String, MarkdownRecipeDescriptor>()) }
+            markdownArtifact.markdownRecipeDescriptors[recipeDescriptor.name] = markdownRecipeDescriptor
         }
 
-        // write recipe-names to a file for comparison with the last released version
         val mapper = ObjectMapper(YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER))
-        mapper.writeValue(File("src/main/resources/recipeDescriptors.yml"), markdownArtifacts.values)
+        mapper.registerKotlinModule()
+
+        // Read in the old saved recipes for comparison with the latest release
+        val oldArtifacts: TreeMap<String, MarkdownRecipeArtifact> = mapper.readValue(Path.of("src/main/resources/recipeDescriptors.yml").toFile())
+
+        // Build up all the information to make a changelog
+        val newArtifacts = getNewArtifacts(markdownArtifacts, oldArtifacts)
+        val removedArtifacts = getRemovedArtifacts(markdownArtifacts, oldArtifacts)
+        val newRecipes = TreeSet<MarkdownRecipeDescriptor>()
+        val removedRecipes = TreeSet<MarkdownRecipeDescriptor>()
+
+        getNewAndRemovedRecipes(markdownArtifacts, oldArtifacts, newRecipes, removedRecipes)
+
+        val changedRecipes = getChangedRecipes(markdownArtifacts, oldArtifacts, newRecipes, removedRecipes)
+
+        // Create the changelog itself
+        buildChangelog(newArtifacts, removedArtifacts, newRecipes, removedRecipes, changedRecipes)
+
+        // Now that we've compared the versions and built the changelog,
+        // write the latest recipe information to a file for next time
+        mapper.writeValue(File("src/main/resources/recipeDescriptors.yml"), markdownArtifacts)
 
         val categories = Category.fromDescriptors(recipeDescriptors, categoryDescriptors)
 
@@ -153,6 +176,180 @@ class RecipeMarkdownGenerator : Runnable {
         for(category in categories) {
             val categoryIndexPath = outputPath.resolve("reference/recipes/")
             category.writeCategoryIndex(categoryIndexPath)
+        }
+    }
+
+    private fun getNewArtifacts(
+        markdownArtifacts: TreeMap<String, MarkdownRecipeArtifact>,
+        oldArtifacts: TreeMap<String, MarkdownRecipeArtifact>,
+    ) : TreeSet<String> {
+        val newArtifacts = TreeSet<String>()
+
+        for (artifactId in markdownArtifacts.keys) {
+            if (!oldArtifacts.containsKey(artifactId)) {
+                newArtifacts.add(artifactId)
+            }
+        }
+
+        return newArtifacts
+    }
+
+    private fun getRemovedArtifacts(
+        markdownArtifacts: TreeMap<String, MarkdownRecipeArtifact>,
+        oldArtifacts: TreeMap<String, MarkdownRecipeArtifact>,
+    ) :TreeSet<String> {
+        val removedArtifacts = TreeSet<String>()
+
+        for (artifactId in oldArtifacts.keys) {
+            if (!markdownArtifacts.containsKey(artifactId)) {
+                removedArtifacts.add(artifactId)
+            }
+        }
+
+        return removedArtifacts
+    }
+
+    // This updates the newRecipes and removedRecipes variables to contain the list of new and removed recipes
+    private fun getNewAndRemovedRecipes(
+        markdownArtifacts: TreeMap<String, MarkdownRecipeArtifact>,
+        oldArtifacts: TreeMap<String, MarkdownRecipeArtifact>,
+        newRecipes: TreeSet<MarkdownRecipeDescriptor>,
+        removedRecipes: TreeSet<MarkdownRecipeDescriptor>,
+    ) {
+        for (markdownArtifact in markdownArtifacts.values) {
+            val oldArtifact = oldArtifacts[markdownArtifact.artifactId]
+
+            if (oldArtifact != null) {
+                // Check for new recipes
+                for (markdownRecipeDescriptors in markdownArtifact.markdownRecipeDescriptors) {
+                    if (!oldArtifact.markdownRecipeDescriptors.containsKey(markdownRecipeDescriptors.key)) {
+                        newRecipes.add(markdownRecipeDescriptors.value)
+                    }
+                }
+
+                // Check for deleted recipes
+                for (oldMarkdownRecipeDescriptors in oldArtifact.markdownRecipeDescriptors) {
+                    if (!markdownArtifact.markdownRecipeDescriptors.containsKey(oldMarkdownRecipeDescriptors.key)) {
+                        removedRecipes.add(oldMarkdownRecipeDescriptors.value)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getChangedRecipes(
+        markdownArtifacts: TreeMap<String, MarkdownRecipeArtifact>,
+        oldArtifacts: TreeMap<String, MarkdownRecipeArtifact>,
+        newRecipes: TreeSet<MarkdownRecipeDescriptor>,
+        removedRecipes: TreeSet<MarkdownRecipeDescriptor>,
+    ) : TreeSet<ChangedRecipe> {
+        val changedRecipes = TreeSet<ChangedRecipe>()
+
+        for (markdownArtifact in markdownArtifacts.values) {
+            val oldArtifact = oldArtifacts[markdownArtifact.artifactId]
+
+            if (oldArtifact != null) {
+                for ((recipeDescriptorName, markdownRecipeDescriptor) in markdownArtifact.markdownRecipeDescriptors) {
+                    if (newRecipes.contains(markdownRecipeDescriptor) || removedRecipes.contains(oldArtifact.markdownRecipeDescriptors[recipeDescriptorName])) {
+                        // Don't report changes to recipe options if a recipe has been added or removed
+                    } else {
+                        val newOptions = markdownRecipeDescriptor.options
+                        val oldOptions = oldArtifact.markdownRecipeDescriptors[recipeDescriptorName]?.options
+
+                        if (newOptions != oldOptions) {
+                            val changedRecipe = ChangedRecipe(
+                                markdownArtifact.artifactId,
+                                recipeDescriptorName,
+                                markdownRecipeDescriptor.description,
+                                markdownRecipeDescriptor.docLink,
+                                newOptions,
+                                oldOptions
+                            )
+                            changedRecipes.add(changedRecipe)
+                        }
+                    }
+                }
+            }
+        }
+
+        return changedRecipes
+    }
+
+    private fun buildChangelog(
+        newArtifacts: TreeSet<String>,
+        removedArtifacts: TreeSet<String>,
+        newRecipes: TreeSet<MarkdownRecipeDescriptor>,
+        removedRecipes: TreeSet<MarkdownRecipeDescriptor>,
+        changedRecipes: TreeSet<ChangedRecipe>
+    ) {
+        // Get the date to label the changelog
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formatted = current.format(formatter)
+        val changelog = File("src/main/resources/CHANGELOG-$formatted.md")
+
+        // Clear the file in case this is being generated multiple times
+        changelog.writeText("")
+
+        // An example of what the changelog could look like after the below statements can be found here:
+        // https://gist.github.com/mike-solomon/16727159ec86ee0f0406ba389cbaecb1
+        if (newArtifacts.isNotEmpty()) {
+            changelog.appendText("## New Artifacts")
+
+            for (newArtifact in newArtifacts) {
+                changelog.appendText("\n* $newArtifact")
+            }
+
+            changelog.appendText("\n\n")
+        }
+
+        if (removedArtifacts.isNotEmpty()) {
+            changelog.appendText("## Removed Artifacts")
+
+            for (removedArtifact in removedArtifacts) {
+                changelog.appendText("\n* $removedArtifact")
+            }
+
+            changelog.appendText("\n\n")
+        }
+
+        if (newRecipes.isNotEmpty()) {
+            changelog.appendText("## New Recipes")
+
+            for (newRecipe in newRecipes) {
+                changelog.appendText("\n* [${newRecipe.name}](${newRecipe.docLink}): ${newRecipe.description} ")
+            }
+
+            changelog.appendText("\n\n")
+        }
+
+        if (removedRecipes.isNotEmpty()) {
+            changelog.appendText("## Removed Recipes")
+
+            for (removedRecipe in removedRecipes) {
+                changelog.appendText("\n* [${removedRecipe.name}](${removedRecipe.docLink}): ${removedRecipe.description} ")
+            }
+
+            changelog.appendText("\n\n")
+        }
+
+        if (changedRecipes.isNotEmpty()) {
+            changelog.appendText("## Changed Recipes")
+
+            for (changedRecipe in changedRecipes) {
+                changelog.appendText("\n* [${changedRecipe.name}](${changedRecipe.docLink}) was changed:")
+                changelog.appendText("\n  * Old Options:")
+
+                for (oldOption in changedRecipe.oldOptions!!) {
+                    changelog.appendText("\n    * `${oldOption.name}: { type: ${oldOption.type}, required: ${oldOption.required} }`")
+                }
+
+                changelog.appendText("\n  * New Options:")
+
+                for (newOption in changedRecipe.newOptions!!) {
+                    changelog.appendText("\n    * `${newOption.name}: { type: ${newOption.type}, required: ${newOption.required} }`")
+                }
+            }
         }
     }
 
