@@ -327,7 +327,7 @@ class RecipeMarkdownGenerator : Runnable {
             changelog.appendText("## Removed Recipes")
 
             for (removedRecipe in removedRecipes) {
-                changelog.appendText("\n* [${removedRecipe.name}](${removedRecipe.docLink}): ${removedRecipe.description} ")
+                changelog.appendText("\n* **${removedRecipe.name}**: ${removedRecipe.description} ")
             }
 
             changelog.appendText("\n\n")
