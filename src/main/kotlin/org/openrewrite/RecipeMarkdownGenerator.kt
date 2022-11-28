@@ -340,14 +340,22 @@ class RecipeMarkdownGenerator : Runnable {
                 changelog.appendText("\n* [${changedRecipe.name}](${changedRecipe.docLink}) was changed:")
                 changelog.appendText("\n  * Old Options:")
 
-                for (oldOption in changedRecipe.oldOptions!!) {
-                    changelog.appendText("\n    * `${oldOption.name}: { type: ${oldOption.type}, required: ${oldOption.required} }`")
+                if (changedRecipe.oldOptions?.isEmpty() == true) {
+                    changelog.appendText("\n    * `None`")
+                } else {
+                    for (oldOption in changedRecipe.oldOptions!!) {
+                        changelog.appendText("\n    * `${oldOption.name}: { type: ${oldOption.type}, required: ${oldOption.required} }`")
+                    }
                 }
 
                 changelog.appendText("\n  * New Options:")
 
-                for (newOption in changedRecipe.newOptions!!) {
-                    changelog.appendText("\n    * `${newOption.name}: { type: ${newOption.type}, required: ${newOption.required} }`")
+                if (changedRecipe.newOptions?.isEmpty() == true) {
+                    changelog.appendText("\n    * `None`")
+                } else {
+                    for (newOption in changedRecipe.newOptions!!) {
+                        changelog.appendText("\n    * `${newOption.name}: { type: ${newOption.type}, required: ${newOption.required} }`")
+                    }
                 }
             }
         }
