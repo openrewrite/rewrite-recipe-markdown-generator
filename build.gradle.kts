@@ -29,6 +29,12 @@ configurations.all {
 
 val recipeConf = configurations.create("recipe")
 val rewriteVersion = "latest.release"
+
+// Used to determine what type of changelog to build up.
+//   * "release"  : When making a changelog for larger releases of OpenRewrite
+//   * "snapshot" : When making a changelog for snapshot releases on a weekly cadence.
+val deployType = "release"
+
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("info.picocli:picocli:latest.release")
@@ -107,7 +113,7 @@ tasks.named<JavaExec>("run").configure {
             .moduleVersion
 
     description = "Writes generated markdown docs to $targetDir"
-    args = listOf(targetDir.toString(), recipeModules, recipeClasspath, gradlePluginVersion, mavenPluginVersion)
+    args = listOf(targetDir.toString(), recipeModules, recipeClasspath, gradlePluginVersion, mavenPluginVersion, deployType)
     doFirst {
         logger.lifecycle("Recipe modules: ")
         logger.lifecycle(recipeModules)
