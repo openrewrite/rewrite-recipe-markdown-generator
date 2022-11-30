@@ -58,6 +58,9 @@ class RecipeMarkdownGenerator : Runnable {
     @Parameters(index = "4", defaultValue = "", description = ["The version of the Rewrite Maven Plugin to display in relevant samples"])
     lateinit var mavenPluginVersion: String
 
+    @Parameters(index = "5", defaultValue = "release", description = ["The type of deploy being done (either release or snapshot)"])
+    lateinit var deployType: String
+
     override fun run() {
         val outputPath = Paths.get(destinationDirectoryName)
         val recipesPath = outputPath.resolve("reference/recipes")
@@ -142,8 +145,13 @@ class RecipeMarkdownGenerator : Runnable {
         val mapper = ObjectMapper(YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER))
         mapper.registerKotlinModule()
 
+        var recipeDescriptorFile = "src/main/resources/recipeDescriptors.yml"
+        if (deployType == "snapshot") {
+            recipeDescriptorFile = "src/main/resources/snapshotRecipeDescriptors.yml"
+        }
+
         // Read in the old saved recipes for comparison with the latest release
-        val oldArtifacts: TreeMap<String, MarkdownRecipeArtifact> = mapper.readValue(Path.of("src/main/resources/recipeDescriptors.yml").toFile())
+        val oldArtifacts: TreeMap<String, MarkdownRecipeArtifact> = mapper.readValue(Path.of(recipeDescriptorFile).toFile())
 
         // Build up all the information to make a changelog
         val newArtifacts = getNewArtifacts(markdownArtifacts, oldArtifacts)
@@ -155,12 +163,18 @@ class RecipeMarkdownGenerator : Runnable {
 
         val changedRecipes = getChangedRecipes(markdownArtifacts, oldArtifacts, newRecipes, removedRecipes)
 
-        // Create the changelog itself
-        buildChangelog(newArtifacts, removedArtifacts, newRecipes, removedRecipes, changedRecipes)
+        // Create the changelog itself if there are any changes
+        if (newArtifacts.isNotEmpty() ||
+            removedArtifacts.isNotEmpty() ||
+            newRecipes.isNotEmpty() ||
+            removedRecipes.isNotEmpty() ||
+            changedRecipes.isNotEmpty()) {
+            buildChangelog(newArtifacts, removedArtifacts, newRecipes, removedRecipes, changedRecipes, deployType)
+        }
 
         // Now that we've compared the versions and built the changelog,
         // write the latest recipe information to a file for next time
-        mapper.writeValue(File("src/main/resources/recipeDescriptors.yml"), markdownArtifacts)
+        mapper.writeValue(File(recipeDescriptorFile), markdownArtifacts)
 
         val categories = Category.fromDescriptors(recipeDescriptors, categoryDescriptors)
 
@@ -280,13 +294,19 @@ class RecipeMarkdownGenerator : Runnable {
         removedArtifacts: TreeSet<String>,
         newRecipes: TreeSet<MarkdownRecipeDescriptor>,
         removedRecipes: TreeSet<MarkdownRecipeDescriptor>,
-        changedRecipes: TreeSet<ChangedRecipe>
+        changedRecipes: TreeSet<ChangedRecipe>,
+        deployType: String
     ) {
         // Get the date to label the changelog
         val current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val formatted = current.format(formatter)
-        val changelog = File("src/main/resources/CHANGELOG-$formatted.md")
+
+        val changelog: File = if (deployType == "release") {
+            File("src/main/resources/CHANGELOG-$formatted.md")
+        } else {
+            File("src/main/resources/snapshot-CHANGELOG-$formatted.md")
+        }
 
         // Clear the file in case this is being generated multiple times
         changelog.writeText("")
