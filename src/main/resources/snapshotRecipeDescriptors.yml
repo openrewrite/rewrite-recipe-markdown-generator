@@ -3334,6 +3334,9 @@ rewrite-maven:
       - name: "oldGroupId"
         type: "String"
         required: true
+      - name: "retainVersions"
+        type: "List"
+        required: false
       - name: "versionPattern"
         type: "String"
         required: false
@@ -3542,6 +3545,9 @@ rewrite-maven:
       - name: "overrideManagedVersion"
         type: "Boolean"
         required: false
+      - name: "retainVersions"
+        type: "List"
+        required: false
       - name: "versionPattern"
         type: "String"
         required: false
@@ -3560,6 +3566,9 @@ rewrite-maven:
       - name: "newVersion"
         type: "String"
         required: true
+      - name: "retainVersions"
+        type: "List"
+        required: false
       - name: "versionPattern"
         type: "String"
         required: false
@@ -4958,6 +4967,12 @@ rewrite-spring:
         \ on constructors."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/noautowiredonconstructor"
       options: []
+    org.openrewrite.java.spring.NoRepoAnnotationOnRepoInterface:
+      name: "org.openrewrite.java.spring.NoRepoAnnotationOnRepoInterface"
+      description: "Removes superfluous `@Repository` annotation from Spring Data\
+        \ `Repository` sub-interfaces."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/norepoannotationonrepointerface"
+      options: []
     org.openrewrite.java.spring.NoRequestMappingAnnotation:
       name: "org.openrewrite.java.spring.NoRequestMappingAnnotation"
       description: "Replace method declaration `@RequestMapping` annotations with\
@@ -5150,6 +5165,13 @@ rewrite-spring:
       description: "`org.springframework.boot.test.autoconfigure.web.reactive.WebTestClientBuilderCustomizer`\
         \ was deprecated in 2.2."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migratewebtestclientbuildercustomizerpackagename"
+      options: []
+    org.openrewrite.java.spring.boot2.MoveAutoConfigurationToImportsFile:
+      name: "org.openrewrite.java.spring.boot2.MoveAutoConfigurationToImportsFile"
+      description: "Use `org.springframework.boot.autoconfigure.AutoConfiguration.imports`\
+        \ instead of the deprecated entry `org.springframework.boot.autoconfigure.EnableAutoConfiguration`\
+        \ in `spring.factories` when defining auto-configuration classes."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/moveautoconfigurationtoimportsfile"
       options: []
     org.openrewrite.java.spring.boot2.OutputCaptureExtension:
       name: "org.openrewrite.java.spring.boot2.OutputCaptureExtension"
