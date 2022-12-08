@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-    <suppress until="2022-12-12Z">
+    <suppress until="2023-01-07Z">
         <!-- Dependencies come from rewrite-java-security. -->
         <notes><![CDATA[
             files: spring-aop.jar, spring-beans.jar, spring-context.jar, spring-core.jar, spring-jcl.jar, spring-messaging.jar, spring-web.jar, spring-webflux.jar, spring-context-support.jar, spring-jdbc.jar, spring-webmvc.jar, spring-websocket.jar
@@ -12,7 +12,7 @@
         <gav regex="true">org\.springframework:spring.*</gav>
         <cve>CVE-2016-1000027</cve>
     </suppress>
-    <suppress until="2022-12-12Z">
+    <suppress until="2023-01-07Z">
         <!-- Dependencies come from rewrite-java-security. -->
         <notes><![CDATA[
             file name: spring-security-crypto-5.7.1.jar
@@ -22,7 +22,7 @@
         <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-crypto@.*$</packageUrl>
         <vulnerabilityName>CVE-2020-5408</vulnerabilityName>
     </suppress>
-    <suppress until="2022-12-12Z">
+    <suppress until="2023-01-07Z">
         <!-- Dependencies come from rewrite-testing-frameworks. -->
         <notes><![CDATA[
             file name: junit-platform-engine-1.9.1.jar
@@ -33,7 +33,7 @@
         <packageUrl regex="true">^pkg:maven/org\.junit\.platform/junit\-platform\-engine@.*$</packageUrl>
         <cve>CVE-2022-31514</cve>
     </suppress>
-    <suppress until="2022-12-12Z">
+    <suppress until="2023-01-07Z">
         <!-- Dependencies come from rewrite-testing-frameworks. -->
         <notes><![CDATA[
             file name: junit-platform-engine-1.9.1.jar
@@ -44,12 +44,21 @@
         <packageUrl regex="true">^pkg:maven/org\.junit\.platform/junit\-platform\-commons@.*$</packageUrl>
         <cpe>cpe:/a:fan_platform_project:fan_platform</cpe>
     </suppress>
-    <suppress>
+    <suppress until="2023-01-07Z">
         <notes><![CDATA[
             file name: rewrite-jhipster-1.0.0.jar
         ]]>
         </notes>
         <packageUrl regex="true">^pkg:maven/org\.openrewrite\.recipe/rewrite\-jhipster@.*$</packageUrl>
         <cpe>cpe:/a:jhipster:jhipster</cpe>
+    </suppress>
+    <suppress until="2023-01-07Z">
+        <notes><![CDATA[
+            file name: snakeyaml-1.33.jar
+            Severity: HIGH
+            False positive: We are not parsing untrusted user input
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.yaml/snakeyaml@.*$</packageUrl>
+        <cve>CVE-2022-1471</cve>
     </suppress>
 </suppressions>
