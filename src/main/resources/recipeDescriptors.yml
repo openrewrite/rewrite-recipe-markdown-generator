@@ -1,6 +1,6 @@
 rewrite-circleci:
   artifactId: "rewrite-circleci"
-  version: "1.15.0"
+  version: "1.16.0"
   markdownRecipeDescriptors:
     org.openrewrite.circleci.InstallOrb:
       name: "org.openrewrite.circleci.InstallOrb"
@@ -24,7 +24,7 @@ rewrite-circleci:
         required: true
 rewrite-cloud-suitability-analyzer:
   artifactId: "rewrite-cloud-suitability-analyzer"
-  version: "1.0.0"
+  version: "1.1.0"
   markdownRecipeDescriptors:
     org.openrewrite.cloudsuitability.FindCacheUses:
       name: "org.openrewrite.cloudsuitability.FindCacheUses"
@@ -82,16 +82,6 @@ rewrite-cloud-suitability-analyzer:
       description: "Convert to redis or consider TKG."
       docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjcache"
       options: []
-    org.openrewrite.cloudsuitability.FindJMS:
-      name: "org.openrewrite.cloudsuitability.FindJMS"
-      description: "Run embedded service broker as a JMS Provider."
-      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjms"
-      options: []
-    org.openrewrite.cloudsuitability.FindJNI:
-      name: "org.openrewrite.cloudsuitability.FindJNI"
-      description: "A few conditions have to be met to make JNI calls."
-      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjni"
-      options: []
     org.openrewrite.cloudsuitability.FindJavaBatch:
       name: "org.openrewrite.cloudsuitability.FindJavaBatch"
       description: "The advice is to remove JNDI provider or move to TKG."
@@ -102,8 +92,8 @@ rewrite-cloud-suitability-analyzer:
       description: "Batch processing can include long running processes."
       docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjavabatchannotations"
       options: []
-    org.openrewrite.cloudsuitability.FindJavaFX:
-      name: "org.openrewrite.cloudsuitability.FindJavaFX"
+    org.openrewrite.cloudsuitability.FindJavaFx:
+      name: "org.openrewrite.cloudsuitability.FindJavaFx"
       description: "JavaFX is not cloud compatible and requires the JRE on the remote\
         \ device."
       docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjavafx"
@@ -129,6 +119,22 @@ rewrite-cloud-suitability-analyzer:
       description: "Use managed executor."
       docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjetty"
       options: []
+    org.openrewrite.cloudsuitability.FindJks:
+      name: "org.openrewrite.cloudsuitability.FindJks"
+      description: "In a cloud environment, use a centralized keystore, such as Azure\
+        \ Key Vault or AWS Secrets Manager, to better secure sensitive information."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjks"
+      options: []
+    org.openrewrite.cloudsuitability.FindJms:
+      name: "org.openrewrite.cloudsuitability.FindJms"
+      description: "Run embedded service broker as a JMS Provider."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjms"
+      options: []
+    org.openrewrite.cloudsuitability.FindJni:
+      name: "org.openrewrite.cloudsuitability.FindJni"
+      description: "A few conditions have to be met to make JNI calls."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjni"
+      options: []
     org.openrewrite.cloudsuitability.FindRemoteMethodInvocations:
       name: "org.openrewrite.cloudsuitability.FindRemoteMethodInvocations"
       description: "Remote Method Invocations are not cloud native. Move to cloud\
@@ -148,7 +154,7 @@ rewrite-cloud-suitability-analyzer:
       options: []
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "1.14.0"
+  version: "1.15.0"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -216,7 +222,7 @@ rewrite-concourse:
       options: []
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "7.33.0"
+  version: "7.34.0"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -281,7 +287,7 @@ rewrite-core:
       options: []
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "1.14.0"
+  version: "1.15.0"
   markdownRecipeDescriptors:
     org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin:
       name: "org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin"
@@ -347,7 +353,7 @@ rewrite-github-actions:
       options: []
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "7.33.0"
+  version: "7.34.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.ActivateStyle:
       name: "org.openrewrite.gradle.ActivateStyle"
@@ -649,7 +655,7 @@ rewrite-gradle:
       options: []
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "7.33.0"
+  version: "7.34.0"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -664,7 +670,7 @@ rewrite-groovy:
       options: []
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "7.33.0"
+  version: "7.34.0"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -730,7 +736,7 @@ rewrite-hcl:
         required: true
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "7.33.0"
+  version: "7.34.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -1015,7 +1021,7 @@ rewrite-java:
     org.openrewrite.java.ReplaceConstant:
       name: "org.openrewrite.java.ReplaceConstant"
       description: "Replace a named constant with a literal value when you wish to\
-        \ remove the old constant."
+        \ remove the old constant. A `String` literal must include escaped quotes."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/replaceconstant"
       options:
       - name: "constantName"
@@ -1489,9 +1495,9 @@ rewrite-java:
       description: "Using `==` or `!=` compares object references, not the equality\
         \ of two objects. This modifies code where both sides of a binary operation\
         \ (`==` or `!=`) override `Object.equals(Object obj)` except when the comparison\
-        \ is within an overridden `Object.equals(Object obj)` method declaration itself.WARNING,\
+        \ is within an overridden `Object.equals(Object obj)` method declaration itself.\
         \ The resulting transformation must be carefully reviewed since any modifications\
-        \ change the programs semantics."
+        \ change the program's semantics."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/referentialequalitytoobjectequals"
       options: []
     org.openrewrite.java.cleanup.RemoveCallsToSystemGc:
@@ -2112,7 +2118,7 @@ rewrite-java:
       options: []
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "1.19.0"
+  version: "1.20.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.security.FindTextDirectionChanges:
       name: "org.openrewrite.java.security.FindTextDirectionChanges"
@@ -2172,7 +2178,10 @@ rewrite-java-security:
       description: "`java.io.File.createTempFile()` has exploitable default file permissions.\
         \ This recipe migrates to the more secure `java.nio.file.Files.createTempFile()`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/security/securetempfilecreation"
-      options: []
+      options:
+      - name: "target"
+        type: "String"
+        required: true
     org.openrewrite.java.security.UseFilesCreateTempDirectory:
       name: "org.openrewrite.java.security.UseFilesCreateTempDirectory"
       description: "Use `Files#createTempDirectory` when the sequence `File#createTempFile(..)`->`File#delete()`->`File#mkdir()`\
@@ -2389,7 +2398,7 @@ rewrite-java-security:
         required: false
 rewrite-jhipster:
   artifactId: "rewrite-jhipster"
-  version: "1.14.0"
+  version: "1.15.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jhipster.FixCwe338:
       name: "org.openrewrite.java.jhipster.FixCwe338"
@@ -2399,7 +2408,7 @@ rewrite-jhipster:
       options: []
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "7.33.0"
+  version: "7.34.0"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -2450,7 +2459,7 @@ rewrite-json:
         required: true
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "1.25.0"
+  version: "1.26.0"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -2841,7 +2850,7 @@ rewrite-kubernetes:
         required: true
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "1.15.0"
+  version: "1.16.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.logging.ParameterizedLogging:
       name: "org.openrewrite.java.logging.ParameterizedLogging"
@@ -3027,7 +3036,7 @@ rewrite-logging-frameworks:
       options: []
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "7.33.0"
+  version: "7.34.0"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -3183,7 +3192,7 @@ rewrite-maven:
         required: true
     org.openrewrite.maven.AddRepository:
       name: "org.openrewrite.maven.AddRepository"
-      description: ""
+      description: "Adds a new Maven Repository or Update a matching repository."
       docLink: "https://docs.openrewrite.org/reference/recipes/maven/addrepository"
       options:
       - name: "id"
@@ -3334,6 +3343,9 @@ rewrite-maven:
       - name: "oldGroupId"
         type: "String"
         required: true
+      - name: "retainVersions"
+        type: "List"
+        required: false
       - name: "versionPattern"
         type: "String"
         required: false
@@ -3497,6 +3509,24 @@ rewrite-maven:
       - name: "groupId"
         type: "String"
         required: true
+    org.openrewrite.maven.RemovePluginDependency:
+      name: "org.openrewrite.maven.RemovePluginDependency"
+      description: "Removes a dependency from the <dependencies> section of a plugin\
+        \ in the pom.xml."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/removeplugindependency"
+      options:
+      - name: "artifactId"
+        type: "String"
+        required: true
+      - name: "groupId"
+        type: "String"
+        required: true
+      - name: "pluginArtifactId"
+        type: "String"
+        required: true
+      - name: "pluginGroupId"
+        type: "String"
+        required: true
     org.openrewrite.maven.RemoveProperty:
       name: "org.openrewrite.maven.RemoveProperty"
       description: "Removes the specified Maven project property from the pom.xml."
@@ -3513,6 +3543,9 @@ rewrite-maven:
       options:
       - name: "artifactPattern"
         type: "String"
+        required: false
+      - name: "except"
+        type: "List"
         required: false
       - name: "groupPattern"
         type: "String"
@@ -3539,6 +3572,9 @@ rewrite-maven:
       - name: "overrideManagedVersion"
         type: "Boolean"
         required: false
+      - name: "retainVersions"
+        type: "List"
+        required: false
       - name: "versionPattern"
         type: "String"
         required: false
@@ -3557,6 +3593,9 @@ rewrite-maven:
       - name: "newVersion"
         type: "String"
         required: true
+      - name: "retainVersions"
+        type: "List"
+        required: false
       - name: "versionPattern"
         type: "String"
         required: false
@@ -3663,7 +3702,7 @@ rewrite-maven:
       options: []
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "1.19.0"
+  version: "1.20.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy:
       name: "org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy"
@@ -3741,11 +3780,12 @@ rewrite-micronaut:
         required: true
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "1.14.1"
+  version: "1.15.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
-      description: "JDeprScan scans class files for uses of deprecated APIs."
+      description: "Add the `JDeprScan` Maven plugin to scan class files for uses\
+        \ of deprecated APIs."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/addjdeprscanplugin"
       options:
       - name: "release"
@@ -3796,27 +3836,29 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.UseJavaUtilBase64:
       name: "org.openrewrite.java.migrate.UseJavaUtilBase64"
-      description: "The `sun.misc` package became is not intended for use beyond Java\
-        \ 9. `java.util.Base64` was introduced in Java 8 for general use."
+      description: "Prefer `java.util.Base64` instead of using `sun.misc` in Java\
+        \ 8 or higher. `sun.misc` is not exported by the Java module system and accessing\
+        \ this class will result in a warning in Java 11 and an error in Java 17."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/usejavautilbase64"
       options: []
     org.openrewrite.java.migrate.apache.commons.codec.ApacheBase64ToJavaBase64:
       name: "org.openrewrite.java.migrate.apache.commons.codec.ApacheBase64ToJavaBase64"
-      description: "Migrate `apache.commons.codec.binary.Base64#encodeBase64` to `java.util.Base64.Encoder#encodeBase64`,\
-        \ `apache.commons.codec.binary.Base64#encodeBase64String` to `java.util.Base64.Encoder#encodeToString`,\
-        \ and `apache.commons.codec.binary.Base64#decodeBase64` to `java.util.Base64.Decoder#decode`."
+      description: "Prefer the Java standard library's `java.util.Base64` over third-party\
+        \ usage of apache's `apache.commons.codec.binary.Base64`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/apache/commons/codec/apachebase64tojavabase64"
       options: []
     org.openrewrite.java.migrate.apache.commons.io.ApacheFileUtilsToJavaFiles:
       name: "org.openrewrite.java.migrate.apache.commons.io.ApacheFileUtilsToJavaFiles"
-      description: "Migrate `apache.commons.io.FileUtils` to `java.nio.file.Files`."
+      description: "Prefer the Java standard library's `java.nio.file.Files` over\
+        \ third-party usage of apache's `apache.commons.io.FileUtils`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/apache/commons/io/apachefileutilstojavafiles"
       options: []
     org.openrewrite.java.migrate.apache.commons.io.ApacheIOUtilsUseExplicitCharset:
       name: "org.openrewrite.java.migrate.apache.commons.io.ApacheIOUtilsUseExplicitCharset"
-      description: "This convert deprecated `IOUtils` method invocations with their\
-        \ charset specific equivalent, e.g. converts `IOUtils.readLines(inputStream)`\
-        \ to `IOUtils.readLines(inputStream, StandardCharsets.UTF_8)`."
+      description: "Use `IOUtils` method invocations that include the charset encoding\
+        \ instead of using the deprecated versions that do not include a charset encoding.\
+        \ (e.g. converts `IOUtils.readLines(inputStream)` to `IOUtils.readLines(inputStream,\
+        \ StandardCharsets.UTF_8)`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/apache/commons/io/apacheioutilsuseexplicitcharset"
       options:
       - name: "encoding"
@@ -3831,12 +3873,14 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.apache.commons.io.UseStandardCharsets:
       name: "org.openrewrite.java.migrate.apache.commons.io.UseStandardCharsets"
-      description: "Migrate `org.apache.commons.io.Charsets` to `java.nio.charset.StandardCharsets`."
+      description: "Prefer the Java standard library's `java.nio.charset.StandardCharsets`\
+        \ over third-party usage of apache's `org.apache.commons.io.Charsets`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/apache/commons/io/usestandardcharsets"
       options: []
     org.openrewrite.java.migrate.apache.commons.io.UseSystemLineSeparator:
       name: "org.openrewrite.java.migrate.apache.commons.io.UseSystemLineSeparator"
-      description: "Migrate `IOUtils.LINE_SEPARATOR` to `System.lineSeparator()`."
+      description: "Prefer the Java standard library's `System.lineSeparator()` over\
+        \ third-party usage of apache's `IOUtils.LINE_SEPARATOR`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/apache/commons/io/usesystemlineseparator"
       options: []
     org.openrewrite.java.migrate.cobertura.RemoveCoberturaMavenPlugin:
@@ -3847,50 +3891,56 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.concurrent.JavaConcurrentAPIs:
       name: "org.openrewrite.java.migrate.concurrent.JavaConcurrentAPIs"
-      description: "Certain Java concurrent APIs have become deprecated and their\
-        \ usages changed, necessitating usage changes."
+      description: "The Java concurrent APIs were updated in Java 9 and those changes\
+        \ resulted in certain APIs being deprecated. This recipe update an application\
+        \ to replace the deprecated APIs with their modern alternatives. \n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/concurrent/javaconcurrentapis"
       options: []
     org.openrewrite.java.migrate.concurrent.MigrateAtomicBooleanWeakCompareAndSetToWeakCompareAndSetPlain:
       name: "org.openrewrite.java.migrate.concurrent.MigrateAtomicBooleanWeakCompareAndSetToWeakCompareAndSetPlain"
-      description: "`AtomicBoolean#weakCompareAndSet(boolean, boolean)` was deprecated\
-        \ in Java 9."
+      description: "Use `AtomicBoolean#weakCompareAndSetPlain(boolean, boolean)` instead\
+        \ of the deprecated `AtomicBoolean#weakCompareAndSet(boolean, boolean)` in\
+        \ Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/concurrent/migrateatomicbooleanweakcompareandsettoweakcompareandsetplain"
       options: []
     org.openrewrite.java.migrate.concurrent.MigrateAtomicIntegerArrayWeakCompareAndSetToWeakCompareAndSetPlain:
       name: "org.openrewrite.java.migrate.concurrent.MigrateAtomicIntegerArrayWeakCompareAndSetToWeakCompareAndSetPlain"
-      description: "`AtomicIntegerArray#weakCompareAndSet(int, int, int)` was deprecated\
-        \ in Java 9."
+      description: "Use `AtomicIntegerArray#weakCompareAndSetPlain(int, int, int)`\
+        \ instead of the deprecated `AtomicIntegerArray#weakCompareAndSet(int, int,\
+        \ int)` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/concurrent/migrateatomicintegerarrayweakcompareandsettoweakcompareandsetplain"
       options: []
     org.openrewrite.java.migrate.concurrent.MigrateAtomicIntegerWeakCompareAndSetToWeakCompareAndSetPlain:
       name: "org.openrewrite.java.migrate.concurrent.MigrateAtomicIntegerWeakCompareAndSetToWeakCompareAndSetPlain"
-      description: "`AtomicInteger#weakCompareAndSet(int, int)` was deprecated in\
-        \ Java 9."
+      description: "Use `AtomicInteger#weakCompareAndSetPlain(int, int)` instead of\
+        \ the deprecated `AtomicInteger#weakCompareAndSet(int, int)` in Java 9 or\
+        \ higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/concurrent/migrateatomicintegerweakcompareandsettoweakcompareandsetplain"
       options: []
     org.openrewrite.java.migrate.concurrent.MigrateAtomicLongArrayWeakCompareAndSetToWeakCompareAndSetPlain:
       name: "org.openrewrite.java.migrate.concurrent.MigrateAtomicLongArrayWeakCompareAndSetToWeakCompareAndSetPlain"
-      description: "`AtomicLongArray#weakCompareAndSet(int, long, long)` was deprecated\
-        \ in Java 9."
+      description: "Use `AtomicLongArray#weakCompareAndSetPlain(int, long, long)`\
+        \ instead of the deprecated `AtomicLongArray#weakCompareAndSet(int, long,\
+        \ long)` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/concurrent/migrateatomiclongarrayweakcompareandsettoweakcompareandsetplain"
       options: []
     org.openrewrite.java.migrate.concurrent.MigrateAtomicLongWeakCompareAndSetToWeakCompareAndSetPlain:
       name: "org.openrewrite.java.migrate.concurrent.MigrateAtomicLongWeakCompareAndSetToWeakCompareAndSetPlain"
-      description: "`AtomicLong#weakCompareAndSet(long, long)` was deprecated in Java\
-        \ 9."
+      description: "Use `AtomicLong#weakCompareAndSetPlain(long, long)` instead of\
+        \ the deprecated `AtomicLong#weakCompareAndSet(long, long)` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/concurrent/migrateatomiclongweakcompareandsettoweakcompareandsetplain"
       options: []
     org.openrewrite.java.migrate.concurrent.MigrateAtomicReferenceArrayWeakCompareAndSetToWeakCompareAndSetPlain:
       name: "org.openrewrite.java.migrate.concurrent.MigrateAtomicReferenceArrayWeakCompareAndSetToWeakCompareAndSetPlain"
-      description: "`AtomicReferenceArray#weakCompareAndSet(int, T, T)` was deprecated\
-        \ in Java 9."
+      description: "Use `AtomicReferenceArray#weakCompareAndSetPlain(int, T, T)` instead\
+        \ of the deprecated `AtomicReferenceArray#weakCompareAndSet(int, T, T)` in\
+        \ Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/concurrent/migrateatomicreferencearrayweakcompareandsettoweakcompareandsetplain"
       options: []
     org.openrewrite.java.migrate.concurrent.MigrateAtomicReferenceWeakCompareAndSetToWeakCompareAndSetPlain:
       name: "org.openrewrite.java.migrate.concurrent.MigrateAtomicReferenceWeakCompareAndSetToWeakCompareAndSetPlain"
-      description: "`AtomicReference#weakCompareAndSet(T, T)` was deprecated in Java\
-        \ 9."
+      description: "Use `AtomicReference#weakCompareAndSetPlain(T, T)` instead of\
+        \ the deprecated `AtomicReference#weakCompareAndSet(T, T)` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/concurrent/migrateatomicreferenceweakcompareandsettoweakcompareandsetplain"
       options: []
     org.openrewrite.java.migrate.guava.NoGuava:
@@ -3898,7 +3948,7 @@ rewrite-migrate-java:
       description: "Guava filled in important gaps in the Java standard library and\
         \ still does. But at least some of Guava's API surface area is covered by\
         \ the Java standard library now, and some projects may be able to remove Guava\
-        \ altogether if they migrate to standard library for these functions."
+        \ altogether if they migrate to standard library for these functions.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/noguava"
       options: []
     org.openrewrite.java.migrate.guava.NoGuavaAtomicsNewReference:
@@ -3989,112 +4039,123 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.guava.PreferCharCompare:
       name: "org.openrewrite.java.migrate.guava.PreferCharCompare"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.lang.Char#compare` instead of using `com.google.common.primitives.Chars#compare`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/prefercharcompare"
       options: []
     org.openrewrite.java.migrate.guava.PreferIntegerCompare:
       name: "org.openrewrite.java.migrate.guava.PreferIntegerCompare"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.lang.Integer#compare` instead of using `com.google.common.primitives.Ints#compare`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferintegercompare"
       options: []
     org.openrewrite.java.migrate.guava.PreferIntegerCompareUnsigned:
       name: "org.openrewrite.java.migrate.guava.PreferIntegerCompareUnsigned"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.lang.Integer#compareUnsigned` instead of using `com.google.common.primitives.UnsignedInts#compare`\
+        \ or `com.google.common.primitives.UnsignedInts#compareUnsigned`.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferintegercompareunsigned"
       options: []
     org.openrewrite.java.migrate.guava.PreferIntegerDivideUnsigned:
       name: "org.openrewrite.java.migrate.guava.PreferIntegerDivideUnsigned"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.lang.Integer#divideUnsigned` instead of using `com.google.common.primitives.UnsignedInts#divide`\
+        \ or `com.google.common.primitives.UnsignedInts#divideUnsigned`.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferintegerdivideunsigned"
       options: []
     org.openrewrite.java.migrate.guava.PreferIntegerParseUnsignedInt:
       name: "org.openrewrite.java.migrate.guava.PreferIntegerParseUnsignedInt"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.lang.Integer#parseUnsignedInt` instead of using `com.google.common.primitives.UnsignedInts#parseUnsignedInt`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferintegerparseunsignedint"
       options: []
     org.openrewrite.java.migrate.guava.PreferIntegerRemainderUnsigned:
       name: "org.openrewrite.java.migrate.guava.PreferIntegerRemainderUnsigned"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.lang.Integer#remainderUnsigned` instead of using\
+        \ `com.google.common.primitives.UnsignedInts#remainderUnsigned`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferintegerremainderunsigned"
       options: []
     org.openrewrite.java.migrate.guava.PreferJavaUtilCollectionsSynchronizedNavigableMap:
       name: "org.openrewrite.java.migrate.guava.PreferJavaUtilCollectionsSynchronizedNavigableMap"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.util.Collections#synchronizedNavigableMap` instead\
+        \ of using `com.google.common.collect.Maps#synchronizedNavigableMap`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferjavautilcollectionssynchronizednavigablemap"
       options: []
     org.openrewrite.java.migrate.guava.PreferJavaUtilCollectionsUnmodifiableNavigableMap:
       name: "org.openrewrite.java.migrate.guava.PreferJavaUtilCollectionsUnmodifiableNavigableMap"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.util.Collections#unmodifiableNavigableMap` instead\
+        \ of using `com.google.common.collect.Maps#unmodifiableNavigableMap`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferjavautilcollectionsunmodifiablenavigablemap"
       options: []
     org.openrewrite.java.migrate.guava.PreferJavaUtilFunction:
       name: "org.openrewrite.java.migrate.guava.PreferJavaUtilFunction"
-      description: "Guava's `Function` extends `java.util.function.Function`."
+      description: "Prefer `java.util.function.Function` instead of using `com.google.common.base.Function`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferjavautilfunction"
       options: []
     org.openrewrite.java.migrate.guava.PreferJavaUtilObjectsEquals:
       name: "org.openrewrite.java.migrate.guava.PreferJavaUtilObjectsEquals"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.util.Objects#equals` instead of using `com.google.common.base.Objects#equal`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferjavautilobjectsequals"
       options: []
     org.openrewrite.java.migrate.guava.PreferJavaUtilObjectsHashCode:
       name: "org.openrewrite.java.migrate.guava.PreferJavaUtilObjectsHashCode"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.util.Objects#hash` instead of using `com.google.common.base.Objects#hashCode`\
+        \ or `com.google.common.base.Objects hash(..)`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferjavautilobjectshashcode"
       options: []
     org.openrewrite.java.migrate.guava.PreferJavaUtilPredicate:
       name: "org.openrewrite.java.migrate.guava.PreferJavaUtilPredicate"
-      description: "Guava's `Predicate` extends `java.util.function.Predicate`."
+      description: "Prefer `java.util.function.Predicate` instead of using `com.google.common.base.Predicate`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferjavautilpredicate"
       options: []
     org.openrewrite.java.migrate.guava.PreferJavaUtilSupplier:
       name: "org.openrewrite.java.migrate.guava.PreferJavaUtilSupplier"
-      description: "Guava's `Supplier` extends `java.util.function.Supplier`."
+      description: "Prefer `java.util.function.Supplier` instead of using `com.google.common.base.Supplier`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferjavautilsupplier"
       options: []
     org.openrewrite.java.migrate.guava.PreferLongCompare:
       name: "org.openrewrite.java.migrate.guava.PreferLongCompare"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.lang.Long#compare` instead of using `com.google.common.primitives.Longs#compare`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferlongcompare"
       options: []
     org.openrewrite.java.migrate.guava.PreferLongCompareUnsigned:
       name: "org.openrewrite.java.migrate.guava.PreferLongCompareUnsigned"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.lang.Long#compareUnsigned` instead of using `com.google.common.primitives.UnsignedLongs#compare`\
+        \ or `com.google.common.primitives.UnsignedLongs#compareUnsigned`.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferlongcompareunsigned"
       options: []
     org.openrewrite.java.migrate.guava.PreferLongDivideUnsigned:
       name: "org.openrewrite.java.migrate.guava.PreferLongDivideUnsigned"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.lang.Long#divideUnsigned` instead of using `com.google.common.primitives.UnsignedLongs#divide`\
+        \ or `com.google.common.primitives.UnsignedLongs#divideUnsigned`.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferlongdivideunsigned"
       options: []
     org.openrewrite.java.migrate.guava.PreferLongParseUnsignedLong:
       name: "org.openrewrite.java.migrate.guava.PreferLongParseUnsignedLong"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.lang.Long#parseUnsignedInt` instead of using `com.google.common.primitives.UnsignedLongs#parseUnsignedInt`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferlongparseunsignedlong"
       options: []
     org.openrewrite.java.migrate.guava.PreferLongRemainderUnsigned:
       name: "org.openrewrite.java.migrate.guava.PreferLongRemainderUnsigned"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.lang.Long#remainderUnsigned` instead of using `com.google.common.primitives.UnsignedLongs#remainderUnsigned`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferlongremainderunsigned"
       options: []
     org.openrewrite.java.migrate.guava.PreferMathAddExact:
       name: "org.openrewrite.java.migrate.guava.PreferMathAddExact"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.lang.Math#addExact` instead of using `com.google.common.math.IntMath#checkedAdd`\
+        \ or `com.google.common.math.IntMath#addExact`"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/prefermathaddexact"
       options: []
     org.openrewrite.java.migrate.guava.PreferMathMultiplyExact:
       name: "org.openrewrite.java.migrate.guava.PreferMathMultiplyExact"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.lang.Math#multiplyExact` instead of using `com.google.common.primitives.IntMath#checkedMultiply`\
+        \ or `com.google.common.primitives.IntMath#multiplyExact`.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/prefermathmultiplyexact"
       options: []
     org.openrewrite.java.migrate.guava.PreferMathSubtractExact:
       name: "org.openrewrite.java.migrate.guava.PreferMathSubtractExact"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.lang.Math#subtractExact` instead of using `com.google.common.primitives.IntMath#checkedSubtract`\
+        \ or `com.google.common.primitives.IntMath#subtractExact`.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/prefermathsubtractexact"
       options: []
     org.openrewrite.java.migrate.guava.PreferShortCompare:
       name: "org.openrewrite.java.migrate.guava.PreferShortCompare"
-      description: "This method exists in the Java standard library now."
+      description: "Prefer `java.lang.Short#compare` instead of using `com.google.common.primitives.Shorts#compare`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/prefershortcompare"
       options: []
     org.openrewrite.java.migrate.jacoco.UpgradeJaCoCoMavenPluginVersion:
@@ -4309,8 +4370,8 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.javax.AddInjectDependencies:
       name: "org.openrewrite.java.migrate.javax.AddInjectDependencies"
-      description: "This recipe will add the necessary Inject dependencies for those\
-        \ projects migrating to Java 11."
+      description: "This recipe will add the necessary `inject-api` dependency from\
+        \ Jakarta EE 8 to maintain compatibility with Java version 11 or greater.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/addinjectdependencies"
       options: []
     org.openrewrite.java.migrate.javax.AddJaxbDependencies:
@@ -4371,70 +4432,85 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.javax.MigrateAbstractAnnotationValueVisitor6To9:
       name: "org.openrewrite.java.migrate.javax.MigrateAbstractAnnotationValueVisitor6To9"
-      description: "`AbstractAnnotationValueVisitor6` was deprecated in Java 9."
+      description: "Use `javax.lang.model.util.AbstractAnnotationValueVisitor9` instead\
+        \ of the deprecated `javax.lang.model.util.AbstractAnnotationValueVisitor6`\
+        \ in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/migrateabstractannotationvaluevisitor6to9"
       options: []
     org.openrewrite.java.migrate.javax.MigrateAbstractElementVisitor6To9:
       name: "org.openrewrite.java.migrate.javax.MigrateAbstractElementVisitor6To9"
-      description: "`AbstractElementVisitor6` was deprecated in Java 9."
+      description: "Use `javax.lang.model.util.AbstractElementVisitor9` instead of\
+        \ the deprecated `javax.lang.model.util.AbstractElementVisitor6` in Java 9\
+        \ or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/migrateabstractelementvisitor6to9"
       options: []
     org.openrewrite.java.migrate.javax.MigrateAbstractTypeVisitor6To9:
       name: "org.openrewrite.java.migrate.javax.MigrateAbstractTypeVisitor6To9"
-      description: "`AbstractTypeVisitor6` was deprecated in Java 9."
+      description: "Use `javax.lang.model.util.AbstractTypeVisitor9` instead of the\
+        \ deprecated `javax.lang.model.util.AbstractTypeVisitor6` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/migrateabstracttypevisitor6to9"
       options: []
     org.openrewrite.java.migrate.javax.MigrateCounterMonitorSetThreshholdToSetInitThreshold:
       name: "org.openrewrite.java.migrate.javax.MigrateCounterMonitorSetThreshholdToSetInitThreshold"
-      description: "`CounterMonitor#setThreshhold` has been deprecated in JMX 1.2."
+      description: "Use `javax.management.monitor.CounterMonitor#setInitThreshold`\
+        \ instead of the deprecated `javax.management.monitor.CounterMonitor#setThreshhold`\
+        \ in JMX 1.2 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/migratecountermonitorsetthreshholdtosetinitthreshold"
       options: []
     org.openrewrite.java.migrate.javax.MigrateElementKindVisitor6To9:
       name: "org.openrewrite.java.migrate.javax.MigrateElementKindVisitor6To9"
-      description: "`ElementKindVisitor6` was deprecated in Java 9."
+      description: "Use `javax.lang.model.util.ElementKindVisitor9` instead of the\
+        \ deprecated `javax.lang.model.util.ElementKindVisitor6` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/migrateelementkindvisitor6to9"
       options: []
     org.openrewrite.java.migrate.javax.MigrateElementScanner6To9:
       name: "org.openrewrite.java.migrate.javax.MigrateElementScanner6To9"
-      description: "`ElementScanner6` was deprecated in Java 9."
+      description: "Use `javax.lang.model.util.ElementScanner9` instead of the deprecated\
+        \ `javax.lang.model.util.ElementScanner6` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/migrateelementscanner6to9"
       options: []
     org.openrewrite.java.migrate.javax.MigrateSimpleAnnotationValueVisitor6To9:
       name: "org.openrewrite.java.migrate.javax.MigrateSimpleAnnotationValueVisitor6To9"
-      description: "`SimpleAnnotationValueVisitor6` was deprecated in Java 9."
+      description: "Use `javax.lang.model.util.SimpleAnnotationValueVisitor9` instead\
+        \ of the deprecated `javax.lang.model.util.SimpleAnnotationValueVisitor6`\
+        \ in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/migratesimpleannotationvaluevisitor6to9"
       options: []
     org.openrewrite.java.migrate.javax.MigrateSimpleElementVisitor6To9:
       name: "org.openrewrite.java.migrate.javax.MigrateSimpleElementVisitor6To9"
-      description: "`SimpleElementVisitor6` was deprecated in Java 9."
+      description: "Use `javax.lang.model.util.SimpleElementVisitor9` instead of the\
+        \ deprecated `javax.lang.model.util.SimpleElementVisitor6` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/migratesimpleelementvisitor6to9"
       options: []
     org.openrewrite.java.migrate.javax.MigrateSimpleTypeVisitor6To9:
       name: "org.openrewrite.java.migrate.javax.MigrateSimpleTypeVisitor6To9"
-      description: "`SimpleTypeVisitor6` was deprecated in Java 9."
+      description: "Use `javax.lang.model.util.SimpleTypeVisitor9` instead of the\
+        \ deprecated `javax.lang.model.util.SimpleTypeVisitor6` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/migratesimpletypevisitor6to9"
       options: []
     org.openrewrite.java.migrate.javax.MigrateTypeKindVisitor6To9:
       name: "org.openrewrite.java.migrate.javax.MigrateTypeKindVisitor6To9"
-      description: "`TypeKindVisitor6` was deprecated in Java 9."
+      description: "Use `javax.lang.model.util.TypeKindVisitor9` instead of the deprecated\
+        \ `javax.lang.model.util.TypeKindVisitor6` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/migratetypekindvisitor6to9"
       options: []
     org.openrewrite.java.migrate.javax.MigrateXMLEventFactoryNewInstanceToNewFactory:
       name: "org.openrewrite.java.migrate.javax.MigrateXMLEventFactoryNewInstanceToNewFactory"
-      description: "`javax.xml.stream.XMLEventFactory#newInstance` has been deprecated\
-        \ in Java 7."
+      description: "Use `javax.xml.stream.XMLEventFactory#newFactory` instead of the\
+        \ deprecated `javax.xml.stream.XMLEventFactory#newInstance` in Java 7 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/migratexmleventfactorynewinstancetonewfactory"
       options: []
     org.openrewrite.java.migrate.javax.MigrateXMLInputFactoryNewInstanceToNewFactory:
       name: "org.openrewrite.java.migrate.javax.MigrateXMLInputFactoryNewInstanceToNewFactory"
-      description: "`javax.xml.stream.XMLInputFactory#newInstance` has been deprecated\
-        \ Java 7."
+      description: "Use `javax.xml.stream.XMLInputFactory#newFactory` instead of the\
+        \ deprecated `javax.xml.stream.XMLInputFactory#newInstance` in Java 7 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/migratexmlinputfactorynewinstancetonewfactory"
       options: []
     org.openrewrite.java.migrate.javax.MigrateXMLOutputFactoryNewInstanceToNewFactory:
       name: "org.openrewrite.java.migrate.javax.MigrateXMLOutputFactoryNewInstanceToNewFactory"
-      description: "`javax.xml.stream.XMLOutputFactory#newInstance` has been deprecated\
-        \ Java 7."
+      description: "Use `javax.xml.stream.XMLOutputFactory#newFactory` instead of\
+        \ the deprecated `javax.xml.stream.XMLOutputFactory#newInstance` in Java 7\
+        \ or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/migratexmloutputfactorynewinstancetonewfactory"
       options: []
     org.openrewrite.java.migrate.lang.JavaLangAPIs:
@@ -4445,55 +4521,64 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.lang.MigrateCharacterIsJavaLetterOrDigitToIsJavaIdentifierPart:
       name: "org.openrewrite.java.migrate.lang.MigrateCharacterIsJavaLetterOrDigitToIsJavaIdentifierPart"
-      description: "`Character#isJavaLetterOrDigit(char)` was deprecated in Java 1.1."
+      description: "Use `Character#isJavaIdentifierPart(char)` instead of the deprecated\
+        \ `Character#isJavaLetterOrDigit(char)` in Java 1.1 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/migratecharacterisjavaletterordigittoisjavaidentifierpart"
       options: []
     org.openrewrite.java.migrate.lang.MigrateCharacterIsJavaLetterToIsJavaIdentifierStart:
       name: "org.openrewrite.java.migrate.lang.MigrateCharacterIsJavaLetterToIsJavaIdentifierStart"
-      description: "`Character#isJavaLetter(char)` was deprecated in Java 1.1."
+      description: "Use `Character#isJavaIdentifierStart(char)` instead of the deprecated\
+        \ `Character#isJavaLetter(char)` in Java 1.1 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/migratecharacterisjavalettertoisjavaidentifierstart"
       options: []
     org.openrewrite.java.migrate.lang.MigrateCharacterIsSpaceToIsWhitespace:
       name: "org.openrewrite.java.migrate.lang.MigrateCharacterIsSpaceToIsWhitespace"
-      description: "`Character#isSpace(char)` was deprecated in Java 1.1."
+      description: "Use `Character#isWhitespace(char)` instead of the deprecated `Character#isSpace(char)`\
+        \ in Java 1.1 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/migratecharacterisspacetoiswhitespace"
       options: []
     org.openrewrite.java.migrate.lang.MigrateClassLoaderDefineClass:
       name: "org.openrewrite.java.migrate.lang.MigrateClassLoaderDefineClass"
-      description: "`ClassLoader#defineClass(byte[], int, int)` was deprecated in\
-        \ Java 1.1."
+      description: "Use `ClassLoader#defineClass(String, byte[], int, int)` instead\
+        \ of the deprecated `ClassLoader#defineClass(byte[], int, int)` in Java 1.1\
+        \ or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/migrateclassloaderdefineclass"
       options: []
     org.openrewrite.java.migrate.lang.MigrateClassNewInstanceToGetDeclaredConstructorNewInstance:
       name: "org.openrewrite.java.migrate.lang.MigrateClassNewInstanceToGetDeclaredConstructorNewInstance"
-      description: "`Class#newInstance()` was deprecated in Java 9."
+      description: "Use `Class#getDeclaredConstructor().newInstance()` instead of\
+        \ the deprecated `Class#newInstance()` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/migrateclassnewinstancetogetdeclaredconstructornewinstance"
       options: []
     org.openrewrite.java.migrate.lang.MigrateRuntimeVersionMajorToFeature:
       name: "org.openrewrite.java.migrate.lang.MigrateRuntimeVersionMajorToFeature"
-      description: "`Runtime.Version#major()` was deprecated in Java 10."
+      description: "Use `Runtime.Version#feature()` instead of the deprecated `Runtime.Version#major()`\
+        \ in Java 10 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/migrateruntimeversionmajortofeature"
       options: []
     org.openrewrite.java.migrate.lang.MigrateRuntimeVersionMinorToInterim:
       name: "org.openrewrite.java.migrate.lang.MigrateRuntimeVersionMinorToInterim"
-      description: "`Runtime.Version#minor()` was deprecated in Java 10."
+      description: "Use `Runtime.Version#interim()` instead of the deprecated `Runtime.Version#minor()`\
+        \ in Java 10 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/migrateruntimeversionminortointerim"
       options: []
     org.openrewrite.java.migrate.lang.MigrateRuntimeVersionSecurityToUpdate:
       name: "org.openrewrite.java.migrate.lang.MigrateRuntimeVersionSecurityToUpdate"
-      description: "`Runtime.Version#security()` was deprecated in Java 10."
+      description: "Use `Runtime.Version#update()` instead of the deprecated `Runtime.Version#security()`\
+        \ in Java 10 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/migrateruntimeversionsecuritytoupdate"
       options: []
     org.openrewrite.java.migrate.lang.MigrateSecurityManagerMulticast:
       name: "org.openrewrite.java.migrate.lang.MigrateSecurityManagerMulticast"
-      description: "`SecurityManager#checkMulticast(InetAddress, byte)` was deprecated\
-        \ in Java 1.1."
+      description: "Use `SecurityManager#checkMulticast(InetAddress)` instead of the\
+        \ deprecated `SecurityManager#checkMulticast(InetAddress, byte)` in Java 1.4\
+        \ or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/migratesecuritymanagermulticast"
       options: []
     org.openrewrite.java.migrate.lang.StringFormatted:
       name: "org.openrewrite.java.migrate.lang.StringFormatted"
-      description: "Call `String#formatted(Object...)` on first argument to `String#format(String,\
-        \ Object...)`."
+      description: "Prefer `String#formatted(Object...)` over `String#format(String,\
+        \ Object...)' in Java 17 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/stringformatted"
       options: []
     org.openrewrite.java.migrate.logging.JavaLoggingAPIs:
@@ -4504,43 +4589,57 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.logging.MigrateGetLoggingMXBeanToGetPlatformMXBean:
       name: "org.openrewrite.java.migrate.logging.MigrateGetLoggingMXBeanToGetPlatformMXBean"
-      description: "`LogManager#getLoggingMXBean()` was deprecated in Java 9."
+      description: "Use `ManagementFactory#getPlatformMXBean(PlatformLoggingMXBean.class)`\
+        \ instead of the deprecated `LogManager#getLoggingMXBean()` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/logging/migrategetloggingmxbeantogetplatformmxbean"
       options: []
     org.openrewrite.java.migrate.logging.MigrateInterfaceLoggingMXBeanToPlatformLoggingMXBean:
       name: "org.openrewrite.java.migrate.logging.MigrateInterfaceLoggingMXBeanToPlatformLoggingMXBean"
-      description: "`java.util.logging.LoggingMXBean` has been deprecated."
+      description: "Use `java.lang.management.PlatformLoggingMXBean` instead of the\
+        \ deprecated `java.util.logging.LoggingMXBean` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/logging/migrateinterfaceloggingmxbeantoplatformloggingmxbean"
       options: []
     org.openrewrite.java.migrate.logging.MigrateLogRecordSetMillisToSetInstant:
       name: "org.openrewrite.java.migrate.logging.MigrateLogRecordSetMillisToSetInstant"
-      description: "`LogRecord#setMillis(long)` has been deprecated."
+      description: "Use `LogRecord#setInstant(Instant)` instead of the deprecated\
+        \ `LogRecord#setMillis(long)` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/logging/migratelogrecordsetmillistosetinstant"
       options: []
     org.openrewrite.java.migrate.logging.MigrateLoggerGlobalToGetGlobal:
       name: "org.openrewrite.java.migrate.logging.MigrateLoggerGlobalToGetGlobal"
       description: "The preferred way to get the global logger object is via the call\
-        \ `Logger#getGlobal()`."
+        \ `Logger#getGlobal()` over direct field access to `java.util.logging.Logger.global`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/logging/migrateloggerglobaltogetglobal"
       options: []
     org.openrewrite.java.migrate.logging.MigrateLoggerLogrbToUseResourceBundle:
       name: "org.openrewrite.java.migrate.logging.MigrateLoggerLogrbToUseResourceBundle"
-      description: "`java.util.logging.Logger#logrb(.., String bundleName, ..)` has\
-        \ been deprecated."
+      description: "Use `Logger#logrb(.., ResourceBundle bundleName, ..)` instead\
+        \ of the deprecated `java.util.logging.Logger#logrb(.., String bundleName,\
+        \ ..)` in Java 8 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/logging/migrateloggerlogrbtouseresourcebundle"
       options: []
     org.openrewrite.java.migrate.lombok.LombokValToFinalVar:
       name: "org.openrewrite.java.migrate.lombok.LombokValToFinalVar"
-      description: "Replace `lombok.val` with `final var` on projects using Java 11\
-        \ or higher."
+      description: "Prefer the Java standard library's `final var` over third-party\
+        \ usage of Lombok's `lombok.val` in Java 10 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lombok/lombokvaltofinalvar"
       options: []
     org.openrewrite.java.migrate.lombok.UpdateLombokToJava17:
       name: "org.openrewrite.java.migrate.lombok.UpdateLombokToJava17"
       description: "Update Lombok dependency to a version that is compatible with\
-        \ Java 17."
+        \ Java 17 and migrate experimental Lombok types that have been promoted."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lombok/updatelomboktojava17"
       options: []
+    org.openrewrite.java.migrate.maven.UseMavenCompilerPluginReleaseConfiguration:
+      name: "org.openrewrite.java.migrate.maven.UseMavenCompilerPluginReleaseConfiguration"
+      description: "Replaces any explicit `source` or `target` configuration (if present)\
+        \ on the maven-compiler-plugin with `release`, and updates the `release` value\
+        \ if needed."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/maven/usemavencompilerpluginreleaseconfiguration"
+      options:
+      - name: "releaseVersion"
+        type: "String"
+        required: true
     org.openrewrite.java.migrate.metrics.SimplifyMicrometerMeterTags:
       name: "org.openrewrite.java.migrate.metrics.SimplifyMicrometerMeterTags"
       description: "Use the simplest method to add new tags."
@@ -4554,29 +4653,34 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.net.MigrateHttpURLConnectionHttpServerErrorToHttpInternalError:
       name: "org.openrewrite.java.migrate.net.MigrateHttpURLConnectionHttpServerErrorToHttpInternalError"
-      description: "`java.net.HttpURLConnection.HTTP_SERVER_ERROR` has been deprecated."
+      description: "Use `java.net.HttpURLConnection.HTTP_INTERNAL_ERROR` instead of\
+        \ the deprecated `java.net.HttpURLConnection.HTTP_SERVER_ERROR`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/net/migratehttpurlconnectionhttpservererrortohttpinternalerror"
       options: []
     org.openrewrite.java.migrate.net.MigrateMulticastSocketGetTTLToGetTimeToLive:
       name: "org.openrewrite.java.migrate.net.MigrateMulticastSocketGetTTLToGetTimeToLive"
-      description: "`java.net.MulticastSocket#getTTL()` has been deprecated."
+      description: "Use `java.net.MulticastSocket#getTimeToLive()` instead of the\
+        \ deprecated `java.net.MulticastSocket#getTTL()` in Java 1.2 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/net/migratemulticastsocketgetttltogettimetolive"
       options: []
     org.openrewrite.java.migrate.net.MigrateMulticastSocketSetTTLToSetTimeToLive:
       name: "org.openrewrite.java.migrate.net.MigrateMulticastSocketSetTTLToSetTimeToLive"
-      description: "`java.net.MulticastSocket#setTTL(byte)` has been deprecated."
+      description: "Use `java.net.MulticastSocket#setTimeToLive(int)` instead of the\
+        \ deprecated `java.net.MulticastSocket#setTTL(byte)` in Java 1.2 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/net/migratemulticastsocketsetttltosettimetolive"
       options: []
     org.openrewrite.java.migrate.net.MigrateURLDecoderDecode:
       name: "org.openrewrite.java.migrate.net.MigrateURLDecoderDecode"
-      description: "`java.net.URLDecoder#decode(String)` is platform-dependent. It's\
-        \ advised to specify an encoding."
+      description: "Use `java.net.URLDecoder#decode(String, StandardCharsets.UTF_8)`\
+        \ instead of the deprecated `java.net.URLDecoder#decode(String)` in Java 10\
+        \ or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/net/migrateurldecoderdecode"
       options: []
     org.openrewrite.java.migrate.net.MigrateURLEncoderEncode:
       name: "org.openrewrite.java.migrate.net.MigrateURLEncoderEncode"
-      description: "`java.net.URLEncoder#encode(String)` is platform-dependent. It's\
-        \ advised to specify an encoding."
+      description: "Use `java.net.URLEncoder#encode(String, StandardCharsets.UTF_8)`\
+        \ instead of the deprecated `java.net.URLEncoder#encode(String)` in Java 10\
+        \ or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/net/migrateurlencoderencode"
       options: []
     org.openrewrite.java.migrate.search.AboutJavaVersion:
@@ -4595,8 +4699,9 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.sql.MigrateDriverManagerSetLogStream:
       name: "org.openrewrite.java.migrate.sql.MigrateDriverManagerSetLogStream"
-      description: "`DriverManager#setLogStream(java.io.PrintStream)` was deprecated\
-        \ in Java 1.2."
+      description: "Use `DriverManager#setLogWriter(java.io.PrintWriter)` instead\
+        \ of the deprecated `DriverManager#setLogStream(java.io.PrintStream)` in Java\
+        \ 1.2 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/sql/migratedrivermanagersetlogstream"
       options: []
     org.openrewrite.java.migrate.util.JavaUtilAPIs:
@@ -4607,52 +4712,56 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.util.MigrateCollectionsSingletonList:
       name: "org.openrewrite.java.migrate.util.MigrateCollectionsSingletonList"
-      description: "Replaces `Collections.singletonList(<args>)))` with `List.Of(<args>)`."
+      description: "Prefer `List.Of(..)` instead of using `Collections.singletonList()`\
+        \ in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/util/migratecollectionssingletonlist"
       options: []
     org.openrewrite.java.migrate.util.MigrateCollectionsSingletonMap:
       name: "org.openrewrite.java.migrate.util.MigrateCollectionsSingletonMap"
-      description: "Replaces `Collections.singletonMap(<args>)))` with `Map.Of(<args>)`."
+      description: "Prefer `Map.Of(..)` instead of using `Collections.singletonMap()`\
+        \ in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/util/migratecollectionssingletonmap"
       options: []
     org.openrewrite.java.migrate.util.MigrateCollectionsSingletonSet:
       name: "org.openrewrite.java.migrate.util.MigrateCollectionsSingletonSet"
-      description: "Replaces `Collections.singleton(<args>)))` with `Set.Of(<args>)`."
+      description: "Prefer `Set.Of(..)` instead of using `Collections.singleton()`\
+        \ in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/util/migratecollectionssingletonset"
       options: []
     org.openrewrite.java.migrate.util.MigrateCollectionsUnmodifiableList:
       name: "org.openrewrite.java.migrate.util.MigrateCollectionsUnmodifiableList"
-      description: "Replaces `unmodifiableList(java.util.Arrays asList(<args>))` with\
-        \ `List.Of(<args>)`."
+      description: "Prefer `List.Of(..)` instead of using `unmodifiableList(java.util.Arrays\
+        \ asList(<args>))` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/util/migratecollectionsunmodifiablelist"
       options: []
     org.openrewrite.java.migrate.util.MigrateCollectionsUnmodifiableSet:
       name: "org.openrewrite.java.migrate.util.MigrateCollectionsUnmodifiableSet"
-      description: "Replaces `unmodifiableSet(java.util.Set(java.util.Arrays asList(<args>)))`\
-        \ with `Set.Of(<args>)`."
+      description: "Prefer `Set.Of(..)` instead of using `unmodifiableSet(java.util.Set(java.util.Arrays\
+        \ asList(<args>)))` in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/util/migratecollectionsunmodifiableset"
       options: []
     org.openrewrite.java.migrate.util.OptionalNotEmptyToIsPresent:
       name: "org.openrewrite.java.migrate.util.OptionalNotEmptyToIsPresent"
-      description: "Replace negated Optional.isEmpty() calls with Optional.isPresent()\
-        \ in Java 11 and above."
+      description: "Prefer `Optional.isPresent()` instead of using `!Optional.isEmpty()`\
+        \ in Java 11 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/util/optionalnotemptytoispresent"
       options: []
     org.openrewrite.java.migrate.util.OptionalNotPresentToIsEmpty:
       name: "org.openrewrite.java.migrate.util.OptionalNotPresentToIsEmpty"
-      description: "Replace negated Optional.isPresent() calls with Optional.isEmpty()\
-        \ in Java 11 and above."
+      description: "Prefer `Optional.isEmpty()` instead of using `!Optional.isPresent()`\
+        \ in Java 11 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/util/optionalnotpresenttoisempty"
       options: []
     org.openrewrite.java.migrate.util.UseEnumSetOf:
       name: "org.openrewrite.java.migrate.util.UseEnumSetOf"
-      description: "Replaces `Set of(..)` with `EnumSet of(..)` if the arguments are\
-        \ enums."
+      description: "Prefer `EnumSet of(..)` instead of using `Set of(..)` when the\
+        \ arguments are enums in Java 5 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/util/useenumsetof"
       options: []
     org.openrewrite.java.migrate.util.UseMapOf:
       name: "org.openrewrite.java.migrate.util.UseMapOf"
-      description: "This succinct syntax was introduced in Java 10."
+      description: "Prefer `Map.of(..)` instead of using `java.util.Map#put(..)` in\
+        \ Java 10 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/util/usemapof"
       options: []
     org.openrewrite.java.migrate.wro4j.UpgradeWro4jMavenPluginVersion:
@@ -4663,7 +4772,7 @@ rewrite-migrate-java:
       options: []
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "7.33.0"
+  version: "7.34.0"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -4745,7 +4854,7 @@ rewrite-properties:
         required: false
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "1.14.0"
+  version: "1.15.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.quarkus.ConfigPropertiesToConfigMapping:
       name: "org.openrewrite.java.quarkus.ConfigPropertiesToConfigMapping"
@@ -4825,11 +4934,12 @@ rewrite-quarkus:
       options: []
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "4.30.0"
+  version: "4.31.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.spring.AddSpringProperty:
       name: "org.openrewrite.java.spring.AddSpringProperty"
-      description: ""
+      description: "Add a spring configuration property to a configuration file if\
+        \ it does not already exist in that file."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/addspringproperty"
       options:
       - name: "comment"
@@ -4852,7 +4962,8 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.ChangeSpringPropertyKey:
       name: "org.openrewrite.java.spring.ChangeSpringPropertyKey"
-      description: ""
+      description: "Change spring application property keys existing in either Properties\
+        \ or Yaml files."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/changespringpropertykey"
       options:
       - name: "except"
@@ -4866,7 +4977,8 @@ rewrite-spring:
         required: true
     org.openrewrite.java.spring.DeleteSpringProperty:
       name: "org.openrewrite.java.spring.DeleteSpringProperty"
-      description: ""
+      description: "Delete a spring configuration property from any configuration\
+        \ file that contains a matching key."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/deletespringproperty"
       options:
       - name: "propertyKey"
@@ -4891,6 +5003,12 @@ rewrite-spring:
         \ constructor on the bean. This recipe removes unneeded `@Autowired` annotations\
         \ on constructors."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/noautowiredonconstructor"
+      options: []
+    org.openrewrite.java.spring.NoRepoAnnotationOnRepoInterface:
+      name: "org.openrewrite.java.spring.NoRepoAnnotationOnRepoInterface"
+      description: "Removes superfluous `@Repository` annotation from Spring Data\
+        \ `Repository` sub-interfaces."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/norepoannotationonrepointerface"
       options: []
     org.openrewrite.java.spring.NoRequestMappingAnnotation:
       name: "org.openrewrite.java.spring.NoRequestMappingAnnotation"
@@ -5057,6 +5175,16 @@ rewrite-spring:
         \ was deprecated in 1.4.x."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migratespringbootservletinitializerpackagename"
       options: []
+    org.openrewrite.java.spring.boot2.MigrateSpringBoot_2_0:
+      name: "org.openrewrite.java.spring.boot2.MigrateSpringBoot_2_0"
+      description: "Migrate applications built on Spring Boot 1.5 to the latest Spring\
+        \ Boot 2.0 release. This recipe will modify an application's build files,\
+        \ make changes to deprecated/preferred APIs, and migrate configuration settings\
+        \ that have changes between versions. This recipe will also chain additional\
+        \ framework migrations (Spring Framework, Spring Data, etc) that are required\
+        \ as part of the migration to Spring Boot 2.0.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migratespringboot_2_0"
+      options: []
     org.openrewrite.java.spring.boot2.MigrateUndertowServletWebServerFactoryIsEagerInitFilters:
       name: "org.openrewrite.java.spring.boot2.MigrateUndertowServletWebServerFactoryIsEagerInitFilters"
       description: "`org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory#isEagerInitFilters`\
@@ -5074,6 +5202,13 @@ rewrite-spring:
       description: "`org.springframework.boot.test.autoconfigure.web.reactive.WebTestClientBuilderCustomizer`\
         \ was deprecated in 2.2."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migratewebtestclientbuildercustomizerpackagename"
+      options: []
+    org.openrewrite.java.spring.boot2.MoveAutoConfigurationToImportsFile:
+      name: "org.openrewrite.java.spring.boot2.MoveAutoConfigurationToImportsFile"
+      description: "Use `org.springframework.boot.autoconfigure.AutoConfiguration.imports`\
+        \ instead of the deprecated entry `org.springframework.boot.autoconfigure.EnableAutoConfiguration`\
+        \ in `spring.factories` when defining auto-configuration classes."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/moveautoconfigurationtoimportsfile"
       options: []
     org.openrewrite.java.spring.boot2.OutputCaptureExtension:
       name: "org.openrewrite.java.spring.boot2.OutputCaptureExtension"
@@ -5104,8 +5239,13 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.SpringBoot1To2Migration:
       name: "org.openrewrite.java.spring.boot2.SpringBoot1To2Migration"
-      description: "Migrates Spring Boot 1.x to latest version of 2.x, updating tests\
-        \ to JUnit 5, and applying 2.x best practices."
+      description: "Migrate applications built on previous versions of Spring Boot\
+        \ (versions 1.5 though 2.6) to the latest Spring Boot 2.7 release. This recipe\
+        \ will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes across Spring\
+        \ Boot versions. This recipe will also chain additional framework migrations\
+        \ (Spring Framework, Spring Data, JUnit, etc) that are required as part of\
+        \ the migration to Spring Boot 2.7.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/springboot1to2migration"
       options: []
     org.openrewrite.java.spring.boot2.SpringBoot2BestPractices:
@@ -5115,8 +5255,10 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.SpringBoot2JUnit4to5Migration:
       name: "org.openrewrite.java.spring.boot2.SpringBoot2JUnit4to5Migration"
-      description: "Migrates Spring Boot 2.x projects having JUnit 4.x tests to JUnit\
-        \ Jupiter."
+      description: "This recipe will migrate a Spring Boot application's tests from\
+        \ JUnit 4 to JUnit 5. This spring-specific migration includes conversion of\
+        \ Spring Test runners to Spring Test extensions and awareness of the composable\
+        \ Spring Test annotations.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/springboot2junit4to5migration"
       options: []
     org.openrewrite.java.spring.boot2.SpringBootMavenPluginMigrateAgentToAgents:
@@ -5162,7 +5304,12 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.SpringBootProperties_2_7:
       name: "org.openrewrite.java.spring.boot2.SpringBootProperties_2_7"
-      description: "Migrate properties found in `application.properties` and `application.yml`."
+      description: "Migrate applications built on Spring Boot 2.0 through 2.6 to the\
+        \ latest Spring Boot 2.7 release. This recipe will modify an application's\
+        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
+        \ settings that have changes between versions. This recipe will also chain\
+        \ additional framework migrations (Spring Framework, Spring Data, etc) that\
+        \ are required as part of the migration to Spring Boot 2.7\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/springbootproperties_2_7"
       options: []
     org.openrewrite.java.spring.boot2.UnnecessarySpringExtension:
@@ -5176,29 +5323,44 @@ rewrite-spring:
       description: "Remove `@RunWith` annotations on Spring tests."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/unnecessaryspringrunwith"
       options: []
-    org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_0:
-      name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_0"
-      description: "Upgrade to Spring Boot 2.0 from prior 1.x version."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/upgradespringboot_2_0"
-      options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_1:
       name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_1"
-      description: "Upgrade to Spring Boot 2.1 from any prior 2.x version."
+      description: "Migrate applications built on Spring Boot 2.0 to the latest Spring\
+        \ Boot 2.1 release. This recipe will modify an application's build files,\
+        \ make changes to deprecated/preferred APIs, and migrate configuration settings\
+        \ that have changes between versions. This recipe will also chain additional\
+        \ framework migrations (Spring Framework, Spring Data, etc) that are required\
+        \ as part of the migration to Spring Boot 2.1.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/upgradespringboot_2_1"
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_2:
       name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_2"
-      description: "Upgrade to Spring Boot 2.2 from any prior 2.x version."
+      description: "Migrate applications built on Spring Boot 2.0 through 2.1 to the\
+        \ latest Spring Boot 2.2 release. This recipe will modify an application's\
+        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
+        \ settings that have changes between versions. This recipe will also chain\
+        \ additional framework migrations (Spring Framework, Spring Data, etc) that\
+        \ are required as part of the migration to Spring Boot 2.2.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/upgradespringboot_2_2"
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_3:
       name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_3"
-      description: "Upgrade to Spring Boot 2.3 from any prior 2.x version."
+      description: "Migrate applications built on Spring Boot 2.0 through 2.2 to the\
+        \ latest Spring Boot 2.3 release. This recipe will modify an application's\
+        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
+        \ settings that have changes between versions. This recipe will also chain\
+        \ additional framework migrations (Spring Framework, Spring Data, etc) that\
+        \ are required as part of the migration to Spring Boot 2.3.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/upgradespringboot_2_3"
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_4:
       name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_4"
-      description: "Upgrade to Spring Boot 2.4 from any prior 2.x version."
+      description: "Migrate applications built on Spring Boot 2.0 through 2.3 to the\
+        \ latest Spring Boot 2.4 release. This recipe will modify an application's\
+        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
+        \ settings that have changes between versions. This recipe will also chain\
+        \ additional framework migrations (Spring Framework, Spring Data, etc) that\
+        \ are required as part of the migration to Spring Boot 2.4.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/upgradespringboot_2_4"
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_5:
@@ -5208,7 +5370,12 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_6:
       name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_6"
-      description: "Upgrade to Spring Boot 2.6 from any prior 2.x version."
+      description: "Migrate applications built on Spring Boot 2.0 through 2.5 to the\
+        \ latest Spring Boot 2.6 release. This recipe will modify an application's\
+        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
+        \ settings that have changes between versions. This recipe will also chain\
+        \ additional framework migrations (Spring Framework, Spring Data, etc) that\
+        \ are required as part of the migration to Spring Boot 2.6.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/upgradespringboot_2_6"
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_7:
@@ -5218,7 +5385,10 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.WebSecurityConfigurerAdapter:
       name: "org.openrewrite.java.spring.boot2.WebSecurityConfigurerAdapter"
-      description: ""
+      description: "The Spring-Security WebSecurityConfigurerAdapter was deprecated\
+        \ 5.7, this recipe will transform `WebSecurityConfigurerAdapter` classes by\
+        \ using a component based approach. Check out the [spring-security-without-the-websecurityconfigureradapter](https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter)\
+        \ blog for more details."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/websecurityconfigureradapter"
       options: []
     org.openrewrite.java.spring.boot2.search.CustomizingJooqDefaultConfiguration:
@@ -5262,7 +5432,12 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.search.UpgradeRequirementsSpringBoot_2_5:
       name: "org.openrewrite.java.spring.boot2.search.UpgradeRequirementsSpringBoot_2_5"
-      description: "Identify changes needed to upgrade to Spring Boot 2.5.\n"
+      description: "Migrate applications built on Spring Boot 2.0 through 2.4 to the\
+        \ latest Spring Boot 2.5 release. This recipe will modify an application's\
+        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
+        \ settings that have changes between versions. This recipe will also chain\
+        \ additional framework migrations (Spring Framework, Spring Data, etc) that\
+        \ are required as part of the migration to Spring Boot 2.5.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/search/upgraderequirementsspringboot_2_5"
       options: []
     org.openrewrite.java.spring.boot3.ActuatorEndpointSanitization:
@@ -5305,7 +5480,13 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot3.SpringBoot2To3Migration:
       name: "org.openrewrite.java.spring.boot3.SpringBoot2To3Migration"
-      description: "Migrates Spring Boot 2.x to latest version of 3.x"
+      description: "Migrate applications built on previous versions of Spring Boot\
+        \ (versions 1.5 though 2.7) to the latest Spring Boot 3.0 release. This recipe\
+        \ will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes across Spring\
+        \ Boot versions. This recipe will also chain additional framework migrations\
+        \ (Spring Framework, Spring Data, JUnit, etc) that are required as part of\
+        \ the migration to Spring Boot 3.0.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/springboot2to3migration"
       options: []
     org.openrewrite.java.spring.boot3.SpringBootProperties_3_0_0:
@@ -5315,7 +5496,12 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_0:
       name: "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_0"
-      description: "Upgrade to Spring Boot 3.0 from prior 2.x version."
+      description: "Migrate applications built on Spring Boot 2.7 to the latest Spring\
+        \ Boot 3.0 release. This recipe will modify an application's build files,\
+        \ make changes to deprecated/preferred APIs, and migrate configuration settings\
+        \ that have changes between versions. This recipe will also chain additional\
+        \ framework migrations (Spring Framework, Spring Data, etc) that are required\
+        \ as part of the migration to Spring Boot 2.7.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/upgradespringboot_3_0"
       options: []
     org.openrewrite.java.spring.data.MigrateJpaSort:
@@ -5332,12 +5518,14 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.data.UpgradeSpringData_2_3:
       name: "org.openrewrite.java.spring.data.UpgradeSpringData_2_3"
-      description: "Upgrade to Spring Data to 2.3 from any prior version."
+      description: "Migrate applications built on Spring Data 2.0 through 2.2 to the\
+        \ latest Spring Data 2.3 release."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/data/upgradespringdata_2_3"
       options: []
     org.openrewrite.java.spring.data.UpgradeSpringData_2_5:
       name: "org.openrewrite.java.spring.data.UpgradeSpringData_2_5"
-      description: "Upgrade to Spring Data to 2.5 from any prior version."
+      description: "Migrate applications built on Spring Data (2.0 through 2.4) to\
+        \ the latest Spring Data 2.5 release."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/data/upgradespringdata_2_5"
       options: []
     org.openrewrite.java.spring.data.UseJpaRepositoryDeleteAllInBatch:
@@ -5398,22 +5586,26 @@ rewrite-spring:
         required: true
     org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_0:
       name: "org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_0"
-      description: "Upgrade to Spring Framework to 5.0 from any prior version."
+      description: "Migrate applications built on Spring Framework 4.0 through 4.3\
+        \ to the latest Spring Framework 5.0 release."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/upgradespringframework_5_0"
       options: []
     org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_1:
       name: "org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_1"
-      description: "Upgrade to Spring Framework to 5.1 from any prior version."
+      description: "Migrate applications built on Spring Framework 5.0 to the latest\
+        \ Spring Framework 5.1 release."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/upgradespringframework_5_1"
       options: []
     org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_2:
       name: "org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_2"
-      description: "Upgrade to Spring Framework to 5.2 from any prior version."
+      description: "Migrate applications built on Spring Framework (5.0 through 5.1)\
+        \ to the latest Spring Framework 5.2 release."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/upgradespringframework_5_2"
       options: []
     org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_3:
       name: "org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_3"
-      description: "Upgrade to Spring Framework to 5.3 from any prior version."
+      description: "Migrate applications built on Spring Framework (5.0 through 5.2)\
+        \ to the latest Spring Framework 5.3 release."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/upgradespringframework_5_3"
       options: []
     org.openrewrite.java.spring.framework.UseObjectUtilsIsEmpty:
@@ -5435,7 +5627,7 @@ rewrite-spring:
         required: true
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "1.14.0"
+  version: "1.15.0"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -5451,7 +5643,7 @@ rewrite-terraform:
         required: true
     org.openrewrite.terraform.SecureRandom:
       name: "org.openrewrite.terraform.SecureRandom"
-      description: ""
+      description: "Use a long enough byte length for `random` resources."
       docLink: "https://docs.openrewrite.org/reference/recipes/terraform/securerandom"
       options:
       - name: "byteLength"
@@ -6094,7 +6286,7 @@ rewrite-terraform:
         required: true
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "1.31.0"
+  version: "1.32.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.assertj.Assertj:
       name: "org.openrewrite.java.testing.assertj.Assertj"
@@ -6104,7 +6296,7 @@ rewrite-testing-frameworks:
       options: []
     org.openrewrite.java.testing.assertj.JUnitAssertArrayEqualsToAssertThat:
       name: "org.openrewrite.java.testing.assertj.JUnitAssertArrayEqualsToAssertThat"
-      description: "Convert JUnit-style `assertArrayEquals()` to assertJ's `assertThat().contains()`\
+      description: "Convert JUnit-style `assertArrayEquals()` to AssertJ's `assertThat().contains()`\
         \ equivalents."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/junitassertarrayequalstoassertthat"
       options: []
@@ -6245,9 +6437,9 @@ rewrite-testing-frameworks:
     org.openrewrite.java.testing.cleanup.TestsShouldNotBePublic:
       name: "org.openrewrite.java.testing.cleanup.TestsShouldNotBePublic"
       description: "Remove `public` and optionally `protected` modifiers from methods\
-        \ with `@Test`, `@ParameterizedTest`, `@RepeatedTest`, `@TestFactory`, `@BeforeEach`\
-        \ or `@AfterEach`. They no longer have to be public visibility to be usable\
-        \ by JUnit 5."
+        \ with `@Test`, `@ParameterizedTest`, `@RepeatedTest`, `@TestFactory`, `@BeforeEach`,\
+        \ `@AfterEach`, `@BeforeAll`, or `@AfterAll`. They no longer have to be public\
+        \ visibility to be usable by JUnit 5."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/cleanup/testsshouldnotbepublic"
       options:
       - name: "removeProtectedModifiers"
@@ -6261,7 +6453,7 @@ rewrite-testing-frameworks:
       options: []
     org.openrewrite.java.testing.cucumber.CucumberJava8HookDefinitionToCucumberJava:
       name: "org.openrewrite.java.testing.cucumber.CucumberJava8HookDefinitionToCucumberJava"
-      description: "Replace LamdbaGlue hook definitions with new annotated methods\
+      description: "Replace LambdaGlue hook definitions with new annotated methods\
         \ with the same body."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/cucumber/cucumberjava8hookdefinitiontocucumberjava"
       options: []
@@ -6391,13 +6583,13 @@ rewrite-testing-frameworks:
       options: []
     org.openrewrite.java.testing.junit5.ParameterizedRunnerToParameterized:
       name: "org.openrewrite.java.testing.junit5.ParameterizedRunnerToParameterized"
-      description: "Convert JUnit4 parameterized runner the JUnit Jupiter parameterized\
+      description: "Convert JUnit 4 parameterized runner the JUnit Jupiter parameterized\
         \ test equivalent."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/parameterizedrunnertoparameterized"
       options: []
     org.openrewrite.java.testing.junit5.RemoveObsoleteRunners:
       name: "org.openrewrite.java.testing.junit5.RemoveObsoleteRunners"
-      description: "Some JUnit4 `@RunWith` annotations do not require replacement\
+      description: "Some JUnit 4 `@RunWith` annotations do not require replacement\
         \ with an equivalent JUnit Jupiter `@ExtendsWith` annotation. This can be\
         \ used to remove those runners that either do not have a JUnit Jupiter equivalent\
         \ or do not require a replacement as part of JUnit 4 to 5 migration."
@@ -6429,7 +6621,7 @@ rewrite-testing-frameworks:
       options: []
     org.openrewrite.java.testing.junit5.TemporaryFolderToTempDir:
       name: "org.openrewrite.java.testing.junit5.TemporaryFolderToTempDir"
-      description: "Translates JUnit4's `org.junit.rules.TemporaryFolder` into JUnit\
+      description: "Translates JUnit 4's `org.junit.rules.TemporaryFolder` into JUnit\
         \ 5's `org.junit.jupiter.api.io.TempDir`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/temporaryfoldertotempdir"
       options: []
@@ -6451,8 +6643,8 @@ rewrite-testing-frameworks:
       options: []
     org.openrewrite.java.testing.junit5.UpdateTestAnnotation:
       name: "org.openrewrite.java.testing.junit5.UpdateTestAnnotation"
-      description: "Update usages of JUnit 4's `@org.junit.Test` annotation to JUnit5's\
-        \ `org.junit.jupiter.api.Test` annotation."
+      description: "Update usages of JUnit 4's `@org.junit.Test` annotation to JUnit\
+        \ 5's `org.junit.jupiter.api.Test` annotation."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/updatetestannotation"
       options: []
     org.openrewrite.java.testing.junit5.UseHamcrestAssertThat:
@@ -6470,8 +6662,8 @@ rewrite-testing-frameworks:
     org.openrewrite.java.testing.junit5.UseTestMethodOrder:
       name: "org.openrewrite.java.testing.junit5.UseTestMethodOrder"
       description: "JUnit optionally allows test method execution order to be specified.\
-        \ This Recipe replaces JUnit4 test execution ordering annotations with JUnit5\
-        \ replacements."
+        \ This Recipe replaces JUnit 4 test execution ordering annotations with JUnit\
+        \ 5 replacements."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/usetestmethodorder"
       options: []
     org.openrewrite.java.testing.junit5.UseWiremockExtension:
@@ -6516,7 +6708,7 @@ rewrite-testing-frameworks:
       options: []
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "7.33.0"
+  version: "7.34.0"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -6640,7 +6832,7 @@ rewrite-xml:
         required: false
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "7.33.0"
+  version: "7.34.0"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.ChangeKey:
       name: "org.openrewrite.yaml.ChangeKey"
