@@ -1,6 +1,6 @@
 rewrite-circleci:
   artifactId: "rewrite-circleci"
-  version: "1.16.0-SNAPSHOT"
+  version: "1.17.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.circleci.InstallOrb:
       name: "org.openrewrite.circleci.InstallOrb"
@@ -24,7 +24,7 @@ rewrite-circleci:
         required: true
 rewrite-cloud-suitability-analyzer:
   artifactId: "rewrite-cloud-suitability-analyzer"
-  version: "1.1.0-SNAPSHOT"
+  version: "1.2.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.cloudsuitability.FindCacheUses:
       name: "org.openrewrite.cloudsuitability.FindCacheUses"
@@ -82,16 +82,6 @@ rewrite-cloud-suitability-analyzer:
       description: "Convert to redis or consider TKG."
       docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjcache"
       options: []
-    org.openrewrite.cloudsuitability.FindJMS:
-      name: "org.openrewrite.cloudsuitability.FindJMS"
-      description: "Run embedded service broker as a JMS Provider."
-      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjms"
-      options: []
-    org.openrewrite.cloudsuitability.FindJNI:
-      name: "org.openrewrite.cloudsuitability.FindJNI"
-      description: "A few conditions have to be met to make JNI calls."
-      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjni"
-      options: []
     org.openrewrite.cloudsuitability.FindJavaBatch:
       name: "org.openrewrite.cloudsuitability.FindJavaBatch"
       description: "The advice is to remove JNDI provider or move to TKG."
@@ -102,8 +92,8 @@ rewrite-cloud-suitability-analyzer:
       description: "Batch processing can include long running processes."
       docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjavabatchannotations"
       options: []
-    org.openrewrite.cloudsuitability.FindJavaFX:
-      name: "org.openrewrite.cloudsuitability.FindJavaFX"
+    org.openrewrite.cloudsuitability.FindJavaFx:
+      name: "org.openrewrite.cloudsuitability.FindJavaFx"
       description: "JavaFX is not cloud compatible and requires the JRE on the remote\
         \ device."
       docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjavafx"
@@ -129,6 +119,22 @@ rewrite-cloud-suitability-analyzer:
       description: "Use managed executor."
       docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjetty"
       options: []
+    org.openrewrite.cloudsuitability.FindJks:
+      name: "org.openrewrite.cloudsuitability.FindJks"
+      description: "In a cloud environment, use a centralized keystore, such as Azure\
+        \ Key Vault or AWS Secrets Manager, to better secure sensitive information."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjks"
+      options: []
+    org.openrewrite.cloudsuitability.FindJms:
+      name: "org.openrewrite.cloudsuitability.FindJms"
+      description: "Run embedded service broker as a JMS Provider."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjms"
+      options: []
+    org.openrewrite.cloudsuitability.FindJni:
+      name: "org.openrewrite.cloudsuitability.FindJni"
+      description: "A few conditions have to be met to make JNI calls."
+      docLink: "https://docs.openrewrite.org/reference/recipes/cloudsuitability/findjni"
+      options: []
     org.openrewrite.cloudsuitability.FindRemoteMethodInvocations:
       name: "org.openrewrite.cloudsuitability.FindRemoteMethodInvocations"
       description: "Remote Method Invocations are not cloud native. Move to cloud\
@@ -148,7 +154,7 @@ rewrite-cloud-suitability-analyzer:
       options: []
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "1.15.0-SNAPSHOT"
+  version: "1.16.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -216,7 +222,7 @@ rewrite-concourse:
       options: []
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "7.34.0-SNAPSHOT"
+  version: "7.35.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -281,7 +287,7 @@ rewrite-core:
       options: []
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "1.15.0-SNAPSHOT"
+  version: "1.16.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin:
       name: "org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin"
@@ -347,7 +353,7 @@ rewrite-github-actions:
       options: []
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "7.34.0-SNAPSHOT"
+  version: "7.35.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.ActivateStyle:
       name: "org.openrewrite.gradle.ActivateStyle"
@@ -634,6 +640,20 @@ rewrite-gradle:
         \ files."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/search/findgradleproject"
       options: []
+    org.openrewrite.gradle.search.FindGradleWrapper:
+      name: "org.openrewrite.gradle.search.FindGradleWrapper"
+      description: "Find Gradle wrappers."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/search/findgradlewrapper"
+      options:
+      - name: "distribution"
+        type: "String"
+        required: false
+      - name: "version"
+        type: "String"
+        required: false
+      - name: "versionPattern"
+        type: "String"
+        required: false
     org.openrewrite.gradle.search.FindPlugins:
       name: "org.openrewrite.gradle.search.FindPlugins"
       description: "Find a Gradle plugin by id."
@@ -649,7 +669,7 @@ rewrite-gradle:
       options: []
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "7.34.0-SNAPSHOT"
+  version: "7.35.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -664,7 +684,7 @@ rewrite-groovy:
       options: []
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "7.34.0-SNAPSHOT"
+  version: "7.35.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -730,7 +750,7 @@ rewrite-hcl:
         required: true
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "7.34.0-SNAPSHOT"
+  version: "7.35.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -2112,7 +2132,7 @@ rewrite-java:
       options: []
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "1.20.0-SNAPSHOT"
+  version: "1.21.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.security.FindTextDirectionChanges:
       name: "org.openrewrite.java.security.FindTextDirectionChanges"
@@ -2172,7 +2192,10 @@ rewrite-java-security:
       description: "`java.io.File.createTempFile()` has exploitable default file permissions.\
         \ This recipe migrates to the more secure `java.nio.file.Files.createTempFile()`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/security/securetempfilecreation"
-      options: []
+      options:
+      - name: "target"
+        type: "String"
+        required: true
     org.openrewrite.java.security.UseFilesCreateTempDirectory:
       name: "org.openrewrite.java.security.UseFilesCreateTempDirectory"
       description: "Use `Files#createTempDirectory` when the sequence `File#createTempFile(..)`->`File#delete()`->`File#mkdir()`\
@@ -2389,7 +2412,7 @@ rewrite-java-security:
         required: false
 rewrite-jhipster:
   artifactId: "rewrite-jhipster"
-  version: "1.15.0-SNAPSHOT"
+  version: "1.16.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.jhipster.FixCwe338:
       name: "org.openrewrite.java.jhipster.FixCwe338"
@@ -2399,7 +2422,7 @@ rewrite-jhipster:
       options: []
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "7.34.0-SNAPSHOT"
+  version: "7.35.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -2450,7 +2473,7 @@ rewrite-json:
         required: true
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "1.26.0-SNAPSHOT"
+  version: "1.27.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -2841,7 +2864,7 @@ rewrite-kubernetes:
         required: true
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "1.16.0-SNAPSHOT"
+  version: "1.17.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.logging.ParameterizedLogging:
       name: "org.openrewrite.java.logging.ParameterizedLogging"
@@ -3027,7 +3050,7 @@ rewrite-logging-frameworks:
       options: []
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "7.34.0-SNAPSHOT"
+  version: "7.35.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -3500,6 +3523,24 @@ rewrite-maven:
       - name: "groupId"
         type: "String"
         required: true
+    org.openrewrite.maven.RemovePluginDependency:
+      name: "org.openrewrite.maven.RemovePluginDependency"
+      description: "Removes a dependency from the <dependencies> section of a plugin\
+        \ in the pom.xml."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/removeplugindependency"
+      options:
+      - name: "artifactId"
+        type: "String"
+        required: true
+      - name: "groupId"
+        type: "String"
+        required: true
+      - name: "pluginArtifactId"
+        type: "String"
+        required: true
+      - name: "pluginGroupId"
+        type: "String"
+        required: true
     org.openrewrite.maven.RemoveProperty:
       name: "org.openrewrite.maven.RemoveProperty"
       description: "Removes the specified Maven project property from the pom.xml."
@@ -3675,7 +3716,7 @@ rewrite-maven:
       options: []
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "1.20.0-SNAPSHOT"
+  version: "1.21.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy:
       name: "org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy"
@@ -3753,7 +3794,7 @@ rewrite-micronaut:
         required: true
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "1.15.0-SNAPSHOT"
+  version: "1.16.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -4603,6 +4644,16 @@ rewrite-migrate-java:
         \ Java 17 and migrate experimental Lombok types that have been promoted."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lombok/updatelomboktojava17"
       options: []
+    org.openrewrite.java.migrate.maven.UseMavenCompilerPluginReleaseConfiguration:
+      name: "org.openrewrite.java.migrate.maven.UseMavenCompilerPluginReleaseConfiguration"
+      description: "Replaces any explicit `source` or `target` configuration (if present)\
+        \ on the maven-compiler-plugin with `release`, and updates the `release` value\
+        \ if needed."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/maven/usemavencompilerpluginreleaseconfiguration"
+      options:
+      - name: "releaseVersion"
+        type: "String"
+        required: true
     org.openrewrite.java.migrate.metrics.SimplifyMicrometerMeterTags:
       name: "org.openrewrite.java.migrate.metrics.SimplifyMicrometerMeterTags"
       description: "Use the simplest method to add new tags."
@@ -4735,7 +4786,7 @@ rewrite-migrate-java:
       options: []
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "7.34.0-SNAPSHOT"
+  version: "7.35.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -4817,7 +4868,7 @@ rewrite-properties:
         required: false
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "1.15.0-SNAPSHOT"
+  version: "1.16.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.quarkus.ConfigPropertiesToConfigMapping:
       name: "org.openrewrite.java.quarkus.ConfigPropertiesToConfigMapping"
@@ -4897,7 +4948,7 @@ rewrite-quarkus:
       options: []
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "4.31.0-SNAPSHOT"
+  version: "4.32.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.spring.AddSpringProperty:
       name: "org.openrewrite.java.spring.AddSpringProperty"
@@ -5501,6 +5552,20 @@ rewrite-spring:
       description: "`JpaRepository#getOne(ID)` was deprecated in 2.5."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/data/usejparepositorygetbyid"
       options: []
+    org.openrewrite.java.spring.data.UseTlsJdbcConnectionString:
+      name: "org.openrewrite.java.spring.data.UseTlsJdbcConnectionString"
+      description: "Increasingly, for compliance reasons (e.g. [NACHA](https://www.nacha.org/sites/default/files/2022-06/End_User_Briefing_Supplementing_Data_Security_UPDATED_FINAL.pdf)),\
+        \ JDBC connection strings should be TLS-enabled. This recipe will update the\
+        \ port and optionally add a connection attribute to indicate that the connection\
+        \ is TLS-enabled."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/data/usetlsjdbcconnectionstring"
+      options:
+      - name: "attribute"
+        type: "String"
+        required: true
+      - name: "port"
+        type: "Integer"
+        required: true
     org.openrewrite.java.spring.framework.EnvironmentAcceptsProfiles:
       name: "org.openrewrite.java.spring.framework.EnvironmentAcceptsProfiles"
       description: "`Environment#acceptsProfiles(String...)` was deprecated in Spring\
@@ -5590,7 +5655,7 @@ rewrite-spring:
         required: true
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "1.15.0-SNAPSHOT"
+  version: "1.16.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -5606,7 +5671,7 @@ rewrite-terraform:
         required: true
     org.openrewrite.terraform.SecureRandom:
       name: "org.openrewrite.terraform.SecureRandom"
-      description: ""
+      description: "Use a long enough byte length for `random` resources."
       docLink: "https://docs.openrewrite.org/reference/recipes/terraform/securerandom"
       options:
       - name: "byteLength"
@@ -6249,7 +6314,7 @@ rewrite-terraform:
         required: true
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "1.32.0-SNAPSHOT"
+  version: "1.33.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.assertj.Assertj:
       name: "org.openrewrite.java.testing.assertj.Assertj"
@@ -6312,7 +6377,8 @@ rewrite-testing-frameworks:
     org.openrewrite.java.testing.assertj.JUnitToAssertj:
       name: "org.openrewrite.java.testing.assertj.JUnitToAssertj"
       description: "AssertJ provides a rich set of assertions, truly helpful error\
-        \ messages, improves test code readability."
+        \ messages, improves test code readability. Converts assertions from `org.junit.jupiter.api.Assertions`\
+        \ to `org.assertj.core.api.Assertions`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/junittoassertj"
       options: []
     org.openrewrite.java.testing.assertj.StaticImports:
@@ -6400,9 +6466,9 @@ rewrite-testing-frameworks:
     org.openrewrite.java.testing.cleanup.TestsShouldNotBePublic:
       name: "org.openrewrite.java.testing.cleanup.TestsShouldNotBePublic"
       description: "Remove `public` and optionally `protected` modifiers from methods\
-        \ with `@Test`, `@ParameterizedTest`, `@RepeatedTest`, `@TestFactory`, `@BeforeEach`\
-        \ or `@AfterEach`. They no longer have to be public visibility to be usable\
-        \ by JUnit 5."
+        \ with `@Test`, `@ParameterizedTest`, `@RepeatedTest`, `@TestFactory`, `@BeforeEach`,\
+        \ `@AfterEach`, `@BeforeAll`, or `@AfterAll`. They no longer have to be public\
+        \ visibility to be usable by JUnit 5."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/cleanup/testsshouldnotbepublic"
       options:
       - name: "removeProtectedModifiers"
@@ -6671,7 +6737,7 @@ rewrite-testing-frameworks:
       options: []
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "7.34.0-SNAPSHOT"
+  version: "7.35.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -6795,7 +6861,7 @@ rewrite-xml:
         required: false
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "7.34.0-SNAPSHOT"
+  version: "7.35.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.ChangeKey:
       name: "org.openrewrite.yaml.ChangeKey"
