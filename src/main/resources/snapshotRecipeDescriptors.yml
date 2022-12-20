@@ -3480,6 +3480,12 @@ rewrite-maven:
       - name: "scope"
         type: "String"
         required: false
+    org.openrewrite.maven.RemoveDuplicateDependencies:
+      name: "org.openrewrite.maven.RemoveDuplicateDependencies"
+      description: "Removes duplicated dependencies in the `<dependencies>` and `<dependencyManagement>`\
+        \ sections of the `pom.xml`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/removeduplicatedependencies"
+      options: []
     org.openrewrite.maven.RemoveExclusion:
       name: "org.openrewrite.maven.RemoveExclusion"
       description: "Remove a single exclusion from on a particular dependency."
@@ -4795,6 +4801,9 @@ rewrite-properties:
         \ the property and value."
       docLink: "https://docs.openrewrite.org/reference/recipes/properties/addproperty"
       options:
+      - name: "delimiter"
+        type: "String"
+        required: false
       - name: "fileMatcher"
         type: "String"
         required: false

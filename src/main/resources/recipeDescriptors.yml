@@ -222,7 +222,7 @@ rewrite-concourse:
       options: []
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "7.34.0"
+  version: "7.34.3"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -353,7 +353,7 @@ rewrite-github-actions:
       options: []
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "7.34.0"
+  version: "7.34.3"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.ActivateStyle:
       name: "org.openrewrite.gradle.ActivateStyle"
@@ -640,6 +640,20 @@ rewrite-gradle:
         \ files."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/search/findgradleproject"
       options: []
+    org.openrewrite.gradle.search.FindGradleWrapper:
+      name: "org.openrewrite.gradle.search.FindGradleWrapper"
+      description: "Find Gradle wrappers."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/search/findgradlewrapper"
+      options:
+      - name: "distribution"
+        type: "String"
+        required: false
+      - name: "version"
+        type: "String"
+        required: false
+      - name: "versionPattern"
+        type: "String"
+        required: false
     org.openrewrite.gradle.search.FindPlugins:
       name: "org.openrewrite.gradle.search.FindPlugins"
       description: "Find a Gradle plugin by id."
@@ -655,7 +669,7 @@ rewrite-gradle:
       options: []
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "7.34.0"
+  version: "7.34.3"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -670,7 +684,7 @@ rewrite-groovy:
       options: []
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "7.34.0"
+  version: "7.34.3"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -736,7 +750,7 @@ rewrite-hcl:
         required: true
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "7.34.0"
+  version: "7.34.3"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -2408,7 +2422,7 @@ rewrite-jhipster:
       options: []
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "7.34.0"
+  version: "7.34.3"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3036,7 +3050,7 @@ rewrite-logging-frameworks:
       options: []
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "7.34.0"
+  version: "7.34.3"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -3466,6 +3480,12 @@ rewrite-maven:
       - name: "scope"
         type: "String"
         required: false
+    org.openrewrite.maven.RemoveDuplicateDependencies:
+      name: "org.openrewrite.maven.RemoveDuplicateDependencies"
+      description: "Removes duplicated dependencies in the `<dependencies>` and `<dependencyManagement>`\
+        \ sections of the `pom.xml`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/removeduplicatedependencies"
+      options: []
     org.openrewrite.maven.RemoveExclusion:
       name: "org.openrewrite.maven.RemoveExclusion"
       description: "Remove a single exclusion from on a particular dependency."
@@ -4772,7 +4792,7 @@ rewrite-migrate-java:
       options: []
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "7.34.0"
+  version: "7.34.3"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -4781,6 +4801,9 @@ rewrite-properties:
         \ the property and value."
       docLink: "https://docs.openrewrite.org/reference/recipes/properties/addproperty"
       options:
+      - name: "delimiter"
+        type: "String"
+        required: false
       - name: "fileMatcher"
         type: "String"
         required: false
@@ -6708,7 +6731,7 @@ rewrite-testing-frameworks:
       options: []
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "7.34.0"
+  version: "7.34.3"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -6832,7 +6855,7 @@ rewrite-xml:
         required: false
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "7.34.0"
+  version: "7.34.3"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.ChangeKey:
       name: "org.openrewrite.yaml.ChangeKey"
