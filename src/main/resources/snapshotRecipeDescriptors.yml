@@ -1924,6 +1924,12 @@ rewrite-java:
       description: "Retrofit recipes with a deafult estimated effort per occurrence."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/recipes/setdefaultestimatedeffortperoccurrence"
       options: []
+    org.openrewrite.java.recipes.SourceSpecTextBlockIndentation:
+      name: "org.openrewrite.java.recipes.SourceSpecTextBlockIndentation"
+      description: "Text blocks that assert before and after source code should have\
+        \ minimal indentation."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/recipes/sourcespectextblockindentation"
+      options: []
     org.openrewrite.java.search.FindAnnotations:
       name: "org.openrewrite.java.search.FindAnnotations"
       description: "Find all annotations matching the annotation pattern."
@@ -2108,6 +2114,26 @@ rewrite-java:
         type: "Boolean"
         required: false
       - name: "fullyQualifiedTypeName"
+        type: "String"
+        required: true
+    org.openrewrite.java.search.HasJavaVersion:
+      name: "org.openrewrite.java.search.HasJavaVersion"
+      description: "Finds Java source files matching a particular language level.\
+        \ This is useful especially as an applicable test for other recipes."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/search/hasjavaversion"
+      options:
+      - name: "version"
+        type: "String"
+        required: true
+    org.openrewrite.java.search.HasSourceSet:
+      name: "org.openrewrite.java.search.HasSourceSet"
+      description: "Source sets are a way to organize your source code into logical\
+        \ groups. For example, Java projects commonly have a `main` source set for\
+        \ application code and a `test` source set for test code. This recipe will\
+        \ find all files in a given source set."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/search/hassourceset"
+      options:
+      - name: "sourceSet"
         type: "String"
         required: true
     org.openrewrite.java.search.PotentiallyDeadCode:
@@ -5064,6 +5090,12 @@ rewrite-spring:
         \ ."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/yamlpropertiestokebabcase"
       options: []
+    org.openrewrite.java.spring.boot2.ChangeEmbeddedServletContainerCustomizer:
+      name: "org.openrewrite.java.spring.boot2.ChangeEmbeddedServletContainerCustomizer"
+      description: "Find any classes implementing `EmbeddedServletContainerCustomizer`\
+        \ and change the interface to `WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/changeembeddedservletcontainercustomizer"
+      options: []
     org.openrewrite.java.spring.boot2.ConditionalOnBeanAnyNestedCondition:
       name: "org.openrewrite.java.spring.boot2.ConditionalOnBeanAnyNestedCondition"
       description: "Migrate multi-condition `@ConditionalOnBean` annotations to `AnyNestedCondition`."
@@ -5127,8 +5159,9 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.MigrateErrorControllerPackageName:
       name: "org.openrewrite.java.spring.boot2.MigrateErrorControllerPackageName"
-      description: "`org.springframework.boot.autoconfigure.web.ErrorController` was\
-        \ deprecated in 1.x."
+      description: "Use `org.springframework.boot.web.servlet.error.ErrorController`\
+        \ instead of the deprecated `org.springframework.boot.autoconfigure.web.ErrorController`\
+        \ in Spring Boot 2.0 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migrateerrorcontrollerpackagename"
       options: []
     org.openrewrite.java.spring.boot2.MigrateErrorPropertiesIncludeStackTraceConstants:
@@ -5139,8 +5172,8 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.MigrateHibernateContraintsToJavax:
       name: "org.openrewrite.java.spring.boot2.MigrateHibernateContraintsToJavax"
-      description: "`org.hibernate.validator.constraints` were deprecated in 1.x.\
-        \ in favor of their javax counterparts."
+      description: "Use `javax.validation.constraints` instead of the deprecated `org.hibernate.validator.constraints`\
+        \ in Spring Boot 2.0 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migratehibernatecontraintstojavax"
       options: []
     org.openrewrite.java.spring.boot2.MigrateHsqlEmbeddedDatabaseConnection:
@@ -5151,8 +5184,9 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.MigrateHttpMessageConvertersPackageName:
       name: "org.openrewrite.java.spring.boot2.MigrateHttpMessageConvertersPackageName"
-      description: "`org.springframework.boot.autoconfigure.web.HttpMessageConverters`\
-        \ was deprecated in 1.x."
+      description: "Use `org.springframework.boot.autoconfigure.http.HttpMessageConverters`\
+        \ instead of the deprecated `org.springframework.boot.autoconfigure.web.HttpMessageConverters`\
+        \ in Spring Boot 2.0 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migratehttpmessageconverterspackagename"
       options: []
     org.openrewrite.java.spring.boot2.MigrateLocalServerPortAnnotation:
@@ -5194,8 +5228,9 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.MigrateSpringBootServletInitializerPackageName:
       name: "org.openrewrite.java.spring.boot2.MigrateSpringBootServletInitializerPackageName"
-      description: "`org.springframework.boot.web.support.SpringBootServletInitializer`\
-        \ was deprecated in 1.4.x."
+      description: "Use `org.springframework.boot.web.servlet.support.SpringBootServletInitializer`\
+        \ instead of the deprecated `org.springframework.boot.web.support.SpringBootServletInitializer`\
+        \ in Spring Boot 1.4 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migratespringbootservletinitializerpackagename"
       options: []
     org.openrewrite.java.spring.boot2.MigrateSpringBoot_2_0:
@@ -5207,6 +5242,16 @@ rewrite-spring:
         \ framework migrations (Spring Framework, Spring Data, etc) that are required\
         \ as part of the migration to Spring Boot 2.0.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migratespringboot_2_0"
+      options: []
+    org.openrewrite.java.spring.boot2.MigrateToWebServerFactoryCustomizer:
+      name: "org.openrewrite.java.spring.boot2.MigrateToWebServerFactoryCustomizer"
+      description: "Use `WebServerFactoryCustomizer` instead of the deprecated `EmbeddedServletContainerCustomizer`\
+        \ in Spring Boot 2.0 or higher. This recipe will replace look for any classes\
+        \ that implement `EmbeddedServletContainerCustomizer` and change the interface\
+        \ to `WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>`. This\
+        \ recipe also adjusts the the types used in the `customize()` method from\
+        \ `*EmbeddedServletContainerFactory` to their `*ServletWebServerFactory` counterparts.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migratetowebserverfactorycustomizer"
       options: []
     org.openrewrite.java.spring.boot2.MigrateUndertowServletWebServerFactoryIsEagerInitFilters:
       name: "org.openrewrite.java.spring.boot2.MigrateUndertowServletWebServerFactoryIsEagerInitFilters"
@@ -5466,22 +5511,33 @@ rewrite-spring:
     org.openrewrite.java.spring.boot3.ActuatorEndpointSanitization:
       name: "org.openrewrite.java.spring.boot3.ActuatorEndpointSanitization"
       description: "Spring Boot 3.0 removed the key-based sanitization mechanism used\
-        \ in Spring Boot 2.x in favor of a unified approach. This recipe maintains\
-        \ the previous behavior but adds a warning comment that these settings should\
-        \ be reviewed. See https://github.com/openrewrite/rewrite-spring/issues/228"
+        \ in Spring Boot 2.x in favor of a unified approach. See https://github.com/openrewrite/rewrite-spring/issues/228"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/actuatorendpointsanitization"
       options: []
-    org.openrewrite.java.spring.boot3.LegacyJmxExposure:
-      name: "org.openrewrite.java.spring.boot3.LegacyJmxExposure"
-      description: "Spring Boot 3.0 only exposes the health endpoint via JMX. This\
-        \ change exposes all actuator endpoints via JMX to maintain parity with Spring\
-        \ Boot 2.x. See See https://github.com/openrewrite/rewrite-spring/issues/229"
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/legacyjmxexposure"
+    org.openrewrite.java.spring.boot3.DowngradeServletApiWhenUsingJetty:
+      name: "org.openrewrite.java.spring.boot3.DowngradeServletApiWhenUsingJetty"
+      description: "Jetty does not yet support Servlet 6.0. This recipe will detect\
+        \ the presence of the `spring-boot-starter-jetty` as a first-order dependency\
+        \ and will add the maven property `jakarta-servlet.version` setting it's value\
+        \ to `5.0.0`. This will downgrade the `jakarta-servlet` artifact if the pom's\
+        \ parent extends from the spring-boot-parent.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/downgradeservletapiwhenusingjetty"
       options: []
     org.openrewrite.java.spring.boot3.MavenPomUpgrade:
       name: "org.openrewrite.java.spring.boot3.MavenPomUpgrade"
       description: "Upgrade Maven Pom to Spring Boot 3.0 from prior 2.x version."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/mavenpomupgrade"
+      options: []
+    org.openrewrite.java.spring.boot3.MigrateMaxHttpHeaderSize:
+      name: "org.openrewrite.java.spring.boot3.MigrateMaxHttpHeaderSize"
+      description: "Previously, the server.max-http-header-size was treated inconsistently\
+        \ across the four supported embedded web servers. When using Jetty, Netty,\
+        \ or Undertow it would configure the max HTTP request header size. When using\
+        \ Tomcat it would configure the max HTTP request and response header sizes.\
+        \ The renamed property is used to configure the http request header size in\
+        \ Spring Boot 3.0. **To limit the max header size of an HTTP response on Tomcat\
+        \ or Jetty (the only two servers that support such a setting), use a `WebServerFactoryCustomizer`**.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/migratemaxhttpheadersize"
       options: []
     org.openrewrite.java.spring.boot3.PreciseBeanType:
       name: "org.openrewrite.java.spring.boot3.PreciseBeanType"
@@ -6849,6 +6905,12 @@ rewrite-xml:
       - name: "untilDate"
         type: "String"
         required: false
+    org.openrewrite.xml.security.IsOwaspSuppressionsFile:
+      name: "org.openrewrite.xml.security.IsOwaspSuppressionsFile"
+      description: "These files are used to suppress false positives in OWASP [Dependency\
+        \ Check](https://jeremylong.github.io/DependencyCheck)."
+      docLink: "https://docs.openrewrite.org/reference/recipes/xml/security/isowaspsuppressionsfile"
+      options: []
     org.openrewrite.xml.security.RemoveOwaspSuppressions:
       name: "org.openrewrite.xml.security.RemoveOwaspSuppressions"
       description: "Remove all OWASP suppressions with a suppression end date in the\
