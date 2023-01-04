@@ -265,7 +265,7 @@ rewrite-core:
         required: true
     org.openrewrite.SetFilePermissions:
       name: "org.openrewrite.SetFilePermissions"
-      description: "Set a files read, write and executable permission attributes."
+      description: "Set a file's read, write and executable permission attributes."
       docLink: "https://docs.openrewrite.org/reference/recipes/setfilepermissions"
       options:
       - name: "fileMatcher"
@@ -381,6 +381,39 @@ rewrite-gradle:
         \ overload."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/adddelegatestogradleapi"
       options: []
+    org.openrewrite.gradle.AddDependency:
+      name: "org.openrewrite.gradle.AddDependency"
+      description: "Add a gradle dependency to a `build.gradle` file in the correct\
+        \ configuration based on where it is used."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/adddependency"
+      options:
+      - name: "artifactId"
+        type: "String"
+        required: true
+      - name: "classifier"
+        type: "String"
+        required: false
+      - name: "configuration"
+        type: "String"
+        required: false
+      - name: "extension"
+        type: "String"
+        required: false
+      - name: "familyPattern"
+        type: "String"
+        required: false
+      - name: "groupId"
+        type: "String"
+        required: true
+      - name: "onlyIfUsing"
+        type: "String"
+        required: true
+      - name: "version"
+        type: "String"
+        required: true
+      - name: "versionPattern"
+        type: "String"
+        required: false
     org.openrewrite.gradle.AddGradleWrapper:
       name: "org.openrewrite.gradle.AddGradleWrapper"
       description: "Add a Gradle wrapper where one does not exist."
@@ -5233,16 +5266,6 @@ rewrite-spring:
         \ in Spring Boot 1.4 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migratespringbootservletinitializerpackagename"
       options: []
-    org.openrewrite.java.spring.boot2.MigrateSpringBoot_2_0:
-      name: "org.openrewrite.java.spring.boot2.MigrateSpringBoot_2_0"
-      description: "Migrate applications built on Spring Boot 1.5 to the latest Spring\
-        \ Boot 2.0 release. This recipe will modify an application's build files,\
-        \ make changes to deprecated/preferred APIs, and migrate configuration settings\
-        \ that have changes between versions. This recipe will also chain additional\
-        \ framework migrations (Spring Framework, Spring Data, etc) that are required\
-        \ as part of the migration to Spring Boot 2.0.\n"
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migratespringboot_2_0"
-      options: []
     org.openrewrite.java.spring.boot2.MigrateToWebServerFactoryCustomizer:
       name: "org.openrewrite.java.spring.boot2.MigrateToWebServerFactoryCustomizer"
       description: "Use `WebServerFactoryCustomizer` instead of the deprecated `EmbeddedServletContainerCustomizer`\
@@ -5390,6 +5413,16 @@ rewrite-spring:
       name: "org.openrewrite.java.spring.boot2.UnnecessarySpringRunWith"
       description: "Remove `@RunWith` annotations on Spring tests."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/unnecessaryspringrunwith"
+      options: []
+    org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_0:
+      name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_0"
+      description: "Migrate applications built on Spring Boot 1.5 to the latest Spring\
+        \ Boot 2.0 release. This recipe will modify an application's build files,\
+        \ make changes to deprecated/preferred APIs, and migrate configuration settings\
+        \ that have changes between versions. This recipe will also chain additional\
+        \ framework migrations (Spring Framework, Spring Data, etc) that are required\
+        \ as part of the migration to Spring Boot 2.0.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/upgradespringboot_2_0"
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_1:
       name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_1"
