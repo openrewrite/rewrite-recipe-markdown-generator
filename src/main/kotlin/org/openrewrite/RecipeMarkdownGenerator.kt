@@ -446,7 +446,7 @@ class RecipeMarkdownGenerator : Runnable {
             if (descriptor == null) {
                 StringUtils.capitalize(simpleName)
             } else {
-                descriptor.displayName
+                descriptor.displayName.replace("`", "")
             }
 
         /**
@@ -949,7 +949,7 @@ class RecipeMarkdownGenerator : Runnable {
             recipesPath.resolve(getRecipePath(recipeDescriptor) + ".md")
 
         private fun getRecipeRelativePath(recipe: RecipeDescriptor): String =
-            "/reference/recipes/" + getRecipePath(recipe)
+            "reference/recipes/" + getRecipePath(recipe)
 
         private fun findCategoryDescriptor(categoryPathFragment: String, categoryDescriptors: Iterable<CategoryDescriptor>): CategoryDescriptor? {
             val categoryPackage = "org.openrewrite.${categoryPathFragment.replace('/', '.')}"
