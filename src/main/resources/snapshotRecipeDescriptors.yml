@@ -572,6 +572,26 @@ rewrite-gradle:
         \ represented as `Maps` with an equivalent dependency represented as a `String`."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/dependencyusestringnotation"
       options: []
+    org.openrewrite.gradle.EnableGradleBuildCache:
+      name: "org.openrewrite.gradle.EnableGradleBuildCache"
+      description: "Enable the Gradle build cache. By enabling build cache the build\
+        \ outputs are stored externally and fetched from the cache when it is determined\
+        \ that those inputs have no changed, avoiding the expensive work of regenerating\
+        \ them. See the [Gradle Build Cache](https://docs.gradle.org/current/userguide/build_cache.html)\
+        \ for more information."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/enablegradlebuildcache"
+      options: []
+    org.openrewrite.gradle.EnableGradleParallelExecution:
+      name: "org.openrewrite.gradle.EnableGradleParallelExecution"
+      description: "Most builds consist of more than one project and some of those\
+        \ projects are usually independent of one another. Yet Gradle will only run\
+        \ one task at a time by default, regardless of the project structure. By using\
+        \ the `--parallel` switch, you can force Gradle to execute tasks in parallel\
+        \ as long as those tasks are in different projects. See the [Gradle performance\
+        \ documentation](https://docs.gradle.org/current/userguide/performance.html#parallel_execution)\
+        \ for more information."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/enablegradleparallelexecution"
+      options: []
     org.openrewrite.gradle.RemoveGradleDependency:
       name: "org.openrewrite.gradle.RemoveGradleDependency"
       description: "Removes a single dependency from the dependencies section of the\
@@ -607,6 +627,20 @@ rewrite-gradle:
       - name: "version"
         type: "String"
         required: true
+    org.openrewrite.gradle.plugins.AddBuildPlugin:
+      name: "org.openrewrite.gradle.plugins.AddBuildPlugin"
+      description: "Add a Gradle build plugin to `build.gradle(.kts)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/plugins/addbuildplugin"
+      options:
+      - name: "pluginId"
+        type: "String"
+        required: true
+      - name: "version"
+        type: "String"
+        required: false
+      - name: "versionPattern"
+        type: "String"
+        required: false
     org.openrewrite.gradle.plugins.AddGradleEnterprise:
       name: "org.openrewrite.gradle.plugins.AddGradleEnterprise"
       description: "Add the Gradle Enterprise plugin to `settings.gradle(.kts)`."
@@ -615,6 +649,20 @@ rewrite-gradle:
       - name: "version"
         type: "String"
         required: true
+    org.openrewrite.gradle.plugins.AddSettingsPlugin:
+      name: "org.openrewrite.gradle.plugins.AddSettingsPlugin"
+      description: "Add a Gradle settings plugin to `settings.gradle(.kts)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/plugins/addsettingsplugin"
+      options:
+      - name: "pluginId"
+        type: "String"
+        required: true
+      - name: "version"
+        type: "String"
+        required: true
+      - name: "versionPattern"
+        type: "String"
+        required: false
     org.openrewrite.gradle.plugins.UpgradePluginVersion:
       name: "org.openrewrite.gradle.plugins.UpgradePluginVersion"
       description: "Update a Gradle plugin by id to a later version."
@@ -629,17 +677,6 @@ rewrite-gradle:
       - name: "versionPattern"
         type: "String"
         required: false
-    org.openrewrite.gradle.search.EnableGradleParallelExecution:
-      name: "org.openrewrite.gradle.search.EnableGradleParallelExecution"
-      description: "Most builds consist of more than one project and some of those\
-        \ projects are usually independent of one another. Yet Gradle will only run\
-        \ one task at a time by default, regardless of the project structure. By using\
-        \ the `--parallel` switch, you can force Gradle to execute tasks in parallel\
-        \ as long as those tasks are in different projects. See the [Gradle performance\
-        \ documentation](https://docs.gradle.org/current/userguide/performance.html#parallel_execution)\
-        \ for more."
-      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/search/enablegradleparallelexecution"
-      options: []
     org.openrewrite.gradle.search.FindDependency:
       name: "org.openrewrite.gradle.search.FindDependency"
       description: "Finds dependencies declared in `build.gradle` files. See the [reference](https://docs.gradle.org/current/userguide/java_library_plugin.html#sec:java_library_configurations_graph)\
@@ -1165,6 +1202,13 @@ rewrite-java:
         \ catches may change application behavior or type attribution is missing."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/combinesemanticallyequalcatchblocks"
       options: []
+    org.openrewrite.java.cleanup.CommonDeclarationSiteTypeVariances:
+      name: "org.openrewrite.java.cleanup.CommonDeclarationSiteTypeVariances"
+      description: "When using a method parameter like `Function<IN, OUT>`, it should\
+        \ rather be `Function<? super IN, ? extends OUT>`. This recipe checks for\
+        \ method parameters of well-known types."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/commondeclarationsitetypevariances"
+      options: []
     org.openrewrite.java.cleanup.CommonStaticAnalysis:
       name: "org.openrewrite.java.cleanup.CommonStaticAnalysis"
       description: "Resolve common static analysis issues discovered through 3rd party\
@@ -1193,6 +1237,24 @@ rewrite-java:
         \ type (any subtype of `Object`)."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/covariantequals"
       options: []
+    org.openrewrite.java.cleanup.DeclarationSiteTypeVariance:
+      name: "org.openrewrite.java.cleanup.DeclarationSiteTypeVariance"
+      description: "Currently, Java requires use-site type variance, so if someone\
+        \ has `Function<IN, OUT>` method parameter, it should rather be `Function<?\
+        \ super IN, ? extends OUT>`. Unfortunately, it is not easy to notice that\
+        \ `? super` and `? extends` is missing, so this recipe adds it where that\
+        \ would improve the situation."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/declarationsitetypevariance"
+      options:
+      - name: "excludeFinalClasses"
+        type: "Boolean"
+        required: false
+      - name: "excludedBounds"
+        type: "List"
+        required: false
+      - name: "variantTypes"
+        type: "List"
+        required: true
     org.openrewrite.java.cleanup.DefaultComesLast:
       name: "org.openrewrite.java.cleanup.DefaultComesLast"
       description: "Ensure the `default` case comes last after all the cases in a\
@@ -3518,6 +3580,13 @@ rewrite-maven:
       - name: "skipModelUpdate"
         type: "Boolean"
         required: false
+    org.openrewrite.maven.NormalizeMavenVariables:
+      name: "org.openrewrite.maven.NormalizeMavenVariables"
+      description: "Variables are all referenced by the prefix `project.`. You may\
+        \ also see references with `pom.` as the prefix, or the prefix omitted entirely\
+        \ - these forms are now deprecated and should not be used."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/normalizemavenvariables"
+      options: []
     org.openrewrite.maven.OrderPomElements:
       name: "org.openrewrite.maven.OrderPomElements"
       description: "Order POM elements according to the [recommended](http://maven.apache.org/developers/conventions/code.html#pom-code-convention)\
@@ -3632,6 +3701,41 @@ rewrite-maven:
       - name: "onlyIfVersionsMatch"
         type: "Boolean"
         required: false
+    org.openrewrite.maven.RemoveRepository:
+      name: "org.openrewrite.maven.RemoveRepository"
+      description: "Removes a matching Maven repository."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/removerepository"
+      options:
+      - name: "id"
+        type: "String"
+        required: false
+      - name: "layout"
+        type: "String"
+        required: false
+      - name: "releasesChecksumPolicy"
+        type: "String"
+        required: false
+      - name: "releasesEnabled"
+        type: "Boolean"
+        required: false
+      - name: "releasesUpdatePolicy"
+        type: "String"
+        required: false
+      - name: "repoName"
+        type: "String"
+        required: false
+      - name: "snapshotsChecksumPolicy"
+        type: "String"
+        required: false
+      - name: "snapshotsEnabled"
+        type: "Boolean"
+        required: false
+      - name: "snapshotsUpdatePolicy"
+        type: "String"
+        required: false
+      - name: "url"
+        type: "String"
+        required: true
     org.openrewrite.maven.UpgradeDependencyVersion:
       name: "org.openrewrite.maven.UpgradeDependencyVersion"
       description: "Upgrade the version of a dependency by specifying a group and\
@@ -4237,6 +4341,23 @@ rewrite-migrate-java:
       description: "Prefer `java.lang.Short#compare` instead of using `com.google.common.primitives.Shorts#compare`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/prefershortcompare"
       options: []
+    org.openrewrite.java.migrate.hibernate.MigrateToHibernate61:
+      name: "org.openrewrite.java.migrate.hibernate.MigrateToHibernate61"
+      description: "This recipe will apply changes commonly needed when migrating\
+        \ to Hibernate 6.1.x. The hibernate dependencies will   be updated to use\
+        \ the new org.hibernate.orm group ID and the recipe will make changes necessary\
+        \ to use Hibernate with Jakarta EE 9.0    \n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/hibernate/migratetohibernate61"
+      options: []
+    org.openrewrite.java.migrate.hibernate.MigrateToHibernateDependencies61:
+      name: "org.openrewrite.java.migrate.hibernate.MigrateToHibernateDependencies61"
+      description: "This recipe will migrate any existing dependencies on Hibernate\
+        \ 5.x to the latest 6.1.x release. This migration will include the adjustment\
+        \ to the new `org.hibernate.orm` group ID. It accounts for artifacts names\
+        \ that both do and do not include the `jakarta` suffix and it will change\
+        \ both dependencies and managed dependencies.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/hibernate/migratetohibernatedependencies61"
+      options: []
     org.openrewrite.java.migrate.jacoco.UpgradeJaCoCoMavenPluginVersion:
       name: "org.openrewrite.java.migrate.jacoco.UpgradeJaCoCoMavenPluginVersion"
       description: "This recipe will upgrade the JaCoCo Maven plugin to a more recent\
@@ -4287,6 +4408,18 @@ rewrite-migrate-java:
       description: "Change type of classes in the `javax.annotation.sql` package to\
         \ jakarta."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/jakarta/javaxannotationsqlpackagetojakarta"
+      options: []
+    org.openrewrite.java.migrate.jakarta.JavaxAuthenticationMigrationToJakartaAuthentication:
+      name: "org.openrewrite.java.migrate.jakarta.JavaxAuthenticationMigrationToJakartaAuthentication"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating a package\
+        \ relocation."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/jakarta/javaxauthenticationmigrationtojakartaauthentication"
+      options: []
+    org.openrewrite.java.migrate.jakarta.JavaxAuthorizationMigrationToJakartaAuthorization:
+      name: "org.openrewrite.java.migrate.jakarta.JavaxAuthorizationMigrationToJakartaAuthorization"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating a package\
+        \ relocation."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/jakarta/javaxauthorizationmigrationtojakartaauthorization"
       options: []
     org.openrewrite.java.migrate.jakarta.JavaxBatchMigrationToJakartaBatch:
       name: "org.openrewrite.java.migrate.jakarta.JavaxBatchMigrationToJakartaBatch"
@@ -4366,16 +4499,16 @@ rewrite-migrate-java:
         \ new `jakarta` namespace."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/jakarta/javaxmigrationtojakarta"
       options: []
-    org.openrewrite.java.migrate.jakarta.JavaxPeristenceXmlToJakartaPersistenceXml:
-      name: "org.openrewrite.java.migrate.jakarta.JavaxPeristenceXmlToJakartaPersistenceXml"
-      description: ""
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/jakarta/javaxperistencexmltojakartapersistencexml"
-      options: []
     org.openrewrite.java.migrate.jakarta.JavaxPersistenceToJakartaPersistence:
       name: "org.openrewrite.java.migrate.jakarta.JavaxPersistenceToJakartaPersistence"
       description: "Java EE has been rebranded to Jakarta EE, necessitating a package\
         \ relocation"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/jakarta/javaxpersistencetojakartapersistence"
+      options: []
+    org.openrewrite.java.migrate.jakarta.JavaxPersistenceXmlToJakartaPersistenceXml:
+      name: "org.openrewrite.java.migrate.jakarta.JavaxPersistenceXmlToJakartaPersistenceXml"
+      description: ""
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/jakarta/javaxpersistencexmltojakartapersistencexml"
       options: []
     org.openrewrite.java.migrate.jakarta.JavaxResourceToJakartaResource:
       name: "org.openrewrite.java.migrate.jakarta.JavaxResourceToJakartaResource"
@@ -4886,6 +5019,9 @@ rewrite-properties:
       - name: "oldPropertyKey"
         type: "String"
         required: true
+      - name: "regex"
+        type: "Boolean"
+        required: false
       - name: "relaxedBinding"
         type: "Boolean"
         required: false
@@ -5098,6 +5234,18 @@ rewrite-spring:
         \ `@GetMapping`, `@PostMapping`, etc. when possible."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/norequestmappingannotation"
       options: []
+    org.openrewrite.java.spring.PropertiesToKebabCase:
+      name: "org.openrewrite.java.spring.PropertiesToKebabCase"
+      description: "Normalize Spring properties to use lowercase and hyphen-separated\
+        \ syntax. For example, changing `spring.main.showBanner` to `spring.main.show-banner`.\
+        \ With [Spring's relaxed binding](https://docs.spring.io/spring-boot/docs/2.5.6/reference/html/features.html#features.external-config.typesafe-configuration-properties.relaxed-binding),\
+        \ `kebab-case` may be used in properties files and still be converted to configuration\
+        \ beans. Note, an exception to this is the case of `@Value`, which is match-sensitive.\
+        \ For example, `@Value(\"${anExampleValue}\")` will not match `an-example-value`.\
+        \ [The Spring reference documentation recommends using `kebab-case` for properties\
+        \ where possible.](https://docs.spring.io/spring-boot/docs/2.5.6/reference/html/features.html#features.external-config.typesafe-configuration-properties.relaxed-binding)."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/propertiestokebabcase"
+      options: []
     org.openrewrite.java.spring.SeparateApplicationYamlByProfile:
       name: "org.openrewrite.java.spring.SeparateApplicationYamlByProfile"
       description: "The Spring team's recommendation is to separate profile properties\
@@ -5109,19 +5257,6 @@ rewrite-spring:
       description: "Keep a consolidated manifest of the API endpoints that this application\
         \ exposes up-to-date."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/updateapimanifest"
-      options: []
-    org.openrewrite.java.spring.YamlPropertiesToKebabCase:
-      name: "org.openrewrite.java.spring.YamlPropertiesToKebabCase"
-      description: "Normalize Spring YAML properties to use lowercase and hyphen-separated\
-        \ syntax. For example, changing `spring.main.showBanner` to `spring.main.show-banner`.\
-        \ With [Spring's relaxed binding](https://docs.spring.io/spring-boot/docs/2.5.6/reference/html/features.html#features.external-config.typesafe-configuration-properties.relaxed-binding),\
-        \ `kebab-case` may be used in properties files and still be converted to configuration\
-        \ beans. Note, an exception to this is the case of `@Value`, which is match-sensitive.\
-        \ For example, `@Value(\"${anExampleValue}\")` will not match `an-example-value`.\
-        \ [The Spring reference documentation recommends using `kebab-case` for properties\
-        \ where possible.](https://docs.spring.io/spring-boot/docs/2.5.6/reference/html/features.html#features.external-config.typesafe-configuration-properties.relaxed-binding)\
-        \ ."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/yamlpropertiestokebabcase"
       options: []
     org.openrewrite.java.spring.boot2.ChangeEmbeddedServletContainerCustomizer:
       name: "org.openrewrite.java.spring.boot2.ChangeEmbeddedServletContainerCustomizer"
@@ -5661,8 +5796,14 @@ rewrite-spring:
       - name: "attribute"
         type: "String"
         required: true
+      - name: "oldPort"
+        type: "Integer"
+        required: true
       - name: "port"
         type: "Integer"
+        required: true
+      - name: "propertyKey"
+        type: "String"
         required: true
     org.openrewrite.java.spring.framework.EnvironmentAcceptsProfiles:
       name: "org.openrewrite.java.spring.framework.EnvironmentAcceptsProfiles"
