@@ -916,7 +916,7 @@ class RecipeMarkdownGenerator : Runnable {
 
                 The Moderne public SaaS instance enables you to try out recipes across thousands of open-source repositories and author new public recipes easily.
 
-                Please contact Moderne for more information about safely running the recipes on your own codebase in a private SaaS.
+                Please [contact Moderne](http://getmoderne.com/) for more information about safely running the recipes on your own codebase in a private SaaS.
             """.trimIndent())
         }
     }
