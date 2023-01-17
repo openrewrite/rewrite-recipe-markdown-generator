@@ -4372,12 +4372,16 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.jakarta.EhcacheJavaxToJakarta:
       name: "org.openrewrite.java.migrate.jakarta.EhcacheJavaxToJakarta"
-      description: ""
+      description: "Java EE has been rebranded to Jakarta EE.  This recipe replaces\
+        \ existing Ehcache dependencies with their counterparts that are compatible\
+        \ with Jakarta EE 9.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/jakarta/ehcachejavaxtojakarta"
       options: []
     org.openrewrite.java.migrate.jakarta.JacksonJavaxToJakarta:
       name: "org.openrewrite.java.migrate.jakarta.JacksonJavaxToJakarta"
-      description: ""
+      description: "Java EE has been rebranded to Jakarta EE.  This recipe replaces\
+        \ existing Jackson dependencies with their counterparts that are compatible\
+        \ with Jakarta EE 9.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/jakarta/jacksonjavaxtojakarta"
       options: []
     org.openrewrite.java.migrate.jakarta.JavaxActivationMigrationToJakartaActivation:
@@ -4507,7 +4511,8 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.jakarta.JavaxPersistenceXmlToJakartaPersistenceXml:
       name: "org.openrewrite.java.migrate.jakarta.JavaxPersistenceXmlToJakartaPersistenceXml"
-      description: ""
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/jakarta/javaxpersistencexmltojakartapersistencexml"
       options: []
     org.openrewrite.java.migrate.jakarta.JavaxResourceToJakartaResource:
@@ -4572,12 +4577,16 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.jakarta.JohnzonJavaxToJakarta:
       name: "org.openrewrite.java.migrate.jakarta.JohnzonJavaxToJakarta"
-      description: ""
+      description: "Java EE has been rebranded to Jakarta EE.  This recipe replaces\
+        \ existing Johnzon dependencies with their counterparts that are compatible\
+        \ with Jakarta EE 9.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/jakarta/johnzonjavaxtojakarta"
       options: []
     org.openrewrite.java.migrate.jakarta.RestAssuredJavaxToJakarta:
       name: "org.openrewrite.java.migrate.jakarta.RestAssuredJavaxToJakarta"
-      description: ""
+      description: "Java EE has been rebranded to Jakarta EE.  This recipe replaces\
+        \ existing RestAssured dependencies with their counterparts that are compatible\
+        \ with Jakarta EE 9.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/jakarta/restassuredjavaxtojakarta"
       options: []
     org.openrewrite.java.migrate.javax.AddInjectDependencies:
