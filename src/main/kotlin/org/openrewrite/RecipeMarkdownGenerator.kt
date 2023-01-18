@@ -489,7 +489,13 @@ class RecipeMarkdownGenerator : Runnable {
             val indent = indentBuilder.toString()
             val result = StringBuilder()
 
-            result.appendLine("$indent* [$displayName](reference/recipes/$path/README.md)")
+            if (path == "") {
+                // Recipes that don't have a path are part of the "core" set of recipes
+                result.appendLine("$indent* [Core](reference/recipes/core-README.md)")
+            } else {
+                result.appendLine("$indent* [$displayName](reference/recipes/$path/README.md)")
+            }
+
             for (recipe in recipes) {
                 // Section headings will display backticks, rather than rendering as code. Omit them so it doesn't look terrible
                 result.appendLine(
@@ -544,7 +550,23 @@ class RecipeMarkdownGenerator : Runnable {
 
         fun writeCategoryIndex(outputRoot: Path) {
             if (path.isBlank()) {
-                // Don't yet support "core" recipes that aren't in any language category
+                // "Core" recipes need to be handled differently as they do not have a path like other recipes.
+                val corePath = outputRoot.resolve("core-README.md")
+
+                Files.newBufferedWriter(corePath, StandardOpenOption.CREATE).useAndApply {
+                    writeln("# Core Recipes")
+                    newLine()
+                    writeln("_Recipes broadly applicable to all types of source file._")
+                    newLine()
+                    writeln("## Recipes")
+                    newLine()
+
+                    for (recipe in recipes) {
+                        val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
+
+                        writeln("* [${recipe.displayName}](${recipeSimpleName}.md)")
+                    }
+                }
                 return
             }
             val outputPath = outputRoot.resolve("$path/README.md")
