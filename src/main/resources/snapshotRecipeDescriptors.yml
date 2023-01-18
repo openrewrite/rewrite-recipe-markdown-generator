@@ -232,6 +232,14 @@ rewrite-core:
       - name: "filePattern"
         type: "String"
         required: true
+    org.openrewrite.FindGitProvenance:
+      name: "org.openrewrite.FindGitProvenance"
+      description: "List out the contents of each unique `GitProvenance` marker in\
+        \ the set of source files. When everything is working correctly, exactly one\
+        \ such marker should be printed as all source files are expected to come from\
+        \ the same repository / branch / commit hash."
+      docLink: "https://docs.openrewrite.org/reference/recipes/findgitprovenance"
+      options: []
     org.openrewrite.FindParseFailures:
       name: "org.openrewrite.FindParseFailures"
       description: "This recipe explores parse failures after an AST is produced for\
@@ -677,6 +685,22 @@ rewrite-gradle:
       - name: "versionPattern"
         type: "String"
         required: false
+    org.openrewrite.gradle.search.DependencyInsight:
+      name: "org.openrewrite.gradle.search.DependencyInsight"
+      description: "Find direct and transitive dependencies matching a group, artifact,\
+        \ and optionally a configuration name. Results include dependencies that either\
+        \ directly match or transitively include a matching dependency."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/search/dependencyinsight"
+      options:
+      - name: "artifactIdPattern"
+        type: "String"
+        required: true
+      - name: "configuration"
+        type: "String"
+        required: false
+      - name: "groupIdPattern"
+        type: "String"
+        required: true
     org.openrewrite.gradle.search.FindDependency:
       name: "org.openrewrite.gradle.search.FindDependency"
       description: "Finds dependencies declared in `build.gradle` files. See the [reference](https://docs.gradle.org/current/userguide/java_library_plugin.html#sec:java_library_configurations_graph)\
@@ -2005,6 +2029,13 @@ rewrite-java:
       description: "Visitors that are parameterized with `ExecutionContext` should\
         \ use the parameter name `ctx`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/recipes/executioncontextparametername"
+      options: []
+    org.openrewrite.java.recipes.FindRecipes:
+      name: "org.openrewrite.java.recipes.FindRecipes"
+      description: "This recipe finds all OpenRewrite recipes, primarily to produce\
+        \ a data table that is being used to experiment with fine-tuning a large language\
+        \ model to produce more recipes."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/recipes/findrecipes"
       options: []
     org.openrewrite.java.recipes.PublicGetVisitor:
       name: "org.openrewrite.java.recipes.PublicGetVisitor"
