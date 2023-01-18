@@ -556,7 +556,7 @@ class RecipeMarkdownGenerator : Runnable {
                 Files.newBufferedWriter(corePath, StandardOpenOption.CREATE).useAndApply {
                     writeln("# Core Recipes")
                     newLine()
-                    writeln("_Recipes broadly applicable to all types of source file._")
+                    writeln("_Recipes broadly applicable to all types of source files._")
                     newLine()
                     writeln("## Recipes")
                     newLine()
