@@ -1,16 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-    <suppress until="2023-02-17Z">
-        <!-- Dependencies come from rewrite-java-security. -->
-        <notes><![CDATA[
+    <suppress>
+        <notes>
+            <![CDATA[
+            file name: snakeyaml-1.33.jar
+            False positive. CVE is about a maliciously crafted payload causing inefficiency, a potential denial of service vector for a hosted application.
+            This is not a hosted application, this CVE is irrelevant.
+            ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/org\.yaml/snakeyaml@.*$</packageUrl>
+        <cve>CVE-2021-4235</cve>
+        <cve>CVE-2022-1471</cve>
+    </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+            file name: junit-jupiter-api-5.9.2.jar
+            False positive. The CVE is about the python web server platform flask, which has nothing to do with the Java unit testing framework JUnit
+            ]]>
+        </notes>
+        <cve>CVE-2022-31514</cve>
+    </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
             files: spring-aop.jar, spring-beans.jar, spring-context.jar, spring-core.jar, spring-jcl.jar, spring-messaging.jar, spring-web.jar, spring-webflux.jar, spring-context-support.jar, spring-jdbc.jar, spring-webmvc.jar, spring-websocket.jar
             sev: CRITICAL
             CVE-2016-1000027
-            False positive. Affects Spring 5.3.16 up to 6.0 exposed HTTP Invoker endpoints to untrusted clients.  We're not using HttpInvokerServiceExporter and do not have any exposed HTTP Invoker endpoints.
-        ]]>
+            False positive. Recipes which modify spring code are not themselves spring applications. The vulnerabilities of spring applications are irrelevant.
+            ]]>
         </notes>
-        <gav regex="true">org\.springframework:spring.*</gav>
         <cve>CVE-2016-1000027</cve>
+    </suppress>
+    <suppress>
+    <notes>
+        <![CDATA[
+        file name: rewrite-jhipster-1.17.0.jar
+        False positive. Recipe module which affects jhipster applications is not itself a jhipster application.
+        ]]>
+    </notes>
+    <cve>CVE-2019-16303</cve>
     </suppress>
     <suppress until="2023-01-07Z">
         <!-- Dependencies come from rewrite-java-security. -->
