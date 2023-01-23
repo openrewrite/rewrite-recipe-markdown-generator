@@ -17,7 +17,20 @@ release, you'll need to modify the `build.gradle.kts` file to change `rewriteVer
 (such as `latest.integration`) and `deployType` to `snapshot`.
 
 Once you have the CHANGELOG created, you can copy it over to the [changelog section](https://docs.openrewrite.org/changelog/)
-in the OpenRewrite docs.
+in the OpenRewrite docs. When doing a full release, make sure you remove the old snapshot releases.
+
+### Automated Recipe Docs
+
+When you run this project for either a snapshot or a full release, all documentation will be updated in the 
+`build/docs` directory. There are two key pieces to that: the `reference` folder and the `SUMMARY_snippet.md` file. 
+
+If you wish to update the [docs](https://docs.openrewrite.org/reference/recipes), you should replace [this directory](https://github.com/openrewrite/rewrite-docs/tree/master/reference/recipes)
+with the `reference/recipe` folder generated here. After that, you should update the [SUMMARY.md](https://github.com/openrewrite/rewrite-docs/blob/master/SUMMARY.md?plain=1#L53-L1066)
+with the snippet generated in the `SUMMARY_snippet.md` file.
+
+Please note that for snapshot releases, you should not copy over all the generated files. This is because we want
+the docs to generally only show full release information. Rather, you should copy over the specific new docs you want
+(as well as the updates to the `SUMMARY_snippet.md`)
 
 ## Usage
 
@@ -33,9 +46,7 @@ Quickstart:
 # or, generally:
 ./gradlew run --args="--help"
 ```
+## Known Issues
 
-## Known issues
-
-Recipes that do not have an organization such as `org.openrewrite.DeleteSourceFiles` 
-(as compared to `org.openrewrite.circleci.InstallOrb`) result in the `SUMMARY_snippet` categorizing them incorrectly. 
-See [here](https://moderneinc.slack.com/archives/C01VADFPJQZ/p1669756621584369) for more information.
+The `SUMMARY_snippet.md` file generated does not entirely match the one in the `rewrite-docs` repository. This is 
+because GitBook makes some strange changes at time automatically. This hasn't been investigated, yet.
