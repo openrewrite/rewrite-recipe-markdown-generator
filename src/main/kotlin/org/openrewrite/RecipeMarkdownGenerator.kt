@@ -533,7 +533,7 @@ class RecipeMarkdownGenerator : Runnable {
                         val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
                         // Anything except a relative link ending in .md will be mangled.
                         // If you touch this line double check that it works when imported into gitbook
-                        appendLine("* [${recipe.displayName}](${recipeSimpleName}.md)")
+                        appendLine("* [${recipe.displayName}](./${recipeSimpleName}.md)")
                     }
                     appendLine()
                 }
@@ -567,6 +567,14 @@ class RecipeMarkdownGenerator : Runnable {
                         writeln("* [${recipe.displayName}](${recipeSimpleName}.md)")
                     }
                 }
+
+                // Also need to make an empty README for GitBook linking
+                val emptyReadmePath = outputRoot.resolve("README.md")
+
+                Files.newBufferedWriter(emptyReadmePath, StandardOpenOption.CREATE).useAndApply {
+                    writeln("# Recipes")
+                }
+
                 return
             }
             val outputPath = outputRoot.resolve("$path/README.md")
@@ -1054,7 +1062,7 @@ class RecipeMarkdownGenerator : Runnable {
             recipesPath.resolve(getRecipePath(recipeDescriptor) + ".md")
 
         private fun getRecipeRelativePath(recipe: RecipeDescriptor): String =
-            "reference/recipes/" + getRecipePath(recipe)
+            "/reference/recipes/" + getRecipePath(recipe)
 
         private fun findCategoryDescriptor(
             categoryPathFragment: String,
