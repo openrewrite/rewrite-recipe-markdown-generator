@@ -30,7 +30,11 @@ with the snippet generated in the `SUMMARY_snippet.md` file.
 
 Please note that for snapshot releases, you should not copy over all the generated files. This is because we want
 the docs to generally only show full release information. Rather, you should copy over the specific new docs you want
-(as well as the updates to the `SUMMARY_snippet.md`)
+(as well as the updates to the `SUMMARY_snippet.md`).
+
+Also note that this does not cover _all_ of the documentation that needs to be updated with a release. There are still
+many docs such as the [latest versions](https://docs.openrewrite.org/reference/latest-versions-of-every-openrewrite-module) doc
+that needs to be updated manually.
 
 ## Usage
 
