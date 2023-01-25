@@ -1,6 +1,6 @@
 rewrite-circleci:
   artifactId: "rewrite-circleci"
-  version: "1.17.0-SNAPSHOT"
+  version: "1.18.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.circleci.InstallOrb:
       name: "org.openrewrite.circleci.InstallOrb"
@@ -24,7 +24,7 @@ rewrite-circleci:
         required: true
 rewrite-cloud-suitability-analyzer:
   artifactId: "rewrite-cloud-suitability-analyzer"
-  version: "1.2.0-SNAPSHOT"
+  version: "1.3.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.cloudsuitability.FindCacheUses:
       name: "org.openrewrite.cloudsuitability.FindCacheUses"
@@ -154,7 +154,7 @@ rewrite-cloud-suitability-analyzer:
       options: []
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "1.16.0-SNAPSHOT"
+  version: "1.17.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -222,7 +222,7 @@ rewrite-concourse:
       options: []
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "7.35.0-SNAPSHOT"
+  version: "7.36.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -295,7 +295,7 @@ rewrite-core:
       options: []
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "1.16.0-SNAPSHOT"
+  version: "1.17.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin:
       name: "org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin"
@@ -359,9 +359,18 @@ rewrite-github-actions:
         \ projects. See the [blog post](https://github.blog/changelog/2021-08-30-github-actions-setup-java-now-supports-dependency-caching/)."
       docLink: "https://docs.openrewrite.org/reference/recipes/github/setupjavacaching"
       options: []
+    org.openrewrite.github.SetupJavaUpgradeJavaVersion:
+      name: "org.openrewrite.github.SetupJavaUpgradeJavaVersion"
+      description: "Update the Java version used by `actions/setup-java` if it is\
+        \ below the expected version number."
+      docLink: "https://docs.openrewrite.org/reference/recipes/github/setupjavaupgradejavaversion"
+      options:
+      - name: "minimumJavaMajorVersion"
+        type: "Integer"
+        required: false
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "7.35.0-SNAPSHOT"
+  version: "7.36.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.ActivateStyle:
       name: "org.openrewrite.gradle.ActivateStyle"
@@ -449,7 +458,7 @@ rewrite-gradle:
         required: true
     org.openrewrite.gradle.ChangeDependencyArtifactId:
       name: "org.openrewrite.gradle.ChangeDependencyArtifactId"
-      description: "Change the artifactId of a specified Gradle dependency."
+      description: "Change the artifact of a specified Gradle dependency."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/changedependencyartifactid"
       options:
       - name: "artifactId"
@@ -483,7 +492,9 @@ rewrite-gradle:
         required: true
     org.openrewrite.gradle.ChangeDependencyConfiguration:
       name: "org.openrewrite.gradle.ChangeDependencyConfiguration"
-      description: "Finds dependencies declared in `build.gradle` files."
+      description: "A common example is the need to change `compile` to `api`/`implementation`\
+        \ as [part of the move](https://docs.gradle.org/current/userguide/upgrading_version_6.html)\
+        \ to Gradle 7.x and later."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/changedependencyconfiguration"
       options:
       - name: "artifactId"
@@ -517,7 +528,7 @@ rewrite-gradle:
         required: true
     org.openrewrite.gradle.ChangeDependencyGroupId:
       name: "org.openrewrite.gradle.ChangeDependencyGroupId"
-      description: "Change the group id of a specified Gradle dependency."
+      description: "Change the group of a specified Gradle dependency."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/changedependencygroupid"
       options:
       - name: "artifactId"
@@ -534,7 +545,8 @@ rewrite-gradle:
         required: true
     org.openrewrite.gradle.ChangeDependencyVersion:
       name: "org.openrewrite.gradle.ChangeDependencyVersion"
-      description: "Finds dependencies declared in `build.gradle` files."
+      description: "Change a version of a specified dependency. The new version must\
+        \ be an exact version number."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/changedependencyversion"
       options:
       - name: "artifactId"
@@ -635,6 +647,25 @@ rewrite-gradle:
       - name: "version"
         type: "String"
         required: true
+    org.openrewrite.gradle.UpgradeLiteralDependencyVersion:
+      name: "org.openrewrite.gradle.UpgradeLiteralDependencyVersion"
+      description: "A fixed literal version is a version that is not a variable or\
+        \ property or supplied indirectly by platform BOMs or similar means. For example,\
+        \ `com.google.guava:guava:29.0-jre`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/upgradeliteraldependencyversion"
+      options:
+      - name: "artifactId"
+        type: "String"
+        required: true
+      - name: "groupId"
+        type: "String"
+        required: true
+      - name: "newVersion"
+        type: "String"
+        required: true
+      - name: "versionPattern"
+        type: "String"
+        required: false
     org.openrewrite.gradle.plugins.AddBuildPlugin:
       name: "org.openrewrite.gradle.plugins.AddBuildPlugin"
       description: "Add a Gradle build plugin to `build.gradle(.kts)`."
@@ -671,6 +702,22 @@ rewrite-gradle:
       - name: "versionPattern"
         type: "String"
         required: false
+    org.openrewrite.gradle.plugins.RemoveBuildPlugin:
+      name: "org.openrewrite.gradle.plugins.RemoveBuildPlugin"
+      description: "Remove plugin from `build.gradle(.kts)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/plugins/removebuildplugin"
+      options:
+      - name: "pluginId"
+        type: "String"
+        required: true
+    org.openrewrite.gradle.plugins.RemoveSettingsPlugin:
+      name: "org.openrewrite.gradle.plugins.RemoveSettingsPlugin"
+      description: "Remove plugin from `settings.gradle(.kts)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/plugins/removesettingsplugin"
+      options:
+      - name: "pluginId"
+        type: "String"
+        required: true
     org.openrewrite.gradle.plugins.UpgradePluginVersion:
       name: "org.openrewrite.gradle.plugins.UpgradePluginVersion"
       description: "Update a Gradle plugin by id to a later version."
@@ -733,7 +780,10 @@ rewrite-gradle:
       description: "Gradle projects are those with `build.gradle` or `build.gradle.kts`\
         \ files."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/search/findgradleproject"
-      options: []
+      options:
+      - name: "searchCriteria"
+        type: "SearchCriteria"
+        required: true
     org.openrewrite.gradle.search.FindGradleWrapper:
       name: "org.openrewrite.gradle.search.FindGradleWrapper"
       description: "Find Gradle wrappers."
@@ -763,7 +813,7 @@ rewrite-gradle:
       options: []
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "7.35.0-SNAPSHOT"
+  version: "7.36.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -778,7 +828,7 @@ rewrite-groovy:
       options: []
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "7.35.0-SNAPSHOT"
+  version: "7.36.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -844,7 +894,7 @@ rewrite-hcl:
         required: true
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "7.35.0-SNAPSHOT"
+  version: "7.36.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -1349,6 +1399,12 @@ rewrite-java:
         \ not reassigned."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/finalizelocalvariables"
       options: []
+    org.openrewrite.java.cleanup.FinalizePrivateFields:
+      name: "org.openrewrite.java.cleanup.FinalizePrivateFields"
+      description: "Adds the `final` modifier keyword to private instance variables\
+        \ which are not reassigned."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/finalizeprivatefields"
+      options: []
     org.openrewrite.java.cleanup.FixSerializableFields:
       name: "org.openrewrite.java.cleanup.FixSerializableFields"
       description: "The fields of a class that implements `Serializable` must also\
@@ -1754,6 +1810,13 @@ rewrite-java:
         \ with the equivalent method reference."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacelambdawithmethodreference"
       options: []
+    org.openrewrite.java.cleanup.ReplaceRedundantFormatWithPrintf:
+      name: "org.openrewrite.java.cleanup.ReplaceRedundantFormatWithPrintf"
+      description: "Replaces `PrintStream.print(String.format(format, ...args))` with\
+        \ `PrintStream.printf(format, ...args)` (and for `println`, appends a newline\
+        \ to the format string)."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replaceredundantformatwithprintf"
+      options: []
     org.openrewrite.java.cleanup.ReplaceStackWithDeque:
       name: "org.openrewrite.java.cleanup.ReplaceStackWithDeque"
       description: "From the Javadoc of `Stack`:\n> A more complete and consistent\
@@ -1795,6 +1858,11 @@ rewrite-java:
       description: "Checks for if expressions that are always `true` or `false` and\
         \ simplifies them."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/simplifyconstantifbranchexecution"
+      options: []
+    org.openrewrite.java.cleanup.SimplifyDurationCreationUnits:
+      name: "org.openrewrite.java.cleanup.SimplifyDurationCreationUnits"
+      description: "Simplifies java.time.Duration units to be more human-readable."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/simplifydurationcreationunits"
       options: []
     org.openrewrite.java.cleanup.StaticMethodNotFinal:
       name: "org.openrewrite.java.cleanup.StaticMethodNotFinal"
@@ -2284,7 +2352,7 @@ rewrite-java:
       options: []
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "1.21.0-SNAPSHOT"
+  version: "1.22.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.security.FindTextDirectionChanges:
       name: "org.openrewrite.java.security.FindTextDirectionChanges"
@@ -2564,7 +2632,7 @@ rewrite-java-security:
         required: false
 rewrite-jhipster:
   artifactId: "rewrite-jhipster"
-  version: "1.16.0-SNAPSHOT"
+  version: "1.18.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.jhipster.FixCwe338:
       name: "org.openrewrite.java.jhipster.FixCwe338"
@@ -2574,7 +2642,7 @@ rewrite-jhipster:
       options: []
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "7.35.0-SNAPSHOT"
+  version: "7.36.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -2625,7 +2693,7 @@ rewrite-json:
         required: true
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "1.27.0-SNAPSHOT"
+  version: "1.28.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -3016,7 +3084,7 @@ rewrite-kubernetes:
         required: true
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "1.17.0-SNAPSHOT"
+  version: "1.18.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.logging.ParameterizedLogging:
       name: "org.openrewrite.java.logging.ParameterizedLogging"
@@ -3202,7 +3270,7 @@ rewrite-logging-frameworks:
       options: []
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "7.35.0-SNAPSHOT"
+  version: "7.36.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -3647,7 +3715,7 @@ rewrite-maven:
       options: []
     org.openrewrite.maven.RemoveExclusion:
       name: "org.openrewrite.maven.RemoveExclusion"
-      description: "Remove a single exclusion from on a particular dependency."
+      description: "Remove any matching exclusion from any matching dependency."
       docLink: "https://docs.openrewrite.org/reference/recipes/maven/removeexclusion"
       options:
       - name: "artifactId"
@@ -3662,6 +3730,9 @@ rewrite-maven:
       - name: "groupId"
         type: "String"
         required: true
+      - name: "onlyIneffective"
+        type: "Boolean"
+        required: false
     org.openrewrite.maven.RemoveManagedDependency:
       name: "org.openrewrite.maven.RemoveManagedDependency"
       description: "Removes a single managed dependency from the <dependencyManagement><dependencies>\
@@ -3916,7 +3987,7 @@ rewrite-maven:
       options: []
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "1.21.0-SNAPSHOT"
+  version: "1.22.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy:
       name: "org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy"
@@ -3994,7 +4065,7 @@ rewrite-micronaut:
         required: true
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "1.16.0-SNAPSHOT"
+  version: "1.17.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -4037,6 +4108,16 @@ rewrite-migrate-java:
         \ to 17."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javaversion17"
       options: []
+    org.openrewrite.java.migrate.UpgradeJavaVersion:
+      name: "org.openrewrite.java.migrate.UpgradeJavaVersion"
+      description: "Upgrade build plugin configuration to use the specified Java version.\
+        \ This recipe changes maven-compiler-plugin target version and related settings.\
+        \ Will not downgrade if the version is newer than the specified version."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/upgradejavaversion"
+      options:
+      - name: "version"
+        type: "Integer"
+        required: true
     org.openrewrite.java.migrate.UpgradeToJava17:
       name: "org.openrewrite.java.migrate.UpgradeToJava17"
       description: "This recipe will apply changes commonly needed when migrating\
@@ -4377,7 +4458,7 @@ rewrite-migrate-java:
       description: "This recipe will apply changes commonly needed when migrating\
         \ to Hibernate 6.1.x. The hibernate dependencies will   be updated to use\
         \ the new org.hibernate.orm group ID and the recipe will make changes necessary\
-        \ to use Hibernate with Jakarta EE 9.0    \n"
+        \ to use Hibernate with Jakarta EE 9.0.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/hibernate/migratetohibernate61"
       options: []
     org.openrewrite.java.migrate.hibernate.MigrateToHibernateDependencies61:
@@ -4886,7 +4967,8 @@ rewrite-migrate-java:
       name: "org.openrewrite.java.migrate.maven.UseMavenCompilerPluginReleaseConfiguration"
       description: "Replaces any explicit `source` or `target` configuration (if present)\
         \ on the maven-compiler-plugin with `release`, and updates the `release` value\
-        \ if needed."
+        \ if needed. Will not downgrade the java version if the current version is\
+        \ higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/maven/usemavencompilerpluginreleaseconfiguration"
       options:
       - name: "releaseVersion"
@@ -5024,7 +5106,7 @@ rewrite-migrate-java:
       options: []
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "7.35.0-SNAPSHOT"
+  version: "7.36.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -5112,87 +5194,87 @@ rewrite-properties:
         required: false
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "1.16.0-SNAPSHOT"
+  version: "1.17.0-SNAPSHOT"
   markdownRecipeDescriptors:
-    org.openrewrite.java.quarkus.ConfigPropertiesToConfigMapping:
-      name: "org.openrewrite.java.quarkus.ConfigPropertiesToConfigMapping"
+    org.openrewrite.quarkus.ConfigPropertiesToConfigMapping:
+      name: "org.openrewrite.quarkus.ConfigPropertiesToConfigMapping"
       description: "Migrate Quarkus configuration classes annotated with `@ConfigProperties`\
         \ to the equivalent Smallrye `@ConfigMapping`."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/quarkus/configpropertiestoconfigmapping"
+      docLink: "https://docs.openrewrite.org/reference/recipes/quarkus/configpropertiestoconfigmapping"
       options: []
-    org.openrewrite.java.quarkus.ConfigureQuarkusMavenPluginWithReasonableDefaults:
-      name: "org.openrewrite.java.quarkus.ConfigureQuarkusMavenPluginWithReasonableDefaults"
+    org.openrewrite.quarkus.ConfigureQuarkusMavenPluginWithReasonableDefaults:
+      name: "org.openrewrite.quarkus.ConfigureQuarkusMavenPluginWithReasonableDefaults"
       description: "Configures the `quarkus-maven-plugin` with reasonable defaults,\
         \ such as default activated `goals` and `<extensions>` configuration."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/quarkus/configurequarkusmavenpluginwithreasonabledefaults"
+      docLink: "https://docs.openrewrite.org/reference/recipes/quarkus/configurequarkusmavenpluginwithreasonabledefaults"
       options: []
-    org.openrewrite.java.quarkus.MigrateQuarkusMavenPluginNativeImageGoal:
-      name: "org.openrewrite.java.quarkus.MigrateQuarkusMavenPluginNativeImageGoal"
+    org.openrewrite.quarkus.MigrateQuarkusMavenPluginNativeImageGoal:
+      name: "org.openrewrite.quarkus.MigrateQuarkusMavenPluginNativeImageGoal"
       description: "Migrates the `quarkus-maven-plugin` deprecated `native-image`\
         \ goal. If the `native-image` goal needs to be removed, this adds `<quarkus.package.type>native</quarkus.package.type>`\
         \ to the `native` profile `properties` section, given the `native` profile\
         \ exists in the `pom.xml`."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/quarkus/migratequarkusmavenpluginnativeimagegoal"
+      docLink: "https://docs.openrewrite.org/reference/recipes/quarkus/migratequarkusmavenpluginnativeimagegoal"
       options: []
-    org.openrewrite.java.quarkus.MultiTransformHotStreamToMultiHotStream:
-      name: "org.openrewrite.java.quarkus.MultiTransformHotStreamToMultiHotStream"
+    org.openrewrite.quarkus.MultiTransformHotStreamToMultiHotStream:
+      name: "org.openrewrite.quarkus.MultiTransformHotStreamToMultiHotStream"
       description: "Replace Mutiny API usages of `multi.transform().toHotStream()`\
         \ with `multi.toHotStream()`."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/quarkus/multitransformhotstreamtomultihotstream"
+      docLink: "https://docs.openrewrite.org/reference/recipes/quarkus/multitransformhotstreamtomultihotstream"
       options: []
-    org.openrewrite.java.quarkus.Quarkus1to1_13Migration:
-      name: "org.openrewrite.java.quarkus.Quarkus1to1_13Migration"
+    org.openrewrite.quarkus.Quarkus1to1_13Migration:
+      name: "org.openrewrite.quarkus.Quarkus1to1_13Migration"
       description: "Migrates Quarkus 1.11 to 1.13."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/quarkus/quarkus1to1_13migration"
+      docLink: "https://docs.openrewrite.org/reference/recipes/quarkus/quarkus1to1_13migration"
       options: []
-    org.openrewrite.java.quarkus.quarkus2.GrpcServiceAnnotationToGrpcClient:
-      name: "org.openrewrite.java.quarkus.quarkus2.GrpcServiceAnnotationToGrpcClient"
+    org.openrewrite.quarkus.quarkus2.GrpcServiceAnnotationToGrpcClient:
+      name: "org.openrewrite.quarkus.quarkus2.GrpcServiceAnnotationToGrpcClient"
       description: "The `@GrpcService` annotation is replaced with `@GrpcClient` in\
         \ Quarkus 2.x. Removes the optional `@GrpcClient.value()` unless the service\
         \ name is different from the name of annotated element."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/quarkus/quarkus2/grpcserviceannotationtogrpcclient"
+      docLink: "https://docs.openrewrite.org/reference/recipes/quarkus/quarkus2/grpcserviceannotationtogrpcclient"
       options: []
-    org.openrewrite.java.quarkus.quarkus2.Quarkus1to2Migration:
-      name: "org.openrewrite.java.quarkus.quarkus2.Quarkus1to2Migration"
+    org.openrewrite.quarkus.quarkus2.Quarkus1to2Migration:
+      name: "org.openrewrite.quarkus.quarkus2.Quarkus1to2Migration"
       description: "Migrates Quarkus 1.x to 2.x."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/quarkus/quarkus2/quarkus1to2migration"
+      docLink: "https://docs.openrewrite.org/reference/recipes/quarkus/quarkus2/quarkus1to2migration"
       options: []
-    org.openrewrite.java.quarkus.quarkus2.RemoveAvroMavenPlugin:
-      name: "org.openrewrite.java.quarkus.quarkus2.RemoveAvroMavenPlugin"
+    org.openrewrite.quarkus.quarkus2.RemoveAvroMavenPlugin:
+      name: "org.openrewrite.quarkus.quarkus2.RemoveAvroMavenPlugin"
       description: "Removes the `avro-maven-plugin` if the `quarkus-maven-plugin`\
         \ is found in the project's `pom.xml`. Avro has been integrated with the Quarkus\
         \ code generation mechanism. This replaces the need to use the Avro plugin."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/quarkus/quarkus2/removeavromavenplugin"
+      docLink: "https://docs.openrewrite.org/reference/recipes/quarkus/quarkus2/removeavromavenplugin"
       options: []
-    org.openrewrite.java.quarkus.quarkus2.UseIdentifierOnDefaultKafkaBroker:
-      name: "org.openrewrite.java.quarkus.quarkus2.UseIdentifierOnDefaultKafkaBroker"
+    org.openrewrite.quarkus.quarkus2.UseIdentifierOnDefaultKafkaBroker:
+      name: "org.openrewrite.quarkus.quarkus2.UseIdentifierOnDefaultKafkaBroker"
       description: "Use `@io.smallrye.common.annotation.Identifier` on default kafka\
         \ broker configuration."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/quarkus/quarkus2/useidentifierondefaultkafkabroker"
+      docLink: "https://docs.openrewrite.org/reference/recipes/quarkus/quarkus2/useidentifierondefaultkafkabroker"
       options: []
-    org.openrewrite.java.quarkus.quarkus2.UsePanacheEntityBaseStaticMethods:
-      name: "org.openrewrite.java.quarkus.quarkus2.UsePanacheEntityBaseStaticMethods"
+    org.openrewrite.quarkus.quarkus2.UsePanacheEntityBaseStaticMethods:
+      name: "org.openrewrite.quarkus.quarkus2.UsePanacheEntityBaseStaticMethods"
       description: "The `getEntityManager()` and the `flush()` methods of `PanacheEntityBase`\
         \ are now static methods."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/quarkus/quarkus2/usepanacheentitybasestaticmethods"
+      docLink: "https://docs.openrewrite.org/reference/recipes/quarkus/quarkus2/usepanacheentitybasestaticmethods"
       options: []
-    org.openrewrite.java.quarkus.quarkus2.UsePanacheEntityBaseUniT:
-      name: "org.openrewrite.java.quarkus.quarkus2.UsePanacheEntityBaseUniT"
+    org.openrewrite.quarkus.quarkus2.UsePanacheEntityBaseUniT:
+      name: "org.openrewrite.quarkus.quarkus2.UsePanacheEntityBaseUniT"
       description: "The `persist()` and `persistAndFlush()` methods now return an\
         \ `Uni<T extends PanacheEntityBase>` instead of an `Uni<Void>` to allow chaining\
         \ the methods."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/quarkus/quarkus2/usepanacheentitybaseunit"
+      docLink: "https://docs.openrewrite.org/reference/recipes/quarkus/quarkus2/usepanacheentitybaseunit"
       options: []
-    org.openrewrite.java.quarkus.quarkus2.UseReactivePanacheMongoEntityBaseUniT:
-      name: "org.openrewrite.java.quarkus.quarkus2.UseReactivePanacheMongoEntityBaseUniT"
+    org.openrewrite.quarkus.quarkus2.UseReactivePanacheMongoEntityBaseUniT:
+      name: "org.openrewrite.quarkus.quarkus2.UseReactivePanacheMongoEntityBaseUniT"
       description: "The `persist()`, `update()`, and `persistOrUpdate()` methods now\
         \ return a `Uni<T extends ReactivePanacheMongoEntityBase>` instead of a `Uni<Void>`\
         \ to allow chaining the methods."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/quarkus/quarkus2/usereactivepanachemongoentitybaseunit"
+      docLink: "https://docs.openrewrite.org/reference/recipes/quarkus/quarkus2/usereactivepanachemongoentitybaseunit"
       options: []
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "4.32.0-SNAPSHOT"
+  version: "4.33.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.spring.AddSpringProperty:
       name: "org.openrewrite.java.spring.AddSpringProperty"
@@ -5506,12 +5588,11 @@ rewrite-spring:
     org.openrewrite.java.spring.boot2.SpringBoot1To2Migration:
       name: "org.openrewrite.java.spring.boot2.SpringBoot1To2Migration"
       description: "Migrate applications built on previous versions of Spring Boot\
-        \ (versions 1.5 though 2.6) to the latest Spring Boot 2.7 release. This recipe\
-        \ will modify an application's build files, make changes to deprecated/preferred\
-        \ APIs, and migrate configuration settings that have changes across Spring\
-        \ Boot versions. This recipe will also chain additional framework migrations\
-        \ (Spring Framework, Spring Data, JUnit, etc) that are required as part of\
-        \ the migration to Spring Boot 2.7.\n"
+        \ to the latest Spring Boot 2.7 release. This recipe will modify an application's\
+        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
+        \ settings that have changes across Spring Boot versions. This recipe will\
+        \ also chain additional framework migrations (Spring Framework, Spring Data,\
+        \ JUnit, etc) that are required as part of the migration to Spring Boot 2.7.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/springboot1to2migration"
       options: []
     org.openrewrite.java.spring.boot2.SpringBoot2BestPractices:
@@ -5570,12 +5651,12 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.SpringBootProperties_2_7:
       name: "org.openrewrite.java.spring.boot2.SpringBootProperties_2_7"
-      description: "Migrate applications built on Spring Boot 2.0 through 2.6 to the\
-        \ latest Spring Boot 2.7 release. This recipe will modify an application's\
-        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
-        \ settings that have changes between versions. This recipe will also chain\
-        \ additional framework migrations (Spring Framework, Spring Data, etc) that\
-        \ are required as part of the migration to Spring Boot 2.7\n"
+      description: "Migrate applications to the latest Spring Boot 2.7 release. This\
+        \ recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions.\
+        \ This recipe will also chain additional framework migrations (Spring Framework,\
+        \ Spring Data, etc) that are required as part of the migration to Spring Boot\
+        \ 2.7\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/springbootproperties_2_7"
       options: []
     org.openrewrite.java.spring.boot2.UnnecessarySpringExtension:
@@ -5591,52 +5672,52 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_0:
       name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_0"
-      description: "Migrate applications built on Spring Boot 1.5 to the latest Spring\
-        \ Boot 2.0 release. This recipe will modify an application's build files,\
-        \ make changes to deprecated/preferred APIs, and migrate configuration settings\
-        \ that have changes between versions. This recipe will also chain additional\
-        \ framework migrations (Spring Framework, Spring Data, etc) that are required\
-        \ as part of the migration to Spring Boot 2.0.\n"
+      description: "Migrate applications to the latest Spring Boot 2.0 release. This\
+        \ recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions.\
+        \ This recipe will also chain additional framework migrations (Spring Framework,\
+        \ Spring Data, etc) that are required as part of the migration to Spring Boot\
+        \ 2.0.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/upgradespringboot_2_0"
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_1:
       name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_1"
-      description: "Migrate applications built on Spring Boot 2.0 to the latest Spring\
-        \ Boot 2.1 release. This recipe will modify an application's build files,\
-        \ make changes to deprecated/preferred APIs, and migrate configuration settings\
-        \ that have changes between versions. This recipe will also chain additional\
-        \ framework migrations (Spring Framework, Spring Data, etc) that are required\
-        \ as part of the migration to Spring Boot 2.1.\n"
+      description: "Migrate applications to the latest Spring Boot 2.1 release. This\
+        \ recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions.\
+        \ This recipe will also chain additional framework migrations (Spring Framework,\
+        \ Spring Data, etc) that are required as part of the migration to Spring Boot\
+        \ 2.1.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/upgradespringboot_2_1"
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_2:
       name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_2"
-      description: "Migrate applications built on Spring Boot 2.0 through 2.1 to the\
-        \ latest Spring Boot 2.2 release. This recipe will modify an application's\
-        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
-        \ settings that have changes between versions. This recipe will also chain\
-        \ additional framework migrations (Spring Framework, Spring Data, etc) that\
-        \ are required as part of the migration to Spring Boot 2.2.\n"
+      description: "Migrate applications to the latest Spring Boot 2.2 release. This\
+        \ recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions.\
+        \ This recipe will also chain additional framework migrations (Spring Framework,\
+        \ Spring Data, etc) that are required as part of the migration to Spring Boot\
+        \ 2.2.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/upgradespringboot_2_2"
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_3:
       name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_3"
-      description: "Migrate applications built on Spring Boot 2.0 through 2.2 to the\
-        \ latest Spring Boot 2.3 release. This recipe will modify an application's\
-        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
-        \ settings that have changes between versions. This recipe will also chain\
-        \ additional framework migrations (Spring Framework, Spring Data, etc) that\
-        \ are required as part of the migration to Spring Boot 2.3.\n"
+      description: "Migrate applications to the latest Spring Boot 2.3 release. This\
+        \ recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions.\
+        \ This recipe will also chain additional framework migrations (Spring Framework,\
+        \ Spring Data, etc) that are required as part of the migration to Spring Boot\
+        \ 2.3.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/upgradespringboot_2_3"
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_4:
       name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_4"
-      description: "Migrate applications built on Spring Boot 2.0 through 2.3 to the\
-        \ latest Spring Boot 2.4 release. This recipe will modify an application's\
-        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
-        \ settings that have changes between versions. This recipe will also chain\
-        \ additional framework migrations (Spring Framework, Spring Data, etc) that\
-        \ are required as part of the migration to Spring Boot 2.4.\n"
+      description: "Migrate applications to the latest Spring Boot 2.4 release. This\
+        \ recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions.\
+        \ This recipe will also chain additional framework migrations (Spring Framework,\
+        \ Spring Data, etc) that are required as part of the migration to Spring Boot\
+        \ 2.4.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/upgradespringboot_2_4"
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_5:
@@ -5646,12 +5727,12 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_6:
       name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_6"
-      description: "Migrate applications built on Spring Boot 2.0 through 2.5 to the\
-        \ latest Spring Boot 2.6 release. This recipe will modify an application's\
-        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
-        \ settings that have changes between versions. This recipe will also chain\
-        \ additional framework migrations (Spring Framework, Spring Data, etc) that\
-        \ are required as part of the migration to Spring Boot 2.6.\n"
+      description: "Migrate applications to the latest Spring Boot 2.6 release. This\
+        \ recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions.\
+        \ This recipe will also chain additional framework migrations (Spring Framework,\
+        \ Spring Data, etc) that are required as part of the migration to Spring Boot\
+        \ 2.6.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/upgradespringboot_2_6"
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_7:
@@ -5708,12 +5789,12 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.search.UpgradeRequirementsSpringBoot_2_5:
       name: "org.openrewrite.java.spring.boot2.search.UpgradeRequirementsSpringBoot_2_5"
-      description: "Migrate applications built on Spring Boot 2.0 through 2.4 to the\
-        \ latest Spring Boot 2.5 release. This recipe will modify an application's\
-        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
-        \ settings that have changes between versions. This recipe will also chain\
-        \ additional framework migrations (Spring Framework, Spring Data, etc) that\
-        \ are required as part of the migration to Spring Boot 2.5.\n"
+      description: "Migrate applications to the latest Spring Boot 2.5 release. This\
+        \ recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions.\
+        \ This recipe will also chain additional framework migrations (Spring Framework,\
+        \ Spring Data, etc) that are required as part of the migration to Spring Boot\
+        \ 2.5.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/search/upgraderequirementsspringboot_2_5"
       options: []
     org.openrewrite.java.spring.boot3.ActuatorEndpointSanitization:
@@ -5768,12 +5849,11 @@ rewrite-spring:
     org.openrewrite.java.spring.boot3.SpringBoot2To3Migration:
       name: "org.openrewrite.java.spring.boot3.SpringBoot2To3Migration"
       description: "Migrate applications built on previous versions of Spring Boot\
-        \ (versions 1.5 though 2.7) to the latest Spring Boot 3.0 release. This recipe\
-        \ will modify an application's build files, make changes to deprecated/preferred\
-        \ APIs, and migrate configuration settings that have changes across Spring\
-        \ Boot versions. This recipe will also chain additional framework migrations\
-        \ (Spring Framework, Spring Data, JUnit, etc) that are required as part of\
-        \ the migration to Spring Boot 3.0.\n"
+        \ to the latest Spring Boot 3.0 release. This recipe will modify an application's\
+        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
+        \ settings that have changes across Spring Boot versions. This recipe will\
+        \ also chain additional framework migrations (Spring Framework, Spring Data,\
+        \ JUnit, etc) that are required as part of the migration to Spring Boot 3.0.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/springboot2to3migration"
       options: []
     org.openrewrite.java.spring.boot3.SpringBootProperties_3_0_0:
@@ -5783,12 +5863,12 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_0:
       name: "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_0"
-      description: "Migrate applications built on Spring Boot 2.7 to the latest Spring\
-        \ Boot 3.0 release. This recipe will modify an application's build files,\
-        \ make changes to deprecated/preferred APIs, and migrate configuration settings\
-        \ that have changes between versions. This recipe will also chain additional\
-        \ framework migrations (Spring Framework, Spring Data, etc) that are required\
-        \ as part of the migration to Spring Boot 2.7.\n"
+      description: "Migrate applications to the latest Spring Boot 3.0 release. This\
+        \ recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions.\
+        \ This recipe will also chain additional framework migrations (Spring Framework,\
+        \ Spring Data, etc) that are required as part of the migration to Spring Boot\
+        \ 2.7.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/upgradespringboot_3_0"
       options: []
     org.openrewrite.java.spring.data.MigrateJpaSort:
@@ -5805,14 +5885,12 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.data.UpgradeSpringData_2_3:
       name: "org.openrewrite.java.spring.data.UpgradeSpringData_2_3"
-      description: "Migrate applications built on Spring Data 2.0 through 2.2 to the\
-        \ latest Spring Data 2.3 release."
+      description: "Migrate applications to the latest Spring Data 2.3 release."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/data/upgradespringdata_2_3"
       options: []
     org.openrewrite.java.spring.data.UpgradeSpringData_2_5:
       name: "org.openrewrite.java.spring.data.UpgradeSpringData_2_5"
-      description: "Migrate applications built on Spring Data (2.0 through 2.4) to\
-        \ the latest Spring Data 2.5 release."
+      description: "Migrate applications to the latest Spring Data 2.5 release."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/data/upgradespringdata_2_5"
       options: []
     org.openrewrite.java.spring.data.UseJpaRepositoryDeleteAllInBatch:
@@ -5893,26 +5971,22 @@ rewrite-spring:
         required: true
     org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_0:
       name: "org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_0"
-      description: "Migrate applications built on Spring Framework 4.0 through 4.3\
-        \ to the latest Spring Framework 5.0 release."
+      description: "Migrate applications to the latest Spring Framework 5.0 release."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/upgradespringframework_5_0"
       options: []
     org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_1:
       name: "org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_1"
-      description: "Migrate applications built on Spring Framework 5.0 to the latest\
-        \ Spring Framework 5.1 release."
+      description: "Migrate applications to the latest Spring Framework 5.1 release."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/upgradespringframework_5_1"
       options: []
     org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_2:
       name: "org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_2"
-      description: "Migrate applications built on Spring Framework (5.0 through 5.1)\
-        \ to the latest Spring Framework 5.2 release."
+      description: "Migrate applications to the latest Spring Framework 5.2 release."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/upgradespringframework_5_2"
       options: []
     org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_3:
       name: "org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_3"
-      description: "Migrate applications built on Spring Framework (5.0 through 5.2)\
-        \ to the latest Spring Framework 5.3 release."
+      description: "Migrate applications to the latest Spring Framework 5.3 release."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/upgradespringframework_5_3"
       options: []
     org.openrewrite.java.spring.framework.UseObjectUtilsIsEmpty:
@@ -5934,7 +6008,7 @@ rewrite-spring:
         required: true
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "1.16.0-SNAPSHOT"
+  version: "1.17.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -6593,7 +6667,7 @@ rewrite-terraform:
         required: true
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "1.33.0-SNAPSHOT"
+  version: "1.34.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.assertj.Assertj:
       name: "org.openrewrite.java.testing.assertj.Assertj"
@@ -6665,6 +6739,19 @@ rewrite-testing-frameworks:
       description: "Consistently use a static import rather than inlining the `Assertions`\
         \ class name in tests."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/staticimports"
+      options: []
+    org.openrewrite.java.testing.assertj.UseExplicitContains:
+      name: "org.openrewrite.java.testing.assertj.UseExplicitContains"
+      description: "Convert AssertJ `assertThat(collection.contains(element)).isTrue()`\
+        \ with assertThat(collection).contains(element) and `assertThat(collection.contains(element)).isFalse()`\
+        \ with assertThat(collection).doesNotContain(element)."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/useexplicitcontains"
+      options: []
+    org.openrewrite.java.testing.assertj.UseExplicitSize:
+      name: "org.openrewrite.java.testing.assertj.UseExplicitSize"
+      description: "Convert `assertThat(collection.size()).isEqualTo(Y)` with AssertJ's\
+        \ `assertThat(collection).hasSize()`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/useexplicitsize"
       options: []
     org.openrewrite.java.testing.cleanup.AssertEqualsNullToAssertNull:
       name: "org.openrewrite.java.testing.cleanup.AssertEqualsNullToAssertNull"
@@ -6779,7 +6866,7 @@ rewrite-testing-frameworks:
       options: []
     org.openrewrite.java.testing.cucumber.CucumberToJunitPlatformSuite:
       name: "org.openrewrite.java.testing.cucumber.CucumberToJunitPlatformSuite"
-      description: "Migrates Cucumber tests to Junit Test Suites."
+      description: "Migrates Cucumber tests to JUnit Test Suites."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/cucumber/cucumbertojunitplatformsuite"
       options: []
     org.openrewrite.java.testing.cucumber.DropSummaryPrinter:
@@ -7016,7 +7103,7 @@ rewrite-testing-frameworks:
       options: []
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "7.35.0-SNAPSHOT"
+  version: "7.36.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -7146,7 +7233,7 @@ rewrite-xml:
         required: false
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "7.35.0-SNAPSHOT"
+  version: "7.36.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.ChangeKey:
       name: "org.openrewrite.yaml.ChangeKey"

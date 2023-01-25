@@ -19,6 +19,12 @@ release, you'll need to modify the `build.gradle.kts` file to change `rewriteVer
 Once you have the CHANGELOG created, you can copy it over to the [changelog section](https://docs.openrewrite.org/changelog/)
 in the OpenRewrite docs. When doing a full release, make sure you remove the old snapshot releases.
 
+A few important things to note:
+
+* The snapshot descriptors are not updated when a full release is run. You should make sure to run the snapshot code when you do a full release so that it can be kept up-to-date.
+* When doing snapshot releases, you generally don't want to copy over all of the files to the rewrite-docs (as it will show snapshot versions instead of full versions). Rather, please only copy over the exact files you need.
+* When copying over the files from the previous step, make sure you update the `SUMMARY.md`. If you don't, those new files won't appear.
+
 ### Automated Recipe Docs
 
 When you run this project for either a snapshot or a full release, all documentation will be updated in the 
