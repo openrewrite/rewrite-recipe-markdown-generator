@@ -4,6 +4,7 @@
         <notes>
             <![CDATA[
             file name: snakeyaml-1.33.jar
+            Severity: HIGH
             False positive. CVE is about a maliciously crafted payload causing inefficiency, a potential denial of service vector for a hosted application.
             This is not a hosted application, this CVE is irrelevant.
             ]]>
@@ -11,6 +12,7 @@
         <packageUrl regex="true">^pkg:maven/org\.yaml/snakeyaml@.*$</packageUrl>
         <cve>CVE-2021-4235</cve>
         <cve>CVE-2022-1471</cve>
+        <cve>CVE-2022-3064</cve>
     </suppress>
     <suppress>
         <notes>
@@ -40,54 +42,5 @@
         ]]>
     </notes>
     <cve>CVE-2019-16303</cve>
-    </suppress>
-    <suppress until="2023-01-07Z">
-        <!-- Dependencies come from rewrite-java-security. -->
-        <notes><![CDATA[
-            file name: spring-security-crypto-5.7.1.jar
-            sev: MEDIUM
-            False positive. Affects Spring Security Crypto versions Prior to these 5.3.2, 5.2.4, 5.1.10, 5.0.16 and 4.2.16
-        ]]></notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-crypto@.*$</packageUrl>
-        <vulnerabilityName>CVE-2020-5408</vulnerabilityName>
-    </suppress>
-    <suppress until="2023-12-12Z">
-        <!-- Dependencies come from rewrite-testing-frameworks. -->
-        <notes><![CDATA[
-            file name: junit-platform-engine-1.9.1.jar
-            sev: CRITICAL
-            False positive. Flask send_file function is not used.
-            Nothing is actionable, because 1.9.1 is the latest version.
-        ]]></notes>
-        <packageUrl regex="true">^pkg:maven/org\.junit\.platform/junit\-platform\-engine@.*$</packageUrl>
-        <cve>CVE-2022-31514</cve>
-    </suppress>
-    <suppress until="2023-01-07Z">
-        <!-- Dependencies come from rewrite-testing-frameworks. -->
-        <notes><![CDATA[
-            file name: junit-platform-engine-1.9.1.jar
-            sev: CRITICAL
-            False positive. Flask send_file function is not used.
-            Nothing is actionable, because 1.9.1 is the latest version.
-        ]]></notes>
-        <packageUrl regex="true">^pkg:maven/org\.junit\.platform/junit\-platform\-commons@.*$</packageUrl>
-        <cpe>cpe:/a:fan_platform_project:fan_platform</cpe>
-    </suppress>
-    <suppress until="2023-01-07Z">
-        <notes><![CDATA[
-            file name: rewrite-jhipster-1.0.0.jar
-        ]]>
-        </notes>
-        <packageUrl regex="true">^pkg:maven/org\.openrewrite\.recipe/rewrite\-jhipster@.*$</packageUrl>
-        <cpe>cpe:/a:jhipster:jhipster</cpe>
-    </suppress>
-    <suppress until="2023-02-17Z">
-        <notes><![CDATA[
-            file name: snakeyaml-1.33.jar
-            Severity: HIGH
-            False positive: We are not parsing untrusted user input
-        ]]></notes>
-        <packageUrl regex="true">^pkg:maven/org\.yaml/snakeyaml@.*$</packageUrl>
-        <cve>CVE-2022-1471</cve>
     </suppress>
 </suppressions>
