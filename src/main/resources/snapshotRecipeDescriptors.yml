@@ -1861,7 +1861,7 @@ rewrite-java:
       options: []
     org.openrewrite.java.cleanup.SimplifyDurationCreationUnits:
       name: "org.openrewrite.java.cleanup.SimplifyDurationCreationUnits"
-      description: "Simplifies java.time.Duration units to be more human-readable."
+      description: "Simplifies `java.time.Duration` units to be more human-readable."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/simplifydurationcreationunits"
       options: []
     org.openrewrite.java.cleanup.StaticMethodNotFinal:
@@ -2415,7 +2415,7 @@ rewrite-java-security:
       options:
       - name: "target"
         type: "String"
-        required: true
+        required: false
     org.openrewrite.java.security.UseFilesCreateTempDirectory:
       name: "org.openrewrite.java.security.UseFilesCreateTempDirectory"
       description: "Use `Files#createTempDirectory` when the sequence `File#createTempFile(..)`->`File#delete()`->`File#mkdir()`\
