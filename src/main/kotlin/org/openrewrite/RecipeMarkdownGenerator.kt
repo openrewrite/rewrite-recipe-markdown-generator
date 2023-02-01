@@ -876,7 +876,7 @@ class RecipeMarkdownGenerator : Runnable {
                         {% tab title="Maven Command Line" %}
                         {% code title="shell" %}
                         ```shell
-                        mvn org.openrewrite.maven:rewrite-maven-plugin:$mavenPluginVersion:run \
+                        mvn -U org.openrewrite.maven:rewrite-maven-plugin:run \
                           -DactiveRecipes=${recipeDescriptor.name}
                         ```
                         {% endcode %}
@@ -949,8 +949,8 @@ class RecipeMarkdownGenerator : Runnable {
                         {% tab title="Maven Command Line" %}
                         {% code title="shell" %}
                         ```shell
-                        mvn org.openrewrite.maven:rewrite-maven-plugin:$mavenPluginVersion:run \
-                          -Drewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:${origin.version} \
+                        mvn -U org.openrewrite.maven:rewrite-maven-plugin:run \
+                          -Drewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:LATEST \
                           -DactiveRecipes=${recipeDescriptor.name}
                         ```
                         {% endcode %}
