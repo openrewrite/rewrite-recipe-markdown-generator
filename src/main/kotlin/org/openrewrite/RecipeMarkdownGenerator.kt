@@ -332,6 +332,14 @@ class RecipeMarkdownGenerator : Runnable {
         // Clear the file in case this is being generated multiple times
         changelog.writeText("")
 
+        if (deployType == "snapshot") {
+            changelog.appendText("# Snapshot ($formatted)")
+
+            changelog.appendText("\n\n{% hint style=\"info\" %}")
+            changelog.appendText("\nWant to learn how to use snapshot versions in your project? Check out our [snapshot version guide](/reference/snapshot-instructions.md).")
+            changelog.appendText("\n{% endhint %}\n\n")
+        }
+
         // An example of what the changelog could look like after the below statements can be found here:
         // https://gist.github.com/mike-solomon/16727159ec86ee0f0406ba389cbaecb1
         if (newArtifacts.isNotEmpty()) {
