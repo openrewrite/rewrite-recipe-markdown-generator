@@ -1247,7 +1247,8 @@ rewrite-java:
     org.openrewrite.java.cleanup.BooleanChecksNotInverted:
       name: "org.openrewrite.java.cleanup.BooleanChecksNotInverted"
       description: "It is needlessly complex to invert the result of a boolean comparison.\
-        \ The opposite comparison should be made instead."
+        \ The opposite comparison should be made instead. Also double negation of\
+        \ boolean expressions should be avoided. This recipes takes care of that."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/booleanchecksnotinverted"
       options: []
     org.openrewrite.java.cleanup.CaseInsensitiveComparisonsDoNotChangeCase:
@@ -1490,6 +1491,14 @@ rewrite-java:
       description: "Inline variables when they are immediately used to return or throw."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/inlinevariable"
       options: []
+    org.openrewrite.java.cleanup.InstanceOfPatternMatch:
+      name: "org.openrewrite.java.cleanup.InstanceOfPatternMatch"
+      description: "Adds pattern variables to `instanceof` expressions wherever the\
+        \ same (side effect free) expression is referenced in a corresponding type\
+        \ cast expression within the flow scope of the `instanceof`. Currently, this\
+        \ recipe supports `if` statements and ternary operator expressions."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/instanceofpatternmatch"
+      options: []
     org.openrewrite.java.cleanup.IsEmptyCallOnCollections:
       name: "org.openrewrite.java.cleanup.IsEmptyCallOnCollections"
       description: "Also check for _not_ `isEmpty()` when testing for not equal to\
@@ -1688,6 +1697,12 @@ rewrite-java:
         \ The resulting transformation must be carefully reviewed since any modifications\
         \ change the program's semantics."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/referentialequalitytoobjectequals"
+      options: []
+    org.openrewrite.java.cleanup.RemoveCallsToObjectFinalize:
+      name: "org.openrewrite.java.cleanup.RemoveCallsToObjectFinalize"
+      description: "Removes calls to `Object.finalize()`. This method is called during\
+        \ garbage collection and calling it manually is misleading."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/removecallstoobjectfinalize"
       options: []
     org.openrewrite.java.cleanup.RemoveCallsToSystemGc:
       name: "org.openrewrite.java.cleanup.RemoveCallsToSystemGc"
@@ -3811,30 +3826,6 @@ rewrite-maven:
       - name: "id"
         type: "String"
         required: false
-      - name: "layout"
-        type: "String"
-        required: false
-      - name: "releasesChecksumPolicy"
-        type: "String"
-        required: false
-      - name: "releasesEnabled"
-        type: "Boolean"
-        required: false
-      - name: "releasesUpdatePolicy"
-        type: "String"
-        required: false
-      - name: "repoName"
-        type: "String"
-        required: false
-      - name: "snapshotsChecksumPolicy"
-        type: "String"
-        required: false
-      - name: "snapshotsEnabled"
-        type: "Boolean"
-        required: false
-      - name: "snapshotsUpdatePolicy"
-        type: "String"
-        required: false
       - name: "url"
         type: "String"
         required: true
@@ -5393,11 +5384,13 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.DatabaseComponentAndBeanInitializationOrdering:
       name: "org.openrewrite.java.spring.boot2.DatabaseComponentAndBeanInitializationOrdering"
-      description: "Beans of certain well-known types, such as JdbcTemplate, will\
+      description: "Beans of certain well-known types, such as `JdbcTemplate`, will\
         \ be ordered so that they are initialized after the database has been initialized.\
-        \ If you have a bean that works with the DataSource directly, annotate its\
-        \ class or @Bean method with @DependsOnDatabaseInitialization to ensure that\
-        \ it too is initialized after the database has been initialized."
+        \ If you have a bean that works with the `DataSource` directly, annotate its\
+        \ class or `@Bean` method with `@DependsOnDatabaseInitialization` to ensure\
+        \ that it too is initialized after the database has been initialized. See\
+        \ the [release notes](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.5-Release-Notes#initialization-ordering)\
+        \ for more."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/databasecomponentandbeaninitializationordering"
       options: []
     org.openrewrite.java.spring.boot2.GetErrorAttributes:
@@ -5420,8 +5413,8 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.MigrateActuatorMediaTypeToApiVersion:
       name: "org.openrewrite.java.spring.boot2.MigrateActuatorMediaTypeToApiVersion"
-      description: "Spring-Boot-Actuator `ActuatorMediaType` was deprecated in 2.5\
-        \ in favor of `ApiVersion#getProducedMimeType()`. Replace `MediaType.parseMediaType(ActuatorMediaType.Vx_JSON)`\
+      description: "Spring Boot `ActuatorMediaType` was deprecated in 2.5 in favor\
+        \ of `ApiVersion#getProducedMimeType()`. Replace `MediaType.parseMediaType(ActuatorMediaType.Vx_JSON)`\
         \ with `MediaType.asMediaType(ApiVersion.Vx.getProducedMimeType())`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migrateactuatormediatypetoapiversion"
       options: []
@@ -5553,9 +5546,9 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.MoveAutoConfigurationToImportsFile:
       name: "org.openrewrite.java.spring.boot2.MoveAutoConfigurationToImportsFile"
-      description: "Use `org.springframework.boot.autoconfigure.AutoConfiguration.imports`\
-        \ instead of the deprecated entry `org.springframework.boot.autoconfigure.EnableAutoConfiguration`\
-        \ in `spring.factories` when defining auto-configuration classes."
+      description: "Use `AutoConfiguration#imports` instead of the deprecated entry\
+        \ `EnableAutoConfiguration` in `spring.factories` when defining autoconfiguration\
+        \ classes."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/moveautoconfigurationtoimportsfile"
       options: []
     org.openrewrite.java.spring.boot2.OutputCaptureExtension:
@@ -5576,7 +5569,9 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.RestTemplateBuilderRequestFactory:
       name: "org.openrewrite.java.spring.boot2.RestTemplateBuilderRequestFactory"
-      description: "Migrate `RestTemplateBuilder#requestFactory` calls to use a `Supplier`."
+      description: "Migrate `RestTemplateBuilder#requestFactory` calls to use a `Supplier`.\
+        \ See the [migration guide](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.0-Migration-Guide#resttemplatebuilder)\
+        \ for more."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/resttemplatebuilderrequestfactory"
       options: []
     org.openrewrite.java.spring.boot2.SamlRelyingPartyPropertyApplicationPropertiesMove:
@@ -5584,16 +5579,6 @@ rewrite-spring:
       description: "Renames spring.security.saml2.relyingparty.registration.(any).identityprovider\
         \ to spring.security.saml2.relyingparty.registration.(any).assertingparty."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/samlrelyingpartypropertyapplicationpropertiesmove"
-      options: []
-    org.openrewrite.java.spring.boot2.SpringBoot1To2Migration:
-      name: "org.openrewrite.java.spring.boot2.SpringBoot1To2Migration"
-      description: "Migrate applications built on previous versions of Spring Boot\
-        \ to the latest Spring Boot 2.7 release. This recipe will modify an application's\
-        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
-        \ settings that have changes across Spring Boot versions. This recipe will\
-        \ also chain additional framework migrations (Spring Framework, Spring Data,\
-        \ JUnit, etc) that are required as part of the migration to Spring Boot 2.7.\n"
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/springboot1to2migration"
       options: []
     org.openrewrite.java.spring.boot2.SpringBoot2BestPractices:
       name: "org.openrewrite.java.spring.boot2.SpringBoot2BestPractices"
@@ -5737,7 +5722,7 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_7:
       name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_7"
-      description: "Upgrade to Spring Boot 2.7 from any prior 2.x version."
+      description: "Upgrade to Spring Boot 2.7"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/upgradespringboot_2_7"
       options: []
     org.openrewrite.java.spring.boot2.WebSecurityConfigurerAdapter:
@@ -5756,6 +5741,12 @@ rewrite-spring:
         \ `*Provider` beans, the support for which has now been deprecated. See [Spring\
         \ Boot 2.5 jOOQ customization](https://docs.spring.io/spring-boot/docs/2.5.x/reference/htmlsingle/#features.sql.jooq.customizing)."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/search/customizingjooqdefaultconfiguration"
+      options: []
+    org.openrewrite.java.spring.boot2.search.FindUpgradeRequirementsSpringBoot_2_5:
+      name: "org.openrewrite.java.spring.boot2.search.FindUpgradeRequirementsSpringBoot_2_5"
+      description: "Looks for a series of patterns that have not yet had auto-remediation\
+        \ recipes developed for.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/search/findupgraderequirementsspringboot_2_5"
       options: []
     org.openrewrite.java.spring.boot2.search.IntegrationSchedulerPoolRecipe:
       name: "org.openrewrite.java.spring.boot2.search.IntegrationSchedulerPoolRecipe"
@@ -5786,16 +5777,6 @@ rewrite-spring:
         You can still use the `server.error.include-message` property if you want\
         \ messages to be included.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/search/messagesinthedefaulterrorview"
-      options: []
-    org.openrewrite.java.spring.boot2.search.UpgradeRequirementsSpringBoot_2_5:
-      name: "org.openrewrite.java.spring.boot2.search.UpgradeRequirementsSpringBoot_2_5"
-      description: "Migrate applications to the latest Spring Boot 2.5 release. This\
-        \ recipe will modify an application's build files, make changes to deprecated/preferred\
-        \ APIs, and migrate configuration settings that have changes between versions.\
-        \ This recipe will also chain additional framework migrations (Spring Framework,\
-        \ Spring Data, etc) that are required as part of the migration to Spring Boot\
-        \ 2.5.\n"
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/search/upgraderequirementsspringboot_2_5"
       options: []
     org.openrewrite.java.spring.boot3.ActuatorEndpointSanitization:
       name: "org.openrewrite.java.spring.boot3.ActuatorEndpointSanitization"
@@ -5840,21 +5821,17 @@ rewrite-spring:
         \ type level on @ConfigurationProperties classes and should be removed."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/removeconstructorbindingannotation"
       options: []
+    org.openrewrite.java.spring.boot3.RemoveEnableBatchProcessing:
+      name: "org.openrewrite.java.spring.boot3.RemoveEnableBatchProcessing"
+      description: "Add or remove the `@EnableBatchProcessing` annotation from a Spring\
+        \ Boot application."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/removeenablebatchprocessing"
+      options: []
     org.openrewrite.java.spring.boot3.Saml:
       name: "org.openrewrite.java.spring.boot3.Saml"
       description: "Renames spring.security.saml2.relyingparty.registration.(any).identityprovider\
         \ to spring.security.saml2.relyingparty.registration.(any).assertingparty."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/saml"
-      options: []
-    org.openrewrite.java.spring.boot3.SpringBoot2To3Migration:
-      name: "org.openrewrite.java.spring.boot3.SpringBoot2To3Migration"
-      description: "Migrate applications built on previous versions of Spring Boot\
-        \ to the latest Spring Boot 3.0 release. This recipe will modify an application's\
-        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
-        \ settings that have changes across Spring Boot versions. This recipe will\
-        \ also chain additional framework migrations (Spring Framework, Spring Data,\
-        \ JUnit, etc) that are required as part of the migration to Spring Boot 3.0.\n"
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/springboot2to3migration"
       options: []
     org.openrewrite.java.spring.boot3.SpringBootProperties_3_0_0:
       name: "org.openrewrite.java.spring.boot3.SpringBootProperties_3_0_0"
@@ -5949,7 +5926,7 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.framework.MigrateUtf8MediaTypes:
       name: "org.openrewrite.java.spring.framework.MigrateUtf8MediaTypes"
-      description: "Spring-Web MediaTypes `APPLICATION_JSON_UTF8` and `APPLICATION_PROBLEM_JSON_UTF8`\
+      description: "Spring Web `MediaType#APPLICATION_JSON_UTF8` and `MediaType#APPLICATION_PROBLEM_JSON_UTF8`\
         \ were deprecated in 5.2."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/migrateutf8mediatypes"
       options: []
@@ -5993,6 +5970,11 @@ rewrite-spring:
       name: "org.openrewrite.java.spring.framework.UseObjectUtilsIsEmpty"
       description: "`StringUtils#isEmpty(Object)` was deprecated in 5.3."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/useobjectutilsisempty"
+      options: []
+    org.openrewrite.java.spring.search.FindApiEndpoints:
+      name: "org.openrewrite.java.spring.search.FindApiEndpoints"
+      description: "Find all API endpoints that this application exposes."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/search/findapiendpoints"
       options: []
     org.openrewrite.maven.spring.UpgradeExplicitSpringBootDependencies:
       name: "org.openrewrite.maven.spring.UpgradeExplicitSpringBootDependencies"
