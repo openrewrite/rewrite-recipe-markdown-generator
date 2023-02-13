@@ -1804,6 +1804,11 @@ rewrite-java:
         \ is blank."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/renameprivatefieldstocamelcase"
       options: []
+    org.openrewrite.java.cleanup.ReplaceApacheCommonsLang3ValidateNotNullWithObjectsRequireNonNull:
+      name: "org.openrewrite.java.cleanup.ReplaceApacheCommonsLang3ValidateNotNullWithObjectsRequireNonNull"
+      description: "Replace `org.apache.commons.lang3.Validate.notNull(..)` with `Objects.requireNonNull(..)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replaceapachecommonslang3validatenotnullwithobjectsrequirenonnull"
+      options: []
     org.openrewrite.java.cleanup.ReplaceDuplicateStringLiterals:
       name: "org.openrewrite.java.cleanup.ReplaceDuplicateStringLiterals"
       description: "Replaces `String` literals with a length of 5 or greater repeated\
@@ -2013,6 +2018,15 @@ rewrite-java:
       name: "org.openrewrite.java.cleanup.UseMapContainsKey"
       description: "`map.keySet().contains(a)` can be simplified to `map.containsKey(a)`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/usemapcontainskey"
+      options: []
+    org.openrewrite.java.cleanup.UseObjectNotifyAll:
+      name: "org.openrewrite.java.cleanup.UseObjectNotifyAll"
+      description: "`Object.notifyAll()` and `Object.notify()` both wake up sleeping\
+        \ threads, but `Object.notify()` only rouses one while `Object.notifyAll()`\
+        \ rouses all of them. Since `Object.notify()` might not wake up the right\
+        \ thread, `Object.notifyAll()` should be used instead. See [this](https://wiki.sei.cmu.edu/confluence/display/java/THI02-J.+Notify+all+waiting+threads+rather+than+a+single+thread)\
+        \ for more information."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/useobjectnotifyall"
       options: []
     org.openrewrite.java.cleanup.UseStandardCharset:
       name: "org.openrewrite.java.cleanup.UseStandardCharset"
@@ -5371,6 +5385,66 @@ rewrite-spring:
         \ exposes up-to-date."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/updateapimanifest"
       options: []
+    org.openrewrite.java.spring.batch.ImplementChunkListenerDirectly:
+      name: "org.openrewrite.java.spring.batch.ImplementChunkListenerDirectly"
+      description: "As of 5.0 `ChunkListener` has default methods (made possible by\
+        \ a Java 8 baseline) and can be implemented directly without the need for\
+        \ this adapter."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/implementchunklistenerdirectly"
+      options: []
+    org.openrewrite.java.spring.batch.ImplementJobExecutionListenerDirectly:
+      name: "org.openrewrite.java.spring.batch.ImplementJobExecutionListenerDirectly"
+      description: "As of 5.0 `JobExecutionListener` has default methods (made possible\
+        \ by a Java 8 baseline) and can be implemented directly without the need for\
+        \ this adapter."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/implementjobexecutionlistenerdirectly"
+      options: []
+    org.openrewrite.java.spring.batch.ImplementRepeatListenerDirectly:
+      name: "org.openrewrite.java.spring.batch.ImplementRepeatListenerDirectly"
+      description: "As of 5.0 `RepeatListener` has default methods (made possible\
+        \ by a Java 8 baseline) and can be implemented directly without the need for\
+        \ this adapter."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/implementrepeatlistenerdirectly"
+      options: []
+    org.openrewrite.java.spring.batch.ImplementSkipListenerSupportDirectly:
+      name: "org.openrewrite.java.spring.batch.ImplementSkipListenerSupportDirectly"
+      description: "As of 5.0 `SkipListener` has default methods (made possible by\
+        \ a Java 8 baseline) and can be implemented directly without the need for\
+        \ this adapter."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/implementskiplistenersupportdirectly"
+      options: []
+    org.openrewrite.java.spring.batch.ImplementStepExecutionListenerDirectly:
+      name: "org.openrewrite.java.spring.batch.ImplementStepExecutionListenerDirectly"
+      description: "As of 5.0 `StepExecutionListener` has default methods (made possible\
+        \ by a Java 8 baseline) and can be implemented directly without the need for\
+        \ this adapter."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/implementstepexecutionlistenerdirectly"
+      options: []
+    org.openrewrite.java.spring.batch.MigrateItemWriterWrite:
+      name: "org.openrewrite.java.spring.batch.MigrateItemWriterWrite"
+      description: "`JobBuilderFactory` was deprecated in Springbatch 5.x : replaced\
+        \ by `JobBuilder`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/migrateitemwriterwrite"
+      options: []
+    org.openrewrite.java.spring.batch.MigrateJobBuilderFactory:
+      name: "org.openrewrite.java.spring.batch.MigrateJobBuilderFactory"
+      description: "`JobBuilderFactory` was deprecated in spring-batch 5.x. It is\
+        \ replaced by `JobBuilder`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/migratejobbuilderfactory"
+      options: []
+    org.openrewrite.java.spring.batch.ReplaceSupportClassWithItsInterface:
+      name: "org.openrewrite.java.spring.batch.ReplaceSupportClassWithItsInterface"
+      description: "As of Spring-Batch 5.0 Listeners has default methods (made possible\
+        \ by a Java 8 baseline) and can be implemented directly without the need for\
+        \ this adapter."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/replacesupportclasswithitsinterface"
+      options:
+      - name: "fullyQualifiedClassName"
+        type: "String"
+        required: true
+      - name: "fullyQualifiedInterfaceName"
+        type: "String"
+        required: true
     org.openrewrite.java.spring.boot2.ChangeEmbeddedServletContainerCustomizer:
       name: "org.openrewrite.java.spring.boot2.ChangeEmbeddedServletContainerCustomizer"
       description: "Find any classes implementing `EmbeddedServletContainerCustomizer`\
@@ -5832,6 +5906,12 @@ rewrite-spring:
       description: "Renames spring.security.saml2.relyingparty.registration.(any).identityprovider\
         \ to spring.security.saml2.relyingparty.registration.(any).assertingparty."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/saml"
+      options: []
+    org.openrewrite.java.spring.boot3.SpringBatch4To5Migration:
+      name: "org.openrewrite.java.spring.boot3.SpringBatch4To5Migration"
+      description: "Migrate applications built on Spring Batch 4.3 to the latest Spring\
+        \ Batch 2.3 release."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/springbatch4to5migration"
       options: []
     org.openrewrite.java.spring.boot3.SpringBootProperties_3_0_0:
       name: "org.openrewrite.java.spring.boot3.SpringBootProperties_3_0_0"
@@ -7082,6 +7162,17 @@ rewrite-testing-frameworks:
       description: "Replace `@RunWith(MockitoJUnitRunner.Silent.class)` with `@ExtendWith(MockitoExtension.class)`\
         \ and `@MockitoSettings(strictness = Strictness.LENIENT)`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/mockito/mockitojunitrunnersilenttoextension"
+      options: []
+    org.openrewrite.java.testing.mockito.PowerMockitoMockStaticToMockito:
+      name: "org.openrewrite.java.testing.mockito.PowerMockitoMockStaticToMockito"
+      description: "Replaces `PowerMockito.mockStatic()` by `Mockito.mockStatic()`.\
+        \ Removes the `@PrepareForTest` annotation."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/mockito/powermockitomockstatictomockito"
+      options: []
+    org.openrewrite.java.testing.mockito.ReplacePowerMockito:
+      name: "org.openrewrite.java.testing.mockito.ReplacePowerMockito"
+      description: "Replace Powermock with raw Mockito."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/mockito/replacepowermockito"
       options: []
 rewrite-xml:
   artifactId: "rewrite-xml"

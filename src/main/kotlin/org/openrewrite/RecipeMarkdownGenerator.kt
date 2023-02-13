@@ -338,6 +338,8 @@ class RecipeMarkdownGenerator : Runnable {
             changelog.appendText("\n\n{% hint style=\"info\" %}")
             changelog.appendText("\nWant to learn how to use snapshot versions in your project? Check out our [snapshot version guide](/reference/snapshot-instructions.md).")
             changelog.appendText("\n{% endhint %}\n\n")
+        } else {
+            changelog.appendText("# X.XX.X release ($formatted)\n\n")
         }
 
         // An example of what the changelog could look like after the below statements can be found here:
