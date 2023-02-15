@@ -631,7 +631,7 @@ class RecipeMarkdownGenerator : Runnable {
                 """
                 ## Source
                 
-                [Github](${origin.githubUrl()}), [Issue Tracker](${origin.issueTrackerUrl()}), [Maven Central](https://search.maven.org/artifact/${origin.groupId}/${origin.artifactId}/${origin.version}/jar)
+                [Github](${origin.githubUrl(recipeDescriptor.name, recipeDescriptor.source)}), [Issue Tracker](${origin.issueTrackerUrl()}), [Maven Central](https://search.maven.org/artifact/${origin.groupId}/${origin.artifactId}/${origin.version}/jar)
                 
                 * groupId: ${origin.groupId}
                 * artifactId: ${origin.artifactId}
