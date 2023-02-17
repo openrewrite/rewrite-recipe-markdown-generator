@@ -1,6 +1,6 @@
 rewrite-circleci:
   artifactId: "rewrite-circleci"
-  version: "1.17.0"
+  version: "1.18.0"
   markdownRecipeDescriptors:
     org.openrewrite.circleci.InstallOrb:
       name: "org.openrewrite.circleci.InstallOrb"
@@ -24,7 +24,7 @@ rewrite-circleci:
         required: true
 rewrite-cloud-suitability-analyzer:
   artifactId: "rewrite-cloud-suitability-analyzer"
-  version: "1.2.0"
+  version: "1.3.0"
   markdownRecipeDescriptors:
     org.openrewrite.cloudsuitability.FindCacheUses:
       name: "org.openrewrite.cloudsuitability.FindCacheUses"
@@ -154,7 +154,7 @@ rewrite-cloud-suitability-analyzer:
       options: []
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "1.16.0"
+  version: "1.17.0"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -222,7 +222,7 @@ rewrite-concourse:
       options: []
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "7.35.0"
+  version: "7.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -293,9 +293,14 @@ rewrite-core:
       description: ""
       docLink: "https://docs.openrewrite.org/reference/recipes/config/compositerecipe"
       options: []
+    org.openrewrite.search.FindLanguageComposition:
+      name: "org.openrewrite.search.FindLanguageComposition"
+      description: "Produce a table of files and their language composition."
+      docLink: "https://docs.openrewrite.org/reference/recipes/search/findlanguagecomposition"
+      options: []
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "1.16.0"
+  version: "1.17.0"
   markdownRecipeDescriptors:
     org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin:
       name: "org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin"
@@ -353,15 +358,40 @@ rewrite-github-actions:
       description: "Set dependabot to check for github-actions updates weekly."
       docLink: "https://docs.openrewrite.org/reference/recipes/github/dependabotcheckforgithubactionsupdatesweekly"
       options: []
+    org.openrewrite.github.RemoveAllCronTriggers:
+      name: "org.openrewrite.github.RemoveAllCronTriggers"
+      description: "Removes all cron triggers from a workflow."
+      docLink: "https://docs.openrewrite.org/reference/recipes/github/removeallcrontriggers"
+      options: []
+    org.openrewrite.github.ReplaceRunners:
+      name: "org.openrewrite.github.ReplaceRunners"
+      description: "Replaces the runners of a given job."
+      docLink: "https://docs.openrewrite.org/reference/recipes/github/replacerunners"
+      options:
+      - name: "jobName"
+        type: "String"
+        required: true
+      - name: "runners"
+        type: "List"
+        required: true
     org.openrewrite.github.SetupJavaCaching:
       name: "org.openrewrite.github.SetupJavaCaching"
       description: "Github actions supports dependency caching on Maven and Gradle\
         \ projects. See the [blog post](https://github.blog/changelog/2021-08-30-github-actions-setup-java-now-supports-dependency-caching/)."
       docLink: "https://docs.openrewrite.org/reference/recipes/github/setupjavacaching"
       options: []
+    org.openrewrite.github.SetupJavaUpgradeJavaVersion:
+      name: "org.openrewrite.github.SetupJavaUpgradeJavaVersion"
+      description: "Update the Java version used by `actions/setup-java` if it is\
+        \ below the expected version number."
+      docLink: "https://docs.openrewrite.org/reference/recipes/github/setupjavaupgradejavaversion"
+      options:
+      - name: "minimumJavaMajorVersion"
+        type: "Integer"
+        required: false
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "7.35.0"
+  version: "7.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.ActivateStyle:
       name: "org.openrewrite.gradle.ActivateStyle"
@@ -430,9 +460,12 @@ rewrite-gradle:
       - name: "distribution"
         type: "String"
         required: false
-      - name: "version"
+      - name: "repositoryUrl"
         type: "String"
         required: true
+      - name: "version"
+        type: "String"
+        required: false
     org.openrewrite.gradle.AddProperty:
       name: "org.openrewrite.gradle.AddProperty"
       description: "Add a property to the `gradle.properties` file."
@@ -449,7 +482,7 @@ rewrite-gradle:
         required: true
     org.openrewrite.gradle.ChangeDependencyArtifactId:
       name: "org.openrewrite.gradle.ChangeDependencyArtifactId"
-      description: "Change the artifactId of a specified Gradle dependency."
+      description: "Change the artifact of a specified Gradle dependency."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/changedependencyartifactid"
       options:
       - name: "artifactId"
@@ -483,7 +516,9 @@ rewrite-gradle:
         required: true
     org.openrewrite.gradle.ChangeDependencyConfiguration:
       name: "org.openrewrite.gradle.ChangeDependencyConfiguration"
-      description: "Finds dependencies declared in `build.gradle` files."
+      description: "A common example is the need to change `compile` to `api`/`implementation`\
+        \ as [part of the move](https://docs.gradle.org/current/userguide/upgrading_version_6.html)\
+        \ to Gradle 7.x and later."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/changedependencyconfiguration"
       options:
       - name: "artifactId"
@@ -517,7 +552,7 @@ rewrite-gradle:
         required: true
     org.openrewrite.gradle.ChangeDependencyGroupId:
       name: "org.openrewrite.gradle.ChangeDependencyGroupId"
-      description: "Change the group id of a specified Gradle dependency."
+      description: "Change the group of a specified Gradle dependency."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/changedependencygroupid"
       options:
       - name: "artifactId"
@@ -534,7 +569,8 @@ rewrite-gradle:
         required: true
     org.openrewrite.gradle.ChangeDependencyVersion:
       name: "org.openrewrite.gradle.ChangeDependencyVersion"
-      description: "Finds dependencies declared in `build.gradle` files."
+      description: "Change a version of a specified dependency. The new version must\
+        \ be an exact version number."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/changedependencyversion"
       options:
       - name: "artifactId"
@@ -635,6 +671,25 @@ rewrite-gradle:
       - name: "version"
         type: "String"
         required: true
+    org.openrewrite.gradle.UpgradeLiteralDependencyVersion:
+      name: "org.openrewrite.gradle.UpgradeLiteralDependencyVersion"
+      description: "A fixed literal version is a version that is not a variable or\
+        \ property or supplied indirectly by platform BOMs or similar means. For example,\
+        \ `com.google.guava:guava:29.0-jre`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/upgradeliteraldependencyversion"
+      options:
+      - name: "artifactId"
+        type: "String"
+        required: true
+      - name: "groupId"
+        type: "String"
+        required: true
+      - name: "newVersion"
+        type: "String"
+        required: true
+      - name: "versionPattern"
+        type: "String"
+        required: false
     org.openrewrite.gradle.plugins.AddBuildPlugin:
       name: "org.openrewrite.gradle.plugins.AddBuildPlugin"
       description: "Add a Gradle build plugin to `build.gradle(.kts)`."
@@ -671,6 +726,22 @@ rewrite-gradle:
       - name: "versionPattern"
         type: "String"
         required: false
+    org.openrewrite.gradle.plugins.RemoveBuildPlugin:
+      name: "org.openrewrite.gradle.plugins.RemoveBuildPlugin"
+      description: "Remove plugin from `build.gradle(.kts)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/plugins/removebuildplugin"
+      options:
+      - name: "pluginId"
+        type: "String"
+        required: true
+    org.openrewrite.gradle.plugins.RemoveSettingsPlugin:
+      name: "org.openrewrite.gradle.plugins.RemoveSettingsPlugin"
+      description: "Remove plugin from `settings.gradle(.kts)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/plugins/removesettingsplugin"
+      options:
+      - name: "pluginId"
+        type: "String"
+        required: true
     org.openrewrite.gradle.plugins.UpgradePluginVersion:
       name: "org.openrewrite.gradle.plugins.UpgradePluginVersion"
       description: "Update a Gradle plugin by id to a later version."
@@ -733,7 +804,10 @@ rewrite-gradle:
       description: "Gradle projects are those with `build.gradle` or `build.gradle.kts`\
         \ files."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/search/findgradleproject"
-      options: []
+      options:
+      - name: "searchCriteria"
+        type: "SearchCriteria"
+        required: true
     org.openrewrite.gradle.search.FindGradleWrapper:
       name: "org.openrewrite.gradle.search.FindGradleWrapper"
       description: "Find Gradle wrappers."
@@ -763,7 +837,7 @@ rewrite-gradle:
       options: []
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "7.35.0"
+  version: "7.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -778,7 +852,7 @@ rewrite-groovy:
       options: []
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "7.35.0"
+  version: "7.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -844,7 +918,7 @@ rewrite-hcl:
         required: true
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "7.35.0"
+  version: "7.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -1197,7 +1271,8 @@ rewrite-java:
     org.openrewrite.java.cleanup.BooleanChecksNotInverted:
       name: "org.openrewrite.java.cleanup.BooleanChecksNotInverted"
       description: "It is needlessly complex to invert the result of a boolean comparison.\
-        \ The opposite comparison should be made instead."
+        \ The opposite comparison should be made instead. Also double negation of\
+        \ boolean expressions should be avoided. This recipes takes care of that."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/booleanchecksnotinverted"
       options: []
     org.openrewrite.java.cleanup.CaseInsensitiveComparisonsDoNotChangeCase:
@@ -1440,6 +1515,14 @@ rewrite-java:
       description: "Inline variables when they are immediately used to return or throw."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/inlinevariable"
       options: []
+    org.openrewrite.java.cleanup.InstanceOfPatternMatch:
+      name: "org.openrewrite.java.cleanup.InstanceOfPatternMatch"
+      description: "Adds pattern variables to `instanceof` expressions wherever the\
+        \ same (side effect free) expression is referenced in a corresponding type\
+        \ cast expression within the flow scope of the `instanceof`. Currently, this\
+        \ recipe supports `if` statements and ternary operator expressions."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/instanceofpatternmatch"
+      options: []
     org.openrewrite.java.cleanup.IsEmptyCallOnCollections:
       name: "org.openrewrite.java.cleanup.IsEmptyCallOnCollections"
       description: "Also check for _not_ `isEmpty()` when testing for not equal to\
@@ -1639,6 +1722,12 @@ rewrite-java:
         \ change the program's semantics."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/referentialequalitytoobjectequals"
       options: []
+    org.openrewrite.java.cleanup.RemoveCallsToObjectFinalize:
+      name: "org.openrewrite.java.cleanup.RemoveCallsToObjectFinalize"
+      description: "Removes calls to `Object.finalize()`. This method is called during\
+        \ garbage collection and calling it manually is misleading."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/removecallstoobjectfinalize"
+      options: []
     org.openrewrite.java.cleanup.RemoveCallsToSystemGc:
       name: "org.openrewrite.java.cleanup.RemoveCallsToSystemGc"
       description: "Removes calls to `System.gc()` and `Runtime.gc()`. When to invoke\
@@ -1656,6 +1745,12 @@ rewrite-java:
       description: "Optional semicolons at the end of try-with-resources are also\
         \ removed."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/removeextrasemicolons"
+      options: []
+    org.openrewrite.java.cleanup.RemoveInstanceOfPatternMatch:
+      name: "org.openrewrite.java.cleanup.RemoveInstanceOfPatternMatch"
+      description: "Adds an explicit variable declaration at the beginning of `if`\
+        \ statement instead of `instanceof` pattern matching."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/removeinstanceofpatternmatch"
       options: []
     org.openrewrite.java.cleanup.RemoveJavaDocAuthorTag:
       name: "org.openrewrite.java.cleanup.RemoveJavaDocAuthorTag"
@@ -1739,6 +1834,11 @@ rewrite-java:
         \ is blank."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/renameprivatefieldstocamelcase"
       options: []
+    org.openrewrite.java.cleanup.ReplaceApacheCommonsLang3ValidateNotNullWithObjectsRequireNonNull:
+      name: "org.openrewrite.java.cleanup.ReplaceApacheCommonsLang3ValidateNotNullWithObjectsRequireNonNull"
+      description: "Replace `org.apache.commons.lang3.Validate.notNull(..)` with `Objects.requireNonNull(..)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replaceapachecommonslang3validatenotnullwithobjectsrequirenonnull"
+      options: []
     org.openrewrite.java.cleanup.ReplaceDuplicateStringLiterals:
       name: "org.openrewrite.java.cleanup.ReplaceDuplicateStringLiterals"
       description: "Replaces `String` literals with a length of 5 or greater repeated\
@@ -1760,12 +1860,24 @@ rewrite-java:
         \ with the equivalent method reference."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacelambdawithmethodreference"
       options: []
+    org.openrewrite.java.cleanup.ReplaceRedundantFormatWithPrintf:
+      name: "org.openrewrite.java.cleanup.ReplaceRedundantFormatWithPrintf"
+      description: "Replaces `PrintStream.print(String.format(format, ...args))` with\
+        \ `PrintStream.printf(format, ...args)` (and for `println`, appends a newline\
+        \ to the format string)."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replaceredundantformatwithprintf"
+      options: []
     org.openrewrite.java.cleanup.ReplaceStackWithDeque:
       name: "org.openrewrite.java.cleanup.ReplaceStackWithDeque"
       description: "From the Javadoc of `Stack`:\n> A more complete and consistent\
         \ set of LIFO stack operations is provided by the Deque interface and its\
         \ implementations, which should be used in preference to this class."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacestackwithdeque"
+      options: []
+    org.openrewrite.java.cleanup.ReplaceTextBlockWithString:
+      name: "org.openrewrite.java.cleanup.ReplaceTextBlockWithString"
+      description: "Replace text block with a regular multi-line string."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacetextblockwithstring"
       options: []
     org.openrewrite.java.cleanup.ReplaceThreadRunWithThreadStart:
       name: "org.openrewrite.java.cleanup.ReplaceThreadRunWithThreadStart"
@@ -1801,6 +1913,11 @@ rewrite-java:
       description: "Checks for if expressions that are always `true` or `false` and\
         \ simplifies them."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/simplifyconstantifbranchexecution"
+      options: []
+    org.openrewrite.java.cleanup.SimplifyDurationCreationUnits:
+      name: "org.openrewrite.java.cleanup.SimplifyDurationCreationUnits"
+      description: "Simplifies `java.time.Duration` units to be more human-readable."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/simplifydurationcreationunits"
       options: []
     org.openrewrite.java.cleanup.StaticMethodNotFinal:
       name: "org.openrewrite.java.cleanup.StaticMethodNotFinal"
@@ -1937,6 +2054,15 @@ rewrite-java:
       description: "`map.keySet().contains(a)` can be simplified to `map.containsKey(a)`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/usemapcontainskey"
       options: []
+    org.openrewrite.java.cleanup.UseObjectNotifyAll:
+      name: "org.openrewrite.java.cleanup.UseObjectNotifyAll"
+      description: "`Object.notifyAll()` and `Object.notify()` both wake up sleeping\
+        \ threads, but `Object.notify()` only rouses one while `Object.notifyAll()`\
+        \ rouses all of them. Since `Object.notify()` might not wake up the right\
+        \ thread, `Object.notifyAll()` should be used instead. See [this](https://wiki.sei.cmu.edu/confluence/display/java/THI02-J.+Notify+all+waiting+threads+rather+than+a+single+thread)\
+        \ for more information."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/useobjectnotifyall"
+      options: []
     org.openrewrite.java.cleanup.UseStandardCharset:
       name: "org.openrewrite.java.cleanup.UseStandardCharset"
       description: "Replaces `Charset.forName(java.lang.String)` with the equivalent\
@@ -1950,6 +2076,12 @@ rewrite-java:
         \ exactly the same thing as `String::replaceAll` without the performance drawback\
         \ of the regex."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/usestringreplace"
+      options: []
+    org.openrewrite.java.cleanup.UseSystemLineSeparator:
+      name: "org.openrewrite.java.cleanup.UseSystemLineSeparator"
+      description: "Replaces calls to `System.getProperty(\"line.separator\")` with\
+        \ `System.lineSeparator()`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/usesystemlineseparator"
       options: []
     org.openrewrite.java.cleanup.WhileInsteadOfFor:
       name: "org.openrewrite.java.cleanup.WhileInsteadOfFor"
@@ -2290,7 +2422,7 @@ rewrite-java:
       options: []
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "1.21.0"
+  version: "1.22.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.security.FindTextDirectionChanges:
       name: "org.openrewrite.java.security.FindTextDirectionChanges"
@@ -2353,7 +2485,7 @@ rewrite-java-security:
       options:
       - name: "target"
         type: "String"
-        required: true
+        required: false
     org.openrewrite.java.security.UseFilesCreateTempDirectory:
       name: "org.openrewrite.java.security.UseFilesCreateTempDirectory"
       description: "Use `Files#createTempDirectory` when the sequence `File#createTempFile(..)`->`File#delete()`->`File#mkdir()`\
@@ -2570,7 +2702,7 @@ rewrite-java-security:
         required: false
 rewrite-jhipster:
   artifactId: "rewrite-jhipster"
-  version: "1.17.0"
+  version: "1.18.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jhipster.FixCwe338:
       name: "org.openrewrite.java.jhipster.FixCwe338"
@@ -2580,7 +2712,7 @@ rewrite-jhipster:
       options: []
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "7.35.0"
+  version: "7.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3022,7 +3154,7 @@ rewrite-kubernetes:
         required: true
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "1.17.0"
+  version: "1.18.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.logging.ParameterizedLogging:
       name: "org.openrewrite.java.logging.ParameterizedLogging"
@@ -3208,7 +3340,7 @@ rewrite-logging-frameworks:
       options: []
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "7.35.0"
+  version: "7.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -3653,7 +3785,7 @@ rewrite-maven:
       options: []
     org.openrewrite.maven.RemoveExclusion:
       name: "org.openrewrite.maven.RemoveExclusion"
-      description: "Remove a single exclusion from on a particular dependency."
+      description: "Remove any matching exclusion from any matching dependency."
       docLink: "https://docs.openrewrite.org/reference/recipes/maven/removeexclusion"
       options:
       - name: "artifactId"
@@ -3668,6 +3800,9 @@ rewrite-maven:
       - name: "groupId"
         type: "String"
         required: true
+      - name: "onlyIneffective"
+        type: "Boolean"
+        required: false
     org.openrewrite.maven.RemoveManagedDependency:
       name: "org.openrewrite.maven.RemoveManagedDependency"
       description: "Removes a single managed dependency from the <dependencyManagement><dependencies>\
@@ -3744,30 +3879,6 @@ rewrite-maven:
       docLink: "https://docs.openrewrite.org/reference/recipes/maven/removerepository"
       options:
       - name: "id"
-        type: "String"
-        required: false
-      - name: "layout"
-        type: "String"
-        required: false
-      - name: "releasesChecksumPolicy"
-        type: "String"
-        required: false
-      - name: "releasesEnabled"
-        type: "Boolean"
-        required: false
-      - name: "releasesUpdatePolicy"
-        type: "String"
-        required: false
-      - name: "repoName"
-        type: "String"
-        required: false
-      - name: "snapshotsChecksumPolicy"
-        type: "String"
-        required: false
-      - name: "snapshotsEnabled"
-        type: "Boolean"
-        required: false
-      - name: "snapshotsUpdatePolicy"
         type: "String"
         required: false
       - name: "url"
@@ -3922,7 +4033,7 @@ rewrite-maven:
       options: []
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "1.20.0"
+  version: "1.22.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy:
       name: "org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy"
@@ -4000,7 +4111,7 @@ rewrite-micronaut:
         required: true
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "1.16.0"
+  version: "1.17.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -5041,7 +5152,7 @@ rewrite-migrate-java:
       options: []
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "7.35.0"
+  version: "7.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -5129,7 +5240,7 @@ rewrite-properties:
         required: false
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "1.16.0"
+  version: "1.17.0"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.ConfigPropertiesToConfigMapping:
       name: "org.openrewrite.quarkus.ConfigPropertiesToConfigMapping"
@@ -5209,7 +5320,7 @@ rewrite-quarkus:
       options: []
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "4.32.0"
+  version: "4.33.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.spring.AddSpringProperty:
       name: "org.openrewrite.java.spring.AddSpringProperty"
@@ -5315,6 +5426,66 @@ rewrite-spring:
         \ exposes up-to-date."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/updateapimanifest"
       options: []
+    org.openrewrite.java.spring.batch.ImplementChunkListenerDirectly:
+      name: "org.openrewrite.java.spring.batch.ImplementChunkListenerDirectly"
+      description: "As of 5.0 `ChunkListener` has default methods (made possible by\
+        \ a Java 8 baseline) and can be implemented directly without the need for\
+        \ this adapter."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/implementchunklistenerdirectly"
+      options: []
+    org.openrewrite.java.spring.batch.ImplementJobExecutionListenerDirectly:
+      name: "org.openrewrite.java.spring.batch.ImplementJobExecutionListenerDirectly"
+      description: "As of 5.0 `JobExecutionListener` has default methods (made possible\
+        \ by a Java 8 baseline) and can be implemented directly without the need for\
+        \ this adapter."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/implementjobexecutionlistenerdirectly"
+      options: []
+    org.openrewrite.java.spring.batch.ImplementRepeatListenerDirectly:
+      name: "org.openrewrite.java.spring.batch.ImplementRepeatListenerDirectly"
+      description: "As of 5.0 `RepeatListener` has default methods (made possible\
+        \ by a Java 8 baseline) and can be implemented directly without the need for\
+        \ this adapter."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/implementrepeatlistenerdirectly"
+      options: []
+    org.openrewrite.java.spring.batch.ImplementSkipListenerSupportDirectly:
+      name: "org.openrewrite.java.spring.batch.ImplementSkipListenerSupportDirectly"
+      description: "As of 5.0 `SkipListener` has default methods (made possible by\
+        \ a Java 8 baseline) and can be implemented directly without the need for\
+        \ this adapter."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/implementskiplistenersupportdirectly"
+      options: []
+    org.openrewrite.java.spring.batch.ImplementStepExecutionListenerDirectly:
+      name: "org.openrewrite.java.spring.batch.ImplementStepExecutionListenerDirectly"
+      description: "As of 5.0 `StepExecutionListener` has default methods (made possible\
+        \ by a Java 8 baseline) and can be implemented directly without the need for\
+        \ this adapter."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/implementstepexecutionlistenerdirectly"
+      options: []
+    org.openrewrite.java.spring.batch.MigrateItemWriterWrite:
+      name: "org.openrewrite.java.spring.batch.MigrateItemWriterWrite"
+      description: "`JobBuilderFactory` was deprecated in Springbatch 5.x : replaced\
+        \ by `JobBuilder`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/migrateitemwriterwrite"
+      options: []
+    org.openrewrite.java.spring.batch.MigrateJobBuilderFactory:
+      name: "org.openrewrite.java.spring.batch.MigrateJobBuilderFactory"
+      description: "`JobBuilderFactory` was deprecated in spring-batch 5.x. It is\
+        \ replaced by `JobBuilder`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/migratejobbuilderfactory"
+      options: []
+    org.openrewrite.java.spring.batch.ReplaceSupportClassWithItsInterface:
+      name: "org.openrewrite.java.spring.batch.ReplaceSupportClassWithItsInterface"
+      description: "As of Spring-Batch 5.0 Listeners has default methods (made possible\
+        \ by a Java 8 baseline) and can be implemented directly without the need for\
+        \ this adapter."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/batch/replacesupportclasswithitsinterface"
+      options:
+      - name: "fullyQualifiedClassName"
+        type: "String"
+        required: true
+      - name: "fullyQualifiedInterfaceName"
+        type: "String"
+        required: true
     org.openrewrite.java.spring.boot2.ChangeEmbeddedServletContainerCustomizer:
       name: "org.openrewrite.java.spring.boot2.ChangeEmbeddedServletContainerCustomizer"
       description: "Find any classes implementing `EmbeddedServletContainerCustomizer`\
@@ -5328,11 +5499,13 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.DatabaseComponentAndBeanInitializationOrdering:
       name: "org.openrewrite.java.spring.boot2.DatabaseComponentAndBeanInitializationOrdering"
-      description: "Beans of certain well-known types, such as JdbcTemplate, will\
+      description: "Beans of certain well-known types, such as `JdbcTemplate`, will\
         \ be ordered so that they are initialized after the database has been initialized.\
-        \ If you have a bean that works with the DataSource directly, annotate its\
-        \ class or @Bean method with @DependsOnDatabaseInitialization to ensure that\
-        \ it too is initialized after the database has been initialized."
+        \ If you have a bean that works with the `DataSource` directly, annotate its\
+        \ class or `@Bean` method with `@DependsOnDatabaseInitialization` to ensure\
+        \ that it too is initialized after the database has been initialized. See\
+        \ the [release notes](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.5-Release-Notes#initialization-ordering)\
+        \ for more."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/databasecomponentandbeaninitializationordering"
       options: []
     org.openrewrite.java.spring.boot2.GetErrorAttributes:
@@ -5355,8 +5528,8 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.MigrateActuatorMediaTypeToApiVersion:
       name: "org.openrewrite.java.spring.boot2.MigrateActuatorMediaTypeToApiVersion"
-      description: "Spring-Boot-Actuator `ActuatorMediaType` was deprecated in 2.5\
-        \ in favor of `ApiVersion#getProducedMimeType()`. Replace `MediaType.parseMediaType(ActuatorMediaType.Vx_JSON)`\
+      description: "Spring Boot `ActuatorMediaType` was deprecated in 2.5 in favor\
+        \ of `ApiVersion#getProducedMimeType()`. Replace `MediaType.parseMediaType(ActuatorMediaType.Vx_JSON)`\
         \ with `MediaType.asMediaType(ApiVersion.Vx.getProducedMimeType())`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migrateactuatormediatypetoapiversion"
       options: []
@@ -5488,9 +5661,9 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.MoveAutoConfigurationToImportsFile:
       name: "org.openrewrite.java.spring.boot2.MoveAutoConfigurationToImportsFile"
-      description: "Use `org.springframework.boot.autoconfigure.AutoConfiguration.imports`\
-        \ instead of the deprecated entry `org.springframework.boot.autoconfigure.EnableAutoConfiguration`\
-        \ in `spring.factories` when defining auto-configuration classes."
+      description: "Use `AutoConfiguration#imports` instead of the deprecated entry\
+        \ `EnableAutoConfiguration` in `spring.factories` when defining autoconfiguration\
+        \ classes."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/moveautoconfigurationtoimportsfile"
       options: []
     org.openrewrite.java.spring.boot2.OutputCaptureExtension:
@@ -5511,7 +5684,9 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.RestTemplateBuilderRequestFactory:
       name: "org.openrewrite.java.spring.boot2.RestTemplateBuilderRequestFactory"
-      description: "Migrate `RestTemplateBuilder#requestFactory` calls to use a `Supplier`."
+      description: "Migrate `RestTemplateBuilder#requestFactory` calls to use a `Supplier`.\
+        \ See the [migration guide](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.0-Migration-Guide#resttemplatebuilder)\
+        \ for more."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/resttemplatebuilderrequestfactory"
       options: []
     org.openrewrite.java.spring.boot2.SamlRelyingPartyPropertyApplicationPropertiesMove:
@@ -5519,16 +5694,6 @@ rewrite-spring:
       description: "Renames spring.security.saml2.relyingparty.registration.(any).identityprovider\
         \ to spring.security.saml2.relyingparty.registration.(any).assertingparty."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/samlrelyingpartypropertyapplicationpropertiesmove"
-      options: []
-    org.openrewrite.java.spring.boot2.SpringBoot1To2Migration:
-      name: "org.openrewrite.java.spring.boot2.SpringBoot1To2Migration"
-      description: "Migrate applications built on previous versions of Spring Boot\
-        \ to the latest Spring Boot 2.7 release. This recipe will modify an application's\
-        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
-        \ settings that have changes across Spring Boot versions. This recipe will\
-        \ also chain additional framework migrations (Spring Framework, Spring Data,\
-        \ JUnit, etc) that are required as part of the migration to Spring Boot 2.7.\n"
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/springboot1to2migration"
       options: []
     org.openrewrite.java.spring.boot2.SpringBoot2BestPractices:
       name: "org.openrewrite.java.spring.boot2.SpringBoot2BestPractices"
@@ -5672,7 +5837,7 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_7:
       name: "org.openrewrite.java.spring.boot2.UpgradeSpringBoot_2_7"
-      description: "Upgrade to Spring Boot 2.7 from any prior 2.x version."
+      description: "Upgrade to Spring Boot 2.7"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/upgradespringboot_2_7"
       options: []
     org.openrewrite.java.spring.boot2.WebSecurityConfigurerAdapter:
@@ -5691,6 +5856,12 @@ rewrite-spring:
         \ `*Provider` beans, the support for which has now been deprecated. See [Spring\
         \ Boot 2.5 jOOQ customization](https://docs.spring.io/spring-boot/docs/2.5.x/reference/htmlsingle/#features.sql.jooq.customizing)."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/search/customizingjooqdefaultconfiguration"
+      options: []
+    org.openrewrite.java.spring.boot2.search.FindUpgradeRequirementsSpringBoot_2_5:
+      name: "org.openrewrite.java.spring.boot2.search.FindUpgradeRequirementsSpringBoot_2_5"
+      description: "Looks for a series of patterns that have not yet had auto-remediation\
+        \ recipes developed for.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/search/findupgraderequirementsspringboot_2_5"
       options: []
     org.openrewrite.java.spring.boot2.search.IntegrationSchedulerPoolRecipe:
       name: "org.openrewrite.java.spring.boot2.search.IntegrationSchedulerPoolRecipe"
@@ -5721,16 +5892,6 @@ rewrite-spring:
         You can still use the `server.error.include-message` property if you want\
         \ messages to be included.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/search/messagesinthedefaulterrorview"
-      options: []
-    org.openrewrite.java.spring.boot2.search.UpgradeRequirementsSpringBoot_2_5:
-      name: "org.openrewrite.java.spring.boot2.search.UpgradeRequirementsSpringBoot_2_5"
-      description: "Migrate applications to the latest Spring Boot 2.5 release. This\
-        \ recipe will modify an application's build files, make changes to deprecated/preferred\
-        \ APIs, and migrate configuration settings that have changes between versions.\
-        \ This recipe will also chain additional framework migrations (Spring Framework,\
-        \ Spring Data, etc) that are required as part of the migration to Spring Boot\
-        \ 2.5.\n"
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/search/upgraderequirementsspringboot_2_5"
       options: []
     org.openrewrite.java.spring.boot3.ActuatorEndpointSanitization:
       name: "org.openrewrite.java.spring.boot3.ActuatorEndpointSanitization"
@@ -5775,21 +5936,23 @@ rewrite-spring:
         \ type level on @ConfigurationProperties classes and should be removed."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/removeconstructorbindingannotation"
       options: []
+    org.openrewrite.java.spring.boot3.RemoveEnableBatchProcessing:
+      name: "org.openrewrite.java.spring.boot3.RemoveEnableBatchProcessing"
+      description: "Add or remove the `@EnableBatchProcessing` annotation from a Spring\
+        \ Boot application."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/removeenablebatchprocessing"
+      options: []
     org.openrewrite.java.spring.boot3.Saml:
       name: "org.openrewrite.java.spring.boot3.Saml"
       description: "Renames spring.security.saml2.relyingparty.registration.(any).identityprovider\
         \ to spring.security.saml2.relyingparty.registration.(any).assertingparty."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/saml"
       options: []
-    org.openrewrite.java.spring.boot3.SpringBoot2To3Migration:
-      name: "org.openrewrite.java.spring.boot3.SpringBoot2To3Migration"
-      description: "Migrate applications built on previous versions of Spring Boot\
-        \ to the latest Spring Boot 3.0 release. This recipe will modify an application's\
-        \ build files, make changes to deprecated/preferred APIs, and migrate configuration\
-        \ settings that have changes across Spring Boot versions. This recipe will\
-        \ also chain additional framework migrations (Spring Framework, Spring Data,\
-        \ JUnit, etc) that are required as part of the migration to Spring Boot 3.0.\n"
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/springboot2to3migration"
+    org.openrewrite.java.spring.boot3.SpringBatch4To5Migration:
+      name: "org.openrewrite.java.spring.boot3.SpringBatch4To5Migration"
+      description: "Migrate applications built on Spring Batch 4.3 to the latest Spring\
+        \ Batch 5.0 release."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/springbatch4to5migration"
       options: []
     org.openrewrite.java.spring.boot3.SpringBootProperties_3_0_0:
       name: "org.openrewrite.java.spring.boot3.SpringBootProperties_3_0_0"
@@ -5884,7 +6047,7 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.framework.MigrateUtf8MediaTypes:
       name: "org.openrewrite.java.spring.framework.MigrateUtf8MediaTypes"
-      description: "Spring-Web MediaTypes `APPLICATION_JSON_UTF8` and `APPLICATION_PROBLEM_JSON_UTF8`\
+      description: "Spring Web `MediaType#APPLICATION_JSON_UTF8` and `MediaType#APPLICATION_PROBLEM_JSON_UTF8`\
         \ were deprecated in 5.2."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/migrateutf8mediatypes"
       options: []
@@ -5929,6 +6092,17 @@ rewrite-spring:
       description: "`StringUtils#isEmpty(Object)` was deprecated in 5.3."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/useobjectutilsisempty"
       options: []
+    org.openrewrite.java.spring.search.FindApiEndpoints:
+      name: "org.openrewrite.java.spring.search.FindApiEndpoints"
+      description: "Find all API endpoints that this application exposes."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/search/findapiendpoints"
+      options: []
+    org.openrewrite.java.spring.search.FindSpringComponents:
+      name: "org.openrewrite.java.spring.search.FindSpringComponents"
+      description: "Find Spring components, including controllers, services, repositories,\
+        \ return types of `@Bean` annotated methods, etc."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/search/findspringcomponents"
+      options: []
     org.openrewrite.maven.spring.UpgradeExplicitSpringBootDependencies:
       name: "org.openrewrite.maven.spring.UpgradeExplicitSpringBootDependencies"
       description: "Upgrades un-managed spring-boot project dependencies according\
@@ -5943,7 +6117,7 @@ rewrite-spring:
         required: true
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "1.16.0"
+  version: "1.17.0"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -6602,7 +6776,7 @@ rewrite-terraform:
         required: true
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "1.33.0"
+  version: "1.34.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.assertj.Assertj:
       name: "org.openrewrite.java.testing.assertj.Assertj"
@@ -6681,6 +6855,12 @@ rewrite-testing-frameworks:
         \ with assertThat(collection).contains(element) and `assertThat(collection.contains(element)).isFalse()`\
         \ with assertThat(collection).doesNotContain(element)."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/useexplicitcontains"
+      options: []
+    org.openrewrite.java.testing.assertj.UseExplicitSize:
+      name: "org.openrewrite.java.testing.assertj.UseExplicitSize"
+      description: "Convert `assertThat(collection.size()).isEqualTo(Y)` with AssertJ's\
+        \ `assertThat(collection).hasSize()`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/useexplicitsize"
       options: []
     org.openrewrite.java.testing.cleanup.AssertEqualsNullToAssertNull:
       name: "org.openrewrite.java.testing.cleanup.AssertEqualsNullToAssertNull"
@@ -7030,9 +7210,20 @@ rewrite-testing-frameworks:
         \ and `@MockitoSettings(strictness = Strictness.LENIENT)`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/mockito/mockitojunitrunnersilenttoextension"
       options: []
+    org.openrewrite.java.testing.mockito.PowerMockitoMockStaticToMockito:
+      name: "org.openrewrite.java.testing.mockito.PowerMockitoMockStaticToMockito"
+      description: "Replaces `PowerMockito.mockStatic()` by `Mockito.mockStatic()`.\
+        \ Removes the `@PrepareForTest` annotation."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/mockito/powermockitomockstatictomockito"
+      options: []
+    org.openrewrite.java.testing.mockito.ReplacePowerMockito:
+      name: "org.openrewrite.java.testing.mockito.ReplacePowerMockito"
+      description: "Replace Powermock with raw Mockito."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/mockito/replacepowermockito"
+      options: []
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "7.35.0"
+  version: "7.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -7162,7 +7353,7 @@ rewrite-xml:
         required: false
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "7.35.0"
+  version: "7.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.ChangeKey:
       name: "org.openrewrite.yaml.ChangeKey"
