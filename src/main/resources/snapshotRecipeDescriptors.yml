@@ -1836,7 +1836,8 @@ rewrite-java:
       options: []
     org.openrewrite.java.cleanup.ReplaceApacheCommonsLang3ValidateNotNullWithObjectsRequireNonNull:
       name: "org.openrewrite.java.cleanup.ReplaceApacheCommonsLang3ValidateNotNullWithObjectsRequireNonNull"
-      description: "Replace `org.apache.commons.lang3.Validate.notNull(..)` with `Objects.requireNonNull(..)`."
+      description: "Replace `org.apache.commons.lang3.Validate.notNull(Object)` with\
+        \ `Objects.requireNonNull(Object)`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replaceapachecommonslang3validatenotnullwithobjectsrequirenonnull"
       options: []
     org.openrewrite.java.cleanup.ReplaceDuplicateStringLiterals:
@@ -2783,7 +2784,7 @@ rewrite-json:
         required: true
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "1.28.0-SNAPSHOT"
+  version: "1.29.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -3041,7 +3042,7 @@ rewrite-kubernetes:
       docLink: "https://docs.openrewrite.org/reference/recipes/kubernetes/search/finddisallowedimagetags"
       options:
       - name: "disallowedTags"
-        type: "Set"
+        type: "String"
         required: true
       - name: "fileMatcher"
         type: "String"
@@ -3650,7 +3651,7 @@ rewrite-maven:
       docLink: "https://docs.openrewrite.org/reference/recipes/maven/changeparentpom"
       options:
       - name: "allowVersionDowngrades"
-        type: "boolean"
+        type: "Boolean"
         required: false
       - name: "newArtifactId"
         type: "String"
@@ -4777,8 +4778,11 @@ rewrite-migrate-java:
       name: "org.openrewrite.java.migrate.javax.AddJaxbDependencies"
       description: "This recipe will add explicit dependencies for Jakarta EE 8 when\
         \ a Java 8 application is using JAXB. Any existing dependencies will be upgraded\
-        \ to the latest version of Jakarta EE 8. **The artifacts are moved to Jakarta\
-        \ EE 8 but the application can continue to use the `javax.xml.bind` namespace.\n"
+        \ to the latest version of Jakarta EE 8. The artifacts are moved to Jakarta\
+        \ EE 8 version 2.x which allows for the continued use of the `javax.xml.bind`\
+        \ namespace. Running a full javax to Jakarta migration using `org.openrewrite.java.migrate.jakarta.JavaxMigrationToJakarta`\
+        \ will update to versions greater than 3.x which necessitates the package\
+        \ change as well.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/addjaxbdependencies"
       options: []
     org.openrewrite.java.migrate.javax.AddJaxbRuntime:
@@ -5112,7 +5116,7 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.util.MigrateCollectionsSingletonList:
       name: "org.openrewrite.java.migrate.util.MigrateCollectionsSingletonList"
-      description: "Prefer `List.Of(..)` instead of using `Collections.singletonList()`\
+      description: "Prefer `List.of(..)` instead of using `Collections.singletonList()`\
         \ in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/util/migratecollectionssingletonlist"
       options: []
@@ -5930,7 +5934,7 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot3.MavenPomUpgrade:
       name: "org.openrewrite.java.spring.boot3.MavenPomUpgrade"
-      description: "Upgrade Maven Pom to Spring Boot 3.0 from prior 2.x version."
+      description: "Upgrade Maven POM to Spring Boot 3.0 from prior 2.x version."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/mavenpomupgrade"
       options: []
     org.openrewrite.java.spring.boot3.MigrateMaxHttpHeaderSize:
