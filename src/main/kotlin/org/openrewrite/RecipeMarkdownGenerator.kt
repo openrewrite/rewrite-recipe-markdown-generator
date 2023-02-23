@@ -368,7 +368,7 @@ class RecipeMarkdownGenerator : Runnable {
             changelog.appendText("## New Recipes")
 
             for (newRecipe in newRecipes) {
-                changelog.appendText("\n* [${newRecipe.name}](${newRecipe.docLink}): ${newRecipe.description} ")
+                changelog.appendText("\n* [${newRecipe.name}](${newRecipe.docLink}): ${newRecipe.description.trim()} ")
             }
 
             changelog.appendText("\n\n")
@@ -378,7 +378,7 @@ class RecipeMarkdownGenerator : Runnable {
             changelog.appendText("## Removed Recipes")
 
             for (removedRecipe in removedRecipes) {
-                changelog.appendText("\n* **${removedRecipe.name}**: ${removedRecipe.description} ")
+                changelog.appendText("\n* **${removedRecipe.name}**: ${removedRecipe.description.trim()} ")
             }
 
             changelog.appendText("\n\n")
@@ -616,7 +616,7 @@ class RecipeMarkdownGenerator : Runnable {
             """.trimIndent()
             )
             if (!isNullOrEmpty(recipeDescriptor.description)) {
-                writeln("_" + recipeDescriptor.description + "_")
+                writeln("_" + recipeDescriptor.description.trim() + "_")
             }
             newLine()
             if (recipeDescriptor.tags.isNotEmpty()) {
@@ -684,7 +684,7 @@ class RecipeMarkdownGenerator : Runnable {
                 write("This recipe has required configuration parameters. ")
                 write("Recipes with required configuration parameters cannot be activated directly. ")
                 write("To activate this recipe you must create a new recipe which fills in the required parameters. ")
-                write("In your rewrite.yml create a new recipe with a unique name. ")
+                write("In your `rewrite.yml` create a new recipe with a unique name. ")
                 write("For example: `$exampleRecipeName`.")
                 newLine()
                 writeln("Here's how you can define and customize such a recipe within your rewrite.yml:")
