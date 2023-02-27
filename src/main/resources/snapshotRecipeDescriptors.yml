@@ -260,6 +260,12 @@ rewrite-core:
       - name: "filePattern"
         type: "String"
         required: true
+    org.openrewrite.ListRuntimeClasspath:
+      name: "org.openrewrite.ListRuntimeClasspath"
+      description: "A diagnostic utility which emits the runtime classpath to a data\
+        \ table."
+      docLink: "https://docs.openrewrite.org/reference/recipes/listruntimeclasspath"
+      options: []
     org.openrewrite.RenameFile:
       name: "org.openrewrite.RenameFile"
       description: "Rename a file while keeping it in the same directory."
@@ -357,6 +363,14 @@ rewrite-github-actions:
       name: "org.openrewrite.github.DependabotCheckForGithubActionsUpdatesWeekly"
       description: "Set dependabot to check for github-actions updates weekly."
       docLink: "https://docs.openrewrite.org/reference/recipes/github/dependabotcheckforgithubactionsupdatesweekly"
+      options: []
+    org.openrewrite.github.PreferTemurinDistributions:
+      name: "org.openrewrite.github.PreferTemurinDistributions"
+      description: "[Host runners](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources/)\
+        \ include Temurin by default as part of the (hosted tool cache)(https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#hosted-tool-cache).Using\
+        \ Temurin speeds up builds as there is no need to download and configure the\
+        \ Java SDK with every build."
+      docLink: "https://docs.openrewrite.org/reference/recipes/github/prefertemurindistributions"
       options: []
     org.openrewrite.github.RemoveAllCronTriggers:
       name: "org.openrewrite.github.RemoveAllCronTriggers"
@@ -1288,6 +1302,14 @@ rewrite-java:
         \ less code."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/catchclauseonlyrethrows"
       options: []
+    org.openrewrite.java.cleanup.ChainStringBuilderAppendCalls:
+      name: "org.openrewrite.java.cleanup.ChainStringBuilderAppendCalls"
+      description: "String concatenation within calls to `StringBuilder.append()`\
+        \ causes unnecessary memory allocation. Except for concatenations of String\
+        \ literals, which are joined together at compile time. Replaces inefficient\
+        \ concatenations with chained calls to `StringBuilder.append()`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/chainstringbuilderappendcalls"
+      options: []
     org.openrewrite.java.cleanup.Cleanup:
       name: "org.openrewrite.java.cleanup.Cleanup"
       description: "Automatically cleanup code, e.g. remove unnecessary parentheses,\
@@ -1637,6 +1659,12 @@ rewrite-java:
         \ loop."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/noequalityinforcondition"
       options: []
+    org.openrewrite.java.cleanup.NoFinalizedLocalVariables:
+      name: "org.openrewrite.java.cleanup.NoFinalizedLocalVariables"
+      description: "Remove the `final` modifier keyword from local variables regardless\
+        \ of whether or not they are used within a local class or an anonymous class."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/nofinalizedlocalvariables"
+      options: []
     org.openrewrite.java.cleanup.NoFinalizer:
       name: "org.openrewrite.java.cleanup.NoFinalizer"
       description: "Finalizers are deprecated. Use of `finalize()` can lead to performance\
@@ -1836,8 +1864,7 @@ rewrite-java:
       options: []
     org.openrewrite.java.cleanup.ReplaceApacheCommonsLang3ValidateNotNullWithObjectsRequireNonNull:
       name: "org.openrewrite.java.cleanup.ReplaceApacheCommonsLang3ValidateNotNullWithObjectsRequireNonNull"
-      description: "Replace `org.apache.commons.lang3.Validate.notNull(Object)` with\
-        \ `Objects.requireNonNull(Object)`."
+      description: "Replace `org.apache.commons.lang3.Validate.notNull(..)` with `Objects.requireNonNull(..)`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replaceapachecommonslang3validatenotnullwithobjectsrequirenonnull"
       options: []
     org.openrewrite.java.cleanup.ReplaceDuplicateStringLiterals:
@@ -1880,6 +1907,14 @@ rewrite-java:
       description: "Replace Java 16 Stream.toList() with Java 11 Stream.collect(Collectors.toList())."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacestreamtolistwithcollect"
       options: []
+    org.openrewrite.java.cleanup.ReplaceStringBuilderWithString:
+      name: "org.openrewrite.java.cleanup.ReplaceStringBuilderWithString"
+      description: "Replace StringBuilder.append() with String if you are only concatenating\
+        \ a small number of strings and the code is simple and easy to read, as the\
+        \ compiler can optimize simple string concatenation expressions into a single\
+        \ String object, which can be more efficient than using StringBuilder."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacestringbuilderwithstring"
+      options: []
     org.openrewrite.java.cleanup.ReplaceTextBlockWithString:
       name: "org.openrewrite.java.cleanup.ReplaceTextBlockWithString"
       description: "Replace text block with a regular multi-line string."
@@ -1889,6 +1924,18 @@ rewrite-java:
       name: "org.openrewrite.java.cleanup.ReplaceThreadRunWithThreadStart"
       description: "`Thread.run()` should not be called directly."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacethreadrunwiththreadstart"
+      options: []
+    org.openrewrite.java.cleanup.ReplaceValidateNotNullHavingSingleArgWithObjectsRequireNonNull:
+      name: "org.openrewrite.java.cleanup.ReplaceValidateNotNullHavingSingleArgWithObjectsRequireNonNull"
+      description: "Replace `org.apache.commons.lang3.Validate.notNull(Object)` with\
+        \ `Objects.requireNonNull(Object)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacevalidatenotnullhavingsingleargwithobjectsrequirenonnull"
+      options: []
+    org.openrewrite.java.cleanup.ReplaceValidateNotNullHavingVarargsWithObjectsRequireNonNull:
+      name: "org.openrewrite.java.cleanup.ReplaceValidateNotNullHavingVarargsWithObjectsRequireNonNull"
+      description: "Replace `org.apache.commons.lang3.Validate.notNull(Object, String,\
+        \ Object[])` with `Objects.requireNonNull(Object, String)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacevalidatenotnullhavingvarargswithobjectsrequirenonnull"
       options: []
     org.openrewrite.java.cleanup.SimplifyBooleanExpression:
       name: "org.openrewrite.java.cleanup.SimplifyBooleanExpression"
@@ -2503,10 +2550,7 @@ rewrite-java-security:
       description: "`java.io.File.createTempFile()` has exploitable default file permissions.\
         \ This recipe migrates to the more secure `java.nio.file.Files.createTempFile()`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/security/securetempfilecreation"
-      options:
-      - name: "target"
-        type: "String"
-        required: false
+      options: []
     org.openrewrite.java.security.UseFilesCreateTempDirectory:
       name: "org.openrewrite.java.security.UseFilesCreateTempDirectory"
       description: "Use `Files#createTempDirectory` when the sequence `File#createTempFile(..)`->`File#delete()`->`File#mkdir()`\
@@ -5510,6 +5554,22 @@ rewrite-spring:
       - name: "fullyQualifiedInterfaceName"
         type: "String"
         required: true
+    org.openrewrite.java.spring.boot2.AddConfigurationAnnotationIfBeansPresent:
+      name: "org.openrewrite.java.spring.boot2.AddConfigurationAnnotationIfBeansPresent"
+      description: "Class having `@Bean' annotation over any methods but missing '@Configuration'\
+        \ annotation over the declaring class would have '@Configuration' annotation\
+        \ added."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/addconfigurationannotationifbeanspresent"
+      options: []
+    org.openrewrite.java.spring.boot2.AuthorizeHttpRequests:
+      name: "org.openrewrite.java.spring.boot2.AuthorizeHttpRequests"
+      description: "Replace 'HttpSecurity.authorizeRequests(...) deprecated in Spring-Security\
+        \ 6 with 'HttpSecurity.authorizeHttpRequests(...) and all method calls on\
+        \ the resultant object respectively. Replace deprecated 'AbstractInterceptUrlConfigurer'\
+        \ and its deprecated subclasses with 'AuthorizeHttpRequestsConfigurer' and\
+        \ its corresponding subclasses."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/authorizehttprequests"
+      options: []
     org.openrewrite.java.spring.boot2.ChangeEmbeddedServletContainerCustomizer:
       name: "org.openrewrite.java.spring.boot2.ChangeEmbeddedServletContainerCustomizer"
       description: "Find any classes implementing `EmbeddedServletContainerCustomizer`\
@@ -5537,6 +5597,12 @@ rewrite-spring:
       description: "`ErrorAttributes#getErrorAttributes(WebRequest, boolean)` was\
         \ deprecated in Spring Boot 2.3."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/geterrorattributes"
+      options: []
+    org.openrewrite.java.spring.boot2.HttpSecurityLambdaDsl:
+      name: "org.openrewrite.java.spring.boot2.HttpSecurityLambdaDsl"
+      description: "Converts HttpSecurity chained call from Spring-Security pre 5.2.x\
+        \ into new lambda DSL style calls and removes `and()` methods."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/httpsecuritylambdadsl"
       options: []
     org.openrewrite.java.spring.boot2.MergeBootstrapYamlWithApplicationYaml:
       name: "org.openrewrite.java.spring.boot2.MergeBootstrapYamlWithApplicationYaml"
@@ -5706,6 +5772,13 @@ rewrite-spring:
         \ with `TestPropertyValues` and the appropriate functionality."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/replacedeprecatedenvironmenttestutils"
       options: []
+    org.openrewrite.java.spring.boot2.ReplaceExtendWithAndContextConfiguration:
+      name: "org.openrewrite.java.spring.boot2.ReplaceExtendWithAndContextConfiguration"
+      description: "Replaces `@ExtendWith(SpringRunner.class)` and `@ContextConfiguration`\
+        \ with `@SpringJunitConfig`, preserving attributes on `@ContextConfiguration`,\
+        \ unless `@ContextConfiguration(loader = ...)` is used."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/replaceextendwithandcontextconfiguration"
+      options: []
     org.openrewrite.java.spring.boot2.RestTemplateBuilderRequestFactory:
       name: "org.openrewrite.java.spring.boot2.RestTemplateBuilderRequestFactory"
       description: "Migrate `RestTemplateBuilder#requestFactory` calls to use a `Supplier`.\
@@ -5718,6 +5791,12 @@ rewrite-spring:
       description: "Renames spring.security.saml2.relyingparty.registration.(any).identityprovider\
         \ to spring.security.saml2.relyingparty.registration.(any).assertingparty."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/samlrelyingpartypropertyapplicationpropertiesmove"
+      options: []
+    org.openrewrite.java.spring.boot2.ServerHttpSecurityLambdaDsl:
+      name: "org.openrewrite.java.spring.boot2.ServerHttpSecurityLambdaDsl"
+      description: "Converts ServerHttpSecurity chained call from Spring-Security\
+        \ pre 5.2.x into new lambda DSL style calls and removes `and()` methods."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/serverhttpsecuritylambdadsl"
       options: []
     org.openrewrite.java.spring.boot2.SpringBoot2BestPractices:
       name: "org.openrewrite.java.spring.boot2.SpringBoot2BestPractices"
@@ -5922,6 +6001,14 @@ rewrite-spring:
       description: "Spring Boot 3.0 removed the key-based sanitization mechanism used\
         \ in Spring Boot 2.x in favor of a unified approach. See https://github.com/openrewrite/rewrite-spring/issues/228"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/actuatorendpointsanitization"
+      options: []
+    org.openrewrite.java.spring.boot3.ConfigurationOverEnableSecurity:
+      name: "org.openrewrite.java.spring.boot3.ConfigurationOverEnableSecurity"
+      description: "Annotations '@EnableXXXSecurity' have '@Configuration' removed\
+        \ from their definition in Spring-Security 6. Consequently classes annotated\
+        \ with '@EnableXXXSecurity' coming from pre-Boot 3 should have '@Configuration'\
+        \ annotation added."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/configurationoverenablesecurity"
       options: []
     org.openrewrite.java.spring.boot3.DowngradeServletApiWhenUsingJetty:
       name: "org.openrewrite.java.spring.boot3.DowngradeServletApiWhenUsingJetty"
