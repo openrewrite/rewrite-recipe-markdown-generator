@@ -51,5 +51,14 @@
         <packageUrl regex="true">^pkg:maven/org\.codehaus\.woodstox/stax2\-api@.*$</packageUrl>
         <cve>CVE-2022-40152</cve>
     </suppress>
-
+    <suppress until="2023-03-30Z">
+       <notes><![CDATA[
+       file name: rewrite-spring-4.33.0.jar: spring-core-4.3.30.RELEASE.jar
+       sev: CRITICAL
+        CVE-2022-22950
+        False positive. Affects Spring 5.3.16 up to 6.0 exposed HTTP Invoker endpoints to untrusted clients.  We're not using HttpInvokerServiceExporter and do not have any exposed HTTP Invoker endpoints.
+       ]]></notes>
+       <sha1>b255bb7389e582d24574f75bc0c880ffb8103dfa</sha1>
+       <cve>CVE-2022-22950</cve>
+    </suppress>
 </suppressions>
