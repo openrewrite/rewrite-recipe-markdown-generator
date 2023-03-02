@@ -222,7 +222,7 @@ rewrite-concourse:
       options: []
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "7.36.0"
+  version: "7.37.2"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -260,6 +260,12 @@ rewrite-core:
       - name: "filePattern"
         type: "String"
         required: true
+    org.openrewrite.ListRuntimeClasspath:
+      name: "org.openrewrite.ListRuntimeClasspath"
+      description: "A diagnostic utility which emits the runtime classpath to a data\
+        \ table."
+      docLink: "https://docs.openrewrite.org/reference/recipes/listruntimeclasspath"
+      options: []
     org.openrewrite.RenameFile:
       name: "org.openrewrite.RenameFile"
       description: "Rename a file while keeping it in the same directory."
@@ -391,7 +397,7 @@ rewrite-github-actions:
         required: false
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "7.36.0"
+  version: "7.37.2"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.ActivateStyle:
       name: "org.openrewrite.gradle.ActivateStyle"
@@ -837,7 +843,7 @@ rewrite-gradle:
       options: []
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "7.36.0"
+  version: "7.37.2"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -852,7 +858,7 @@ rewrite-groovy:
       options: []
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "7.36.0"
+  version: "7.37.2"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -918,7 +924,7 @@ rewrite-hcl:
         required: true
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "7.36.0"
+  version: "7.37.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -1288,6 +1294,14 @@ rewrite-java:
         \ less code."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/catchclauseonlyrethrows"
       options: []
+    org.openrewrite.java.cleanup.ChainStringBuilderAppendCalls:
+      name: "org.openrewrite.java.cleanup.ChainStringBuilderAppendCalls"
+      description: "String concatenation within calls to `StringBuilder.append()`\
+        \ causes unnecessary memory allocation. Except for concatenations of String\
+        \ literals, which are joined together at compile time. Replaces inefficient\
+        \ concatenations with chained calls to `StringBuilder.append()`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/chainstringbuilderappendcalls"
+      options: []
     org.openrewrite.java.cleanup.Cleanup:
       name: "org.openrewrite.java.cleanup.Cleanup"
       description: "Automatically cleanup code, e.g. remove unnecessary parentheses,\
@@ -1637,6 +1651,12 @@ rewrite-java:
         \ loop."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/noequalityinforcondition"
       options: []
+    org.openrewrite.java.cleanup.NoFinalizedLocalVariables:
+      name: "org.openrewrite.java.cleanup.NoFinalizedLocalVariables"
+      description: "Remove the `final` modifier keyword from local variables regardless\
+        \ of whether or not they are used within a local class or an anonymous class."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/nofinalizedlocalvariables"
+      options: []
     org.openrewrite.java.cleanup.NoFinalizer:
       name: "org.openrewrite.java.cleanup.NoFinalizer"
       description: "Finalizers are deprecated. Use of `finalize()` can lead to performance\
@@ -1839,6 +1859,13 @@ rewrite-java:
       description: "Replace `org.apache.commons.lang3.Validate.notNull(..)` with `Objects.requireNonNull(..)`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replaceapachecommonslang3validatenotnullwithobjectsrequirenonnull"
       options: []
+    org.openrewrite.java.cleanup.ReplaceDeprecatedRuntimeExecMethods:
+      name: "org.openrewrite.java.cleanup.ReplaceDeprecatedRuntimeExecMethods"
+      description: "Replace Runtime.exec(String) methods to use exec(String[]) instead\
+        \ because the former is deprecated after java 18 and no longer recommended\
+        \ for use by the Java documentation."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacedeprecatedruntimeexecmethods"
+      options: []
     org.openrewrite.java.cleanup.ReplaceDuplicateStringLiterals:
       name: "org.openrewrite.java.cleanup.ReplaceDuplicateStringLiterals"
       description: "Replaces `String` literals with a length of 5 or greater repeated\
@@ -1874,6 +1901,19 @@ rewrite-java:
         \ implementations, which should be used in preference to this class."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacestackwithdeque"
       options: []
+    org.openrewrite.java.cleanup.ReplaceStreamToListWithCollect:
+      name: "org.openrewrite.java.cleanup.ReplaceStreamToListWithCollect"
+      description: "Replace Java 16 Stream.toList() with Java 11 Stream.collect(Collectors.toList())."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacestreamtolistwithcollect"
+      options: []
+    org.openrewrite.java.cleanup.ReplaceStringBuilderWithString:
+      name: "org.openrewrite.java.cleanup.ReplaceStringBuilderWithString"
+      description: "Replace StringBuilder.append() with String if you are only concatenating\
+        \ a small number of strings and the code is simple and easy to read, as the\
+        \ compiler can optimize simple string concatenation expressions into a single\
+        \ String object, which can be more efficient than using StringBuilder."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacestringbuilderwithstring"
+      options: []
     org.openrewrite.java.cleanup.ReplaceTextBlockWithString:
       name: "org.openrewrite.java.cleanup.ReplaceTextBlockWithString"
       description: "Replace text block with a regular multi-line string."
@@ -1883,6 +1923,18 @@ rewrite-java:
       name: "org.openrewrite.java.cleanup.ReplaceThreadRunWithThreadStart"
       description: "`Thread.run()` should not be called directly."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacethreadrunwiththreadstart"
+      options: []
+    org.openrewrite.java.cleanup.ReplaceValidateNotNullHavingSingleArgWithObjectsRequireNonNull:
+      name: "org.openrewrite.java.cleanup.ReplaceValidateNotNullHavingSingleArgWithObjectsRequireNonNull"
+      description: "Replace `org.apache.commons.lang3.Validate.notNull(Object)` with\
+        \ `Objects.requireNonNull(Object)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacevalidatenotnullhavingsingleargwithobjectsrequirenonnull"
+      options: []
+    org.openrewrite.java.cleanup.ReplaceValidateNotNullHavingVarargsWithObjectsRequireNonNull:
+      name: "org.openrewrite.java.cleanup.ReplaceValidateNotNullHavingVarargsWithObjectsRequireNonNull"
+      description: "Replace `org.apache.commons.lang3.Validate.notNull(Object, String,\
+        \ Object[])` with `Objects.requireNonNull(Object, String)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/replacevalidatenotnullhavingvarargswithobjectsrequirenonnull"
       options: []
     org.openrewrite.java.cleanup.SimplifyBooleanExpression:
       name: "org.openrewrite.java.cleanup.SimplifyBooleanExpression"
@@ -2400,6 +2452,21 @@ rewrite-java:
       - name: "sourceSet"
         type: "String"
         required: true
+    org.openrewrite.java.search.IsLikelyNotTest:
+      name: "org.openrewrite.java.search.IsLikelyNotTest"
+      description: "Sources that do not contain indicators of being, or being exclusively\
+        \ for the use in tests. This recipe is simply a negation of the `org.openrewrite.java.search.IsLikelyTest`\
+        \ recipe."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/search/islikelynottest"
+      options: []
+    org.openrewrite.java.search.IsLikelyTest:
+      name: "org.openrewrite.java.search.IsLikelyTest"
+      description: "Sources that contain indicators of being, or being exclusively\
+        \ for the use in tests. This recipe is not exhaustive, but is intended to\
+        \ be a good starting point for finding test sources. Looks at the source set\
+        \ name, and types in use; for example looks for uses of JUnit & TestNG annotations/assertions."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/search/islikelytest"
+      options: []
     org.openrewrite.java.search.PotentiallyDeadCode:
       name: "org.openrewrite.java.search.PotentiallyDeadCode"
       description: "Method definitions that are defined in this project and aren't\
@@ -2712,7 +2779,7 @@ rewrite-jhipster:
       options: []
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "7.36.0"
+  version: "7.37.2"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -2763,7 +2830,7 @@ rewrite-json:
         required: true
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "1.27.0"
+  version: "1.28.0"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -3021,7 +3088,7 @@ rewrite-kubernetes:
       docLink: "https://docs.openrewrite.org/reference/recipes/kubernetes/search/finddisallowedimagetags"
       options:
       - name: "disallowedTags"
-        type: "Set"
+        type: "String"
         required: true
       - name: "fileMatcher"
         type: "String"
@@ -3340,7 +3407,7 @@ rewrite-logging-frameworks:
       options: []
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "7.36.0"
+  version: "7.37.2"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -3630,7 +3697,7 @@ rewrite-maven:
       docLink: "https://docs.openrewrite.org/reference/recipes/maven/changeparentpom"
       options:
       - name: "allowVersionDowngrades"
-        type: "boolean"
+        type: "Boolean"
         required: false
       - name: "newArtifactId"
         type: "String"
@@ -4111,7 +4178,7 @@ rewrite-micronaut:
         required: true
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "1.17.0"
+  version: "1.17.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -4757,8 +4824,11 @@ rewrite-migrate-java:
       name: "org.openrewrite.java.migrate.javax.AddJaxbDependencies"
       description: "This recipe will add explicit dependencies for Jakarta EE 8 when\
         \ a Java 8 application is using JAXB. Any existing dependencies will be upgraded\
-        \ to the latest version of Jakarta EE 8. **The artifacts are moved to Jakarta\
-        \ EE 8 but the application can continue to use the `javax.xml.bind` namespace.\n"
+        \ to the latest version of Jakarta EE 8. The artifacts are moved to Jakarta\
+        \ EE 8 version 2.x which allows for the continued use of the `javax.xml.bind`\
+        \ namespace. Running a full javax to Jakarta migration using `org.openrewrite.java.migrate.jakarta.JavaxMigrationToJakarta`\
+        \ will update to versions greater than 3.x which necessitates the package\
+        \ change as well.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/addjaxbdependencies"
       options: []
     org.openrewrite.java.migrate.javax.AddJaxbRuntime:
@@ -5092,7 +5162,7 @@ rewrite-migrate-java:
       options: []
     org.openrewrite.java.migrate.util.MigrateCollectionsSingletonList:
       name: "org.openrewrite.java.migrate.util.MigrateCollectionsSingletonList"
-      description: "Prefer `List.Of(..)` instead of using `Collections.singletonList()`\
+      description: "Prefer `List.of(..)` instead of using `Collections.singletonList()`\
         \ in Java 9 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/util/migratecollectionssingletonlist"
       options: []
@@ -5152,7 +5222,7 @@ rewrite-migrate-java:
       options: []
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "7.36.0"
+  version: "7.37.2"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -7223,7 +7293,7 @@ rewrite-testing-frameworks:
       options: []
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "7.36.0"
+  version: "7.37.2"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -7353,7 +7423,7 @@ rewrite-xml:
         required: false
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "7.36.0"
+  version: "7.37.2"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.ChangeKey:
       name: "org.openrewrite.yaml.ChangeKey"
