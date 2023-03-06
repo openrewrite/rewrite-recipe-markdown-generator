@@ -883,10 +883,12 @@ class RecipeMarkdownGenerator : Runnable {
                         {% endtab %}
     
                         {% tab title="Maven Command Line" %}
+                        You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
+
                         {% code title="shell" %}
                         ```shell
-                        ./mvnw -U org.openrewrite.maven:rewrite-maven-plugin:run \
-                          -DactiveRecipes=${recipeDescriptor.name}
+                        mvn -U org.openrewrite.maven:rewrite-maven-plugin:run \
+                          -Drewrite.activeRecipes=${recipeDescriptor.name}
                         ```
                         {% endcode %}
                         {% endtab %}
@@ -958,10 +960,12 @@ class RecipeMarkdownGenerator : Runnable {
     
                         {% tab title="Maven Command Line" %}
                         {% code title="shell" %}
+                        You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
+
                         ```shell
-                        ./mvnw -U org.openrewrite.maven:rewrite-maven-plugin:run \
+                        mvn -U org.openrewrite.maven:rewrite-maven-plugin:run \
                           -Drewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:LATEST \
-                          -DactiveRecipes=${recipeDescriptor.name}
+                          -Drewrite.activeRecipes=${recipeDescriptor.name}
                         ```
                         {% endcode %}
                         {% endtab %}
