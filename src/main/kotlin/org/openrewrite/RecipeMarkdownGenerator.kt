@@ -830,7 +830,6 @@ class RecipeMarkdownGenerator : Runnable {
                     """.trimIndent()
                     )
                 }
-                writeln("Recipes can also be activated directly from the command line by adding the argument `-Drewrite.activeRecipes=${exampleRecipeName}`")
             } else {
                 if (origin.isFromCoreLibrary()) {
                     writeln(
@@ -886,7 +885,7 @@ class RecipeMarkdownGenerator : Runnable {
                         {% tab title="Maven Command Line" %}
                         {% code title="shell" %}
                         ```shell
-                        mvn -U org.openrewrite.maven:rewrite-maven-plugin:run \
+                        ./mvnw -U org.openrewrite.maven:rewrite-maven-plugin:run \
                           -DactiveRecipes=${recipeDescriptor.name}
                         ```
                         {% endcode %}
@@ -897,8 +896,9 @@ class RecipeMarkdownGenerator : Runnable {
                     )
                 } else {
                     writeln(
-                        "This recipe has no required configuration options and can be activated directly after " +
-                                "taking a dependency on ${origin.groupId}:${origin.artifactId}:${origin.version} in your build file:"
+                        "This recipe has no required configuration options. It can be activated by adding a dependency on " +
+                                "`${origin.groupId}:${origin.artifactId}:${origin.version}` in your build file or by running a shell " +
+                                "command (in which case no build changes are needed): "
                     )
                     writeln(
                         """
@@ -959,7 +959,7 @@ class RecipeMarkdownGenerator : Runnable {
                         {% tab title="Maven Command Line" %}
                         {% code title="shell" %}
                         ```shell
-                        mvn -U org.openrewrite.maven:rewrite-maven-plugin:run \
+                        ./mvnw -U org.openrewrite.maven:rewrite-maven-plugin:run \
                           -Drewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:LATEST \
                           -DactiveRecipes=${recipeDescriptor.name}
                         ```
@@ -970,7 +970,6 @@ class RecipeMarkdownGenerator : Runnable {
                     """.trimIndent()
                     )
                 }
-                writeln("Recipes can also be activated directly from the command line by adding the argument `-Drewrite.activeRecipes=${recipeDescriptor.name}`")
             }
 
             if (recipeDescriptor.recipeList.isNotEmpty()) {
