@@ -60,6 +60,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-concourse:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-github-actions:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-java-security:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-java-dependencies:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-jhipster:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-kubernetes:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-logging-frameworks:$rewriteVersion")
