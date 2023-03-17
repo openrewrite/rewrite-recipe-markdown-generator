@@ -79,8 +79,11 @@ class RecipeMarkdownGenerator : Runnable {
         } catch (e: IOException) {
             throw RuntimeException(e)
         }
+
         val env: Environment
         val recipeOrigins: Map<URI, RecipeOrigin>
+
+        // Load recipe details into memory
         if (recipeSources.isNotEmpty() && recipeClasspath.isNotEmpty()) {
             recipeOrigins = RecipeOrigin.parse(recipeSources)
 
@@ -107,11 +110,14 @@ class RecipeMarkdownGenerator : Runnable {
                 .scanRuntimeClasspath()
                 .build()
         }
+
+        // Recipes fully loaded into recipeDescriptors
         val recipeDescriptors: List<RecipeDescriptor> = env.listRecipeDescriptors()
             .filterNot { it.name.startsWith("org.openrewrite.text") } // These are test utilities only
         val categoryDescriptors = ArrayList(env.listCategoryDescriptors())
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
 
+        // Create the recipe docs
         for (recipeDescriptor in recipeDescriptors) {
             var origin: RecipeOrigin?
             var rawUri = recipeDescriptor.source.toString()
@@ -149,6 +155,7 @@ class RecipeMarkdownGenerator : Runnable {
                 docBaseUrl + recipeDescriptor.name.lowercase(Locale.getDefault()).removePrefix("org.openrewrite.")
                     .replace('.', '/')
 
+            // Used to create changelogs
             val markdownRecipeDescriptor =
                 MarkdownRecipeDescriptor(recipeDescriptor.name, recipeDescription, docLink, recipeOptions)
             val markdownArtifact = markdownArtifacts.computeIfAbsent(origin.artifactId) {
@@ -164,6 +171,7 @@ class RecipeMarkdownGenerator : Runnable {
         val mapper = ObjectMapper(YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER))
         mapper.registerKotlinModule()
 
+        // Location of the recipe metadata from previous runs
         var recipeDescriptorFile = "src/main/resources/recipeDescriptors.yml"
         if (deployType == "snapshot") {
             recipeDescriptorFile = "src/main/resources/snapshotRecipeDescriptors.yml"
