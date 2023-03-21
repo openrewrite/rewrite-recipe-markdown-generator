@@ -24,7 +24,7 @@ rewrite-circleci:
         required: true
 rewrite-cloud-suitability-analyzer:
   artifactId: "rewrite-cloud-suitability-analyzer"
-  version: "1.4.0"
+  version: "1.5.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.cloudsuitability.FindCacheUses:
       name: "org.openrewrite.cloudsuitability.FindCacheUses"
@@ -313,7 +313,7 @@ rewrite-core:
       options: []
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "1.18.0"
+  version: "1.19.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin:
       name: "org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin"
@@ -2397,6 +2397,12 @@ rewrite-java:
       - name: "target"
         type: "String"
         required: true
+    org.openrewrite.java.search.FindImplementations:
+      name: "org.openrewrite.java.search.FindImplementations"
+      description: "Find source files that contain a class declaration implementing\
+        \ a specific interface."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/search/findimplementations"
+      options: []
     org.openrewrite.java.search.FindImports:
       name: "org.openrewrite.java.search.FindImports"
       description: "Locates source files that have imports matching the given type\
@@ -2524,7 +2530,7 @@ rewrite-java:
       options: []
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "0.2.0"
+  version: "0.3.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.DependencyLicenseCheck:
       name: "org.openrewrite.java.dependencies.DependencyLicenseCheck"
@@ -2556,7 +2562,7 @@ rewrite-java-dependencies:
         required: true
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "1.23.0"
+  version: "1.24.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.security.FindTextDirectionChanges:
       name: "org.openrewrite.java.security.FindTextDirectionChanges"
@@ -3285,7 +3291,7 @@ rewrite-kubernetes:
         required: true
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "1.19.0"
+  version: "1.20.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.logging.ParameterizedLogging:
       name: "org.openrewrite.java.logging.ParameterizedLogging"
@@ -4018,6 +4024,18 @@ rewrite-maven:
       - name: "url"
         type: "String"
         required: true
+    org.openrewrite.maven.RenamePropertyKey:
+      name: "org.openrewrite.maven.RenamePropertyKey"
+      description: "Rename the specified Maven project property key leaving the value\
+        \ unchanged."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/renamepropertykey"
+      options:
+      - name: "newKey"
+        type: "String"
+        required: true
+      - name: "oldKey"
+        type: "String"
+        required: true
     org.openrewrite.maven.UpgradeDependencyVersion:
       name: "org.openrewrite.maven.UpgradeDependencyVersion"
       description: "Upgrade the version of a dependency by specifying a group and\
@@ -4311,6 +4329,12 @@ rewrite-migrate-java:
         \ to 17."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javaversion17"
       options: []
+    org.openrewrite.java.migrate.JavaVersion20:
+      name: "org.openrewrite.java.migrate.JavaVersion20"
+      description: "Change maven.compiler.source and maven.compiler.target values\
+        \ to 20."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javaversion20"
+      options: []
     org.openrewrite.java.migrate.UpgradeJavaVersion:
       name: "org.openrewrite.java.migrate.UpgradeJavaVersion"
       description: "Upgrade build plugin configuration to use the specified Java version.\
@@ -4331,6 +4355,15 @@ rewrite-migrate-java:
         \ will also be updated to use Java 17 as the target/source and plugins will\
         \ be also be upgraded to versions that are compatible with Java 17.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/upgradetojava17"
+      options: []
+    org.openrewrite.java.migrate.UpgradeToJava20:
+      name: "org.openrewrite.java.migrate.UpgradeToJava20"
+      description: "This recipe will apply changes commonly needed when migrating\
+        \ to Java 20. This recipe will also replace deprecated API with equivalents\
+        \ when there is a clear migration strategy. Build files will also be updated\
+        \ to use Java 20 as the target/source and plugins will be also be upgraded\
+        \ to versions that are compatible with Java 20.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/upgradetojava20"
       options: []
     org.openrewrite.java.migrate.UseJavaUtilBase64:
       name: "org.openrewrite.java.migrate.UseJavaUtilBase64"
@@ -5120,6 +5153,14 @@ rewrite-migrate-java:
         \ Object...)` in Java 17 or higher."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/stringformatted"
       options: []
+    org.openrewrite.java.migrate.lang.UseTextBlocks:
+      name: "org.openrewrite.java.migrate.lang.UseTextBlocks"
+      description: "Text blocks are easier to read than concatenated strings."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/usetextblocks"
+      options:
+      - name: "endLineDelimiter"
+        type: "String"
+        required: false
     org.openrewrite.java.migrate.logging.JavaLoggingAPIs:
       name: "org.openrewrite.java.migrate.logging.JavaLoggingAPIs"
       description: "Certain Java logging APIs have become deprecated and their usages\
@@ -5486,7 +5527,7 @@ rewrite-quarkus:
       options: []
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "4.34.0"
+  version: "4.35.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.spring.AddSpringProperty:
       name: "org.openrewrite.java.spring.AddSpringProperty"
@@ -5654,17 +5695,17 @@ rewrite-spring:
         required: true
     org.openrewrite.java.spring.boot2.AddConfigurationAnnotationIfBeansPresent:
       name: "org.openrewrite.java.spring.boot2.AddConfigurationAnnotationIfBeansPresent"
-      description: "Class having `@Bean' annotation over any methods but missing '@Configuration'\
-        \ annotation over the declaring class would have '@Configuration' annotation\
+      description: "Class having `@Bean` annotation over any methods but missing `@Configuration`\
+        \ annotation over the declaring class would have `@Configuration` annotation\
         \ added."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/addconfigurationannotationifbeanspresent"
       options: []
     org.openrewrite.java.spring.boot2.AuthorizeHttpRequests:
       name: "org.openrewrite.java.spring.boot2.AuthorizeHttpRequests"
-      description: "Replace 'HttpSecurity.authorizeRequests(...) deprecated in Spring-Security\
-        \ 6 with 'HttpSecurity.authorizeHttpRequests(...) and all method calls on\
-        \ the resultant object respectively. Replace deprecated 'AbstractInterceptUrlConfigurer'\
-        \ and its deprecated subclasses with 'AuthorizeHttpRequestsConfigurer' and\
+      description: "Replace `HttpSecurity.authorizeRequests(...)` deprecated in Spring\
+        \ Security 6 with `HttpSecurity.authorizeHttpRequests(...)` and all method\
+        \ calls on the resultant object respectively. Replace deprecated `AbstractInterceptUrlConfigurer`\
+        \ and its deprecated subclasses with `AuthorizeHttpRequestsConfigurer` and\
         \ its corresponding subclasses."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/authorizehttprequests"
       options: []
@@ -5698,8 +5739,8 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.HttpSecurityLambdaDsl:
       name: "org.openrewrite.java.spring.boot2.HttpSecurityLambdaDsl"
-      description: "Converts HttpSecurity chained call from Spring-Security pre 5.2.x\
-        \ into new lambda DSL style calls and removes `and()` methods."
+      description: "Converts `HttpSecurity` chained call from Spring Security pre\
+        \ 5.2.x into new lambda DSL style calls and removes `and()` methods."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/httpsecuritylambdadsl"
       options: []
     org.openrewrite.java.spring.boot2.MergeBootstrapYamlWithApplicationYaml:
@@ -5723,8 +5764,8 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.MigrateConfigurationPropertiesBindingPostProcessorValidatorBeanName:
       name: "org.openrewrite.java.spring.boot2.MigrateConfigurationPropertiesBindingPostProcessorValidatorBeanName"
-      description: "Replaces field and static access of `ConfigurationPropertiesBindingPostProcessor#VALIDATOR_BEAN_NAME`\
-        \ with `EnableConfigurationProperties#VALIDATOR_BEAN_NAME`. Deprecated in\
+      description: "Replaces field and static access of `ConfigurationPropertiesBindingPostProcessor.VALIDATOR_BEAN_NAME`\
+        \ with `EnableConfigurationProperties.VALIDATOR_BEAN_NAME`. Deprecated in\
         \ 2.2.x."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migrateconfigurationpropertiesbindingpostprocessorvalidatorbeanname"
       options: []
@@ -5892,7 +5933,7 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.ServerHttpSecurityLambdaDsl:
       name: "org.openrewrite.java.spring.boot2.ServerHttpSecurityLambdaDsl"
-      description: "Converts ServerHttpSecurity chained call from Spring-Security\
+      description: "Converts `ServerHttpSecurity` chained call from Spring Security\
         \ pre 5.2.x into new lambda DSL style calls and removes `and()` methods."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/serverhttpsecuritylambdadsl"
       options: []
@@ -6043,7 +6084,7 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.WebSecurityConfigurerAdapter:
       name: "org.openrewrite.java.spring.boot2.WebSecurityConfigurerAdapter"
-      description: "The Spring-Security WebSecurityConfigurerAdapter was deprecated\
+      description: "The Spring Security `WebSecurityConfigurerAdapter` was deprecated\
         \ 5.7, this recipe will transform `WebSecurityConfigurerAdapter` classes by\
         \ using a component based approach. Check out the [spring-security-without-the-websecurityconfigureradapter](https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter)\
         \ blog for more details."
@@ -6066,7 +6107,7 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot2.search.IntegrationSchedulerPoolRecipe:
       name: "org.openrewrite.java.spring.boot2.search.IntegrationSchedulerPoolRecipe"
-      description: "Spring Integration now reuses an available TaskScheduler rather\
+      description: "Spring Integration now reuses an available `TaskScheduler` rather\
         \ than configuring its own. In a typical application setup relying on the\
         \ auto-configuration, this means that Spring Integration uses the auto-configured\
         \ task scheduler that has a pool size of 1. To restore Spring Integration’\
@@ -6100,14 +6141,43 @@ rewrite-spring:
         \ in Spring Boot 2.x in favor of a unified approach. See https://github.com/openrewrite/rewrite-spring/issues/228"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/actuatorendpointsanitization"
       options: []
+    org.openrewrite.java.spring.boot3.AddRouteTrailingSlash:
+      name: "org.openrewrite.java.spring.boot3.AddRouteTrailingSlash"
+      description: "This is part of Spring MVC and WebFlux URL Matching Changes, as\
+        \ of Spring Framework 6.0, the trailing slash matching configuration option\
+        \ has been deprecated and its default value set to false. This means that\
+        \ previously, a controller `@GetMapping(\"/some/greeting\")` would match both\
+        \ `GET /some/greeting` and `GET /some/greeting/`, but it doesn't match `GET\
+        \ /some/greeting/` anymore by default and will result in an HTTP 404 error.\
+        \ This recipe is to add declaration of additional route explicitly on the\
+        \ controller handler (like `@GetMapping(\"/some/greeting\", \"/some/greeting/\"\
+        )`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/addroutetrailingslash"
+      options: []
+    org.openrewrite.java.spring.boot3.AddSetUseTrailingSlashMatch:
+      name: "org.openrewrite.java.spring.boot3.AddSetUseTrailingSlashMatch"
+      description: "This is part of Spring MVC and WebFlux URL Matching Changes, as\
+        \ of Spring Framework 6.0, the trailing slash matching configuration option\
+        \ has been deprecated and its default value set to false. This means that\
+        \ previously, a controller `@GetMapping(\"/some/greeting\")` would match both\
+        \ `GET /some/greeting` and `GET /some/greeting/`, but it doesn't match `GET\
+        \ /some/greeting/` anymore by default and will result in an HTTP 404 error.\
+        \ This recipe is change the default with the global Spring MVC or Webflux\
+        \ configuration."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/addsetusetrailingslashmatch"
+      options: []
     org.openrewrite.java.spring.boot3.ConfigurationOverEnableSecurity:
       name: "org.openrewrite.java.spring.boot3.ConfigurationOverEnableSecurity"
-      description: "Annotations '@EnableXXXSecurity' have '@Configuration' removed\
-        \ from their definition in Spring-Security 6. Consequently classes annotated\
-        \ with '@EnableXXXSecurity' coming from pre-Boot 3 should have '@Configuration'\
+      description: "Prior to Spring Security 6, `@EnableXXXSecurity` implicitly had\
+        \ `@Configuration`. `Configuration` was removed from the definitions of the\
+        \ `@EnableSecurity` definitions in Spring Security 6. Consequently classes\
+        \ annotated with `@EnableXXXSecurity` coming from pre-Boot 3 should have `@Configuration`\
         \ annotation added."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/configurationoverenablesecurity"
-      options: []
+      options:
+      - name: "forceAddConfiguration"
+        type: "boolean"
+        required: true
     org.openrewrite.java.spring.boot3.DowngradeServletApiWhenUsingJetty:
       name: "org.openrewrite.java.spring.boot3.DowngradeServletApiWhenUsingJetty"
       description: "Jetty does not yet support Servlet 6.0. This recipe will detect\
@@ -6116,6 +6186,17 @@ rewrite-spring:
         \ to `5.0.0`. This will downgrade the `jakarta-servlet` artifact if the pom's\
         \ parent extends from the spring-boot-parent.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/downgradeservletapiwhenusingjetty"
+      options: []
+    org.openrewrite.java.spring.boot3.MaintainTrailingSlashURLMappings:
+      name: "org.openrewrite.java.spring.boot3.MaintainTrailingSlashURLMappings"
+      description: "This is part of Spring MVC and WebFlux URL Matching Changes, as\
+        \ of Spring Framework 6.0, the trailing slash matching configuration option\
+        \ has been deprecated and its default value set to false. This means that\
+        \ previously, a controller `@GetMapping(\"/some/greeting\")` would match both\
+        \ `GET /some/greeting` and `GET /some/greeting/`, but it doesn't match `GET\
+        \ /some/greeting/` anymore by default and will result in an HTTP 404 error.\
+        \ This recipe is to maintain trailing slash in all HTTP url mappings."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/maintaintrailingslashurlmappings"
       options: []
     org.openrewrite.java.spring.boot3.MavenPomUpgrade:
       name: "org.openrewrite.java.spring.boot3.MavenPomUpgrade"
@@ -6141,8 +6222,8 @@ rewrite-spring:
       options: []
     org.openrewrite.java.spring.boot3.RemoveConstructorBindingAnnotation:
       name: "org.openrewrite.java.spring.boot3.RemoveConstructorBindingAnnotation"
-      description: "As of Boot 3.0 @ConstructorBinding is no longer needed at the\
-        \ type level on @ConfigurationProperties classes and should be removed."
+      description: "As of Boot 3.0 `@ConstructorBinding` is no longer needed at the\
+        \ type level on `@ConfigurationProperties` classes and should be removed."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/removeconstructorbindingannotation"
       options: []
     org.openrewrite.java.spring.boot3.RemoveEnableBatchProcessing:
@@ -6318,6 +6399,34 @@ rewrite-spring:
         \ methods. Refer to the [Spring Security docs](https://docs.spring.io/spring-security/reference/5.8/migration/servlet/config.html#use-new-requestmatchers)\
         \ for more information."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security5/usenewrequestmatchers"
+      options: []
+    org.openrewrite.java.spring.security6.MavenPomUpgrade:
+      name: "org.openrewrite.java.spring.security6.MavenPomUpgrade"
+      description: "Upgrade Maven POM to Spring Security 6.0 from prior 5.x version."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/mavenpomupgrade"
+      options: []
+    org.openrewrite.java.spring.security6.PropagateAuthenticationServiceExceptions:
+      name: "org.openrewrite.java.spring.security6.PropagateAuthenticationServiceExceptions"
+      description: "Remove any calls matching `AuthenticationEntryPointFailureHandler.setRethrowAuthenticationServiceException(true)`.\
+        \ See the corresponding [https://docs.spring.io/spring-security/reference/6.0.0/migration/servlet/authentication.html#_propagate_authenticationserviceexceptions](Sprint\
+        \ Security 6.0 migration step) for details."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/propagateauthenticationserviceexceptions"
+      options: []
+    org.openrewrite.java.spring.security6.UpgradeSpringSecurity_6_0:
+      name: "org.openrewrite.java.spring.security6.UpgradeSpringSecurity_6_0"
+      description: "Migrate applications to the latest Spring Security 6.0 release.\
+        \ This recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/upgradespringsecurity_6_0"
+      options: []
+    org.openrewrite.java.spring.security6.UseSha256InRememberMe:
+      name: "org.openrewrite.java.spring.security6.UseSha256InRememberMe"
+      description: "As of Spring Security 6.0 the SHA-256 algorithm is the default\
+        \ for the encoding and matching algorithm used by `TokenBasedRememberMeServices`\
+        \ and does thus no longer need to be explicitly configured.See the corresponding\
+        \ [https://docs.spring.io/spring-security/reference/6.0.0/migration/servlet/authentication.html#servlet-opt-in-sha256-rememberme](Sprint\
+        \ Security 6.0 migration step) for details."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/usesha256inrememberme"
       options: []
     org.openrewrite.maven.spring.UpgradeExplicitSpringBootDependencies:
       name: "org.openrewrite.maven.spring.UpgradeExplicitSpringBootDependencies"
@@ -6992,7 +7101,7 @@ rewrite-terraform:
         required: true
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "1.35.0"
+  version: "1.36.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.assertj.Assertj:
       name: "org.openrewrite.java.testing.assertj.Assertj"
