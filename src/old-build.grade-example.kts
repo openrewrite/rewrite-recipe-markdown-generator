@@ -1,3 +1,11 @@
+// This file is an example of what the build.gradle file would look like
+// for diff logs on old versions of OpenRewrite. Some key things to note include:
+// 1. `rewriteVersion` is a version number instead of something like `latest`
+// 2. Not all `recipe` dependencies will exist at the same time as this release number. You will need to ensure that
+//    artifacts that did not exist at that time are commented out or not included.
+// 3. Most `recipe` dependencies will need their own specific version number that corresponds to the rewrite version
+//    specified in this file. You can't rely on the bom for all of these.
+
 plugins {
     application
     id("org.jetbrains.kotlin.jvm").version("1.7.20")
@@ -28,26 +36,22 @@ configurations.all {
 }
 
 val recipeConf = configurations.create("recipe")
-val rewriteVersion = "latest.release"
+val rewriteVersion = "7.24.0"
 
 // Used to determine what type of changelog to build up.
 //   * "release"  : When making a changelog for larger releases of OpenRewrite
 //   * "snapshot" : When making a changelog for snapshot releases on a weekly cadence.
-//   * "diff" : When making a diff-log for what recipes are made over time.
-val deployType = "release"
-
-// When you set the above to diff, this will be the name of the markdown file generated
-val diffFileName = "desjardins"
+val deployType = "snapshot"
 
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("info.picocli:picocli:latest.release")
-    implementation("org.openrewrite:rewrite-core:$rewriteVersion")
+    implementation("org.openrewrite:rewrite-core:7.24.1")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.+")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.+")
     runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
 
-    "recipe"(platform("org.openrewrite:rewrite-bom:$rewriteVersion"))
+    "recipe"(platform("org.openrewrite:rewrite-bom:7.24.1"))
     "recipe"("org.openrewrite:rewrite-core")
     "recipe"("org.openrewrite:rewrite-groovy")
     "recipe"("org.openrewrite:rewrite-gradle")
@@ -60,21 +64,21 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-xml")
     "recipe"("org.openrewrite:rewrite-yaml")
 
-    "recipe"("org.openrewrite.recipe:rewrite-circleci:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-concourse:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-github-actions:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-java-security:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-java-dependencies:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-jhipster:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-kubernetes:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-logging-frameworks:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-micronaut:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-migrate-java:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-quarkus:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-terraform:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-cloud-suitability-analyzer:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-circleci:1.8.0")
+    "recipe"("org.openrewrite.recipe:rewrite-concourse:1.7.0")
+    "recipe"("org.openrewrite.recipe:rewrite-github-actions:1.7.0")
+    "recipe"("org.openrewrite.recipe:rewrite-java-security:1.12.0")
+//    "recipe"("org.openrewrite.recipe:rewrite-java-dependencies:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-jhipster:1.7.0")
+    "recipe"("org.openrewrite.recipe:rewrite-kubernetes:1.18.0")
+    "recipe"("org.openrewrite.recipe:rewrite-logging-frameworks:1.8.0")
+    "recipe"("org.openrewrite.recipe:rewrite-micronaut:1.12.0")
+    "recipe"("org.openrewrite.recipe:rewrite-migrate-java:1.7.0")
+    "recipe"("org.openrewrite.recipe:rewrite-quarkus:1.7.0")
+    "recipe"("org.openrewrite.recipe:rewrite-spring:4.22.1")
+    "recipe"("org.openrewrite.recipe:rewrite-terraform:1.6.0")
+    "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:1.23.1")
+//    "recipe"("org.openrewrite.recipe:rewrite-cloud-suitability-analyzer:$rewriteVersion")
 }
 
 java {
@@ -102,23 +106,23 @@ tasks.named<JavaExec>("run").configure {
     }.joinToString(";")
     // recipeModules doesn't include transitive dependencies, but those are needed to load recipes and their descriptors
     val recipeClasspath = recipeConf.resolvedConfiguration.files.asSequence()
-            .map { it.absolutePath }
-            .joinToString(";")
+        .map { it.absolutePath }
+        .joinToString(";")
 
     val gradlePluginVersion = configurations.detachedConfiguration(dependencies.create("org.openrewrite:plugin:latest.release"))
-            .resolvedConfiguration
-            .firstLevelModuleDependencies
-            .first()
-            .moduleVersion
+        .resolvedConfiguration
+        .firstLevelModuleDependencies
+        .first()
+        .moduleVersion
 
     val mavenPluginVersion = configurations.detachedConfiguration(dependencies.create("org.openrewrite.maven:rewrite-maven-plugin:latest.release"))
-            .resolvedConfiguration
-            .firstLevelModuleDependencies
-            .first()
-            .moduleVersion
+        .resolvedConfiguration
+        .firstLevelModuleDependencies
+        .first()
+        .moduleVersion
 
     description = "Writes generated markdown docs to $targetDir"
-    args = listOf(targetDir.toString(), recipeModules, recipeClasspath, gradlePluginVersion, mavenPluginVersion, deployType, diffFileName)
+    args = listOf(targetDir.toString(), recipeModules, recipeClasspath, gradlePluginVersion, mavenPluginVersion, deployType)
     doFirst {
         logger.lifecycle("Recipe modules: ")
         logger.lifecycle(recipeModules)

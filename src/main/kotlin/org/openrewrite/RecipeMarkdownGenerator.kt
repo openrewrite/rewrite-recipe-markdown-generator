@@ -71,6 +71,13 @@ class RecipeMarkdownGenerator : Runnable {
     )
     lateinit var deployType: String
 
+    @Parameters(
+        index = "6",
+        defaultValue = "renameMe",
+        description = ["The name of the diff file to be generated when making a diff log"]
+    )
+    lateinit var diffFileName: String
+
     override fun run() {
         val outputPath = Paths.get(destinationDirectoryName)
         val recipesPath = outputPath.resolve("reference/recipes")
@@ -101,6 +108,9 @@ class RecipeMarkdownGenerator : Runnable {
 
             val envBuilder = Environment.builder()
             for (recipeOrigin in recipeOrigins) {
+                // If you are running this with an old version of Rewrite (for diff log purposes), you'll need
+                // to update the below line to look like this instead:
+                // envBuilder.scanJar(recipeOrigin.key.toPath(), classloader)
                 envBuilder.scanJar(recipeOrigin.key.toPath(), dependencies, classloader)
             }
             env = envBuilder.build()
@@ -155,9 +165,18 @@ class RecipeMarkdownGenerator : Runnable {
                 docBaseUrl + recipeDescriptor.name.lowercase(Locale.getDefault()).removePrefix("org.openrewrite.")
                     .replace('.', '/')
 
+            val recipeSource = recipeDescriptor.source.toString();
+            var isImperative = true;
+
+            // YAML recipes will have a source that ends with META-INF/rewrite/something.yml
+            // Used to help with time spent calculations. Imperative = 12 hours, Declarative = 4 hours
+            if (recipeSource.substring(recipeSource.length - 3) == "yml") {
+                isImperative = false;
+            }
+
             // Used to create changelogs
             val markdownRecipeDescriptor =
-                MarkdownRecipeDescriptor(recipeDescriptor.name, recipeDescription, docLink, recipeOptions)
+                MarkdownRecipeDescriptor(recipeDescriptor.name, recipeDescription, docLink, recipeOptions, isImperative, origin.artifactId)
             val markdownArtifact = markdownArtifacts.computeIfAbsent(origin.artifactId) {
                 MarkdownRecipeArtifact(
                     origin.artifactId,
@@ -175,6 +194,8 @@ class RecipeMarkdownGenerator : Runnable {
         var recipeDescriptorFile = "src/main/resources/recipeDescriptors.yml"
         if (deployType == "snapshot") {
             recipeDescriptorFile = "src/main/resources/snapshotRecipeDescriptors.yml"
+        } else if (deployType == "diff") {
+            recipeDescriptorFile = "src/main/resources/diffRecipeDescriptors.yml"
         }
 
         // Read in the old saved recipes for comparison with the latest release
@@ -191,14 +212,18 @@ class RecipeMarkdownGenerator : Runnable {
 
         val changedRecipes = getChangedRecipes(markdownArtifacts, oldArtifacts, newRecipes, removedRecipes)
 
-        // Create the changelog itself if there are any changes
-        if (newArtifacts.isNotEmpty() ||
-            removedArtifacts.isNotEmpty() ||
-            newRecipes.isNotEmpty() ||
-            removedRecipes.isNotEmpty() ||
-            changedRecipes.isNotEmpty()
-        ) {
-            buildChangelog(newArtifacts, removedArtifacts, newRecipes, removedRecipes, changedRecipes, deployType)
+        if (deployType == "diff") {
+            buildDiffLog(newRecipes)
+        } else {
+            // Create the changelog itself if there are any changes
+            if (newArtifacts.isNotEmpty() ||
+                removedArtifacts.isNotEmpty() ||
+                newRecipes.isNotEmpty() ||
+                removedRecipes.isNotEmpty() ||
+                changedRecipes.isNotEmpty()
+            ) {
+                buildChangelog(newArtifacts, removedArtifacts, newRecipes, removedRecipes, changedRecipes, deployType)
+            }
         }
 
         // Now that we've compared the versions and built the changelog,
@@ -275,6 +300,11 @@ class RecipeMarkdownGenerator : Runnable {
                     if (!markdownArtifact.markdownRecipeDescriptors.containsKey(oldMarkdownRecipeDescriptors.key)) {
                         removedRecipes.add(oldMarkdownRecipeDescriptors.value)
                     }
+                }
+            } else {
+                // If there's no old artifact, just add all of the recipes to the new recipe list
+                for (markdownRecipeDescriptors in markdownArtifact.markdownRecipeDescriptors) {
+                    newRecipes.add(markdownRecipeDescriptors.value)
                 }
             }
         }
@@ -417,6 +447,60 @@ class RecipeMarkdownGenerator : Runnable {
                     }
                 }
             }
+        }
+    }
+
+    private fun buildDiffLog(
+        newRecipes: TreeSet<MarkdownRecipeDescriptor>,
+    ) {
+        val artifactToRecipes = TreeMap<String, TreeSet<MarkdownRecipeDescriptor>>()
+        for (newRecipe in newRecipes) {
+            if (artifactToRecipes.containsKey(newRecipe.artifactId)) {
+                artifactToRecipes[newRecipe.artifactId]?.add(newRecipe)
+            } else {
+                val recipes = TreeSet<MarkdownRecipeDescriptor>();
+                recipes.add(newRecipe)
+                artifactToRecipes[newRecipe.artifactId] = recipes
+            }
+        }
+
+        val diffFile = File("src/main/resources/$diffFileName.md")
+
+        // Clear the file in case this is being generated multiple times
+        diffFile.writeText("")
+
+        if (artifactToRecipes.isNotEmpty()) {
+            diffFile.appendText("# New Recipes")
+
+            var totalTimeSaved = 0;
+
+            for (artifact in artifactToRecipes.keys) {
+                diffFile.appendText("\n\n## $artifact\n")
+
+                val recipes = artifactToRecipes[artifact]
+
+                if (recipes != null) {
+                    var timeSavedPerArtifact = 0;
+
+                    for (recipe in recipes) {
+                        val isImperative = recipe.isImperative
+                        var timeSaved = 4;
+
+                        if (isImperative) {
+                            timeSaved = 12;
+                        }
+
+                        totalTimeSaved += timeSaved
+                        timeSavedPerArtifact += timeSaved
+
+                        diffFile.appendText("\n* [${recipe.name}](${recipe.docLink}) — ${timeSaved}h")
+                    }
+
+                    diffFile.appendText("\n\nInitial recipe development time: ${timeSavedPerArtifact}h")
+                }
+            }
+
+            diffFile.appendText("\n\nTotal initial recipe development time: ${totalTimeSaved}h")
         }
     }
 

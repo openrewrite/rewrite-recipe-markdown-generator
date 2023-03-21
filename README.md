@@ -25,6 +25,24 @@ A few important things to note:
 * When doing snapshot releases, you generally don't want to copy over all of the files to the rewrite-docs (as it will show snapshot versions instead of full versions). Rather, please only copy over the exact files you need.
 * When copying over the files from the previous step, make sure you update the `SUMMARY.md`. If you don't, those new files won't appear.
 
+### Diff log
+
+It's possible to configure the markdown generator to create a diff log that generates something like [this](https://gist.github.com/mike-solomon/b72f6f857a7a8e40c996ec47c838ae95).
+That doc shows all of the recipes created since a particular version of OpenRewrite. Companies may want to see the work
+we've done for them since they've signed on. In order to make this log, please follow these steps:
+
+1. Determine what version you want to start from. For instance, OpenRewrite version `7.24.0`.
+2. Once you have that, find the version for all artifacts that correspond to that release. For example, if OpenRewrite is version `7.24.0`, then `rewrite-circleci` would be `1.8.0` and `rewrite-spring` would be `4.22.1`.
+3. Update the `build.gradle.kts` file to include all of those old versions. You can see an example of this and some key notes in the `old-build.gradle-example.kts` file provided in the `src` directory.
+4. Run the markdown generator with `snapshot` specified as the deploy type and all of the versions specified. This will update the `snapshotRecipeDescriptors.yml` file with all of the details from that version.
+5. Copy the `snapshotRecipeDescriptors.yml` file into a new file for safe keeping. This file will be used as a backup so you don't need to do the above steps every time you wish to regenerate the log.
+6. Revert all changes to the `build.gradle.kts` file you made above.
+7. Specify `diff` as the deploy type in the `build.gradle.kts` file, specify the `diffFileName` as the name of the company you're making this for, specify `latest.integration` for the `rewriteVersion`, and copy over the snapshot descriptors file you made earlier into the `diffRecipeDescriptors.yml` file.
+8. Run the markdown generator with the above configurations. You should now see a file called `diffFileName.md` that shows all of the recipes created between the old version and the latest snapshot.
+9. If you need to re-run or change the diff file, copy over the snapshot descriptors file you saved into the `diffRecipeDescriptors.yml` file and re-run the generator.
+
+Note: It's possible that with old versions of Rewrite that the markdown generator might not compile. I added a comment in the code that shows what one of the lines need to change to with some older versions.
+
 ### Automated Recipe Docs
 
 When you run this project for either a snapshot or a full release, all documentation will be updated in the 
