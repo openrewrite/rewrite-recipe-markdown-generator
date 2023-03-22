@@ -8,6 +8,7 @@ dependencyCheck {
     analyzers.assemblyEnabled = false
     failBuildOnCVSS = 9.0F
     suppressionFile = "suppressions.xml"
+    scanConfigurations = listOf("runtimeClasspath")
 }
 
 group = "org.example"

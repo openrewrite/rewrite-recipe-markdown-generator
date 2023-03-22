@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-    <suppress until="2023-03-10Z">
+    <suppress>
         <notes>
             <![CDATA[
             file name: snakeyaml-1.33.jar
             Severity: HIGH
-            False positive. CVE is about a maliciously crafted payload causing inefficiency, a potential denial of service vector for a hosted application.
-            This is not a hosted application, this CVE is irrelevant.
+            These vulnerabilites are not relevant to this project's usage of snakeyaml.
             ]]>
         </notes>
-        <packageUrl regex="true">^pkg:maven/org\.yaml/snakeyaml@.*$</packageUrl>
         <cve>CVE-2021-4235</cve>
         <cve>CVE-2022-1471</cve>
         <cve>CVE-2022-3064</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+           file name: LatencyUtils-2.0.3.jar
+
+           Not relevant. LatencyUtils is invoked through micrometer instrumentation, which is not
+           enabled when this project is run.
+           ]]>
+        </notes>
+        <cve>CVE-2021-4277</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+           file name: commons-compress-1.22.jar
+
+           The CVE is specific to the .NET version of the library. This is the Java version.
+           This is a false positive.
+           ]]>
+        </notes>
+        <cve>CVE-2021-37533</cve>
     </suppress>
     <suppress until="2023-03-10Z">
         <notes>
