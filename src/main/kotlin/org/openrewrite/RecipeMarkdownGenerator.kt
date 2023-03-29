@@ -707,6 +707,9 @@ class RecipeMarkdownGenerator : Runnable {
                 
             """.trimIndent()
             )
+
+            newLine()
+
             if (!isNullOrEmpty(recipeDescriptor.description)) {
                 writeln("_" + recipeDescriptor.description.trim() + "_")
             }
