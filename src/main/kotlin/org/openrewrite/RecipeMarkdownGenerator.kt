@@ -735,6 +735,30 @@ class RecipeMarkdownGenerator : Runnable {
             """.trimIndent()
             )
 
+            if (!recipeDescriptor.examples.isEmpty()) {
+                var subject = if (recipeDescriptor.examples.size > 1) "Examples" else "Example"
+                writeln("## ${subject}")
+
+                for (example in recipeDescriptor.examples) {
+                    writeln(
+                        """
+                        |* ${example.description}
+                        |
+                        |#### Before
+                        |```java
+                        |${example.before}
+                        |```
+                        |
+                        |#### After
+                        |```java
+                        |${example.after}
+                        |```
+                        """.trimMargin()
+                    )
+                }
+                newLine()
+            }
+
             if (recipeDescriptor.options.isNotEmpty()) {
                 writeln(
                     """
