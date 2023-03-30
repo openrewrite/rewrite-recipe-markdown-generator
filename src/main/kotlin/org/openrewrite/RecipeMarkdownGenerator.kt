@@ -1059,7 +1059,7 @@ class RecipeMarkdownGenerator : Runnable {
 
                         ```shell
                         mvn -U org.openrewrite.maven:rewrite-maven-plugin:run \
-                          -Drewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:LATEST \
+                          -Drewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:RELEASE \
                           -Drewrite.activeRecipes=${recipeDescriptor.name}
                         ```
                         {% endcode %}
