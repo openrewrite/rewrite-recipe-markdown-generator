@@ -885,6 +885,21 @@ rewrite-gradle:
       description: "Add the Gradle Enterprise plugin to settings.gradle files."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/plugins/addgradleenterprise"
       options:
+      - name: "allowUntrustedServer"
+        type: "Boolean"
+        required: false
+      - name: "captureTaskInputFiles"
+        type: "Boolean"
+        required: false
+      - name: "publishCriteria"
+        type: "PublishCriteria"
+        required: false
+      - name: "server"
+        type: "String"
+        required: false
+      - name: "uploadInBackground"
+        type: "Boolean"
+        required: false
       - name: "version"
         type: "String"
         required: true
@@ -1483,6 +1498,20 @@ rewrite-java:
         required: true
       isImperative: true
       artifactId: "rewrite-java"
+    org.openrewrite.java.ReplaceConstantWithAnotherConstant:
+      name: "org.openrewrite.java.ReplaceConstantWithAnotherConstant"
+      description: "Replace constant with another constant, adding/removing import\
+        \ on class if needed."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/replaceconstantwithanotherconstant"
+      options:
+      - name: "existingFullyQualifiedConstantName"
+        type: "String"
+        required: true
+      - name: "fullyQualifiedConstantName"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-java"
     org.openrewrite.java.ReplaceStringLiteralWithConstant:
       name: "org.openrewrite.java.ReplaceStringLiteralWithConstant"
       description: "Replace String literal with constant, adding import on class if\
@@ -1494,7 +1523,7 @@ rewrite-java:
         required: true
       - name: "literalValue"
         type: "String"
-        required: true
+        required: false
       isImperative: true
       artifactId: "rewrite-java"
     org.openrewrite.java.SimplifyMethodChain:
@@ -2222,6 +2251,14 @@ rewrite-java:
       options: []
       isImperative: true
       artifactId: "rewrite-java"
+    org.openrewrite.java.cleanup.RemoveSystemOutPrintln:
+      name: "org.openrewrite.java.cleanup.RemoveSystemOutPrintln"
+      description: "Print statements are often left accidentally after debugging an\
+        \ issue."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/removesystemoutprintln"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-java"
     org.openrewrite.java.cleanup.RemoveUnneededAssertion:
       name: "org.openrewrite.java.cleanup.RemoveUnneededAssertion"
       description: "Remove unneeded assertions like `assert true`, `assertTrue(true)`,\
@@ -2820,6 +2857,16 @@ rewrite-java:
       description: "Text blocks that assert before and after source code should have\
         \ minimal indentation."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/recipes/sourcespectextblockindentation"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-java"
+    org.openrewrite.java.recipes.UseJavaParserBuilderInJavaTemplate:
+      name: "org.openrewrite.java.recipes.UseJavaParserBuilderInJavaTemplate"
+      description: "Because we can now clone `JavaParser.Builder`, there is no need\
+        \ to fully build the parser inside a `Supplier<JavaParser>`. This also makes\
+        \ room for `JavaTemplate` to add shared `JavaTypeCache` implementations to\
+        \ parsers used to compile templates."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/recipes/usejavaparserbuilderinjavatemplate"
       options: []
       isImperative: true
       artifactId: "rewrite-java"
@@ -4685,6 +4732,26 @@ rewrite-maven:
         required: true
       isImperative: true
       artifactId: "rewrite-maven"
+    org.openrewrite.maven.ChangePluginGroupIdAndArtifactId:
+      name: "org.openrewrite.maven.ChangePluginGroupIdAndArtifactId"
+      description: "Change the groupId and/or the artifactId of a specified Maven\
+        \ plugin."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/changeplugingroupidandartifactid"
+      options:
+      - name: "newArtifactId"
+        type: "String"
+        required: false
+      - name: "newGroupId"
+        type: "String"
+        required: false
+      - name: "oldArtifactId"
+        type: "String"
+        required: true
+      - name: "oldGroupId"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-maven"
     org.openrewrite.maven.ChangePropertyValue:
       name: "org.openrewrite.maven.ChangePropertyValue"
       description: "Changes the specified Maven project property value leaving the\
@@ -5545,6 +5612,21 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.guava.NoGuavaOptionalFromJavaUtil:
+      name: "org.openrewrite.java.migrate.guava.NoGuavaOptionalFromJavaUtil"
+      description: "Replaces `com.google.common.base.Optional#fromJavaUtil(java.util.Optional)`\
+        \ with argument."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/noguavaoptionalfromjavautil"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.guava.NoGuavaOptionalToJavaUtil:
+      name: "org.openrewrite.java.migrate.guava.NoGuavaOptionalToJavaUtil"
+      description: "Remove calls to `com.google.common.base.Optional#toJavaUtil()`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/noguavaoptionaltojavautil"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.guava.NoGuavaSetsNewConcurrentHashSet:
       name: "org.openrewrite.java.migrate.guava.NoGuavaSetsNewConcurrentHashSet"
       description: "Prefer the Java standard library over third-party usage of Guava\
@@ -5651,6 +5733,28 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferjavautilobjectshashcode"
       options: []
       isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.guava.PreferJavaUtilOptional:
+      name: "org.openrewrite.java.migrate.guava.PreferJavaUtilOptional"
+      description: "Prefer `java.util.Optional` instead of using `com.google.common.base.Optional`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferjavautiloptional"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.guava.PreferJavaUtilOptionalOrElseNull:
+      name: "org.openrewrite.java.migrate.guava.PreferJavaUtilOptionalOrElseNull"
+      description: "Replaces `com.google.common.base.Optional#orNull()` with `java.util.Optional#orElse(null)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferjavautiloptionalorelsenull"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.guava.PreferJavaUtilOptionalOrSupplier:
+      name: "org.openrewrite.java.migrate.guava.PreferJavaUtilOptionalOrSupplier"
+      description: "Prefer `java.util.Optional#or(Supplier<T extends java.util.Optional<T>>)`\
+        \ over `com.google.common.base.Optional#or(com.google.common.base.Optional)."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferjavautiloptionalorsupplier"
+      options: []
+      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.guava.PreferJavaUtilPredicate:
       name: "org.openrewrite.java.migrate.guava.PreferJavaUtilPredicate"
@@ -7748,8 +7852,36 @@ rewrite-spring:
         \ APIs, and migrate configuration settings that have changes between versions.\
         \ This recipe will also chain additional framework migrations (Spring Framework,\
         \ Spring Data, etc) that are required as part of the migration to Spring Boot\
-        \ 2.7.\n"
+        \ 2.7.\nMigrating a Spring Boot application across major versions can be a\
+        \ complex task. Not every part of the  process can be automated, and not everything\
+        \ that possibly could be automated is. We recommend first running each of\
+        \ the minor version upgrades individually, making any manual changes which\
+        \ may be required. When you  have a working spring-boot 2.7.x application,\
+        \ then run this recipe to migrate to 3.0.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/upgradespringboot_3_0"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.cloud2022.MavenPomUpgrade:
+      name: "org.openrewrite.java.spring.cloud2022.MavenPomUpgrade"
+      description: "Upgrade Maven POM to Spring Cloud 2022 from prior 2021.x version."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/cloud2022/mavenpomupgrade"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.cloud2022.MigrateCloudSleuthToMicrometerTracing:
+      name: "org.openrewrite.java.spring.cloud2022.MigrateCloudSleuthToMicrometerTracing"
+      description: "Spring Cloud Sleuth has been discontinued and only compatible\
+        \ with Spring Boot 2.x."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/cloud2022/migratecloudsleuthtomicrometertracing"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.cloud2022.UpgradeSpringCloud_2022:
+      name: "org.openrewrite.java.spring.cloud2022.UpgradeSpringCloud_2022"
+      description: "Migrate applications to the latest Spring Cloud 2022 (Kilburn)\
+        \ release."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/cloud2022/upgradespringcloud_2022"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
