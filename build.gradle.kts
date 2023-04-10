@@ -30,7 +30,7 @@ configurations.all {
 
 val recipeConf = configurations.create("recipe")
 
-// Either `latest.release` or `latest.snapshot`
+// Either `latest.release` or `latest.integration`
 val rewriteVersion = "latest.release"
 
 // Used to determine what type of changelog to build up.
