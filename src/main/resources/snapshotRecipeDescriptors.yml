@@ -1,6 +1,6 @@
 rewrite-circleci:
   artifactId: "rewrite-circleci"
-  version: "1.19.0-SNAPSHOT"
+  version: "1.20.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.circleci.InstallOrb:
       name: "org.openrewrite.circleci.InstallOrb"
@@ -28,7 +28,7 @@ rewrite-circleci:
       artifactId: "rewrite-circleci"
 rewrite-cloud-suitability-analyzer:
   artifactId: "rewrite-cloud-suitability-analyzer"
-  version: "1.5.0-SNAPSHOT"
+  version: "1.6.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.cloudsuitability.FindCacheUses:
       name: "org.openrewrite.cloudsuitability.FindCacheUses"
@@ -206,7 +206,7 @@ rewrite-cloud-suitability-analyzer:
       artifactId: "rewrite-cloud-suitability-analyzer"
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "1.18.0-SNAPSHOT"
+  version: "1.19.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -286,7 +286,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "7.39.0-SNAPSHOT"
+  version: "7.40.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -395,14 +395,15 @@ rewrite-core:
       artifactId: "rewrite-core"
     org.openrewrite.search.FindLanguageComposition:
       name: "org.openrewrite.search.FindLanguageComposition"
-      description: "Produce a table of files and their language composition."
+      description: "Produce a table of individual files, noting their language and\
+        \ size."
       docLink: "https://docs.openrewrite.org/reference/recipes/search/findlanguagecomposition"
       options: []
       isImperative: true
       artifactId: "rewrite-core"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "1.19.0-SNAPSHOT"
+  version: "1.20.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin:
       name: "org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin"
@@ -423,6 +424,9 @@ rewrite-github-actions:
       - name: "cron"
         type: "String"
         required: true
+      - name: "workflowFileMatcher"
+        type: "String"
+        required: false
       isImperative: true
       artifactId: "rewrite-github-actions"
     org.openrewrite.github.AddManualTrigger:
@@ -525,7 +529,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "7.39.0-SNAPSHOT"
+  version: "7.40.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.ActivateStyle:
       name: "org.openrewrite.gradle.ActivateStyle"
@@ -1052,7 +1056,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "7.39.0-SNAPSHOT"
+  version: "7.40.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1071,7 +1075,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "7.39.0-SNAPSHOT"
+  version: "7.40.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1155,7 +1159,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "7.39.0-SNAPSHOT"
+  version: "7.40.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -3174,7 +3178,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "0.3.0-SNAPSHOT"
+  version: "0.4.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.DependencyLicenseCheck:
       name: "org.openrewrite.java.dependencies.DependencyLicenseCheck"
@@ -3189,12 +3193,29 @@ rewrite-java-dependencies:
         required: true
       isImperative: true
       artifactId: "rewrite-java-dependencies"
+    org.openrewrite.java.dependencies.DependencyList:
+      name: "org.openrewrite.java.dependencies.DependencyList"
+      description: "Emits a data table detailing all Gradle and Maven dependencies.This\
+        \ recipe makes no changes to any source file."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/dependencies/dependencylist"
+      options:
+      - name: "includeTransitive"
+        type: "boolean"
+        required: true
+      - name: "scope"
+        type: "Scope"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-java-dependencies"
     org.openrewrite.java.dependencies.DependencyVulnerabilityCheck:
       name: "org.openrewrite.java.dependencies.DependencyVulnerabilityCheck"
-      description: "This is a software composition analysis (SCA) tool detects publicly\
-        \ disclosed vulnerabilities contained within a project’s dependencies. It\
-        \ does this by determining If found, it will generate a report linking to\
-        \ the associated CVE entries."
+      description: "This is a software composition analysis (SCA) tool which detects\
+        \ publicly disclosed vulnerabilities. If vulnerabilities are found, it will\
+        \ generate a report linking to the associated CVE entries. Vulnerability information\
+        \ comes from the [GitHub Security Advisory Database](https://docs.github.com/en/code-security/security-advisories/global-security-advisories/about-the-github-advisory-database),\
+        \ which aggregates vulnerability data from several public databases, including\
+        \ the [National Vulnerability Database](https://nvd.nist.gov/) maintained\
+        \ by the United States government."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/dependencies/dependencyvulnerabilitycheck"
       options:
       - name: "addMarkers"
@@ -3210,7 +3231,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "1.24.0-SNAPSHOT"
+  version: "1.25.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.security.FindTextDirectionChanges:
       name: "org.openrewrite.java.security.FindTextDirectionChanges"
@@ -3573,7 +3594,7 @@ rewrite-java-security:
       artifactId: "rewrite-java-security"
 rewrite-jhipster:
   artifactId: "rewrite-jhipster"
-  version: "1.19.0-SNAPSHOT"
+  version: "1.20.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.jhipster.FixCwe338:
       name: "org.openrewrite.java.jhipster.FixCwe338"
@@ -3585,7 +3606,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "7.39.0-SNAPSHOT"
+  version: "7.40.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3644,7 +3665,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "1.29.0-SNAPSHOT"
+  version: "1.30.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -4103,7 +4124,7 @@ rewrite-kubernetes:
       artifactId: "rewrite-kubernetes"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "1.20.0-SNAPSHOT"
+  version: "1.21.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.logging.ParameterizedLogging:
       name: "org.openrewrite.java.logging.ParameterizedLogging"
@@ -4339,7 +4360,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "7.39.0-SNAPSHOT"
+  version: "7.40.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -5178,7 +5199,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "1.23.0-SNAPSHOT"
+  version: "1.24.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy:
       name: "org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy"
@@ -5276,7 +5297,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "1.19.0-SNAPSHOT"
+  version: "1.20.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -6725,7 +6746,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "7.39.0-SNAPSHOT"
+  version: "7.40.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -6823,7 +6844,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "1.18.0-SNAPSHOT"
+  version: "1.19.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.ConfigPropertiesToConfigMapping:
       name: "org.openrewrite.quarkus.ConfigPropertiesToConfigMapping"
@@ -6927,7 +6948,7 @@ rewrite-quarkus:
       artifactId: "rewrite-quarkus"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "4.35.0-SNAPSHOT"
+  version: "4.36.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.spring.AddSpringProperty:
       name: "org.openrewrite.java.spring.AddSpringProperty"
@@ -8144,6 +8165,37 @@ rewrite-spring:
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security6.RemoveOauth2LoginConfig:
+      name: "org.openrewrite.java.spring.security6.RemoveOauth2LoginConfig"
+      description: "`oauth2Login()` is a Spring Security feature that allows users\
+        \ to authenticate with an OAuth2 or OpenID Connect 1.0 provider. When a user\
+        \ is authenticated using this feature, they are granted a set of authorities\
+        \ that determines what actions they are allowed to perform within the application.\n\
+        \nIn Spring Security 5, the default authority given to a user authenticated\
+        \ with an OAuth2 or OpenID Connect 1.0 provider via `oauth2Login()` is `ROLE_USER`.\
+        \ This means that the user is allowed to access the application's resources\
+        \ as a regular user.\n\nHowever, in Spring Security 6, the default authority\
+        \ given to a user authenticated with an OAuth2 provider is `OAUTH2_USER`,\
+        \ and the default authority given to a user authenticated with an OpenID Connect\
+        \ 1.0 provider is `OIDC_USER`. These authorities are more specific and allow\
+        \ for better customization of the user's permissions within the application.\n\
+        \nIf you are upgrading to Spring Security 6 and you have previously configured\
+        \ a `GrantedAuthoritiesMapper` to handle the authorities of users authenticated\
+        \ via `oauth2Login()`, you can remove it completely as the new default authorities\
+        \ should be sufficient."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/removeoauth2loginconfig"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security6.RemoveUseAuthorizationManager:
+      name: "org.openrewrite.java.spring.security6.RemoveUseAuthorizationManager"
+      description: "In Spring Security 6, <websocket-message-broker> defaults use-authorization-manager\
+        \ to true.  So, the 'use-authorization-manager' attribute for message security\
+        \ is no longer needed and can be removed.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/removeuseauthorizationmanager"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.security6.RequireExplicitSavingOfSecurityContextRepository:
       name: "org.openrewrite.java.spring.security6.RequireExplicitSavingOfSecurityContextRepository"
       description: "Remove explicit `SecurityContextConfigurer.requireExplicitSave(true)`\
@@ -8151,6 +8203,29 @@ rewrite-spring:
         \ [Sprint Security 6.0 migration step](https://docs.spring.io/spring-security/reference/6.0.0/migration/servlet/session-management.html#_require_explicit_saving_of_securitycontextrepository)\
         \ for details."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/requireexplicitsavingofsecuritycontextrepository"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security6.UpdateEnableReactiveMethodSecurity:
+      name: "org.openrewrite.java.spring.security6.UpdateEnableReactiveMethodSecurity"
+      description: "In Spring security 6.0, `@EnableReactiveMethodSecurity` defaults\
+        \ `useAuthorizationManager` to true. So, to complete migration, `@EnableReactiveMethodSecurity`\
+        \ remove the `useAuthorizationManager` attribute."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/updateenablereactivemethodsecurity"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security6.UpdateRequestCache:
+      name: "org.openrewrite.java.spring.security6.UpdateRequestCache"
+      description: "By default, Spring Security 5 queries the saved request on every\
+        \ request, which means that in a typical setup, the HttpSession is queried\
+        \ on every request to use the RequestCache. In Spring Security 6, the default\
+        \ behavior has changed, and RequestCache will only be queried for a cached\
+        \ request if the HTTP parameter \"continue\" is defined. To maintain the same\
+        \ default behavior as Spring Security 5, either explicitly add the HTTP parameter\
+        \ \"continue\" to every request or use NullRequestCache to override the default\
+        \ behavior."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/updaterequestcache"
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
@@ -8190,7 +8265,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "1.18.0-SNAPSHOT"
+  version: "1.19.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -9083,7 +9158,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "1.36.0-SNAPSHOT"
+  version: "1.37.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.assertj.Assertj:
       name: "org.openrewrite.java.testing.assertj.Assertj"
@@ -9411,6 +9486,14 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.MigrateAssumptions:
+      name: "org.openrewrite.java.testing.junit5.MigrateAssumptions"
+      description: "Many of JUnit 4's `Assume#assume(..)` methods have no direct counterpart\
+        \ in JUnit 5 and require Hamcrest JUnit's `MatcherAssume`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/migrateassumptions"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.MigrateJUnitTestCase:
       name: "org.openrewrite.java.testing.junit5.MigrateJUnitTestCase"
       description: "Convert JUnit 4 `TestCase` to JUnit Jupiter."
@@ -9630,7 +9713,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "7.39.0-SNAPSHOT"
+  version: "7.40.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -9790,7 +9873,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "7.39.0-SNAPSHOT"
+  version: "7.40.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.ChangeKey:
       name: "org.openrewrite.yaml.ChangeKey"
