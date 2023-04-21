@@ -1,6 +1,6 @@
 rewrite-circleci:
   artifactId: "rewrite-circleci"
-  version: "1.19.0"
+  version: "1.20.0"
   markdownRecipeDescriptors:
     org.openrewrite.circleci.InstallOrb:
       name: "org.openrewrite.circleci.InstallOrb"
@@ -28,7 +28,7 @@ rewrite-circleci:
       artifactId: "rewrite-circleci"
 rewrite-cloud-suitability-analyzer:
   artifactId: "rewrite-cloud-suitability-analyzer"
-  version: "1.5.0"
+  version: "1.6.0"
   markdownRecipeDescriptors:
     org.openrewrite.cloudsuitability.FindCacheUses:
       name: "org.openrewrite.cloudsuitability.FindCacheUses"
@@ -206,7 +206,7 @@ rewrite-cloud-suitability-analyzer:
       artifactId: "rewrite-cloud-suitability-analyzer"
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "1.18.0"
+  version: "1.19.0"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -286,7 +286,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "7.39.1"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -393,16 +393,9 @@ rewrite-core:
       options: []
       isImperative: true
       artifactId: "rewrite-core"
-    org.openrewrite.search.FindLanguageComposition:
-      name: "org.openrewrite.search.FindLanguageComposition"
-      description: "Produce a table of files and their language composition."
-      docLink: "https://docs.openrewrite.org/reference/recipes/search/findlanguagecomposition"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-core"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "1.19.0"
+  version: "1.20.0"
   markdownRecipeDescriptors:
     org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin:
       name: "org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin"
@@ -423,6 +416,9 @@ rewrite-github-actions:
       - name: "cron"
         type: "String"
         required: true
+      - name: "workflowFileMatcher"
+        type: "String"
+        required: false
       isImperative: true
       artifactId: "rewrite-github-actions"
     org.openrewrite.github.AddManualTrigger:
@@ -525,7 +521,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "7.39.1"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.ActivateStyle:
       name: "org.openrewrite.gradle.ActivateStyle"
@@ -1052,7 +1048,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "7.39.1"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1071,7 +1067,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "7.39.1"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1155,7 +1151,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "7.39.1"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -2454,6 +2450,16 @@ rewrite-java:
       options: []
       isImperative: true
       artifactId: "rewrite-java"
+    org.openrewrite.java.cleanup.ShortenFullyQualifiedTypeReferences:
+      name: "org.openrewrite.java.cleanup.ShortenFullyQualifiedTypeReferences"
+      description: "Any fully qualified references to Java types will be replaced\
+        \ with corresponding simple names and import statements, provided that it\
+        \ doesn't result in any conflicts with other imports or types declared in\
+        \ the local compilation unit."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/shortenfullyqualifiedtypereferences"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-java"
     org.openrewrite.java.cleanup.SimplifyBooleanExpression:
       name: "org.openrewrite.java.cleanup.SimplifyBooleanExpression"
       description: "Checks for over-complicated boolean expressions. Finds code like\
@@ -2653,7 +2659,10 @@ rewrite-java:
       artifactId: "rewrite-java"
     org.openrewrite.java.cleanup.UseLambdaForFunctionalInterface:
       name: "org.openrewrite.java.cleanup.UseLambdaForFunctionalInterface"
-      description: "Instead of anonymous class declarations, use a lambda where possible."
+      description: "Instead of anonymous class declarations, use a lambda where possible.\
+        \ Using lambdas to replace anonymous classes can lead to more expressive and\
+        \ maintainable code, improve code readability, reduce code duplication, and\
+        \ achieve better performance in some cases."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/uselambdaforfunctionalinterface"
       options: []
       isImperative: true
@@ -3174,7 +3183,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "0.3.0"
+  version: "0.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.DependencyLicenseCheck:
       name: "org.openrewrite.java.dependencies.DependencyLicenseCheck"
@@ -3186,6 +3195,20 @@ rewrite-java-dependencies:
         required: false
       - name: "scope"
         type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-java-dependencies"
+    org.openrewrite.java.dependencies.DependencyList:
+      name: "org.openrewrite.java.dependencies.DependencyList"
+      description: "Emits a data table detailing all Gradle and Maven dependencies.This\
+        \ recipe makes no changes to any source file."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/dependencies/dependencylist"
+      options:
+      - name: "includeTransitive"
+        type: "boolean"
+        required: true
+      - name: "scope"
+        type: "Scope"
         required: true
       isImperative: true
       artifactId: "rewrite-java-dependencies"
@@ -3213,7 +3236,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "1.24.0"
+  version: "1.25.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.security.FindTextDirectionChanges:
       name: "org.openrewrite.java.security.FindTextDirectionChanges"
@@ -3576,7 +3599,7 @@ rewrite-java-security:
       artifactId: "rewrite-java-security"
 rewrite-jhipster:
   artifactId: "rewrite-jhipster"
-  version: "1.19.0"
+  version: "1.20.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jhipster.FixCwe338:
       name: "org.openrewrite.java.jhipster.FixCwe338"
@@ -3588,7 +3611,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "7.39.1"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3647,7 +3670,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "1.29.0"
+  version: "1.30.0"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -4106,7 +4129,7 @@ rewrite-kubernetes:
       artifactId: "rewrite-kubernetes"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "1.20.0"
+  version: "1.20.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.logging.ParameterizedLogging:
       name: "org.openrewrite.java.logging.ParameterizedLogging"
@@ -4342,7 +4365,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "7.39.1"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -5181,7 +5204,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "1.23.0"
+  version: "1.24.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy:
       name: "org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy"
@@ -5279,7 +5302,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "1.19.0"
+  version: "1.20.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -5343,8 +5366,10 @@ rewrite-migrate-java:
     org.openrewrite.java.migrate.UpgradeJavaVersion:
       name: "org.openrewrite.java.migrate.UpgradeJavaVersion"
       description: "Upgrade build plugin configuration to use the specified Java version.\
-        \ This recipe changes maven-compiler-plugin target version and related settings.\
-        \ Will not downgrade if the version is newer than the specified version."
+        \ This recipe changes `java.toolchain.languageVersion` in `build.gradle(.kts)`\
+        \ of gradle projects, or maven-compiler-plugin target version and related\
+        \ settings. Will not downgrade if the version is newer than the specified\
+        \ version."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/upgradejavaversion"
       options:
       - name: "version"
@@ -5438,6 +5463,14 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/apache/commons/io/usesystemlineseparator"
       options: []
       isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.IsNotEmptyToJdk:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.IsNotEmptyToJdk"
+      description: "Replace any `StringUtils#isEmpty(String)` and `#isNotEmpty(String)`\
+        \ with `s == null || s.isEmpty()` and `s != null && !s.isEmpty()`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/apache/commons/lang/isnotemptytojdk"
+      options: []
+      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.cobertura.RemoveCoberturaMavenPlugin:
       name: "org.openrewrite.java.migrate.cobertura.RemoveCoberturaMavenPlugin"
@@ -6728,7 +6761,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "7.39.1"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -6790,6 +6823,9 @@ rewrite-properties:
       - name: "propertyKey"
         type: "String"
         required: true
+      - name: "regex"
+        type: "Boolean"
+        required: false
       - name: "relaxedBinding"
         type: "Boolean"
         required: false
@@ -6826,7 +6862,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "1.18.0"
+  version: "1.19.0"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.ConfigPropertiesToConfigMapping:
       name: "org.openrewrite.quarkus.ConfigPropertiesToConfigMapping"
@@ -6930,7 +6966,7 @@ rewrite-quarkus:
       artifactId: "rewrite-quarkus"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "4.35.0"
+  version: "4.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.spring.AddSpringProperty:
       name: "org.openrewrite.java.spring.AddSpringProperty"
@@ -6975,6 +7011,29 @@ rewrite-spring:
       - name: "oldPropertyKey"
         type: "String"
         required: true
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.ChangeSpringPropertyValue:
+      name: "org.openrewrite.java.spring.ChangeSpringPropertyValue"
+      description: "Change spring application property values existing in either Properties\
+        \ or Yaml files."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/changespringpropertyvalue"
+      options:
+      - name: "newValue"
+        type: "String"
+        required: true
+      - name: "oldValue"
+        type: "String"
+        required: false
+      - name: "propertyKey"
+        type: "String"
+        required: true
+      - name: "regex"
+        type: "Boolean"
+        required: false
+      - name: "relaxedBinding"
+        type: "Boolean"
+        required: false
       isImperative: true
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.DeleteSpringProperty:
@@ -7041,6 +7100,13 @@ rewrite-spring:
         \ [The Spring reference documentation recommends using `kebab-case` for properties\
         \ where possible.](https://docs.spring.io/spring-boot/docs/2.5.6/reference/html/features.html#features.external-config.typesafe-configuration-properties.relaxed-binding)."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/propertiestokebabcase"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.RenameBean:
+      name: "org.openrewrite.java.spring.RenameBean"
+      description: "Renames a Spring bean, both declaration and references."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/renamebean"
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
@@ -8049,6 +8115,30 @@ rewrite-spring:
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.http.ReplaceStringLiteralsWithHttpHeadersConstants:
+      name: "org.openrewrite.java.spring.http.ReplaceStringLiteralsWithHttpHeadersConstants"
+      description: "Replace String literals with `org.springframework.http.HttpHeaders`\
+        \ constants."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/http/replacestringliteralswithhttpheadersconstants"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.http.ReplaceStringLiteralsWithMediaTypeConstants:
+      name: "org.openrewrite.java.spring.http.ReplaceStringLiteralsWithMediaTypeConstants"
+      description: "Replace String literals with `org.springframework.http.MediaType`\
+        \ constants."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/http/replacestringliteralswithmediatypeconstants"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.http.SpringWebDependency:
+      name: "org.openrewrite.java.spring.http.SpringWebDependency"
+      description: "Find compile scoped Spring Web dependency for Maven and Gradle,\
+        \ both direct and transitive."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/http/springwebdependency"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.search.FindApiCalls:
       name: "org.openrewrite.java.spring.search.FindApiCalls"
       description: "Find outbound API calls that this application is making."
@@ -8070,6 +8160,26 @@ rewrite-spring:
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/search/findspringcomponents"
       options: []
       isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security5.ReplaceGlobalMethodSecurityWithMethodSecurity:
+      name: "org.openrewrite.java.spring.security5.ReplaceGlobalMethodSecurityWithMethodSecurity"
+      description: "`@EnableGlobalMethodSecurity` and `<global-method-security>` are\
+        \ deprecated in favor of `@EnableMethodSecurity` and `<method-security>`,\
+        \ respectively. The new annotation and XML element activate Spring’s pre-post\
+        \ annotations by default and use AuthorizationManager internally."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security5/replaceglobalmethodsecuritywithmethodsecurity"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security5.ReplaceGlobalMethodSecurityWithMethodSecurityXml:
+      name: "org.openrewrite.java.spring.security5.ReplaceGlobalMethodSecurityWithMethodSecurityXml"
+      description: "`@EnableGlobalMethodSecurity` and `<global-method-security>` are\
+        \ deprecated in favor of `@EnableMethodSecurity`  and `<method-security>`,\
+        \ respectively. The new annotation and XML element activate Spring’s pre-post\
+        \ annotations  by default and use AuthorizationManager internally.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security5/replaceglobalmethodsecuritywithmethodsecurityxml"
+      options: []
+      isImperative: false
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.security5.UpdateArgon2PasswordEncoder:
       name: "org.openrewrite.java.spring.security5.UpdateArgon2PasswordEncoder"
@@ -8147,6 +8257,45 @@ rewrite-spring:
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security6.RemoveFilterSecurityInterceptorOncePerRequest:
+      name: "org.openrewrite.java.spring.security6.RemoveFilterSecurityInterceptorOncePerRequest"
+      description: "In Spring Security 6.0, `<http>` defaults `authorizeRequests#filterSecurityInterceptorOncePerRequest`\
+        \ to false. So, to complete migration, any defaults values can be removed."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/removefiltersecurityinterceptoronceperrequest"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security6.RemoveOauth2LoginConfig:
+      name: "org.openrewrite.java.spring.security6.RemoveOauth2LoginConfig"
+      description: "`oauth2Login()` is a Spring Security feature that allows users\
+        \ to authenticate with an OAuth2 or OpenID Connect 1.0 provider. When a user\
+        \ is authenticated using this feature, they are granted a set of authorities\
+        \ that determines what actions they are allowed to perform within the application.\n\
+        \nIn Spring Security 5, the default authority given to a user authenticated\
+        \ with an OAuth2 or OpenID Connect 1.0 provider via `oauth2Login()` is `ROLE_USER`.\
+        \ This means that the user is allowed to access the application's resources\
+        \ as a regular user.\n\nHowever, in Spring Security 6, the default authority\
+        \ given to a user authenticated with an OAuth2 provider is `OAUTH2_USER`,\
+        \ and the default authority given to a user authenticated with an OpenID Connect\
+        \ 1.0 provider is `OIDC_USER`. These authorities are more specific and allow\
+        \ for better customization of the user's permissions within the application.\n\
+        \nIf you are upgrading to Spring Security 6 and you have previously configured\
+        \ a `GrantedAuthoritiesMapper` to handle the authorities of users authenticated\
+        \ via `oauth2Login()`, you can remove it completely as the new default authorities\
+        \ should be sufficient."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/removeoauth2loginconfig"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security6.RemoveUseAuthorizationManager:
+      name: "org.openrewrite.java.spring.security6.RemoveUseAuthorizationManager"
+      description: "In Spring Security 6, <websocket-message-broker> defaults use-authorization-manager\
+        \ to true.  So, the 'use-authorization-manager' attribute for message security\
+        \ is no longer needed and can be removed.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/removeuseauthorizationmanager"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.security6.RequireExplicitSavingOfSecurityContextRepository:
       name: "org.openrewrite.java.spring.security6.RequireExplicitSavingOfSecurityContextRepository"
       description: "Remove explicit `SecurityContextConfigurer.requireExplicitSave(true)`\
@@ -8154,6 +8303,29 @@ rewrite-spring:
         \ [Sprint Security 6.0 migration step](https://docs.spring.io/spring-security/reference/6.0.0/migration/servlet/session-management.html#_require_explicit_saving_of_securitycontextrepository)\
         \ for details."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/requireexplicitsavingofsecuritycontextrepository"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security6.UpdateEnableReactiveMethodSecurity:
+      name: "org.openrewrite.java.spring.security6.UpdateEnableReactiveMethodSecurity"
+      description: "In Spring security 6.0, `@EnableReactiveMethodSecurity` defaults\
+        \ `useAuthorizationManager` to true. So, to complete migration, `@EnableReactiveMethodSecurity`\
+        \ remove the `useAuthorizationManager` attribute."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/updateenablereactivemethodsecurity"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security6.UpdateRequestCache:
+      name: "org.openrewrite.java.spring.security6.UpdateRequestCache"
+      description: "By default, Spring Security 5 queries the saved request on every\
+        \ request, which means that in a typical setup, the HttpSession is queried\
+        \ on every request to use the RequestCache. In Spring Security 6, the default\
+        \ behavior has changed, and RequestCache will only be queried for a cached\
+        \ request if the HTTP parameter \"continue\" is defined. To maintain the same\
+        \ default behavior as Spring Security 5, either explicitly add the HTTP parameter\
+        \ \"continue\" to every request or use NullRequestCache to override the default\
+        \ behavior."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/updaterequestcache"
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
@@ -8193,7 +8365,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "1.18.0"
+  version: "1.19.0"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -9086,7 +9258,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "1.36.0"
+  version: "1.37.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.assertj.Assertj:
       name: "org.openrewrite.java.testing.assertj.Assertj"
@@ -9522,6 +9694,14 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.UpgradeOkHttpMockWebServer:
+      name: "org.openrewrite.java.testing.junit5.UpgradeOkHttpMockWebServer"
+      description: "Migrates OkHttp 3 `MockWebServer` to the JUnit Jupiter compatible\
+        \ version."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/upgradeokhttpmockwebserver"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.UseHamcrestAssertThat:
       name: "org.openrewrite.java.testing.junit5.UseHamcrestAssertThat"
       description: "JUnit 4's `Assert#assertThat(..)` This method was deprecated in\
@@ -9641,7 +9821,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "7.39.1"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -9692,6 +9872,25 @@ rewrite-xml:
       - name: "newName"
         type: "String"
         required: true
+      isImperative: true
+      artifactId: "rewrite-xml"
+    org.openrewrite.xml.ChangeTagValue:
+      name: "org.openrewrite.xml.ChangeTagValue"
+      description: "Alters the value of XML tags matching the provided expression."
+      docLink: "https://docs.openrewrite.org/reference/recipes/xml/changetagvalue"
+      options:
+      - name: "elementName"
+        type: "String"
+        required: true
+      - name: "fileMatcher"
+        type: "String"
+        required: false
+      - name: "newValue"
+        type: "String"
+        required: true
+      - name: "oldValue"
+        type: "String"
+        required: false
       isImperative: true
       artifactId: "rewrite-xml"
     org.openrewrite.xml.RemoveTrailingWhitespace:
@@ -9801,8 +10000,30 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "7.39.1"
+  version: "7.40.0"
   markdownRecipeDescriptors:
+    org.openrewrite.yaml.AppendToSequence:
+      name: "org.openrewrite.yaml.AppendToSequence"
+      description: "Append item to YAML sequence."
+      docLink: "https://docs.openrewrite.org/reference/recipes/yaml/appendtosequence"
+      options:
+      - name: "existingSequenceValues"
+        type: "List"
+        required: false
+      - name: "fileMatcher"
+        type: "String"
+        required: false
+      - name: "matchExistingSequenceValuesInAnyOrder"
+        type: "String"
+        required: false
+      - name: "sequencePath"
+        type: "String"
+        required: true
+      - name: "value"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-yaml"
     org.openrewrite.yaml.ChangeKey:
       name: "org.openrewrite.yaml.ChangeKey"
       description: "Change a YAML mapping entry key leaving the value intact."
@@ -9838,6 +10059,30 @@ rewrite-yaml:
       - name: "oldPropertyKey"
         type: "String"
         required: true
+      - name: "relaxedBinding"
+        type: "Boolean"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-yaml"
+    org.openrewrite.yaml.ChangePropertyValue:
+      name: "org.openrewrite.yaml.ChangePropertyValue"
+      description: "Change a YAML property. Nested YAML mappings are interpreted as\
+        \ dot separated property names, i.e.  as Spring Boot interprets `application.yml`\
+        \ files."
+      docLink: "https://docs.openrewrite.org/reference/recipes/yaml/changepropertyvalue"
+      options:
+      - name: "newValue"
+        type: "String"
+        required: true
+      - name: "oldValue"
+        type: "String"
+        required: false
+      - name: "propertyKey"
+        type: "String"
+        required: true
+      - name: "regex"
+        type: "Boolean"
+        required: false
       - name: "relaxedBinding"
         type: "Boolean"
         required: false

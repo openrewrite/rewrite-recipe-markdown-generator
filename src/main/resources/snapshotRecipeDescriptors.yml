@@ -1,6 +1,6 @@
 rewrite-circleci:
   artifactId: "rewrite-circleci"
-  version: "1.20.0-SNAPSHOT"
+  version: "1.21.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.circleci.InstallOrb:
       name: "org.openrewrite.circleci.InstallOrb"
@@ -28,7 +28,7 @@ rewrite-circleci:
       artifactId: "rewrite-circleci"
 rewrite-cloud-suitability-analyzer:
   artifactId: "rewrite-cloud-suitability-analyzer"
-  version: "1.6.0-SNAPSHOT"
+  version: "1.6.0"
   markdownRecipeDescriptors:
     org.openrewrite.cloudsuitability.FindCacheUses:
       name: "org.openrewrite.cloudsuitability.FindCacheUses"
@@ -206,7 +206,7 @@ rewrite-cloud-suitability-analyzer:
       artifactId: "rewrite-cloud-suitability-analyzer"
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "1.19.0-SNAPSHOT"
+  version: "1.19.0"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -286,7 +286,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "7.40.0-SNAPSHOT"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -395,7 +395,7 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "1.20.0-SNAPSHOT"
+  version: "1.20.0"
   markdownRecipeDescriptors:
     org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin:
       name: "org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin"
@@ -521,7 +521,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "7.40.0-SNAPSHOT"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.ActivateStyle:
       name: "org.openrewrite.gradle.ActivateStyle"
@@ -1048,7 +1048,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "7.40.0-SNAPSHOT"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1067,7 +1067,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "7.40.0-SNAPSHOT"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1151,7 +1151,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "7.40.0-SNAPSHOT"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -2450,6 +2450,16 @@ rewrite-java:
       options: []
       isImperative: true
       artifactId: "rewrite-java"
+    org.openrewrite.java.cleanup.ShortenFullyQualifiedTypeReferences:
+      name: "org.openrewrite.java.cleanup.ShortenFullyQualifiedTypeReferences"
+      description: "Any fully qualified references to Java types will be replaced\
+        \ with corresponding simple names and import statements, provided that it\
+        \ doesn't result in any conflicts with other imports or types declared in\
+        \ the local compilation unit."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/shortenfullyqualifiedtypereferences"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-java"
     org.openrewrite.java.cleanup.SimplifyBooleanExpression:
       name: "org.openrewrite.java.cleanup.SimplifyBooleanExpression"
       description: "Checks for over-complicated boolean expressions. Finds code like\
@@ -3173,7 +3183,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "0.4.0-SNAPSHOT"
+  version: "0.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.DependencyLicenseCheck:
       name: "org.openrewrite.java.dependencies.DependencyLicenseCheck"
@@ -3226,7 +3236,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "1.25.0-SNAPSHOT"
+  version: "1.25.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.security.FindTextDirectionChanges:
       name: "org.openrewrite.java.security.FindTextDirectionChanges"
@@ -3589,7 +3599,7 @@ rewrite-java-security:
       artifactId: "rewrite-java-security"
 rewrite-jhipster:
   artifactId: "rewrite-jhipster"
-  version: "1.20.0-SNAPSHOT"
+  version: "1.20.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jhipster.FixCwe338:
       name: "org.openrewrite.java.jhipster.FixCwe338"
@@ -3601,7 +3611,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "7.40.0-SNAPSHOT"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3660,7 +3670,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "1.30.0-SNAPSHOT"
+  version: "1.30.0"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -4355,7 +4365,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "7.40.0-SNAPSHOT"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -5194,7 +5204,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "1.24.0-SNAPSHOT"
+  version: "1.24.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy:
       name: "org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy"
@@ -5292,7 +5302,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "1.20.0-SNAPSHOT"
+  version: "1.21.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -5356,8 +5366,10 @@ rewrite-migrate-java:
     org.openrewrite.java.migrate.UpgradeJavaVersion:
       name: "org.openrewrite.java.migrate.UpgradeJavaVersion"
       description: "Upgrade build plugin configuration to use the specified Java version.\
-        \ This recipe changes maven-compiler-plugin target version and related settings.\
-        \ Will not downgrade if the version is newer than the specified version."
+        \ This recipe changes `java.toolchain.languageVersion` in `build.gradle(.kts)`\
+        \ of gradle projects, or maven-compiler-plugin target version and related\
+        \ settings. Will not downgrade if the version is newer than the specified\
+        \ version."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/upgradejavaversion"
       options:
       - name: "version"
@@ -6749,7 +6761,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "7.40.0-SNAPSHOT"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -6850,7 +6862,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "1.19.0-SNAPSHOT"
+  version: "1.19.0"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.ConfigPropertiesToConfigMapping:
       name: "org.openrewrite.quarkus.ConfigPropertiesToConfigMapping"
@@ -6954,7 +6966,7 @@ rewrite-quarkus:
       artifactId: "rewrite-quarkus"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "4.36.0-SNAPSHOT"
+  version: "4.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.spring.AddSpringProperty:
       name: "org.openrewrite.java.spring.AddSpringProperty"
@@ -8353,7 +8365,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "1.19.0-SNAPSHOT"
+  version: "1.19.0"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -9246,7 +9258,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "1.37.0-SNAPSHOT"
+  version: "1.37.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.assertj.Assertj:
       name: "org.openrewrite.java.testing.assertj.Assertj"
@@ -9809,7 +9821,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "7.40.0-SNAPSHOT"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -9860,6 +9872,25 @@ rewrite-xml:
       - name: "newName"
         type: "String"
         required: true
+      isImperative: true
+      artifactId: "rewrite-xml"
+    org.openrewrite.xml.ChangeTagValue:
+      name: "org.openrewrite.xml.ChangeTagValue"
+      description: "Alters the value of XML tags matching the provided expression."
+      docLink: "https://docs.openrewrite.org/reference/recipes/xml/changetagvalue"
+      options:
+      - name: "elementName"
+        type: "String"
+        required: true
+      - name: "fileMatcher"
+        type: "String"
+        required: false
+      - name: "newValue"
+        type: "String"
+        required: true
+      - name: "oldValue"
+        type: "String"
+        required: false
       isImperative: true
       artifactId: "rewrite-xml"
     org.openrewrite.xml.RemoveTrailingWhitespace:
@@ -9969,7 +10000,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "7.40.0-SNAPSHOT"
+  version: "7.40.0"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
