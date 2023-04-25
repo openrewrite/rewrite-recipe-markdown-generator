@@ -393,6 +393,90 @@ rewrite-core:
       options: []
       isImperative: true
       artifactId: "rewrite-core"
+    org.openrewrite.text.AppendToTextFile:
+      name: "org.openrewrite.text.AppendToTextFile"
+      description: "Appends content to a plaintext file. Multiple instances of this\
+        \ recipe in the same execution context can all contribute."
+      docLink: "https://docs.openrewrite.org/reference/recipes/text/appendtotextfile"
+      options:
+      - name: "appendNewline"
+        type: "Boolean"
+        required: false
+      - name: "content"
+        type: "String"
+        required: true
+      - name: "existingFileStrategy"
+        type: "String"
+        required: false
+      - name: "preamble"
+        type: "String"
+        required: false
+      - name: "relativeFileName"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-core"
+    org.openrewrite.text.ChangeText:
+      name: "org.openrewrite.text.ChangeText"
+      description: "Completely replaces the contents of the text file with other text."
+      docLink: "https://docs.openrewrite.org/reference/recipes/text/changetext"
+      options:
+      - name: "toText"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-core"
+    org.openrewrite.text.CreateTextFile:
+      name: "org.openrewrite.text.CreateTextFile"
+      description: "Creates a new plain text file."
+      docLink: "https://docs.openrewrite.org/reference/recipes/text/createtextfile"
+      options:
+      - name: "fileContents"
+        type: "String"
+        required: true
+      - name: "overwriteExisting"
+        type: "Boolean"
+        required: false
+      - name: "relativeFileName"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-core"
+    org.openrewrite.text.Find:
+      name: "org.openrewrite.text.Find"
+      description: "Search for text, treating all textual sources as plain text."
+      docLink: "https://docs.openrewrite.org/reference/recipes/text/find"
+      options:
+      - name: "find"
+        type: "String"
+        required: true
+      - name: "regex"
+        type: "Boolean"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-core"
+    org.openrewrite.text.FindAndReplace:
+      name: "org.openrewrite.text.FindAndReplace"
+      description: "Simple text find and replace. When the original source file is\
+        \ a language-specific Lossless Semantic Tree, this operation irreversibly\
+        \ converts the source file to a plain text file. Subsequent recipes will not\
+        \ be able to operate on language-specific type."
+      docLink: "https://docs.openrewrite.org/reference/recipes/text/findandreplace"
+      options:
+      - name: "fileMatcher"
+        type: "String"
+        required: false
+      - name: "find"
+        type: "String"
+        required: true
+      - name: "regex"
+        type: "Boolean"
+        required: false
+      - name: "replace"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-core"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
   version: "1.20.0"
@@ -3668,6 +3752,34 @@ rewrite-json:
         required: true
       isImperative: true
       artifactId: "rewrite-json"
+rewrite-kotlin:
+  artifactId: "rewrite-kotlin"
+  version: "0.4.0"
+  markdownRecipeDescriptors:
+    org.openrewrite.kotlin.ChangeTypeAlias:
+      name: "org.openrewrite.kotlin.ChangeTypeAlias"
+      description: "Change a given type alias to another."
+      docLink: "https://docs.openrewrite.org/reference/recipes/kotlin/changetypealias"
+      options:
+      - name: "aliasName"
+        type: "String"
+        required: true
+      - name: "fullyQualifiedAliasedType"
+        type: "String"
+        required: true
+      - name: "newName"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-kotlin"
+    org.openrewrite.kotlin.FindKotlinSources:
+      name: "org.openrewrite.kotlin.FindKotlinSources"
+      description: "Use data table to collect source files types and counts of files\
+        \ with extensions `.kt`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/kotlin/findkotlinsources"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-kotlin"
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
   version: "1.30.0"
@@ -6860,6 +6972,42 @@ rewrite-properties:
         required: false
       isImperative: true
       artifactId: "rewrite-properties"
+rewrite-python:
+  artifactId: "rewrite-python"
+  version: "0.4.0"
+  markdownRecipeDescriptors:
+    org.openrewrite.python.ChangeMethodName:
+      name: "org.openrewrite.python.ChangeMethodName"
+      description: "Renames a method."
+      docLink: "https://docs.openrewrite.org/reference/recipes/python/changemethodname"
+      options:
+      - name: "ignoreDefinition"
+        type: "Boolean"
+        required: false
+      - name: "newMethodName"
+        type: "String"
+        required: true
+      - name: "oldMethodName"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-python"
+    org.openrewrite.python.format.PythonSpaces:
+      name: "org.openrewrite.python.format.PythonSpaces"
+      description: "Standardizes spaces in Python code. Currently limited to formatting\
+        \ method arguments."
+      docLink: "https://docs.openrewrite.org/reference/recipes/python/format/pythonspaces"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-python"
+    org.openrewrite.python.search.FindPythonSources:
+      name: "org.openrewrite.python.search.FindPythonSources"
+      description: "Use data table to collect source files types and counts of files\
+        \ with extensions `.py`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/python/search/findpythonsources"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-python"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
   version: "1.19.0"

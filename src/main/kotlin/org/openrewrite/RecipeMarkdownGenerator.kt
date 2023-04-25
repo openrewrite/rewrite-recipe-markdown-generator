@@ -122,8 +122,7 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         // Recipes fully loaded into recipeDescriptors
-        val recipeDescriptors: List<RecipeDescriptor> = env.listRecipeDescriptors()
-            .filterNot { it.name.startsWith("org.openrewrite.text") } // These are test utilities only
+        val recipeDescriptors: Collection<RecipeDescriptor> = env.listRecipeDescriptors()
         val categoryDescriptors = ArrayList(env.listCategoryDescriptors())
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
 
