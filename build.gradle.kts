@@ -63,7 +63,14 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-xml")
     "recipe"("org.openrewrite:rewrite-yaml")
 
+//    "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion") // Pending implementation of JS parser
+    "recipe"("org.openrewrite:rewrite-kotlin:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
+//    "recipe"("org.openrewrite:rewrite-sql:$rewriteVersion") // Pending release
+
+//    "recipe"("org.openrewrite.recipe:rewrite-all:$rewriteVersion") // Exclude language composition data table recipes
     "recipe"("org.openrewrite.recipe:rewrite-circleci:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-cloud-suitability-analyzer:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-concourse:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-github-actions:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-java-security:$rewriteVersion")
