@@ -735,6 +735,48 @@ class RecipeMarkdownGenerator : Runnable {
             """.trimIndent()
             )
 
+            if (!recipeDescriptor.examples.isEmpty()) {
+                var subject = if (recipeDescriptor.examples.size > 1) "Examples" else "Example"
+                writeln("## ${subject}")
+
+                for (i in 0 until recipeDescriptor.examples.size) {
+                    if (i > 0) {
+                        writeln("---");
+                    }
+
+                    var example = recipeDescriptor.examples.get(i)
+                    if (example.description != null && example.description.isNotEmpty() ) {
+                        writeln("* Example ${i+1}: " + "${example.description}");
+                    }
+
+                    val hasChange = example.after != null && example.after.isNotEmpty()
+                    var title = if (hasChange) "Before" else  "No change"
+
+                    newLine()
+                    writeln(
+                            """
+                        |#### ${title}
+                        |```${example.language}
+                        |${example.before}
+                        |```
+                        """.trimMargin()
+                    )
+
+                    if (hasChange) {
+                        newLine()
+                        writeln(
+                                """
+                        |#### After
+                        |```${example.language}
+                        |${example.after}
+                        |```
+                        """.trimMargin()
+                        )
+                    }
+                }
+                newLine()
+            }
+
             if (recipeDescriptor.options.isNotEmpty()) {
                 writeln(
                     """
