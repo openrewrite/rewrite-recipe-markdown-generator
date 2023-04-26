@@ -40,6 +40,7 @@ jobs:
         with:
           source: build/docs/SUMMARY_snippet.md
           output: build/docs/index.html
+          dark-mode: false
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
