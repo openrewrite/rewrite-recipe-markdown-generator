@@ -35,6 +35,12 @@ jobs:
         with:
           arguments: ${{ env.GRADLE_SWITCHES }} run
 
+      - name: Converts Markdown to HTML
+        uses: jaywcjlove/markdown-to-html-cli@main
+        with:
+          source: build/docs/SUMMARY_snippet.md
+          output: build/docs/index.html
+
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
