@@ -286,7 +286,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "7.40.0"
+  version: "7.40.2"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -605,7 +605,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "7.40.0"
+  version: "7.40.2"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.ActivateStyle:
       name: "org.openrewrite.gradle.ActivateStyle"
@@ -923,11 +923,32 @@ rewrite-gradle:
         required: true
       isImperative: true
       artifactId: "rewrite-gradle"
+    org.openrewrite.gradle.UpgradeDependencyVersion:
+      name: "org.openrewrite.gradle.UpgradeDependencyVersion"
+      description: "Upgrade the version of a dependency in a build.gradle file. Supports\
+        \ updating dependency declarations of various forms:\n* `String` notation:\
+        \  `implementation \"group:artifact:version\"` \n* `Map` notation: `implementation\
+        \ group: 'group', name: 'artifact', version: 'version'`\nCan update version\
+        \ numbers which are defined earlier in the same file in variable declarations."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/upgradedependencyversion"
+      options:
+      - name: "artifactId"
+        type: "String"
+        required: true
+      - name: "groupId"
+        type: "String"
+        required: true
+      - name: "newVersion"
+        type: "String"
+        required: true
+      - name: "versionPattern"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-gradle"
     org.openrewrite.gradle.UpgradeLiteralDependencyVersion:
       name: "org.openrewrite.gradle.UpgradeLiteralDependencyVersion"
-      description: "A fixed literal version is a version that is not a variable or\
-        \ property or supplied indirectly by platform BOMs or similar means. For example,\
-        \ `com.google.guava:guava:29.0-jre`."
+      description: "Deprecated form of `UpgradeDependencyVersion`. Use that instead."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/upgradeliteraldependencyversion"
       options:
       - name: "artifactId"
@@ -999,6 +1020,19 @@ rewrite-gradle:
       - name: "versionPattern"
         type: "String"
         required: false
+      isImperative: true
+      artifactId: "rewrite-gradle"
+    org.openrewrite.gradle.plugins.AddSettingsPluginRepository:
+      name: "org.openrewrite.gradle.plugins.AddSettingsPluginRepository"
+      description: "Add a Gradle settings repository to `settings.gradle(.kts)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/plugins/addsettingspluginrepository"
+      options:
+      - name: "type"
+        type: "String"
+        required: true
+      - name: "url"
+        type: "String"
+        required: true
       isImperative: true
       artifactId: "rewrite-gradle"
     org.openrewrite.gradle.plugins.RemoveBuildPlugin:
@@ -1123,6 +1157,22 @@ rewrite-gradle:
         required: true
       isImperative: true
       artifactId: "rewrite-gradle"
+    org.openrewrite.gradle.search.FindRepository:
+      name: "org.openrewrite.gradle.search.FindRepository"
+      description: "Find a Gradle repository by url."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/search/findrepository"
+      options:
+      - name: "purpose"
+        type: "Purpose"
+        required: false
+      - name: "type"
+        type: "String"
+        required: false
+      - name: "url"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-gradle"
     org.openrewrite.gradle.security.UseHttpsForRepositories:
       name: "org.openrewrite.gradle.security.UseHttpsForRepositories"
       description: "Use HTTPS for repository urls."
@@ -1132,7 +1182,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "7.40.0"
+  version: "7.40.2"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1151,7 +1201,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "7.40.0"
+  version: "7.40.2"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1235,7 +1285,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "7.40.0"
+  version: "7.40.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -2626,7 +2676,10 @@ rewrite-java:
         \ is no longer thrown from a `try` block. This recipe will find and remove\
         \ unnecessary catch blocks."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/unnecessarycatch"
-      options: []
+      options:
+      - name: "includeJavaLangException"
+        type: "boolean"
+        required: false
       isImperative: true
       artifactId: "rewrite-java"
     org.openrewrite.java.cleanup.UnnecessaryCloseInTryWithResources:
@@ -2935,6 +2988,14 @@ rewrite-java:
         \ class. Making them public makes recipes easier to use in other recipes in\
         \ unexpected ways."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/recipes/publicgetvisitor"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-java"
+    org.openrewrite.java.recipes.SelectRecipeExamples:
+      name: "org.openrewrite.java.recipes.SelectRecipeExamples"
+      description: "Add `@DocumentExample` to the first non-issue and not a disabled\
+        \ unit test of a recipe as an example, if there are not any examples yet."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/recipes/selectrecipeexamples"
       options: []
       isImperative: true
       artifactId: "rewrite-java"
@@ -3695,7 +3756,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "7.40.0"
+  version: "7.40.2"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -4477,7 +4538,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "7.40.0"
+  version: "7.40.2"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -5414,7 +5475,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "1.20.0"
+  version: "1.21.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -6873,7 +6934,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "7.40.0"
+  version: "7.40.2"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -9969,7 +10030,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "7.40.0"
+  version: "7.40.2"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -10148,7 +10209,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "7.40.0"
+  version: "7.40.2"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"

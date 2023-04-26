@@ -1211,7 +1211,7 @@ class RecipeMarkdownGenerator : Runnable {
             recipesPath.resolve(getRecipePath(recipeDescriptor) + ".md")
 
         private fun getRecipeRelativePath(recipe: RecipeDescriptor): String =
-            "/reference/recipes/" + getRecipePath(recipe)
+            "reference/recipes/" + getRecipePath(recipe)
 
         private fun findCategoryDescriptor(
             categoryPathFragment: String,
