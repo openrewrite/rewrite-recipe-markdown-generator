@@ -744,9 +744,8 @@ class RecipeMarkdownGenerator : Runnable {
                     }
 
                     var example = recipeDescriptor.examples.get(i)
-                    if (example.description != null && example.description.isNotEmpty() ) {
-                        writeln("* Example ${i+1}: " + "${example.description}");
-                    }
+                    var description = if (example.description != null && example.description.isNotEmpty()) example.description else ""
+                    writeln("* Example ${i+1}: " + "${description}");
 
                     val hasChange = example.after != null && example.after.isNotEmpty()
                     var title = if (hasChange) "Before" else  "No change"
