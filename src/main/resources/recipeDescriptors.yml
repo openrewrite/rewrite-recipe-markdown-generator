@@ -286,7 +286,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "7.40.2"
+  version: "7.40.3"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -440,6 +440,16 @@ rewrite-core:
       - name: "relativeFileName"
         type: "String"
         required: true
+      isImperative: true
+      artifactId: "rewrite-core"
+    org.openrewrite.text.EndOfLineAtEndOfFile:
+      name: "org.openrewrite.text.EndOfLineAtEndOfFile"
+      description: "Ensure that the file ends with the newline character.\n\n*Note*:\
+        \ If this recipe modifies a file, it converts the file into plain text. As\
+        \ such, this recipe should be run after any recipe that modifies the language-specific\
+        \ LST."
+      docLink: "https://docs.openrewrite.org/reference/recipes/text/endoflineatendoffile"
+      options: []
       isImperative: true
       artifactId: "rewrite-core"
     org.openrewrite.text.Find:
@@ -605,7 +615,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "7.40.2"
+  version: "7.40.3"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.ActivateStyle:
       name: "org.openrewrite.gradle.ActivateStyle"
@@ -1182,7 +1192,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "7.40.2"
+  version: "7.40.3"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1201,7 +1211,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "7.40.2"
+  version: "7.40.3"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1285,7 +1295,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "7.40.2"
+  version: "7.40.3"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -3756,7 +3766,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "7.40.2"
+  version: "7.40.3"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3815,7 +3825,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "0.4.0"
+  version: "0.4.1"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.ChangeTypeAlias:
       name: "org.openrewrite.kotlin.ChangeTypeAlias"
@@ -4538,7 +4548,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "7.40.2"
+  version: "7.40.3"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -6934,7 +6944,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "7.40.2"
+  version: "7.40.3"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -10030,7 +10040,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "7.40.2"
+  version: "7.40.3"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -10209,7 +10219,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "7.40.2"
+  version: "7.40.3"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
