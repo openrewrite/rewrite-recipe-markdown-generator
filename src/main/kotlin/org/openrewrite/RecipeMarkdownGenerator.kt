@@ -627,6 +627,16 @@ class RecipeMarkdownGenerator : Runnable {
                     appendLine("_${descriptor.description}_")
                 }
                 appendLine()
+
+                if (subcategories.isNotEmpty()) {
+                    appendLine("## Categories")
+                    appendLine()
+                    for (subcategory in subcategories) {
+                        appendLine("* [${subcategory.displayName}](/reference/recipes/${subcategory.path})")
+                    }
+                    appendLine()
+                }
+
                 if (recipes.isNotEmpty()) {
                     appendLine("## Recipes")
                     appendLine()
@@ -638,14 +648,7 @@ class RecipeMarkdownGenerator : Runnable {
                     }
                     appendLine()
                 }
-                if (subcategories.isNotEmpty()) {
-                    appendLine("## Subcategories")
-                    appendLine()
-                    for (subcategory in subcategories) {
-                        appendLine("* [${subcategory.displayName}](/reference/recipes/${subcategory.path})")
-                    }
-                    appendLine()
-                }
+
             }.toString()
         }
 
