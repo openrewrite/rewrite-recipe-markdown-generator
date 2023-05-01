@@ -175,7 +175,14 @@ class RecipeMarkdownGenerator : Runnable {
 
             // Used to create changelogs
             val markdownRecipeDescriptor =
-                MarkdownRecipeDescriptor(recipeDescriptor.name, recipeDescription, docLink, recipeOptions, isImperative, origin.artifactId)
+                MarkdownRecipeDescriptor(
+                    recipeDescriptor.name,
+                    recipeDescription,
+                    docLink,
+                    recipeOptions,
+                    isImperative,
+                    origin.artifactId
+                )
             val markdownArtifact = markdownArtifacts.computeIfAbsent(origin.artifactId) {
                 MarkdownRecipeArtifact(
                     origin.artifactId,
@@ -728,7 +735,12 @@ class RecipeMarkdownGenerator : Runnable {
                 """
                 ## Source
                 
-                [Github](${origin.githubUrl(recipeDescriptor.name, recipeDescriptor.source)}), [Issue Tracker](${origin.issueTrackerUrl()}), [Maven Central](https://central.sonatype.com/artifact/${origin.groupId}/${origin.artifactId}/${origin.version}/jar)
+                [Github](${
+                    origin.githubUrl(
+                        recipeDescriptor.name,
+                        recipeDescriptor.source
+                    )
+                }), [Issue Tracker](${origin.issueTrackerUrl()}), [Maven Central](https://central.sonatype.com/artifact/${origin.groupId}/${origin.artifactId}/${origin.version}/jar)
                 
                 * groupId: ${origin.groupId}
                 * artifactId: ${origin.artifactId}
@@ -738,7 +750,7 @@ class RecipeMarkdownGenerator : Runnable {
             )
 
             if (!recipeDescriptor.examples.isEmpty()) {
-                var subject = if (recipeDescriptor.examples.size > 1) "Examples" else "Example"
+                val subject = if (recipeDescriptor.examples.size > 1) "Examples" else "Example"
                 writeln("## ${subject}")
 
                 for (i in 0 until recipeDescriptor.examples.size) {
@@ -746,16 +758,17 @@ class RecipeMarkdownGenerator : Runnable {
                         writeln("---");
                     }
 
-                    var example = recipeDescriptor.examples.get(i)
-                    var description = if (example.description != null && example.description.isNotEmpty()) example.description else ""
-                    writeln("* Example ${i+1}: " + "${description}");
+                    val example = recipeDescriptor.examples.get(i)
+                    val description =
+                        if (example.description != null && example.description.isNotEmpty()) example.description else ""
+                    writeln("* Example ${i + 1}: " + description)
 
                     val hasChange = example.after != null && example.after.isNotEmpty()
-                    var title = if (hasChange) "Before" else  "No change"
+                    val title = if (hasChange) "Before" else "No change"
 
                     newLine()
                     writeln(
-                            """
+                        """
                         |#### ${title}
                         |```${example.language}
                         |${example.before}
@@ -766,7 +779,7 @@ class RecipeMarkdownGenerator : Runnable {
                     if (hasChange) {
                         newLine()
                         writeln(
-                                """
+                            """
                         |#### After
                         |```${example.language}
                         |${example.after}
@@ -822,6 +835,9 @@ class RecipeMarkdownGenerator : Runnable {
             newLine()
             writeln("## Usage")
             newLine()
+
+            val suppressMaven = recipeDescriptor.name.contains(".gradle.")
+            val suppressGradle = recipeDescriptor.name.contains(".maven.")
             val requiresConfiguration = recipeDescriptor.options.any { it.isRequired }
             val requiresDependency = !origin.isFromCoreLibrary()
             if (requiresConfiguration) {
@@ -863,261 +879,31 @@ class RecipeMarkdownGenerator : Runnable {
                 writeln("{% endcode %}")
                 newLine()
                 if (requiresDependency) {
-                    writeln(
-                        """
-                        Now that `$exampleRecipeName` has been defined activate it and take a dependency on ${origin.groupId}:${origin.artifactId}:${origin.version} in your build file:
-                        
-                        {% tabs %}
-                        {% tab title="Gradle" %}
-                        {% code title="build.gradle" %}
-                        ```groovy
-                        plugins {
-                            id("org.openrewrite.rewrite") version("$gradlePluginVersion")
-                        }
-    
-                        rewrite {
-                            activeRecipe("$exampleRecipeName")
-                        }
-    
-                        repositories {
-                            mavenCentral()
-                        }
-                        
-                        dependencies {
-                            rewrite("${origin.groupId}:${origin.artifactId}:${origin.version}")
-                        }
-                        ```
-                        {% endcode %}
-                        {% endtab %}
-    
-                        {% tab title="Maven" %}
-                        {% code title="pom.xml" %}
-                        ```markup
-                        <project>
-                          <build>
-                            <plugins>
-                              <plugin>
-                                <groupId>org.openrewrite.maven</groupId>
-                                <artifactId>rewrite-maven-plugin</artifactId>
-                                <version>$mavenPluginVersion</version>
-                                <configuration>
-                                  <activeRecipes>
-                                    <recipe>$exampleRecipeName</recipe>
-                                  </activeRecipes>
-                                </configuration>
-                                <dependencies>
-                                  <dependency>
-                                    <groupId>${origin.groupId}</groupId>
-                                    <artifactId>${origin.artifactId}</artifactId>
-                                    <version>${origin.version}</version>
-                                  </dependency>
-                                </dependencies>
-                              </plugin>
-                            </plugins>
-                          </build>
-                        </project>
-                        ```
-                        {% endcode %}
-                        {% endtab %}
-                        {% endtabs %}
-                        
-                """.trimIndent()
+                    writeSnippetsWithConfigurationWithDependency(
+                        exampleRecipeName,
+                        origin,
+                        gradlePluginVersion,
+                        mavenPluginVersion,
+                        suppressMaven,
+                        suppressGradle
                     )
                 } else {
-                    writeln(
-                        """
-                        
-                        Now that `$exampleRecipeName` has been defined activate it in your build file:
-                        
-                        {% tabs %}
-                        {% tab title="Gradle" %}
-                        {% code title="build.gradle" %}
-                        ```groovy
-                        plugins {
-                            id("org.openrewrite.rewrite") version("$gradlePluginVersion")
-                        }
-    
-                        rewrite {
-                            activeRecipe("$exampleRecipeName")
-                        }
-    
-                        repositories {
-                            mavenCentral()
-                        }
-
-                        ```
-                        {% endcode %}
-                        {% endtab %}
-    
-                        {% tab title="Maven" %}
-                        {% code title="pom.xml" %}
-                        ```markup
-                        <project>
-                          <build>
-                            <plugins>
-                              <plugin>
-                                <groupId>org.openrewrite.maven</groupId>
-                                <artifactId>rewrite-maven-plugin</artifactId>
-                                <version>$mavenPluginVersion</version>
-                                <configuration>
-                                  <activeRecipes>
-                                    <recipe>$exampleRecipeName</recipe>
-                                  </activeRecipes>
-                                </configuration>
-                              </plugin>
-                            </plugins>
-                          </build>
-                        </project>
-                        ```
-                        {% endcode %}
-                        {% endtab %}
-                        {% endtabs %}
-                        
-                    """.trimIndent()
+                    writeSnippetsWithConfigurationWithoutDependency(
+                        exampleRecipeName,
+                        gradlePluginVersion,
+                        mavenPluginVersion,
+                        suppressMaven,
+                        suppressGradle
                     )
                 }
             } else {
                 if (origin.isFromCoreLibrary()) {
-                    writeln(
-                        "This recipe has no required configuration parameters and comes from a rewrite core library. " +
-                                "It can be activated directly without adding any dependencies."
-                    )
-                    writeln(
-                        """
-                        
-                        {% tabs %}
-                        {% tab title="Gradle" %}
-                        {% code title="build.gradle" %}
-                        ```groovy
-                        plugins {
-                            id("org.openrewrite.rewrite") version("$gradlePluginVersion")
-                        }
-    
-                        rewrite {
-                            activeRecipe("${recipeDescriptor.name}")
-                        }
-    
-                        repositories {
-                            mavenCentral()
-                        }
-
-                        ```
-                        {% endcode %}
-                        {% endtab %}
-    
-                        {% tab title="Maven POM" %}
-                        {% code title="pom.xml" %}
-                        ```markup
-                        <project>
-                          <build>
-                            <plugins>
-                              <plugin>
-                                <groupId>org.openrewrite.maven</groupId>
-                                <artifactId>rewrite-maven-plugin</artifactId>
-                                <version>$mavenPluginVersion</version>
-                                <configuration>
-                                  <activeRecipes>
-                                    <recipe>${recipeDescriptor.name}</recipe>
-                                  </activeRecipes>
-                                </configuration>
-                              </plugin>
-                            </plugins>
-                          </build>
-                        </project>
-                        ```
-                        {% endcode %}
-                        {% endtab %}
-    
-                        {% tab title="Maven Command Line" %}
-                        You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
-
-                        {% code title="shell" %}
-                        ```shell
-                        mvn -U org.openrewrite.maven:rewrite-maven-plugin:run \
-                          -Drewrite.activeRecipes=${recipeDescriptor.name}
-                        ```
-                        {% endcode %}
-                        {% endtab %}
-                        {% endtabs %}
-                        
-                    """.trimIndent()
+                    writeSnippetsFromCoreLibrary(
+                        recipeDescriptor, gradlePluginVersion, mavenPluginVersion, suppressMaven, suppressGradle
                     )
                 } else {
-                    writeln(
-                        "This recipe has no required configuration options. It can be activated by adding a dependency on " +
-                                "`${origin.groupId}:${origin.artifactId}:${origin.version}` in your build file or by running a shell " +
-                                "command (in which case no build changes are needed): "
-                    )
-                    writeln(
-                        """
-                        
-                        {% tabs %}
-                        {% tab title="Gradle" %}
-                        {% code title="build.gradle" %}
-                        ```groovy
-                        plugins {
-                            id("org.openrewrite.rewrite") version("$gradlePluginVersion")
-                        }
-    
-                        rewrite {
-                            activeRecipe("${recipeDescriptor.name}")
-                        }
-    
-                        repositories {
-                            mavenCentral()
-                        }
-                        
-                        dependencies {
-                            rewrite("${origin.groupId}:${origin.artifactId}:${origin.version}")
-                        }
-                        ```
-                        {% endcode %}
-                        {% endtab %}
-    
-                        {% tab title="Maven POM" %}
-                        {% code title="pom.xml" %}
-                        ```markup
-                        <project>
-                          <build>
-                            <plugins>
-                              <plugin>
-                                <groupId>org.openrewrite.maven</groupId>
-                                <artifactId>rewrite-maven-plugin</artifactId>
-                                <version>$mavenPluginVersion</version>
-                                <configuration>
-                                  <activeRecipes>
-                                    <recipe>${recipeDescriptor.name}</recipe>
-                                  </activeRecipes>
-                                </configuration>
-                                <dependencies>
-                                  <dependency>
-                                    <groupId>${origin.groupId}</groupId>
-                                    <artifactId>${origin.artifactId}</artifactId>
-                                    <version>${origin.version}</version>
-                                  </dependency>
-                                </dependencies>
-                              </plugin>
-                            </plugins>
-                          </build>
-                        </project>
-                        ```
-                        {% endcode %}
-                        {% endtab %}
-    
-                        {% tab title="Maven Command Line" %}
-                        {% code title="shell" %}
-                        You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
-
-                        ```shell
-                        mvn -U org.openrewrite.maven:rewrite-maven-plugin:run \
-                          -Drewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:RELEASE \
-                          -Drewrite.activeRecipes=${recipeDescriptor.name}
-                        ```
-                        {% endcode %}
-                        {% endtab %}
-                        {% endtabs %}
-                        
-                    """.trimIndent()
+                    writeSnippetForOtherLibrary(
+                        origin, recipeDescriptor, gradlePluginVersion, mavenPluginVersion, suppressMaven, suppressGradle
                     )
                 }
             }
@@ -1180,6 +966,304 @@ class RecipeMarkdownGenerator : Runnable {
             """.trimIndent()
             )
         }
+    }
+
+    private fun BufferedWriter.writeSnippetsWithConfigurationWithoutDependency(
+        exampleRecipeName: String,
+        gradlePluginVersion: String,
+        mavenPluginVersion: String,
+        suppressMaven: Boolean,
+        suppressGradle: Boolean
+    ) {
+        val gradleSnippet = if (suppressGradle) "" else """
+                            {% tab title="Gradle" %}
+                            {% code title="build.gradle" %}
+                            ```groovy
+                            plugins {
+                                id("org.openrewrite.rewrite") version("$gradlePluginVersion")
+                            }
+                            
+                            rewrite {
+                                activeRecipe("$exampleRecipeName")
+                            }
+                            
+                            repositories {
+                                mavenCentral()
+                            }
+                            ```
+                            {% endcode %}
+                            {% endtab %}
+                            """.trimIndent()
+        val mavenSnippet = if (suppressMaven) "" else """
+                            {% tab title="Maven" %}
+                            {% code title="pom.xml" %}
+                            ```markup
+                            <project>
+                              <build>
+                                <plugins>
+                                  <plugin>
+                                    <groupId>org.openrewrite.maven</groupId>
+                                    <artifactId>rewrite-maven-plugin</artifactId>
+                                    <version>$mavenPluginVersion</version>
+                                    <configuration>
+                                      <activeRecipes>
+                                        <recipe>$exampleRecipeName</recipe>
+                                      </activeRecipes>
+                                    </configuration>
+                                  </plugin>
+                                </plugins>
+                              </build>
+                            </project>
+                            ```
+                            {% endcode %}
+                            {% endtab %}
+                            """.trimIndent()
+        writeln(
+            """
+                            Now that `$exampleRecipeName` has been defined activate it in your build file:
+                            {% tabs %}
+                            $gradleSnippet
+                            $mavenSnippet
+                            {% endtabs %}
+                            """.trimIndent()
+        )
+    }
+
+    private fun BufferedWriter.writeSnippetsWithConfigurationWithDependency(
+        exampleRecipeName: String,
+        origin: RecipeOrigin,
+        gradlePluginVersion: String,
+        mavenPluginVersion: String,
+        suppressMaven: Boolean,
+        suppressGradle: Boolean
+    ) {
+        val gradleSnippet = if (suppressGradle) "" else """
+                            {% tab title="Gradle" %}
+                            {% code title="build.gradle" %}
+                            ```groovy
+                            plugins {
+                                id("org.openrewrite.rewrite") version("$gradlePluginVersion")
+                            }
+                            
+                            rewrite {
+                                activeRecipe("$exampleRecipeName")
+                            }
+                            
+                            repositories {
+                                mavenCentral()
+                            }
+                            
+                            dependencies {
+                                rewrite("${origin.groupId}:${origin.artifactId}:${origin.version}")
+                            }
+                            ```
+                            {% endcode %}
+                            {% endtab %}
+                            """.trimIndent()
+        val mavenSnippet = if (suppressMaven) "" else """
+                            {% tab title="Maven" %}
+                            {% code title="pom.xml" %}
+                            ```markup
+                            <project>
+                              <build>
+                                <plugins>
+                                  <plugin>
+                                    <groupId>org.openrewrite.maven</groupId>
+                                    <artifactId>rewrite-maven-plugin</artifactId>
+                                    <version>$mavenPluginVersion</version>
+                                    <configuration>
+                                      <activeRecipes>
+                                        <recipe>$exampleRecipeName</recipe>
+                                      </activeRecipes>
+                                    </configuration>
+                                    <dependencies>
+                                      <dependency>
+                                        <groupId>${origin.groupId}</groupId>
+                                        <artifactId>${origin.artifactId}</artifactId>
+                                        <version>${origin.version}</version>
+                                      </dependency>
+                                    </dependencies>
+                                  </plugin>
+                                </plugins>
+                              </build>
+                            </project>
+                            ```
+                            {% endcode %}
+                            {% endtab %}
+                            """.trimIndent()
+        writeln(
+            """
+                            Now that `$exampleRecipeName` has been defined activate it and take a dependency on ${origin.groupId}:${origin.artifactId}:${origin.version} in your build file:
+                            {% tabs %}
+                            $gradleSnippet
+                            $mavenSnippet
+                            {% endtabs %}
+                            """.trimIndent()
+        )
+    }
+
+    private fun BufferedWriter.writeSnippetsFromCoreLibrary(
+        recipeDescriptor: RecipeDescriptor,
+        gradlePluginVersion: String,
+        mavenPluginVersion: String,
+        suppressMaven: Boolean,
+        suppressGradle: Boolean
+    ) {
+        writeln(
+            "This recipe has no required configuration parameters and comes from a rewrite core library. " +
+                    "It can be activated directly without adding any dependencies."
+        )
+        val gradleSnippet = if (suppressGradle) "" else """
+                            {% tab title="Gradle" %}
+                            {% code title="build.gradle" %}
+                            ```groovy
+                            plugins {
+                                id("org.openrewrite.rewrite") version("$gradlePluginVersion")
+                            }
+                            
+                            rewrite {
+                                activeRecipe("${recipeDescriptor.name}")
+                            }
+                            
+                            repositories {
+                                mavenCentral()
+                            }
+                            
+                            ```
+                            {% endcode %}
+                            {% endtab %}
+                            """.trimIndent()
+        val mavenSnippet = if (suppressMaven) "" else """
+                            {% tab title="Maven POM" %}
+                            {% code title="pom.xml" %}
+                            ```markup
+                            <project>
+                              <build>
+                                <plugins>
+                                  <plugin>
+                                    <groupId>org.openrewrite.maven</groupId>
+                                    <artifactId>rewrite-maven-plugin</artifactId>
+                                    <version>$mavenPluginVersion</version>
+                                    <configuration>
+                                      <activeRecipes>
+                                        <recipe>${recipeDescriptor.name}</recipe>
+                                      </activeRecipes>
+                                    </configuration>
+                                  </plugin>
+                                </plugins>
+                              </build>
+                            </project>
+                            ```
+                            {% endcode %}
+                            {% endtab %}
+                            
+                            {% tab title="Maven Command Line" %}
+                            You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
+                            {% code title="shell" %}
+                            ```shell
+                            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run \
+                              -Drewrite.activeRecipes=${recipeDescriptor.name}
+                            ```
+                            {% endcode %}
+                            {% endtab %}
+                            """.trimIndent()
+        writeln(
+            """
+                            {% tabs %}
+                            $gradleSnippet
+                            $mavenSnippet
+                            {% endtabs %}
+                            """.trimIndent()
+        )
+    }
+
+    private fun BufferedWriter.writeSnippetForOtherLibrary(
+        origin: RecipeOrigin,
+        recipeDescriptor: RecipeDescriptor,
+        gradlePluginVersion: String,
+        mavenPluginVersion: String,
+        suppressMaven: Boolean,
+        suppressGradle: Boolean
+    ) {
+        writeln(
+            "This recipe has no required configuration options. It can be activated by adding a dependency on " +
+                    "`${origin.groupId}:${origin.artifactId}:${origin.version}` in your build file or by running a shell " +
+                    "command (in which case no build changes are needed): "
+        )
+        val gradleSnippet = if (suppressGradle) "" else """
+                            {% tab title="Gradle" %}
+                            {% code title="build.gradle" %}
+                            ```groovy
+                            plugins {
+                                id("org.openrewrite.rewrite") version("$gradlePluginVersion")
+                            }
+                            
+                            rewrite {
+                                activeRecipe("${recipeDescriptor.name}")
+                            }
+                            
+                            repositories {
+                                mavenCentral()
+                            }
+                            
+                            dependencies {
+                                rewrite("${origin.groupId}:${origin.artifactId}:${origin.version}")
+                            }
+                            ```
+                            {% endcode %}
+                            {% endtab %}
+                            """.trimIndent()
+        val mavenSnippet = if (suppressMaven) "" else """
+                            {% tab title="Maven POM" %}
+                            {% code title="pom.xml" %}
+                            ```markup
+                            <project>
+                              <build>
+                                <plugins>
+                                  <plugin>
+                                    <groupId>org.openrewrite.maven</groupId>
+                                    <artifactId>rewrite-maven-plugin</artifactId>
+                                    <version>$mavenPluginVersion</version>
+                                    <configuration>
+                                      <activeRecipes>
+                                        <recipe>${recipeDescriptor.name}</recipe>
+                                      </activeRecipes>
+                                    </configuration>
+                                    <dependencies>
+                                      <dependency>
+                                        <groupId>${origin.groupId}</groupId>
+                                        <artifactId>${origin.artifactId}</artifactId>
+                                        <version>${origin.version}</version>
+                                      </dependency>
+                                    </dependencies>
+                                  </plugin>
+                                </plugins>
+                              </build>
+                            </project>
+                            ```
+                            {% endcode %}
+                            {% endtab %}
+                            
+                            {% tab title="Maven Command Line" %}
+                            {% code title="shell" %}
+                            You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
+                            
+                            ```shell
+                            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run \
+                              -Drewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:RELEASE \
+                              -Drewrite.activeRecipes=${recipeDescriptor.name}
+                            ```
+                            {% endcode %}
+                            {% endtab %}
+                            """.trimIndent()
+        writeln(
+            """
+                            {% tabs %}
+                            $gradleSnippet
+                            $mavenSnippet
+                            {% endtabs %}
+                            """.trimIndent()
+        )
     }
 
     companion object {
