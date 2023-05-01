@@ -28,7 +28,7 @@ rewrite-circleci:
       artifactId: "rewrite-circleci"
 rewrite-cloud-suitability-analyzer:
   artifactId: "rewrite-cloud-suitability-analyzer"
-  version: "1.6.0"
+  version: "1.7.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.cloudsuitability.FindCacheUses:
       name: "org.openrewrite.cloudsuitability.FindCacheUses"
@@ -206,7 +206,7 @@ rewrite-cloud-suitability-analyzer:
       artifactId: "rewrite-cloud-suitability-analyzer"
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "1.19.0"
+  version: "1.20.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -286,7 +286,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "7.40.0"
+  version: "7.41.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -393,9 +393,103 @@ rewrite-core:
       options: []
       isImperative: true
       artifactId: "rewrite-core"
+    org.openrewrite.text.AppendToTextFile:
+      name: "org.openrewrite.text.AppendToTextFile"
+      description: "Appends content to a plaintext file. Multiple instances of this\
+        \ recipe in the same execution context can all contribute."
+      docLink: "https://docs.openrewrite.org/reference/recipes/text/appendtotextfile"
+      options:
+      - name: "appendNewline"
+        type: "Boolean"
+        required: false
+      - name: "content"
+        type: "String"
+        required: true
+      - name: "existingFileStrategy"
+        type: "String"
+        required: false
+      - name: "preamble"
+        type: "String"
+        required: false
+      - name: "relativeFileName"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-core"
+    org.openrewrite.text.ChangeText:
+      name: "org.openrewrite.text.ChangeText"
+      description: "Completely replaces the contents of the text file with other text."
+      docLink: "https://docs.openrewrite.org/reference/recipes/text/changetext"
+      options:
+      - name: "toText"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-core"
+    org.openrewrite.text.CreateTextFile:
+      name: "org.openrewrite.text.CreateTextFile"
+      description: "Creates a new plain text file."
+      docLink: "https://docs.openrewrite.org/reference/recipes/text/createtextfile"
+      options:
+      - name: "fileContents"
+        type: "String"
+        required: true
+      - name: "overwriteExisting"
+        type: "Boolean"
+        required: false
+      - name: "relativeFileName"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-core"
+    org.openrewrite.text.EndOfLineAtEndOfFile:
+      name: "org.openrewrite.text.EndOfLineAtEndOfFile"
+      description: "Ensure that the file ends with the newline character.\n\n*Note*:\
+        \ If this recipe modifies a file, it converts the file into plain text. As\
+        \ such, this recipe should be run after any recipe that modifies the language-specific\
+        \ LST."
+      docLink: "https://docs.openrewrite.org/reference/recipes/text/endoflineatendoffile"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-core"
+    org.openrewrite.text.Find:
+      name: "org.openrewrite.text.Find"
+      description: "Search for text, treating all textual sources as plain text."
+      docLink: "https://docs.openrewrite.org/reference/recipes/text/find"
+      options:
+      - name: "find"
+        type: "String"
+        required: true
+      - name: "regex"
+        type: "Boolean"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-core"
+    org.openrewrite.text.FindAndReplace:
+      name: "org.openrewrite.text.FindAndReplace"
+      description: "Simple text find and replace. When the original source file is\
+        \ a language-specific Lossless Semantic Tree, this operation irreversibly\
+        \ converts the source file to a plain text file. Subsequent recipes will not\
+        \ be able to operate on language-specific type."
+      docLink: "https://docs.openrewrite.org/reference/recipes/text/findandreplace"
+      options:
+      - name: "fileMatcher"
+        type: "String"
+        required: false
+      - name: "find"
+        type: "String"
+        required: true
+      - name: "regex"
+        type: "Boolean"
+        required: false
+      - name: "replace"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-core"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "1.20.0"
+  version: "1.21.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin:
       name: "org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin"
@@ -521,7 +615,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "7.40.0"
+  version: "7.41.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.ActivateStyle:
       name: "org.openrewrite.gradle.ActivateStyle"
@@ -839,11 +933,32 @@ rewrite-gradle:
         required: true
       isImperative: true
       artifactId: "rewrite-gradle"
+    org.openrewrite.gradle.UpgradeDependencyVersion:
+      name: "org.openrewrite.gradle.UpgradeDependencyVersion"
+      description: "Upgrade the version of a dependency in a build.gradle file. Supports\
+        \ updating dependency declarations of various forms:\n* `String` notation:\
+        \  `implementation \"group:artifact:version\"` \n* `Map` notation: `implementation\
+        \ group: 'group', name: 'artifact', version: 'version'`\nCan update version\
+        \ numbers which are defined earlier in the same file in variable declarations."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/upgradedependencyversion"
+      options:
+      - name: "artifactId"
+        type: "String"
+        required: true
+      - name: "groupId"
+        type: "String"
+        required: true
+      - name: "newVersion"
+        type: "String"
+        required: true
+      - name: "versionPattern"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-gradle"
     org.openrewrite.gradle.UpgradeLiteralDependencyVersion:
       name: "org.openrewrite.gradle.UpgradeLiteralDependencyVersion"
-      description: "A fixed literal version is a version that is not a variable or\
-        \ property or supplied indirectly by platform BOMs or similar means. For example,\
-        \ `com.google.guava:guava:29.0-jre`."
+      description: "Deprecated form of `UpgradeDependencyVersion`. Use that instead."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/upgradeliteraldependencyversion"
       options:
       - name: "artifactId"
@@ -915,6 +1030,19 @@ rewrite-gradle:
       - name: "versionPattern"
         type: "String"
         required: false
+      isImperative: true
+      artifactId: "rewrite-gradle"
+    org.openrewrite.gradle.plugins.AddSettingsPluginRepository:
+      name: "org.openrewrite.gradle.plugins.AddSettingsPluginRepository"
+      description: "Add a Gradle settings repository to `settings.gradle(.kts)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/plugins/addsettingspluginrepository"
+      options:
+      - name: "type"
+        type: "String"
+        required: true
+      - name: "url"
+        type: "String"
+        required: true
       isImperative: true
       artifactId: "rewrite-gradle"
     org.openrewrite.gradle.plugins.RemoveBuildPlugin:
@@ -1039,6 +1167,22 @@ rewrite-gradle:
         required: true
       isImperative: true
       artifactId: "rewrite-gradle"
+    org.openrewrite.gradle.search.FindRepository:
+      name: "org.openrewrite.gradle.search.FindRepository"
+      description: "Find a Gradle repository by url."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/search/findrepository"
+      options:
+      - name: "purpose"
+        type: "Purpose"
+        required: false
+      - name: "type"
+        type: "String"
+        required: false
+      - name: "url"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-gradle"
     org.openrewrite.gradle.security.UseHttpsForRepositories:
       name: "org.openrewrite.gradle.security.UseHttpsForRepositories"
       description: "Use HTTPS for repository urls."
@@ -1048,7 +1192,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "7.40.0"
+  version: "7.41.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1067,7 +1211,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "7.40.0"
+  version: "7.41.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1151,7 +1295,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "7.40.0"
+  version: "7.41.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -2542,7 +2686,10 @@ rewrite-java:
         \ is no longer thrown from a `try` block. This recipe will find and remove\
         \ unnecessary catch blocks."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/unnecessarycatch"
-      options: []
+      options:
+      - name: "includeJavaLangException"
+        type: "boolean"
+        required: false
       isImperative: true
       artifactId: "rewrite-java"
     org.openrewrite.java.cleanup.UnnecessaryCloseInTryWithResources:
@@ -2851,6 +2998,14 @@ rewrite-java:
         \ class. Making them public makes recipes easier to use in other recipes in\
         \ unexpected ways."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/recipes/publicgetvisitor"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-java"
+    org.openrewrite.java.recipes.SelectRecipeExamples:
+      name: "org.openrewrite.java.recipes.SelectRecipeExamples"
+      description: "Add `@DocumentExample` to the first non-issue and not a disabled\
+        \ unit test of a recipe as an example, if there are not any examples yet."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/recipes/selectrecipeexamples"
       options: []
       isImperative: true
       artifactId: "rewrite-java"
@@ -3183,7 +3338,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "0.4.0"
+  version: "0.5.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.DependencyLicenseCheck:
       name: "org.openrewrite.java.dependencies.DependencyLicenseCheck"
@@ -3236,7 +3391,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "1.25.0"
+  version: "1.26.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.security.FindTextDirectionChanges:
       name: "org.openrewrite.java.security.FindTextDirectionChanges"
@@ -3599,7 +3754,7 @@ rewrite-java-security:
       artifactId: "rewrite-java-security"
 rewrite-jhipster:
   artifactId: "rewrite-jhipster"
-  version: "1.20.0"
+  version: "1.21.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.jhipster.FixCwe338:
       name: "org.openrewrite.java.jhipster.FixCwe338"
@@ -3611,7 +3766,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "7.40.0"
+  version: "7.41.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3668,9 +3823,37 @@ rewrite-json:
         required: true
       isImperative: true
       artifactId: "rewrite-json"
+rewrite-kotlin:
+  artifactId: "rewrite-kotlin"
+  version: "0.5.0-SNAPSHOT"
+  markdownRecipeDescriptors:
+    org.openrewrite.kotlin.ChangeTypeAlias:
+      name: "org.openrewrite.kotlin.ChangeTypeAlias"
+      description: "Change a given type alias to another."
+      docLink: "https://docs.openrewrite.org/reference/recipes/kotlin/changetypealias"
+      options:
+      - name: "aliasName"
+        type: "String"
+        required: true
+      - name: "fullyQualifiedAliasedType"
+        type: "String"
+        required: true
+      - name: "newName"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-kotlin"
+    org.openrewrite.kotlin.FindKotlinSources:
+      name: "org.openrewrite.kotlin.FindKotlinSources"
+      description: "Use data table to collect source files types and counts of files\
+        \ with extensions `.kt`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/kotlin/findkotlinsources"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-kotlin"
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "1.30.0"
+  version: "1.31.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -4284,26 +4467,18 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
     org.openrewrite.java.logging.slf4j.CompleteExceptionLogging:
       name: "org.openrewrite.java.logging.slf4j.CompleteExceptionLogging"
-      description: "It is a common mistake to call Exception.getMessage() when passing\
+      description: "It is a common mistake to call `Exception.getMessage()` when passing\
         \ an exception into a log method. Not all exception types have useful messages,\
         \ and even if the message is useful this omits the stack trace. Including\
         \ a complete stack trace of the error along with the exception message in\
         \ the log allows developers to better understand the context of the exception\
-        \ and identify the source of the error more quickly and accurately."
+        \ and identify the source of the error more quickly and accurately. \n If\
+        \ the method invocation includes any call to `Exception.getMessage()` or `Exception.getLocalizedMessage()`\
+        \ and not an exception is already passed as the last parameter to the log\
+        \ method, then we will append the exception as the last parameter in the log\
+        \ method."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/logging/slf4j/completeexceptionlogging"
       options: []
-      isImperative: true
-      artifactId: "rewrite-logging-frameworks"
-    org.openrewrite.java.logging.slf4j.ConvertLogMessageMessageOnlyToLogMessageAndThrowable:
-      name: "org.openrewrite.java.logging.slf4j.ConvertLogMessageMessageOnlyToLogMessageAndThrowable"
-      description: "Convert `Logger#error|warn(throwable#message)` to `Logger#error|warn(<log-message>,\
-        \ e)` invocations having only the error's message as the parameter, to a log\
-        \ statement with message and throwable."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/logging/slf4j/convertlogmessagemessageonlytologmessageandthrowable"
-      options:
-      - name: "logMessage"
-        type: "String"
-        required: false
       isImperative: true
       artifactId: "rewrite-logging-frameworks"
     org.openrewrite.java.logging.slf4j.Log4j1ToSlf4j1:
@@ -4365,7 +4540,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "7.40.0"
+  version: "7.41.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -5204,7 +5379,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "1.24.0"
+  version: "1.25.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy:
       name: "org.openrewrite.java.micronaut.BeanPropertyCapitalizationStrategy"
@@ -5302,7 +5477,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "1.21.0-SNAPSHOT"
+  version: "1.22.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -6491,6 +6666,16 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.UseStringIsEmptyRecipe:
+      name: "org.openrewrite.java.migrate.lang.UseStringIsEmptyRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        public class UseStringIsEmpty {\n    \n    @BeforeTemplate\n    boolean before(String\
+        \ s) {\n        return s.length() > 0;\n    }\n    \n    @AfterTemplate\n\
+        \    boolean after(String s) {\n        return !s.isEmpty();\n    }\n}\n```."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/usestringisemptyrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.lang.UseTextBlocks:
       name: "org.openrewrite.java.migrate.lang.UseTextBlocks"
       description: "Text blocks are easier to read than concatenated strings."
@@ -6761,7 +6946,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "7.40.0"
+  version: "7.41.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -6860,9 +7045,53 @@ rewrite-properties:
         required: false
       isImperative: true
       artifactId: "rewrite-properties"
+rewrite-python:
+  artifactId: "rewrite-python"
+  version: "0.5.0-SNAPSHOT"
+  markdownRecipeDescriptors:
+    org.openrewrite.python.ChangeMethodName:
+      name: "org.openrewrite.python.ChangeMethodName"
+      description: "Renames a method."
+      docLink: "https://docs.openrewrite.org/reference/recipes/python/changemethodname"
+      options:
+      - name: "ignoreDefinition"
+        type: "Boolean"
+        required: false
+      - name: "newMethodName"
+        type: "String"
+        required: true
+      - name: "oldMethodName"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-python"
+    org.openrewrite.python.cleanup.CommonStaticAnalysis:
+      name: "org.openrewrite.python.cleanup.CommonStaticAnalysis"
+      description: "Resolve common static analysis issues discovered through 3rd party\
+        \ tools."
+      docLink: "https://docs.openrewrite.org/reference/recipes/python/cleanup/commonstaticanalysis"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-python"
+    org.openrewrite.python.format.PythonSpaces:
+      name: "org.openrewrite.python.format.PythonSpaces"
+      description: "Standardizes spaces in Python code. Currently limited to formatting\
+        \ method arguments."
+      docLink: "https://docs.openrewrite.org/reference/recipes/python/format/pythonspaces"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-python"
+    org.openrewrite.python.search.FindPythonSources:
+      name: "org.openrewrite.python.search.FindPythonSources"
+      description: "Use data table to collect source files types and counts of files\
+        \ with extensions `.py`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/python/search/findpythonsources"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-python"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "1.19.0"
+  version: "1.20.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.ConfigPropertiesToConfigMapping:
       name: "org.openrewrite.quarkus.ConfigPropertiesToConfigMapping"
@@ -6966,7 +7195,7 @@ rewrite-quarkus:
       artifactId: "rewrite-quarkus"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "4.36.0"
+  version: "4.37.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.spring.AddSpringProperty:
       name: "org.openrewrite.java.spring.AddSpringProperty"
@@ -8365,7 +8594,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "1.19.0"
+  version: "1.20.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -9258,7 +9487,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "1.37.0"
+  version: "1.38.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.assertj.Assertj:
       name: "org.openrewrite.java.testing.assertj.Assertj"
@@ -9821,7 +10050,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "7.40.0"
+  version: "7.41.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -10000,7 +10229,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "7.40.0"
+  version: "7.41.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"

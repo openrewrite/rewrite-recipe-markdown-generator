@@ -778,14 +778,12 @@ class RecipeMarkdownGenerator : Runnable {
                 newLine()
             }
 
-            if (!recipeDescriptor.contributors.isEmpty()) {
+            if (recipeDescriptor.contributors.isNotEmpty()) {
                 writeln("## Contributors")
                 for (contributors in recipeDescriptor.contributors) {
-                    var nameInitial = contributors.name.split(" ")
-                            .map { it.substring(0, 1).uppercase() }
-                            .joinToString("")
-                    writeln("<span style=\"display: inline-block; width: 50px; height: 50px; border-radius: 50%; background-color: #555; color: #fff; text-align: center; line-height: 50px; font-size: 24px; text-transform: uppercase;\" title=\"${contributors.name}(${contributors.email})\">${nameInitial}</span>")
+                    writeln("* [${contributors.name}](${contributors.email})")
                 }
+                newLine()
             }
 
             if (recipeDescriptor.options.isNotEmpty()) {
