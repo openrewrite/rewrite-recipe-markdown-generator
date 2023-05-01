@@ -1020,12 +1020,12 @@ class RecipeMarkdownGenerator : Runnable {
                             """.trimIndent()
         writeln(
             """
-                            Now that `$exampleRecipeName` has been defined activate it in your build file:
-                            {% tabs %}
-                            $gradleSnippet
-                            $mavenSnippet
-                            {% endtabs %}
-                            """.trimIndent()
+            Now that `$exampleRecipeName` has been defined activate it in your build file:
+            {% tabs %}
+            $gradleSnippet
+            $mavenSnippet
+            {% endtabs %}
+            """.trimIndent()
         )
     }
 
@@ -1093,12 +1093,12 @@ class RecipeMarkdownGenerator : Runnable {
                             """.trimIndent()
         writeln(
             """
-                            Now that `$exampleRecipeName` has been defined activate it and take a dependency on ${origin.groupId}:${origin.artifactId}:${origin.version} in your build file:
-                            {% tabs %}
-                            $gradleSnippet
-                            $mavenSnippet
-                            {% endtabs %}
-                            """.trimIndent()
+            Now that `$exampleRecipeName` has been defined activate it and take a dependency on ${origin.groupId}:${origin.artifactId}:${origin.version} in your build file:
+            {% tabs %}
+            $gradleSnippet
+            $mavenSnippet
+            {% endtabs %}
+            """.trimIndent()
         )
     }
 
@@ -1169,11 +1169,11 @@ class RecipeMarkdownGenerator : Runnable {
                             """.trimIndent()
         writeln(
             """
-                            {% tabs %}
-                            $gradleSnippet
-                            $mavenSnippet
-                            {% endtabs %}
-                            """.trimIndent()
+            {% tabs %}
+            $gradleSnippet
+            $mavenSnippet
+            {% endtabs %}
+            """.trimIndent()
         )
     }
 
@@ -1258,11 +1258,11 @@ class RecipeMarkdownGenerator : Runnable {
                             """.trimIndent()
         writeln(
             """
-                            {% tabs %}
-                            $gradleSnippet
-                            $mavenSnippet
-                            {% endtabs %}
-                            """.trimIndent()
+            {% tabs %}
+            $gradleSnippet
+            $mavenSnippet
+            {% endtabs %}
+            """.trimIndent()
         )
     }
 
