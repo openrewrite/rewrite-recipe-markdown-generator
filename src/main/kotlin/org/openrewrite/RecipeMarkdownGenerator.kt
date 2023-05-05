@@ -960,7 +960,7 @@ class RecipeMarkdownGenerator : Runnable {
 
                 [![Moderne Link Image](/.gitbook/assets/ModerneRecipeButton.png)](https://public.moderne.io/recipes/${recipeDescriptor.name})
 
-                The Moderne public SaaS instance enables you to easily run recipes across thousands of open-source repositories.
+                The community edition of the Moderne platform enables you to easily run recipes across thousands of open-source repositories.
 
                 Please [contact Moderne](https://moderne.io/product) for more information about safely running the recipes on your own codebase in a private SaaS.
             """.trimIndent()
