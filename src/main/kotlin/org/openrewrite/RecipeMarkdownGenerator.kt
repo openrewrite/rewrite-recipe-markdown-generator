@@ -755,37 +755,54 @@ class RecipeMarkdownGenerator : Runnable {
 
                 for (i in 0 until recipeDescriptor.examples.size) {
                     if (i > 0) {
-                        writeln("---");
+                        writeln("---")
                     }
 
                     val example = recipeDescriptor.examples.get(i)
                     val description =
                         if (example.description != null && example.description.isNotEmpty()) example.description else ""
                     writeln("* Example ${i + 1}: " + description)
+//
+//                    if (example.parameters != null && !example.parameters.isEmpty()) {
+//                        write("|")
+//                        for (param in example.parameters) {
+//                            write(" ")
+//                            write(param)
+//                            write(" |")
+//                        }
+//                    }
 
-                    val hasChange = example.after != null && example.after.isNotEmpty()
-                    val title = if (hasChange) "Before" else "No change"
+                    for (source in example.sources) {
+                        val hasChange = source.after != null && source.after.isNotEmpty()
+                        val beforeTitle = if (hasChange) "Before" else "No change"
+                        val isNewFile = source.before == null && source.after != null
+                        val afterTile = if (isNewFile) "New file" else "After"
 
-                    newLine()
-                    writeln(
-                        """
-                        |#### ${title}
-                        |```${example.language}
-                        |${example.before}
-                        |```
-                        """.trimMargin()
-                    )
-
-                    if (hasChange) {
                         newLine()
+
+                        writeln("{% code title=\"${source.path}\" %}")
                         writeln(
-                            """
-                        |#### After
-                        |```${example.language}
-                        |${example.after}
+                                """
+                        |#### ${beforeTitle}
+                        |```${source.language}
+                        |${source.before}
                         |```
                         """.trimMargin()
                         )
+
+                        if (hasChange) {
+                            newLine()
+                            writeln(
+                                    """
+                        |#### ${afterTile}
+                        |```${source.language}
+                        |${source.after}
+                        |```
+                        """.trimMargin()
+                            )
+                        }
+
+                        writeln("{% endcode %}")
                     }
                 }
                 newLine()
