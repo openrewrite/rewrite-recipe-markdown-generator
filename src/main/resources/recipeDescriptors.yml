@@ -286,7 +286,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "7.40.3"
+  version: "7.40.6"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -615,7 +615,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "7.40.3"
+  version: "7.40.6"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.ActivateStyle:
       name: "org.openrewrite.gradle.ActivateStyle"
@@ -1192,7 +1192,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "7.40.3"
+  version: "7.40.6"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1211,7 +1211,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "7.40.3"
+  version: "7.40.6"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1295,7 +1295,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "7.40.3"
+  version: "7.40.6"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -3766,7 +3766,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "7.40.3"
+  version: "7.40.6"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -4548,7 +4548,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "7.40.3"
+  version: "7.40.6"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -4611,6 +4611,25 @@ rewrite-maven:
       - name: "versionPattern"
         type: "String"
         required: false
+      isImperative: true
+      artifactId: "rewrite-maven"
+    org.openrewrite.maven.AddGradleEnterpriseMavenExtension:
+      name: "org.openrewrite.maven.AddGradleEnterpriseMavenExtension"
+      description: "To integrate gradle enterprise maven extension into maven projects,\
+        \ ensure that the `gradle-enterprise-maven-extension` is added to the `.mvn/extensions.xml`\
+        \ file if not already present. Additionally, configure the extension by adding\
+        \ the `.mvn/gradle-enterprise.xml` configuration file."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/addgradleenterprisemavenextension"
+      options:
+      - name: "allowUntrustedServer"
+        type: "Boolean"
+        required: false
+      - name: "server"
+        type: "String"
+        required: true
+      - name: "version"
+        type: "String"
+        required: true
       isImperative: true
       artifactId: "rewrite-maven"
     org.openrewrite.maven.AddManagedDependency:
@@ -6944,7 +6963,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "7.40.3"
+  version: "7.40.6"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -10040,7 +10059,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "7.40.3"
+  version: "7.40.6"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -10219,7 +10238,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "7.40.3"
+  version: "7.40.6"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
