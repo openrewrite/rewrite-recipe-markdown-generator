@@ -761,8 +761,11 @@ class RecipeMarkdownGenerator : Runnable {
                     val example = recipeDescriptor.examples.get(i)
                     val description =
                         if (example.description != null && example.description.isNotEmpty()) example.description else ""
-                    writeln("* Example ${i + 1}: " + description)
-//
+
+                    if (recipeDescriptor.examples.size > 1) {
+                        writeln("##### Example ${i + 1}: " + description)
+                    }
+
 //                    if (example.parameters != null && !example.parameters.isEmpty()) {
 //                        write("|")
 //                        for (param in example.parameters) {
@@ -780,25 +783,27 @@ class RecipeMarkdownGenerator : Runnable {
 
                         newLine()
 
+                        writeln("###### ${beforeTitle}")
                         writeln("{% code title=\"${source.path}\" %}")
                         writeln(
                                 """
-                        |#### ${beforeTitle}
                         |```${source.language}
                         |${source.before}
                         |```
                         """.trimMargin()
                         )
+                        writeln("{% endcode %}")
 
                         if (hasChange) {
                             newLine()
+                            writeln("###### ${afterTile}")
+                            writeln("{% code title=\"${source.path}\" %}")
                             writeln(
                                     """
-                        |#### ${afterTile}
-                        |```${source.language}
-                        |${source.after}
-                        |```
-                        """.trimMargin()
+                                |```${source.language}
+                                |${source.after}
+                                |```
+                                """.trimMargin()
                             )
                         }
 
