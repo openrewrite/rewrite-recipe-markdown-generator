@@ -300,7 +300,7 @@ rewrite-core:
       artifactId: "rewrite-core"
     org.openrewrite.FindBuildToolFailures:
       name: "org.openrewrite.FindBuildToolFailures"
-      description: "This recipe explores build tool failures after an AST is produced\
+      description: "This recipe explores build tool failures after an LST is produced\
         \ for classifying the types of failures that can occur and prioritizing fixes\
         \ according to the most common problems."
       docLink: "https://docs.openrewrite.org/reference/recipes/findbuildtoolfailures"
@@ -322,7 +322,7 @@ rewrite-core:
       artifactId: "rewrite-core"
     org.openrewrite.FindParseFailures:
       name: "org.openrewrite.FindParseFailures"
-      description: "This recipe explores parse failures after an AST is produced for\
+      description: "This recipe explores parse failures after an LST is produced for\
         \ classifying the types of failures that can occur and prioritizing fixes\
         \ according to the most common problems."
       docLink: "https://docs.openrewrite.org/reference/recipes/findparsefailures"
@@ -1257,7 +1257,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
     org.openrewrite.hcl.format.NormalizeFormat:
       name: "org.openrewrite.hcl.format.NormalizeFormat"
-      description: "Move whitespace to the outermost AST element possible."
+      description: "Move whitespace to the outermost LST element possible."
       docLink: "https://docs.openrewrite.org/reference/recipes/hcl/format/normalizeformat"
       options: []
       isImperative: true
@@ -1681,7 +1681,7 @@ rewrite-java:
       artifactId: "rewrite-java"
     org.openrewrite.java.UpdateSourcePositions:
       name: "org.openrewrite.java.UpdateSourcePositions"
-      description: "Calculate start position and length for every AST element."
+      description: "Calculate start position and length for every LST element."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/updatesourcepositions"
       options: []
       isImperative: true
@@ -2918,7 +2918,7 @@ rewrite-java:
       artifactId: "rewrite-java"
     org.openrewrite.java.format.NormalizeFormat:
       name: "org.openrewrite.java.format.NormalizeFormat"
-      description: "Move whitespace to the outermost AST element possible."
+      description: "Move whitespace to the outermost LST element possible."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/format/normalizeformat"
       options: []
       isImperative: true
@@ -3045,6 +3045,13 @@ rewrite-java:
       - name: "matchMetaAnnotations"
         type: "Boolean"
         required: false
+      isImperative: true
+      artifactId: "rewrite-java"
+    org.openrewrite.java.search.FindCallGraph:
+      name: "org.openrewrite.java.search.FindCallGraph"
+      description: "Produce the call graph describing the relationships between methods."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/search/findcallgraph"
+      options: []
       isImperative: true
       artifactId: "rewrite-java"
     org.openrewrite.java.search.FindDeprecatedClasses:
@@ -4605,6 +4612,25 @@ rewrite-maven:
         required: false
       isImperative: true
       artifactId: "rewrite-maven"
+    org.openrewrite.maven.AddGradleEnterpriseMavenExtension:
+      name: "org.openrewrite.maven.AddGradleEnterpriseMavenExtension"
+      description: "To integrate gradle enterprise maven extension into maven projects,\
+        \ ensure that the `gradle-enterprise-maven-extension` is added to the `.mvn/extensions.xml`\
+        \ file if not already present. Additionally, configure the extension by adding\
+        \ the `.mvn/gradle-enterprise.xml` configuration file."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/addgradleenterprisemavenextension"
+      options:
+      - name: "allowUntrustedServer"
+        type: "Boolean"
+        required: false
+      - name: "server"
+        type: "String"
+        required: true
+      - name: "version"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-maven"
     org.openrewrite.maven.AddManagedDependency:
       name: "org.openrewrite.maven.AddManagedDependency"
       description: "Add a managed maven dependency to a pom.xml file."
@@ -5311,7 +5337,7 @@ rewrite-maven:
       description: "Lists the Maven repositories that would be used for dependency\
         \ resolution, in order of precedence. This includes Maven repositories defined\
         \ in the Maven settings file (and those contributed by active profiles) as\
-        \ determined when the AST was produced."
+        \ determined when the LST was produced."
       docLink: "https://docs.openrewrite.org/reference/recipes/maven/search/effectivemavenrepositories"
       options: []
       isImperative: true
@@ -6671,7 +6697,8 @@ rewrite-migrate-java:
       description: "Recipe created for the following Refaster template:\n```java\n\
         public class UseStringIsEmpty {\n    \n    @BeforeTemplate\n    boolean before(String\
         \ s) {\n        return s.length() > 0;\n    }\n    \n    @AfterTemplate\n\
-        \    boolean after(String s) {\n        return !s.isEmpty();\n    }\n}\n```."
+        \    boolean after(String s) {\n        return !s.isEmpty();\n    }\n}\n```\n\
+        ."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/usestringisemptyrecipe"
       options: []
       isImperative: true
@@ -7355,6 +7382,28 @@ rewrite-spring:
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.amqp.UseTlsAmqpConnectionString:
+      name: "org.openrewrite.java.spring.amqp.UseTlsAmqpConnectionString"
+      description: "Use TLS for AMQP connection strings."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/amqp/usetlsamqpconnectionstring"
+      options:
+      - name: "oldPort"
+        type: "Integer"
+        required: true
+      - name: "pathExpressions"
+        type: "List"
+        required: false
+      - name: "port"
+        type: "Integer"
+        required: true
+      - name: "propertyKey"
+        type: "String"
+        required: true
+      - name: "tlsPropertyKey"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.batch.ImplementChunkListenerDirectly:
       name: "org.openrewrite.java.spring.batch.ImplementChunkListenerDirectly"
       description: "As of 5.0 `ChunkListener` has default methods (made possible by\
@@ -7936,16 +7985,6 @@ rewrite-spring:
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
-    org.openrewrite.java.spring.boot2.WebSecurityConfigurerAdapter:
-      name: "org.openrewrite.java.spring.boot2.WebSecurityConfigurerAdapter"
-      description: "The Spring Security `WebSecurityConfigurerAdapter` was deprecated\
-        \ 5.7, this recipe will transform `WebSecurityConfigurerAdapter` classes by\
-        \ using a component based approach. Check out the [spring-security-without-the-websecurityconfigureradapter](https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter)\
-        \ blog for more details."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/websecurityconfigureradapter"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.boot2.search.CustomizingJooqDefaultConfiguration:
       name: "org.openrewrite.java.spring.boot2.search.CustomizingJooqDefaultConfiguration"
       description: "To streamline the customization of jOOQ’s `DefaultConfiguration`,\
@@ -8466,6 +8505,16 @@ rewrite-spring:
         \ `HttpSecurity#securityMatcher()` method. Refer to the [Spring Security docs](https://docs.spring.io/spring-security/reference/5.8/migration/servlet/config.html#use-new-security-matchers)\
         \ for more information."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security5/usenewsecuritymatchers"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security5.WebSecurityConfigurerAdapter:
+      name: "org.openrewrite.java.spring.security5.WebSecurityConfigurerAdapter"
+      description: "The Spring Security `WebSecurityConfigurerAdapter` was deprecated\
+        \ 5.7, this recipe will transform `WebSecurityConfigurerAdapter` classes by\
+        \ using a component based approach. Check out the [spring-security-without-the-websecurityconfigureradapter](https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter)\
+        \ blog for more details."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security5/websecurityconfigureradapter"
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
@@ -10146,7 +10195,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
     org.openrewrite.xml.format.NormalizeFormat:
       name: "org.openrewrite.xml.format.NormalizeFormat"
-      description: "Move whitespace to the outermost AST element possible."
+      description: "Move whitespace to the outermost LST element possible."
       docLink: "https://docs.openrewrite.org/reference/recipes/xml/format/normalizeformat"
       options: []
       isImperative: true
