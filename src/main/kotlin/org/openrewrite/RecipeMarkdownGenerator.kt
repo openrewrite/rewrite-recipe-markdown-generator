@@ -749,6 +749,41 @@ class RecipeMarkdownGenerator : Runnable {
             """.trimIndent()
             )
 
+            // Options
+            if (recipeDescriptor.options.isNotEmpty()) {
+                writeln(
+                        """
+                    ## Options
+                    
+                    | Type | Name | Description |
+                    | -- | -- | -- |
+                """.trimIndent()
+                )
+                for (option in recipeDescriptor.options) {
+                    var description = if (option.description == null) {
+                        ""
+                    } else {
+                        option.description
+                    }
+                    description = if (option.isRequired) {
+                        description
+                    } else {
+                        "*Optional*. $description"
+                    }
+                    // This should preserve casing and plurality
+                    description = description.replace("method patterns?".toRegex(RegexOption.IGNORE_CASE)) { match ->
+                        "[${match.value}](/reference/method-patterns.md)"
+                    }
+                    writeln(
+                            """
+                        | `${option.type}` | ${option.name} | $description |
+                    """.trimIndent()
+                    )
+                }
+                newLine()
+            }
+
+            // examples
             if (!recipeDescriptor.examples.isEmpty()) {
                 val subject = if (recipeDescriptor.examples.size > 1) "Examples" else "Example"
                 writeln("## ${subject}")
@@ -813,6 +848,7 @@ class RecipeMarkdownGenerator : Runnable {
                 newLine()
             }
 
+            // Contributors
             if (recipeDescriptor.contributors.isNotEmpty()) {
                 writeln("## Contributors")
                 for (contributors in recipeDescriptor.contributors) {
@@ -821,39 +857,7 @@ class RecipeMarkdownGenerator : Runnable {
                 newLine()
             }
 
-            if (recipeDescriptor.options.isNotEmpty()) {
-                writeln(
-                    """
-                    ## Options
-                    
-                    | Type | Name | Description |
-                    | -- | -- | -- |
-                """.trimIndent()
-                )
-                for (option in recipeDescriptor.options) {
-                    var description = if (option.description == null) {
-                        ""
-                    } else {
-                        option.description
-                    }
-                    description = if (option.isRequired) {
-                        description
-                    } else {
-                        "*Optional*. $description"
-                    }
-                    // This should preserve casing and plurality
-                    description = description.replace("method patterns?".toRegex(RegexOption.IGNORE_CASE)) { match ->
-                        "[${match.value}](/reference/method-patterns.md)"
-                    }
-                    writeln(
-                        """
-                        | `${option.type}` | ${option.name} | $description |
-                    """.trimIndent()
-                    )
-                }
-                newLine()
-            }
-
+            // Usage
             newLine()
             writeln("## Usage")
             newLine()
