@@ -491,16 +491,6 @@ rewrite-github-actions:
   artifactId: "rewrite-github-actions"
   version: "1.21.0-SNAPSHOT"
   markdownRecipeDescriptors:
-    org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin:
-      name: "org.openrewrite.github.ActionsSetupJavaAdoptOpenJDKToTemurin"
-      description: "Adopt OpenJDK got moved to Eclipse Temurin and won't be updated\
-        \ anymore. It is highly recommended to migrate workflows from adopt to temurin\
-        \ to keep receiving software and security updates. See more details in the\
-        \ [Good-bye AdoptOpenJDK post](https://blog.adoptopenjdk.net/2021/08/goodbye-adoptopenjdk-hello-adoptium/)."
-      docLink: "https://docs.openrewrite.org/reference/recipes/github/actionssetupjavaadoptopenjdktotemurin"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-github-actions"
     org.openrewrite.github.AddCronTrigger:
       name: "org.openrewrite.github.AddCronTrigger"
       description: "The `schedule` [event](https://docs.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events)\
@@ -592,6 +582,26 @@ rewrite-github-actions:
       - name: "runners"
         type: "List"
         required: true
+      isImperative: true
+      artifactId: "rewrite-github-actions"
+    org.openrewrite.github.SetupJavaAdoptOpenJDKToTemurin:
+      name: "org.openrewrite.github.SetupJavaAdoptOpenJDKToTemurin"
+      description: "Adopt OpenJDK got moved to Eclipse Temurin and won't be updated\
+        \ anymore. It is highly recommended to migrate workflows from adopt to temurin\
+        \ to keep receiving software and security updates. See more details in the\
+        \ [Good-bye AdoptOpenJDK post](https://blog.adoptopenjdk.net/2021/08/goodbye-adoptopenjdk-hello-adoptium/)."
+      docLink: "https://docs.openrewrite.org/reference/recipes/github/setupjavaadoptopenjdktotemurin"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-github-actions"
+    org.openrewrite.github.SetupJavaAdoptOpenj9ToSemeru:
+      name: "org.openrewrite.github.SetupJavaAdoptOpenj9ToSemeru"
+      description: "Adopt OpenJDK got moved to Eclipse Temurin and won't be updated\
+        \ anymore. It is highly recommended to migrate workflows from adopt-openj9\
+        \ to IBM semeru to keep receiving software and security updates. See more\
+        \ details in the [Good-bye AdoptOpenJDK post](https://blog.adoptopenjdk.net/2021/08/goodbye-adoptopenjdk-hello-adoptium/)."
+      docLink: "https://docs.openrewrite.org/reference/recipes/github/setupjavaadoptopenj9tosemeru"
+      options: []
       isImperative: true
       artifactId: "rewrite-github-actions"
     org.openrewrite.github.SetupJavaCaching:
@@ -3488,19 +3498,6 @@ rewrite-java-security:
         \ to `false`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/security/xmlparserxxevulnerability"
       options: []
-      isImperative: true
-      artifactId: "rewrite-java-security"
-    org.openrewrite.java.security.ZipSlip:
-      name: "org.openrewrite.java.security.ZipSlip"
-      description: "Zip slip is an arbitrary file overwrite critical vulnerability,\
-        \ which typically results in remote command execution. A fuller description\
-        \ of this vulnerability is available in the [Snyk documentation](https://snyk.io/research/zip-slip-vulnerability)\
-        \ on it."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/security/zipslip"
-      options:
-      - name: "debug"
-        type: "boolean"
-        required: true
       isImperative: true
       artifactId: "rewrite-java-security"
     org.openrewrite.java.security.marshalling.SecureJacksonDefaultTyping:
