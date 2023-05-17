@@ -65,6 +65,7 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-protobuf")
     "recipe"("org.openrewrite:rewrite-xml")
     "recipe"("org.openrewrite:rewrite-yaml")
+    "recipe"("org.openrewrite:rewrite-java-test")
 
 //    "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion") // Pending implementation of JS parser
     "recipe"("org.openrewrite:rewrite-kotlin:$rewriteVersion")

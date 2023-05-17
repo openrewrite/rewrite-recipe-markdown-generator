@@ -801,14 +801,15 @@ class RecipeMarkdownGenerator : Runnable {
                         writeln("##### Example ${i + 1}: " + description)
                     }
 
-//                    if (example.parameters != null && !example.parameters.isEmpty()) {
-//                        write("|")
-//                        for (param in example.parameters) {
-//                            write(" ")
-//                            write(param)
-//                            write(" |")
-//                        }
-//                    }
+                    if (example.parameters != null && !example.parameters.isEmpty()) {
+                        writeln("###### Parameters")
+                        write("|")
+                        for (param in example.parameters) {
+                            write(" ")
+                            write(param)
+                            write(" |")
+                        }
+                    }
 
                     for (source in example.sources) {
                         val hasChange = source.after != null && source.after.isNotEmpty()
