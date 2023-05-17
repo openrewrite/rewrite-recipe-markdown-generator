@@ -735,7 +735,7 @@ class RecipeMarkdownGenerator : Runnable {
                 """
                 ## Source
                 
-                [Github](${
+                [GitHub](${
                     origin.githubUrl(
                         recipeDescriptor.name,
                         recipeDescriptor.source
