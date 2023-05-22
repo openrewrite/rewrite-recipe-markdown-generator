@@ -606,7 +606,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
     org.openrewrite.github.SetupJavaCaching:
       name: "org.openrewrite.github.SetupJavaCaching"
-      description: "Github actions supports dependency caching on Maven and Gradle\
+      description: "GitHub actions supports dependency caching on Maven and Gradle\
         \ projects. See the [blog post](https://github.blog/changelog/2021-08-30-github-actions-setup-java-now-supports-dependency-caching/)."
       docLink: "https://docs.openrewrite.org/reference/recipes/github/setupjavacaching"
       options: []
@@ -6516,12 +6516,12 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.javax.MigrateCounterMonitorSetThreshholdToSetInitThreshold:
-      name: "org.openrewrite.java.migrate.javax.MigrateCounterMonitorSetThreshholdToSetInitThreshold"
+    org.openrewrite.java.migrate.javax.MigrateCounterMonitorSetThresholdToSetInitThreshold:
+      name: "org.openrewrite.java.migrate.javax.MigrateCounterMonitorSetThresholdToSetInitThreshold"
       description: "Use `javax.management.monitor.CounterMonitor#setInitThreshold`\
-        \ instead of the deprecated `javax.management.monitor.CounterMonitor#setThreshhold`\
+        \ instead of the deprecated `javax.management.monitor.CounterMonitor#setThreshold`\
         \ in JMX 1.2 or higher."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/migratecountermonitorsetthreshholdtosetinitthreshold"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/migratecountermonitorsetthresholdtosetinitthreshold"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -7611,11 +7611,11 @@ rewrite-spring:
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
-    org.openrewrite.java.spring.boot2.MigrateHibernateContraintsToJavax:
-      name: "org.openrewrite.java.spring.boot2.MigrateHibernateContraintsToJavax"
+    org.openrewrite.java.spring.boot2.MigrateHibernateConstraintsToJavax:
+      name: "org.openrewrite.java.spring.boot2.MigrateHibernateConstraintsToJavax"
       description: "Use `javax.validation.constraints` instead of the deprecated `org.hibernate.validator.constraints`\
         \ in Spring Boot 2.0 or higher."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migratehibernatecontraintstojavax"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migratehibernateconstraintstojavax"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -7700,8 +7700,8 @@ rewrite-spring:
         \ in Spring Boot 2.0 or higher. This recipe will replace look for any classes\
         \ that implement `EmbeddedServletContainerCustomizer` and change the interface\
         \ to `WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>`. This\
-        \ recipe also adjusts the the types used in the `customize()` method from\
-        \ `*EmbeddedServletContainerFactory` to their `*ServletWebServerFactory` counterparts.\n"
+        \ recipe also adjusts the types used in the `customize()` method from `*EmbeddedServletContainerFactory`\
+        \ to their `*ServletWebServerFactory` counterparts.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/migratetowebserverfactorycustomizer"
       options: []
       isImperative: false
@@ -8186,12 +8186,7 @@ rewrite-spring:
         \ APIs, and migrate configuration settings that have changes between versions.\
         \ This recipe will also chain additional framework migrations (Spring Framework,\
         \ Spring Data, etc) that are required as part of the migration to Spring Boot\
-        \ 2.7.\nMigrating a Spring Boot application across major versions can be a\
-        \ complex task. Not every part of the  process can be automated, and not everything\
-        \ that possibly could be automated is. We recommend first running each of\
-        \ the minor version upgrades individually, making any manual changes which\
-        \ may be required. When you  have a working spring-boot 2.7.x application,\
-        \ then run this recipe to migrate to 3.0.\n"
+        \ 2.7.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/upgradespringboot_3_0"
       options: []
       isImperative: false
@@ -8425,6 +8420,14 @@ rewrite-spring:
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/search/findspringcomponents"
       options: []
       isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security5.RenameNimbusdsJsonObjectPackageName:
+      name: "org.openrewrite.java.spring.security5.RenameNimbusdsJsonObjectPackageName"
+      description: "Rename the package name from `com.nimbusds.jose.shaded.json.JSONObject`\
+        \ to `net.minidev.json.JSONObject`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security5/renamenimbusdsjsonobjectpackagename"
+      options: []
+      isImperative: false
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.security5.ReplaceGlobalMethodSecurityWithMethodSecurity:
       name: "org.openrewrite.java.spring.security5.ReplaceGlobalMethodSecurityWithMethodSecurity"
