@@ -86,6 +86,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-migrate-java:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-quarkus:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-static-analysis:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-terraform:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-cloud-suitability-analyzer:$rewriteVersion")
