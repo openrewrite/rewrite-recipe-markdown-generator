@@ -795,14 +795,22 @@ class RecipeMarkdownGenerator : Runnable {
 
                     val example = recipeDescriptor.examples.get(i)
                     val description =
-                        if (example.description != null && example.description.isNotEmpty()) example.description else ""
+                        if (example.description.isNotEmpty()) example.description else ""
 
                     if (recipeDescriptor.examples.size > 1) {
                         writeln("##### Example ${i + 1}: " + description)
                     }
 
-                    if (example.parameters != null && !example.parameters.isEmpty()) {
+                    if (!example.parameters.isEmpty() && recipeDescriptor.options.isNotEmpty()) {
                         writeln("###### Parameters")
+                        write("|")
+                        for (option in recipeDescriptor.options) {
+                            write(" ")
+                            write(option.name)
+                            write(" |")
+                        }
+                        newLine()
+                        writeln("| -- | -- | -- |")
                         write("|")
                         for (param in example.parameters) {
                             write(" ")
@@ -813,7 +821,7 @@ class RecipeMarkdownGenerator : Runnable {
 
                     for (source in example.sources) {
                         val hasChange = source.after != null && source.after.isNotEmpty()
-                        val beforeTitle = if (hasChange) "Before" else "No change"
+                        val beforeTitle = if (hasChange) "Before" else "Unchanged"
                         val isNewFile = source.before == null && source.after != null
                         val afterTile = if (isNewFile) "New file" else "After"
 
@@ -845,15 +853,6 @@ class RecipeMarkdownGenerator : Runnable {
 
                         writeln("{% endcode %}")
                     }
-                }
-                newLine()
-            }
-
-            // Contributors
-            if (recipeDescriptor.contributors.isNotEmpty()) {
-                writeln("## Contributors")
-                for (contributors in recipeDescriptor.contributors) {
-                    writeln("* [${contributors.name}](${contributors.email})")
                 }
                 newLine()
             }
@@ -978,6 +977,15 @@ class RecipeMarkdownGenerator : Runnable {
                     {% endtabs %}
                 """.trimIndent()
                 )
+            }
+
+            // Contributors
+            if (recipeDescriptor.contributors.isNotEmpty()) {
+                writeln("## Contributors")
+                for (contributors in recipeDescriptor.contributors) {
+                    writeln("* [${contributors.name}](${contributors.email})")
+                }
+                newLine()
             }
 
             newLine()
