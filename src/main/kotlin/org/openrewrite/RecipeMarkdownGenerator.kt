@@ -798,9 +798,13 @@ class RecipeMarkdownGenerator : Runnable {
                         if (example.description.isNotEmpty()) example.description else ""
 
                     if (recipeDescriptor.examples.size > 1) {
-                        writeln("##### Example ${i + 1}: " + description)
+                        writeln("##### Example ${i + 1}")
+                        if (description.isNotEmpty()) {
+                            writeln(description)
+                        }
                     }
 
+                    newLine()
                     if (!example.parameters.isEmpty() && recipeDescriptor.options.isNotEmpty()) {
                         writeln("###### Parameters")
                         write("|")
@@ -817,9 +821,17 @@ class RecipeMarkdownGenerator : Runnable {
                             write(param)
                             write(" |")
                         }
+                        newLine()
                     }
 
-                    for (source in example.sources) {
+                    for (sourceIndex in 0 until example.sources.size) {
+                        if (sourceIndex > 0) {
+                            newLine()
+                            writeln("---")
+                            newLine()
+                        }
+
+                        val source = example.sources.get(sourceIndex)
                         val hasChange = source.after != null && source.after.isNotEmpty()
                         val beforeTitle = if (hasChange) "Before" else "Unchanged"
                         val isNewFile = source.before == null && source.after != null
@@ -832,10 +844,10 @@ class RecipeMarkdownGenerator : Runnable {
                         writeln(
                                 """
                         |```${source.language}
-                        |${source.before}
-                        |```
+                        |${source.before}```
                         """.trimMargin()
                         )
+
                         writeln("{% endcode %}")
 
                         if (hasChange) {
@@ -845,13 +857,11 @@ class RecipeMarkdownGenerator : Runnable {
                             writeln(
                                     """
                                 |```${source.language}
-                                |${source.after}
-                                |```
+                                |${source.after}```
                                 """.trimMargin()
                             )
+                            writeln("{% endcode %}")
                         }
-
-                        writeln("{% endcode %}")
                     }
                 }
                 newLine()
