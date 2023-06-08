@@ -27,6 +27,9 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.io.path.toPath
 import kotlin.system.exitProcess
+import com.github.difflib.DiffUtils
+import com.github.difflib.patch.Patch
+import org.openrewrite.internal.lang.Nullable
 
 @Command(
     name = "rewrite-recipe-markdown-generator",
@@ -861,6 +864,19 @@ class RecipeMarkdownGenerator : Runnable {
                                 """.trimMargin()
                             )
                             writeln("{% endcode %}")
+                            newLine()
+
+                            // diff
+                            if (source.before != null) {
+                                val diff = generateDiff(source.path, source.before, source.after)
+                                writeln("###### Diff")
+                                writeln(
+                                        """
+                                |```diff
+                                |${diff}```
+                                """.trimMargin()
+                                )
+                            }
                         }
                     }
                 }
@@ -1011,6 +1027,35 @@ class RecipeMarkdownGenerator : Runnable {
             """.trimIndent()
             )
         }
+    }
+
+    private fun generateDiff(path: String?, original: String, revised: String): String {
+        val patch: Patch<String> = DiffUtils.diff(original.lines(), revised.lines())
+        val diffContent = StringBuilder()
+
+        if (path != null) {
+            diffContent.append("--- ").append(path).append("\n")
+            diffContent.append("+++ ").append(path).append("\n")
+        }
+
+        for (delta in patch.deltas) {
+            val originalLines = delta.source.lines.joinToString("\n")
+            val revisedLines = delta.target.lines.joinToString("\n")
+
+            diffContent.append("@@ -${delta.source.position + 1},${delta.source.size()} ")
+                    .append("+${delta.target.position + 1},${delta.target.size()} @@")
+                    .append("\n")
+
+            if (delta.source.lines.isNotEmpty()) {
+                diffContent.append("-").append(originalLines).append("\n")
+            }
+
+            if (delta.target.lines.isNotEmpty()) {
+                diffContent.append("+").append(revisedLines).append("\n")
+            }
+        }
+
+        return diffContent.toString()
     }
 
     private fun BufferedWriter.writeSnippetsWithConfigurationWithoutDependency(

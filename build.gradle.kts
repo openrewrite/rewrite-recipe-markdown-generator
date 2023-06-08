@@ -51,6 +51,7 @@ dependencies {
     implementation("org.openrewrite:rewrite-core:$rewriteVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
+    implementation("io.github.java-diff-utils:java-diff-utils:4.11")
     runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
 
     "recipe"(platform("org.openrewrite:rewrite-bom:$rewriteVersion"))
