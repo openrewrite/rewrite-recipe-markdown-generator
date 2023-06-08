@@ -810,19 +810,17 @@ class RecipeMarkdownGenerator : Runnable {
                     newLine()
                     if (!example.parameters.isEmpty() && recipeDescriptor.options.isNotEmpty()) {
                         writeln("###### Parameters")
-                        write("|")
-                        for (option in recipeDescriptor.options) {
-                            write(" ")
-                            write(option.name)
-                            write(" |")
-                        }
-                        newLine()
-                        writeln("| -- | -- | -- |")
-                        write("|")
-                        for (param in example.parameters) {
-                            write(" ")
-                            write(param)
-                            write(" |")
+                        writeln("| Parameter | Value |")
+                        writeln("| -- | -- |")
+                        for (n in 0 until recipeDescriptor.options.size) {
+                            write("|")
+                            write(recipeDescriptor.options.get(n).name)
+                            write("|")
+                            if (n < example.parameters.size) {
+                                write(example.parameters.get(n))
+                            }
+                            write("|")
+                            newLine()
                         }
                         newLine()
                     }
