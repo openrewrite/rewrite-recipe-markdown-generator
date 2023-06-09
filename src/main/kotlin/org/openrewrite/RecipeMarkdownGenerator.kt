@@ -834,14 +834,14 @@ class RecipeMarkdownGenerator : Runnable {
                         val isNewFile = source.before == null && source.after != null
                         val afterTile = if (isNewFile) "New file" else "After"
 
-                        newLine()
-
-                        if (beforeTitle.equals("Unchanged")) {
-                            writeln("<details>")
-                            writeln("<summary>${source.path} (Unchanged)</summary>")
-                        } else {
-                            writeln("###### ${beforeTitle}")
+                        if (hasChange && source.before != null) {
+                            newLine()
+                            writeln("{% tabs %}")
+                            writeln("{% tab title=\"${source.path}\" %}")
                         }
+
+                        newLine()
+                        writeln("###### ${beforeTitle}")
 
                         writeln("{% code title=\"${source.path}\" %}")
                         writeln(
@@ -851,10 +851,6 @@ class RecipeMarkdownGenerator : Runnable {
                         """.trimMargin()
                         )
                         writeln("{% endcode %}")
-
-                        if (beforeTitle.equals("Unchanged")) {
-                            writeln("</details>")
-                        }
 
                         if (hasChange) {
                             newLine()
@@ -871,9 +867,11 @@ class RecipeMarkdownGenerator : Runnable {
 
                             // diff
                             if (source.before != null) {
+                                writeln("{% endtab %}")
+                                writeln("{% tab title=\"Diff\" %}")
+
                                 val diff = generateDiff(source.path, source.before, source.after)
-                                writeln("<details>")
-                                writeln("<summary>Diff</summary>")
+
                                 writeln("{% code %}")
                                 writeln(
                                         """
@@ -882,7 +880,8 @@ class RecipeMarkdownGenerator : Runnable {
                                 """.trimMargin()
                                 )
                                 writeln("{% endcode %}")
-                                writeln("</details>")
+                                writeln("{% endtab %}")
+                                writeln("{% endtabs %}")
                             }
                         }
                     }
