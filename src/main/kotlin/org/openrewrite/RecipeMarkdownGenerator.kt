@@ -793,7 +793,9 @@ class RecipeMarkdownGenerator : Runnable {
 
                 for (i in 0 until recipeDescriptor.examples.size) {
                     if (i > 0) {
+                        newLine()
                         writeln("---")
+                        newLine()
                     }
 
                     val example = recipeDescriptor.examples.get(i)
