@@ -817,7 +817,7 @@ class RecipeMarkdownGenerator : Runnable {
                             write(recipeDescriptor.options.get(n).name)
                             write("|")
                             if (n < example.parameters.size) {
-                                write(example.parameters.get(n))
+                                write("`${example.parameters.get(n)}`")
                             }
                             write("|")
                             newLine()
