@@ -1038,7 +1038,8 @@ class RecipeMarkdownGenerator : Runnable {
     private fun generateDiff(path: String?, original: String, revised: String): String {
         val patch: Patch<String> = DiffUtils.diff(original.lines(), revised.lines())
         val diffContent = StringBuilder()
-        val contextLines = 2
+        val contextLinesBefore = 2
+        val contextLinesAfter = 1
 
         if (path != null) {
             diffContent.append("--- ").append(path).append("\n")
@@ -1054,8 +1055,8 @@ class RecipeMarkdownGenerator : Runnable {
                     .append("\n")
 
             // print shared context
-            val startIndex = maxOf(0, delta.source.position - contextLines)
-            val endIndex = minOf(originalLines.size, delta.source.position + delta.source.size() + contextLines)
+            val startIndex = maxOf(0, delta.source.position - contextLinesBefore)
+            val endIndex = minOf(originalLines.size, delta.source.position + delta.source.size() + contextLinesAfter)
             for (i in startIndex until delta.source.position) {
                 diffContent.append(originalLines[i]).append("\n")
             }
