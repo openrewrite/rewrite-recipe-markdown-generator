@@ -786,6 +786,35 @@ class RecipeMarkdownGenerator : Runnable {
                 newLine()
             }
 
+            // Data Tables
+            if (recipeDescriptor.dataTables.isNotEmpty()) {
+                writeln(
+                    """
+                        ## Data Tables (Only available on the [Moderne platform](https://public.moderne.io/))
+
+                    """.trimIndent()
+                )
+            }
+
+            for (dataTable in recipeDescriptor.dataTables) {
+                writeln("""
+                    ### ${dataTable.displayName}
+
+                    _${dataTable.description}_
+
+                    | Column Name | Description |
+                    | ----------- | ----------- |
+                """.trimIndent())
+
+                for (column in dataTable.columns) {
+                    writeln("""
+                       | ${column.displayName} | ${column.description} |
+                    """.trimIndent())
+                }
+
+                newLine()
+            }
+
             // examples
             if (!recipeDescriptor.examples.isEmpty()) {
                 val subject = if (recipeDescriptor.examples.size > 1) "Examples" else "Example"
