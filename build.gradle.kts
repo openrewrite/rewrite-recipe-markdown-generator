@@ -73,6 +73,7 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
 
 //    "recipe"("org.openrewrite.recipe:rewrite-all:$rewriteVersion") // Exclude language composition data table recipes
+    "recipe"("org.openrewrite.meta:rewrite-analysis:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-circleci:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-cloud-suitability-analyzer:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-concourse:$rewriteVersion")
