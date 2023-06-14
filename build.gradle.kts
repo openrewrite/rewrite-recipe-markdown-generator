@@ -71,7 +71,6 @@ dependencies {
 //    "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion") // Pending implementation of JS parser
     "recipe"("org.openrewrite:rewrite-kotlin:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-sql:$rewriteVersion")
 
 //    "recipe"("org.openrewrite.recipe:rewrite-all:$rewriteVersion") // Exclude language composition data table recipes
     "recipe"("org.openrewrite.recipe:rewrite-circleci:$rewriteVersion")
@@ -90,6 +89,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-quarkus:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-recommendations:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-sql:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-static-analysis:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-terraform:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
