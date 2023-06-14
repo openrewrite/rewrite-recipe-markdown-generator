@@ -5,6 +5,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.github.difflib.DiffUtils
+import com.github.difflib.patch.Patch
 import org.openrewrite.config.CategoryDescriptor
 import org.openrewrite.config.Environment
 import org.openrewrite.config.RecipeDescriptor
@@ -27,9 +29,6 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.io.path.toPath
 import kotlin.system.exitProcess
-import com.github.difflib.DiffUtils
-import com.github.difflib.patch.Patch
-import org.openrewrite.internal.lang.Nullable
 
 @Command(
     name = "rewrite-recipe-markdown-generator",
@@ -1013,6 +1012,7 @@ class RecipeMarkdownGenerator : Runnable {
 
             // Contributors
             if (recipeDescriptor.contributors.isNotEmpty()) {
+                newLine()
                 writeln("## Contributors")
                 for (contributors in recipeDescriptor.contributors) {
                     writeln("* [${contributors.name}](${contributors.email})")
@@ -1038,6 +1038,7 @@ class RecipeMarkdownGenerator : Runnable {
     private fun generateDiff(path: String?, original: String, revised: String): String {
         val patch: Patch<String> = DiffUtils.diff(original.lines(), revised.lines())
         val diffContent = StringBuilder()
+        val contextLines = 2
 
         if (path != null) {
             diffContent.append("--- ").append(path).append("\n")
@@ -1045,19 +1046,32 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         for (delta in patch.deltas) {
-            val originalLines = delta.source.lines.joinToString("\n")
-            val revisedLines = delta.target.lines.joinToString("\n")
+            val originalLines = original.lines()
+            val revisedLines = revised.lines()
 
             diffContent.append("@@ -${delta.source.position + 1},${delta.source.size()} ")
                     .append("+${delta.target.position + 1},${delta.target.size()} @@")
                     .append("\n")
 
-            if (delta.source.lines.isNotEmpty()) {
-                diffContent.append("-").append(originalLines).append("\n")
+            // print shared context
+            val startIndex = maxOf(0, delta.source.position - contextLines)
+            val endIndex = minOf(originalLines.size, delta.source.position + delta.source.size() + contextLines)
+            for (i in startIndex until delta.source.position) {
+                diffContent.append(originalLines[i]).append("\n")
             }
 
-            if (delta.target.lines.isNotEmpty()) {
-                diffContent.append("+").append(revisedLines).append("\n")
+            for (i in delta.source.position until delta.source.position + delta.source.size()) {
+                val trimmedLine = if (originalLines[i].startsWith(" ")) originalLines[i].replaceFirst(" ", "") else originalLines[i]
+                diffContent.append("-").append(trimmedLine).append("\n")
+            }
+
+            for (i in delta.target.position until delta.target.position + delta.target.size()) {
+                val trimmedLine = if (revisedLines[i].startsWith(" ")) revisedLines[i].replaceFirst(" ", "") else revisedLines[i]
+                diffContent.append("+").append(trimmedLine).append("\n")
+            }
+
+            for (i in delta.source.position + delta.source.size() until endIndex) {
+                diffContent.append(originalLines[i]).append("\n")
             }
         }
 
