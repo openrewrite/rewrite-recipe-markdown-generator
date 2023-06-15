@@ -787,7 +787,19 @@ class RecipeMarkdownGenerator : Runnable {
             }
 
             // Data Tables
-            if (recipeDescriptor.dataTables.isNotEmpty()) {
+
+            // These are common in every recipe - so let's not document them everywhere.
+            val dataTablesToIgnore = listOf(
+                "org.openrewrite.table.SourcesFileResults",
+                "org.openrewrite.table.SourcesFileErrors",
+                "org.openrewrite.table.RecipeRunStats"
+            )
+
+            val filteredDataTables = recipeDescriptor.dataTables.filter { dataTable ->
+                dataTable.name !in dataTablesToIgnore
+            }
+
+            if (filteredDataTables.isNotEmpty()) {
                 writeln(
                     """
                         ## Data Tables (Only available on the [Moderne platform](https://public.moderne.io/))
@@ -796,7 +808,7 @@ class RecipeMarkdownGenerator : Runnable {
                 )
             }
 
-            for (dataTable in recipeDescriptor.dataTables) {
+            for (dataTable in filteredDataTables) {
                 writeln("""
                     ### ${dataTable.displayName}
 
