@@ -166,13 +166,13 @@ class RecipeMarkdownGenerator : Runnable {
                 docBaseUrl + recipeDescriptor.name.lowercase(Locale.getDefault()).removePrefix("org.openrewrite.")
                     .replace('.', '/')
 
-            val recipeSource = recipeDescriptor.source.toString();
-            var isImperative = true;
+            val recipeSource = recipeDescriptor.source.toString()
+            var isImperative = true
 
             // YAML recipes will have a source that ends with META-INF/rewrite/something.yml
             // Used to help with time spent calculations. Imperative = 12 hours, Declarative = 4 hours
             if (recipeSource.substring(recipeSource.length - 3) == "yml") {
-                isImperative = false;
+                isImperative = false
             }
 
             // Used to create changelogs
@@ -466,7 +466,7 @@ class RecipeMarkdownGenerator : Runnable {
             if (artifactToRecipes.containsKey(newRecipe.artifactId)) {
                 artifactToRecipes[newRecipe.artifactId]?.add(newRecipe)
             } else {
-                val recipes = TreeSet<MarkdownRecipeDescriptor>();
+                val recipes = TreeSet<MarkdownRecipeDescriptor>()
                 recipes.add(newRecipe)
                 artifactToRecipes[newRecipe.artifactId] = recipes
             }
@@ -480,7 +480,7 @@ class RecipeMarkdownGenerator : Runnable {
         if (artifactToRecipes.isNotEmpty()) {
             diffFile.appendText("# New Recipes")
 
-            var totalTimeSaved = 0;
+            var totalTimeSaved = 0
 
             for (artifact in artifactToRecipes.keys) {
                 diffFile.appendText("\n\n## $artifact\n")
@@ -488,14 +488,14 @@ class RecipeMarkdownGenerator : Runnable {
                 val recipes = artifactToRecipes[artifact]
 
                 if (recipes != null) {
-                    var timeSavedPerArtifact = 0;
+                    var timeSavedPerArtifact = 0
 
                     for (recipe in recipes) {
                         val isImperative = recipe.isImperative
-                        var timeSaved = 4;
+                        var timeSaved = 4
 
                         if (isImperative) {
-                            timeSaved = 12;
+                            timeSaved = 12
                         }
 
                         totalTimeSaved += timeSaved
