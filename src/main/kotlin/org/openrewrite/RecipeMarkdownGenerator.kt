@@ -884,24 +884,27 @@ class RecipeMarkdownGenerator : Runnable {
                         writeln("###### ${beforeTitle}")
 
                         writeln("{% code title=\"${source.path}\" %}")
-                        writeln(
-                                """
-                        |```${source.language}
-                        |${source.before}```
-                        """.trimMargin()
-                        )
+                        writeln("```${source.language}")
+                        write("${source.before}")
+                        if (source.before != null && !source.before.endsWith("\n")) {
+                            newLine()
+                        }
+                        writeln("```")
+
                         writeln("{% endcode %}")
 
                         if (hasChange) {
                             newLine()
                             writeln("###### ${afterTile}")
                             writeln("{% code title=\"${source.path}\" %}")
-                            writeln(
-                                    """
-                                |```${source.language}
-                                |${source.after}```
-                                """.trimMargin()
-                            )
+
+                            writeln("```${source.language}")
+                            write("${source.after}")
+                            if (source.after != null && !source.after.endsWith("\n")) {
+                                newLine()
+                            }
+                            writeln("```")
+
                             writeln("{% endcode %}")
                             newLine()
 
