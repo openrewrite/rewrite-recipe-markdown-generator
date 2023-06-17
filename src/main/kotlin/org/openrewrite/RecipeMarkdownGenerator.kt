@@ -876,8 +876,9 @@ class RecipeMarkdownGenerator : Runnable {
 
                         if (hasChange && source.before != null) {
                             newLine()
+                            val tabName = source.path ?: (source.language ?: "Before / After")
                             writeln("{% tabs %}")
-                            writeln("{% tab title=\"${source.path}\" %}")
+                            writeln("{% tab title=\"${tabName}\" %}")
                         }
 
                         newLine()
