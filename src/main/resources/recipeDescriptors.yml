@@ -562,7 +562,7 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
-  version: "1.0.1"
+  version: "1.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite"
@@ -10081,7 +10081,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "2.0.1"
+  version: "2.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.assertj.Assertj:
       name: "org.openrewrite.java.testing.assertj.Assertj"
@@ -10336,6 +10336,14 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.AddParameterizedTestAnnotation:
+      name: "org.openrewrite.java.testing.junit5.AddParameterizedTestAnnotation"
+      description: "Add missing @ParameterizedTest annotation when @ValueSource is\
+        \ used or replace @Test with @ParameterizedTest."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/addparameterizedtestannotation"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.AssertToAssertions:
       name: "org.openrewrite.java.testing.junit5.AssertToAssertions"
       description: "Change JUnit 4's `org.junit.Assert` into JUnit Jupiter's `org.junit.jupiter.api.Assertions`."
@@ -10445,6 +10453,14 @@ rewrite-testing-frameworks:
       description: "Convert JUnit 4 parameterized runner the JUnit Jupiter parameterized\
         \ test equivalent."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/parameterizedrunnertoparameterized"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.RemoveDuplicateTestTemplates:
+      name: "org.openrewrite.java.testing.junit5.RemoveDuplicateTestTemplates"
+      description: "Remove duplicates uses of @TestTemplate implementations for a\
+        \ single method."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/removeduplicatetesttemplates"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
