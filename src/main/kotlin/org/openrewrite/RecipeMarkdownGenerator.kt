@@ -801,7 +801,7 @@ class RecipeMarkdownGenerator : Runnable {
             if (filteredDataTables.isNotEmpty()) {
                 writeln(
                     """
-                        ## Data Tables (Only available on the [Moderne platform](https://public.moderne.io/))
+                        ## Data Tables (Only available on the [Moderne platform](https://app.moderne.io/))
 
                     """.trimIndent()
                 )
@@ -1070,7 +1070,7 @@ class RecipeMarkdownGenerator : Runnable {
                 """
                 ## See how this recipe works across multiple open-source repositories
 
-                [![Moderne Link Image](/.gitbook/assets/ModerneRecipeButton.png)](https://public.moderne.io/recipes/${recipeDescriptor.name})
+                [![Moderne Link Image](/.gitbook/assets/ModerneRecipeButton.png)](https://app.moderne.io/recipes/${recipeDescriptor.name})
 
                 The community edition of the Moderne platform enables you to easily run recipes across thousands of open-source repositories.
 
