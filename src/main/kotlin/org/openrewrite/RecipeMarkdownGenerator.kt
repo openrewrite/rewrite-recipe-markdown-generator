@@ -884,7 +884,12 @@ class RecipeMarkdownGenerator : Runnable {
                         newLine()
                         writeln("###### ${beforeTitle}")
 
-                        writeln("{% code title=\"${source.path}\" %}")
+                        if (source.path != null) {
+                            writeln("{% code title=\"${source.path}\" %}")
+                        } else {
+                            writeln("{% code %}")
+                        }
+
                         writeln("```${source.language}")
                         write("${source.before}")
                         if (source.before != null && !source.before.endsWith("\n")) {
@@ -897,7 +902,12 @@ class RecipeMarkdownGenerator : Runnable {
                         if (hasChange) {
                             newLine()
                             writeln("###### ${afterTile}")
-                            writeln("{% code title=\"${source.path}\" %}")
+
+                            if (source.path != null) {
+                                writeln("{% code title=\"${source.path}\" %}")
+                            } else {
+                                writeln("{% code %}")
+                            }
 
                             writeln("```${source.language}")
                             write("${source.after}")
