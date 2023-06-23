@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.1.2"
+  version: "8.1.3"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -533,9 +533,21 @@ rewrite-core:
       description: "Search for text, treating all textual sources as plain text."
       docLink: "https://docs.openrewrite.org/reference/recipes/text/find"
       options:
+      - name: "caseInsensitive"
+        type: "Boolean"
+        required: false
+      - name: "dotAll"
+        type: "Boolean"
+        required: false
+      - name: "filePattern"
+        type: "String"
+        required: true
       - name: "find"
         type: "String"
         required: true
+      - name: "multiline"
+        type: "Boolean"
+        required: false
       - name: "regex"
         type: "Boolean"
         required: false
@@ -777,7 +789,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.1.2"
+  version: "8.1.3"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1033,12 +1045,15 @@ rewrite-gradle:
       description: "Update the version of Gradle used in an existing Gradle wrapper."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/updategradlewrapper"
       options:
+      - name: "addIfMissing"
+        type: "Boolean"
+        required: false
       - name: "distribution"
         type: "String"
         required: false
       - name: "repositoryUrl"
         type: "String"
-        required: true
+        required: false
       - name: "version"
         type: "String"
         required: true
@@ -1300,7 +1315,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.1.2"
+  version: "8.1.3"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1319,7 +1334,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.1.2"
+  version: "8.1.3"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1436,7 +1451,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.1.2"
+  version: "8.1.3"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -2078,10 +2093,23 @@ rewrite-java:
         required: true
       isImperative: true
       artifactId: "rewrite-java"
-    org.openrewrite.java.recipes.UpdateMovedRecipesYaml:
-      name: "org.openrewrite.java.recipes.UpdateMovedRecipesYaml"
-      description: "Update moved package recipe."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/recipes/updatemovedrecipesyaml"
+    org.openrewrite.java.recipes.UpdateMovedRecipeXml:
+      name: "org.openrewrite.java.recipes.UpdateMovedRecipeXml"
+      description: "Update moved package recipe in pom.xml."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/recipes/updatemovedrecipexml"
+      options:
+      - name: "newRecipeFullyQualifiedClassName"
+        type: "String"
+        required: true
+      - name: "oldRecipeFullyQualifiedClassName"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-java"
+    org.openrewrite.java.recipes.UpdateMovedRecipeYaml:
+      name: "org.openrewrite.java.recipes.UpdateMovedRecipeYaml"
+      description: "Update moved package recipe in yaml file."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/recipes/updatemovedrecipeyaml"
       options:
       - name: "newRecipeFullyQualifiedClassName"
         type: "String"
@@ -2119,6 +2147,17 @@ rewrite-java:
       description: "Produce the call graph describing the relationships between methods."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/search/findcallgraph"
       options: []
+      isImperative: true
+      artifactId: "rewrite-java"
+    org.openrewrite.java.search.FindComments:
+      name: "org.openrewrite.java.search.FindComments"
+      description: "Find regular expression matches within comments and literals.\
+        \ \"Literals\" includes string literals, character literals, and numeric literals."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/search/findcomments"
+      options:
+      - name: "patterns"
+        type: "List"
+        required: true
       isImperative: true
       artifactId: "rewrite-java"
     org.openrewrite.java.search.FindDeprecatedClasses:
@@ -2285,17 +2324,6 @@ rewrite-java:
       docLink: "https://docs.openrewrite.org/reference/recipes/java/search/findsecrets"
       options: []
       isImperative: false
-      artifactId: "rewrite-java"
-    org.openrewrite.java.search.FindText:
-      name: "org.openrewrite.java.search.FindText"
-      description: "Find occurrences of regular expression based patterns in comments\
-        \ and literals."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/search/findtext"
-      options:
-      - name: "patterns"
-        type: "List"
-        required: true
-      isImperative: true
       artifactId: "rewrite-java"
     org.openrewrite.java.search.FindTypes:
       name: "org.openrewrite.java.search.FindTypes"
@@ -2950,7 +2978,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.1.2"
+  version: "8.1.3"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3722,7 +3750,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.1.2"
+  version: "8.1.3"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -6321,7 +6349,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.1.2"
+  version: "8.1.3"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -10675,7 +10703,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.1.2"
+  version: "8.1.3"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -10858,7 +10886,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.1.2"
+  version: "8.1.3"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"

@@ -411,7 +411,7 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         if (newRecipes.isNotEmpty()) {
-            changelog.appendText("## New Recipes")
+            changelog.appendText("## New Recipes\n")
 
             for (newRecipe in newRecipes) {
                 changelog.appendText("\n* [${newRecipe.name}](${newRecipe.docLink}): ${newRecipe.description.trim()} ")
@@ -421,7 +421,7 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         if (removedRecipes.isNotEmpty()) {
-            changelog.appendText("## Removed Recipes")
+            changelog.appendText("## Removed Recipes\n")
 
             for (removedRecipe in removedRecipes) {
                 changelog.appendText("\n* **${removedRecipe.name}**: ${removedRecipe.description.trim()} ")
@@ -431,7 +431,7 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         if (changedRecipes.isNotEmpty()) {
-            changelog.appendText("## Changed Recipes")
+            changelog.appendText("## Changed Recipes\n")
 
             for (changedRecipe in changedRecipes) {
                 changelog.appendText("\n* [${changedRecipe.name}](${changedRecipe.docLink}) was changed:")
