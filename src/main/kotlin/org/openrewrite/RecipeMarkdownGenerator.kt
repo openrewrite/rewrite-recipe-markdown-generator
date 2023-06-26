@@ -651,9 +651,14 @@ class RecipeMarkdownGenerator : Runnable {
                     appendLine()
                     for (recipe in recipes) {
                         val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
+
                         // Anything except a relative link ending in .md will be mangled.
-                        // If you touch this line double check that it works when imported into gitbook
-                        appendLine("* [${recipe.displayName}](./${recipeSimpleName}.md)")
+                        // If you touch this line double check that it works when imported into gitbo
+                        if (recipe.recipeList.isNotEmpty()) {
+                            appendLine("* (Composite) [${recipe.displayName}](./${recipeSimpleName}.md)")
+                        } else {
+                            appendLine("* [${recipe.displayName}](./${recipeSimpleName}.md)")
+                        }
                     }
                     appendLine()
                 }
