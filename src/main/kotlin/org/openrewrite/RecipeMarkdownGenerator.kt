@@ -650,6 +650,7 @@ class RecipeMarkdownGenerator : Runnable {
                     appendLine("## Composite Recipes")
                     appendLine()
                     appendLine("_Recipes that include further recipes, often including the individual recipes below._")
+                    appendLine()
 
                     for (recipe in recipes) {
                         val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
