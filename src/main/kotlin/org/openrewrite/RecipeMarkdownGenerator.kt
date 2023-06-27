@@ -647,15 +647,48 @@ class RecipeMarkdownGenerator : Runnable {
                 }
 
                 if (recipes.isNotEmpty()) {
-                    appendLine("## Recipes")
-                    appendLine()
+                    val compositeRecipes: MutableList<RecipeDescriptor> = mutableListOf()
+                    val normalRecipes: MutableList<RecipeDescriptor> = mutableListOf()
+
                     for (recipe in recipes) {
-                        val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
-                        // Anything except a relative link ending in .md will be mangled.
-                        // If you touch this line double check that it works when imported into gitbook
-                        appendLine("* [${recipe.displayName}](./${recipeSimpleName}.md)")
+                        if (recipe.recipeList.isNotEmpty()) {
+                            compositeRecipes.add(recipe)
+                        } else {
+                            normalRecipes.add(recipe)
+                        }
                     }
-                    appendLine()
+
+                    if (compositeRecipes.isNotEmpty()) {
+                        appendLine("## Composite Recipes")
+                        appendLine()
+                        appendLine("_Recipes that include further recipes, often including the individual recipes below._")
+                        appendLine()
+
+                        for (recipe in compositeRecipes) {
+                            val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
+
+                            // Anything except a relative link ending in .md will be mangled.
+                            // If you touch this line double check that it works when imported into gitbook
+                            appendLine("* [${recipe.displayName}](./${recipeSimpleName}.md)")
+                        }
+
+                        appendLine()
+                    }
+
+                    if (normalRecipes.isNotEmpty()) {
+                        appendLine("## Recipes")
+                        appendLine()
+
+                        for (recipe in normalRecipes) {
+                            val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
+
+                            // Anything except a relative link ending in .md will be mangled.
+                            // If you touch this line double check that it works when imported into gitbook
+                            appendLine("* [${recipe.displayName}](./${recipeSimpleName}.md)")
+                        }
+
+                        appendLine()
+                    }
                 }
 
             }.toString()
