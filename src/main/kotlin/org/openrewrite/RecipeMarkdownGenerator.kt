@@ -874,6 +874,7 @@ class RecipeMarkdownGenerator : Runnable {
                         val isNewFile = source.before == null && source.after != null
                         val afterTile = if (isNewFile) "New file" else "After"
 
+
                         if (hasChange && source.before != null) {
                             newLine()
                             val tabName = source.path ?: (source.language ?: "Before / After")
@@ -882,22 +883,25 @@ class RecipeMarkdownGenerator : Runnable {
                         }
 
                         newLine()
-                        writeln("###### ${beforeTitle}")
 
-                        if (source.path != null) {
-                            writeln("{% code title=\"${source.path}\" %}")
-                        } else {
-                            writeln("{% code %}")
+                        if (source.before != null) {
+                            writeln("###### ${beforeTitle}")
+
+                            if (source.path != null) {
+                                writeln("{% code title=\"${source.path}\" %}")
+                            } else {
+                                writeln("{% code %}")
+                            }
+
+                            writeln("```${source.language}")
+                            write("${source.before}")
+                            if (source.before != null && !source.before.endsWith("\n")) {
+                                newLine()
+                            }
+                            writeln("```")
+
+                            writeln("{% endcode %}")
                         }
-
-                        writeln("```${source.language}")
-                        write("${source.before}")
-                        if (source.before != null && !source.before.endsWith("\n")) {
-                            newLine()
-                        }
-                        writeln("```")
-
-                        writeln("{% endcode %}")
 
                         if (hasChange) {
                             newLine()
