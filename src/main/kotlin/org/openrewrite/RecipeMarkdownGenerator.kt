@@ -647,19 +647,34 @@ class RecipeMarkdownGenerator : Runnable {
                 }
 
                 if (recipes.isNotEmpty()) {
-                    appendLine("## Recipes")
+                    appendLine("## Composite Recipes")
                     appendLine()
+                    appendLine("_Recipes that include further recipes, often including the individual recipes below._")
+
                     for (recipe in recipes) {
                         val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
 
                         // Anything except a relative link ending in .md will be mangled.
-                        // If you touch this line double check that it works when imported into gitbo
+                        // If you touch this line double check that it works when imported into gitbook
                         if (recipe.recipeList.isNotEmpty()) {
-                            appendLine("* (Composite) [${recipe.displayName}](./${recipeSimpleName}.md)")
-                        } else {
                             appendLine("* [${recipe.displayName}](./${recipeSimpleName}.md)")
                         }
                     }
+
+                    appendLine()
+                    appendLine("## Recipes")
+                    appendLine()
+
+                    for (recipe in recipes) {
+                        val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
+
+                        // Anything except a relative link ending in .md will be mangled.
+                        // If you touch this line double check that it works when imported into gitbook
+                        if (recipe.recipeList.isEmpty()) {
+                            appendLine("* [${recipe.displayName}](./${recipeSimpleName}.md)")
+                        }
+                    }
+
                     appendLine()
                 }
 
