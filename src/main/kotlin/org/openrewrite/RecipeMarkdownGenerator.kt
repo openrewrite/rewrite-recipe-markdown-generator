@@ -1107,7 +1107,11 @@ class RecipeMarkdownGenerator : Runnable {
                 newLine()
                 writeln("## Contributors")
                 for (contributors in recipeDescriptor.contributors) {
-                    writeln("* [${contributors.name}](${contributors.email})")
+                    if (contributors.email.contains("noreply")) {
+                        writeln("* ${contributors.name}")
+                    } else {
+                        writeln("* [${contributors.name}](mailto:${contributors.email})")
+                    }
                 }
                 newLine()
             }
