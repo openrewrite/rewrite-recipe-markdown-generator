@@ -106,5 +106,13 @@
         <cpe>cpe:/a:fasterxml:jackson-modules-java8</cpe>
         <cpe>cpe:/a:json-java_project:json-java</cpe>
     </suppress>
+    <suppress until="2023-07-21Z">
+        <notes><![CDATA[
+            file name: jackson-databind-2.15.2.jar
+            This is not a really valid CVE and not really exploitable as Java code needs to be modified: https://github.com/FasterXML/jackson-databind/issues/3972
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson\-databind@.*$</packageUrl>
+        <cve>CVE-2023-35116</cve>
+    </suppress>
 
 </suppressions>
