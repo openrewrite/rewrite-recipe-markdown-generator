@@ -1,6 +1,6 @@
 rewrite-analysis:
   artifactId: "rewrite-analysis"
-  version: "2.0.1"
+  version: "2.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.analysis.controlflow.ControlFlowVisualization:
       name: "org.openrewrite.analysis.controlflow.ControlFlowVisualization"
@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.1.3"
+  version: "8.1.6"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -561,9 +561,21 @@ rewrite-core:
         \ be able to operate on language-specific type."
       docLink: "https://docs.openrewrite.org/reference/recipes/text/findandreplace"
       options:
+      - name: "caseInsensitive"
+        type: "Boolean"
+        required: false
+      - name: "dotAll"
+        type: "Boolean"
+        required: false
+      - name: "filePattern"
+        type: "String"
+        required: true
       - name: "find"
         type: "String"
         required: true
+      - name: "multiline"
+        type: "Boolean"
+        required: false
       - name: "regex"
         type: "Boolean"
         required: false
@@ -574,7 +586,7 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
-  version: "1.0.2"
+  version: "1.0.3"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite"
@@ -653,7 +665,7 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "2.0.1"
+  version: "2.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.github.AddCronTrigger:
       name: "org.openrewrite.github.AddCronTrigger"
@@ -789,7 +801,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.1.3"
+  version: "8.1.6"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -834,6 +846,9 @@ rewrite-gradle:
       description: "Add a property to the `gradle.properties` file."
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/addproperty"
       options:
+      - name: "filePattern"
+        type: "String"
+        required: true
       - name: "key"
         type: "String"
         required: true
@@ -1056,7 +1071,7 @@ rewrite-gradle:
         required: false
       - name: "version"
         type: "String"
-        required: true
+        required: false
       isImperative: true
       artifactId: "rewrite-gradle"
     org.openrewrite.gradle.UpdateJavaCompatibility:
@@ -1315,7 +1330,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.1.3"
+  version: "8.1.6"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1334,7 +1349,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.1.3"
+  version: "8.1.6"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1451,7 +1466,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.1.3"
+  version: "8.1.6"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -2415,7 +2430,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "1.0.1"
+  version: "1.0.5"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.AddDependency:
       name: "org.openrewrite.java.dependencies.AddDependency"
@@ -2527,10 +2542,12 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
     org.openrewrite.java.dependencies.DependencyVulnerabilityCheck:
       name: "org.openrewrite.java.dependencies.DependencyVulnerabilityCheck"
-      description: "This is a software composition analysis (SCA) tool which detects\
-        \ publicly disclosed vulnerabilities. If vulnerabilities are found, it will\
-        \ generate a report linking to the associated CVE entries. Vulnerability information\
-        \ comes from the [GitHub Security Advisory Database](https://docs.github.com/en/code-security/security-advisories/global-security-advisories/about-the-github-advisory-database),\
+      description: "This software composition analysis (SCA) tool detects and upgrades\
+        \ dependencies with publicly disclosed vulnerabilities. This recipe both generates\
+        \ a report of vulnerable dependencies and upgrades to newer versions with\
+        \ fixes. Automatic upgrade of vulnerable versions is performed when the fixed\
+        \ version is a minor or patch version bump. Vulnerability information comes\
+        \ from the [GitHub Security Advisory Database](https://docs.github.com/en/code-security/security-advisories/global-security-advisories/about-the-github-advisory-database),\
         \ which aggregates vulnerability data from several public databases, including\
         \ the [National Vulnerability Database](https://nvd.nist.gov/) maintained\
         \ by the United States government. Dependencies following [Semantic Versioning](https://semver.org/)\
@@ -2603,7 +2620,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "2.0.1"
+  version: "2.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.security.FindTextDirectionChanges:
       name: "org.openrewrite.java.security.FindTextDirectionChanges"
@@ -2966,7 +2983,7 @@ rewrite-java-security:
       artifactId: "rewrite-java-security"
 rewrite-jhipster:
   artifactId: "rewrite-jhipster"
-  version: "2.0.1"
+  version: "2.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.jhipster.FixCwe338:
       name: "org.openrewrite.java.jhipster.FixCwe338"
@@ -2978,7 +2995,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.1.3"
+  version: "8.1.6"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3028,7 +3045,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.1.0"
+  version: "1.1.6"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -3054,12 +3071,43 @@ rewrite-kotlin:
         required: true
       isImperative: true
       artifactId: "rewrite-kotlin"
-    org.openrewrite.kotlin.StaticAnalysis:
-      name: "org.openrewrite.kotlin.StaticAnalysis"
-      description: "Static analysis fixes for Kotlin sources."
-      docLink: "https://docs.openrewrite.org/reference/recipes/kotlin/staticanalysis"
+    org.openrewrite.kotlin.cleanup.EqualsMethodUsage:
+      name: "org.openrewrite.kotlin.cleanup.EqualsMethodUsage"
+      description: "In Kotlin, == means structural equality and != structural inequality\
+        \ and both map to the left-side term’s equals() function. It is, therefore,\
+        \ redundant to call equals() as a function. Also, == and != are more general\
+        \ than equals() and !equals() because it allows either of both operands to\
+        \ be null.\nDevelopers using equals() instead of == or != is often the result\
+        \ of adapting styles from other languages like Java, where == means reference\
+        \ equality and != means reference inequality.\nThe == and != operators are\
+        \ a more concise and elegant way to test structural equality than calling\
+        \ a function."
+      docLink: "https://docs.openrewrite.org/reference/recipes/kotlin/cleanup/equalsmethodusage"
       options: []
-      isImperative: false
+      isImperative: true
+      artifactId: "rewrite-kotlin"
+    org.openrewrite.kotlin.cleanup.ImplicitParameterInLambda:
+      name: "org.openrewrite.kotlin.cleanup.ImplicitParameterInLambda"
+      description: "\"it\" is a special identifier that allows you to refer to the\
+        \ current parameter being passed to a lambda expression without explicitly\
+        \ naming the parameter.Lambda expressions are a concise way of writing anonymous\
+        \ functions. Many lambda expressions have only one parameter, when this is\
+        \ true the compiler can determine the parameter type by context. Thus when\
+        \ using it with single parameter lambda expressions, you do not need to declare\
+        \ the type."
+      docLink: "https://docs.openrewrite.org/reference/recipes/kotlin/cleanup/implicitparameterinlambda"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-kotlin"
+    org.openrewrite.kotlin.cleanup.ReplaceCharToIntWithCode:
+      name: "org.openrewrite.kotlin.cleanup.ReplaceCharToIntWithCode"
+      description: "Replace the usage of the deprecated `Char#toInt()` with `Char#code`.\
+        \ Please ensure that your Kotlin version is 1.5 or later to support the `Char#code`\
+        \ property. Note that the current implementation does not perform a Kotlin\
+        \ version check."
+      docLink: "https://docs.openrewrite.org/reference/recipes/kotlin/cleanup/replacechartointwithcode"
+      options: []
+      isImperative: true
       artifactId: "rewrite-kotlin"
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
@@ -3522,7 +3570,7 @@ rewrite-kubernetes:
       artifactId: "rewrite-kubernetes"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "2.0.1"
+  version: "2.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.logging.ParameterizedLogging:
       name: "org.openrewrite.java.logging.ParameterizedLogging"
@@ -3750,7 +3798,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.1.3"
+  version: "8.1.6"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -4438,6 +4486,28 @@ rewrite-maven:
         required: true
       isImperative: true
       artifactId: "rewrite-maven"
+    org.openrewrite.maven.UpdateMavenWrapper:
+      name: "org.openrewrite.maven.UpdateMavenWrapper"
+      description: "Update the version of Maven used in an existing Maven wrapper."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/updatemavenwrapper"
+      options:
+      - name: "addIfMissing"
+        type: "Boolean"
+        required: false
+      - name: "distributionVersion"
+        type: "String"
+        required: false
+      - name: "repositoryUrl"
+        type: "String"
+        required: false
+      - name: "wrapperDistribution"
+        type: "String"
+        required: false
+      - name: "wrapperVersion"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-maven"
     org.openrewrite.maven.UpgradeDependencyVersion:
       name: "org.openrewrite.maven.UpgradeDependencyVersion"
       description: "Upgrade the version of a dependency by specifying a group and\
@@ -4877,7 +4947,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "2.0.1"
+  version: "2.0.6"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -5307,6 +5377,13 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.guava.PreferJavaNioCharsetStandardCharsets:
+      name: "org.openrewrite.java.migrate.guava.PreferJavaNioCharsetStandardCharsets"
+      description: "Prefer `java.nio.charset.StandardCharsets` instead of using `com.google.common.base.Charsets`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferjavaniocharsetstandardcharsets"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.guava.PreferJavaUtilCollectionsSynchronizedNavigableMap:
       name: "org.openrewrite.java.migrate.guava.PreferJavaUtilCollectionsSynchronizedNavigableMap"
       description: "Prefer `java.util.Collections#synchronizedNavigableMap` instead\
@@ -5342,6 +5419,13 @@ rewrite-migrate-java:
       description: "Prefer `java.util.Objects#hash` instead of using `com.google.common.base.Objects#hashCode`\
         \ or `com.google.common.base.Objects hash(..)`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferjavautilobjectshashcode"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.guava.PreferJavaUtilObjectsRequireNonNull:
+      name: "org.openrewrite.java.migrate.guava.PreferJavaUtilObjectsRequireNonNull"
+      description: "Prefer `java.util.Objects#requireNonNull` instead of using `com.google.common.base.Preconditions#checkNotNull`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/preferjavautilobjectsrequirenonnull"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -5446,27 +5530,6 @@ rewrite-migrate-java:
       name: "org.openrewrite.java.migrate.guava.PreferShortCompare"
       description: "Prefer `java.lang.Short#compare` instead of using `com.google.common.primitives.Shorts#compare`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/prefershortcompare"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.hibernate.MigrateToHibernate61:
-      name: "org.openrewrite.java.migrate.hibernate.MigrateToHibernate61"
-      description: "This recipe will apply changes commonly needed when migrating\
-        \ to Hibernate 6.1.x. The hibernate dependencies will   be updated to use\
-        \ the new org.hibernate.orm group ID and the recipe will make changes necessary\
-        \ to use Hibernate with Jakarta EE 9.0.\n"
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/hibernate/migratetohibernate61"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.hibernate.MigrateToHibernateDependencies61:
-      name: "org.openrewrite.java.migrate.hibernate.MigrateToHibernateDependencies61"
-      description: "This recipe will migrate any existing dependencies on Hibernate\
-        \ 5.x to the latest 6.1.x release. This migration will include the adjustment\
-        \ to the new `org.hibernate.orm` group ID. It accounts for artifacts names\
-        \ that both do and do not include the `jakarta` suffix and it will change\
-        \ both dependencies and managed dependencies.\n"
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/hibernate/migratetohibernatedependencies61"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -6089,6 +6152,32 @@ rewrite-migrate-java:
         required: false
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.UseVar:
+      name: "org.openrewrite.java.migrate.lang.UseVar"
+      description: "Apply local variable type inference (`var`) for primitives and\
+        \ objects."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/usevar"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.var.UseVarForObject:
+      name: "org.openrewrite.java.migrate.lang.var.UseVarForObject"
+      description: "Try to apply local variable type inference `var` to variables\
+        \ containing Objects where possible.This recipe will not touch variable declaration\
+        \ with genrics or initializer containing ternary operators."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/var/usevarforobject"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.var.UseVarForPrimitive:
+      name: "org.openrewrite.java.migrate.lang.var.UseVarForPrimitive"
+      description: "Try to apply local variable type inference `var` to primitiv variables\
+        \ where possible.This recipe will not touch variable declaration with initializer\
+        \ containing ternary operators."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/var/usevarforprimitive"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.logging.JavaLoggingAPIs:
       name: "org.openrewrite.java.migrate.logging.JavaLoggingAPIs"
       description: "Certain Java logging APIs have become deprecated and their usages\
@@ -6316,6 +6405,14 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.util.RemoveFinalizerFromZip:
+      name: "org.openrewrite.java.migrate.util.RemoveFinalizerFromZip"
+      description: "Remove invocations of finalize() deprecated invocations from Deflater,\
+        \ Inflater, ZipFile."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/util/removefinalizerfromzip"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.util.UseEnumSetOf:
       name: "org.openrewrite.java.migrate.util.UseEnumSetOf"
       description: "Prefer `EnumSet of(..)` instead of using `Set of(..)` when the\
@@ -6349,7 +6446,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.1.3"
+  version: "8.1.6"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -6438,7 +6535,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-python:
   artifactId: "rewrite-python"
-  version: "1.0.1"
+  version: "1.0.3"
   markdownRecipeDescriptors:
     org.openrewrite.python.ChangeMethodName:
       name: "org.openrewrite.python.ChangeMethodName"
@@ -6482,7 +6579,7 @@ rewrite-python:
       artifactId: "rewrite-python"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "2.0.1"
+  version: "2.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.ConfigPropertiesToConfigMapping:
       name: "org.openrewrite.quarkus.ConfigPropertiesToConfigMapping"
@@ -6618,8 +6715,15 @@ rewrite-recommendations:
       artifactId: "rewrite-recommendations"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "5.0.1"
+  version: "5.0.5"
   markdownRecipeDescriptors:
+    org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin:
+      name: "org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin"
+      description: "Add `io.spring.dependency-management` plugin, if in use."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/spring/addspringdependencymanagementplugin"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.AddSpringProperty:
       name: "org.openrewrite.java.spring.AddSpringProperty"
       description: "Add a spring configuration property to a configuration file if\
@@ -7511,20 +7615,6 @@ rewrite-spring:
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
-    org.openrewrite.java.spring.boot3.MavenPomUpgrade:
-      name: "org.openrewrite.java.spring.boot3.MavenPomUpgrade"
-      description: "Upgrade Maven POM to Spring Boot 3.0 from prior 2.x version."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/mavenpomupgrade"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-spring"
-    org.openrewrite.java.spring.boot3.MavenPomUpgrade_3_1:
-      name: "org.openrewrite.java.spring.boot3.MavenPomUpgrade_3_1"
-      description: "Upgrade Maven POM to Spring Boot 3.1 from prior 3.0 version."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot3/mavenpomupgrade_3_1"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.boot3.MigrateMaxHttpHeaderSize:
       name: "org.openrewrite.java.spring.boot3.MigrateMaxHttpHeaderSize"
       description: "Previously, the server.max-http-header-size was treated inconsistently\
@@ -8103,7 +8193,7 @@ rewrite-sql:
       artifactId: "rewrite-sql"
 rewrite-static-analysis:
   artifactId: "rewrite-static-analysis"
-  version: "1.0.1"
+  version: "1.0.3"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.StaticAnalysis:
       name: "org.openrewrite.kotlin.StaticAnalysis"
@@ -8287,6 +8377,13 @@ rewrite-static-analysis:
         \ side of an `equals()` comparison. Also checks for String literals assigned\
         \ to some field (such as `someString.equals(anotherString = \"text\"))`."
       docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/equalsavoidsnull"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.EqualsToContentEquals:
+      name: "org.openrewrite.staticanalysis.EqualsToContentEquals"
+      description: "Use `String.contentEquals(CharSequence)` instead of `String.equals(CharSequence.toString())`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/equalstocontentequals"
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
@@ -8723,6 +8820,14 @@ rewrite-static-analysis:
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.RemoveHashCodeCallsFromArrayInstances:
+      name: "org.openrewrite.staticanalysis.RemoveHashCodeCallsFromArrayInstances"
+      description: "Replace `hashCode()` calls on arrays with `Arrays.hashCode()`\
+        \ because the results from `hashCode()` are not helpful."
+      docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/removehashcodecallsfromarrayinstances"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.RemoveInstanceOfPatternMatch:
       name: "org.openrewrite.staticanalysis.RemoveInstanceOfPatternMatch"
       description: "Adds an explicit variable declaration at the beginning of `if`\
@@ -8751,6 +8856,15 @@ rewrite-static-analysis:
       description: "Print statements are often left accidentally after debugging an\
         \ issue."
       docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/removesystemoutprintln"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.RemoveToStringCallsFromArrayInstances:
+      name: "org.openrewrite.staticanalysis.RemoveToStringCallsFromArrayInstances"
+      description: "The result from `toString()` calls on arrays is largely useless.\
+        \ The output does not actually reflect the contents of the array. `Arrays.toString(array)`\
+        \ give the contents of the array."
+      docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/removetostringcallsfromarrayinstances"
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
@@ -9216,7 +9330,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "2.0.1"
+  version: "2.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -10109,7 +10223,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "2.0.2"
+  version: "2.0.6"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.assertj.Assertj:
       name: "org.openrewrite.java.testing.assertj.Assertj"
@@ -10356,6 +10470,53 @@ rewrite-testing-frameworks:
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/addhamcrestifused"
       options: []
       isImperative: false
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.hamcrest.AssertThatBooleanToAssertJ:
+      name: "org.openrewrite.java.testing.hamcrest.AssertThatBooleanToAssertJ"
+      description: "Replace Hamcrest `assertThat(String, boolean)` with AssertJ `assertThat(boolean).as(String).isTrue()`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/assertthatbooleantoassertj"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.hamcrest.HamcrestMatcherToAssertJ:
+      name: "org.openrewrite.java.testing.hamcrest.HamcrestMatcherToAssertJ"
+      description: "Migrate from Hamcrest `Matcher` to AssertJ assertions."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/hamcrestmatchertoassertj"
+      options:
+      - name: "assertion"
+        type: "String"
+        required: false
+      - name: "matcher"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.hamcrest.HamcrestNotMatcherToAssertJ:
+      name: "org.openrewrite.java.testing.hamcrest.HamcrestNotMatcherToAssertJ"
+      description: "Migrate from Hamcrest `not(Matcher)` to AssertJ assertions."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/hamcrestnotmatchertoassertj"
+      options:
+      - name: "assertion"
+        type: "String"
+        required: false
+      - name: "notMatcher"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.hamcrest.MigrateHamcrestToAssertJ:
+      name: "org.openrewrite.java.testing.hamcrest.MigrateHamcrestToAssertJ"
+      description: "Migrate Hamcrest `assertThat(..)` to AssertJ `Assertions`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/migratehamcresttoassertj"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.hamcrest.RemoveIsMatcher:
+      name: "org.openrewrite.java.testing.hamcrest.RemoveIsMatcher"
+      description: "Remove Hamcrest `is(Matcher)` ahead of migration."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/removeismatcher"
+      options: []
+      isImperative: true
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.AddMissingNested:
       name: "org.openrewrite.java.testing.junit5.AddMissingNested"
@@ -10703,7 +10864,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.1.3"
+  version: "8.1.6"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -10886,7 +11047,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.1.3"
+  version: "8.1.6"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
