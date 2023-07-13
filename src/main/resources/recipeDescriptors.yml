@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.1.6"
+  version: "8.1.8"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -401,6 +401,12 @@ rewrite-core:
       options:
       - name: "maxSnippetLength"
         type: "Integer"
+        required: false
+      - name: "parserType"
+        type: "String"
+        required: false
+      - name: "stackTrace"
+        type: "String"
         required: false
       isImperative: true
       artifactId: "rewrite-core"
@@ -467,6 +473,19 @@ rewrite-core:
       description: "A recipe that consists of a list of other recipes."
       docLink: "https://docs.openrewrite.org/reference/recipes/config/compositerecipe"
       options: []
+      isImperative: true
+      artifactId: "rewrite-core"
+    org.openrewrite.search.FindBuildMetadata:
+      name: "org.openrewrite.search.FindBuildMetadata"
+      description: "Find source files with matching build metadata."
+      docLink: "https://docs.openrewrite.org/reference/recipes/search/findbuildmetadata"
+      options:
+      - name: "key"
+        type: "String"
+        required: true
+      - name: "value"
+        type: "String"
+        required: true
       isImperative: true
       artifactId: "rewrite-core"
     org.openrewrite.text.AppendToTextFile:
@@ -586,7 +605,7 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
-  version: "1.0.3"
+  version: "1.0.4"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite"
@@ -801,7 +820,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.1.6"
+  version: "8.1.8"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1330,7 +1349,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.1.6"
+  version: "8.1.8"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1349,7 +1368,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.1.6"
+  version: "8.1.8"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1466,7 +1485,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.1.6"
+  version: "8.1.8"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -2981,6 +3000,133 @@ rewrite-java-security:
         required: false
       isImperative: true
       artifactId: "rewrite-java-security"
+rewrite-jenkins:
+  artifactId: "rewrite-jenkins"
+  version: "0.2.0"
+  markdownRecipeDescriptors:
+    org.openrewrite.jenkins.AddPluginsBom:
+      name: "org.openrewrite.jenkins.AddPluginsBom"
+      description: "Adds [Jenkins plugins BOM](https://www.jenkins.io/doc/developer/plugin-development/dependency-management/#jenkins-plugin-bom)\
+        \ at the latest release if the project depends on any managed versions. BOMs\
+        \ are expected to be synchronized to Jenkins LTS versions, so this will also\
+        \ remove any mismatched BOMs (Such as using Jenkins 2.387.3, but importing\
+        \ bom-2.319.x). If the expected BOM is already added, the version will not\
+        \ be upgraded."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/addpluginsbom"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.CommonsLang3ToApiPlugin:
+      name: "org.openrewrite.jenkins.CommonsLang3ToApiPlugin"
+      description: "Updates `pom.xml` to depend on `commons-lang3-api` and exclude\
+        \ `commons-lang3` where it is brought in transitively."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/commonslang3toapiplugin"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.CreateIndexJelly:
+      name: "org.openrewrite.jenkins.CreateIndexJelly"
+      description: "The Jenkins tooling has changed over the years to [enforce](https://github.com/jenkinsci/maven-hpi-plugin/pull/302)\
+        \ that a `src/main/resources/index.jelly` exists with a description. If you\
+        \ don't have this, the build fails."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/createindexjelly"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.DisableLocalResolutionForParentPom:
+      name: "org.openrewrite.jenkins.DisableLocalResolutionForParentPom"
+      description: "Explicitly sets `<relativePath/>` to disable file resolution,\
+        \ as recommended in the [plugin development guide](https://www.jenkins.io/doc/developer/plugin-development/updating-parent/)."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/disablelocalresolutionforparentpom"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.IsJenkinsPlugin:
+      name: "org.openrewrite.jenkins.IsJenkinsPlugin"
+      description: "Checks if the project is a Jenkins plugin by the presence of a\
+        \ managed version of jenkins-core"
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/isjenkinsplugin"
+      options:
+      - name: "version"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.JavaxAnnotationsToSpotbugs:
+      name: "org.openrewrite.jenkins.JavaxAnnotationsToSpotbugs"
+      description: "SpotBugs is the [preferred replacement](https://www.jenkins.io/doc/developer/tutorial-improve/replace-jsr-305-annotations/)\
+        \ of JSR-305 annotations."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/javaxannotationstospotbugs"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.ModernizeJenkinsfile:
+      name: "org.openrewrite.jenkins.ModernizeJenkinsfile"
+      description: "Updates `Jenkinsfile` to build with recommended Java versions,\
+        \ platforms, and settings."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/modernizejenkinsfile"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.ModernizePlugin:
+      name: "org.openrewrite.jenkins.ModernizePlugin"
+      description: "This recipe is intended to change over time to reflect the most\
+        \ recent tooling and [recommended Jenkins baseline](https://www.jenkins.io/doc/developer/plugin-development/choosing-jenkins-baseline/).\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/modernizeplugin"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.ModernizePluginForJava8:
+      name: "org.openrewrite.jenkins.ModernizePluginForJava8"
+      description: "This recipe is intended to break down the modernization of very\
+        \ old plugins into distinct steps. It allows modernizing all tooling up to\
+        \ the last versions that supported Java 8. This can then be followed by another\
+        \ recipe that makes the jump to Java 11.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/modernizepluginforjava8"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.ReplaceLibrariesWithApiPlugin:
+      name: "org.openrewrite.jenkins.ReplaceLibrariesWithApiPlugin"
+      description: "Prefer Jenkins API plugins over bundling libraries for slimmer\
+        \ plugins."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/replacelibrarieswithapiplugin"
+      options:
+      - name: "pluginArtifactId"
+        type: "String"
+        required: true
+      - name: "pluginGroupId"
+        type: "String"
+        required: true
+      - name: "pluginVersion"
+        type: "String"
+        required: true
+      - name: "replaces"
+        type: "Set"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.UpgradeHtmlUnit_3_3_0:
+      name: "org.openrewrite.jenkins.UpgradeHtmlUnit_3_3_0"
+      description: "Automates the HtmlUnit [migration guide](https://htmlunit.sourceforge.io/migration.html)\
+        \ from 2.x to 3.x. This change was brought in by [parent 4.66](https://github.com/jenkinsci/plugin-pom/releases/tag/plugin-4.66).\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/upgradehtmlunit_3_3_0"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.UpgradeVersionProperty:
+      name: "org.openrewrite.jenkins.UpgradeVersionProperty"
+      description: "If the current value is a version < given version, upgrade it."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/upgradeversionproperty"
+      options:
+      - name: "key"
+        type: "String"
+        required: true
+      - name: "minimumVersion"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-jenkins"
 rewrite-jhipster:
   artifactId: "rewrite-jhipster"
   version: "2.0.2"
@@ -2995,7 +3141,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.1.6"
+  version: "8.1.8"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3045,7 +3191,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.1.6"
+  version: "1.1.8"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -3073,15 +3219,15 @@ rewrite-kotlin:
       artifactId: "rewrite-kotlin"
     org.openrewrite.kotlin.cleanup.EqualsMethodUsage:
       name: "org.openrewrite.kotlin.cleanup.EqualsMethodUsage"
-      description: "In Kotlin, == means structural equality and != structural inequality\
-        \ and both map to the left-side term’s equals() function. It is, therefore,\
-        \ redundant to call equals() as a function. Also, == and != are more general\
-        \ than equals() and !equals() because it allows either of both operands to\
-        \ be null.\nDevelopers using equals() instead of == or != is often the result\
-        \ of adapting styles from other languages like Java, where == means reference\
-        \ equality and != means reference inequality.\nThe == and != operators are\
-        \ a more concise and elegant way to test structural equality than calling\
-        \ a function."
+      description: "In Kotlin, `==` means structural equality and `!=` structural\
+        \ inequality and both map to the left-side term’s `equals()` function. It\
+        \ is, therefore, redundant to call `equals()` as a function. Also, `==` and\
+        \ `!=` are more general than `equals()` and `!equals()` because it allows\
+        \ either of both operands to be null.\nDevelopers using `equals()` instead\
+        \ of `==` or `!=` is often the result of adapting styles from other languages\
+        \ like Java, where `==` means reference equality and `!=` means reference\
+        \ inequality.\nThe `==` and `!=` operators are a more concise and elegant\
+        \ way to test structural equality than calling a function."
       docLink: "https://docs.openrewrite.org/reference/recipes/kotlin/cleanup/equalsmethodusage"
       options: []
       isImperative: true
@@ -3090,7 +3236,7 @@ rewrite-kotlin:
       name: "org.openrewrite.kotlin.cleanup.ImplicitParameterInLambda"
       description: "\"it\" is a special identifier that allows you to refer to the\
         \ current parameter being passed to a lambda expression without explicitly\
-        \ naming the parameter.Lambda expressions are a concise way of writing anonymous\
+        \ naming the parameter. Lambda expressions are a concise way of writing anonymous\
         \ functions. Many lambda expressions have only one parameter, when this is\
         \ true the compiler can determine the parameter type by context. Thus when\
         \ using it with single parameter lambda expressions, you do not need to declare\
@@ -3798,7 +3944,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.1.6"
+  version: "8.1.8"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -4678,6 +4824,14 @@ rewrite-maven:
       - name: "propertyPattern"
         type: "String"
         required: true
+      isImperative: true
+      artifactId: "rewrite-maven"
+    org.openrewrite.maven.search.FindRepositoryOrder:
+      name: "org.openrewrite.maven.search.FindRepositoryOrder"
+      description: "Determine the order in which dependencies will be resolved for\
+        \ each `pom.xml` based on its defined repositories and effective `settings.xml`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/search/findrepositoryorder"
+      options: []
       isImperative: true
       artifactId: "rewrite-maven"
     org.openrewrite.maven.security.UseHttpsForRepositories:
@@ -6446,7 +6600,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.1.6"
+  version: "8.1.8"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -6535,7 +6689,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-python:
   artifactId: "rewrite-python"
-  version: "1.0.3"
+  version: "1.0.4"
   markdownRecipeDescriptors:
     org.openrewrite.python.ChangeMethodName:
       name: "org.openrewrite.python.ChangeMethodName"
@@ -10864,7 +11018,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.1.6"
+  version: "8.1.8"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -11047,7 +11201,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.1.6"
+  version: "8.1.8"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"

@@ -402,6 +402,12 @@ rewrite-core:
       - name: "maxSnippetLength"
         type: "Integer"
         required: false
+      - name: "parserType"
+        type: "String"
+        required: false
+      - name: "stackTrace"
+        type: "String"
+        required: false
       isImperative: true
       artifactId: "rewrite-core"
     org.openrewrite.FindQuarks:
@@ -469,6 +475,19 @@ rewrite-core:
       options: []
       isImperative: true
       artifactId: "rewrite-core"
+    org.openrewrite.search.FindBuildMetadata:
+      name: "org.openrewrite.search.FindBuildMetadata"
+      description: "Find source files with matching build metadata."
+      docLink: "https://docs.openrewrite.org/reference/recipes/search/findbuildmetadata"
+      options:
+      - name: "key"
+        type: "String"
+        required: true
+      - name: "value"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-core"
     org.openrewrite.text.AppendToTextFile:
       name: "org.openrewrite.text.AppendToTextFile"
       description: "Appends or replaces content of an existing plain text file, or\
@@ -533,7 +552,7 @@ rewrite-core:
       description: "Search for text, treating all textual sources as plain text."
       docLink: "https://docs.openrewrite.org/reference/recipes/text/find"
       options:
-      - name: "caseInsensitive"
+      - name: "caseSensitive"
         type: "Boolean"
         required: false
       - name: "dotAll"
@@ -561,7 +580,7 @@ rewrite-core:
         \ be able to operate on language-specific type."
       docLink: "https://docs.openrewrite.org/reference/recipes/text/findandreplace"
       options:
-      - name: "caseInsensitive"
+      - name: "caseSensitive"
         type: "Boolean"
         required: false
       - name: "dotAll"
@@ -1129,10 +1148,10 @@ rewrite-gradle:
         required: false
       isImperative: true
       artifactId: "rewrite-gradle"
-    org.openrewrite.gradle.plugins.AddGradleEnterprise:
-      name: "org.openrewrite.gradle.plugins.AddGradleEnterprise"
-      description: "Add the Gradle Enterprise plugin to settings.gradle files."
-      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/plugins/addgradleenterprise"
+    org.openrewrite.gradle.plugins.AddGradleEnterpriseGradlePlugin:
+      name: "org.openrewrite.gradle.plugins.AddGradleEnterpriseGradlePlugin"
+      description: "Add the Gradle Enterprise Gradle plugin to settings.gradle files."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/plugins/addgradleenterprisegradleplugin"
       options:
       - name: "allowUntrustedServer"
         type: "Boolean"
@@ -1693,7 +1712,10 @@ rewrite-java:
       artifactId: "rewrite-java"
     org.openrewrite.java.OrderImports:
       name: "org.openrewrite.java.OrderImports"
-      description: "Group and order imports."
+      description: "Groups and orders import statements. If a [style has been defined](https://docs.openrewrite.org/concepts-explanations/styles),\
+        \ this recipe will order the imports according to that style. If no style\
+        \ is detected, this recipe will default to ordering imports in the same way\
+        \ that IntelliJ does."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/orderimports"
       options:
       - name: "removeUnused"
@@ -3007,6 +3029,132 @@ rewrite-java-security:
         required: false
       isImperative: true
       artifactId: "rewrite-java-security"
+rewrite-jenkins:
+  artifactId: "rewrite-jenkins"
+  version: "0.3.0-SNAPSHOT"
+  markdownRecipeDescriptors:
+    org.openrewrite.jenkins.AddPluginsBom:
+      name: "org.openrewrite.jenkins.AddPluginsBom"
+      description: "Adds [Jenkins plugins BOM](https://www.jenkins.io/doc/developer/plugin-development/dependency-management/#jenkins-plugin-bom)\
+        \ at the latest release if the project depends on any managed versions. BOMs\
+        \ are expected to be synchronized to Jenkins LTS versions, so this will also\
+        \ remove any mismatched BOMs (Such as using Jenkins 2.387.3, but importing\
+        \ bom-2.319.x). If the expected BOM is already added, the version will not\
+        \ be upgraded."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/addpluginsbom"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.CommonsLang3ToApiPlugin:
+      name: "org.openrewrite.jenkins.CommonsLang3ToApiPlugin"
+      description: "Updates `pom.xml` to depend on `commons-lang3-api` and exclude\
+        \ `commons-lang3` where it is brought in transitively."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/commonslang3toapiplugin"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.CreateIndexJelly:
+      name: "org.openrewrite.jenkins.CreateIndexJelly"
+      description: "Jenkins tooling [requires](https://github.com/jenkinsci/maven-hpi-plugin/pull/302)\
+        \ `src/main/resources/index.jelly` exists with a description."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/createindexjelly"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.DisableLocalResolutionForParentPom:
+      name: "org.openrewrite.jenkins.DisableLocalResolutionForParentPom"
+      description: "Explicitly sets `<relativePath/>` to disable file resolution,\
+        \ as recommended in the [plugin development guide](https://www.jenkins.io/doc/developer/plugin-development/updating-parent/)."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/disablelocalresolutionforparentpom"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.IsJenkinsPlugin:
+      name: "org.openrewrite.jenkins.IsJenkinsPlugin"
+      description: "Checks if the project is a Jenkins plugin by the presence of a\
+        \ managed version of jenkins-core"
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/isjenkinsplugin"
+      options:
+      - name: "version"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.JavaxAnnotationsToSpotbugs:
+      name: "org.openrewrite.jenkins.JavaxAnnotationsToSpotbugs"
+      description: "SpotBugs is the [preferred replacement](https://www.jenkins.io/doc/developer/tutorial-improve/replace-jsr-305-annotations/)\
+        \ of JSR-305 annotations for Jenkins plugins."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/javaxannotationstospotbugs"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.ModernizeJenkinsfile:
+      name: "org.openrewrite.jenkins.ModernizeJenkinsfile"
+      description: "Updates `Jenkinsfile` to build with recommended Java versions,\
+        \ platforms, and settings."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/modernizejenkinsfile"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.ModernizePlugin:
+      name: "org.openrewrite.jenkins.ModernizePlugin"
+      description: "This recipe is intended to change over time to reflect the most\
+        \ recent tooling and [recommended Jenkins baseline](https://www.jenkins.io/doc/developer/plugin-development/choosing-jenkins-baseline/).\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/modernizeplugin"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.ModernizePluginForJava8:
+      name: "org.openrewrite.jenkins.ModernizePluginForJava8"
+      description: "This recipe is intended to break down the modernization of very\
+        \ old plugins into distinct steps. It allows modernizing all tooling up to\
+        \ the last versions that supported Java 8. This can then be followed by another\
+        \ recipe that makes the jump to Java 11.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/modernizepluginforjava8"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.ReplaceLibrariesWithApiPlugin:
+      name: "org.openrewrite.jenkins.ReplaceLibrariesWithApiPlugin"
+      description: "Prefer Jenkins API plugins over bundling libraries for slimmer\
+        \ plugins."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/replacelibrarieswithapiplugin"
+      options:
+      - name: "pluginArtifactId"
+        type: "String"
+        required: true
+      - name: "pluginGroupId"
+        type: "String"
+        required: true
+      - name: "pluginVersion"
+        type: "String"
+        required: true
+      - name: "replaces"
+        type: "Set"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.UpgradeHtmlUnit_3_3_0:
+      name: "org.openrewrite.jenkins.UpgradeHtmlUnit_3_3_0"
+      description: "Automates the HtmlUnit [migration guide](https://htmlunit.sourceforge.io/migration.html)\
+        \ from 2.x to 3.x. This change was brought in by [parent 4.66](https://github.com/jenkinsci/plugin-pom/releases/tag/plugin-4.66).\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/upgradehtmlunit_3_3_0"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-jenkins"
+    org.openrewrite.jenkins.UpgradeVersionProperty:
+      name: "org.openrewrite.jenkins.UpgradeVersionProperty"
+      description: "If the current value is < given version, upgrade it."
+      docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/upgradeversionproperty"
+      options:
+      - name: "key"
+        type: "String"
+        required: true
+      - name: "minimumVersion"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-jenkins"
 rewrite-jhipster:
   artifactId: "rewrite-jhipster"
   version: "2.1.0-SNAPSHOT"
@@ -3101,7 +3249,7 @@ rewrite-kotlin:
       name: "org.openrewrite.kotlin.cleanup.EqualsMethodUsage"
       description: "In Kotlin, `==` means structural equality and `!=` structural\
         \ inequality and both map to the left-side term’s `equals()` function. It\
-        \ is, therefore, redundant to call equals() as a function. Also, `==` and\
+        \ is, therefore, redundant to call `equals()` as a function. Also, `==` and\
         \ `!=` are more general than `equals()` and `!equals()` because it allows\
         \ either of both operands to be null.\nDevelopers using `equals()` instead\
         \ of `==` or `!=` is often the result of adapting styles from other languages\
@@ -3749,6 +3897,22 @@ rewrite-logging-frameworks:
       options: []
       isImperative: false
       artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.ChangeLogLevel:
+      name: "org.openrewrite.java.logging.slf4j.ChangeLogLevel"
+      description: "Change the log level of slf4j log statements."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/logging/slf4j/changeloglevel"
+      options:
+      - name: "from"
+        type: "Level"
+        required: true
+      - name: "startsWith"
+        type: "String"
+        required: false
+      - name: "to"
+        type: "Level"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
     org.openrewrite.java.logging.slf4j.CompleteExceptionLogging:
       name: "org.openrewrite.java.logging.slf4j.CompleteExceptionLogging"
       description: "It is a common mistake to call `Exception.getMessage()` when passing\
@@ -3891,7 +4055,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
     org.openrewrite.maven.AddGradleEnterpriseMavenExtension:
       name: "org.openrewrite.maven.AddGradleEnterpriseMavenExtension"
-      description: "To integrate gradle enterprise maven extension into maven projects,\
+      description: "To integrate Gradle Enterprise Maven extension into maven projects,\
         \ ensure that the `gradle-enterprise-maven-extension` is added to the `.mvn/extensions.xml`\
         \ file if not already present. Additionally, configure the extension by adding\
         \ the `.mvn/gradle-enterprise.xml` configuration file."
@@ -4706,6 +4870,14 @@ rewrite-maven:
         required: true
       isImperative: true
       artifactId: "rewrite-maven"
+    org.openrewrite.maven.search.FindRepositoryOrder:
+      name: "org.openrewrite.maven.search.FindRepositoryOrder"
+      description: "Determine the order in which dependencies will be resolved for\
+        \ each `pom.xml` based on its defined repositories and effective `settings.xml`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/search/findrepositoryorder"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-maven"
     org.openrewrite.maven.security.UseHttpsForRepositories:
       name: "org.openrewrite.maven.security.UseHttpsForRepositories"
       description: "Use HTTPS for repository urls."
@@ -4724,6 +4896,29 @@ rewrite-micronaut:
   artifactId: "rewrite-micronaut"
   version: "2.1.0-SNAPSHOT"
   markdownRecipeDescriptors:
+    org.openrewrite.java.micronaut.AddAnnotationProcessorPath:
+      name: "org.openrewrite.java.micronaut.AddAnnotationProcessorPath"
+      description: "Add the groupId, artifactId, version, and exclusions of a Maven\
+        \ annotation processor path."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/addannotationprocessorpath"
+      options:
+      - name: "artifactId"
+        type: "String"
+        required: true
+      - name: "exclusions"
+        type: "List"
+        required: false
+      - name: "groupId"
+        type: "String"
+        required: true
+      - name: "onlyIfUsing"
+        type: "String"
+        required: true
+      - name: "version"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-micronaut"
     org.openrewrite.java.micronaut.AddMicronautRetryDependencyIfNeeded:
       name: "org.openrewrite.java.micronaut.AddMicronautRetryDependencyIfNeeded"
       description: "This recipe will add the explicit Micronaut Retry dependency if\
@@ -4847,6 +5042,13 @@ rewrite-micronaut:
       options: []
       isImperative: true
       artifactId: "rewrite-micronaut"
+    org.openrewrite.java.micronaut.RemoveWithJansiLogbackConfiguration:
+      name: "org.openrewrite.java.micronaut.RemoveWithJansiLogbackConfiguration"
+      description: "This recipe will remove the withJansi configuration tag from logback.xml."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/removewithjansilogbackconfiguration"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-micronaut"
     org.openrewrite.java.micronaut.SubclassesReturnedFromFactoriesNotInjectable:
       name: "org.openrewrite.java.micronaut.SubclassesReturnedFromFactoriesNotInjectable"
       description: "As of Micronaut 3.x It is no longer possible to inject the internal\
@@ -4867,6 +5069,14 @@ rewrite-micronaut:
       docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/typerequiresintrospection"
       options: []
       isImperative: true
+      artifactId: "rewrite-micronaut"
+    org.openrewrite.java.micronaut.UpdateBlockingTaskExecutors:
+      name: "org.openrewrite.java.micronaut.UpdateBlockingTaskExecutors"
+      description: "This recipe will any usage of TaskExecutors.IO to TaskExecutors.BLOCKING\
+        \ in order to be compatible with virtual threads."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/updateblockingtaskexecutors"
+      options: []
+      isImperative: false
       artifactId: "rewrite-micronaut"
     org.openrewrite.java.micronaut.UpdateBuildPlugins:
       name: "org.openrewrite.java.micronaut.UpdateBuildPlugins"
@@ -4890,6 +5100,14 @@ rewrite-micronaut:
         \ a transitive dependency of micronaut-inject, and migrate from javax.annotation\
         \ if needed."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/updatejakartaannotations"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-micronaut"
+    org.openrewrite.java.micronaut.UpdateMicronautData:
+      name: "org.openrewrite.java.micronaut.UpdateMicronautData"
+      description: "This recipe will make the necessary updates for using Micronaut\
+        \ Data with Micronaut Framework 4."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/updatemicronautdata"
       options: []
       isImperative: false
       artifactId: "rewrite-micronaut"
@@ -5934,6 +6152,14 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.javax.AddScopeToInjectedClass:
+      name: "org.openrewrite.java.migrate.javax.AddScopeToInjectedClass"
+      description: "Finds member variables annotated with `@Inject' and applies `@Dependent`\
+        \ scope annotation to the variable's type."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/addscopetoinjectedclass"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.javax.JavaxLangModelUtil:
       name: "org.openrewrite.java.migrate.javax.JavaxLangModelUtil"
       description: "Certain `javax.lang.model.util` APIs have become deprecated and\
@@ -6189,10 +6415,27 @@ rewrite-migrate-java:
     org.openrewrite.java.migrate.lang.UseVar:
       name: "org.openrewrite.java.migrate.lang.UseVar"
       description: "Apply local variable type inference (`var`) for primitives and\
-        \ objects."
+        \ objects. These recipes can cause unused imports, be advised to run `org.openrewrite.java.RemoveUnusedImports\
+        \ afterwards."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/usevar"
       options: []
       isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.var.UseVarForGenericMethodInvocations:
+      name: "org.openrewrite.java.migrate.lang.var.UseVarForGenericMethodInvocations"
+      description: "Apply `var` to variables initialized by invocations of Generic\
+        \ Methods. This recipe ignores generic factory methods without parameters,\
+        \ because open rewrite cannot handle them correctly ATM."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/var/usevarforgenericmethodinvocations"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.var.UseVarForGenericsConstructors:
+      name: "org.openrewrite.java.migrate.lang.var.UseVarForGenericsConstructors"
+      description: "Apply `var` to generics variables initialized by constructor calls."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/var/usevarforgenericsconstructors"
+      options: []
+      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.lang.var.UseVarForObject:
       name: "org.openrewrite.java.migrate.lang.var.UseVarForObject"
@@ -6932,10 +7175,10 @@ rewrite-spring:
         required: true
       - name: "propertyKey"
         type: "String"
-        required: true
+        required: false
       - name: "tlsPropertyKey"
         type: "String"
-        required: true
+        required: false
       isImperative: true
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.batch.ImplementChunkListenerDirectly:
@@ -10583,6 +10826,14 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.AssertTrueInstanceofToAssertInstanceOf:
+      name: "org.openrewrite.java.testing.junit5.AssertTrueInstanceofToAssertInstanceOf"
+      description: "Migration of JUnit4 (or potentially JUnit5) test case in form\
+        \ of assertTrue(x instanceof y) to assertInstanceOf(y.class, x)."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/asserttrueinstanceoftoassertinstanceof"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.CategoryToTag:
       name: "org.openrewrite.java.testing.junit5.CategoryToTag"
       description: "Transforms the JUnit 4 `@Category`, which can list multiple categories,\
@@ -10839,11 +11090,11 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.AnyToNullable:
       name: "org.openrewrite.java.testing.mockito.AnyToNullable"
-      description: "Since Mockito 2.10 `any(Class)` and `anyString()` no longer match\
+      description: "Since Mockito 2.10 `anyString()` and `any()` no longer matches\
         \ null values. Use `nullable(Class)` instead."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/mockito/anytonullable"
       options: []
-      isImperative: false
+      isImperative: true
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.CleanupMockitoImports:
       name: "org.openrewrite.java.testing.mockito.CleanupMockitoImports"
@@ -10895,13 +11146,6 @@ rewrite-testing-frameworks:
       name: "org.openrewrite.java.testing.mockito.ReplacePowerMockito"
       description: "Replace PowerMock with raw Mockito."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/mockito/replacepowermockito"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.mockito.UsesMockitoAll:
-      name: "org.openrewrite.java.testing.mockito.UsesMockitoAll"
-      description: "Finds projects that depend on `mockito-all` through Maven or Gradle."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/mockito/usesmockitoall"
       options: []
       isImperative: false
       artifactId: "rewrite-testing-frameworks"
