@@ -1,6 +1,6 @@
 rewrite-analysis:
   artifactId: "rewrite-analysis"
-  version: "2.1.0-SNAPSHOT"
+  version: "2.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.analysis.controlflow.ControlFlowVisualization:
       name: "org.openrewrite.analysis.controlflow.ControlFlowVisualization"
@@ -63,7 +63,7 @@ rewrite-analysis:
       artifactId: "rewrite-analysis"
 rewrite-circleci:
   artifactId: "rewrite-circleci"
-  version: "2.1.0-SNAPSHOT"
+  version: "2.0.1"
   markdownRecipeDescriptors:
     org.openrewrite.circleci.InstallOrb:
       name: "org.openrewrite.circleci.InstallOrb"
@@ -91,7 +91,7 @@ rewrite-circleci:
       artifactId: "rewrite-circleci"
 rewrite-cloud-suitability-analyzer:
   artifactId: "rewrite-cloud-suitability-analyzer"
-  version: "2.1.0-SNAPSHOT"
+  version: "2.0.1"
   markdownRecipeDescriptors:
     org.openrewrite.cloudsuitability.FindCacheUses:
       name: "org.openrewrite.cloudsuitability.FindCacheUses"
@@ -269,7 +269,7 @@ rewrite-cloud-suitability-analyzer:
       artifactId: "rewrite-cloud-suitability-analyzer"
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "2.1.0-SNAPSHOT"
+  version: "2.0.1"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -605,7 +605,7 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
-  version: "1.1.0-SNAPSHOT"
+  version: "1.0.4"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite"
@@ -684,22 +684,8 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "2.1.0-SNAPSHOT"
+  version: "2.0.2"
   markdownRecipeDescriptors:
-    org.openrewrite.github.AddCronTrigger:
-      name: "org.openrewrite.github.AddCronTrigger"
-      description: "The `schedule` [event](https://docs.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events)\
-        \ allows you to trigger a workflow at a scheduled time."
-      docLink: "https://docs.openrewrite.org/reference/recipes/github/addcrontrigger"
-      options:
-      - name: "cron"
-        type: "String"
-        required: true
-      - name: "workflowFileMatcher"
-        type: "String"
-        required: false
-      isImperative: true
-      artifactId: "rewrite-github-actions"
     org.openrewrite.github.AddManualTrigger:
       name: "org.openrewrite.github.AddManualTrigger"
       description: "You can manually trigger workflow runs. To trigger specific workflows\
@@ -820,7 +806,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1349,7 +1335,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1368,7 +1354,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1452,7 +1438,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-hibernate:
   artifactId: "rewrite-hibernate"
-  version: "1.1.0-SNAPSHOT"
+  version: "1.0.1"
   markdownRecipeDescriptors:
     org.openrewrite.hibernate.MigrateToHibernate61:
       name: "org.openrewrite.hibernate.MigrateToHibernate61"
@@ -1461,14 +1447,6 @@ rewrite-hibernate:
         \ the new org.hibernate.orm group ID and the recipe will make changes necessary\
         \ to use Hibernate with Jakarta EE 9.0.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/hibernate/migratetohibernate61"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-hibernate"
-    org.openrewrite.hibernate.MigrateToHibernate62:
-      name: "org.openrewrite.hibernate.MigrateToHibernate62"
-      description: "This recipe will apply changes commonly needed when migrating\
-        \ to Hibernate 6.2.x.\n"
-      docLink: "https://docs.openrewrite.org/reference/recipes/hibernate/migratetohibernate62"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -1483,24 +1461,6 @@ rewrite-hibernate:
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
-    org.openrewrite.hibernate.MigrateToHypersistenceUtilsHibernate6.0:
-      name: "org.openrewrite.hibernate.MigrateToHypersistenceUtilsHibernate6.0"
-      description: "This recipe will migrate any existing dependencies on `com.vladmihalcea:hibernate-types`\
-        \ to `io.hypersistence:hypersistence-utils-hibernate-60`.  This migration\
-        \ will include the adjustment from `com.vladmihalcea` to `io.hypersistence.utils`\
-        \ package name.\n"
-      docLink: "https://docs.openrewrite.org/reference/recipes/hibernate/migratetohypersistenceutilshibernate6/0"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-hibernate"
-    org.openrewrite.hibernate.MigrateToHypersistenceUtilsHibernate6.2:
-      name: "org.openrewrite.hibernate.MigrateToHypersistenceUtilsHibernate6.2"
-      description: "This recipe will migrate any existing dependencies on `io.hypersistence:hypersistence-utils-hibernate-60`\
-        \ to `io.hypersistence:hypersistence-utils-hibernate-62`. \n"
-      docLink: "https://docs.openrewrite.org/reference/recipes/hibernate/migratetohypersistenceutilshibernate6/2"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-hibernate"
     org.openrewrite.hibernate.TypeDescriptorToType:
       name: "org.openrewrite.hibernate.TypeDescriptorToType"
       description: "Rename `JavaTypeDescriptor` and `SqlTypeDescriptor` to `JavaType`\
@@ -1511,7 +1471,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -2478,7 +2438,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "1.1.0-SNAPSHOT"
+  version: "1.0.5"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.AddDependency:
       name: "org.openrewrite.java.dependencies.AddDependency"
@@ -2668,7 +2628,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "2.1.0-SNAPSHOT"
+  version: "2.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.security.FindTextDirectionChanges:
       name: "org.openrewrite.java.security.FindTextDirectionChanges"
@@ -3031,7 +2991,7 @@ rewrite-java-security:
       artifactId: "rewrite-java-security"
 rewrite-jenkins:
   artifactId: "rewrite-jenkins"
-  version: "0.3.0-SNAPSHOT"
+  version: "0.2.0"
   markdownRecipeDescriptors:
     org.openrewrite.jenkins.AddPluginsBom:
       name: "org.openrewrite.jenkins.AddPluginsBom"
@@ -3055,8 +3015,9 @@ rewrite-jenkins:
       artifactId: "rewrite-jenkins"
     org.openrewrite.jenkins.CreateIndexJelly:
       name: "org.openrewrite.jenkins.CreateIndexJelly"
-      description: "Jenkins tooling [requires](https://github.com/jenkinsci/maven-hpi-plugin/pull/302)\
-        \ `src/main/resources/index.jelly` exists with a description."
+      description: "The Jenkins tooling has changed over the years to [enforce](https://github.com/jenkinsci/maven-hpi-plugin/pull/302)\
+        \ that a `src/main/resources/index.jelly` exists with a description. If you\
+        \ don't have this, the build fails."
       docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/createindexjelly"
       options: []
       isImperative: true
@@ -3083,7 +3044,7 @@ rewrite-jenkins:
     org.openrewrite.jenkins.JavaxAnnotationsToSpotbugs:
       name: "org.openrewrite.jenkins.JavaxAnnotationsToSpotbugs"
       description: "SpotBugs is the [preferred replacement](https://www.jenkins.io/doc/developer/tutorial-improve/replace-jsr-305-annotations/)\
-        \ of JSR-305 annotations for Jenkins plugins."
+        \ of JSR-305 annotations."
       docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/javaxannotationstospotbugs"
       options: []
       isImperative: false
@@ -3144,7 +3105,7 @@ rewrite-jenkins:
       artifactId: "rewrite-jenkins"
     org.openrewrite.jenkins.UpgradeVersionProperty:
       name: "org.openrewrite.jenkins.UpgradeVersionProperty"
-      description: "If the current value is < given version, upgrade it."
+      description: "If the current value is a version < given version, upgrade it."
       docLink: "https://docs.openrewrite.org/reference/recipes/jenkins/upgradeversionproperty"
       options:
       - name: "key"
@@ -3157,7 +3118,7 @@ rewrite-jenkins:
       artifactId: "rewrite-jenkins"
 rewrite-jhipster:
   artifactId: "rewrite-jhipster"
-  version: "2.1.0-SNAPSHOT"
+  version: "2.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.jhipster.FixCwe338:
       name: "org.openrewrite.java.jhipster.FixCwe338"
@@ -3169,7 +3130,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3219,7 +3180,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.2.0-SNAPSHOT"
+  version: "1.1.9"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -3285,7 +3246,7 @@ rewrite-kotlin:
       artifactId: "rewrite-kotlin"
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "2.1.0-SNAPSHOT"
+  version: "2.0.1"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -3744,7 +3705,7 @@ rewrite-kubernetes:
       artifactId: "rewrite-kubernetes"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "2.1.0-SNAPSHOT"
+  version: "2.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.logging.ParameterizedLogging:
       name: "org.openrewrite.java.logging.ParameterizedLogging"
@@ -3897,22 +3858,6 @@ rewrite-logging-frameworks:
       options: []
       isImperative: false
       artifactId: "rewrite-logging-frameworks"
-    org.openrewrite.java.logging.slf4j.ChangeLogLevel:
-      name: "org.openrewrite.java.logging.slf4j.ChangeLogLevel"
-      description: "Change the log level of slf4j log statements."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/logging/slf4j/changeloglevel"
-      options:
-      - name: "from"
-        type: "Level"
-        required: true
-      - name: "startsWith"
-        type: "String"
-        required: false
-      - name: "to"
-        type: "Level"
-        required: true
-      isImperative: true
-      artifactId: "rewrite-logging-frameworks"
     org.openrewrite.java.logging.slf4j.CompleteExceptionLogging:
       name: "org.openrewrite.java.logging.slf4j.CompleteExceptionLogging"
       description: "It is a common mistake to call `Exception.getMessage()` when passing\
@@ -3988,7 +3933,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -4894,7 +4839,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "2.1.0-SNAPSHOT"
+  version: "2.1.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.AddAnnotationProcessorPath:
       name: "org.openrewrite.java.micronaut.AddAnnotationProcessorPath"
@@ -5191,7 +5136,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "2.1.0-SNAPSHOT"
+  version: "2.0.7"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -5476,31 +5421,24 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.guava.NoGuavaImmutableListOf:
       name: "org.openrewrite.java.migrate.guava.NoGuavaImmutableListOf"
-      description: "Replaces `ImmutableList.of(..)` if the returned type is immediately\
-        \ down-cast."
+      description: "Replaces `.common.collect.ImmutableList.of(..)` if the returned\
+        \ type is immediately down-cast."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/noguavaimmutablelistof"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.guava.NoGuavaImmutableMapOf:
       name: "org.openrewrite.java.migrate.guava.NoGuavaImmutableMapOf"
-      description: "Replaces `ImmutableMap.of(..)` if the returned type is immediately\
-        \ down-cast."
+      description: "Replaces `.common.collect.ImmutableMap.of(..)` if the returned\
+        \ type is immediately down-cast."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/noguavaimmutablemapof"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.guava.NoGuavaImmutableSetOf:
       name: "org.openrewrite.java.migrate.guava.NoGuavaImmutableSetOf"
-      description: "Replaces `ImmutableSet.of(..)` if the returned type is immediately\
-        \ down-cast.\n  Java 9 introduced `List#of(..)`, `Map#of(..)`, `Set#of(..)`\
-        \ which is similar to `ImmutableList#of(..)`, `ImmutableMap#of(..)`, `ImmutableSet#of(..)`,\
-        \ but has a subtle difference.\n  As per the Java 9 documentation, [`Set.of`\
-        \ provides an unspecified iteration order on the set of elements and is subject\
-        \ to change](https://docs.oracle.com/javase/9/docs/api/java/util/Set.html),\
-        \ whereas [Guava `ImmutableSet` preserves the order from construction time](https://github.com/google/guava/wiki/ImmutableCollectionsExplained#how).\n\
-        \  This is worth pointing out in case your usage calls for iteration order\
-        \ being important."
+      description: "Replaces `.common.collect.ImmutableSet.of(..)` if the returned\
+        \ type is immediately down-cast."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/noguavaimmutablesetof"
       options: []
       isImperative: true
@@ -6723,7 +6661,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -6812,7 +6750,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-python:
   artifactId: "rewrite-python"
-  version: "1.1.0-SNAPSHOT"
+  version: "1.0.4"
   markdownRecipeDescriptors:
     org.openrewrite.python.ChangeMethodName:
       name: "org.openrewrite.python.ChangeMethodName"
@@ -6856,7 +6794,7 @@ rewrite-python:
       artifactId: "rewrite-python"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "2.1.0-SNAPSHOT"
+  version: "2.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.ConfigPropertiesToConfigMapping:
       name: "org.openrewrite.quarkus.ConfigPropertiesToConfigMapping"
@@ -6960,7 +6898,7 @@ rewrite-quarkus:
       artifactId: "rewrite-quarkus"
 rewrite-recommendations:
   artifactId: "rewrite-recommendations"
-  version: "1.1.0-SNAPSHOT"
+  version: "1.0.1"
   markdownRecipeDescriptors:
     org.openrewrite.recommendations.CodeHealth:
       name: "org.openrewrite.recommendations.CodeHealth"
@@ -6992,7 +6930,7 @@ rewrite-recommendations:
       artifactId: "rewrite-recommendations"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "5.1.0-SNAPSHOT"
+  version: "5.0.5"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin:
       name: "org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin"
@@ -7175,10 +7113,10 @@ rewrite-spring:
         required: true
       - name: "propertyKey"
         type: "String"
-        required: false
+        required: true
       - name: "tlsPropertyKey"
         type: "String"
-        required: false
+        required: true
       isImperative: true
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.batch.ImplementChunkListenerDirectly:
@@ -8124,17 +8062,6 @@ rewrite-spring:
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
-    org.openrewrite.java.spring.framework.UpgradeSpringFrameworkDependencies:
-      name: "org.openrewrite.java.spring.framework.UpgradeSpringFrameworkDependencies"
-      description: "Upgrade spring-framework 5.x Maven dependencies using a Node Semver\
-        \ advanced range selector."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/upgradespringframeworkdependencies"
-      options:
-      - name: "newVersion"
-        type: "String"
-        required: true
-      isImperative: true
-      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_0:
       name: "org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_0"
       description: "Migrate applications to the latest Spring Framework 5.0 release."
@@ -8438,7 +8365,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-sql:
   artifactId: "rewrite-sql"
-  version: "1.1.0-SNAPSHOT"
+  version: "1.0.1"
   markdownRecipeDescriptors:
     org.openrewrite.sql.FindSql:
       name: "org.openrewrite.sql.FindSql"
@@ -8470,7 +8397,7 @@ rewrite-sql:
       artifactId: "rewrite-sql"
 rewrite-static-analysis:
   artifactId: "rewrite-static-analysis"
-  version: "1.1.0-SNAPSHOT"
+  version: "1.0.3"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.StaticAnalysis:
       name: "org.openrewrite.kotlin.StaticAnalysis"
@@ -9349,15 +9276,6 @@ rewrite-static-analysis:
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
-    org.openrewrite.staticanalysis.ReplaceWeekYearWithYear:
-      name: "org.openrewrite.staticanalysis.ReplaceWeekYearWithYear"
-      description: "For most dates Week Year (YYYY) and Year (yyyy) yield the same\
-        \ results. However, on the last week of December and first week of January\
-        \ Week Year could produce unexpected results."
-      docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/replaceweekyearwithyear"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.SimplifyCompoundStatement:
       name: "org.openrewrite.staticanalysis.SimplifyCompoundStatement"
       description: "Fixes or removes useless compound statements. For example, removing\
@@ -9616,7 +9534,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "2.1.0-SNAPSHOT"
+  version: "2.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -10509,7 +10427,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "2.1.0-SNAPSHOT"
+  version: "2.0.7"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.assertj.Assertj:
       name: "org.openrewrite.java.testing.assertj.Assertj"
@@ -10960,6 +10878,14 @@ rewrite-testing-frameworks:
         required: true
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.RemoveTryCatchFailBlocks:
+      name: "org.openrewrite.java.testing.junit5.RemoveTryCatchFailBlocks"
+      description: "Replace `try-catch` blocks where `catch` merely contains a `fail(..)`\
+        \ statement with `Assertions.assertDoesNotThrow(() -> { ... })`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/removetrycatchfailblocks"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.RunnerToExtension:
       name: "org.openrewrite.java.testing.junit5.RunnerToExtension"
       description: "Replace runners with the JUnit Jupiter extension equivalent."
@@ -11151,7 +11077,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -11334,7 +11260,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"

@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.1.8"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -552,7 +552,7 @@ rewrite-core:
       description: "Search for text, treating all textual sources as plain text."
       docLink: "https://docs.openrewrite.org/reference/recipes/text/find"
       options:
-      - name: "caseInsensitive"
+      - name: "caseSensitive"
         type: "Boolean"
         required: false
       - name: "dotAll"
@@ -580,7 +580,7 @@ rewrite-core:
         \ be able to operate on language-specific type."
       docLink: "https://docs.openrewrite.org/reference/recipes/text/findandreplace"
       options:
-      - name: "caseInsensitive"
+      - name: "caseSensitive"
         type: "Boolean"
         required: false
       - name: "dotAll"
@@ -686,20 +686,6 @@ rewrite-github-actions:
   artifactId: "rewrite-github-actions"
   version: "2.0.2"
   markdownRecipeDescriptors:
-    org.openrewrite.github.AddCronTrigger:
-      name: "org.openrewrite.github.AddCronTrigger"
-      description: "The `schedule` [event](https://docs.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events)\
-        \ allows you to trigger a workflow at a scheduled time."
-      docLink: "https://docs.openrewrite.org/reference/recipes/github/addcrontrigger"
-      options:
-      - name: "cron"
-        type: "String"
-        required: true
-      - name: "workflowFileMatcher"
-        type: "String"
-        required: false
-      isImperative: true
-      artifactId: "rewrite-github-actions"
     org.openrewrite.github.AddManualTrigger:
       name: "org.openrewrite.github.AddManualTrigger"
       description: "You can manually trigger workflow runs. To trigger specific workflows\
@@ -820,7 +806,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.1.8"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1148,10 +1134,10 @@ rewrite-gradle:
         required: false
       isImperative: true
       artifactId: "rewrite-gradle"
-    org.openrewrite.gradle.plugins.AddGradleEnterprise:
-      name: "org.openrewrite.gradle.plugins.AddGradleEnterprise"
-      description: "Add the Gradle Enterprise plugin to settings.gradle files."
-      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/plugins/addgradleenterprise"
+    org.openrewrite.gradle.plugins.AddGradleEnterpriseGradlePlugin:
+      name: "org.openrewrite.gradle.plugins.AddGradleEnterpriseGradlePlugin"
+      description: "Add the Gradle Enterprise Gradle plugin to settings.gradle files."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/plugins/addgradleenterprisegradleplugin"
       options:
       - name: "allowUntrustedServer"
         type: "Boolean"
@@ -1349,7 +1335,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.1.8"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1368,7 +1354,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.1.8"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1485,7 +1471,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.1.8"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -1686,7 +1672,10 @@ rewrite-java:
       artifactId: "rewrite-java"
     org.openrewrite.java.OrderImports:
       name: "org.openrewrite.java.OrderImports"
-      description: "Group and order imports."
+      description: "Groups and orders import statements. If a [style has been defined](https://docs.openrewrite.org/concepts-explanations/styles),\
+        \ this recipe will order the imports according to that style. If no style\
+        \ is detected, this recipe will default to ordering imports in the same way\
+        \ that IntelliJ does."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/orderimports"
       options:
       - name: "removeUnused"
@@ -3141,7 +3130,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.1.8"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3191,7 +3180,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.1.8"
+  version: "1.1.9"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -3944,7 +3933,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.1.8"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -4011,7 +4000,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
     org.openrewrite.maven.AddGradleEnterpriseMavenExtension:
       name: "org.openrewrite.maven.AddGradleEnterpriseMavenExtension"
-      description: "To integrate gradle enterprise maven extension into maven projects,\
+      description: "To integrate Gradle Enterprise Maven extension into maven projects,\
         \ ensure that the `gradle-enterprise-maven-extension` is added to the `.mvn/extensions.xml`\
         \ file if not already present. Additionally, configure the extension by adding\
         \ the `.mvn/gradle-enterprise.xml` configuration file."
@@ -4850,8 +4839,31 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "2.0.1"
+  version: "2.1.0"
   markdownRecipeDescriptors:
+    org.openrewrite.java.micronaut.AddAnnotationProcessorPath:
+      name: "org.openrewrite.java.micronaut.AddAnnotationProcessorPath"
+      description: "Add the groupId, artifactId, version, and exclusions of a Maven\
+        \ annotation processor path."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/addannotationprocessorpath"
+      options:
+      - name: "artifactId"
+        type: "String"
+        required: true
+      - name: "exclusions"
+        type: "List"
+        required: false
+      - name: "groupId"
+        type: "String"
+        required: true
+      - name: "onlyIfUsing"
+        type: "String"
+        required: true
+      - name: "version"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-micronaut"
     org.openrewrite.java.micronaut.AddMicronautRetryDependencyIfNeeded:
       name: "org.openrewrite.java.micronaut.AddMicronautRetryDependencyIfNeeded"
       description: "This recipe will add the explicit Micronaut Retry dependency if\
@@ -4975,6 +4987,13 @@ rewrite-micronaut:
       options: []
       isImperative: true
       artifactId: "rewrite-micronaut"
+    org.openrewrite.java.micronaut.RemoveWithJansiLogbackConfiguration:
+      name: "org.openrewrite.java.micronaut.RemoveWithJansiLogbackConfiguration"
+      description: "This recipe will remove the withJansi configuration tag from logback.xml."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/removewithjansilogbackconfiguration"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-micronaut"
     org.openrewrite.java.micronaut.SubclassesReturnedFromFactoriesNotInjectable:
       name: "org.openrewrite.java.micronaut.SubclassesReturnedFromFactoriesNotInjectable"
       description: "As of Micronaut 3.x It is no longer possible to inject the internal\
@@ -4995,6 +5014,14 @@ rewrite-micronaut:
       docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/typerequiresintrospection"
       options: []
       isImperative: true
+      artifactId: "rewrite-micronaut"
+    org.openrewrite.java.micronaut.UpdateBlockingTaskExecutors:
+      name: "org.openrewrite.java.micronaut.UpdateBlockingTaskExecutors"
+      description: "This recipe will any usage of TaskExecutors.IO to TaskExecutors.BLOCKING\
+        \ in order to be compatible with virtual threads."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/updateblockingtaskexecutors"
+      options: []
+      isImperative: false
       artifactId: "rewrite-micronaut"
     org.openrewrite.java.micronaut.UpdateBuildPlugins:
       name: "org.openrewrite.java.micronaut.UpdateBuildPlugins"
@@ -5018,6 +5045,14 @@ rewrite-micronaut:
         \ a transitive dependency of micronaut-inject, and migrate from javax.annotation\
         \ if needed."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/updatejakartaannotations"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-micronaut"
+    org.openrewrite.java.micronaut.UpdateMicronautData:
+      name: "org.openrewrite.java.micronaut.UpdateMicronautData"
+      description: "This recipe will make the necessary updates for using Micronaut\
+        \ Data with Micronaut Framework 4."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/updatemicronautdata"
       options: []
       isImperative: false
       artifactId: "rewrite-micronaut"
@@ -5101,7 +5136,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "2.0.6"
+  version: "2.0.7"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -5386,31 +5421,24 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.guava.NoGuavaImmutableListOf:
       name: "org.openrewrite.java.migrate.guava.NoGuavaImmutableListOf"
-      description: "Replaces `ImmutableList.of(..)` if the returned type is immediately\
-        \ down-cast."
+      description: "Replaces `.common.collect.ImmutableList.of(..)` if the returned\
+        \ type is immediately down-cast."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/noguavaimmutablelistof"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.guava.NoGuavaImmutableMapOf:
       name: "org.openrewrite.java.migrate.guava.NoGuavaImmutableMapOf"
-      description: "Replaces `ImmutableMap.of(..)` if the returned type is immediately\
-        \ down-cast."
+      description: "Replaces `.common.collect.ImmutableMap.of(..)` if the returned\
+        \ type is immediately down-cast."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/noguavaimmutablemapof"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.guava.NoGuavaImmutableSetOf:
       name: "org.openrewrite.java.migrate.guava.NoGuavaImmutableSetOf"
-      description: "Replaces `ImmutableSet.of(..)` if the returned type is immediately\
-        \ down-cast.\n  Java 9 introduced `List#of(..)`, `Map#of(..)`, `Set#of(..)`\
-        \ which is similar to `ImmutableList#of(..)`, `ImmutableMap#of(..)`, `ImmutableSet#of(..)`,\
-        \ but has a subtle difference.\n  As per the Java 9 documentation, [`Set.of`\
-        \ provides an unspecified iteration order on the set of elements and is subject\
-        \ to change](https://docs.oracle.com/javase/9/docs/api/java/util/Set.html),\
-        \ whereas [Guava `ImmutableSet` preserves the order from construction time](https://github.com/google/guava/wiki/ImmutableCollectionsExplained#how).\n\
-        \  This is worth pointing out in case your usage calls for iteration order\
-        \ being important."
+      description: "Replaces `.common.collect.ImmutableSet.of(..)` if the returned\
+        \ type is immediately down-cast."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/noguavaimmutablesetof"
       options: []
       isImperative: true
@@ -6062,6 +6090,14 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.javax.AddScopeToInjectedClass:
+      name: "org.openrewrite.java.migrate.javax.AddScopeToInjectedClass"
+      description: "Finds member variables annotated with `@Inject' and applies `@Dependent`\
+        \ scope annotation to the variable's type."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/javax/addscopetoinjectedclass"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.javax.JavaxLangModelUtil:
       name: "org.openrewrite.java.migrate.javax.JavaxLangModelUtil"
       description: "Certain `javax.lang.model.util` APIs have become deprecated and\
@@ -6277,6 +6313,14 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.RemoveThreadDestroyMethod:
+      name: "org.openrewrite.java.migrate.lang.RemoveThreadDestroyMethod"
+      description: "Remove deprecated invocations of `Thread.destroy()` which have\
+        \ no alternatives needed."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/removethreaddestroymethod"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.lang.StringFormatted:
       name: "org.openrewrite.java.migrate.lang.StringFormatted"
       description: "Prefer `String#formatted(Object...)` over `String#format(String,\
@@ -6309,25 +6353,42 @@ rewrite-migrate-java:
     org.openrewrite.java.migrate.lang.UseVar:
       name: "org.openrewrite.java.migrate.lang.UseVar"
       description: "Apply local variable type inference (`var`) for primitives and\
-        \ objects."
+        \ objects. These recipes can cause unused imports, be advised to run `org.openrewrite.java.RemoveUnusedImports\
+        \ afterwards."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/usevar"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.var.UseVarForGenericMethodInvocations:
+      name: "org.openrewrite.java.migrate.lang.var.UseVarForGenericMethodInvocations"
+      description: "Apply `var` to variables initialized by invocations of Generic\
+        \ Methods. This recipe ignores generic factory methods without parameters,\
+        \ because open rewrite cannot handle them correctly ATM."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/var/usevarforgenericmethodinvocations"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.var.UseVarForGenericsConstructors:
+      name: "org.openrewrite.java.migrate.lang.var.UseVarForGenericsConstructors"
+      description: "Apply `var` to generics variables initialized by constructor calls."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/var/usevarforgenericsconstructors"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.lang.var.UseVarForObject:
       name: "org.openrewrite.java.migrate.lang.var.UseVarForObject"
       description: "Try to apply local variable type inference `var` to variables\
-        \ containing Objects where possible.This recipe will not touch variable declaration\
-        \ with genrics or initializer containing ternary operators."
+        \ containing Objects where possible. This recipe will not touch variable declarations\
+        \ with generics or initializers containing ternary operators."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/var/usevarforobject"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.lang.var.UseVarForPrimitive:
       name: "org.openrewrite.java.migrate.lang.var.UseVarForPrimitive"
-      description: "Try to apply local variable type inference `var` to primitiv variables\
-        \ where possible.This recipe will not touch variable declaration with initializer\
-        \ containing ternary operators."
+      description: "Try to apply local variable type inference `var` to primitive\
+        \ variables where possible. This recipe will not touch variable declarations\
+        \ with initializers containing ternary operators."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/var/usevarforprimitive"
       options: []
       isImperative: true
@@ -6600,7 +6661,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.1.8"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -7999,17 +8060,6 @@ rewrite-spring:
         \ this adapter."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/migratewebmvcconfigureradapter"
       options: []
-      isImperative: true
-      artifactId: "rewrite-spring"
-    org.openrewrite.java.spring.framework.UpgradeSpringFrameworkDependencies:
-      name: "org.openrewrite.java.spring.framework.UpgradeSpringFrameworkDependencies"
-      description: "Upgrade spring-framework 5.x Maven dependencies using a Node Semver\
-        \ advanced range selector."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/upgradespringframeworkdependencies"
-      options:
-      - name: "newVersion"
-        type: "String"
-        required: true
       isImperative: true
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_0:
@@ -10377,7 +10427,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "2.0.6"
+  version: "2.0.7"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.assertj.Assertj:
       name: "org.openrewrite.java.testing.assertj.Assertj"
@@ -10694,6 +10744,14 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.AssertTrueInstanceofToAssertInstanceOf:
+      name: "org.openrewrite.java.testing.junit5.AssertTrueInstanceofToAssertInstanceOf"
+      description: "Migration of JUnit4 (or potentially JUnit5) test case in form\
+        \ of assertTrue(x instanceof y) to assertInstanceOf(y.class, x)."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/asserttrueinstanceoftoassertinstanceof"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.CategoryToTag:
       name: "org.openrewrite.java.testing.junit5.CategoryToTag"
       description: "Transforms the JUnit 4 `@Category`, which can list multiple categories,\
@@ -10818,6 +10876,14 @@ rewrite-testing-frameworks:
       - name: "obsoleteRunners"
         type: "List"
         required: true
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.RemoveTryCatchFailBlocks:
+      name: "org.openrewrite.java.testing.junit5.RemoveTryCatchFailBlocks"
+      description: "Replace `try-catch` blocks where `catch` merely contains a `fail(..)`\
+        \ statement with `Assertions.assertDoesNotThrow(() -> { ... })`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/removetrycatchfailblocks"
+      options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.RunnerToExtension:
@@ -10950,11 +11016,11 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.AnyToNullable:
       name: "org.openrewrite.java.testing.mockito.AnyToNullable"
-      description: "Since Mockito 2.10 `any(Class)` and `anyString()` no longer match\
+      description: "Since Mockito 2.10 `anyString()` and `any()` no longer matches\
         \ null values. Use `nullable(Class)` instead."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/mockito/anytonullable"
       options: []
-      isImperative: false
+      isImperative: true
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.CleanupMockitoImports:
       name: "org.openrewrite.java.testing.mockito.CleanupMockitoImports"
@@ -11009,16 +11075,9 @@ rewrite-testing-frameworks:
       options: []
       isImperative: false
       artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.mockito.UsesMockitoAll:
-      name: "org.openrewrite.java.testing.mockito.UsesMockitoAll"
-      description: "Finds projects that depend on `mockito-all` through Maven or Gradle."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/mockito/usesmockitoall"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.1.8"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -11201,7 +11260,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.1.8"
+  version: "8.1.10"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
