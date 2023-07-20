@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.1.10"
+  version: "8.1.11"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -389,6 +389,14 @@ rewrite-core:
         \ such marker should be printed as all source files are expected to come from\
         \ the same repository / branch / commit hash."
       docLink: "https://docs.openrewrite.org/reference/recipes/findgitprovenance"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-core"
+    org.openrewrite.FindLstProvenance:
+      name: "org.openrewrite.FindLstProvenance"
+      description: "Produces a data table showing what versions of OpenRewrite/Moderne\
+        \ tooling was used to produce a given LST. "
+      docLink: "https://docs.openrewrite.org/reference/recipes/findlstprovenance"
       options: []
       isImperative: true
       artifactId: "rewrite-core"
@@ -684,8 +692,22 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "2.0.2"
+  version: "2.0.3"
   markdownRecipeDescriptors:
+    org.openrewrite.github.AddCronTrigger:
+      name: "org.openrewrite.github.AddCronTrigger"
+      description: "The `schedule` [event](https://docs.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events)\
+        \ allows you to trigger a workflow at a scheduled time."
+      docLink: "https://docs.openrewrite.org/reference/recipes/github/addcrontrigger"
+      options:
+      - name: "cron"
+        type: "String"
+        required: true
+      - name: "workflowFileMatcher"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-github-actions"
     org.openrewrite.github.AddManualTrigger:
       name: "org.openrewrite.github.AddManualTrigger"
       description: "You can manually trigger workflow runs. To trigger specific workflows\
@@ -806,7 +828,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.1.10"
+  version: "8.1.11"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1112,7 +1134,7 @@ rewrite-gradle:
         required: true
       - name: "newVersion"
         type: "String"
-        required: true
+        required: false
       - name: "versionPattern"
         type: "String"
         required: false
@@ -1156,7 +1178,7 @@ rewrite-gradle:
         required: false
       - name: "version"
         type: "String"
-        required: true
+        required: false
       isImperative: true
       artifactId: "rewrite-gradle"
     org.openrewrite.gradle.plugins.AddSettingsPlugin:
@@ -1169,7 +1191,7 @@ rewrite-gradle:
         required: true
       - name: "version"
         type: "String"
-        required: true
+        required: false
       - name: "versionPattern"
         type: "String"
         required: false
@@ -1215,7 +1237,7 @@ rewrite-gradle:
       options:
       - name: "newVersion"
         type: "String"
-        required: true
+        required: false
       - name: "pluginIdPattern"
         type: "String"
         required: true
@@ -1335,7 +1357,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.1.10"
+  version: "8.1.11"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1354,7 +1376,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.1.10"
+  version: "8.1.11"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1471,7 +1493,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.1.10"
+  version: "8.1.11"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -1722,7 +1744,7 @@ rewrite-java:
       options:
       - name: "filter"
         type: "String"
-        required: true
+        required: false
       - name: "interfaceType"
         type: "String"
         required: true
@@ -1750,6 +1772,9 @@ rewrite-java:
       docLink: "https://docs.openrewrite.org/reference/recipes/java/reordermethodarguments"
       options:
       - name: "ignoreDefinition"
+        type: "Boolean"
+        required: false
+      - name: "matchOverrides"
         type: "Boolean"
         required: false
       - name: "methodPattern"
@@ -1823,6 +1848,9 @@ rewrite-java:
       description: "Simplify `a.b().c()` to `a.d()`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/simplifymethodchain"
       options:
+      - name: "matchOverrides"
+        type: "Boolean"
+        required: false
       - name: "methodPatternChain"
         type: "List"
         required: true
@@ -2412,6 +2440,9 @@ rewrite-java:
       description: "Find locations where the result of the method call is being ignored."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/search/resultofmethodcallignored"
       options:
+      - name: "matchOverrides"
+        type: "Boolean"
+        required: false
       - name: "methodPattern"
         type: "String"
         required: true
@@ -3130,11 +3161,11 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.1.10"
+  version: "8.1.11"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
-      description: "Change a JSON mapping entry key leaving the value intact."
+      description: "Change a JSON mapping entry key, while leaving the value intact."
       docLink: "https://docs.openrewrite.org/reference/recipes/json/changekey"
       options:
       - name: "newKey"
@@ -3933,7 +3964,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.1.10"
+  version: "8.1.11"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -6661,7 +6692,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.1.10"
+  version: "8.1.11"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -11077,7 +11108,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.1.10"
+  version: "8.1.11"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -11260,7 +11291,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.1.10"
+  version: "8.1.11"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
@@ -11283,7 +11314,7 @@ rewrite-yaml:
       artifactId: "rewrite-yaml"
     org.openrewrite.yaml.ChangeKey:
       name: "org.openrewrite.yaml.ChangeKey"
-      description: "Change a YAML mapping entry key leaving the value intact."
+      description: "Change a YAML mapping entry key while leaving the value intact."
       docLink: "https://docs.openrewrite.org/reference/recipes/yaml/changekey"
       options:
       - name: "newKey"
@@ -11296,9 +11327,9 @@ rewrite-yaml:
       artifactId: "rewrite-yaml"
     org.openrewrite.yaml.ChangePropertyKey:
       name: "org.openrewrite.yaml.ChangePropertyKey"
-      description: "Change a YAML property key leaving the value intact. Nested YAML\
-        \ mappings are interpreted as dot separated property names, i.e. as Spring\
-        \ Boot interprets application.yml files."
+      description: "Change a YAML property key while leaving the value intact. Expects\
+        \ dot notation for nested YAML mappings, similar to how Spring Boot interprets\
+        \ `application.yml` files."
       docLink: "https://docs.openrewrite.org/reference/recipes/yaml/changepropertykey"
       options:
       - name: "except"
@@ -11317,9 +11348,8 @@ rewrite-yaml:
       artifactId: "rewrite-yaml"
     org.openrewrite.yaml.ChangePropertyValue:
       name: "org.openrewrite.yaml.ChangePropertyValue"
-      description: "Change a YAML property. Nested YAML mappings are interpreted as\
-        \ dot separated property names, i.e.  as Spring Boot interprets `application.yml`\
-        \ files."
+      description: "Change a YAML property. Expects dot notation for nested YAML mappings,\
+        \ similar to how Spring Boot interprets `application.yml` files."
       docLink: "https://docs.openrewrite.org/reference/recipes/yaml/changepropertyvalue"
       options:
       - name: "newValue"
@@ -11341,7 +11371,7 @@ rewrite-yaml:
       artifactId: "rewrite-yaml"
     org.openrewrite.yaml.ChangeValue:
       name: "org.openrewrite.yaml.ChangeValue"
-      description: "Change a YAML mapping entry value leaving the key intact."
+      description: "Change a YAML mapping entry value while leaving the key intact."
       docLink: "https://docs.openrewrite.org/reference/recipes/yaml/changevalue"
       options:
       - name: "oldKeyPath"
@@ -11355,7 +11385,7 @@ rewrite-yaml:
     org.openrewrite.yaml.CoalesceProperties:
       name: "org.openrewrite.yaml.CoalesceProperties"
       description: "Simplify nested map hierarchies into their simplest dot separated\
-        \ property form, i.e. as Spring Boot interprets application.yml files."
+        \ property form, similar to how Spring Boot interprets `application.yml` files."
       docLink: "https://docs.openrewrite.org/reference/recipes/yaml/coalesceproperties"
       options: []
       isImperative: true
@@ -11438,7 +11468,7 @@ rewrite-yaml:
       artifactId: "rewrite-yaml"
     org.openrewrite.yaml.cleanup.RemoveUnused:
       name: "org.openrewrite.yaml.cleanup.RemoveUnused"
-      description: "Remove YAML mapping and sequence keys that have no value."
+      description: "Remove YAML mappings and sequence keys that have no value."
       docLink: "https://docs.openrewrite.org/reference/recipes/yaml/cleanup/removeunused"
       options: []
       isImperative: true
@@ -11452,7 +11482,8 @@ rewrite-yaml:
       artifactId: "rewrite-yaml"
     org.openrewrite.yaml.search.FindKey:
       name: "org.openrewrite.yaml.search.FindKey"
-      description: "Find YAML entries by JsonPath expression."
+      description: "Find YAML entries that match the specified [JsonPath](https://github.com/json-path/JsonPath)\
+        \ expression."
       docLink: "https://docs.openrewrite.org/reference/recipes/yaml/search/findkey"
       options:
       - name: "key"
@@ -11462,9 +11493,9 @@ rewrite-yaml:
       artifactId: "rewrite-yaml"
     org.openrewrite.yaml.search.FindProperty:
       name: "org.openrewrite.yaml.search.FindProperty"
-      description: "Find a YAML property. Nested YAML mappings are interpreted as\
-        \ dot separated property names, i.e.  as Spring Boot interprets `application.yml`\
-        \ files."
+      description: "Find YAML properties that match the specified `propertyKey`. Expects\
+        \ dot notation for nested YAML mappings, similar to how Spring Boot interprets\
+        \ `application.yml` files."
       docLink: "https://docs.openrewrite.org/reference/recipes/yaml/search/findproperty"
       options:
       - name: "propertyKey"
