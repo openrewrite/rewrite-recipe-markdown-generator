@@ -392,6 +392,14 @@ rewrite-core:
       options: []
       isImperative: true
       artifactId: "rewrite-core"
+    org.openrewrite.FindLstProvenance:
+      name: "org.openrewrite.FindLstProvenance"
+      description: "Produces a data table showing what versions of OpenRewrite/Moderne\
+        \ tooling was used to produce a given LST. "
+      docLink: "https://docs.openrewrite.org/reference/recipes/findlstprovenance"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-core"
     org.openrewrite.FindParseFailures:
       name: "org.openrewrite.FindParseFailures"
       description: "This recipe explores parse failures after an LST is produced for\
@@ -3253,7 +3261,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.2.0-SNAPSHOT"
+  version: "1.3.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -9480,6 +9488,14 @@ rewrite-static-analysis:
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.SortedSetStreamToLinkedHashSet:
+      name: "org.openrewrite.staticanalysis.SortedSetStreamToLinkedHashSet"
+      description: "Correct 'set.stream().sorted().collect(Collectors.toSet())' to\
+        \ 'set.stream().sorted().collect(LinkedHashSet::new)'."
+      docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/sortedsetstreamtolinkedhashset"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.StaticMethodNotFinal:
       name: "org.openrewrite.staticanalysis.StaticMethodNotFinal"
       description: "Static methods do not need to be declared final because they cannot\
@@ -10871,6 +10887,13 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.hamcrest.HamcrestIsMatcherToAssertJ:
+      name: "org.openrewrite.java.testing.hamcrest.HamcrestIsMatcherToAssertJ"
+      description: "Migrate Hamcrest `is(Object)` to AssertJ `Assertions.assertThat(..)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/hamcrestismatchertoassertj"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.hamcrest.HamcrestMatcherToAssertJ:
       name: "org.openrewrite.java.testing.hamcrest.HamcrestMatcherToAssertJ"
       description: "Migrate from Hamcrest `Matcher` to AssertJ assertions."
@@ -11187,6 +11210,13 @@ rewrite-testing-frameworks:
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/usewiremockextension"
       options: []
       isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.UseXMLUnitLegacy:
+      name: "org.openrewrite.java.testing.junit5.UseXMLUnitLegacy"
+      description: "Migrates XMLUnit 1.x to XMLUnit legacy 2.x"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/usexmlunitlegacy"
+      options: []
+      isImperative: false
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.VertxUnitToVertxJunit5:
       name: "org.openrewrite.java.testing.junit5.VertxUnitToVertxJunit5"

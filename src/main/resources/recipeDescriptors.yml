@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.1.11"
+  version: "8.1.12"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -828,7 +828,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.1.11"
+  version: "8.1.12"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1210,6 +1210,22 @@ rewrite-gradle:
         required: true
       isImperative: true
       artifactId: "rewrite-gradle"
+    org.openrewrite.gradle.plugins.ChangePlugin:
+      name: "org.openrewrite.gradle.plugins.ChangePlugin"
+      description: "Changes the selected Gradle plugin to the new plugin."
+      docLink: "https://docs.openrewrite.org/reference/recipes/gradle/plugins/changeplugin"
+      options:
+      - name: "newPluginId"
+        type: "String"
+        required: true
+      - name: "newVersion"
+        type: "String"
+        required: false
+      - name: "pluginId"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-gradle"
     org.openrewrite.gradle.plugins.RemoveBuildPlugin:
       name: "org.openrewrite.gradle.plugins.RemoveBuildPlugin"
       description: "Remove plugin from `build.gradle(.kts)`."
@@ -1357,7 +1373,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.1.11"
+  version: "8.1.12"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1376,7 +1392,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.1.11"
+  version: "8.1.12"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1493,7 +1509,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.1.11"
+  version: "8.1.12"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -1875,30 +1891,6 @@ rewrite-java:
       - name: "methodPattern"
         type: "String"
         required: true
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.cleanup.SimplifyBooleanExpression:
-      name: "org.openrewrite.java.cleanup.SimplifyBooleanExpression"
-      description: "Checks for over-complicated boolean expressions. Finds code like\
-        \ `if (b == true)`, `b || true`, `!false`, etc."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/simplifybooleanexpression"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.cleanup.SimplifyBooleanReturn:
-      name: "org.openrewrite.java.cleanup.SimplifyBooleanReturn"
-      description: "Simplifies Boolean expressions by removing redundancies, e.g.:\
-        \ `a && true` simplifies to `a`."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/simplifybooleanreturn"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.cleanup.UnnecessaryParentheses:
-      name: "org.openrewrite.java.cleanup.UnnecessaryParentheses"
-      description: "Removes unnecessary parentheses from code where extra parentheses\
-        \ pairs are redundant."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/unnecessaryparentheses"
-      options: []
       isImperative: true
       artifactId: "rewrite-java"
     org.openrewrite.java.format.AutoFormat:
@@ -3161,7 +3153,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.1.11"
+  version: "8.1.12"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3211,7 +3203,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.1.9"
+  version: "1.2.0"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -3964,7 +3956,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.1.11"
+  version: "8.1.12"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -4870,7 +4862,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "2.1.0"
+  version: "2.1.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.AddAnnotationProcessorPath:
       name: "org.openrewrite.java.micronaut.AddAnnotationProcessorPath"
@@ -4895,6 +4887,15 @@ rewrite-micronaut:
         required: true
       isImperative: true
       artifactId: "rewrite-micronaut"
+    org.openrewrite.java.micronaut.AddHttpRequestTypeParameter:
+      name: "org.openrewrite.java.micronaut.AddHttpRequestTypeParameter"
+      description: "Add an `HttpRequest` type parameter to a class `implements` statement\
+        \ for interfaces that have been generically parameterized where they previously\
+        \ specified `HttpRequest` explicitly."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/addhttprequesttypeparameter"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-micronaut"
     org.openrewrite.java.micronaut.AddMicronautRetryDependencyIfNeeded:
       name: "org.openrewrite.java.micronaut.AddMicronautRetryDependencyIfNeeded"
       description: "This recipe will add the explicit Micronaut Retry dependency if\
@@ -4916,6 +4917,14 @@ rewrite-micronaut:
       description: "This recipe will add the `snakeyaml` dependency to a Micronaut\
         \ 4 application that uses yaml configuration."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/addsnakeyamldependencyifneeded"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-micronaut"
+    org.openrewrite.java.micronaut.AddTestResourcesClientDependencyIfNeeded:
+      name: "org.openrewrite.java.micronaut.AddTestResourcesClientDependencyIfNeeded"
+      description: "This recipe adds the Test Resources Client dependency to pom.xml\
+        \ if test.resources.client.enabled property is true."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/addtestresourcesclientdependencyifneeded"
       options: []
       isImperative: true
       artifactId: "rewrite-micronaut"
@@ -5018,6 +5027,28 @@ rewrite-micronaut:
       options: []
       isImperative: true
       artifactId: "rewrite-micronaut"
+    org.openrewrite.java.micronaut.RemoveAnnotationProcessorPath:
+      name: "org.openrewrite.java.micronaut.RemoveAnnotationProcessorPath"
+      description: "Remove the Maven annotation processor path that matches the given\
+        \ groupId and artifactId."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/removeannotationprocessorpath"
+      options:
+      - name: "artifactId"
+        type: "String"
+        required: true
+      - name: "groupId"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-micronaut"
+    org.openrewrite.java.micronaut.RemoveUnnecessaryDependencies:
+      name: "org.openrewrite.java.micronaut.RemoveUnnecessaryDependencies"
+      description: "This recipe will remove dependencies that are no longer explicitly\
+        \ needed."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/removeunnecessarydependencies"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-micronaut"
     org.openrewrite.java.micronaut.RemoveWithJansiLogbackConfiguration:
       name: "org.openrewrite.java.micronaut.RemoveWithJansiLogbackConfiguration"
       description: "This recipe will remove the withJansi configuration tag from logback.xml."
@@ -5076,6 +5107,14 @@ rewrite-micronaut:
         \ a transitive dependency of micronaut-inject, and migrate from javax.annotation\
         \ if needed."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/updatejakartaannotations"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-micronaut"
+    org.openrewrite.java.micronaut.UpdateMavenAnnotationProcessors:
+      name: "org.openrewrite.java.micronaut.UpdateMavenAnnotationProcessors"
+      description: "This recipe will update the version of Maven-configured annotation\
+        \ processors from Micronaut Core."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/micronaut/updatemavenannotationprocessors"
       options: []
       isImperative: false
       artifactId: "rewrite-micronaut"
@@ -5167,7 +5206,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "2.0.7"
+  version: "2.0.8"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -6692,7 +6731,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.1.11"
+  version: "8.1.12"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -11108,7 +11147,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.1.11"
+  version: "8.1.12"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -11291,7 +11330,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.1.11"
+  version: "8.1.12"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
