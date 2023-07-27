@@ -88,7 +88,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-logging-frameworks:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-micronaut:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-migrate-java:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-okhttp:$rewriteVersion")
+//    "recipe"("org.openrewrite.recipe:rewrite-okhttp:$rewriteVersion") // Broken right now
     "recipe"("org.openrewrite.recipe:rewrite-quarkus:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-recommendations:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")

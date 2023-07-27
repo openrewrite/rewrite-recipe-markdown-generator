@@ -1,6 +1,6 @@
 rewrite-analysis:
   artifactId: "rewrite-analysis"
-  version: "2.0.2"
+  version: "2.0.3"
   markdownRecipeDescriptors:
     org.openrewrite.analysis.controlflow.ControlFlowVisualization:
       name: "org.openrewrite.analysis.controlflow.ControlFlowVisualization"
@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.1.12"
+  version: "8.1.13"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -828,7 +828,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.1.12"
+  version: "8.1.13"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -907,6 +907,9 @@ rewrite-gradle:
       - name: "oldGroupId"
         type: "String"
         required: true
+      - name: "overrideManagedVersion"
+        type: "Boolean"
+        required: false
       - name: "versionPattern"
         type: "String"
         required: false
@@ -1373,7 +1376,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.1.12"
+  version: "8.1.13"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1392,7 +1395,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.1.12"
+  version: "8.1.13"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1509,7 +1512,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.1.12"
+  version: "8.1.13"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -2461,7 +2464,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "1.0.5"
+  version: "1.0.6"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.AddDependency:
       name: "org.openrewrite.java.dependencies.AddDependency"
@@ -3153,7 +3156,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.1.12"
+  version: "8.1.13"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3956,7 +3959,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.1.12"
+  version: "8.1.13"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -6731,7 +6734,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.1.12"
+  version: "8.1.13"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -8467,7 +8470,7 @@ rewrite-sql:
       artifactId: "rewrite-sql"
 rewrite-static-analysis:
   artifactId: "rewrite-static-analysis"
-  version: "1.0.3"
+  version: "1.0.4"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.StaticAnalysis:
       name: "org.openrewrite.kotlin.StaticAnalysis"
@@ -9346,6 +9349,31 @@ rewrite-static-analysis:
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.ReplaceWeekYearWithYear:
+      name: "org.openrewrite.staticanalysis.ReplaceWeekYearWithYear"
+      description: "For most dates Week Year (YYYY) and Year (yyyy) yield the same\
+        \ results. However, on the last week of December and first week of January\
+        \ Week Year could produce unexpected results."
+      docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/replaceweekyearwithyear"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.SimplifyBooleanExpression:
+      name: "org.openrewrite.staticanalysis.SimplifyBooleanExpression"
+      description: "Checks for over-complicated boolean expressions. Finds code like\
+        \ `if (b == true)`, `b || true`, `!false`, etc."
+      docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/simplifybooleanexpression"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.SimplifyBooleanReturn:
+      name: "org.openrewrite.staticanalysis.SimplifyBooleanReturn"
+      description: "Simplifies Boolean expressions by removing redundancies, e.g.:\
+        \ `a && true` simplifies to `a`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/simplifybooleanreturn"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.SimplifyCompoundStatement:
       name: "org.openrewrite.staticanalysis.SimplifyCompoundStatement"
       description: "Fixes or removes useless compound statements. For example, removing\
@@ -9374,6 +9402,14 @@ rewrite-static-analysis:
       name: "org.openrewrite.staticanalysis.SimplifyDurationCreationUnits"
       description: "Simplifies `java.time.Duration` units to be more human-readable."
       docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/simplifydurationcreationunits"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.SortedSetStreamToLinkedHashSet:
+      name: "org.openrewrite.staticanalysis.SortedSetStreamToLinkedHashSet"
+      description: "Correct 'set.stream().sorted().collect(Collectors.toSet())' to\
+        \ 'set.stream().sorted().collect(LinkedHashSet::new)'."
+      docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/sortedsetstreamtolinkedhashset"
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
@@ -9430,6 +9466,14 @@ rewrite-static-analysis:
       description: "When explicit type arguments are inferrable by the compiler, they\
         \ may be removed."
       docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/unnecessaryexplicittypearguments"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.UnnecessaryParentheses:
+      name: "org.openrewrite.staticanalysis.UnnecessaryParentheses"
+      description: "Removes unnecessary parentheses from code where extra parentheses\
+        \ pairs are redundant."
+      docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/unnecessaryparentheses"
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
@@ -10497,7 +10541,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "2.0.7"
+  version: "2.0.8"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.assertj.Assertj:
       name: "org.openrewrite.java.testing.assertj.Assertj"
@@ -10752,6 +10796,29 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.hamcrest.FlattenAllOf:
+      name: "org.openrewrite.java.testing.hamcrest.FlattenAllOf"
+      description: "Convert Hamcrest `allOf(Matcher...)` to individual `assertThat`\
+        \ statements for easier migration."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/flattenallof"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.hamcrest.HamcrestAnyOfToAssertJ:
+      name: "org.openrewrite.java.testing.hamcrest.HamcrestAnyOfToAssertJ"
+      description: "Migrate the `anyOf` Hamcrest Matcher to AssertJ's `satisfiesAnyOf`\
+        \ assertion."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/hamcrestanyoftoassertj"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.hamcrest.HamcrestIsMatcherToAssertJ:
+      name: "org.openrewrite.java.testing.hamcrest.HamcrestIsMatcherToAssertJ"
+      description: "Migrate Hamcrest `is(Object)` to AssertJ `Assertions.assertThat(..)`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/hamcrestismatchertoassertj"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.hamcrest.HamcrestMatcherToAssertJ:
       name: "org.openrewrite.java.testing.hamcrest.HamcrestMatcherToAssertJ"
       description: "Migrate from Hamcrest `Matcher` to AssertJ assertions."
@@ -10950,8 +11017,9 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.RemoveTryCatchFailBlocks:
       name: "org.openrewrite.java.testing.junit5.RemoveTryCatchFailBlocks"
-      description: "Replace `try-catch` blocks where `catch` merely contains a `fail(..)`\
-        \ statement with `Assertions.assertDoesNotThrow(() -> { ... })`."
+      description: "Replace `try-catch` blocks where `catch` merely contains a `fail()`\
+        \ for `fail(String)` statement with `Assertions.assertDoesNotThrow(() -> {\
+        \ ... })`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/removetrycatchfailblocks"
       options: []
       isImperative: true
@@ -11068,6 +11136,13 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.UseXMLUnitLegacy:
+      name: "org.openrewrite.java.testing.junit5.UseXMLUnitLegacy"
+      description: "Migrates XMLUnit 1.x to XMLUnit legacy 2.x"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/usexmlunitlegacy"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.VertxUnitToVertxJunit5:
       name: "org.openrewrite.java.testing.junit5.VertxUnitToVertxJunit5"
       description: "Migrates Vert.x `@RunWith` `VertxUnitRunner` to the JUnit Jupiter\
@@ -11147,7 +11222,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.1.12"
+  version: "8.1.13"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -11330,7 +11405,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.1.12"
+  version: "8.1.13"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"

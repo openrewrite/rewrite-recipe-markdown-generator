@@ -907,6 +907,9 @@ rewrite-gradle:
       - name: "oldGroupId"
         type: "String"
         required: true
+      - name: "overrideManagedVersion"
+        type: "Boolean"
+        required: false
       - name: "versionPattern"
         type: "String"
         required: false
@@ -1917,30 +1920,6 @@ rewrite-java:
       - name: "methodPattern"
         type: "String"
         required: true
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.cleanup.SimplifyBooleanExpression:
-      name: "org.openrewrite.java.cleanup.SimplifyBooleanExpression"
-      description: "Checks for over-complicated boolean expressions. Finds code like\
-        \ `if (b == true)`, `b || true`, `!false`, etc."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/simplifybooleanexpression"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.cleanup.SimplifyBooleanReturn:
-      name: "org.openrewrite.java.cleanup.SimplifyBooleanReturn"
-      description: "Simplifies Boolean expressions by removing redundancies, e.g.:\
-        \ `a && true` simplifies to `a`."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/simplifybooleanreturn"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.cleanup.UnnecessaryParentheses:
-      name: "org.openrewrite.java.cleanup.UnnecessaryParentheses"
-      description: "Removes unnecessary parentheses from code where extra parentheses\
-        \ pairs are redundant."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/cleanup/unnecessaryparentheses"
-      options: []
       isImperative: true
       artifactId: "rewrite-java"
     org.openrewrite.java.format.AutoFormat:
@@ -5859,6 +5838,14 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.io.ReplaceFileInOrOutputStreamFinalizeWithClose:
+      name: "org.openrewrite.java.migrate.io.ReplaceFileInOrOutputStreamFinalizeWithClose"
+      description: "Replace invocations of the deprecated `finalize()` method on `FileInputStream`\
+        \ and `FileOutputStream` with `close()`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/io/replacefileinoroutputstreamfinalizewithclose"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jacoco.UpgradeJaCoCoMavenPluginVersion:
       name: "org.openrewrite.java.migrate.jacoco.UpgradeJaCoCoMavenPluginVersion"
       description: "This recipe will upgrade the JaCoCo Maven plugin to a more recent\
@@ -6594,11 +6581,11 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.lombok.UpdateLombokToJava17:
-      name: "org.openrewrite.java.migrate.lombok.UpdateLombokToJava17"
+    org.openrewrite.java.migrate.lombok.UpdateLombokToJava11:
+      name: "org.openrewrite.java.migrate.lombok.UpdateLombokToJava11"
       description: "Update Lombok dependency to a version that is compatible with\
-        \ Java 17 and migrate experimental Lombok types that have been promoted."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lombok/updatelomboktojava17"
+        \ Java 11 and migrate experimental Lombok types that have been promoted."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lombok/updatelomboktojava11"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -10884,6 +10871,14 @@ rewrite-testing-frameworks:
       description: "Convert Hamcrest `allOf(Matcher...)` to individual `assertThat`\
         \ statements for easier migration."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/flattenallof"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.hamcrest.HamcrestAnyOfToAssertJ:
+      name: "org.openrewrite.java.testing.hamcrest.HamcrestAnyOfToAssertJ"
+      description: "Migrate the `anyOf` Hamcrest Matcher to AssertJ's `satisfiesAnyOf`\
+        \ assertion."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/hamcrestanyoftoassertj"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
