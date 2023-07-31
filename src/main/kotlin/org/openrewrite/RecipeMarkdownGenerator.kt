@@ -766,6 +766,7 @@ class RecipeMarkdownGenerator : Runnable {
                 }
                 newLine()
             }
+
             writeln(
                 """
                 ## Source
@@ -859,10 +860,10 @@ class RecipeMarkdownGenerator : Runnable {
                 newLine()
             }
 
-            // examples
-            if (!recipeDescriptor.examples.isEmpty()) {
+            // Examples
+            if (recipeDescriptor.examples.isNotEmpty()) {
                 val subject = if (recipeDescriptor.examples.size > 1) "Examples" else "Example"
-                writeln("## ${subject}")
+                writeln("## $subject")
 
                 for (i in 0 until recipeDescriptor.examples.size) {
                     if (i > 0) {
@@ -871,7 +872,7 @@ class RecipeMarkdownGenerator : Runnable {
                         newLine()
                     }
 
-                    val example = recipeDescriptor.examples.get(i)
+                    val example = recipeDescriptor.examples[i]
                     val description =
                         if (example.description.isNotEmpty()) example.description else ""
 
@@ -883,16 +884,18 @@ class RecipeMarkdownGenerator : Runnable {
                     }
 
                     newLine()
-                    if (!example.parameters.isEmpty() && recipeDescriptor.options.isNotEmpty()) {
+
+                    // Parameters
+                    if (example.parameters.isNotEmpty() && recipeDescriptor.options.isNotEmpty()) {
                         writeln("###### Parameters")
                         writeln("| Parameter | Value |")
                         writeln("| -- | -- |")
                         for (n in 0 until recipeDescriptor.options.size) {
                             write("|")
-                            write(recipeDescriptor.options.get(n).name)
+                            write(recipeDescriptor.options[n].name)
                             write("|")
                             if (n < example.parameters.size) {
-                                write("`${example.parameters.get(n)}`")
+                                write("`${example.parameters[n]}`")
                             }
                             write("|")
                             newLine()
@@ -900,8 +903,9 @@ class RecipeMarkdownGenerator : Runnable {
                         newLine()
                     }
 
+                    // Example files
                     for (sourceIndex in 0 until example.sources.size) {
-                        val source = example.sources.get(sourceIndex)
+                        val source = example.sources[sourceIndex]
                         val hasChange = source.after != null && source.after.isNotEmpty()
                         val beforeTitle = if (hasChange) "Before" else "Unchanged"
                         val isNewFile = source.before == null && source.after != null
@@ -918,7 +922,7 @@ class RecipeMarkdownGenerator : Runnable {
                         newLine()
 
                         if (source.before != null) {
-                            writeln("###### ${beforeTitle}")
+                            writeln("###### $beforeTitle")
 
                             if (source.path != null) {
                                 writeln("{% code title=\"${source.path}\" %}")
@@ -927,7 +931,7 @@ class RecipeMarkdownGenerator : Runnable {
                             }
 
                             writeln("```${source.language}")
-                            write("${source.before}")
+                            write(source.before)
                             if (source.before != null && !source.before.endsWith("\n")) {
                                 newLine()
                             }
@@ -938,7 +942,7 @@ class RecipeMarkdownGenerator : Runnable {
 
                         if (hasChange) {
                             newLine()
-                            writeln("###### ${afterTile}")
+                            writeln("###### $afterTile")
 
                             if (source.path != null) {
                                 writeln("{% code title=\"${source.path}\" %}")
@@ -947,7 +951,7 @@ class RecipeMarkdownGenerator : Runnable {
                             }
 
                             writeln("```${source.language}")
-                            write("${source.after}")
+                            write(source.after)
                             if (source.after != null && !source.after.endsWith("\n")) {
                                 newLine()
                             }
