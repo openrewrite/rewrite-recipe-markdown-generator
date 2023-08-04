@@ -31,53 +31,6 @@
         </notes>
         <cve>CVE-2021-37533</cve>
     </suppress>
-    <suppress until="2023-03-10Z">
-        <notes>
-            <![CDATA[
-            file name: junit-jupiter-api-5.9.2.jar
-            False positive. The CVE is about the python web server platform flask, which has nothing to do with the Java unit testing framework JUnit
-            ]]>
-        </notes>
-        <cve>CVE-2022-31514</cve>
-    </suppress>
-    <suppress until="2023-03-10Z">
-        <notes>
-            <![CDATA[
-            files: spring-aop.jar, spring-beans.jar, spring-context.jar, spring-core.jar, spring-jcl.jar, spring-messaging.jar, spring-web.jar, spring-webflux.jar, spring-context-support.jar, spring-jdbc.jar, spring-webmvc.jar, spring-websocket.jar
-            sev: CRITICAL
-            CVE-2016-1000027
-            False positive. Recipes which modify spring code are not themselves spring applications. The vulnerabilities of spring applications are irrelevant.
-            ]]>
-        </notes>
-        <cve>CVE-2016-1000027</cve>
-    </suppress>
-    <suppress until="2023-03-10Z">
-        <notes>
-        <![CDATA[
-        file name: rewrite-jhipster-1.17.0.jar
-        False positive. Recipe module which affects jhipster applications is not itself a jhipster application.
-        ]]>
-    </notes>
-        <cve>CVE-2019-16303</cve>
-    </suppress>
-    <suppress until="2023-04-09Z">
-        <notes><![CDATA[
-            file name: stax2-api-4.2.1.jar
-            Severity: HIGH
-            ]]></notes>
-        <packageUrl regex="true">^pkg:maven/org\.codehaus\.woodstox/stax2\-api@.*$</packageUrl>
-        <cve>CVE-2022-40152</cve>
-    </suppress>
-    <suppress until="2023-03-30Z">
-       <notes><![CDATA[
-       file name: rewrite-spring-4.33.0.jar: spring-core-4.3.30.RELEASE.jar
-       sev: CRITICAL
-        CVE-2022-22950
-        False positive. Affects Spring 5.3.16 up to 6.0 exposed HTTP Invoker endpoints to untrusted clients.  We're not using HttpInvokerServiceExporter and do not have any exposed HTTP Invoker endpoints.
-       ]]></notes>
-       <sha1>b255bb7389e582d24574f75bc0c880ffb8103dfa</sha1>
-       <cve>CVE-2022-22950</cve>
-    </suppress>
     <suppress until="2024-01-30">
         <notes>
             <![CDATA[
@@ -91,13 +44,6 @@
         <cve>CVE-2022-22968</cve>
         <cve>CVE-2022-22970</cve>
     </suppress>
-    <suppress until="2023-04-09Z">
-        <notes><![CDATA[
-            file name: javax.json-1.1.4.jar
-        ]]></notes>
-        <packageUrl regex="true">^pkg:maven/org\.glassfish/javax\.json@.*$</packageUrl>
-        <cve>CVE-2022-45688</cve>
-    </suppress>
     <suppress>
         <notes><![CDATA[
            file name: jackson-core-2.14.2.jar
@@ -106,7 +52,7 @@
         <cpe>cpe:/a:fasterxml:jackson-modules-java8</cpe>
         <cpe>cpe:/a:json-java_project:json-java</cpe>
     </suppress>
-    <suppress until="2023-07-21Z">
+    <suppress until="2023-08-14Z">
         <notes><![CDATA[
             file name: jackson-databind-2.15.2.jar
             This is not a really valid CVE and not really exploitable as Java code needs to be modified: https://github.com/FasterXML/jackson-databind/issues/3972
@@ -114,5 +60,4 @@
         <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson\-databind@.*$</packageUrl>
         <cve>CVE-2023-35116</cve>
     </suppress>
-
 </suppressions>
