@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.1.13"
+  version: "8.1.14"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -359,18 +359,6 @@ rewrite-core:
       - name: "filePattern"
         type: "String"
         required: true
-      isImperative: true
-      artifactId: "rewrite-core"
-    org.openrewrite.FindBuildToolFailures:
-      name: "org.openrewrite.FindBuildToolFailures"
-      description: "This recipe explores build tool failures after an LST is produced\
-        \ for classifying the types of failures that can occur and prioritizing fixes\
-        \ according to the most common problems."
-      docLink: "https://docs.openrewrite.org/reference/recipes/findbuildtoolfailures"
-      options:
-      - name: "suppressLogOutput"
-        type: "Boolean"
-        required: false
       isImperative: true
       artifactId: "rewrite-core"
     org.openrewrite.FindCollidingSourceFiles:
@@ -496,6 +484,19 @@ rewrite-core:
         required: true
       isImperative: true
       artifactId: "rewrite-core"
+    org.openrewrite.search.FindParseToPrintInequality:
+      name: "org.openrewrite.search.FindParseToPrintInequality"
+      description: "OpenRewrite `Parser` implementations should produce `SourceFile`\
+        \ objects whose `printAll()` method should be byte-for-byte equivalent with\
+        \ the original source file. When this isn't true, recipes can still run on\
+        \ the `SourceFile` and even produce diffs, but the diffs would fail to apply\
+        \ as a patch to the original source file. Most `Parser` use `Parser#requirePrintEqualsInput`\
+        \ to produce a `ParseError` when they fail to produce a `SourceFile` that\
+        \ is print idempotent."
+      docLink: "https://docs.openrewrite.org/reference/recipes/search/findparsetoprintinequality"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-core"
     org.openrewrite.text.AppendToTextFile:
       name: "org.openrewrite.text.AppendToTextFile"
       description: "Appends or replaces content of an existing plain text file, or\
@@ -568,7 +569,7 @@ rewrite-core:
         required: false
       - name: "filePattern"
         type: "String"
-        required: true
+        required: false
       - name: "find"
         type: "String"
         required: true
@@ -609,6 +610,26 @@ rewrite-core:
       - name: "replace"
         type: "String"
         required: true
+      isImperative: true
+      artifactId: "rewrite-core"
+    org.openrewrite.text.FindMultiselect:
+      name: "org.openrewrite.text.FindMultiselect"
+      description: "Search for text, treating all textual sources as plain text. This\
+        \ version of the recipe exists to experiment with multiselect recipe options."
+      docLink: "https://docs.openrewrite.org/reference/recipes/text/findmultiselect"
+      options:
+      - name: "filePattern"
+        type: "String"
+        required: true
+      - name: "find"
+        type: "String"
+        required: true
+      - name: "regex"
+        type: "Boolean"
+        required: false
+      - name: "regexOptions"
+        type: "Set"
+        required: false
       isImperative: true
       artifactId: "rewrite-core"
 rewrite-cucumber-jvm:
@@ -828,7 +849,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.1.13"
+  version: "8.1.14"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1376,7 +1397,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.1.13"
+  version: "8.1.14"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1395,7 +1416,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.1.13"
+  version: "8.1.14"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1512,7 +1533,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.1.13"
+  version: "8.1.14"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -2464,7 +2485,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "1.0.6"
+  version: "1.0.7"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.AddDependency:
       name: "org.openrewrite.java.dependencies.AddDependency"
@@ -3156,7 +3177,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.1.13"
+  version: "8.1.14"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3206,7 +3227,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.2.0"
+  version: "1.3.2"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -3959,7 +3980,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.1.13"
+  version: "8.1.14"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -5209,7 +5230,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "2.0.8"
+  version: "2.0.9"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -5787,6 +5808,14 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/guava/prefershortcompare"
       options: []
       isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.io.ReplaceFileInOrOutputStreamFinalizeWithClose:
+      name: "org.openrewrite.java.migrate.io.ReplaceFileInOrOutputStreamFinalizeWithClose"
+      description: "Replace invocations of the deprecated `finalize()` method on `FileInputStream`\
+        \ and `FileOutputStream` with `close()`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/io/replacefileinoroutputstreamfinalizewithclose"
+      options: []
+      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jacoco.UpgradeJaCoCoMavenPluginVersion:
       name: "org.openrewrite.java.migrate.jacoco.UpgradeJaCoCoMavenPluginVersion"
@@ -6523,11 +6552,11 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.lombok.UpdateLombokToJava17:
-      name: "org.openrewrite.java.migrate.lombok.UpdateLombokToJava17"
+    org.openrewrite.java.migrate.lombok.UpdateLombokToJava11:
+      name: "org.openrewrite.java.migrate.lombok.UpdateLombokToJava11"
       description: "Update Lombok dependency to a version that is compatible with\
-        \ Java 17 and migrate experimental Lombok types that have been promoted."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lombok/updatelomboktojava17"
+        \ Java 11 and migrate experimental Lombok types that have been promoted."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lombok/updatelomboktojava11"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -6734,7 +6763,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.1.13"
+  version: "8.1.14"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -6823,7 +6852,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-python:
   artifactId: "rewrite-python"
-  version: "1.0.4"
+  version: "1.0.7"
   markdownRecipeDescriptors:
     org.openrewrite.python.ChangeMethodName:
       name: "org.openrewrite.python.ChangeMethodName"
@@ -6859,8 +6888,9 @@ rewrite-python:
       artifactId: "rewrite-python"
     org.openrewrite.python.search.FindPythonSources:
       name: "org.openrewrite.python.search.FindPythonSources"
-      description: "Use data table to collect source files types and counts of files\
-        \ with extensions `.py`."
+      description: "Creates a data table which contains detailed information about\
+        \ all `.py` files such as where those files are and what version of Python\
+        \ is being used."
       docLink: "https://docs.openrewrite.org/reference/recipes/python/search/findpythonsources"
       options: []
       isImperative: true
@@ -7003,7 +7033,7 @@ rewrite-recommendations:
       artifactId: "rewrite-recommendations"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "5.0.5"
+  version: "5.0.7"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin:
       name: "org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin"
@@ -7011,6 +7041,101 @@ rewrite-spring:
       docLink: "https://docs.openrewrite.org/reference/recipes/gradle/spring/addspringdependencymanagementplugin"
       options: []
       isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient4.MappingDeprecatedClasses:
+      name: "org.openrewrite.java.apache.httpclient4.MappingDeprecatedClasses"
+      description: "Uses new classes/methods instead of the deprecated ones"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient4/mappingdeprecatedclasses"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient4.MigrateDefaultHttpClient:
+      name: "org.openrewrite.java.apache.httpclient4.MigrateDefaultHttpClient"
+      description: "Since DefaultHttpClient is deprecated, we need to change it to\
+        \ the CloseableHttpClient. It only covers the default scenario with no custom\
+        \ HttpParams or ConnectionManager."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient4/migratedefaulthttpclient"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient4.UpgradeApacheHttpClient_4_5:
+      name: "org.openrewrite.java.apache.httpclient4.UpgradeApacheHttpClient_4_5"
+      description: "Migrate applications to the latest Apache HttpClient 4.5.x release.\
+        \ This recipe modifies  application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrates configuration settings that have changes between versions.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient4/upgradeapachehttpclient_4_5"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient5.AddTimeUnitArgument:
+      name: "org.openrewrite.java.apache.httpclient5.AddTimeUnitArgument"
+      description: "In Apache Http Client 5.x migration, an extra TimeUnit argument\
+        \ is required in the timeout and duration methods. Previously in 4.x, all\
+        \ these methods were implicitly having the timeout or duration expressed in\
+        \ milliseconds, but in 5.x the unit of the timeout or duration is required.\
+        \ So, by default this recipe adds `TimeUnit.MILLISECONDS`, it is possible\
+        \ to specify this as a parameter. Since all affected methods of the Apache\
+        \ Http Client 5.x migration only have one integer/long argument, the recipe\
+        \ applies with matched method invocations of exactly one parameter."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient5/addtimeunitargument"
+      options:
+      - name: "methodPattern"
+        type: "String"
+        required: true
+      - name: "timeUnit"
+        type: "TimeUnit"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient5.NewStatusLine:
+      name: "org.openrewrite.java.apache.httpclient5.NewStatusLine"
+      description: "`HttpResponse::getStatusLine()` was deprecated in 4.x, so we replace\
+        \ it for `new StatusLine(HttpResponse)`. Ideally we will try to simplify method\
+        \ chains for `getStatusCode`, `getProtocolVersion` and `getReasonPhrase`,\
+        \ but there are some scenarios where the `StatusLine` object is assigned or\
+        \ used directly, and we need to instantiate the object."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient5/newstatusline"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient5.StatusLine:
+      name: "org.openrewrite.java.apache.httpclient5.StatusLine"
+      description: "Migrates deprecated methods to their equivalent ones in 5.x"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient5/statusline"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5:
+      name: "org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5"
+      description: "Migrate applications to the latest Apache HttpClient 5.x release.\
+        \ This recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient5/upgradeapachehttpclient_5"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5_ClassMapping:
+      name: "org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5_ClassMapping"
+      description: "Mapping of all the compatible classes of ApacheHttpClient 5.x\
+        \ from 4.x."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient5/upgradeapachehttpclient_5_classmapping"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5_DeprecatedMethods:
+      name: "org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5_DeprecatedMethods"
+      description: "Migrates deprecated methods to their equivalent ones in 5.x"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient5/upgradeapachehttpclient_5_deprecatedmethods"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5_TimeUnit:
+      name: "org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5_TimeUnit"
+      description: "Apache HttpClient 5.x Timeout and duration methods need an extra\
+        \ the TimeUnit argument. This recipe uses milliseconds as a default unit."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient5/upgradeapachehttpclient_5_timeunit"
+      options: []
+      isImperative: false
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.AddSpringProperty:
       name: "org.openrewrite.java.spring.AddSpringProperty"
@@ -7186,10 +7311,10 @@ rewrite-spring:
         required: true
       - name: "propertyKey"
         type: "String"
-        required: true
+        required: false
       - name: "tlsPropertyKey"
         type: "String"
-        required: true
+        required: false
       isImperative: true
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.batch.ImplementChunkListenerDirectly:
@@ -8133,6 +8258,17 @@ rewrite-spring:
         \ this adapter."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/migratewebmvcconfigureradapter"
       options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.framework.UpgradeSpringFrameworkDependencies:
+      name: "org.openrewrite.java.spring.framework.UpgradeSpringFrameworkDependencies"
+      description: "Upgrade spring-framework 5.x Maven dependencies using a Node Semver\
+        \ advanced range selector."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/framework/upgradespringframeworkdependencies"
+      options:
+      - name: "newVersion"
+        type: "String"
+        required: true
       isImperative: true
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.framework.UpgradeSpringFramework_5_0:
@@ -10541,7 +10677,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "2.0.8"
+  version: "2.0.9"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.assertj.Assertj:
       name: "org.openrewrite.java.testing.assertj.Assertj"
@@ -10632,6 +10768,34 @@ rewrite-testing-frameworks:
       options: []
       isImperative: false
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertion:
+      name: "org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertion"
+      description: "Many AssertJ chained assertions have dedicated assertions that\
+        \ function the same. It is best to use the dedicated assertions."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/simplifychainedassertjassertion"
+      options:
+      - name: "assertToReplace"
+        type: "String"
+        required: false
+      - name: "chainedAssertion"
+        type: "String"
+        required: false
+      - name: "dedicatedAssertion"
+        type: "String"
+        required: false
+      - name: "requiredType"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertions:
+      name: "org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertions"
+      description: "Replace AssertJ chained assertions with dedicated assertions that\
+        \ function the same."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/simplifychainedassertjassertions"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.assertj.StaticImports:
       name: "org.openrewrite.java.testing.assertj.StaticImports"
       description: "Consistently use a static import rather than inlining the `Assertions`\
@@ -10639,32 +10803,6 @@ rewrite-testing-frameworks:
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/staticimports"
       options: []
       isImperative: false
-      artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.assertj.UseExplicitContains:
-      name: "org.openrewrite.java.testing.assertj.UseExplicitContains"
-      description: "Convert AssertJ `assertThat(collection.contains(element)).isTrue()`\
-        \ to `assertThat(collection).contains(element)` and `assertThat(collection.contains(element)).isFalse()`\
-        \ to `assertThat(collection).doesNotContain(element)`."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/useexplicitcontains"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.assertj.UseExplicitIsEmpty:
-      name: "org.openrewrite.java.testing.assertj.UseExplicitIsEmpty"
-      description: "Convert AssertJ `assertThat(collection.isEmpty()).isTrue()` to\
-        \ `assertThat(collection).isEmpty()` and `assertThat(collection.isEmpty()).isFalse()`\
-        \ to `assertThat(collection).isNotEmpty()`."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/useexplicitisempty"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.assertj.UseExplicitSize:
-      name: "org.openrewrite.java.testing.assertj.UseExplicitSize"
-      description: "Convert `assertThat(collection.size()).isEqualTo(Y)` to AssertJ's\
-        \ `assertThat(collection).hasSize()`."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/useexplicitsize"
-      options: []
-      isImperative: true
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.cleanup.AssertEqualsNullToAssertNull:
       name: "org.openrewrite.java.testing.cleanup.AssertEqualsNullToAssertNull"
@@ -10796,22 +10934,6 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.hamcrest.FlattenAllOf:
-      name: "org.openrewrite.java.testing.hamcrest.FlattenAllOf"
-      description: "Convert Hamcrest `allOf(Matcher...)` to individual `assertThat`\
-        \ statements for easier migration."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/flattenallof"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.hamcrest.HamcrestAnyOfToAssertJ:
-      name: "org.openrewrite.java.testing.hamcrest.HamcrestAnyOfToAssertJ"
-      description: "Migrate the `anyOf` Hamcrest Matcher to AssertJ's `satisfiesAnyOf`\
-        \ assertion."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/hamcrestanyoftoassertj"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.hamcrest.HamcrestIsMatcherToAssertJ:
       name: "org.openrewrite.java.testing.hamcrest.HamcrestIsMatcherToAssertJ"
       description: "Migrate Hamcrest `is(Object)` to AssertJ `Assertions.assertThat(..)`."
@@ -10843,6 +10965,14 @@ rewrite-testing-frameworks:
       - name: "notMatcher"
         type: "String"
         required: false
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.hamcrest.HamcrestOfMatchersToAssertJ:
+      name: "org.openrewrite.java.testing.hamcrest.HamcrestOfMatchersToAssertJ"
+      description: "Migrate the `anyOf` Hamcrest Matcher to AssertJ's `satisfiesAnyOf`\
+        \ assertion."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/hamcrestofmatcherstoassertj"
+      options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.hamcrest.MigrateHamcrestToAssertJ:
@@ -11222,7 +11352,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.1.13"
+  version: "8.1.14"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -11405,7 +11535,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.1.13"
+  version: "8.1.14"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"

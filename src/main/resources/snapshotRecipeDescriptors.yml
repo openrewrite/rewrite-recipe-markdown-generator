@@ -611,21 +611,41 @@ rewrite-core:
         required: true
       isImperative: true
       artifactId: "rewrite-core"
+    org.openrewrite.text.FindMultiselect:
+      name: "org.openrewrite.text.FindMultiselect"
+      description: "Search for text, treating all textual sources as plain text. This\
+        \ version of the recipe exists to experiment with multiselect recipe options."
+      docLink: "https://docs.openrewrite.org/reference/recipes/text/findmultiselect"
+      options:
+      - name: "filePattern"
+        type: "String"
+        required: true
+      - name: "find"
+        type: "String"
+        required: true
+      - name: "regex"
+        type: "Boolean"
+        required: false
+      - name: "regexOptions"
+        type: "Set"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-core"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
   version: "1.1.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite"
-      description: "Replace @Cucumber with @Suite and @SelectClasspathResource(\"\
-        cucumber/annotated/class/package\")."
+      description: "Replace `@Cucumber` with `@Suite` and `@SelectClasspathResource(\"\
+        cucumber/annotated/class/package\")`."
       docLink: "https://docs.openrewrite.org/reference/recipes/cucumber/jvm/cucumberannotationtosuite"
       options: []
       isImperative: true
       artifactId: "rewrite-cucumber-jvm"
     org.openrewrite.cucumber.jvm.CucumberJava8HookDefinitionToCucumberJava:
       name: "org.openrewrite.cucumber.jvm.CucumberJava8HookDefinitionToCucumberJava"
-      description: "Replace LambdaGlue hook definitions with new annotated methods\
+      description: "Replace `LambdaGlue` hook definitions with new annotated methods\
         \ with the same body."
       docLink: "https://docs.openrewrite.org/reference/recipes/cucumber/jvm/cucumberjava8hookdefinitiontocucumberjava"
       options: []
@@ -633,7 +653,7 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
     org.openrewrite.cucumber.jvm.CucumberJava8StepDefinitionToCucumberJava:
       name: "org.openrewrite.cucumber.jvm.CucumberJava8StepDefinitionToCucumberJava"
-      description: "Replace StepDefinitionBody methods with StepDefinitionAnnotations\
+      description: "Replace `StepDefinitionBody` methods with `StepDefinitionAnnotations`\
         \ on new methods with the same body."
       docLink: "https://docs.openrewrite.org/reference/recipes/cucumber/jvm/cucumberjava8stepdefinitiontocucumberjava"
       options: []
@@ -641,22 +661,22 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
     org.openrewrite.cucumber.jvm.CucumberJava8ToJava:
       name: "org.openrewrite.cucumber.jvm.CucumberJava8ToJava"
-      description: "Migrates Cucumber-Java8 step definitions and LambdaGlue hooks\
-        \ to Cucumber-Java annotated methods."
+      description: "Migrates `cucumber-java8` step definitions and `LambdaGlue` hooks\
+        \ to `cucumber-java` annotated methods."
       docLink: "https://docs.openrewrite.org/reference/recipes/cucumber/jvm/cucumberjava8tojava"
       options: []
       isImperative: false
       artifactId: "rewrite-cucumber-jvm"
     org.openrewrite.cucumber.jvm.CucumberToJunitPlatformSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberToJunitPlatformSuite"
-      description: "Migrates Cucumber tests to JUnit Test Suites."
+      description: "Migrates Cucumber tests to JUnit test `@Suite`."
       docLink: "https://docs.openrewrite.org/reference/recipes/cucumber/jvm/cucumbertojunitplatformsuite"
       options: []
       isImperative: false
       artifactId: "rewrite-cucumber-jvm"
     org.openrewrite.cucumber.jvm.DropSummaryPrinter:
       name: "org.openrewrite.cucumber.jvm.DropSummaryPrinter"
-      description: "Replace SummaryPrinter with Plugin, if not already present."
+      description: "Replace `SummaryPrinter` with `Plugin`, if not already present."
       docLink: "https://docs.openrewrite.org/reference/recipes/cucumber/jvm/dropsummaryprinter"
       options: []
       isImperative: true
@@ -3240,7 +3260,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.3.0-SNAPSHOT"
+  version: "1.4.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -7071,6 +7091,101 @@ rewrite-spring:
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient4.MappingDeprecatedClasses:
+      name: "org.openrewrite.java.apache.httpclient4.MappingDeprecatedClasses"
+      description: "Uses new classes/methods instead of the deprecated ones"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient4/mappingdeprecatedclasses"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient4.MigrateDefaultHttpClient:
+      name: "org.openrewrite.java.apache.httpclient4.MigrateDefaultHttpClient"
+      description: "Since DefaultHttpClient is deprecated, we need to change it to\
+        \ the CloseableHttpClient. It only covers the default scenario with no custom\
+        \ HttpParams or ConnectionManager."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient4/migratedefaulthttpclient"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient4.UpgradeApacheHttpClient_4_5:
+      name: "org.openrewrite.java.apache.httpclient4.UpgradeApacheHttpClient_4_5"
+      description: "Migrate applications to the latest Apache HttpClient 4.5.x release.\
+        \ This recipe modifies  application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrates configuration settings that have changes between versions.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient4/upgradeapachehttpclient_4_5"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient5.AddTimeUnitArgument:
+      name: "org.openrewrite.java.apache.httpclient5.AddTimeUnitArgument"
+      description: "In Apache Http Client 5.x migration, an extra TimeUnit argument\
+        \ is required in the timeout and duration methods. Previously in 4.x, all\
+        \ these methods were implicitly having the timeout or duration expressed in\
+        \ milliseconds, but in 5.x the unit of the timeout or duration is required.\
+        \ So, by default this recipe adds `TimeUnit.MILLISECONDS`, it is possible\
+        \ to specify this as a parameter. Since all affected methods of the Apache\
+        \ Http Client 5.x migration only have one integer/long argument, the recipe\
+        \ applies with matched method invocations of exactly one parameter."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient5/addtimeunitargument"
+      options:
+      - name: "methodPattern"
+        type: "String"
+        required: true
+      - name: "timeUnit"
+        type: "TimeUnit"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient5.NewStatusLine:
+      name: "org.openrewrite.java.apache.httpclient5.NewStatusLine"
+      description: "`HttpResponse::getStatusLine()` was deprecated in 4.x, so we replace\
+        \ it for `new StatusLine(HttpResponse)`. Ideally we will try to simplify method\
+        \ chains for `getStatusCode`, `getProtocolVersion` and `getReasonPhrase`,\
+        \ but there are some scenarios where the `StatusLine` object is assigned or\
+        \ used directly, and we need to instantiate the object."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient5/newstatusline"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient5.StatusLine:
+      name: "org.openrewrite.java.apache.httpclient5.StatusLine"
+      description: "Migrates deprecated methods to their equivalent ones in 5.x"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient5/statusline"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5:
+      name: "org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5"
+      description: "Migrate applications to the latest Apache HttpClient 5.x release.\
+        \ This recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient5/upgradeapachehttpclient_5"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5_ClassMapping:
+      name: "org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5_ClassMapping"
+      description: "Mapping of all the compatible classes of ApacheHttpClient 5.x\
+        \ from 4.x."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient5/upgradeapachehttpclient_5_classmapping"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5_DeprecatedMethods:
+      name: "org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5_DeprecatedMethods"
+      description: "Migrates deprecated methods to their equivalent ones in 5.x"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient5/upgradeapachehttpclient_5_deprecatedmethods"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5_TimeUnit:
+      name: "org.openrewrite.java.apache.httpclient5.UpgradeApacheHttpClient_5_TimeUnit"
+      description: "Apache HttpClient 5.x Timeout and duration methods need an extra\
+        \ the TimeUnit argument. This recipe uses milliseconds as a default unit."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/apache/httpclient5/upgradeapachehttpclient_5_timeunit"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.AddSpringProperty:
       name: "org.openrewrite.java.spring.AddSpringProperty"
       description: "Add a spring configuration property to a configuration file if\
@@ -8552,7 +8667,7 @@ rewrite-static-analysis:
     org.openrewrite.staticanalysis.AddSerialVersionUidToSerializable:
       name: "org.openrewrite.staticanalysis.AddSerialVersionUidToSerializable"
       description: "A `serialVersionUID` field is strongly recommended in all `Serializable`\
-        \ classes. If this is not defined on a `Serializable` class, the compiler\
+        \ classes. If this is not defined in a `Serializable` class, the compiler\
         \ will generate this value. If a change is later made to the class, the generated\
         \ value will change and attempts to deserialize the class will fail."
       docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/addserialversionuidtoserializable"
@@ -8587,9 +8702,9 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.BooleanChecksNotInverted:
       name: "org.openrewrite.staticanalysis.BooleanChecksNotInverted"
-      description: "It is needlessly complex to invert the result of a boolean comparison.\
-        \ The opposite comparison should be made instead. Also double negation of\
-        \ boolean expressions should be avoided."
+      description: "Ensures that boolean comparisons are not It is needlessly complex\
+        \ to invert the result of a boolean comparison. The opposite comparison should\
+        \ be made instead. Also double negation of boolean expressions should be avoided."
       docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/booleanchecksnotinverted"
       options: []
       isImperative: true
@@ -9430,8 +9545,8 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.SimplifyBooleanExpression:
       name: "org.openrewrite.staticanalysis.SimplifyBooleanExpression"
-      description: "Checks for over-complicated boolean expressions. Finds code like\
-        \ `if (b == true)`, `b || true`, `!false`, etc."
+      description: "Checks for overly complicated boolean expressions, such as `if\
+        \ (b == true)`, `b || true`, `!false`, etc."
       docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/simplifybooleanexpression"
       options: []
       isImperative: true
@@ -9500,6 +9615,13 @@ rewrite-static-analysis:
         \ `\"someString\" == someVariable;`. This is to prevent inadvertently changing\
         \ code where referential equality is the user's intent."
       docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/stringliteralequality"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.TestRecipe:
+      name: "org.openrewrite.staticanalysis.TestRecipe"
+      description: "for testing nonsense"
+      docLink: "https://docs.openrewrite.org/reference/recipes/staticanalysis/testrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
@@ -10702,6 +10824,34 @@ rewrite-testing-frameworks:
       options: []
       isImperative: false
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertion:
+      name: "org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertion"
+      description: "Many AssertJ chained assertions have dedicated assertions that\
+        \ function the same. It is best to use the dedicated assertions."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/simplifychainedassertjassertion"
+      options:
+      - name: "assertToReplace"
+        type: "String"
+        required: false
+      - name: "chainedAssertion"
+        type: "String"
+        required: false
+      - name: "dedicatedAssertion"
+        type: "String"
+        required: false
+      - name: "requiredType"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertions:
+      name: "org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertions"
+      description: "Replace AssertJ chained assertions with dedicated assertions that\
+        \ function the same."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/simplifychainedassertjassertions"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.assertj.StaticImports:
       name: "org.openrewrite.java.testing.assertj.StaticImports"
       description: "Consistently use a static import rather than inlining the `Assertions`\
@@ -10709,32 +10859,6 @@ rewrite-testing-frameworks:
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/staticimports"
       options: []
       isImperative: false
-      artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.assertj.UseExplicitContains:
-      name: "org.openrewrite.java.testing.assertj.UseExplicitContains"
-      description: "Convert AssertJ `assertThat(collection.contains(element)).isTrue()`\
-        \ to `assertThat(collection).contains(element)` and `assertThat(collection.contains(element)).isFalse()`\
-        \ to `assertThat(collection).doesNotContain(element)`."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/useexplicitcontains"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.assertj.UseExplicitIsEmpty:
-      name: "org.openrewrite.java.testing.assertj.UseExplicitIsEmpty"
-      description: "Convert AssertJ `assertThat(collection.isEmpty()).isTrue()` to\
-        \ `assertThat(collection).isEmpty()` and `assertThat(collection.isEmpty()).isFalse()`\
-        \ to `assertThat(collection).isNotEmpty()`."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/useexplicitisempty"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.assertj.UseExplicitSize:
-      name: "org.openrewrite.java.testing.assertj.UseExplicitSize"
-      description: "Convert `assertThat(collection.size()).isEqualTo(Y)` to AssertJ's\
-        \ `assertThat(collection).hasSize()`."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/assertj/useexplicitsize"
-      options: []
-      isImperative: true
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.cleanup.AssertEqualsNullToAssertNull:
       name: "org.openrewrite.java.testing.cleanup.AssertEqualsNullToAssertNull"
@@ -10866,22 +10990,6 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.hamcrest.FlattenAllOf:
-      name: "org.openrewrite.java.testing.hamcrest.FlattenAllOf"
-      description: "Convert Hamcrest `allOf(Matcher...)` to individual `assertThat`\
-        \ statements for easier migration."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/flattenallof"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.hamcrest.HamcrestAnyOfToAssertJ:
-      name: "org.openrewrite.java.testing.hamcrest.HamcrestAnyOfToAssertJ"
-      description: "Migrate the `anyOf` Hamcrest Matcher to AssertJ's `satisfiesAnyOf`\
-        \ assertion."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/hamcrestanyoftoassertj"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.hamcrest.HamcrestIsMatcherToAssertJ:
       name: "org.openrewrite.java.testing.hamcrest.HamcrestIsMatcherToAssertJ"
       description: "Migrate Hamcrest `is(Object)` to AssertJ `Assertions.assertThat(..)`."
@@ -10915,6 +11023,14 @@ rewrite-testing-frameworks:
         required: false
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.hamcrest.HamcrestOfMatchersToAssertJ:
+      name: "org.openrewrite.java.testing.hamcrest.HamcrestOfMatchersToAssertJ"
+      description: "Migrate the `anyOf` Hamcrest Matcher to AssertJ's `satisfiesAnyOf`\
+        \ assertion."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/hamcrest/hamcrestofmatcherstoassertj"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.hamcrest.MigrateHamcrestToAssertJ:
       name: "org.openrewrite.java.testing.hamcrest.MigrateHamcrestToAssertJ"
       description: "Migrate Hamcrest `assertThat(..)` to AssertJ `Assertions`."
@@ -10938,8 +11054,8 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.AddParameterizedTestAnnotation:
       name: "org.openrewrite.java.testing.junit5.AddParameterizedTestAnnotation"
-      description: "Add missing @ParameterizedTest annotation when @ValueSource is\
-        \ used or replace @Test with @ParameterizedTest."
+      description: "Add missing `@ParameterizedTest` annotation when `@ValueSource`\
+        \ is used or replace `@Test` with `@ParameterizedTest`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/testing/junit5/addparameterizedtestannotation"
       options: []
       isImperative: true
