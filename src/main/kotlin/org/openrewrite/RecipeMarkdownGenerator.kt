@@ -651,7 +651,7 @@ class RecipeMarkdownGenerator : Runnable {
                     val normalRecipes: MutableList<RecipeDescriptor> = mutableListOf()
 
                     for (recipe in recipes) {
-                        if (recipe.recipeList.isNotEmpty()) {
+                        if (1 < recipe.recipeList.size) {
                             compositeRecipes.add(recipe)
                         } else {
                             normalRecipes.add(recipe)
