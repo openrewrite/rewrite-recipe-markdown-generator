@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.3.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -359,18 +359,6 @@ rewrite-core:
       - name: "filePattern"
         type: "String"
         required: true
-      isImperative: true
-      artifactId: "rewrite-core"
-    org.openrewrite.FindBuildToolFailures:
-      name: "org.openrewrite.FindBuildToolFailures"
-      description: "This recipe explores build tool failures after an LST is produced\
-        \ for classifying the types of failures that can occur and prioritizing fixes\
-        \ according to the most common problems."
-      docLink: "https://docs.openrewrite.org/reference/recipes/findbuildtoolfailures"
-      options:
-      - name: "suppressLogOutput"
-        type: "Boolean"
-        required: false
       isImperative: true
       artifactId: "rewrite-core"
     org.openrewrite.FindCollidingSourceFiles:
@@ -496,6 +484,19 @@ rewrite-core:
         required: true
       isImperative: true
       artifactId: "rewrite-core"
+    org.openrewrite.search.FindParseToPrintInequality:
+      name: "org.openrewrite.search.FindParseToPrintInequality"
+      description: "OpenRewrite `Parser` implementations should produce `SourceFile`\
+        \ objects whose `printAll()` method should be byte-for-byte equivalent with\
+        \ the original source file. When this isn't true, recipes can still run on\
+        \ the `SourceFile` and even produce diffs, but the diffs would fail to apply\
+        \ as a patch to the original source file. Most `Parser` use `Parser#requirePrintEqualsInput`\
+        \ to produce a `ParseError` when they fail to produce a `SourceFile` that\
+        \ is print idempotent."
+      docLink: "https://docs.openrewrite.org/reference/recipes/search/findparsetoprintinequality"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-core"
     org.openrewrite.text.AppendToTextFile:
       name: "org.openrewrite.text.AppendToTextFile"
       description: "Appends or replaces content of an existing plain text file, or\
@@ -568,7 +569,7 @@ rewrite-core:
         required: false
       - name: "filePattern"
         type: "String"
-        required: true
+        required: false
       - name: "find"
         type: "String"
         required: true
@@ -848,7 +849,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.3.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1396,7 +1397,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.3.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1415,7 +1416,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.3.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1558,7 +1559,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.3.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -3210,7 +3211,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.3.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3321,6 +3322,14 @@ rewrite-kotlin:
         \ property. Note that the current implementation does not perform a Kotlin\
         \ version check."
       docLink: "https://docs.openrewrite.org/reference/recipes/kotlin/cleanup/replacechartointwithcode"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-kotlin"
+    org.openrewrite.kotlin.format.AutoFormat:
+      name: "org.openrewrite.kotlin.format.AutoFormat"
+      description: "Format Kotlin code using a standard comprehensive set of Kotlin\
+        \ formatting recipes."
+      docLink: "https://docs.openrewrite.org/reference/recipes/kotlin/format/autoformat"
       options: []
       isImperative: true
       artifactId: "rewrite-kotlin"
@@ -4029,7 +4038,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.3.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -4871,7 +4880,10 @@ rewrite-maven:
         \ in the Maven settings file (and those contributed by active profiles) as\
         \ determined when the LST was produced."
       docLink: "https://docs.openrewrite.org/reference/recipes/maven/search/effectivemavenrepositories"
-      options: []
+      options:
+      - name: "useMarkers"
+        type: "Boolean"
+        required: false
       isImperative: true
       artifactId: "rewrite-maven"
     org.openrewrite.maven.search.FindDependency:
@@ -6812,7 +6824,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.3.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -11408,7 +11420,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.3.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -11421,6 +11433,29 @@ rewrite-xml:
       - name: "xPath"
         type: "String"
         required: true
+      isImperative: true
+      artifactId: "rewrite-xml"
+    org.openrewrite.xml.ChangeNamespaceValue:
+      name: "org.openrewrite.xml.ChangeNamespaceValue"
+      description: "Alters XML Attribute value within specified element of a specific\
+        \ resource versions."
+      docLink: "https://docs.openrewrite.org/reference/recipes/xml/changenamespacevalue"
+      options:
+      - name: "elementName"
+        type: "String"
+        required: false
+      - name: "newValue"
+        type: "String"
+        required: true
+      - name: "oldValue"
+        type: "String"
+        required: false
+      - name: "searchAllNamespaces"
+        type: "Boolean"
+        required: false
+      - name: "versionMatcher"
+        type: "String"
+        required: false
       isImperative: true
       artifactId: "rewrite-xml"
     org.openrewrite.xml.ChangeTagAttribute:
@@ -11591,7 +11626,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.2.0-SNAPSHOT"
+  version: "8.3.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"

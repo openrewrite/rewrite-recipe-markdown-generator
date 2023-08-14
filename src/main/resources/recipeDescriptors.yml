@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.1.15"
+  version: "8.2.0"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -634,19 +634,19 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
-  version: "1.0.4"
+  version: "1.0.5"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite"
-      description: "Replace @Cucumber with @Suite and @SelectClasspathResource(\"\
-        cucumber/annotated/class/package\")."
+      description: "Replace `@Cucumber` with `@Suite` and `@SelectClasspathResource(\"\
+        cucumber/annotated/class/package\")`."
       docLink: "https://docs.openrewrite.org/reference/recipes/cucumber/jvm/cucumberannotationtosuite"
       options: []
       isImperative: true
       artifactId: "rewrite-cucumber-jvm"
     org.openrewrite.cucumber.jvm.CucumberJava8HookDefinitionToCucumberJava:
       name: "org.openrewrite.cucumber.jvm.CucumberJava8HookDefinitionToCucumberJava"
-      description: "Replace LambdaGlue hook definitions with new annotated methods\
+      description: "Replace `LambdaGlue` hook definitions with new annotated methods\
         \ with the same body."
       docLink: "https://docs.openrewrite.org/reference/recipes/cucumber/jvm/cucumberjava8hookdefinitiontocucumberjava"
       options: []
@@ -654,7 +654,7 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
     org.openrewrite.cucumber.jvm.CucumberJava8StepDefinitionToCucumberJava:
       name: "org.openrewrite.cucumber.jvm.CucumberJava8StepDefinitionToCucumberJava"
-      description: "Replace StepDefinitionBody methods with StepDefinitionAnnotations\
+      description: "Replace `StepDefinitionBody` methods with `StepDefinitionAnnotations`\
         \ on new methods with the same body."
       docLink: "https://docs.openrewrite.org/reference/recipes/cucumber/jvm/cucumberjava8stepdefinitiontocucumberjava"
       options: []
@@ -662,22 +662,22 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
     org.openrewrite.cucumber.jvm.CucumberJava8ToJava:
       name: "org.openrewrite.cucumber.jvm.CucumberJava8ToJava"
-      description: "Migrates Cucumber-Java8 step definitions and LambdaGlue hooks\
-        \ to Cucumber-Java annotated methods."
+      description: "Migrates `cucumber-java8` step definitions and `LambdaGlue` hooks\
+        \ to `cucumber-java` annotated methods."
       docLink: "https://docs.openrewrite.org/reference/recipes/cucumber/jvm/cucumberjava8tojava"
       options: []
       isImperative: false
       artifactId: "rewrite-cucumber-jvm"
     org.openrewrite.cucumber.jvm.CucumberToJunitPlatformSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberToJunitPlatformSuite"
-      description: "Migrates Cucumber tests to JUnit Test Suites."
+      description: "Migrates Cucumber tests to JUnit test `@Suite`."
       docLink: "https://docs.openrewrite.org/reference/recipes/cucumber/jvm/cucumbertojunitplatformsuite"
       options: []
       isImperative: false
       artifactId: "rewrite-cucumber-jvm"
     org.openrewrite.cucumber.jvm.DropSummaryPrinter:
       name: "org.openrewrite.cucumber.jvm.DropSummaryPrinter"
-      description: "Replace SummaryPrinter with Plugin, if not already present."
+      description: "Replace `SummaryPrinter` with `Plugin`, if not already present."
       docLink: "https://docs.openrewrite.org/reference/recipes/cucumber/jvm/dropsummaryprinter"
       options: []
       isImperative: true
@@ -849,7 +849,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.1.15"
+  version: "8.2.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1397,7 +1397,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.1.15"
+  version: "8.2.0"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1416,7 +1416,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.1.15"
+  version: "8.2.0"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1533,7 +1533,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.1.15"
+  version: "8.2.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -3177,7 +3177,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.1.15"
+  version: "8.2.0"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3980,7 +3980,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.1.15"
+  version: "8.2.0"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -4822,7 +4822,10 @@ rewrite-maven:
         \ in the Maven settings file (and those contributed by active profiles) as\
         \ determined when the LST was produced."
       docLink: "https://docs.openrewrite.org/reference/recipes/maven/search/effectivemavenrepositories"
-      options: []
+      options:
+      - name: "useMarkers"
+        type: "Boolean"
+        required: false
       isImperative: true
       artifactId: "rewrite-maven"
     org.openrewrite.maven.search.FindDependency:
@@ -6763,7 +6766,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.1.15"
+  version: "8.2.0"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -6852,7 +6855,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-python:
   artifactId: "rewrite-python"
-  version: "1.0.7"
+  version: "1.0.8"
   markdownRecipeDescriptors:
     org.openrewrite.python.ChangeMethodName:
       name: "org.openrewrite.python.ChangeMethodName"
@@ -8606,7 +8609,7 @@ rewrite-sql:
       artifactId: "rewrite-sql"
 rewrite-static-analysis:
   artifactId: "rewrite-static-analysis"
-  version: "1.0.4"
+  version: "1.0.5"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.StaticAnalysis:
       name: "org.openrewrite.kotlin.StaticAnalysis"
@@ -11352,7 +11355,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.1.15"
+  version: "8.2.0"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -11365,6 +11368,29 @@ rewrite-xml:
       - name: "xPath"
         type: "String"
         required: true
+      isImperative: true
+      artifactId: "rewrite-xml"
+    org.openrewrite.xml.ChangeNamespaceValue:
+      name: "org.openrewrite.xml.ChangeNamespaceValue"
+      description: "Alters XML Attribute value within specified element of a specific\
+        \ resource versions."
+      docLink: "https://docs.openrewrite.org/reference/recipes/xml/changenamespacevalue"
+      options:
+      - name: "elementName"
+        type: "String"
+        required: false
+      - name: "newValue"
+        type: "String"
+        required: true
+      - name: "oldValue"
+        type: "String"
+        required: false
+      - name: "searchAllNamespaces"
+        type: "Boolean"
+        required: false
+      - name: "versionMatcher"
+        type: "String"
+        required: false
       isImperative: true
       artifactId: "rewrite-xml"
     org.openrewrite.xml.ChangeTagAttribute:
@@ -11535,7 +11561,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.1.15"
+  version: "8.2.0"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
