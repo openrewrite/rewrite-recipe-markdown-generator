@@ -96,6 +96,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-sql:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-static-analysis:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-terraform:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-testcontainers:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
 }
 
