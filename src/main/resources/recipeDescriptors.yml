@@ -3792,6 +3792,118 @@ rewrite-kubernetes:
         required: true
       isImperative: true
       artifactId: "rewrite-kubernetes"
+rewrite-liberty:
+  artifactId: "rewrite-liberty"
+  version: "1.0.0-rc.1"
+  markdownRecipeDescriptors:
+    org.openrewrite.java.liberty:
+      name: "org.openrewrite.java.liberty"
+      description: "Use this category of rules to identify code changes needed when\
+        \ migrating  from WebSphere Application Server traditional to Liberty.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-liberty"
+    org.openrewrite.java.liberty.ChangeMethodInvocation:
+      name: "org.openrewrite.java.liberty.ChangeMethodInvocation"
+      description: "Rename a method invocation."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty/changemethodinvocation"
+      options:
+      - name: "methodPattern"
+        type: "String"
+        required: true
+      - name: "newMethodPattern"
+        type: "String"
+        required: true
+      - name: "performStaticCall"
+        type: "Boolean"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-liberty"
+    org.openrewrite.java.liberty.ChangeStringLiteral:
+      name: "org.openrewrite.java.liberty.ChangeStringLiteral"
+      description: "Changes the value of a string literal."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty/changestringliteral"
+      options:
+      - name: "newValueTemplate"
+        type: "String"
+        required: true
+      - name: "valuePattern"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-liberty"
+    org.openrewrite.java.liberty.RemoveWas2LibertyNonPortableJndiLookup:
+      name: "org.openrewrite.java.liberty.RemoveWas2LibertyNonPortableJndiLookup"
+      description: "Remove the use of invalid JNDI properties from Hashtable."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty/removewas2libertynonportablejndilookup"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-liberty"
+    org.openrewrite.java.liberty.ServerName:
+      name: "org.openrewrite.java.liberty.ServerName"
+      description: "The `getDisplayName()` is not available in Liberty."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty/servername"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-liberty"
+    org.openrewrite.java.liberty.WebSphereUnavailableSSOCookieMethod:
+      name: "org.openrewrite.java.liberty.WebSphereUnavailableSSOCookieMethod"
+      description: "Replace `WSSecurityHelper.revokeSSOCookies(request, response)`\
+        \ with `request.logout()`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty/websphereunavailablessocookiemethod"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-liberty"
+    org.openrewrite.java.liberty.WebSphereUnavailableSSOTokenMethod:
+      name: "org.openrewrite.java.liberty.WebSphereUnavailableSSOTokenMethod"
+      description: "This method `LTPACookieFromSSOToken()` is deprecated in traditional\
+        \ WebSphere Application  Server Version 8.5 and might be removed in a future\
+        \ release. It is not available on Liberty.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty/websphereunavailablessotokenmethod"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-liberty"
+    org.openrewrite.xml.liberty.AppDDNamespaceRule:
+      name: "org.openrewrite.xml.liberty.AppDDNamespaceRule"
+      description: "Namespace values in application.xml must be consistent with the\
+        \ descriptor version."
+      docLink: "https://docs.openrewrite.org/reference/recipes/xml/liberty/appddnamespacerule"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-liberty"
+    org.openrewrite.xml.liberty.ConnectorDDNamespaceRule:
+      name: "org.openrewrite.xml.liberty.ConnectorDDNamespaceRule"
+      description: "Namespace values in ra.xml must be consistent with the descriptor\
+        \ version."
+      docLink: "https://docs.openrewrite.org/reference/recipes/xml/liberty/connectorddnamespacerule"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-liberty"
+    org.openrewrite.xml.liberty.EJBDDNamespaceRule:
+      name: "org.openrewrite.xml.liberty.EJBDDNamespaceRule"
+      description: "Namespace values in ejb-jar.xml must be consistent with the descriptor\
+        \ version."
+      docLink: "https://docs.openrewrite.org/reference/recipes/xml/liberty/ejbddnamespacerule"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-liberty"
+    org.openrewrite.xml.liberty.PersistenceXmlLocationRule:
+      name: "org.openrewrite.xml.liberty.PersistenceXmlLocationRule"
+      description: "This recipes moves persistence.xml files into the root META-INF\
+        \ directory in source folder."
+      docLink: "https://docs.openrewrite.org/reference/recipes/xml/liberty/persistencexmllocationrule"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-liberty"
+    org.openrewrite.xml.liberty.WebDDNamespaceRule:
+      name: "org.openrewrite.xml.liberty.WebDDNamespaceRule"
+      description: "Namespace values in web.xml must be consistent with the descriptor\
+        \ version."
+      docLink: "https://docs.openrewrite.org/reference/recipes/xml/liberty/webddnamespacerule"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-liberty"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
   version: "2.0.2"
@@ -4939,6 +5051,18 @@ rewrite-maven:
       options: []
       isImperative: true
       artifactId: "rewrite-maven"
+rewrite-micrometer:
+  artifactId: "rewrite-micrometer"
+  version: "0.0.1"
+  markdownRecipeDescriptors:
+    org.openrewrite.micrometer.UpgradeMicrometer:
+      name: "org.openrewrite.micrometer.UpgradeMicrometer"
+      description: "This recipe will apply changes commonly needed when migrating\
+        \ Micrometer."
+      docLink: "https://docs.openrewrite.org/reference/recipes/micrometer/upgrademicrometer"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-micrometer"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
   version: "2.1.1"
