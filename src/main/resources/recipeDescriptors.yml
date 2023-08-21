@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.2.0"
+  version: "8.3.0"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -849,7 +849,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.2.0"
+  version: "8.3.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1397,7 +1397,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.2.0"
+  version: "8.3.0"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1416,7 +1416,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.2.0"
+  version: "8.3.0"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1500,7 +1500,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-hibernate:
   artifactId: "rewrite-hibernate"
-  version: "1.0.1"
+  version: "1.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.hibernate.MigrateToHibernate61:
       name: "org.openrewrite.hibernate.MigrateToHibernate61"
@@ -1509,6 +1509,14 @@ rewrite-hibernate:
         \ the new org.hibernate.orm group ID and the recipe will make changes necessary\
         \ to use Hibernate with Jakarta EE 9.0.\n"
       docLink: "https://docs.openrewrite.org/reference/recipes/hibernate/migratetohibernate61"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-hibernate"
+    org.openrewrite.hibernate.MigrateToHibernate62:
+      name: "org.openrewrite.hibernate.MigrateToHibernate62"
+      description: "This recipe will apply changes commonly needed when migrating\
+        \ to Hibernate 6.2.x.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/hibernate/migratetohibernate62"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -1523,6 +1531,32 @@ rewrite-hibernate:
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
+    org.openrewrite.hibernate.MigrateToHypersistenceUtilsHibernate6.0:
+      name: "org.openrewrite.hibernate.MigrateToHypersistenceUtilsHibernate6.0"
+      description: "This recipe will migrate any existing dependencies on `com.vladmihalcea:hibernate-types`\
+        \ to `io.hypersistence:hypersistence-utils-hibernate-60`.  This migration\
+        \ will include the adjustment from `com.vladmihalcea` to `io.hypersistence.utils`\
+        \ package name.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/hibernate/migratetohypersistenceutilshibernate6/0"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-hibernate"
+    org.openrewrite.hibernate.MigrateToHypersistenceUtilsHibernate6.2:
+      name: "org.openrewrite.hibernate.MigrateToHypersistenceUtilsHibernate6.2"
+      description: "This recipe will migrate any existing dependencies on `io.hypersistence:hypersistence-utils-hibernate-60`\
+        \ to `io.hypersistence:hypersistence-utils-hibernate-62`. \n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/hibernate/migratetohypersistenceutilshibernate6/2"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-hibernate"
+    org.openrewrite.hibernate.TypeAnnotationParameter:
+      name: "org.openrewrite.hibernate.TypeAnnotationParameter"
+      description: "Hibernate 6.x has 'type' parameter of type String replaced with\
+        \ 'value' of type class."
+      docLink: "https://docs.openrewrite.org/reference/recipes/hibernate/typeannotationparameter"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-hibernate"
     org.openrewrite.hibernate.TypeDescriptorToType:
       name: "org.openrewrite.hibernate.TypeDescriptorToType"
       description: "Rename `JavaTypeDescriptor` and `SqlTypeDescriptor` to `JavaType`\
@@ -1533,7 +1567,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.2.0"
+  version: "8.3.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -3177,7 +3211,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.2.0"
+  version: "8.3.0"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3227,7 +3261,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.3.3"
+  version: "1.3.4"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -3288,6 +3322,14 @@ rewrite-kotlin:
         \ property. Note that the current implementation does not perform a Kotlin\
         \ version check."
       docLink: "https://docs.openrewrite.org/reference/recipes/kotlin/cleanup/replacechartointwithcode"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-kotlin"
+    org.openrewrite.kotlin.format.AutoFormat:
+      name: "org.openrewrite.kotlin.format.AutoFormat"
+      description: "Format Kotlin code using a standard comprehensive set of Kotlin\
+        \ formatting recipes."
+      docLink: "https://docs.openrewrite.org/reference/recipes/kotlin/format/autoformat"
       options: []
       isImperative: true
       artifactId: "rewrite-kotlin"
@@ -3980,7 +4022,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.2.0"
+  version: "8.3.0"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -4840,6 +4882,16 @@ rewrite-maven:
       - name: "groupId"
         type: "String"
         required: true
+      isImperative: true
+      artifactId: "rewrite-maven"
+    org.openrewrite.maven.search.FindMavenSettings:
+      name: "org.openrewrite.maven.search.FindMavenSettings"
+      description: "List the effective maven settings file for the current project."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/search/findmavensettings"
+      options:
+      - name: "existenceCheckOnly"
+        type: "Boolean"
+        required: false
       isImperative: true
       artifactId: "rewrite-maven"
     org.openrewrite.maven.search.FindPlugin:
@@ -6766,7 +6818,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.2.0"
+  version: "8.3.0"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -11355,7 +11407,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.2.0"
+  version: "8.3.0"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -11561,7 +11613,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.2.0"
+  version: "8.3.0"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
