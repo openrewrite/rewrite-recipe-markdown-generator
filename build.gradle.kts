@@ -90,7 +90,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-micrometer:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-micronaut:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-migrate-java:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-okhttp:$rewriteVersion")
+//    "recipe"("org.openrewrite.recipe:rewrite-okhttp:$rewriteVersion") // Still doesn't work
     "recipe"("org.openrewrite.recipe:rewrite-quarkus:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-recommendations:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
