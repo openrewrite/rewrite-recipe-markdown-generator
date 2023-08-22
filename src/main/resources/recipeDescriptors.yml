@@ -3794,7 +3794,7 @@ rewrite-kubernetes:
       artifactId: "rewrite-kubernetes"
 rewrite-liberty:
   artifactId: "rewrite-liberty"
-  version: "1.0.0-rc.1"
+  version: "1.0.0-rc.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.liberty:
       name: "org.openrewrite.java.liberty"
@@ -3803,22 +3803,6 @@ rewrite-liberty:
       docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty"
       options: []
       isImperative: false
-      artifactId: "rewrite-liberty"
-    org.openrewrite.java.liberty.ChangeMethodInvocation:
-      name: "org.openrewrite.java.liberty.ChangeMethodInvocation"
-      description: "Rename a method invocation."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty/changemethodinvocation"
-      options:
-      - name: "methodPattern"
-        type: "String"
-        required: true
-      - name: "newMethodPattern"
-        type: "String"
-        required: true
-      - name: "performStaticCall"
-        type: "Boolean"
-        required: false
-      isImperative: true
       artifactId: "rewrite-liberty"
     org.openrewrite.java.liberty.ChangeStringLiteral:
       name: "org.openrewrite.java.liberty.ChangeStringLiteral"
@@ -3842,10 +3826,10 @@ rewrite-liberty:
       artifactId: "rewrite-liberty"
     org.openrewrite.java.liberty.ServerName:
       name: "org.openrewrite.java.liberty.ServerName"
-      description: "The `getDisplayName()` is not available in Liberty."
+      description: "`ServerName.getDisplayName()` is not available in Liberty."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty/servername"
       options: []
-      isImperative: false
+      isImperative: true
       artifactId: "rewrite-liberty"
     org.openrewrite.java.liberty.WebSphereUnavailableSSOCookieMethod:
       name: "org.openrewrite.java.liberty.WebSphereUnavailableSSOCookieMethod"
