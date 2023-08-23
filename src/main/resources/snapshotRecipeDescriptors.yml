@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.4.0-SNAPSHOT"
+  version: "8.5.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -849,7 +849,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.4.0-SNAPSHOT"
+  version: "8.5.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1397,7 +1397,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.4.0-SNAPSHOT"
+  version: "8.5.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1416,7 +1416,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.4.0-SNAPSHOT"
+  version: "8.5.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1567,7 +1567,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.4.0-SNAPSHOT"
+  version: "8.5.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -1771,7 +1771,7 @@ rewrite-java:
       description: "Groups and orders import statements. If a [style has been defined](https://docs.openrewrite.org/concepts-explanations/styles),\
         \ this recipe will order the imports according to that style. If no style\
         \ is detected, this recipe will default to ordering imports in the same way\
-        \ that IntelliJ does."
+        \ that IntelliJ IDEA does."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/orderimports"
       options:
       - name: "removeUnused"
@@ -1835,7 +1835,10 @@ rewrite-java:
       artifactId: "rewrite-java"
     org.openrewrite.java.RemoveUnusedImports:
       name: "org.openrewrite.java.RemoveUnusedImports"
-      description: "Remove imports for types that are not referenced."
+      description: "Remove imports for types that are not referenced. As a precaution\
+        \ against incorrect changes no imports will be removed from any source where\
+        \ unknown types are referenced. The most common cause of unknown types is\
+        \ the use of annotation processors not supported by OpenRewrite, such as lombok."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/removeunusedimports"
       options: []
       isImperative: true
@@ -3240,7 +3243,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.4.0-SNAPSHOT"
+  version: "8.5.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3290,7 +3293,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.4.0-SNAPSHOT"
+  version: "1.5.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -3829,6 +3832,102 @@ rewrite-kubernetes:
         required: true
       isImperative: true
       artifactId: "rewrite-kubernetes"
+rewrite-liberty:
+  artifactId: "rewrite-liberty"
+  version: "1.1.0-SNAPSHOT"
+  markdownRecipeDescriptors:
+    org.openrewrite.java.liberty:
+      name: "org.openrewrite.java.liberty"
+      description: "Use this category of rules to identify code changes needed when\
+        \ migrating  from WebSphere Application Server traditional to Liberty.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-liberty"
+    org.openrewrite.java.liberty.ChangeStringLiteral:
+      name: "org.openrewrite.java.liberty.ChangeStringLiteral"
+      description: "Changes the value of a string literal."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty/changestringliteral"
+      options:
+      - name: "newValueTemplate"
+        type: "String"
+        required: true
+      - name: "valuePattern"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-liberty"
+    org.openrewrite.java.liberty.RemoveWas2LibertyNonPortableJndiLookup:
+      name: "org.openrewrite.java.liberty.RemoveWas2LibertyNonPortableJndiLookup"
+      description: "Remove the use of invalid JNDI properties from Hashtable."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty/removewas2libertynonportablejndilookup"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-liberty"
+    org.openrewrite.java.liberty.ServerName:
+      name: "org.openrewrite.java.liberty.ServerName"
+      description: "`ServerName.getDisplayName()` is not available in Liberty."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty/servername"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-liberty"
+    org.openrewrite.java.liberty.WebSphereUnavailableSSOCookieMethod:
+      name: "org.openrewrite.java.liberty.WebSphereUnavailableSSOCookieMethod"
+      description: "Replace `WSSecurityHelper.revokeSSOCookies(request, response)`\
+        \ with `request.logout()`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty/websphereunavailablessocookiemethod"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-liberty"
+    org.openrewrite.java.liberty.WebSphereUnavailableSSOTokenMethod:
+      name: "org.openrewrite.java.liberty.WebSphereUnavailableSSOTokenMethod"
+      description: "This method `LTPACookieFromSSOToken()` is deprecated in traditional\
+        \ WebSphere Application  Server Version 8.5 and might be removed in a future\
+        \ release. It is not available on Liberty.\n"
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/liberty/websphereunavailablessotokenmethod"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-liberty"
+    org.openrewrite.xml.liberty.AppDDNamespaceRule:
+      name: "org.openrewrite.xml.liberty.AppDDNamespaceRule"
+      description: "Namespace values in application.xml must be consistent with the\
+        \ descriptor version."
+      docLink: "https://docs.openrewrite.org/reference/recipes/xml/liberty/appddnamespacerule"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-liberty"
+    org.openrewrite.xml.liberty.ConnectorDDNamespaceRule:
+      name: "org.openrewrite.xml.liberty.ConnectorDDNamespaceRule"
+      description: "Namespace values in ra.xml must be consistent with the descriptor\
+        \ version."
+      docLink: "https://docs.openrewrite.org/reference/recipes/xml/liberty/connectorddnamespacerule"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-liberty"
+    org.openrewrite.xml.liberty.EJBDDNamespaceRule:
+      name: "org.openrewrite.xml.liberty.EJBDDNamespaceRule"
+      description: "Namespace values in ejb-jar.xml must be consistent with the descriptor\
+        \ version."
+      docLink: "https://docs.openrewrite.org/reference/recipes/xml/liberty/ejbddnamespacerule"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-liberty"
+    org.openrewrite.xml.liberty.PersistenceXmlLocationRule:
+      name: "org.openrewrite.xml.liberty.PersistenceXmlLocationRule"
+      description: "This recipes moves persistence.xml files into the root META-INF\
+        \ directory in source folder."
+      docLink: "https://docs.openrewrite.org/reference/recipes/xml/liberty/persistencexmllocationrule"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-liberty"
+    org.openrewrite.xml.liberty.WebDDNamespaceRule:
+      name: "org.openrewrite.xml.liberty.WebDDNamespaceRule"
+      description: "Namespace values in web.xml must be consistent with the descriptor\
+        \ version."
+      docLink: "https://docs.openrewrite.org/reference/recipes/xml/liberty/webddnamespacerule"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-liberty"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
   version: "2.1.0-SNAPSHOT"
@@ -4075,7 +4174,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.4.0-SNAPSHOT"
+  version: "8.5.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -4165,7 +4264,7 @@ rewrite-maven:
         required: false
       - name: "version"
         type: "String"
-        required: true
+        required: false
       isImperative: true
       artifactId: "rewrite-maven"
     org.openrewrite.maven.AddManagedDependency:
@@ -5009,6 +5108,18 @@ rewrite-maven:
       options: []
       isImperative: true
       artifactId: "rewrite-maven"
+rewrite-micrometer:
+  artifactId: "rewrite-micrometer"
+  version: "0.1.0-SNAPSHOT"
+  markdownRecipeDescriptors:
+    org.openrewrite.micrometer.UpgradeMicrometer:
+      name: "org.openrewrite.micrometer.UpgradeMicrometer"
+      description: "This recipe will apply changes commonly needed when migrating\
+        \ Micrometer."
+      docLink: "https://docs.openrewrite.org/reference/recipes/micrometer/upgrademicrometer"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-micrometer"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
   version: "2.2.0-SNAPSHOT"
@@ -5468,6 +5579,13 @@ rewrite-migrate-java:
       description: "Prefer the Java standard library's `java.util.Base64` over third-party\
         \ usage of apache's `apache.commons.codec.binary.Base64`."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/apache/commons/codec/apachebase64tojavabase64"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.io.ApacheCommonsFileUtilsRecipes:
+      name: "org.openrewrite.java.migrate.apache.commons.io.ApacheCommonsFileUtilsRecipes"
+      description: "Refaster template recipes for `org.openrewrite.java.migrate.apache.commons.io.ApacheCommonsFileUtils`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/apache/commons/io/apachecommonsfileutilsrecipes"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
@@ -6900,9 +7018,51 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+rewrite-okhttp:
+  artifactId: "rewrite-okhttp"
+  version: "0.1.0-SNAPSHOT"
+  markdownRecipeDescriptors:
+    org.openrewrite.okhttp.ReorderRequestBodyCreateArguments:
+      name: "org.openrewrite.okhttp.ReorderRequestBodyCreateArguments"
+      description: "Reorder the arguments of `RequestBody.create() to put the `MediaType`\
+        \ argument after the `String` body."
+      docLink: "https://docs.openrewrite.org/reference/recipes/okhttp/reorderrequestbodycreatearguments"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-okhttp"
+    org.openrewrite.okhttp.UpgradeOkHttp5:
+      name: "org.openrewrite.okhttp.UpgradeOkHttp5"
+      description: "This recipe will apply changes commonly needed when migrating\
+        \ to OkHttp 5.x."
+      docLink: "https://docs.openrewrite.org/reference/recipes/okhttp/upgradeokhttp5"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-okhttp"
+    org.openrewrite.okhttp.UpgradeOkHttp5Dependencies:
+      name: "org.openrewrite.okhttp.UpgradeOkHttp5Dependencies"
+      description: "Migrate OkHttp dependencies to 5.x."
+      docLink: "https://docs.openrewrite.org/reference/recipes/okhttp/upgradeokhttp5dependencies"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-okhttp"
+    org.openrewrite.okio.UpgradeOkio3:
+      name: "org.openrewrite.okio.UpgradeOkio3"
+      description: "This recipe will apply changes commonly needed when migrating\
+        \ to Okio 3.x."
+      docLink: "https://docs.openrewrite.org/reference/recipes/okio/upgradeokio3"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-okhttp"
+    org.openrewrite.okio.UpgradeOkio3Dependencies:
+      name: "org.openrewrite.okio.UpgradeOkio3Dependencies"
+      description: "Migrate Okio dependencies to 3.x."
+      docLink: "https://docs.openrewrite.org/reference/recipes/okio/upgradeokio3dependencies"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-okhttp"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.4.0-SNAPSHOT"
+  version: "8.5.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -7546,17 +7706,6 @@ rewrite-spring:
         \ annotation over the declaring class would have `@Configuration` annotation\
         \ added."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/addconfigurationannotationifbeanspresent"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-spring"
-    org.openrewrite.java.spring.boot2.AuthorizeHttpRequests:
-      name: "org.openrewrite.java.spring.boot2.AuthorizeHttpRequests"
-      description: "Replace `HttpSecurity.authorizeRequests(...)` deprecated in Spring\
-        \ Security 6 with `HttpSecurity.authorizeHttpRequests(...)` and all method\
-        \ calls on the resultant object respectively. Replace deprecated `AbstractInterceptUrlConfigurer`\
-        \ and its deprecated subclasses with `AuthorizeHttpRequestsConfigurer` and\
-        \ its corresponding subclasses."
-      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/boot2/authorizehttprequests"
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
@@ -8512,6 +8661,17 @@ rewrite-spring:
       description: "Find Spring components, including controllers, services, repositories,\
         \ return types of `@Bean` annotated methods, etc."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/search/findspringcomponents"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security5.AuthorizeHttpRequests:
+      name: "org.openrewrite.java.spring.security5.AuthorizeHttpRequests"
+      description: "Replace `HttpSecurity.authorizeRequests(...)` deprecated in Spring\
+        \ Security 6 with `HttpSecurity.authorizeHttpRequests(...)` and all method\
+        \ calls on the resultant object respectively. Replace deprecated `AbstractInterceptUrlConfigurer`\
+        \ and its deprecated subclasses with `AuthorizeHttpRequestsConfigurer` and\
+        \ its corresponding subclasses."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security5/authorizehttprequests"
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
@@ -11540,7 +11700,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.4.0-SNAPSHOT"
+  version: "8.5.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -11746,7 +11906,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.4.0-SNAPSHOT"
+  version: "8.5.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
