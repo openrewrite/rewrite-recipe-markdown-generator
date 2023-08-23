@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.3.0"
+  version: "8.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -849,7 +849,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.3.0"
+  version: "8.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1397,7 +1397,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.3.0"
+  version: "8.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1416,7 +1416,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.3.0"
+  version: "8.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1567,7 +1567,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.3.0"
+  version: "8.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -1771,7 +1771,7 @@ rewrite-java:
       description: "Groups and orders import statements. If a [style has been defined](https://docs.openrewrite.org/concepts-explanations/styles),\
         \ this recipe will order the imports according to that style. If no style\
         \ is detected, this recipe will default to ordering imports in the same way\
-        \ that IntelliJ does."
+        \ that IntelliJ IDEA does."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/orderimports"
       options:
       - name: "removeUnused"
@@ -1835,7 +1835,10 @@ rewrite-java:
       artifactId: "rewrite-java"
     org.openrewrite.java.RemoveUnusedImports:
       name: "org.openrewrite.java.RemoveUnusedImports"
-      description: "Remove imports for types that are not referenced."
+      description: "Remove imports for types that are not referenced. As a precaution\
+        \ against incorrect changes no imports will be removed from any source where\
+        \ unknown types are referenced. The most common cause of unknown types is\
+        \ the use of annotation processors not supported by OpenRewrite, such as lombok."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/removeunusedimports"
       options: []
       isImperative: true
@@ -3211,7 +3214,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.3.0"
+  version: "8.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3261,7 +3264,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.3.4"
+  version: "1.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -3312,6 +3315,14 @@ rewrite-kotlin:
         \ using it with single parameter lambda expressions, you do not need to declare\
         \ the type."
       docLink: "https://docs.openrewrite.org/reference/recipes/kotlin/cleanup/implicitparameterinlambda"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-kotlin"
+    org.openrewrite.kotlin.cleanup.RemoveTrailingSemicolon:
+      name: "org.openrewrite.kotlin.cleanup.RemoveTrailingSemicolon"
+      description: "Some Java programmers may mistakenly add semicolons at the end\
+        \ when writing Kotlin code, but in reality, they are not necessary."
+      docLink: "https://docs.openrewrite.org/reference/recipes/kotlin/cleanup/removetrailingsemicolon"
       options: []
       isImperative: true
       artifactId: "rewrite-kotlin"
@@ -3794,7 +3805,7 @@ rewrite-kubernetes:
       artifactId: "rewrite-kubernetes"
 rewrite-liberty:
   artifactId: "rewrite-liberty"
-  version: "1.0.0-rc.2"
+  version: "1.0.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.liberty:
       name: "org.openrewrite.java.liberty"
@@ -4118,7 +4129,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.3.0"
+  version: "8.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -4951,6 +4962,23 @@ rewrite-maven:
       - name: "scope"
         type: "String"
         required: false
+      isImperative: true
+      artifactId: "rewrite-maven"
+    org.openrewrite.maven.search.EffectiveDependencies:
+      name: "org.openrewrite.maven.search.EffectiveDependencies"
+      description: "Emit the data of binary dependency relationships."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/search/effectivedependencies"
+      options:
+      - name: "scope"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-maven"
+    org.openrewrite.maven.search.EffectiveManagedDependencies:
+      name: "org.openrewrite.maven.search.EffectiveManagedDependencies"
+      description: "Emit the data of binary dependency relationships."
+      docLink: "https://docs.openrewrite.org/reference/recipes/maven/search/effectivemanageddependencies"
+      options: []
       isImperative: true
       artifactId: "rewrite-maven"
     org.openrewrite.maven.search.EffectiveMavenRepositories:
@@ -6924,9 +6952,51 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+rewrite-okhttp:
+  artifactId: "rewrite-okhttp"
+  version: "0.0.1"
+  markdownRecipeDescriptors:
+    org.openrewrite.okhttp.ReorderRequestBodyCreateArguments:
+      name: "org.openrewrite.okhttp.ReorderRequestBodyCreateArguments"
+      description: "Reorder the arguments of `RequestBody.create() to put the `MediaType`\
+        \ argument after the `String` body."
+      docLink: "https://docs.openrewrite.org/reference/recipes/okhttp/reorderrequestbodycreatearguments"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-okhttp"
+    org.openrewrite.okhttp.UpgradeOkHttp5:
+      name: "org.openrewrite.okhttp.UpgradeOkHttp5"
+      description: "This recipe will apply changes commonly needed when migrating\
+        \ to OkHttp 5.x."
+      docLink: "https://docs.openrewrite.org/reference/recipes/okhttp/upgradeokhttp5"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-okhttp"
+    org.openrewrite.okhttp.UpgradeOkHttp5Dependencies:
+      name: "org.openrewrite.okhttp.UpgradeOkHttp5Dependencies"
+      description: "Migrate OkHttp dependencies to 5.x."
+      docLink: "https://docs.openrewrite.org/reference/recipes/okhttp/upgradeokhttp5dependencies"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-okhttp"
+    org.openrewrite.okio.UpgradeOkio3:
+      name: "org.openrewrite.okio.UpgradeOkio3"
+      description: "This recipe will apply changes commonly needed when migrating\
+        \ to Okio 3.x."
+      docLink: "https://docs.openrewrite.org/reference/recipes/okio/upgradeokio3"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-okhttp"
+    org.openrewrite.okio.UpgradeOkio3Dependencies:
+      name: "org.openrewrite.okio.UpgradeOkio3Dependencies"
+      description: "Migrate Okio dependencies to 3.x."
+      docLink: "https://docs.openrewrite.org/reference/recipes/okio/upgradeokio3dependencies"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-okhttp"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.3.0"
+  version: "8.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -11515,7 +11585,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.3.0"
+  version: "8.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -11721,7 +11791,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.3.0"
+  version: "8.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
