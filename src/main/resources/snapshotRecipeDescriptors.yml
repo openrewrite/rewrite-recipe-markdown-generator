@@ -6681,6 +6681,13 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.StringRulesRecipes:
+      name: "org.openrewrite.java.migrate.lang.StringRulesRecipes"
+      description: "Refaster template recipes for `org.openrewrite.java.migrate.lang.StringRules`."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/migrate/lang/stringrulesrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.lang.UseStringIsEmptyRecipe:
       name: "org.openrewrite.java.migrate.lang.UseStringIsEmptyRecipe"
       description: "Recipe created for the following Refaster template:\n```java\n\
@@ -7024,7 +7031,7 @@ rewrite-okhttp:
   markdownRecipeDescriptors:
     org.openrewrite.okhttp.ReorderRequestBodyCreateArguments:
       name: "org.openrewrite.okhttp.ReorderRequestBodyCreateArguments"
-      description: "Reorder the arguments of `RequestBody.create() to put the `MediaType`\
+      description: "Reorder the arguments of `RequestBody.create()` to put the `MediaType`\
         \ argument after the `String` body."
       docLink: "https://docs.openrewrite.org/reference/recipes/okhttp/reorderrequestbodycreatearguments"
       options: []
@@ -8896,6 +8903,30 @@ rewrite-spring:
         \ [Sprint Security 6.0 migration step](https://docs.spring.io/spring-security/reference/6.0.0/migration/servlet/authentication.html#servlet-opt-in-sha256-rememberme)\
         \ for details."
       docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/usesha256inrememberme"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security6.oauth2.client.OAuth2ClientLambdaDsl:
+      name: "org.openrewrite.java.spring.security6.oauth2.client.OAuth2ClientLambdaDsl"
+      description: "Converts `OAuth2ClientConfigurer` chained call from Spring Security\
+        \ pre 5.2.x into new lambda DSL style calls and removes `and()` methods."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/oauth2/client/oauth2clientlambdadsl"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security6.oauth2.client.OAuth2LoginLambdaDsl:
+      name: "org.openrewrite.java.spring.security6.oauth2.client.OAuth2LoginLambdaDsl"
+      description: "Converts `OAuth2LoginConfigurer` chained call from Spring Security\
+        \ pre 5.2.x into new lambda DSL style calls and removes `and()` methods."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/oauth2/client/oauth2loginlambdadsl"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security6.oauth2.server.resource.OAuth2ResourceServerLambdaDsl:
+      name: "org.openrewrite.java.spring.security6.oauth2.server.resource.OAuth2ResourceServerLambdaDsl"
+      description: "Converts `OAuth2ResourceServerConfigurer` chained call from Spring\
+        \ Security pre 5.2.x into new lambda DSL style calls and removes `and()` methods."
+      docLink: "https://docs.openrewrite.org/reference/recipes/java/spring/security6/oauth2/server/resource/oauth2resourceserverlambdadsl"
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
