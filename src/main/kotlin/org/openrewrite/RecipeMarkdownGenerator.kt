@@ -580,7 +580,7 @@ class RecipeMarkdownGenerator : Runnable {
             }
         }
 
-        val displayName: String =
+        var displayName: String =
             if (descriptor == null) {
                 StringUtils.capitalize(simpleName)
             } else {
@@ -603,6 +603,11 @@ class RecipeMarkdownGenerator : Runnable {
                 // Recipes that don't have a path are part of the "core" set of recipes
                 result.appendLine("$indent* [Core](reference/recipes/core-README.md)")
             } else {
+                // Some nested recipes have a `github` path which gets converted into `Github` when it should be `GitHub`.
+                if (displayName == "Github") {
+                    displayName = "GitHub";
+                }
+
                 result.appendLine("$indent* [$displayName](reference/recipes/$path/README.md)")
             }
 
