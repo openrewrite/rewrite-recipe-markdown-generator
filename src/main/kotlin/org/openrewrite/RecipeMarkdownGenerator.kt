@@ -1193,6 +1193,7 @@ class RecipeMarkdownGenerator : Runnable {
     ) {
         val gradleSnippet = if (suppressGradle) "" else """
                             {% tab title="Gradle" %}
+                            1. Add the following to your `build.gradle` file:
                             {% code title="build.gradle" %}
                             ```groovy
                             plugins {
@@ -1208,10 +1209,12 @@ class RecipeMarkdownGenerator : Runnable {
                             }
                             ```
                             {% endcode %}
+                            2. Run `gradle rewriteRun` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
         val mavenSnippet = if (suppressMaven) "" else """
                             {% tab title="Maven" %}
+                            1. Add the following to your `pom.xml` file:
                             {% code title="pom.xml" %}
                             ```xml
                             <project>
@@ -1232,6 +1235,7 @@ class RecipeMarkdownGenerator : Runnable {
                             </project>
                             ```
                             {% endcode %}
+                            2. Run `mvn rewrite:run` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
         writeln(
@@ -1255,6 +1259,7 @@ $mavenSnippet
     ) {
         val gradleSnippet = if (suppressGradle) "" else """
                             {% tab title="Gradle" %}
+                            1. Add the following to your `build.gradle` file:
                             {% code title="build.gradle" %}
                             ```groovy
                             plugins {
@@ -1274,10 +1279,12 @@ $mavenSnippet
                             }
                             ```
                             {% endcode %}
+                            2. Run `gradle rewriteRun` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
         val mavenSnippet = if (suppressMaven) "" else """
                             {% tab title="Maven" %}
+                            1. Add the following to your `pom.xml` file:
                             {% code title="pom.xml" %}
                             ```xml
                             <project>
@@ -1305,6 +1312,7 @@ $mavenSnippet
                             </project>
                             ```
                             {% endcode %}
+                            2. Run `mvn rewrite:run` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
         writeln(
@@ -1331,6 +1339,7 @@ $mavenSnippet
         )
         val gradleSnippet = if (suppressGradle) "" else """
                             {% tab title="Gradle" %}
+                            1. Add the following to your `build.gradle` file:
                             {% code title="build.gradle" %}
                             ```groovy
                             plugins {
@@ -1347,6 +1356,7 @@ $mavenSnippet
                             
                             ```
                             {% endcode %}
+                            2. Run `gradle rewriteRun` to run the recipe.
                             {% endtab %}
                             
                             {% tab title="Gradle init script" %}
@@ -1382,6 +1392,7 @@ $mavenSnippet
                             """.trimIndent()
         val mavenSnippet = if (suppressMaven) "" else """
                             {% tab title="Maven POM" %}
+                            1. Add the following to your `pom.xml` file:
                             {% code title="pom.xml" %}
                             ```xml
                             <project>
@@ -1402,6 +1413,7 @@ $mavenSnippet
                             </project>
                             ```
                             {% endcode %}
+                            2. Run `mvn rewrite:run` to run the recipe.
                             {% endtab %}
                             
                             {% tab title="Maven Command Line" %}
@@ -1439,6 +1451,7 @@ $mavenSnippet
         )
         val gradleSnippet = if (suppressGradle) "" else """
                             {% tab title="Gradle" %}
+                            1. Add the following to your `build.gradle` file:
                             {% code title="build.gradle" %}
                             ```groovy
                             plugins {
@@ -1458,6 +1471,7 @@ $mavenSnippet
                             }
                             ```
                             {% endcode %}
+                            2. Run `gradle rewriteRun` to run the recipe.
                             {% endtab %}
                             
                             {% tab title="Gradle init script" %}
@@ -1493,6 +1507,7 @@ $mavenSnippet
                             """.trimIndent()
         val mavenSnippet = if (suppressMaven) "" else """
                             {% tab title="Maven POM" %}
+                            1. Add the following to your `pom.xml` file:
                             {% code title="pom.xml" %}
                             ```xml
                             <project>
@@ -1520,6 +1535,7 @@ $mavenSnippet
                             </project>
                             ```
                             {% endcode %}
+                            2. Run `mvn rewrite:run` to run the recipe.
                             {% endtab %}
                             
                             {% tab title="Maven Command Line" %}
