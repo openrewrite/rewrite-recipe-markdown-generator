@@ -154,7 +154,7 @@ tasks.named<JavaExec>("run").configure {
     doLast {
         this as JavaExec
         @Suppress("UNNECESSARY_NOT_NULL_ASSERTION") // IntelliJ says this is unnecessary, kotlin compiler disagrees
-        logger.lifecycle("Wrote generated docs to: ${args!!.first()}")
+        logger.lifecycle("Wrote generated docs to: file://${args!!.first()}")
     }
 }
 
@@ -164,4 +164,9 @@ tasks.withType<MarkdownToHtmlTask> {
     dependsOn("run")
     sourceDir = file("build/docs")
     outputDir = file("build/html")
+    doLast {
+        this as MarkdownToHtmlTask
+        @Suppress("UNNECESSARY_NOT_NULL_ASSERTION") // IntelliJ says this is unnecessary, kotlin compiler disagrees
+        logger.lifecycle("Wrote generated html to: file://${outputDir}")
+    }
 }
