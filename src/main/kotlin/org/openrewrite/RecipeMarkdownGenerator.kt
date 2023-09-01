@@ -1193,6 +1193,7 @@ class RecipeMarkdownGenerator : Runnable {
     ) {
         val gradleSnippet = if (suppressGradle) "" else """
                             {% tab title="Gradle" %}
+                            1. Add the following to your `build.gradle` file:
                             {% code title="build.gradle" %}
                             ```groovy
                             plugins {
@@ -1208,12 +1209,14 @@ class RecipeMarkdownGenerator : Runnable {
                             }
                             ```
                             {% endcode %}
+                            2. Run `gradle rewriteRun` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
         val mavenSnippet = if (suppressMaven) "" else """
                             {% tab title="Maven" %}
+                            1. Add the following to your `pom.xml` file:
                             {% code title="pom.xml" %}
-                            ```markup
+                            ```xml
                             <project>
                               <build>
                                 <plugins>
@@ -1232,6 +1235,7 @@ class RecipeMarkdownGenerator : Runnable {
                             </project>
                             ```
                             {% endcode %}
+                            2. Run `mvn rewrite:run` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
         writeln(
@@ -1255,6 +1259,7 @@ $mavenSnippet
     ) {
         val gradleSnippet = if (suppressGradle) "" else """
                             {% tab title="Gradle" %}
+                            1. Add the following to your `build.gradle` file:
                             {% code title="build.gradle" %}
                             ```groovy
                             plugins {
@@ -1274,12 +1279,14 @@ $mavenSnippet
                             }
                             ```
                             {% endcode %}
+                            2. Run `gradle rewriteRun` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
         val mavenSnippet = if (suppressMaven) "" else """
                             {% tab title="Maven" %}
+                            1. Add the following to your `pom.xml` file:
                             {% code title="pom.xml" %}
-                            ```markup
+                            ```xml
                             <project>
                               <build>
                                 <plugins>
@@ -1305,6 +1312,7 @@ $mavenSnippet
                             </project>
                             ```
                             {% endcode %}
+                            2. Run `mvn rewrite:run` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
         writeln(
@@ -1331,6 +1339,7 @@ $mavenSnippet
         )
         val gradleSnippet = if (suppressGradle) "" else """
                             {% tab title="Gradle" %}
+                            1. Add the following to your `build.gradle` file:
                             {% code title="build.gradle" %}
                             ```groovy
                             plugins {
@@ -1347,12 +1356,45 @@ $mavenSnippet
                             
                             ```
                             {% endcode %}
+                            2. Run `gradle rewriteRun` to run the recipe.
+                            {% endtab %}
+                            
+                            {% tab title="Gradle init script" %}
+                            1. Create a file named `init.gradle` in the root of your project.
+                            {% code title="init.gradle" %}
+                            ```groovy
+                            initscript {
+                                repositories {
+                                    maven { url "https://plugins.gradle.org/m2" }
+                                }
+                                dependencies { classpath("org.openrewrite:plugin:latest.release") }
+                            }
+                            rootProject {
+                                plugins.apply(org.openrewrite.gradle.RewritePlugin)
+                                dependencies {
+                                    rewrite("org.openrewrite:rewrite-java")
+                                }
+                                rewrite {
+                                    activeRecipe("${recipeDescriptor.name}")
+                                }
+                                afterEvaluate {
+                                    if (repositories.isEmpty()) {
+                                        repositories {
+                                            mavenCentral()
+                                        }
+                                    }
+                                }
+                            }
+                            ```
+                            {% endcode %}
+                            2. Run `gradle --init-script init.gradle rewriteRun` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
         val mavenSnippet = if (suppressMaven) "" else """
                             {% tab title="Maven POM" %}
+                            1. Add the following to your `pom.xml` file:
                             {% code title="pom.xml" %}
-                            ```markup
+                            ```xml
                             <project>
                               <build>
                                 <plugins>
@@ -1371,6 +1413,7 @@ $mavenSnippet
                             </project>
                             ```
                             {% endcode %}
+                            2. Run `mvn rewrite:run` to run the recipe.
                             {% endtab %}
                             
                             {% tab title="Maven Command Line" %}
@@ -1408,6 +1451,7 @@ $mavenSnippet
         )
         val gradleSnippet = if (suppressGradle) "" else """
                             {% tab title="Gradle" %}
+                            1. Add the following to your `build.gradle` file:
                             {% code title="build.gradle" %}
                             ```groovy
                             plugins {
@@ -1427,12 +1471,45 @@ $mavenSnippet
                             }
                             ```
                             {% endcode %}
+                            2. Run `gradle rewriteRun` to run the recipe.
+                            {% endtab %}
+                            
+                            {% tab title="Gradle init script" %}
+                            1. Create a file named `init.gradle` in the root of your project.
+                            {% code title="init.gradle" %}
+                            ```groovy
+                            initscript {
+                                repositories {
+                                    maven { url "https://plugins.gradle.org/m2" }
+                                }
+                                dependencies { classpath("org.openrewrite:plugin:${gradlePluginVersion}") }
+                            }
+                            rootProject {
+                                plugins.apply(org.openrewrite.gradle.RewritePlugin)
+                                dependencies {
+                                    rewrite("${origin.groupId}:${origin.artifactId}:${origin.version}")
+                                }
+                                rewrite {
+                                    activeRecipe("${recipeDescriptor.name}")
+                                }
+                                afterEvaluate {
+                                    if (repositories.isEmpty()) {
+                                        repositories {
+                                            mavenCentral()
+                                        }
+                                    }
+                                }
+                            }
+                            ```
+                            {% endcode %}
+                            2. Run `gradle --init-script init.gradle rewriteRun` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
         val mavenSnippet = if (suppressMaven) "" else """
                             {% tab title="Maven POM" %}
+                            1. Add the following to your `pom.xml` file:
                             {% code title="pom.xml" %}
-                            ```markup
+                            ```xml
                             <project>
                               <build>
                                 <plugins>
@@ -1458,6 +1535,7 @@ $mavenSnippet
                             </project>
                             ```
                             {% endcode %}
+                            2. Run `mvn rewrite:run` to run the recipe.
                             {% endtab %}
                             
                             {% tab title="Maven Command Line" %}

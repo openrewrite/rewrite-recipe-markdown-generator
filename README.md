@@ -64,16 +64,26 @@ that needs to be updated manually.
 
 Quickstart:
 
-```sh
-# Will place generated docs into build/docs
+### Create Markdown files in `build/docs`
+```shell
 ./gradlew run
+```
 
-# Will place generated docs into the specified directory
+### Create Markdown files in a specific directory
+```shell
 ./gradlew run --args="desired/output/path"
+```
 
-# or, generally:
+### Print additional options
+```shell
 ./gradlew run --args="--help"
 ```
+
+### Create HTML files from Markdown
+```shell
+./gradlew markdownToHtml
+```
+
 ## Known Issues
 
 The `SUMMARY_snippet.md` file generated does not entirely match the one in the `rewrite-docs` repository. This is 
