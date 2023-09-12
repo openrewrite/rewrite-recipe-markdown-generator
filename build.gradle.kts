@@ -80,12 +80,13 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-github-actions:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-hibernate:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-java-security:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-java-dependencies:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-java-security:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-jenkins:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-jhipster:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-kubernetes:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-liberty:$rewriteVersion")
+    //"recipe"("org.openrewrite.recipe:rewrite-launchdarkly:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-logging-frameworks:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-micrometer:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-micronaut:$rewriteVersion")
@@ -97,7 +98,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-sql:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-static-analysis:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-terraform:$rewriteVersion")
-    //"recipe"("org.openrewrite.recipe:rewrite-testcontainers:$rewriteVersion") // TODO Add after first release
+    //"recipe"("org.openrewrite.recipe:rewrite-testcontainers:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
 }
 
