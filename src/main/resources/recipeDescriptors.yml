@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.5.0"
+  version: "8.5.2"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -849,7 +849,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.5.0"
+  version: "8.5.2"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1414,7 +1414,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.5.0"
+  version: "8.5.2"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1433,7 +1433,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.5.0"
+  version: "8.5.2"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1584,7 +1584,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.5.0"
+  version: "8.5.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -3335,7 +3335,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.5.0"
+  version: "8.5.2"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3385,7 +3385,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.4.6"
+  version: "1.4.9"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -4266,7 +4266,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.5.0"
+  version: "8.5.2"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -4413,12 +4413,15 @@ rewrite-maven:
       - name: "executions"
         type: "String"
         required: false
+      - name: "filePattern"
+        type: "String"
+        required: false
       - name: "groupId"
         type: "String"
         required: true
       - name: "version"
         type: "String"
-        required: true
+        required: false
       isImperative: true
       artifactId: "rewrite-maven"
     org.openrewrite.maven.AddPluginDependency:
@@ -4789,6 +4792,24 @@ rewrite-maven:
       - name: "scope"
         type: "String"
         required: false
+      isImperative: true
+      artifactId: "rewrite-maven"
+    org.openrewrite.maven.IncrementProjectVersion:
+      name: "org.openrewrite.maven.IncrementProjectVersion"
+      description: "Increase Maven project version by incrementing either the major,\
+        \ minor, or patch version as defined by [semver](https://semver.org/). Other\
+        \ versioning schemes are not supported."
+      docLink: "https://docs.openrewrite.org/recipes/maven/incrementprojectversion"
+      options:
+      - name: "artifactId"
+        type: "String"
+        required: true
+      - name: "digit"
+        type: "SemverDigit"
+        required: true
+      - name: "groupId"
+        type: "String"
+        required: true
       isImperative: true
       artifactId: "rewrite-maven"
     org.openrewrite.maven.ManageDependencies:
@@ -7210,7 +7231,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.5.0"
+  version: "8.5.2"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -11873,7 +11894,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.5.0"
+  version: "8.5.2"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -12079,7 +12100,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.5.0"
+  version: "8.5.2"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
