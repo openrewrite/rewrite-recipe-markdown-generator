@@ -3,7 +3,7 @@ package org.openrewrite
 import org.openrewrite.config.OptionDescriptor
 import org.openrewrite.config.RecipeDescriptor
 
-fun RecipeDescriptor.asYaml(): String {
+fun  RecipeDescriptor.asYaml( ): String {
     val s = StringBuilder()
     s.appendLine("""
         ---
@@ -12,27 +12,27 @@ fun RecipeDescriptor.asYaml(): String {
         displayName: $displayName
         description: $description
     """.trimIndent())
-    if(tags.isNotEmpty()) {
+    if (tags.isNotEmpty()) {
         s.appendLine("tags:")
-        for(tag in tags) {
+        for (tag in tags) {
             s.appendLine("  - $tag")
         }
     }
-    if(options.isNotEmpty()) {
-        for(option in options) {
+    if (options.isNotEmpty()) {
+        for (option in options) {
             s.appendLine(option.asYaml())
         }
     }
-    if(recipeList.isNotEmpty()) {
+    if (recipeList.isNotEmpty()) {
         s.appendLine("recipeList:")
-        for(subRecipe in recipeList) {
+        for (subRecipe in recipeList) {
             s.append("  - ${subRecipe.name}")
-            if(subRecipe.options.isEmpty()) {
+            if (subRecipe.options.isEmpty()) {
                 s.appendLine()
             } else {
                 s.appendLine(":")
             }
-            for(subOption in subRecipe.options) {
+            for (subOption in subRecipe.options) {
                 s.append(subOption.asYaml(3))
             }
         }
@@ -40,18 +40,18 @@ fun RecipeDescriptor.asYaml(): String {
     return s.toString()
 }
 
-fun OptionDescriptor.asYaml(indentation: Int = 0): String {
-    if(value == null) {
+fun  OptionDescriptor.asYaml( indentation: Int = 0): String {
+    if (value == null) {
         return ""
     }
     val prefixBuilder = StringBuilder()
-    (0 until indentation).forEach { _ ->
+    (0 untilindentation).forEach{ _  -> 
         prefixBuilder.append("  ")
     }
 
     val prefix = prefixBuilder.toString()
-    val formattedValue = if(value is Array<*>) {
-        val asArray = value as Array<*>
+    val formattedValue = if (value is Array<*>) {
+        val asArray =  value asArray<*>
         "[${asArray.joinToString(", ")}]"
     } else {
         value
