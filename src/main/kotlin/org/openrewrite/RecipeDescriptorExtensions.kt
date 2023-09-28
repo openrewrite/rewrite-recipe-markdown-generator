@@ -3,7 +3,7 @@ package org.openrewrite
 import org.openrewrite.config.OptionDescriptor
 import org.openrewrite.config.RecipeDescriptor
 
-fun  RecipeDescriptor.asYaml( ): String {
+fun RecipeDescriptor.asYaml(): String {
     val s = StringBuilder()
     s.appendLine("""
         ---
@@ -40,12 +40,12 @@ fun  RecipeDescriptor.asYaml( ): String {
     return s.toString()
 }
 
-fun  OptionDescriptor.asYaml( indentation: Int = 0): String {
+fun OptionDescriptor.asYaml(indentation: Int = 0): String {
     if (value == null) {
         return ""
     }
     val prefixBuilder = StringBuilder()
-    (0 untilindentation).forEach{ _  -> 
+    (0 until indentation).forEach { _  ->
         prefixBuilder.append("  ")
     }
 
