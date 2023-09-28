@@ -51,7 +51,7 @@ fun OptionDescriptor.asYaml(indentation: Int = 0): String {
 
     val prefix = prefixBuilder.toString()
     val formattedValue = if (value is Array<*>) {
-        val asArray =  value asArray<*>
+        val asArray =  value as Array<*>
         "[${asArray.joinToString(", ")}]"
     } else {
         value
