@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.7.0-SNAPSHOT"
+  version: "8.8.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -468,6 +468,13 @@ rewrite-core:
       name: "org.openrewrite.config.CompositeRecipe"
       description: "A recipe that consists of a list of other recipes."
       docLink: "https://docs.openrewrite.org/recipes/config/compositerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-core"
+    org.openrewrite.config.DeclarativeRecipe$LazyLoadedRecipe:
+      name: "org.openrewrite.config.DeclarativeRecipe$LazyLoadedRecipe"
+      description: "Recipe that is loaded lazily."
+      docLink: "https://docs.openrewrite.org/recipes/config/declarativerecipe$lazyloadedrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-core"
@@ -849,7 +856,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.7.0-SNAPSHOT"
+  version: "8.8.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1414,7 +1421,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.7.0-SNAPSHOT"
+  version: "8.8.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1433,7 +1440,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.7.0-SNAPSHOT"
+  version: "8.8.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1584,7 +1591,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.7.0-SNAPSHOT"
+  version: "8.8.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -2299,6 +2306,9 @@ rewrite-java:
       - name: "ignoreDeprecatedScopes"
         type: "Boolean"
         required: false
+      - name: "matchInherited"
+        type: "Boolean"
+        required: false
       - name: "typePattern"
         type: "String"
         required: false
@@ -2363,6 +2373,9 @@ rewrite-java:
       - name: "fullyQualifiedTypeName"
         type: "String"
         required: true
+      - name: "matchInherited"
+        type: "Boolean"
+        required: false
       isImperative: true
       artifactId: "rewrite-java"
     org.openrewrite.java.search.FindFieldsOfType:
@@ -2373,6 +2386,9 @@ rewrite-java:
       - name: "fullyQualifiedTypeName"
         type: "String"
         required: true
+      - name: "matchInherited"
+        type: "Boolean"
+        required: false
       isImperative: true
       artifactId: "rewrite-java"
     org.openrewrite.java.search.FindImplementations:
@@ -2380,7 +2396,13 @@ rewrite-java:
       description: "Find source files that contain a class declaration implementing\
         \ a specific interface."
       docLink: "https://docs.openrewrite.org/recipes/java/search/findimplementations"
-      options: []
+      options:
+      - name: "interfaceFullyQualifiedName"
+        type: "String"
+        required: true
+      - name: "matchInherited"
+        type: "Boolean"
+        required: false
       isImperative: true
       artifactId: "rewrite-java"
     org.openrewrite.java.search.FindImports:
@@ -2389,6 +2411,9 @@ rewrite-java:
         \ pattern, regardless of whether that import is used in the code."
       docLink: "https://docs.openrewrite.org/recipes/java/search/findimports"
       options:
+      - name: "matchInherited"
+        type: "Boolean"
+        required: false
       - name: "typePattern"
         type: "String"
         required: false
@@ -3335,7 +3360,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.7.0-SNAPSHOT"
+  version: "8.8.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -4253,7 +4278,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.7.0-SNAPSHOT"
+  version: "8.8.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -4508,6 +4533,13 @@ rewrite-maven:
         type: "String"
         required: true
       isImperative: true
+      artifactId: "rewrite-maven"
+    org.openrewrite.maven.BestPractices:
+      name: "org.openrewrite.maven.BestPractices"
+      description: "Applies best practices to Maven POMs."
+      docLink: "https://docs.openrewrite.org/recipes/maven/bestpractices"
+      options: []
+      isImperative: false
       artifactId: "rewrite-maven"
     org.openrewrite.maven.ChangeDependencyClassifier:
       name: "org.openrewrite.maven.ChangeDependencyClassifier"
@@ -5094,6 +5126,22 @@ rewrite-maven:
       options: []
       isImperative: true
       artifactId: "rewrite-maven"
+    org.openrewrite.maven.cleanup.ExplicitPluginGroupId:
+      name: "org.openrewrite.maven.cleanup.ExplicitPluginGroupId"
+      description: "Add the default `<groupId>org.apache.maven.plugins</groupId>`\
+        \ to plugins for clarity."
+      docLink: "https://docs.openrewrite.org/recipes/maven/cleanup/explicitplugingroupid"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-maven"
+    org.openrewrite.maven.cleanup.PrefixlessExpressions:
+      name: "org.openrewrite.maven.cleanup.PrefixlessExpressions"
+      description: "MNG-7404 drops support for prefixless in POMs. This recipe will\
+        \ add the `project.` prefix where missing."
+      docLink: "https://docs.openrewrite.org/recipes/maven/cleanup/prefixlessexpressions"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-maven"
     org.openrewrite.maven.search.DependencyInsight:
       name: "org.openrewrite.maven.search.DependencyInsight"
       description: "Find direct and transitive dependencies matching a group, artifact,\
@@ -5220,6 +5268,19 @@ rewrite-maven:
         \ each `pom.xml` based on its defined repositories and effective `settings.xml`."
       docLink: "https://docs.openrewrite.org/recipes/maven/search/findrepositoryorder"
       options: []
+      isImperative: true
+      artifactId: "rewrite-maven"
+    org.openrewrite.maven.search.ParentPomInsight:
+      name: "org.openrewrite.maven.search.ParentPomInsight"
+      description: "Find Maven parents matching a `groupId` and `artifactId`."
+      docLink: "https://docs.openrewrite.org/recipes/maven/search/parentpominsight"
+      options:
+      - name: "artifactIdPattern"
+        type: "String"
+        required: true
+      - name: "groupIdPattern"
+        type: "String"
+        required: true
       isImperative: true
       artifactId: "rewrite-maven"
     org.openrewrite.maven.security.UseHttpsForRepositories:
@@ -5652,6 +5713,44 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.IBMSemeru:
+      name: "org.openrewrite.java.migrate.IBMSemeru"
+      description: "This recipe will apply changes commonly needed when upgrading\
+        \ Java versions. The solutions provided in this list are solutions only availible\
+        \ in IBM Semeru Runtimes.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/ibmsemeru"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.InternalBindContextFactory:
+      name: "org.openrewrite.java.migrate.InternalBindContextFactory"
+      description: "Do not use the `com.sun.xml.internal.bind.v2.ContextFactory` class."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/internalbindcontextfactory"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.JREDoNotUseSunNetSslInternalSslProvider:
+      name: "org.openrewrite.java.migrate.JREDoNotUseSunNetSslInternalSslProvider"
+      description: "Do not use the `com.sun.net.ssl.internal.ssl.Provider` class."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jredonotusesunnetsslinternalsslprovider"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.JREDoNotUseSunNetSslInternalWwwProtocol:
+      name: "org.openrewrite.java.migrate.JREDoNotUseSunNetSslInternalWwwProtocol"
+      description: "Do not use the `com.sun.net.ssl.internal.www.protocol` package."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jredonotusesunnetsslinternalwwwprotocol"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.JREDoNotUseSunNetSslInternalWwwProtocolHttpsHandler:
+      name: "org.openrewrite.java.migrate.JREDoNotUseSunNetSslInternalWwwProtocolHttpsHandler"
+      description: "Do not use the `com.sun.net.ssl.internal.www.protocol.https.Handler`\
+        \ class."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jredonotusesunnetsslinternalwwwprotocolhttpshandler"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.Java8toJava11:
       name: "org.openrewrite.java.migrate.Java8toJava11"
       description: "This recipe will apply changes commonly needed when upgrading\
@@ -5772,13 +5871,6 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.apache.commons.io.ApacheCommonsFileUtilsRecipes:
-      name: "org.openrewrite.java.migrate.apache.commons.io.ApacheCommonsFileUtilsRecipes"
-      description: "Refaster template recipes for `org.openrewrite.java.migrate.apache.commons.io.ApacheCommonsFileUtils`."
-      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/io/apachecommonsfileutilsrecipes"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.apache.commons.io.ApacheFileUtilsToJavaFiles:
       name: "org.openrewrite.java.migrate.apache.commons.io.ApacheFileUtilsToJavaFiles"
       description: "Prefer the Java standard library's `java.nio.file.Files` over\
@@ -5824,13 +5916,6 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/io/usesystemlineseparator"
       options: []
       isImperative: false
-      artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes:
-      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes"
-      description: "Refaster template recipes for `org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtils`."
-      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes"
-      options: []
-      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.apache.commons.lang.IsNotEmptyToJdk:
       name: "org.openrewrite.java.migrate.apache.commons.lang.IsNotEmptyToJdk"
@@ -6590,6 +6675,25 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.RemovedIsParmetersProvidedMethod:
+      name: "org.openrewrite.java.migrate.jakarta.RemovedIsParmetersProvidedMethod"
+      description: "Expression Language prior to 5.0 provides the deprecated MethodExpression.isParmetersProvided()\
+        \ method, with the word 'parameter' misspelled in the method name.  This method\
+        \ is unavailable in Jakarta Expression Language 5.0. Use the correctly spelled\
+        \ MethodExpression.isParametersProvided() method instead.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/removedisparmetersprovidedmethod"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.RemovedSOAPElementFactory:
+      name: "org.openrewrite.java.migrate.jakarta.RemovedSOAPElementFactory"
+      description: "XML Web Services prior to 4.0 provides the deprecated SOAPElementFactory\
+        \ class,  which is removed in XML Web Services 4.0. The recommended replacement\
+        \ is to use jakarta.xml.soap.SOAPFactory to create SOAPElements.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/removedsoapelementfactory"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.RestAssuredJavaxToJakarta:
       name: "org.openrewrite.java.migrate.jakarta.RestAssuredJavaxToJakarta"
       description: "Java EE has been rebranded to Jakarta EE.  This recipe replaces\
@@ -6643,6 +6747,29 @@ rewrite-migrate-java:
         required: true
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.javax.AddJaxbRuntime$AddJaxbRuntimeGradle:
+      name: "org.openrewrite.java.migrate.javax.AddJaxbRuntime$AddJaxbRuntimeGradle"
+      description: "Update Gradle build files to use the latest JAXB runtime from\
+        \ Jakarta EE 8 to maintain compatibility with Java version 11 or greater.\
+        \  The recipe will add a JAXB run-time, in `compileOnly`+`testImplementation`\
+        \ configurations, to any project that has a transitive dependency on the JAXB\
+        \ API. **The resulting dependencies still use the `javax` namespace, despite\
+        \ the move to the Jakarta artifact**."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/javax/addjaxbruntime$addjaxbruntimegradle"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.javax.AddJaxbRuntime$AddJaxbRuntimeMaven:
+      name: "org.openrewrite.java.migrate.javax.AddJaxbRuntime$AddJaxbRuntimeMaven"
+      description: "Update Maven build files to use the latest JAXB runtime from Jakarta\
+        \ EE 8 to maintain compatibility with Java version 11 or greater.  The recipe\
+        \ will add a JAXB run-time, in `provided` scope, to any project that has a\
+        \ transitive dependency on the JAXB API. **The resulting dependencies still\
+        \ use the `javax` namespace, despite the move to the Jakarta artifact**."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/javax/addjaxbruntime$addjaxbruntimemaven"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.javax.AddJaxwsDependencies:
       name: "org.openrewrite.java.migrate.javax.AddJaxwsDependencies"
       description: "This recipe will add explicit dependencies for Jakarta EE 8 when\
@@ -6663,6 +6790,29 @@ rewrite-migrate-java:
         \ on the JAX-WS API. **The resulting dependencies still use the `javax` namespace,\
         \ despite the move to the Jakarta artifact**."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/javax/addjaxwsruntime"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.javax.AddJaxwsRuntime$AddJaxwsRuntimeGradle:
+      name: "org.openrewrite.java.migrate.javax.AddJaxwsRuntime$AddJaxwsRuntimeGradle"
+      description: "Update Gradle build files to use the latest JAX-WS runtime from\
+        \ Jakarta EE 8 to maintain compatibility with Java version 11 or greater.\
+        \  The recipe will add a JAX-WS run-time, in `compileOnly`+`testImplementation`\
+        \ configurations, to any project that has a transitive dependency on the JAX-WS\
+        \ API. **The resulting dependencies still use the `javax` namespace, despite\
+        \ the move to the Jakarta artifact**."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/javax/addjaxwsruntime$addjaxwsruntimegradle"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.javax.AddJaxwsRuntime$AddJaxwsRuntimeMaven:
+      name: "org.openrewrite.java.migrate.javax.AddJaxwsRuntime$AddJaxwsRuntimeMaven"
+      description: "Update maven build files to use the latest JAX-WS runtime from\
+        \ Jakarta EE 8 to maintain compatibility with Java version 11 or greater.\
+        \  The recipe will add a JAX-WS run-time, in `provided` scope, to any project\
+        \ that has a transitive dependency on the JAX-WS API. **The resulting dependencies\
+        \ still use the `javax` namespace, despite the move to the Jakarta artifact**."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/javax/addjaxwsruntime$addjaxwsruntimemaven"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
@@ -6905,24 +7055,6 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.lang.StringRulesRecipes:
-      name: "org.openrewrite.java.migrate.lang.StringRulesRecipes"
-      description: "Refaster template recipes for `org.openrewrite.java.migrate.lang.StringRules`."
-      docLink: "https://docs.openrewrite.org/recipes/java/migrate/lang/stringrulesrecipes"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.lang.UseStringIsEmptyRecipe:
-      name: "org.openrewrite.java.migrate.lang.UseStringIsEmptyRecipe"
-      description: "Recipe created for the following Refaster template:\n```java\n\
-        public class UseStringIsEmpty {\n    \n    @BeforeTemplate\n    boolean before(String\
-        \ s) {\n        return s.length() > 0;\n    }\n    \n    @AfterTemplate\n\
-        \    boolean after(String s) {\n        return !s.isEmpty();\n    }\n}\n```\n\
-        ."
-      docLink: "https://docs.openrewrite.org/recipes/java/migrate/lang/usestringisemptyrecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.lang.UseTextBlocks:
       name: "org.openrewrite.java.migrate.lang.UseTextBlocks"
       description: "Text blocks are easier to read than concatenated strings."
@@ -7054,13 +7186,6 @@ rewrite-migrate-java:
         required: true
       isImperative: true
       artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes:
-      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes"
-      description: "Refaster template recipes for `org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtils`."
-      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.metrics.SimplifyMicrometerMeterTags:
       name: "org.openrewrite.java.migrate.metrics.SimplifyMicrometerMeterTags"
       description: "Use the simplest method to add new tags."
@@ -7115,20 +7240,6 @@ rewrite-migrate-java:
         \ instead of the deprecated `java.net.URLEncoder#encode(String)` in Java 10\
         \ or higher."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/net/migrateurlencoderencode"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.plexus.PlexusFileUtilsRecipes:
-      name: "org.openrewrite.java.migrate.plexus.PlexusFileUtilsRecipes"
-      description: "Refaster template recipes for `org.openrewrite.java.migrate.plexus.PlexusFileUtils`."
-      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusfileutilsrecipes"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes:
-      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes"
-      description: "Refaster template recipes for `org.openrewrite.java.migrate.plexus.PlexusStringUtils`."
-      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
@@ -7319,7 +7430,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.7.0-SNAPSHOT"
+  version: "8.8.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -7873,6 +7984,20 @@ rewrite-spring:
         required: false
       isImperative: true
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.amqp.UseTlsAmqpConnectionString$UseTlsAmqpConnectionStringProperties:
+      name: "org.openrewrite.java.spring.amqp.UseTlsAmqpConnectionString$UseTlsAmqpConnectionStringProperties"
+      description: "Use TLS for AMQP connection strings."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/amqp/usetlsamqpconnectionstring$usetlsamqpconnectionstringproperties"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.amqp.UseTlsAmqpConnectionString$UseTlsAmqpConnectionStringYaml:
+      name: "org.openrewrite.java.spring.amqp.UseTlsAmqpConnectionString$UseTlsAmqpConnectionStringYaml"
+      description: "Use TLS for AMQP connection strings."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/amqp/usetlsamqpconnectionstring$usetlsamqpconnectionstringyaml"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.batch.ImplementChunkListenerDirectly:
       name: "org.openrewrite.java.spring.batch.ImplementChunkListenerDirectly"
       description: "As of 5.0 `ChunkListener` has default methods (made possible by\
@@ -8060,6 +8185,20 @@ rewrite-spring:
         \ properties but this turned out to be problematic for people that provided\
         \ their own `DataSource` beans."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/boot2/migratedatabasecredentials"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.boot2.MigrateDatabaseCredentials$MigrateDatabaseCredentialsForToolProperties:
+      name: "org.openrewrite.java.spring.boot2.MigrateDatabaseCredentials$MigrateDatabaseCredentialsForToolProperties"
+      description: "Migrate null credentials."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot2/migratedatabasecredentials$migratedatabasecredentialsfortoolproperties"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.boot2.MigrateDatabaseCredentials$MigrateDatabaseCredentialsForToolYaml:
+      name: "org.openrewrite.java.spring.boot2.MigrateDatabaseCredentials$MigrateDatabaseCredentialsForToolYaml"
+      description: "Migrate null credentials."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot2/migratedatabasecredentials$migratedatabasecredentialsfortoolyaml"
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
@@ -8779,6 +8918,20 @@ rewrite-spring:
       - name: "propertyKey"
         type: "String"
         required: true
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.data.UseTlsJdbcConnectionString$UseTlsJdbcConnectionStringProperties:
+      name: "org.openrewrite.java.spring.data.UseTlsJdbcConnectionString$UseTlsJdbcConnectionStringProperties"
+      description: "Use TLS for JDBC connection strings."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/data/usetlsjdbcconnectionstring$usetlsjdbcconnectionstringproperties"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.data.UseTlsJdbcConnectionString$UseTlsJdbcConnectionStringYaml:
+      name: "org.openrewrite.java.spring.data.UseTlsJdbcConnectionString$UseTlsJdbcConnectionStringYaml"
+      description: "Use TLS for JDBC connection strings."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/data/usetlsjdbcconnectionstring$usetlsjdbcconnectionstringyaml"
+      options: []
       isImperative: true
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.framework.EnvironmentAcceptsProfiles:
@@ -11998,7 +12151,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.7.0-SNAPSHOT"
+  version: "8.8.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -12204,7 +12357,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.7.0-SNAPSHOT"
+  version: "8.8.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
