@@ -471,13 +471,6 @@ rewrite-core:
       options: []
       isImperative: true
       artifactId: "rewrite-core"
-    org.openrewrite.config.DeclarativeRecipe$LazyLoadedRecipe:
-      name: "org.openrewrite.config.DeclarativeRecipe$LazyLoadedRecipe"
-      description: "Recipe that is loaded lazily."
-      docLink: "https://docs.openrewrite.org/recipes/config/declarativerecipe$lazyloadedrecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-core"
     org.openrewrite.search.FindBuildMetadata:
       name: "org.openrewrite.search.FindBuildMetadata"
       description: "Find source files with matching build metadata."
@@ -4851,15 +4844,6 @@ rewrite-maven:
         required: false
       isImperative: true
       artifactId: "rewrite-maven"
-    org.openrewrite.maven.NormalizeMavenVariables:
-      name: "org.openrewrite.maven.NormalizeMavenVariables"
-      description: "Variables are all referenced by the prefix `project.`. You may\
-        \ also see references with `pom.` as the prefix, or the prefix omitted entirely\
-        \ - these forms are now deprecated and should not be used."
-      docLink: "https://docs.openrewrite.org/recipes/maven/normalizemavenvariables"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-maven"
     org.openrewrite.maven.OrderPomElements:
       name: "org.openrewrite.maven.OrderPomElements"
       description: "Order POM elements according to the [recommended](http://maven.apache.org/developers/conventions/code.html#pom-code-convention)\
@@ -5315,6 +5299,28 @@ rewrite-micrometer:
       docLink: "https://docs.openrewrite.org/recipes/micrometer/upgrademicrometer"
       options: []
       isImperative: false
+      artifactId: "rewrite-micrometer"
+    org.openrewrite.micrometer.misk.MigrateEmptyLabelMiskCounter:
+      name: "org.openrewrite.micrometer.misk.MigrateEmptyLabelMiskCounter"
+      description: "Convert a Misk (Prometheus) counter to a Micrometer counter."
+      docLink: "https://docs.openrewrite.org/recipes/micrometer/misk/migrateemptylabelmiskcounter"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-micrometer"
+    org.openrewrite.micrometer.misk.MigrateMiskToMicrometer:
+      name: "org.openrewrite.micrometer.misk.MigrateMiskToMicrometer"
+      description: "This recipe will move Misk metrics to Micrometer, where that is\
+        \ possible to do without a loss of fidelity."
+      docLink: "https://docs.openrewrite.org/recipes/micrometer/misk/migratemisktomicrometer"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-micrometer"
+    org.openrewrite.micrometer.misk.NoExplicitEmptyLabelList:
+      name: "org.openrewrite.micrometer.misk.NoExplicitEmptyLabelList"
+      description: "`listOf()` is the default argument for the `labels` parameter."
+      docLink: "https://docs.openrewrite.org/recipes/micrometer/misk/noexplicitemptylabellist"
+      options: []
+      isImperative: true
       artifactId: "rewrite-micrometer"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
@@ -5871,6 +5877,29 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.io.ApacheCommonsFileUtilsRecipes:
+      name: "org.openrewrite.java.migrate.apache.commons.io.ApacheCommonsFileUtilsRecipes"
+      description: "Refaster template recipes for `org.openrewrite.java.migrate.apache.commons.io.ApacheCommonsFileUtils`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/io/apachecommonsfileutilsrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.io.ApacheCommonsFileUtilsRecipes$GetFileRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.io.ApacheCommonsFileUtilsRecipes$GetFileRecipe"
+      description: "Replace Apache Commons `FileUtils.getFile(String... name)` with\
+        \ JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/io/apachecommonsfileutilsrecipes$getfilerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.io.ApacheCommonsFileUtilsRecipes$WriteStringToFileRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.io.ApacheCommonsFileUtilsRecipes$WriteStringToFileRecipe"
+      description: "Replace Apache Commons `FileUtils.writeStringToFile(File file,\
+        \ String data)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/io/apachecommonsfileutilsrecipes$writestringtofilerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.apache.commons.io.ApacheFileUtilsToJavaFiles:
       name: "org.openrewrite.java.migrate.apache.commons.io.ApacheFileUtilsToJavaFiles"
       description: "Prefer the Java standard library's `java.nio.file.Files` over\
@@ -5916,6 +5945,149 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/io/usesystemlineseparator"
       options: []
       isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes"
+      description: "Refaster template recipes for `org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtils`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$AbbreviateRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$AbbreviateRecipe"
+      description: "Replace Apache Commons `StringUtils.abbreviate(String str, int\
+        \ maxWidth)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$abbreviaterecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$CapitalizeRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$CapitalizeRecipe"
+      description: "Replace Apache Commons `StringUtils.capitalize(String str)` with\
+        \ JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$capitalizerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$DefaultStringFallbackRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$DefaultStringFallbackRecipe"
+      description: "Replace Apache Commons `StringUtils.defaultString(String str,\
+        \ String nullDefault)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$defaultstringfallbackrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$DefaultStringRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$DefaultStringRecipe"
+      description: "Replace Apache Commons `StringUtils.defaultString(String str)`\
+        \ with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$defaultstringrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$DeleteWhitespaceRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$DeleteWhitespaceRecipe"
+      description: "Replace Apache Commons `StringUtils.deleteWhitespace(String str)`\
+        \ with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$deletewhitespacerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$EqualsIgnoreCaseRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$EqualsIgnoreCaseRecipe"
+      description: "Replace Apache Commons `StringUtils.equalsIgnoreCase(CharSequence\
+        \ cs1, CharSequence cs2)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$equalsignorecaserecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$EqualsRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$EqualsRecipe"
+      description: "Replace Apache Commons `StringUtils.equals(CharSequence cs1, CharSequence\
+        \ cs2)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$equalsrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$LowercaseRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$LowercaseRecipe"
+      description: "Replace Apache Commons `StringUtils.lowerCase(String str)` with\
+        \ JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$lowercaserecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$RemoveEndRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$RemoveEndRecipe"
+      description: "Replace Apache Commons `StringUtils.removeEnd(String str, String\
+        \ remove)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$removeendrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$ReplaceRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$ReplaceRecipe"
+      description: "Replace Apache Commons `StringUtils.replace(String text, String\
+        \ searchString, String replacement)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$replacerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$ReverseRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$ReverseRecipe"
+      description: "Replace Apache Commons `StringUtils.reverse(String str)` with\
+        \ JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$reverserecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$SplitRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$SplitRecipe"
+      description: "Replace Apache Commons `StringUtils.split(String str)` with JDK\
+        \ internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$splitrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$StripRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$StripRecipe"
+      description: "Replace Apache Commons `StringUtils.strip(String str)` with JDK\
+        \ internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$striprecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$TrimRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$TrimRecipe"
+      description: "Replace Apache Commons `StringUtils.trim(String str)` with JDK\
+        \ internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$trimrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$TrimToEmptyRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$TrimToEmptyRecipe"
+      description: "Replace Apache Commons `StringUtils.trimToEmpty(String str)` with\
+        \ JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$trimtoemptyrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$TrimToNullRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$TrimToNullRecipe"
+      description: "Replace Apache Commons `StringUtils.trimToNull(String str)` with\
+        \ JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$trimtonullrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$UppercaseRecipe:
+      name: "org.openrewrite.java.migrate.apache.commons.lang.ApacheCommonsStringUtilsRecipes$UppercaseRecipe"
+      description: "Replace Apache Commons `StringUtils.upperCase(String str)` with\
+        \ JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/apache/commons/lang/apachecommonsstringutilsrecipes$uppercaserecipe"
+      options: []
+      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.apache.commons.lang.IsNotEmptyToJdk:
       name: "org.openrewrite.java.migrate.apache.commons.lang.IsNotEmptyToJdk"
@@ -6685,6 +6857,15 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.RemovedJakartaFacesExpressionLanguageClasses:
+      name: "org.openrewrite.java.migrate.jakarta.RemovedJakartaFacesExpressionLanguageClasses"
+      description: "Several classes were removed and replaced in Jakarta Faces 4.0.\
+        \ The only Object definition not removed in the jakarta.faces.el package is\
+        \ the CompositeComponentExpressionHolder interface.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/removedjakartafacesexpressionlanguageclasses"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.RemovedSOAPElementFactory:
       name: "org.openrewrite.java.migrate.jakarta.RemovedSOAPElementFactory"
       description: "XML Web Services prior to 4.0 provides the deprecated SOAPElementFactory\
@@ -6745,29 +6926,6 @@ rewrite-migrate-java:
       - name: "runtime"
         type: "String"
         required: true
-      isImperative: true
-      artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.javax.AddJaxbRuntime$AddJaxbRuntimeGradle:
-      name: "org.openrewrite.java.migrate.javax.AddJaxbRuntime$AddJaxbRuntimeGradle"
-      description: "Update Gradle build files to use the latest JAXB runtime from\
-        \ Jakarta EE 8 to maintain compatibility with Java version 11 or greater.\
-        \  The recipe will add a JAXB run-time, in `compileOnly`+`testImplementation`\
-        \ configurations, to any project that has a transitive dependency on the JAXB\
-        \ API. **The resulting dependencies still use the `javax` namespace, despite\
-        \ the move to the Jakarta artifact**."
-      docLink: "https://docs.openrewrite.org/recipes/java/migrate/javax/addjaxbruntime$addjaxbruntimegradle"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.javax.AddJaxbRuntime$AddJaxbRuntimeMaven:
-      name: "org.openrewrite.java.migrate.javax.AddJaxbRuntime$AddJaxbRuntimeMaven"
-      description: "Update Maven build files to use the latest JAXB runtime from Jakarta\
-        \ EE 8 to maintain compatibility with Java version 11 or greater.  The recipe\
-        \ will add a JAXB run-time, in `provided` scope, to any project that has a\
-        \ transitive dependency on the JAXB API. **The resulting dependencies still\
-        \ use the `javax` namespace, despite the move to the Jakarta artifact**."
-      docLink: "https://docs.openrewrite.org/recipes/java/migrate/javax/addjaxbruntime$addjaxbruntimemaven"
-      options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.javax.AddJaxwsDependencies:
@@ -7055,6 +7213,50 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.StringRulesRecipes:
+      name: "org.openrewrite.java.migrate.lang.StringRulesRecipes"
+      description: "Refaster template recipes for `org.openrewrite.java.migrate.lang.StringRules`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/lang/stringrulesrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.StringRulesRecipes$IndexOfCharRecipe:
+      name: "org.openrewrite.java.migrate.lang.StringRulesRecipes$IndexOfCharRecipe"
+      description: "Replace `String.indexOf(char ch, int fromIndex)` with `String.indexOf(char)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/lang/stringrulesrecipes$indexofcharrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.StringRulesRecipes$IndexOfStringRecipe:
+      name: "org.openrewrite.java.migrate.lang.StringRulesRecipes$IndexOfStringRecipe"
+      description: "Replace `String.indexOf(String str, int fromIndex)` with `String.indexOf(String)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/lang/stringrulesrecipes$indexofstringrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.StringRulesRecipes$RedundantCallRecipe:
+      name: "org.openrewrite.java.migrate.lang.StringRulesRecipes$RedundantCallRecipe"
+      description: "Replace redundant `substring(..)` and `toString()` method calls\
+        \ with the `String` self."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/lang/stringrulesrecipes$redundantcallrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.StringRulesRecipes$UseEqualsIgnoreCaseRecipe:
+      name: "org.openrewrite.java.migrate.lang.StringRulesRecipes$UseEqualsIgnoreCaseRecipe"
+      description: "Replace `String` equality comparisons involving `.toLowerCase()`\
+        \ or `.toUpperCase()` with `String.equalsIgnoreCase(String anotherString)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/lang/stringrulesrecipes$useequalsignorecaserecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.UseStringIsEmptyRecipe:
+      name: "org.openrewrite.java.migrate.lang.UseStringIsEmptyRecipe"
+      description: "Replace `0 < s.length()` and `s.length() != 0` with `!s.isEmpty()`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/lang/usestringisemptyrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.lang.UseTextBlocks:
       name: "org.openrewrite.java.migrate.lang.UseTextBlocks"
       description: "Text blocks are easier to read than concatenated strings."
@@ -7186,6 +7388,124 @@ rewrite-migrate-java:
         required: true
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes:
+      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes"
+      description: "Refaster template recipes for `org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtils`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$AbbreviateRecipe:
+      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$AbbreviateRecipe"
+      description: "Replace Maven Shared `StringUtils.abbreviate(String str, int maxWidth)`\
+        \ with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes$abbreviaterecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$CapitaliseRecipe:
+      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$CapitaliseRecipe"
+      description: "Replace Maven Shared `StringUtils.capitalise(String str)` with\
+        \ JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes$capitaliserecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$DefaultStringFallbackRecipe:
+      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$DefaultStringFallbackRecipe"
+      description: "Replace Maven Shared `StringUtils.defaultString(Object obj, String\
+        \ nullDefault)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes$defaultstringfallbackrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$DefaultStringRecipe:
+      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$DefaultStringRecipe"
+      description: "Replace Maven Shared `StringUtils.defaultString(Object obj)` with\
+        \ JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes$defaultstringrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$DeleteWhitespaceRecipe:
+      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$DeleteWhitespaceRecipe"
+      description: "Replace Maven Shared `StringUtils.deleteWhitespace(String str)`\
+        \ with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes$deletewhitespacerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$EqualsIgnoreCaseRecipe:
+      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$EqualsIgnoreCaseRecipe"
+      description: "Replace Maven Shared `StringUtils.equalsIgnoreCase(String str1,\
+        \ String str2)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes$equalsignorecaserecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$EqualsRecipe:
+      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$EqualsRecipe"
+      description: "Replace Maven Shared `StringUtils.equals(String str1, String str2)`\
+        \ with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes$equalsrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$LowercaseRecipe:
+      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$LowercaseRecipe"
+      description: "Replace Maven Shared `StringUtils.lowerCase(String str)` with\
+        \ JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes$lowercaserecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$ReplaceRecipe:
+      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$ReplaceRecipe"
+      description: "Replace Maven Shared `StringUtils.replace(String text, String\
+        \ searchString, String replacement)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes$replacerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$ReverseRecipe:
+      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$ReverseRecipe"
+      description: "Replace Maven Shared `StringUtils.reverse(String str)` with JDK\
+        \ internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes$reverserecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$SplitRecipe:
+      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$SplitRecipe"
+      description: "Replace Maven Shared `StringUtils.split(String str)` with JDK\
+        \ internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes$splitrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$StripRecipe:
+      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$StripRecipe"
+      description: "Replace Maven Shared `StringUtils.strip(String str)` with JDK\
+        \ internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes$striprecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$TrimRecipe:
+      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$TrimRecipe"
+      description: "Replace Maven Shared `StringUtils.trim(String str)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes$trimrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$UppercaseRecipe:
+      name: "org.openrewrite.java.migrate.maven.shared.MavenSharedStringUtilsRecipes$UppercaseRecipe"
+      description: "Replace Maven Shared `StringUtils.upperCase(String str)` with\
+        \ JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/shared/mavensharedstringutilsrecipes$uppercaserecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.metrics.SimplifyMicrometerMeterTags:
       name: "org.openrewrite.java.migrate.metrics.SimplifyMicrometerMeterTags"
       description: "Use the simplest method to add new tags."
@@ -7240,6 +7560,156 @@ rewrite-migrate-java:
         \ instead of the deprecated `java.net.URLEncoder#encode(String)` in Java 10\
         \ or higher."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/net/migrateurlencoderencode"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusFileUtilsRecipes:
+      name: "org.openrewrite.java.migrate.plexus.PlexusFileUtilsRecipes"
+      description: "Refaster template recipes for `org.openrewrite.java.migrate.plexus.PlexusFileUtils`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusfileutilsrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusFileUtilsRecipes$DeleteDirectoryFileRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusFileUtilsRecipes$DeleteDirectoryFileRecipe"
+      description: "Replace Plexus `FileUtils.deleteDirectory(File directory)` with\
+        \ JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusfileutilsrecipes$deletedirectoryfilerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusFileUtilsRecipes$DeleteDirectoryStringRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusFileUtilsRecipes$DeleteDirectoryStringRecipe"
+      description: "Replace Plexus `FileUtils.deleteDirectory(String directory)` with\
+        \ JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusfileutilsrecipes$deletedirectorystringrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusFileUtilsRecipes$FileExistsStringRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusFileUtilsRecipes$FileExistsStringRecipe"
+      description: "Replace Plexus `FileUtils.fileExists(String fileName)` with JDK\
+        \ internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusfileutilsrecipes$fileexistsstringrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusFileUtilsRecipes$GetFileRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusFileUtilsRecipes$GetFileRecipe"
+      description: "Replace Plexus `FileUtils.getFile(String fileName)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusfileutilsrecipes$getfilerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes:
+      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes"
+      description: "Refaster template recipes for `org.openrewrite.java.migrate.plexus.PlexusStringUtils`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$AbbreviateRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$AbbreviateRecipe"
+      description: "Replace Plexus `StringUtils.abbreviate(String str, int maxWidth)`\
+        \ with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes$abbreviaterecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$CapitaliseRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$CapitaliseRecipe"
+      description: "Replace Plexus `StringUtils.capitalise(String str)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes$capitaliserecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$DefaultStringFallbackRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$DefaultStringFallbackRecipe"
+      description: "Replace Plexus `StringUtils.defaultString(Object obj, String nullDefault)`\
+        \ with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes$defaultstringfallbackrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$DefaultStringRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$DefaultStringRecipe"
+      description: "Replace Plexus `StringUtils.defaultString(Object obj)` with JDK\
+        \ internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes$defaultstringrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$DeleteWhitespaceRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$DeleteWhitespaceRecipe"
+      description: "Replace Plexus `StringUtils.deleteWhitespace(String str)` with\
+        \ JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes$deletewhitespacerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$EqualsIgnoreCaseRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$EqualsIgnoreCaseRecipe"
+      description: "Replace Plexus `StringUtils.equalsIgnoreCase(String str1, String\
+        \ str2)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes$equalsignorecaserecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$EqualsRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$EqualsRecipe"
+      description: "Replace Plexus `StringUtils.equals(String str1, String str2)`\
+        \ with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes$equalsrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$LowercaseRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$LowercaseRecipe"
+      description: "Replace Plexus `StringUtils.lowerCase(String str)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes$lowercaserecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$ReplaceRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$ReplaceRecipe"
+      description: "Replace Plexus `StringUtils.replace(String text, String searchString,\
+        \ String replacement)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes$replacerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$ReverseRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$ReverseRecipe"
+      description: "Replace Plexus `StringUtils.reverse(String str)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes$reverserecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$SplitRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$SplitRecipe"
+      description: "Replace Plexus `StringUtils.split(String str)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes$splitrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$StripRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$StripRecipe"
+      description: "Replace Plexus `StringUtils.strip(String str)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes$striprecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$TrimRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$TrimRecipe"
+      description: "Replace Plexus `StringUtils.trim(String str)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes$trimrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$UppercaseRecipe:
+      name: "org.openrewrite.java.migrate.plexus.PlexusStringUtilsRecipes$UppercaseRecipe"
+      description: "Replace Plexus `StringUtils.upperCase(String str)` with JDK internals."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/plexus/plexusstringutilsrecipes$uppercaserecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
@@ -7354,6 +7824,14 @@ rewrite-migrate-java:
         type: "Boolean"
         required: false
       isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.util.SequencedCollection:
+      name: "org.openrewrite.java.migrate.util.SequencedCollection"
+      description: "Replace older code patterns with `SequencedCollection` methods,\
+        \ as per https://openjdk.org/jeps/431."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/util/sequencedcollection"
+      options: []
+      isImperative: false
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.util.UseEnumSetOf:
       name: "org.openrewrite.java.migrate.util.UseEnumSetOf"
@@ -7984,20 +8462,6 @@ rewrite-spring:
         required: false
       isImperative: true
       artifactId: "rewrite-spring"
-    org.openrewrite.java.spring.amqp.UseTlsAmqpConnectionString$UseTlsAmqpConnectionStringProperties:
-      name: "org.openrewrite.java.spring.amqp.UseTlsAmqpConnectionString$UseTlsAmqpConnectionStringProperties"
-      description: "Use TLS for AMQP connection strings."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/amqp/usetlsamqpconnectionstring$usetlsamqpconnectionstringproperties"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-spring"
-    org.openrewrite.java.spring.amqp.UseTlsAmqpConnectionString$UseTlsAmqpConnectionStringYaml:
-      name: "org.openrewrite.java.spring.amqp.UseTlsAmqpConnectionString$UseTlsAmqpConnectionStringYaml"
-      description: "Use TLS for AMQP connection strings."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/amqp/usetlsamqpconnectionstring$usetlsamqpconnectionstringyaml"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.batch.ImplementChunkListenerDirectly:
       name: "org.openrewrite.java.spring.batch.ImplementChunkListenerDirectly"
       description: "As of 5.0 `ChunkListener` has default methods (made possible by\
@@ -8185,20 +8649,6 @@ rewrite-spring:
         \ properties but this turned out to be problematic for people that provided\
         \ their own `DataSource` beans."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/boot2/migratedatabasecredentials"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-spring"
-    org.openrewrite.java.spring.boot2.MigrateDatabaseCredentials$MigrateDatabaseCredentialsForToolProperties:
-      name: "org.openrewrite.java.spring.boot2.MigrateDatabaseCredentials$MigrateDatabaseCredentialsForToolProperties"
-      description: "Migrate null credentials."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot2/migratedatabasecredentials$migratedatabasecredentialsfortoolproperties"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-spring"
-    org.openrewrite.java.spring.boot2.MigrateDatabaseCredentials$MigrateDatabaseCredentialsForToolYaml:
-      name: "org.openrewrite.java.spring.boot2.MigrateDatabaseCredentials$MigrateDatabaseCredentialsForToolYaml"
-      description: "Migrate null credentials."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot2/migratedatabasecredentials$migratedatabasecredentialsfortoolyaml"
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
@@ -8918,20 +9368,6 @@ rewrite-spring:
       - name: "propertyKey"
         type: "String"
         required: true
-      isImperative: true
-      artifactId: "rewrite-spring"
-    org.openrewrite.java.spring.data.UseTlsJdbcConnectionString$UseTlsJdbcConnectionStringProperties:
-      name: "org.openrewrite.java.spring.data.UseTlsJdbcConnectionString$UseTlsJdbcConnectionStringProperties"
-      description: "Use TLS for JDBC connection strings."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/data/usetlsjdbcconnectionstring$usetlsjdbcconnectionstringproperties"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-spring"
-    org.openrewrite.java.spring.data.UseTlsJdbcConnectionString$UseTlsJdbcConnectionStringYaml:
-      name: "org.openrewrite.java.spring.data.UseTlsJdbcConnectionString$UseTlsJdbcConnectionStringYaml"
-      description: "Use TLS for JDBC connection strings."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/data/usetlsjdbcconnectionstring$usetlsjdbcconnectionstringyaml"
-      options: []
       isImperative: true
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.framework.EnvironmentAcceptsProfiles:
