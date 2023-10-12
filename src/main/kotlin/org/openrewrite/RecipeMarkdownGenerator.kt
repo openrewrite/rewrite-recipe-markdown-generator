@@ -1043,7 +1043,8 @@ class RecipeMarkdownGenerator : Runnable {
                         gradlePluginVersion,
                         mavenPluginVersion,
                         suppressMaven,
-                        suppressGradle
+                        suppressGradle,
+                        getCliSnippet(recipeDescriptor),
                     )
                 } else {
                     writeSnippetsWithConfigurationWithoutDependency(
@@ -1051,17 +1052,29 @@ class RecipeMarkdownGenerator : Runnable {
                         gradlePluginVersion,
                         mavenPluginVersion,
                         suppressMaven,
-                        suppressGradle
+                        suppressGradle,
+                        getCliSnippet(recipeDescriptor),
                     )
                 }
             } else {
                 if (origin.isFromCoreLibrary()) {
                     writeSnippetsFromCoreLibrary(
-                        recipeDescriptor, gradlePluginVersion, mavenPluginVersion, suppressMaven, suppressGradle
+                        recipeDescriptor,
+                        gradlePluginVersion,
+                        mavenPluginVersion,
+                        suppressMaven,
+                        suppressGradle,
+                        getCliSnippet(recipeDescriptor),
                     )
                 } else {
                     writeSnippetForOtherLibrary(
-                        origin, recipeDescriptor, gradlePluginVersion, mavenPluginVersion, suppressMaven, suppressGradle
+                        origin,
+                        recipeDescriptor,
+                        gradlePluginVersion,
+                        mavenPluginVersion,
+                        suppressMaven,
+                        suppressGradle,
+                        getCliSnippet(recipeDescriptor),
                     )
                 }
             }
@@ -1184,12 +1197,36 @@ class RecipeMarkdownGenerator : Runnable {
         return diffContent.toString()
     }
 
+    private fun getCliSnippet(
+        recipeDescriptor: RecipeDescriptor,
+    ): String {
+        val lastPeriod = recipeDescriptor.name.lastIndexOf('.')
+        var trimmedRecipeName = recipeDescriptor.name
+
+        if (lastPeriod >= 0) {
+            trimmedRecipeName = recipeDescriptor.name.substring(lastPeriod + 1)
+        }
+
+        return """
+                {% tab title="Moderne CLI" %}
+                You will need to have configured the [Moderne CLI](https://docs.moderne.io/moderne-cli/cli-intro) on your machine before you can run the following command.
+
+                {% code title="shell" %}
+                ```shell
+                mod run <PATH> --recipe $trimmedRecipeName
+                ```
+                {% endcode %}
+                {% endtab %}
+        """.trimIndent()
+    }
+
     private fun BufferedWriter.writeSnippetsWithConfigurationWithoutDependency(
         exampleRecipeName: String,
         gradlePluginVersion: String,
         mavenPluginVersion: String,
         suppressMaven: Boolean,
-        suppressGradle: Boolean
+        suppressGradle: Boolean,
+        cliSnippet: String,
     ) {
         val gradleSnippet = if (suppressGradle) "" else """
                             {% tab title="Gradle" %}
@@ -1212,6 +1249,7 @@ class RecipeMarkdownGenerator : Runnable {
                             2. Run `gradle rewriteRun` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
+
         val mavenSnippet = if (suppressMaven) "" else """
                             {% tab title="Maven" %}
                             1. Add the following to your `pom.xml` file:
@@ -1238,12 +1276,14 @@ class RecipeMarkdownGenerator : Runnable {
                             2. Run `mvn rewrite:run` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
+
         writeln(
             """
 Now that `$exampleRecipeName` has been defined activate it in your build file:
 {% tabs %}
 $gradleSnippet
 $mavenSnippet
+$cliSnippet
 {% endtabs %}
 """.trimIndent()
         )
@@ -1255,7 +1295,8 @@ $mavenSnippet
         gradlePluginVersion: String,
         mavenPluginVersion: String,
         suppressMaven: Boolean,
-        suppressGradle: Boolean
+        suppressGradle: Boolean,
+        cliSnippet: String,
     ) {
         val gradleSnippet = if (suppressGradle) "" else """
                             {% tab title="Gradle" %}
@@ -1282,6 +1323,7 @@ $mavenSnippet
                             2. Run `gradle rewriteRun` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
+
         val mavenSnippet = if (suppressMaven) "" else """
                             {% tab title="Maven" %}
                             1. Add the following to your `pom.xml` file:
@@ -1315,12 +1357,14 @@ $mavenSnippet
                             2. Run `mvn rewrite:run` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
+
         writeln(
             """
 Now that `$exampleRecipeName` has been defined activate it and take a dependency on ${origin.groupId}:${origin.artifactId}:${origin.version} in your build file:
 {% tabs %}
 $gradleSnippet
 $mavenSnippet
+$cliSnippet
 {% endtabs %}
 """.trimIndent()
         )
@@ -1331,12 +1375,14 @@ $mavenSnippet
         gradlePluginVersion: String,
         mavenPluginVersion: String,
         suppressMaven: Boolean,
-        suppressGradle: Boolean
+        suppressGradle: Boolean,
+        cliSnippet: String,
     ) {
         writeln(
             "This recipe has no required configuration parameters and comes from a rewrite core library. " +
                     "It can be activated directly without adding any dependencies."
         )
+
         val gradleSnippet = if (suppressGradle) "" else """
                             {% tab title="Gradle" %}
                             1. Add the following to your `build.gradle` file:
@@ -1390,6 +1436,7 @@ $mavenSnippet
                             2. Run `gradle --init-script init.gradle rewriteRun` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
+
         val mavenSnippet = if (suppressMaven) "" else """
                             {% tab title="Maven POM" %}
                             1. Add the following to your `pom.xml` file:
@@ -1431,6 +1478,7 @@ $mavenSnippet
 {% tabs %}
 $gradleSnippet
 $mavenSnippet
+$cliSnippet
 {% endtabs %}
 """.trimIndent()
         )
@@ -1442,13 +1490,15 @@ $mavenSnippet
         gradlePluginVersion: String,
         mavenPluginVersion: String,
         suppressMaven: Boolean,
-        suppressGradle: Boolean
+        suppressGradle: Boolean,
+        cliSnippet: String,
     ) {
         writeln(
             "This recipe has no required configuration options. It can be activated by adding a dependency on " +
                     "`${origin.groupId}:${origin.artifactId}:${origin.version}` in your build file or by running a shell " +
                     "command (in which case no build changes are needed): "
         )
+
         val gradleSnippet = if (suppressGradle) "" else """
                             {% tab title="Gradle" %}
                             1. Add the following to your `build.gradle` file:
@@ -1505,6 +1555,7 @@ $mavenSnippet
                             2. Run `gradle --init-script init.gradle rewriteRun` to run the recipe.
                             {% endtab %}
                             """.trimIndent()
+
         val mavenSnippet = if (suppressMaven) "" else """
                             {% tab title="Maven POM" %}
                             1. Add the following to your `pom.xml` file:
@@ -1550,11 +1601,13 @@ $mavenSnippet
                             {% endcode %}
                             {% endtab %}
                             """.trimIndent()
+
         writeln(
             """
 {% tabs %}
 $gradleSnippet
 $mavenSnippet
+$cliSnippet
 {% endtabs %}
 """.trimIndent()
         )
