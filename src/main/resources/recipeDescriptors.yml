@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.7.4"
+  version: "8.8.0"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -849,7 +849,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.7.4"
+  version: "8.8.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1197,10 +1197,10 @@ rewrite-gradle:
         required: false
       isImperative: true
       artifactId: "rewrite-gradle"
-    org.openrewrite.gradle.plugins.AddGradleEnterpriseGradlePlugin:
-      name: "org.openrewrite.gradle.plugins.AddGradleEnterpriseGradlePlugin"
-      description: "Add the Gradle Enterprise Gradle plugin to settings.gradle files."
-      docLink: "https://docs.openrewrite.org/recipes/gradle/plugins/addgradleenterprisegradleplugin"
+    org.openrewrite.gradle.plugins.AddDevelocityGradlePlugin:
+      name: "org.openrewrite.gradle.plugins.AddDevelocityGradlePlugin"
+      description: "Add the Develocity Gradle plugin to settings.gradle files."
+      docLink: "https://docs.openrewrite.org/recipes/gradle/plugins/adddevelocitygradleplugin"
       options:
       - name: "allowUntrustedServer"
         type: "Boolean"
@@ -1414,7 +1414,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.7.4"
+  version: "8.8.0"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1433,7 +1433,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.7.4"
+  version: "8.8.0"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1584,7 +1584,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.7.4"
+  version: "8.8.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -3353,7 +3353,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.7.4"
+  version: "8.8.0"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3403,7 +3403,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.4.15"
+  version: "1.5.0"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -4271,7 +4271,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.7.4"
+  version: "8.8.0"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -4336,13 +4336,13 @@ rewrite-maven:
         required: false
       isImperative: true
       artifactId: "rewrite-maven"
-    org.openrewrite.maven.AddGradleEnterpriseMavenExtension:
-      name: "org.openrewrite.maven.AddGradleEnterpriseMavenExtension"
-      description: "To integrate Gradle Enterprise Maven extension into maven projects,\
+    org.openrewrite.maven.AddDevelocityMavenExtension:
+      name: "org.openrewrite.maven.AddDevelocityMavenExtension"
+      description: "To integrate the Develocity Maven extension into Maven projects,\
         \ ensure that the `gradle-enterprise-maven-extension` is added to the `.mvn/extensions.xml`\
         \ file if not already present. Additionally, configure the extension by adding\
         \ the `.mvn/gradle-enterprise.xml` configuration file."
-      docLink: "https://docs.openrewrite.org/recipes/maven/addgradleenterprisemavenextension"
+      docLink: "https://docs.openrewrite.org/recipes/maven/adddevelocitymavenextension"
       options:
       - name: "allowUntrustedServer"
         type: "Boolean"
@@ -7899,7 +7899,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.7.4"
+  version: "8.8.0"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -12579,7 +12579,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.7.4"
+  version: "8.8.0"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -12785,7 +12785,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.7.4"
+  version: "8.8.0"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
