@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.8.0-SNAPSHOT"
+  version: "8.9.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -849,7 +849,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.8.0-SNAPSHOT"
+  version: "8.9.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1197,10 +1197,10 @@ rewrite-gradle:
         required: false
       isImperative: true
       artifactId: "rewrite-gradle"
-    org.openrewrite.gradle.plugins.AddGradleEnterpriseGradlePlugin:
-      name: "org.openrewrite.gradle.plugins.AddGradleEnterpriseGradlePlugin"
-      description: "Add the Gradle Enterprise Gradle plugin to settings.gradle files."
-      docLink: "https://docs.openrewrite.org/recipes/gradle/plugins/addgradleenterprisegradleplugin"
+    org.openrewrite.gradle.plugins.AddDevelocityGradlePlugin:
+      name: "org.openrewrite.gradle.plugins.AddDevelocityGradlePlugin"
+      description: "Add the Develocity Gradle plugin to settings.gradle files."
+      docLink: "https://docs.openrewrite.org/recipes/gradle/plugins/adddevelocitygradleplugin"
       options:
       - name: "allowUntrustedServer"
         type: "Boolean"
@@ -1414,7 +1414,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.8.0-SNAPSHOT"
+  version: "8.9.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1433,7 +1433,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.8.0-SNAPSHOT"
+  version: "8.9.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1584,7 +1584,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.8.0-SNAPSHOT"
+  version: "8.9.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -2678,9 +2678,10 @@ rewrite-java-dependencies:
       description: "This software composition analysis (SCA) tool detects and upgrades\
         \ dependencies with publicly disclosed vulnerabilities. This recipe both generates\
         \ a report of vulnerable dependencies and upgrades to newer versions with\
-        \ fixes. Automatic upgrade of vulnerable versions is performed when the fixed\
-        \ version is a minor or patch version bump. Vulnerability information comes\
-        \ from the [GitHub Security Advisory Database](https://docs.github.com/en/code-security/security-advisories/global-security-advisories/about-the-github-advisory-database),\
+        \ fixes. This recipe **only** upgrades to the latest **patch** version.  If\
+        \ a minor or major upgrade is required to reach the fixed version, this recipe\
+        \ will not make any changes. Vulnerability information comes from the [GitHub\
+        \ Security Advisory Database](https://docs.github.com/en/code-security/security-advisories/global-security-advisories/about-the-github-advisory-database),\
         \ which aggregates vulnerability data from several public databases, including\
         \ the [National Vulnerability Database](https://nvd.nist.gov/) maintained\
         \ by the United States government. Dependencies following [Semantic Versioning](https://semver.org/)\
@@ -2769,6 +2770,15 @@ rewrite-java-security:
       options: []
       isImperative: true
       artifactId: "rewrite-java-security"
+    org.openrewrite.java.security.ImproperPrivilegeManagement:
+      name: "org.openrewrite.java.security.ImproperPrivilegeManagement"
+      description: "Marking code as privileged enables a piece of trusted code to\
+        \ temporarily enable access to more resources than are available directly\
+        \ to the code that called it."
+      docLink: "https://docs.openrewrite.org/recipes/java/security/improperprivilegemanagement"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-java-security"
     org.openrewrite.java.security.JavaSecurityBestPractices:
       name: "org.openrewrite.java.security.JavaSecurityBestPractices"
       description: "Applies security best practices to Java code."
@@ -2801,6 +2811,16 @@ rewrite-java-security:
         \ program state to operate outside of its intended bounds. This recipe seeks\
         \ to remediate these vulnerabilities.\n"
       docLink: "https://docs.openrewrite.org/recipes/java/security/owaspa03"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-java-security"
+    org.openrewrite.java.security.OwaspA04:
+      name: "org.openrewrite.java.security.OwaspA04"
+      description: "OWASP [A04:2021](https://owasp.org/Top10/A04_2021-Insecure_Design/)\
+        \ focuses on risks related to design and architectural flaws,  with a call\
+        \ for more use of threat modeling, secure design patterns, and reference architectures.\
+        \ This recipe seeks to remediate these vulnerabilities.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/security/owaspa04"
       options: []
       isImperative: false
       artifactId: "rewrite-java-security"
@@ -2924,6 +2944,15 @@ rewrite-java-security:
       - name: "debug"
         type: "boolean"
         required: true
+      isImperative: true
+      artifactId: "rewrite-java-security"
+    org.openrewrite.java.security.marshalling.InsecureJmsDeserialization:
+      name: "org.openrewrite.java.security.marshalling.InsecureJmsDeserialization"
+      description: "JMS `Object` messages depend on Java Serialization for marshalling/unmarshalling\
+        \ of the message payload when `ObjectMessage#getObject` is called. Deserialization\
+        \ of untrusted data can lead to security flaws."
+      docLink: "https://docs.openrewrite.org/recipes/java/security/marshalling/insecurejmsdeserialization"
+      options: []
       isImperative: true
       artifactId: "rewrite-java-security"
     org.openrewrite.java.security.marshalling.SecureJacksonDefaultTyping:
@@ -3353,7 +3382,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.8.0-SNAPSHOT"
+  version: "8.9.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3403,7 +3432,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.5.0-SNAPSHOT"
+  version: "1.6.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -4271,7 +4300,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.8.0-SNAPSHOT"
+  version: "8.9.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -4336,13 +4365,13 @@ rewrite-maven:
         required: false
       isImperative: true
       artifactId: "rewrite-maven"
-    org.openrewrite.maven.AddGradleEnterpriseMavenExtension:
-      name: "org.openrewrite.maven.AddGradleEnterpriseMavenExtension"
-      description: "To integrate Gradle Enterprise Maven extension into maven projects,\
+    org.openrewrite.maven.AddDevelocityMavenExtension:
+      name: "org.openrewrite.maven.AddDevelocityMavenExtension"
+      description: "To integrate the Develocity Maven extension into Maven projects,\
         \ ensure that the `gradle-enterprise-maven-extension` is added to the `.mvn/extensions.xml`\
         \ file if not already present. Additionally, configure the extension by adding\
         \ the `.mvn/gradle-enterprise.xml` configuration file."
-      docLink: "https://docs.openrewrite.org/recipes/maven/addgradleenterprisemavenextension"
+      docLink: "https://docs.openrewrite.org/recipes/maven/adddevelocitymavenextension"
       options:
       - name: "allowUntrustedServer"
         type: "Boolean"
@@ -5722,7 +5751,7 @@ rewrite-migrate-java:
     org.openrewrite.java.migrate.IBMSemeru:
       name: "org.openrewrite.java.migrate.IBMSemeru"
       description: "This recipe will apply changes commonly needed when upgrading\
-        \ Java versions. The solutions provided in this list are solutions only availible\
+        \ Java versions. The solutions provided in this list are solutions only available\
         \ in IBM Semeru Runtimes.\n"
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/ibmsemeru"
       options: []
@@ -5867,6 +5896,18 @@ rewrite-migrate-java:
         \ this class will result in a warning in Java 11 and an error in Java 17."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/usejavautilbase64"
       options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.UseTabsOrSpaces:
+      name: "org.openrewrite.java.migrate.UseTabsOrSpaces"
+      description: "This is useful for one-off migrations of a codebase that has mixed\
+        \ indentation styles, while preserving all other auto-detected formatting\
+        \ rules."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/usetabsorspaces"
+      options:
+      - name: "useTabs"
+        type: "boolean"
+        required: true
       isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.apache.commons.codec.ApacheBase64ToJavaBase64:
@@ -6244,6 +6285,16 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.guava.NoGuavaJava21:
+      name: "org.openrewrite.java.migrate.guava.NoGuavaJava21"
+      description: "Guava filled in important gaps in the Java standard library and\
+        \ still does. But at least some of Guava's API surface area is covered by\
+        \ the Java standard library now, and some projects may be able to remove Guava\
+        \ altogether if they migrate to standard library for these functions.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/guava/noguavajava21"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.guava.NoGuavaListsNewArrayList:
       name: "org.openrewrite.java.migrate.guava.NoGuavaListsNewArrayList"
       description: "Prefer the Java standard library over third-party usage of Guava\
@@ -6498,6 +6549,13 @@ rewrite-migrate-java:
       description: "Prefer `java.lang.Math#addExact` instead of using `com.google.common.math.IntMath#checkedAdd`\
         \ or `com.google.common.math.IntMath#addExact`"
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/guava/prefermathaddexact"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.guava.PreferMathClamp:
+      name: "org.openrewrite.java.migrate.guava.PreferMathClamp"
+      description: "Prefer `java.lang.Math#clamp` instead of using `com.google.common.primitives.*#constrainToRange`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/guava/prefermathclamp"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -6872,6 +6930,16 @@ rewrite-migrate-java:
         \ class,  which is removed in XML Web Services 4.0. The recommended replacement\
         \ is to use jakarta.xml.soap.SOAPFactory to create SOAPElements.\n"
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/removedsoapelementfactory"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.RemovedStateManagerMethods:
+      name: "org.openrewrite.java.migrate.jakarta.RemovedStateManagerMethods"
+      description: "Methods that were removed from the `jakarta.faces.application.StateManager`\
+        \ and `javax.faces.application.StateManager` classes in Jakarta Faces 4.0\
+        \ are replaced by `jakarta.faces.view.StateManagementStrategy` or `javax.faces.view.StateManagementStrategy`\
+        \ based on Jakarta10 migration in Faces 4.0\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/removedstatemanagermethods"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -7908,7 +7976,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.8.0-SNAPSHOT"
+  version: "8.9.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -9838,7 +9906,7 @@ rewrite-static-analysis:
     org.openrewrite.staticanalysis.AddSerialVersionUidToSerializable:
       name: "org.openrewrite.staticanalysis.AddSerialVersionUidToSerializable"
       description: "A `serialVersionUID` field is strongly recommended in all `Serializable`\
-        \ classes. If this is not defined in a `Serializable` class, the compiler\
+        \ classes. If this is not defined on a `Serializable` class, the compiler\
         \ will generate this value. If a change is later made to the class, the generated\
         \ value will change and attempts to deserialize the class will fail."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/addserialversionuidtoserializable"
@@ -9873,9 +9941,8 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.BooleanChecksNotInverted:
       name: "org.openrewrite.staticanalysis.BooleanChecksNotInverted"
-      description: "Ensures that boolean comparisons are not It is needlessly complex\
-        \ to invert the result of a boolean comparison. The opposite comparison should\
-        \ be made instead. Also double negation of boolean expressions should be avoided."
+      description: "Ensures that boolean checks are not unnecessarily inverted. Also\
+        \ fixes double negative boolean expressions."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/booleanchecksnotinverted"
       options: []
       isImperative: true
@@ -10496,7 +10563,7 @@ rewrite-static-analysis:
       name: "org.openrewrite.staticanalysis.RemoveToStringCallsFromArrayInstances"
       description: "The result from `toString()` calls on arrays is largely useless.\
         \ The output does not actually reflect the contents of the array. `Arrays.toString(array)`\
-        \ give the contents of the array."
+        \ should be used instead as it gives the contents of the array."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/removetostringcallsfromarrayinstances"
       options: []
       isImperative: true
@@ -10558,10 +10625,11 @@ rewrite-static-analysis:
         \ declared in for loop controls or catches with a single character. The first\
         \ character is set to lower case and existing capital letters are preserved.\
         \ Special characters that are allowed in java field names `$` and `_` are\
-        \ removed. If a special character is removed the next valid alphanumeric will\
-        \ be capitalized. Currently, does not support renaming members of classes.\
-        \ The recipe will not rename a variable if the result already exists in the\
-        \ class, conflicts with a java reserved keyword, or the result is blank."
+        \ removed (unless the name starts with one). If a special character is removed\
+        \ the next valid alphanumeric will be capitalized. Currently, does not support\
+        \ renaming members of classes. The recipe will not rename a variable if the\
+        \ result already exists in the class, conflicts with a java reserved keyword,\
+        \ or the result is blank."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/renamelocalvariablestocamelcase"
       options: []
       isImperative: true
@@ -10599,7 +10667,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.ReplaceDeprecatedRuntimeExecMethods:
       name: "org.openrewrite.staticanalysis.ReplaceDeprecatedRuntimeExecMethods"
-      description: "Replace `Runtime.exec(String)` methods to use `exec(String[])`\
+      description: "Replace `Runtime#exec(String)` methods to use `exec(String[])`\
         \ instead because the former is deprecated after Java 18 and is no longer\
         \ recommended for use by the Java documentation."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/replacedeprecatedruntimeexecmethods"
@@ -10708,7 +10776,7 @@ rewrite-static-analysis:
     org.openrewrite.staticanalysis.ReplaceWeekYearWithYear:
       name: "org.openrewrite.staticanalysis.ReplaceWeekYearWithYear"
       description: "For most dates Week Year (YYYY) and Year (yyyy) yield the same\
-        \ results. However, on the last week of December and first week of January\
+        \ results. However, on the last week of December and the first week of January,\
         \ Week Year could produce unexpected results."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/replaceweekyearwithyear"
       options: []
@@ -10724,7 +10792,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.SimplifyBooleanReturn:
       name: "org.openrewrite.staticanalysis.SimplifyBooleanReturn"
-      description: "Simplifies Boolean expressions by removing redundancies, e.g.:\
+      description: "Simplifies Boolean expressions by removing redundancies. For example,\
         \ `a && true` simplifies to `a`."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/simplifybooleanreturn"
       options: []
@@ -10763,8 +10831,8 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.SortedSetStreamToLinkedHashSet:
       name: "org.openrewrite.staticanalysis.SortedSetStreamToLinkedHashSet"
-      description: "Correct 'set.stream().sorted().collect(Collectors.toSet())' to\
-        \ 'set.stream().sorted().collect(LinkedHashSet::new)'."
+      description: "Converts `set.stream().sorted().collect(Collectors.toSet())` to\
+        \ `set.stream().sorted().collect(LinkedHashSet::new)`."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/sortedsetstreamtolinkedhashset"
       options: []
       isImperative: true
@@ -10789,10 +10857,12 @@ rewrite-static-analysis:
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
-    org.openrewrite.staticanalysis.TestRecipe:
-      name: "org.openrewrite.staticanalysis.TestRecipe"
-      description: "for testing nonsense"
-      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/testrecipe"
+    org.openrewrite.staticanalysis.TernaryOperatorsShouldNotBeNested:
+      name: "org.openrewrite.staticanalysis.TernaryOperatorsShouldNotBeNested"
+      description: "Nested ternary operators can be hard to read quickly. Prefer simpler\
+        \ constructs for improved readability. If supported, this recipe will try\
+        \ to replace nested ternaries with switch expressions."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/ternaryoperatorsshouldnotbenested"
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
@@ -10826,7 +10896,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.UnnecessaryExplicitTypeArguments:
       name: "org.openrewrite.staticanalysis.UnnecessaryExplicitTypeArguments"
-      description: "When explicit type arguments are inferrable by the compiler, they\
+      description: "When explicit type arguments are inferable by the compiler, they\
         \ may be removed."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/unnecessaryexplicittypearguments"
       options: []
@@ -10851,10 +10921,10 @@ rewrite-static-analysis:
     org.openrewrite.staticanalysis.UnnecessaryThrows:
       name: "org.openrewrite.staticanalysis.UnnecessaryThrows"
       description: "Remove unnecessary `throws` declarations. This recipe will only\
-        \ remove unused, checked exception if:\n\n- The declaring class or the method\
+        \ remove unused, checked exceptions if:\n\n- The declaring class or the method\
         \ declaration is `final`.\n- The method declaration is `static` or `private`.\n\
-        - If the method overriding a method declaration in a super class and the super\
-        \ does not throw the exception.\n- If the method is `public` or `protected`\
+        - The method overrides a method declaration in a super class and the super\
+        \ class does not throw the exception.\n- The method is `public` or `protected`\
         \ and the exception is not documented via a JavaDoc as a `@throws` tag."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/unnecessarythrows"
       options: []
@@ -12224,6 +12294,21 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.jmockit.JMockitExpectationsToMockitoWhen:
+      name: "org.openrewrite.java.testing.jmockit.JMockitExpectationsToMockitoWhen"
+      description: "Rewrites JMockit `Expectations` to `Mockito.when`."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/jmockit/jmockitexpectationstomockitowhen"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.jmockit.JMockitToMockito:
+      name: "org.openrewrite.java.testing.jmockit.JMockitToMockito"
+      description: "This recipe will apply changes commonly needed when migrating\
+        \ from JMockit to Mockito."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/jmockit/jmockittomockito"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.AddMissingNested:
       name: "org.openrewrite.java.testing.junit5.AddMissingNested"
       description: "Adds `@Nested` to inner classes that contain JUnit 5 tests."
@@ -12587,7 +12672,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.8.0-SNAPSHOT"
+  version: "8.9.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -12793,7 +12878,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.8.0-SNAPSHOT"
+  version: "8.9.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
