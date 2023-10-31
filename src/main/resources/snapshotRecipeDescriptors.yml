@@ -880,7 +880,7 @@ rewrite-gradle:
         required: true
       - name: "onlyIfUsing"
         type: "String"
-        required: true
+        required: false
       - name: "version"
         type: "String"
         required: false
@@ -2596,7 +2596,7 @@ rewrite-java-dependencies:
         required: true
       - name: "onlyIfUsing"
         type: "String"
-        required: true
+        required: false
       - name: "optional"
         type: "Boolean"
         required: false
@@ -4344,7 +4344,7 @@ rewrite-maven:
         required: true
       - name: "onlyIfUsing"
         type: "String"
-        required: true
+        required: false
       - name: "optional"
         type: "Boolean"
         required: false
@@ -5114,6 +5114,9 @@ rewrite-maven:
         \ minor releases."
       docLink: "https://docs.openrewrite.org/recipes/maven/upgradepluginversion"
       options:
+      - name: "addVersionIfMissing"
+        type: "Boolean"
+        required: false
       - name: "artifactId"
         type: "String"
         required: true
@@ -5144,6 +5147,14 @@ rewrite-maven:
       description: "Add the default `<groupId>org.apache.maven.plugins</groupId>`\
         \ to plugins for clarity."
       docLink: "https://docs.openrewrite.org/recipes/maven/cleanup/explicitplugingroupid"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-maven"
+    org.openrewrite.maven.cleanup.ExplicitPluginVersion:
+      name: "org.openrewrite.maven.cleanup.ExplicitPluginVersion"
+      description: "Add explicit plugin versions to POMs for reproducibility, as [MNG-4173](https://issues.apache.org/jira/browse/MNG-4173)\
+        \ removes automatic version resolution for POM plugins."
+      docLink: "https://docs.openrewrite.org/recipes/maven/cleanup/explicitpluginversion"
       options: []
       isImperative: true
       artifactId: "rewrite-maven"
@@ -5697,7 +5708,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "2.2.0-SNAPSHOT"
+  version: "2.3.0-SNAPSHOT"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -6615,6 +6626,15 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.FacesJNDINamesChanged:
+      name: "org.openrewrite.java.migrate.jakarta.FacesJNDINamesChanged"
+      description: "The `jsf/ClientSideSecretKey` JNDI name has been renamed to `faces/ClientSideSecretKey`,\
+        \  and the `jsf/FlashSecretKey` JNDI name has been renamed to `faces/FlashSecretKey`.\
+        \  The JNDI keys that have been renamed are updated to allow use of the keys.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/facesjndinameschanged"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.JacksonJavaxToJakarta:
       name: "org.openrewrite.java.migrate.jakarta.JacksonJavaxToJakarta"
       description: "Java EE has been rebranded to Jakarta EE.  This recipe replaces\
@@ -6905,6 +6925,17 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.RemoveMethods:
+      name: "org.openrewrite.java.migrate.jakarta.RemoveMethods"
+      description: "Checks for a method patterns and removes the method call from\
+        \ the class"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/removemethods"
+      options:
+      - name: "methodPattern"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.RemovedIsParmetersProvidedMethod:
       name: "org.openrewrite.java.migrate.jakarta.RemovedIsParmetersProvidedMethod"
       description: "Expression Language prior to 5.0 provides the deprecated MethodExpression.isParmetersProvided()\
@@ -6918,9 +6949,18 @@ rewrite-migrate-java:
     org.openrewrite.java.migrate.jakarta.RemovedJakartaFacesExpressionLanguageClasses:
       name: "org.openrewrite.java.migrate.jakarta.RemovedJakartaFacesExpressionLanguageClasses"
       description: "Several classes were removed and replaced in Jakarta Faces 4.0.\
-        \ The only Object definition not removed in the jakarta.faces.el package is\
-        \ the CompositeComponentExpressionHolder interface.\n"
+        \ The only Object definition not removed in the `jakarta.faces.el` package\
+        \ is the CompositeComponentExpressionHolder interface.\n"
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/removedjakartafacesexpressionlanguageclasses"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.RemovedJakartaFacesResourceResolver:
+      name: "org.openrewrite.java.migrate.jakarta.RemovedJakartaFacesResourceResolver"
+      description: "The `ResourceResolver` class was removed in Jakarta Faces 4.0.\
+        \  The functionality provided by that class can be replaced by using the `jakarta.faces.application.ResourceHandler`\
+        \ class.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/removedjakartafacesresourceresolver"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -6943,12 +6983,32 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.RemovedUIComponentConstant:
+      name: "org.openrewrite.java.migrate.jakarta.RemovedUIComponentConstant"
+      description: "Replace `jakarta.faces.component.UIComponent.CURRENT_COMPONENT`\
+        \ and `CURRENT_COMPOSITE_COMPONENT` constants with `jakarta.faces.component.UIComponent.getCurrentComponent()`\
+        \ and `getCurrentCompositeComponent()` that were added in JSF 2.0\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/removeduicomponentconstant"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.RestAssuredJavaxToJakarta:
       name: "org.openrewrite.java.migrate.jakarta.RestAssuredJavaxToJakarta"
       description: "Java EE has been rebranded to Jakarta EE.  This recipe replaces\
         \ existing RestAssured dependencies with their counterparts that are compatible\
         \ with Jakarta EE 9.\n"
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/restassuredjavaxtojakarta"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.ServletCookieBehaviorChangeRFC6265:
+      name: "org.openrewrite.java.migrate.jakarta.ServletCookieBehaviorChangeRFC6265"
+      description: "Jakarta Servlet methods have been deprecated for removal in Jakarta\
+        \ Servlet 6.0 to align with RFC 6265.  In addition, the behavior of these\
+        \ methods has been changed so the setters no longer have any effect, the getComment\
+        \ methods return null, and the getVersion method returns 0. The deprecated\
+        \ methods are removed.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/servletcookiebehaviorchangerfc6265"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -7433,6 +7493,16 @@ rewrite-migrate-java:
         \ usage of Lombok's `lombok.val` in Java 10 or higher."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/lombok/lombokvaltofinalvar"
       options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lombok.LombokValueToRecord:
+      name: "org.openrewrite.java.migrate.lombok.LombokValueToRecord"
+      description: "Convert Lombok `@Value` annotated classes to standard Java Records."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/lombok/lombokvaluetorecord"
+      options:
+      - name: "useExactToString"
+        type: "Boolean"
+        required: false
       isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.lombok.UpdateLombokToJava11:
@@ -9551,8 +9621,8 @@ rewrite-spring:
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.http.SimplifyMediaTypeParseCalls:
       name: "org.openrewrite.java.spring.http.SimplifyMediaTypeParseCalls"
-      description: "Replaces `MediaType.parseMediaType('application/json')` and `MediaType.valueOf('application/json')`\
-        \ with `MediaType.APPLICATION_JSON`."
+      description: "Replaces `MediaType.parseMediaType(\"application/json\")` and\
+        \ `MediaType.valueOf(\"application/json\")` with `MediaType.APPLICATION_JSON`."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/http/simplifymediatypeparsecalls"
       options: []
       isImperative: true
@@ -9567,14 +9637,18 @@ rewrite-spring:
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.search.FindApiCalls:
       name: "org.openrewrite.java.spring.search.FindApiCalls"
-      description: "Find outbound API calls that this application is making."
+      description: "Find outbound HTTP API calls made via Spring's `RestTemplate`\
+        \ class."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/search/findapicalls"
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.search.FindApiEndpoints:
       name: "org.openrewrite.java.spring.search.FindApiEndpoints"
-      description: "Find all API endpoints that this application exposes."
+      description: "Find all HTTP API endpoints exposed by Spring applications. More\
+        \ specifically, this marks method declarations annotated with `@RequestMapping`,\
+        \ `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping`, and `@PatchMapping`\
+        \ as search results."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/search/findapiendpoints"
       options: []
       isImperative: true
@@ -12109,6 +12183,13 @@ rewrite-testing-frameworks:
       options: []
       isImperative: false
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.cleanup.AssertEqualsBooleanToAssertBoolean:
+      name: "org.openrewrite.java.testing.cleanup.AssertEqualsBooleanToAssertBoolean"
+      description: "Using `assertFalse` or `assertTrue` is simpler and more clear."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/cleanup/assertequalsbooleantoassertboolean"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.cleanup.AssertEqualsNullToAssertNull:
       name: "org.openrewrite.java.testing.cleanup.AssertEqualsNullToAssertNull"
       description: "Using `assertNull(a)` is simpler and more clear."
@@ -12134,6 +12215,13 @@ rewrite-testing-frameworks:
       name: "org.openrewrite.java.testing.cleanup.AssertFalseNullToAssertNotNull"
       description: "Using `assertNotNull(a)` is simpler and more clear."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/cleanup/assertfalsenulltoassertnotnull"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.cleanup.AssertNotEqualsBooleanToAssertBoolean:
+      name: "org.openrewrite.java.testing.cleanup.AssertNotEqualsBooleanToAssertBoolean"
+      description: "Using `assertFalse` or `assertTrue` is simpler and more clear."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/cleanup/assertnotequalsbooleantoassertboolean"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
@@ -12294,10 +12382,10 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.jmockit.JMockitExpectationsToMockitoWhen:
-      name: "org.openrewrite.java.testing.jmockit.JMockitExpectationsToMockitoWhen"
-      description: "Rewrites JMockit `Expectations` to `Mockito.when`."
-      docLink: "https://docs.openrewrite.org/recipes/java/testing/jmockit/jmockitexpectationstomockitowhen"
+    org.openrewrite.java.testing.jmockit.JMockitExpectationsToMockito:
+      name: "org.openrewrite.java.testing.jmockit.JMockitExpectationsToMockito"
+      description: "Rewrites JMockit `Expectations` blocks to Mockito statements."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/jmockit/jmockitexpectationstomockito"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
