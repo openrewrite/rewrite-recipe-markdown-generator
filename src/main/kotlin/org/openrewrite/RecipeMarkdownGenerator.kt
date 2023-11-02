@@ -1028,6 +1028,8 @@ class RecipeMarkdownGenerator : Runnable {
                                 || option.example.matches(".*:\\s.*".toRegex()))
                     ) {
                         "'" + option.example + "'"
+                    } else if (option.type == "boolean") {
+                        "false"
                     } else {
                         option.example
                     }
