@@ -1030,7 +1030,7 @@ class RecipeMarkdownGenerator : Runnable {
                         "'" + option.example + "'"
                     } else if (option.type == "boolean") {
                         "false"
-                    }else {
+                    } else {
                         option.example
                     }
                     writeln("      ${option.name}: $ex")
