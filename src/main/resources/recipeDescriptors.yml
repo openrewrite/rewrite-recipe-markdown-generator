@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.8.3"
+  version: "8.8.4"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -424,6 +424,18 @@ rewrite-core:
         required: true
       isImperative: true
       artifactId: "rewrite-core"
+    org.openrewrite.IsInRepository:
+      name: "org.openrewrite.IsInRepository"
+      description: "A search recipe which marks files that are in a repository with\
+        \ one of the supplied names. Intended for use as a precondition for other\
+        \ recipes being run over many different repositories"
+      docLink: "https://docs.openrewrite.org/recipes/isinrepository"
+      options:
+      - name: "allowedRepositories"
+        type: "Set"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-core"
     org.openrewrite.ListRuntimeClasspath:
       name: "org.openrewrite.ListRuntimeClasspath"
       description: "A diagnostic utility which emits the runtime classpath to a data\
@@ -482,6 +494,13 @@ rewrite-core:
       - name: "value"
         type: "String"
         required: true
+      isImperative: true
+      artifactId: "rewrite-core"
+    org.openrewrite.search.FindCommitters:
+      name: "org.openrewrite.search.FindCommitters"
+      description: "List the committers on a repository."
+      docLink: "https://docs.openrewrite.org/recipes/search/findcommitters"
+      options: []
       isImperative: true
       artifactId: "rewrite-core"
     org.openrewrite.search.FindParseToPrintInequality:
@@ -849,7 +868,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.8.3"
+  version: "8.8.4"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1183,7 +1202,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
     org.openrewrite.gradle.plugins.AddBuildPlugin:
       name: "org.openrewrite.gradle.plugins.AddBuildPlugin"
-      description: "Add a Gradle build plugin to `build.gradle(.kts)`."
+      description: "Add a build plugin to a Gradle build file's `plugins` block."
       docLink: "https://docs.openrewrite.org/recipes/gradle/plugins/addbuildplugin"
       options:
       - name: "pluginId"
@@ -1224,7 +1243,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
     org.openrewrite.gradle.plugins.AddSettingsPlugin:
       name: "org.openrewrite.gradle.plugins.AddSettingsPlugin"
-      description: "Add a Gradle settings plugin to `settings.gradle(.kts)`."
+      description: "Add plugin to Gradle settings file `plugins` block by id."
       docLink: "https://docs.openrewrite.org/recipes/gradle/plugins/addsettingsplugin"
       options:
       - name: "pluginId"
@@ -1269,7 +1288,8 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
     org.openrewrite.gradle.plugins.RemoveBuildPlugin:
       name: "org.openrewrite.gradle.plugins.RemoveBuildPlugin"
-      description: "Remove plugin from `build.gradle(.kts)`."
+      description: "Remove plugin from Gradle `plugins` block by its id. Does not\
+        \ remove plugins from the `buildscript` block."
       docLink: "https://docs.openrewrite.org/recipes/gradle/plugins/removebuildplugin"
       options:
       - name: "pluginId"
@@ -1279,7 +1299,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
     org.openrewrite.gradle.plugins.RemoveSettingsPlugin:
       name: "org.openrewrite.gradle.plugins.RemoveSettingsPlugin"
-      description: "Remove plugin from `settings.gradle(.kts)`."
+      description: "Remove plugin from Gradle settings file `plugins` block by id."
       docLink: "https://docs.openrewrite.org/recipes/gradle/plugins/removesettingsplugin"
       options:
       - name: "pluginId"
@@ -1414,7 +1434,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.8.3"
+  version: "8.8.4"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1433,7 +1453,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.8.3"
+  version: "8.8.4"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1584,7 +1604,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.8.3"
+  version: "8.8.4"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -3382,7 +3402,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.8.3"
+  version: "8.8.4"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -4300,7 +4320,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.8.3"
+  version: "8.8.4"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -5708,7 +5728,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "2.2.0"
+  version: "2.2.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -5719,6 +5739,22 @@ rewrite-migrate-java:
       - name: "release"
         type: "String"
         required: false
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.AddMissingMethodImplementation:
+      name: "org.openrewrite.java.migrate.AddMissingMethodImplementation"
+      description: "Check for missing methods required by interfaces and adds them."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/addmissingmethodimplementation"
+      options:
+      - name: "fullyQualifiedClassName"
+        type: "String"
+        required: true
+      - name: "methodPattern"
+        type: "String"
+        required: true
+      - name: "methodTemplateString"
+        type: "String"
+        required: true
       isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.AddSuppressionForIllegalReflectionWarningsPlugin:
@@ -5797,6 +5833,21 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.JREJdbcInterfaceNewMethods:
+      name: "org.openrewrite.java.migrate.JREJdbcInterfaceNewMethods"
+      description: "Add method implementations stubs to classes that implement JDBC\
+        \ interfaces."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jrejdbcinterfacenewmethods"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.JREWrapperInterface:
+      name: "org.openrewrite.java.migrate.JREWrapperInterface"
+      description: "Add method implementations stubs to classes that implement `java.sql.Wrapper`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jrewrapperinterface"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.Java8toJava11:
       name: "org.openrewrite.java.migrate.Java8toJava11"
       description: "This recipe will apply changes commonly needed when upgrading\
@@ -5840,6 +5891,13 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jre17agentmainpremainpublic"
       options: []
       isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.MXBeanNonPublic:
+      name: "org.openrewrite.java.migrate.MXBeanNonPublic"
+      description: "Sets visibility of MBean and MXBean interfaces to public."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/mxbeannonpublic"
+      options: []
+      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.RemovedLegacySunJSSEProviderName:
       name: "org.openrewrite.java.migrate.RemovedLegacySunJSSEProviderName"
@@ -5897,6 +5955,33 @@ rewrite-migrate-java:
         \ to use Java 21 as the target/source and plugins will be also be upgraded\
         \ to versions that are compatible with Java 21.\n"
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/upgradetojava21"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.UpgradeToJava6:
+      name: "org.openrewrite.java.migrate.UpgradeToJava6"
+      description: "This recipe will apply changes commonly needed when upgrading\
+        \ to Java 6. This recipe will also replace deprecated API with equivalents\
+        \ when there is a clear migration strategy.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/upgradetojava6"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.UpgradeToJava7:
+      name: "org.openrewrite.java.migrate.UpgradeToJava7"
+      description: "This recipe will apply changes commonly needed when upgrading\
+        \ to Java 7. This recipe will also replace deprecated API with equivalents\
+        \ when there is a clear migration strategy.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/upgradetojava7"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.UpgradeToJava8:
+      name: "org.openrewrite.java.migrate.UpgradeToJava8"
+      description: "This recipe will apply changes commonly needed when upgrading\
+        \ to Java 8. This recipe will also replace deprecated API with equivalents\
+        \ when there is a clear migration strategy.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/upgradetojava8"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -6626,6 +6711,15 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.FacesJNDINamesChanged:
+      name: "org.openrewrite.java.migrate.jakarta.FacesJNDINamesChanged"
+      description: "The `jsf/ClientSideSecretKey` JNDI name has been renamed to `faces/ClientSideSecretKey`,\
+        \  and the `jsf/FlashSecretKey` JNDI name has been renamed to `faces/FlashSecretKey`.\
+        \  The JNDI keys that have been renamed are updated to allow use of the keys.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/facesjndinameschanged"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.JacksonJavaxToJakarta:
       name: "org.openrewrite.java.migrate.jakarta.JacksonJavaxToJakarta"
       description: "Java EE has been rebranded to Jakarta EE.  This recipe replaces\
@@ -6916,6 +7010,17 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.RemoveMethods:
+      name: "org.openrewrite.java.migrate.jakarta.RemoveMethods"
+      description: "Checks for a method patterns and removes the method call from\
+        \ the class"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/removemethods"
+      options:
+      - name: "methodPattern"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.RemovedIsParmetersProvidedMethod:
       name: "org.openrewrite.java.migrate.jakarta.RemovedIsParmetersProvidedMethod"
       description: "Expression Language prior to 5.0 provides the deprecated MethodExpression.isParmetersProvided()\
@@ -6929,9 +7034,18 @@ rewrite-migrate-java:
     org.openrewrite.java.migrate.jakarta.RemovedJakartaFacesExpressionLanguageClasses:
       name: "org.openrewrite.java.migrate.jakarta.RemovedJakartaFacesExpressionLanguageClasses"
       description: "Several classes were removed and replaced in Jakarta Faces 4.0.\
-        \ The only Object definition not removed in the jakarta.faces.el package is\
-        \ the CompositeComponentExpressionHolder interface.\n"
+        \ The only Object definition not removed in the `jakarta.faces.el` package\
+        \ is the CompositeComponentExpressionHolder interface.\n"
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/removedjakartafacesexpressionlanguageclasses"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.RemovedJakartaFacesResourceResolver:
+      name: "org.openrewrite.java.migrate.jakarta.RemovedJakartaFacesResourceResolver"
+      description: "The `ResourceResolver` class was removed in Jakarta Faces 4.0.\
+        \  The functionality provided by that class can be replaced by using the `jakarta.faces.application.ResourceHandler`\
+        \ class.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/removedjakartafacesresourceresolver"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -6954,12 +7068,32 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.RemovedUIComponentConstant:
+      name: "org.openrewrite.java.migrate.jakarta.RemovedUIComponentConstant"
+      description: "Replace `jakarta.faces.component.UIComponent.CURRENT_COMPONENT`\
+        \ and `CURRENT_COMPOSITE_COMPONENT` constants with `jakarta.faces.component.UIComponent.getCurrentComponent()`\
+        \ and `getCurrentCompositeComponent()` that were added in JSF 2.0\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/removeduicomponentconstant"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.RestAssuredJavaxToJakarta:
       name: "org.openrewrite.java.migrate.jakarta.RestAssuredJavaxToJakarta"
       description: "Java EE has been rebranded to Jakarta EE.  This recipe replaces\
         \ existing RestAssured dependencies with their counterparts that are compatible\
         \ with Jakarta EE 9.\n"
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/restassuredjavaxtojakarta"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.ServletCookieBehaviorChangeRFC6265:
+      name: "org.openrewrite.java.migrate.jakarta.ServletCookieBehaviorChangeRFC6265"
+      description: "Jakarta Servlet methods have been deprecated for removal in Jakarta\
+        \ Servlet 6.0 to align with RFC 6265.  In addition, the behavior of these\
+        \ methods has been changed so the setters no longer have any effect, the getComment\
+        \ methods return null, and the getVersion method returns 0. The deprecated\
+        \ methods are removed.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/servletcookiebehaviorchangerfc6265"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -7830,6 +7964,13 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.util.IteratorNext:
+      name: "org.openrewrite.java.migrate.util.IteratorNext"
+      description: "Replace `SequencedCollection.iterator().next()` with `getFirst()`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/util/iteratornext"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.util.JavaUtilAPIs:
       name: "org.openrewrite.java.migrate.util.JavaUtilAPIs"
       description: "Certain java util APIs have been introduced and are favored over\
@@ -7837,6 +7978,14 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/util/javautilapis"
       options: []
       isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.util.ListFirstAndLast:
+      name: "org.openrewrite.java.migrate.util.ListFirstAndLast"
+      description: "Replace `list.get(0)` with `list.getFirst()`, `list.get(list.size()\
+        \ - 1)` with `list.getLast()`, and similar for `add(int, E)` and `remove(int)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/util/listfirstandlast"
+      options: []
+      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.util.MigrateCollectionsSingletonList:
       name: "org.openrewrite.java.migrate.util.MigrateCollectionsSingletonList"
@@ -7891,6 +8040,14 @@ rewrite-migrate-java:
       description: "Prefer `Optional.isEmpty()` instead of using `!Optional.isPresent()`\
         \ in Java 11 or higher."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/util/optionalnotpresenttoisempty"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.util.OptionalStreamRecipe:
+      name: "org.openrewrite.java.migrate.util.OptionalStreamRecipe"
+      description: "Migrate Java 8 `Optional<Stream>.filter(Optional::isPresent).map(Optional::get)`\
+        \ to Java 11 `.flatMap(Optional::stream)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/util/optionalstreamrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
@@ -7997,7 +8154,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.8.3"
+  version: "8.8.4"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -12711,7 +12868,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.8.3"
+  version: "8.8.4"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -12917,7 +13074,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.8.3"
+  version: "8.8.4"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
