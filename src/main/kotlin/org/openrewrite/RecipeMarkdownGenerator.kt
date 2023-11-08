@@ -1226,7 +1226,7 @@ class RecipeMarkdownGenerator : Runnable {
 
                 {% code title="shell" %}
                 ```shell
-                mod run <PATH> --recipe $trimmedRecipeName
+                mod run . --recipe $trimmedRecipeName
                 ```
                 {% endcode %}
                 {% endtab %}
