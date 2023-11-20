@@ -1162,9 +1162,9 @@ class RecipeMarkdownGenerator : Runnable {
                 writeln(recipeDescriptor.contributors.stream()
                     .map { contributor: Contributor ->
                         if (contributor.email.contains("noreply")) {
-                            "* " + contributor.name
+                            contributor.name
                         } else {
-                            "* [" + contributor.name + "](mailto:" + contributor.email + ")"
+                            "[" + contributor.name + "](mailto:" + contributor.email + ")"
                         }
                     }.collect(Collectors.joining(", "))
                 )
