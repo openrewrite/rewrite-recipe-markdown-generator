@@ -18,24 +18,22 @@ class RecipeOrigin(
     fun isFromCoreLibrary() = groupId == "org.openrewrite" && coreLibs.contains(artifactId)
 
     private fun convertNameToJavaPath(recipeName: String): String =
-        recipeName.replace('.', '/') + ".java"
+        recipeName.replace('.', '/').removeSuffix("Recipe") + ".java"
 
     fun githubUrl(recipeName: String, source: URI): String {
         val sourceString = source.toString()
-        var baseUrl = ""
-
-        if (isFromCoreLibrary()) {
-            baseUrl = "https://github.com/openrewrite/rewrite/blob/main/$artifactId/src/main"
+        val baseUrl = if (isFromCoreLibrary()) {
+            "https://github.com/openrewrite/rewrite/blob/main/$artifactId/src/main"
         } else {
-            baseUrl = "https://github.com/openrewrite/$artifactId/blob/main/src/main"
+            "https://github.com/openrewrite/$artifactId/blob/main/src/main"
         }
 
         // YAML recipes will have a source that ends with META-INF/rewrite/something.yml
-        if (sourceString.substring(sourceString.length - 3) == "yml") {
+        return if (sourceString.substring(sourceString.length - 3) == "yml") {
             val ymlPath = sourceString.substring(source.toString().lastIndexOf("META-INF"))
-            return "$baseUrl/resources/$ymlPath"
+            "$baseUrl/resources/$ymlPath"
         } else {
-            return baseUrl + "/java/" + convertNameToJavaPath(recipeName)
+            baseUrl + "/java/" + convertNameToJavaPath(recipeName)
         }
     }
 
