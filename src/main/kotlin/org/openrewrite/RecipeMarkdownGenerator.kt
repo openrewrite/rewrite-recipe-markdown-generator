@@ -639,7 +639,11 @@ class RecipeMarkdownGenerator : Runnable {
                 @Suppress("SENSELESS_COMPARISON")
                 if (descriptor != null && descriptor.description != null) {
                     appendLine()
-                    appendLine("_${descriptor.description}_")
+                    if (descriptor.description.contains("\n") || descriptor.description.contains("_")){
+                        appendLine(descriptor.description)
+                    } else {
+                        appendLine("_${descriptor.description}_")
+                    }
                 }
                 appendLine()
 
