@@ -4029,6 +4029,25 @@ rewrite-kubernetes:
         required: true
       isImperative: true
       artifactId: "rewrite-kubernetes"
+rewrite-launchdarkly:
+  artifactId: "rewrite-launchdarkly"
+  version: "0.0.1"
+  markdownRecipeDescriptors:
+    org.openrewrite.launchdarkly.UpgradeLaunchDarkly6:
+      name: "org.openrewrite.launchdarkly.UpgradeLaunchDarkly6"
+      description: "This recipe will apply changes commonly needed when migrating\
+        \ to LaunchDarkly 6.x."
+      docLink: "https://docs.openrewrite.org/recipes/launchdarkly/upgradelaunchdarkly6"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-launchdarkly"
+    org.openrewrite.launchdarkly.UpgradeLaunchDarkly6Dependencies:
+      name: "org.openrewrite.launchdarkly.UpgradeLaunchDarkly6Dependencies"
+      description: "Migrate LaunchDarkly dependencies to 6.x."
+      docLink: "https://docs.openrewrite.org/recipes/launchdarkly/upgradelaunchdarkly6dependencies"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-launchdarkly"
 rewrite-liberty:
   artifactId: "rewrite-liberty"
   version: "1.0.3"
