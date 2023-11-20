@@ -27,6 +27,7 @@ import java.nio.file.StandardOpenOption
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.stream.Collectors
 import kotlin.io.path.toPath
 import kotlin.system.exitProcess
 
@@ -1137,20 +1138,6 @@ class RecipeMarkdownGenerator : Runnable {
                 )
             }
 
-            // Contributors
-            if (recipeDescriptor.contributors.isNotEmpty()) {
-                newLine()
-                writeln("## Contributors")
-                for (contributors in recipeDescriptor.contributors) {
-                    if (contributors.email.contains("noreply")) {
-                        writeln("* ${contributors.name}")
-                    } else {
-                        writeln("* [${contributors.name}](mailto:${contributors.email})")
-                    }
-                }
-                newLine()
-            }
-
             newLine()
             writeln(
                 """
@@ -1163,6 +1150,21 @@ class RecipeMarkdownGenerator : Runnable {
                 Please [contact Moderne](https://moderne.io/product) for more information about safely running the recipes on your own codebase in a private SaaS.
             """.trimIndent()
             )
+
+            // Contributors
+            if (recipeDescriptor.contributors.isNotEmpty()) {
+                newLine()
+                writeln("## Contributors")
+                writeln(recipeDescriptor.contributors.stream()
+                    .map { contributor: Contributor ->
+                        if (contributor.email.contains("noreply")) {
+                            "* " + contributor.name
+                        } else {
+                            "* [" + contributor.name + "](mailto:" + contributor.email + ")"
+                        }
+                    }.collect(Collectors.joining(", "))
+                )
+            }
         }
     }
 
