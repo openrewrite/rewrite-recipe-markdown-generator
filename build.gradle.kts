@@ -86,7 +86,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-jhipster:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-kubernetes:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-liberty:$rewriteVersion")
-    //"recipe"("org.openrewrite.recipe:rewrite-launchdarkly:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-launchdarkly:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-logging-frameworks:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-micrometer:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-micronaut:$rewriteVersion")
