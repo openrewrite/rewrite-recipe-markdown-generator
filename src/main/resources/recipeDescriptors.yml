@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.9.4"
+  version: "8.9.5"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -868,7 +868,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.9.4"
+  version: "8.9.5"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1437,7 +1437,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.9.4"
+  version: "8.9.5"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1456,7 +1456,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.9.4"
+  version: "8.9.5"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1607,7 +1607,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.9.4"
+  version: "8.9.5"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -3440,7 +3440,7 @@ rewrite-jhipster:
       artifactId: "rewrite-jhipster"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.9.4"
+  version: "8.9.5"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3490,7 +3490,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.7.3"
+  version: "1.7.4"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -4384,7 +4384,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.9.4"
+  version: "8.9.5"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -8256,7 +8256,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.9.4"
+  version: "8.9.5"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -8526,7 +8526,7 @@ rewrite-recommendations:
       artifactId: "rewrite-recommendations"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "5.1.1"
+  version: "5.1.2"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin:
       name: "org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin"
@@ -9285,12 +9285,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.boot2.SpringBootProperties_2_7:
       name: "org.openrewrite.java.spring.boot2.SpringBootProperties_2_7"
-      description: "Migrate applications to the latest Spring Boot 2.7 release. This\
-        \ recipe will modify an application's build files, make changes to deprecated/preferred\
-        \ APIs, and migrate configuration settings that have changes between versions.\
-        \ This recipe will also chain additional framework migrations (Spring Framework,\
-        \ Spring Data, etc) that are required as part of the migration to Spring Boot\
-        \ 2.7\n"
+      description: "Migrate properties found in `application.properties` and `application.yml`."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/boot2/springbootproperties_2_7"
       options: []
       isImperative: false
@@ -9513,6 +9508,14 @@ rewrite-spring:
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.boot3.EnableVirtualThreads:
+      name: "org.openrewrite.java.spring.boot3.EnableVirtualThreads"
+      description: "Set `spring.threads.virtual.enabled` to `true` in `application.properties`\
+        \ or `application.yml`."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/enablevirtualthreads"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.boot3.MaintainTrailingSlashURLMappings:
       name: "org.openrewrite.java.spring.boot3.MaintainTrailingSlashURLMappings"
       description: "This is part of Spring MVC and WebFlux URL Matching Changes, as\
@@ -9614,8 +9617,25 @@ rewrite-spring:
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_1:
       name: "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_1"
-      description: "Upgrade to Spring Boot 3.1"
+      description: "Migrate applications to the latest Spring Boot 3.1 release. This\
+        \ recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions.\
+        \ This recipe will also chain additional framework migrations (Spring Framework,\
+        \ Spring Data, etc) that are required as part of the migration to Spring Boot\
+        \ 3.0.\n"
       docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/upgradespringboot_3_1"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_2:
+      name: "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_2"
+      description: "Migrate applications to the latest Spring Boot 3.2 release. This\
+        \ recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions.\
+        \ This recipe will also chain additional framework migrations (Spring Framework,\
+        \ Spring Data, etc) that are required as part of the migration to Spring Boot\
+        \ 3.1.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/upgradespringboot_3_2"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -10099,6 +10119,15 @@ rewrite-spring:
         \ This recipe will modify an application's build files, make changes to deprecated/preferred\
         \ APIs, and migrate configuration settings that have changes between versions.\n"
       docLink: "https://docs.openrewrite.org/recipes/java/spring/security6/upgradespringsecurity_6_1"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.security6.UpgradeSpringSecurity_6_2:
+      name: "org.openrewrite.java.spring.security6.UpgradeSpringSecurity_6_2"
+      description: "Migrate applications to the latest Spring Security 6.2 release.\
+        \ This recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/security6/upgradespringsecurity_6_2"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -12977,7 +13006,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.9.4"
+  version: "8.9.5"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -13183,7 +13212,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.9.4"
+  version: "8.9.5"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
