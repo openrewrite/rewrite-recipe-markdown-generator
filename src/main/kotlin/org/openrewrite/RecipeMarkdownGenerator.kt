@@ -1114,6 +1114,11 @@ class RecipeMarkdownGenerator : Runnable {
                 }
                 val pathToRecipes = pathToRecipesBuilder.toString()
                 for (recipe in recipeDescriptor.recipeList) {
+                    // https://github.com/openrewrite/rewrite-docs/issues/250
+                    if (recipe.displayName == "Precondition bellwether") {
+                        continue
+                    }
+
                     writeln("* [" + recipe.displayName + "](" + pathToRecipes + getRecipePath(recipe) + ".md)")
                     if (recipe.options.isNotEmpty()) {
                         for (option in recipe.options) {
