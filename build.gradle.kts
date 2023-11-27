@@ -83,7 +83,6 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-java-dependencies:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-java-security:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-jenkins:$rewriteVersion")
-//    "recipe"("org.openrewrite.recipe:rewrite-jhipster:$rewriteVersion") // Archived
     "recipe"("org.openrewrite.recipe:rewrite-kubernetes:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-liberty:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-launchdarkly:$rewriteVersion")
@@ -98,7 +97,6 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-sql:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-static-analysis:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-terraform:$rewriteVersion")
-    //"recipe"("org.openrewrite.recipe:rewrite-testcontainers:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
 }
 
