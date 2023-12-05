@@ -386,7 +386,11 @@ class RecipeMarkdownGenerator : Runnable {
             changelog.appendText("\nWant to learn how to use snapshot versions in your project? Check out our [snapshot version guide](/reference/snapshot-instructions.md).")
             changelog.appendText("\n{% endhint %}\n\n")
         } else {
-            changelog.appendText("# X.XX.X release ($formatted)\n\n")
+            changelog.appendText("# X.XX.X release ($formatted)")
+
+            changelog.appendText("\n\n{% hint style=\"info\" %}")
+            changelog.appendText("\nThis changelog only shows what recipes have been added, removed, or changed. OpenRewrite may do releases that do not include these types of changes. To see these changes, please go to the [releases page](https://github.com/openrewrite/rewrite/releases).")
+            changelog.appendText("\n{% endhint %}\n\n")
         }
 
         // An example of what the changelog could look like after the below statements can be found here:
