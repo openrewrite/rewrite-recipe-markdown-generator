@@ -1495,8 +1495,7 @@ $cliSnippet
                             You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
                             {% code title="shell" %}
                             ```shell
-                            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run \
-                              -Drewrite.activeRecipes=${recipeDescriptor.name}
+                            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.activeRecipes=${recipeDescriptor.name}
                             ```
                             {% endcode %}
                             {% endtab %}
@@ -1622,9 +1621,7 @@ $cliSnippet
                             You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
                             
                             ```shell
-                            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run \
-                              -Drewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:RELEASE \
-                              -Drewrite.activeRecipes=${recipeDescriptor.name}
+                            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:RELEASE -Drewrite.activeRecipes=${recipeDescriptor.name}
                             ```
                             {% endcode %}
                             {% endtab %}
