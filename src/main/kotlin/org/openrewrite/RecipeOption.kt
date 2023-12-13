@@ -1,8 +1,11 @@
 package org.openrewrite
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 data class RecipeOption(
     val name: String,
     val type: String,
+    @JsonIgnore
     val example: String?,
     val required: Boolean
 ): Comparable<RecipeOption> {

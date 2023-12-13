@@ -161,6 +161,7 @@ defaultTasks = mutableListOf("run")
 
 tasks.withType<MarkdownToHtmlTask> {
     dependsOn("run")
+    all = true
     sourceDir = file("build/docs")
     outputDir = file("build/html")
     doLast {
