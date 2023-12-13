@@ -643,7 +643,7 @@ class RecipeMarkdownGenerator : Runnable {
                 @Suppress("SENSELESS_COMPARISON")
                 if (descriptor != null && descriptor.description != null) {
                     appendLine()
-                    if (descriptor.description.contains("\n") || descriptor.description.contains("_")){
+                    if (descriptor.description.contains("\n") || descriptor.description.contains("_")) {
                         appendLine(descriptor.description)
                     } else {
                         appendLine("_${descriptor.description}_")
@@ -813,7 +813,7 @@ class RecipeMarkdownGenerator : Runnable {
             // Options
             if (recipeDescriptor.options.isNotEmpty()) {
                 writeln(
-                        """
+                    """
                     ## Options
                     
                     | Type | Name | Description | Example |
@@ -843,8 +843,8 @@ class RecipeMarkdownGenerator : Runnable {
                         }
                     }
                     writeln(
-                            """
-                        | `${option.type}` | ${option.name} | $description | `${option.example}` |
+                        """
+                        | `${option.type}` | ${option.name} | $description | `${option.example ?: ""}` |
                     """.trimIndent()
                     )
                 }
@@ -874,19 +874,23 @@ class RecipeMarkdownGenerator : Runnable {
             }
 
             for (dataTable in filteredDataTables) {
-                writeln("""
+                writeln(
+                    """
                     ### ${dataTable.displayName}
 
                     _${dataTable.description}_
 
                     | Column Name | Description |
                     | ----------- | ----------- |
-                """.trimIndent())
+                """.trimIndent()
+                )
 
                 for (column in dataTable.columns) {
-                    writeln("""
+                    writeln(
+                        """
                        | ${column.displayName} | ${column.description} |
-                    """.trimIndent())
+                    """.trimIndent()
+                    )
                 }
 
                 newLine()
@@ -1001,7 +1005,7 @@ class RecipeMarkdownGenerator : Runnable {
 
                                 writeln("{% code %}")
                                 writeln(
-                                        """
+                                    """
                                 |```diff
                                 |${diff}```
                                 """.trimMargin()
@@ -1178,14 +1182,15 @@ class RecipeMarkdownGenerator : Runnable {
             if (recipeDescriptor.contributors.isNotEmpty()) {
                 newLine()
                 writeln("## Contributors")
-                writeln(recipeDescriptor.contributors.stream()
-                    .map { contributor: Contributor ->
-                        if (contributor.email.contains("noreply")) {
-                            contributor.name
-                        } else {
-                            "[" + contributor.name + "](mailto:" + contributor.email + ")"
-                        }
-                    }.collect(Collectors.joining(", "))
+                writeln(
+                    recipeDescriptor.contributors.stream()
+                        .map { contributor: Contributor ->
+                            if (contributor.email.contains("noreply")) {
+                                contributor.name
+                            } else {
+                                "[" + contributor.name + "](mailto:" + contributor.email + ")"
+                            }
+                        }.collect(Collectors.joining(", "))
                 )
             }
         }
@@ -1207,8 +1212,8 @@ class RecipeMarkdownGenerator : Runnable {
             val revisedLines = revised.lines()
 
             diffContent.append("@@ -${delta.source.position + 1},${delta.source.size()} ")
-                    .append("+${delta.target.position + 1},${delta.target.size()} @@")
-                    .append("\n")
+                .append("+${delta.target.position + 1},${delta.target.size()} @@")
+                .append("\n")
 
             // print shared context
             val startIndex = maxOf(0, delta.source.position - contextLinesBefore)
@@ -1218,12 +1223,14 @@ class RecipeMarkdownGenerator : Runnable {
             }
 
             for (i in delta.source.position until delta.source.position + delta.source.size()) {
-                val trimmedLine = if (originalLines[i].startsWith(" ")) originalLines[i].replaceFirst(" ", "") else originalLines[i]
+                val trimmedLine =
+                    if (originalLines[i].startsWith(" ")) originalLines[i].replaceFirst(" ", "") else originalLines[i]
                 diffContent.append("-").append(trimmedLine).append("\n")
             }
 
             for (i in delta.target.position until delta.target.position + delta.target.size()) {
-                val trimmedLine = if (revisedLines[i].startsWith(" ")) revisedLines[i].replaceFirst(" ", "") else revisedLines[i]
+                val trimmedLine =
+                    if (revisedLines[i].startsWith(" ")) revisedLines[i].replaceFirst(" ", "") else revisedLines[i]
                 diffContent.append("+").append(trimmedLine).append("\n")
             }
 
