@@ -839,9 +839,10 @@ class RecipeMarkdownGenerator : Runnable {
                     if (option.valid?.isNotEmpty()?: false) {
                         description += " Valid options: " + option.valid?.joinToString { "`$it`" }
                     }
+                    val example = if (option.example != null) "`${option.example}`" else ""
                     writeln(
                         """
-                        | `${option.type}` | ${option.name} | $description | `${option.example ?: ""}` |
+                        | `${option.type}` | ${option.name} | $description | $example |
                     """.trimIndent()
                     )
                 }
