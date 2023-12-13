@@ -151,7 +151,7 @@ class RecipeMarkdownGenerator : Runnable {
             val recipeOptions = TreeSet<RecipeOption>()
             for (recipeOption in recipeDescriptor.options) {
                 val name = recipeOption.name as String
-                val ro = RecipeOption(name, recipeOption.type, recipeOption.example, recipeOption.isRequired)
+                val ro = RecipeOption(name, recipeOption.type, recipeOption.isRequired)
                 recipeOptions.add(ro)
             }
 
