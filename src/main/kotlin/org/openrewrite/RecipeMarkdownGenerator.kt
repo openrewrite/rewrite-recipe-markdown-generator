@@ -835,6 +835,13 @@ class RecipeMarkdownGenerator : Runnable {
                     description = description.replace("method patterns?".toRegex(RegexOption.IGNORE_CASE)) { match ->
                         "[${match.value}](/reference/method-patterns.md)"
                     }
+                    // Add valid options to description
+                    if (option.valid != null && option.valid.isNotEmpty()) {
+                        description += "\n\nValid options:\n"
+                        option.valid.forEach { validOption ->
+                            description += "* `$validOption`\n"
+                        }
+                    }
                     writeln(
                             """
                         | `${option.type}` | ${option.name} | $description | `${option.example}` |
