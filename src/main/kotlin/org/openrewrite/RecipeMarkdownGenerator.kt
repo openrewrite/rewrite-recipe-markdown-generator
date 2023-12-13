@@ -151,7 +151,7 @@ class RecipeMarkdownGenerator : Runnable {
             val recipeOptions = TreeSet<RecipeOption>()
             for (recipeOption in recipeDescriptor.options) {
                 val name = recipeOption.name as String
-                val ro = RecipeOption(name, recipeOption.type, recipeOption.isRequired)
+                val ro = RecipeOption(name, recipeOption.type, recipeOption.example, recipeOption.isRequired)
                 recipeOptions.add(ro)
             }
 
@@ -610,7 +610,7 @@ class RecipeMarkdownGenerator : Runnable {
             } else {
                 // Some nested recipes have a `github` path which gets converted into `Github` when it should be `GitHub`.
                 if (displayName == "Github") {
-                    displayName = "GitHub";
+                    displayName = "GitHub"
                 }
 
                 result.appendLine("$indent* [$displayName](reference/recipes/$path/README.md)")
@@ -816,8 +816,8 @@ class RecipeMarkdownGenerator : Runnable {
                         """
                     ## Options
                     
-                    | Type | Name | Description |
-                    | -- | -- | -- |
+                    | Type | Name | Description | Example |
+                    | -- | -- | -- | -- |
                 """.trimIndent()
                 )
                 for (option in recipeDescriptor.options) {
@@ -837,7 +837,7 @@ class RecipeMarkdownGenerator : Runnable {
                     }
                     writeln(
                             """
-                        | `${option.type}` | ${option.name} | $description |
+                        | `${option.type}` | ${option.name} | $description | `${option.example}` |
                     """.trimIndent()
                     )
                 }
