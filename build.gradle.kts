@@ -161,9 +161,10 @@ defaultTasks = mutableListOf("run")
 
 tasks.withType<MarkdownToHtmlTask> {
     dependsOn("run")
-    all = true
     sourceDir = file("build/docs")
     outputDir = file("build/html")
+    fencedCodeBlocks = true
+    tables = true
     doLast {
         this as MarkdownToHtmlTask
         @Suppress("UNNECESSARY_NOT_NULL_ASSERTION") // IntelliJ says this is unnecessary, kotlin compiler disagrees
