@@ -836,11 +836,8 @@ class RecipeMarkdownGenerator : Runnable {
                         "[${match.value}](/reference/method-patterns.md)"
                     }
                     // Add valid options to description
-                    if (option.valid != null && option.valid.isNotEmpty()) {
-                        description += "\n\nValid options:\n"
-                        option.valid.forEach { validOption ->
-                            description += "* `$validOption`\n"
-                        }
+                    if (option.valid?.isNotEmpty()?: false) {
+                        description += " Valid options: " + option.valid?.joinToString { "`$it`" }
                     }
                     writeln(
                         """
