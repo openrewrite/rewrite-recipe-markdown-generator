@@ -1,16 +1,19 @@
 package org.openrewrite
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 data class RecipeOption(
     val name: String,
     val type: String,
+    @JsonIgnore
+    val example: String?,
     val required: Boolean
 ): Comparable<RecipeOption> {
     override fun compareTo(other: RecipeOption): Int {
-        if (this.name != other.name) return this.name.compareTo(other.name)
-        if (this.type != other.type) return this.type.compareTo(other.type)
-        if (this.required && !other.required) return 1
-        if (!this.required && other.required) return -1
-
-        return 0
+        return compareBy(RecipeOption::name)
+            .then(compareBy(RecipeOption::type))
+            .then(compareBy(RecipeOption::example))
+            .then(compareBy(RecipeOption::required))
+            .compare(this, other)
     }
 }
