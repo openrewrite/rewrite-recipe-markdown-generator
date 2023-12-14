@@ -54,6 +54,9 @@ dependencies {
     implementation("io.github.java-diff-utils:java-diff-utils:4.11")
     runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
 
+    testImplementation("org.junit.jupiter:junit-jupiter-api:latest.release")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:latest.release")
+
     "recipe"(platform("org.openrewrite:rewrite-bom:$rewriteVersion"))
     "recipe"("org.openrewrite:rewrite-core")
     "recipe"("org.openrewrite:rewrite-groovy")
@@ -109,6 +112,10 @@ java {
 tasks.named<JavaCompile>("compileJava") {
     sourceCompatibility = JavaVersion.VERSION_17.toString()
     targetCompatibility = JavaVersion.VERSION_17.toString()
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 application {
