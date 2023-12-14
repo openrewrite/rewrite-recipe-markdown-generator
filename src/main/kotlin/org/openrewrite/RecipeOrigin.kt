@@ -18,7 +18,7 @@ class RecipeOrigin(
     fun isFromCoreLibrary() = groupId == "org.openrewrite" && coreLibs.contains(artifactId)
 
     private fun convertNameToJavaPath(recipeName: String): String =
-        recipeName.replace('.', '/').removeSuffix("Recipe") + ".java"
+        recipeName.replace('.', '/').replace(Regex("Recipes\\$?.*"), "") + ".java"
 
     fun githubUrl(recipeName: String, source: URI): String {
         val sourceString = source.toString()
