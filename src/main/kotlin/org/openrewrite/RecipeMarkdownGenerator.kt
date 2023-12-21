@@ -809,7 +809,6 @@ class RecipeMarkdownGenerator : Runnable {
                 )
             }
 
-
             // Options
             if (recipeDescriptor.options.isNotEmpty()) {
                 writeln(
@@ -843,7 +842,7 @@ class RecipeMarkdownGenerator : Runnable {
                     writeln(
                         """
                         | `${option.type}` | ${option.name} | $description | $example |
-                    """.trimIndent()
+                    """.trimIndent().replace("\n", "<br/>")
                     )
                 }
                 newLine()
