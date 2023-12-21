@@ -1,6 +1,6 @@
 rewrite-analysis:
   artifactId: "rewrite-analysis"
-  version: "2.1.4"
+  version: "2.1.5"
   markdownRecipeDescriptors:
     org.openrewrite.analysis.controlflow.ControlFlowVisualization:
       name: "org.openrewrite.analysis.controlflow.ControlFlowVisualization"
@@ -63,7 +63,7 @@ rewrite-analysis:
       artifactId: "rewrite-analysis"
 rewrite-circleci:
   artifactId: "rewrite-circleci"
-  version: "2.0.10"
+  version: "2.0.11"
   markdownRecipeDescriptors:
     org.openrewrite.circleci.InstallOrb:
       name: "org.openrewrite.circleci.InstallOrb"
@@ -91,7 +91,7 @@ rewrite-circleci:
       artifactId: "rewrite-circleci"
 rewrite-cloud-suitability-analyzer:
   artifactId: "rewrite-cloud-suitability-analyzer"
-  version: "2.0.10"
+  version: "2.0.11"
   markdownRecipeDescriptors:
     org.openrewrite.cloudsuitability.FindCacheUses:
       name: "org.openrewrite.cloudsuitability.FindCacheUses"
@@ -269,7 +269,7 @@ rewrite-cloud-suitability-analyzer:
       artifactId: "rewrite-cloud-suitability-analyzer"
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "2.0.10"
+  version: "2.0.11"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -349,7 +349,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.11.1"
+  version: "8.11.2"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -734,7 +734,7 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "2.0.11"
+  version: "2.0.12"
   markdownRecipeDescriptors:
     org.openrewrite.github.AddCronTrigger:
       name: "org.openrewrite.github.AddCronTrigger"
@@ -884,7 +884,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.11.1"
+  version: "8.11.2"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1160,16 +1160,18 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
     org.openrewrite.gradle.UpdateGradleWrapper:
       name: "org.openrewrite.gradle.UpdateGradleWrapper"
-      description: "Update the version of Gradle used in an existing Gradle wrapper."
+      description: "Update the version of Gradle used in an existing Gradle wrapper.\
+        \ Queries services.gradle.org to determine the available releases, but prefers\
+        \ the artifact repository URL which already exists within the wrapper properties\
+        \ file. If your artifact repository does not contain the same Gradle distributions\
+        \ as services.gradle.org, then the recipe may suggest a version which is not\
+        \ available in your artifact repository."
       docLink: "https://docs.openrewrite.org/recipes/gradle/updategradlewrapper"
       options:
       - name: "addIfMissing"
         type: "Boolean"
         required: false
       - name: "distribution"
-        type: "String"
-        required: false
-      - name: "repositoryUrl"
         type: "String"
         required: false
       - name: "version"
@@ -1453,7 +1455,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.11.1"
+  version: "8.11.2"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda:
       name: "org.openrewrite.groovy.format.OmitParenthesesForLastArgumentLambda"
@@ -1472,7 +1474,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.11.1"
+  version: "8.11.2"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -1623,7 +1625,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.11.1"
+  version: "8.11.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -2650,7 +2652,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "1.2.5"
+  version: "1.2.6"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.AddDependency:
       name: "org.openrewrite.java.dependencies.AddDependency"
@@ -3382,7 +3384,7 @@ rewrite-java-security:
       artifactId: "rewrite-java-security"
 rewrite-jenkins:
   artifactId: "rewrite-jenkins"
-  version: "0.2.8"
+  version: "0.2.9"
   markdownRecipeDescriptors:
     org.openrewrite.jenkins.AddPluginsBom:
       name: "org.openrewrite.jenkins.AddPluginsBom"
@@ -3525,7 +3527,7 @@ rewrite-jenkins:
       artifactId: "rewrite-jenkins"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.11.1"
+  version: "8.11.2"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -3575,7 +3577,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.8.1"
+  version: "1.8.2"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -3632,6 +3634,14 @@ rewrite-kotlin:
       options: []
       isImperative: true
       artifactId: "rewrite-kotlin"
+    org.openrewrite.kotlin.cleanup.RemoveTrailingComma:
+      name: "org.openrewrite.kotlin.cleanup.RemoveTrailingComma"
+      description: "Remove trailing commas in variable, parameter, and class property\
+        \ lists."
+      docLink: "https://docs.openrewrite.org/recipes/kotlin/cleanup/removetrailingcomma"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-kotlin"
     org.openrewrite.kotlin.cleanup.RemoveTrailingSemicolon:
       name: "org.openrewrite.kotlin.cleanup.RemoveTrailingSemicolon"
       description: "Some Java programmers may mistakenly add semicolons at the end\
@@ -3668,7 +3678,7 @@ rewrite-kotlin:
       artifactId: "rewrite-kotlin"
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "2.0.10"
+  version: "2.0.11"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -4549,7 +4559,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.11.1"
+  version: "8.11.2"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -8570,7 +8580,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.11.1"
+  version: "8.11.2"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -8678,7 +8688,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-python:
   artifactId: "rewrite-python"
-  version: "1.2.4"
+  version: "1.2.5"
   markdownRecipeDescriptors:
     org.openrewrite.python.ChangeMethodName:
       name: "org.openrewrite.python.ChangeMethodName"
@@ -10546,7 +10556,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-sql:
   artifactId: "rewrite-sql"
-  version: "1.0.9"
+  version: "1.0.10"
   markdownRecipeDescriptors:
     org.openrewrite.sql.FindSql:
       name: "org.openrewrite.sql.FindSql"
@@ -11765,7 +11775,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "2.0.10"
+  version: "2.0.11"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -13424,7 +13434,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.11.1"
+  version: "8.11.2"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -13654,7 +13664,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.11.1"
+  version: "8.11.2"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
