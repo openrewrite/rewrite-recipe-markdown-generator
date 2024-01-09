@@ -166,7 +166,7 @@ class RecipeMarkdownGenerator : Runnable {
             val docLink =
                 docBaseUrl + recipeDescriptor.name.lowercase(Locale.getDefault()).removePrefix("org.openrewrite.")
                     .replace('.', '/')
-                    .replace("$", "usd")
+                    .replace("$", "usd") // needed for refaster templates + gitbook as we have started using $ in our recipe descriptors :(
 
             val recipeSource = recipeDescriptor.source.toString()
             var isImperative = true
