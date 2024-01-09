@@ -166,6 +166,7 @@ class RecipeMarkdownGenerator : Runnable {
             val docLink =
                 docBaseUrl + recipeDescriptor.name.lowercase(Locale.getDefault()).removePrefix("org.openrewrite.")
                     .replace('.', '/')
+                    .replace("$", "usd")
 
             val recipeSource = recipeDescriptor.source.toString()
             var isImperative = true
