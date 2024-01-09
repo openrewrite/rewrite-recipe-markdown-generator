@@ -1909,6 +1909,20 @@ rewrite-java:
         required: true
       isImperative: true
       artifactId: "rewrite-java"
+    org.openrewrite.java.RemoveAnnotationAttribute:
+      name: "org.openrewrite.java.RemoveAnnotationAttribute"
+      description: "Some annotations accept arguments. This recipe removes an existing\
+        \ attribute."
+      docLink: "https://docs.openrewrite.org/recipes/java/removeannotationattribute"
+      options:
+      - name: "annotationType"
+        type: "String"
+        required: true
+      - name: "attributeName"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-java"
     org.openrewrite.java.RemoveImplements:
       name: "org.openrewrite.java.RemoveImplements"
       description: "Removes `implements` clauses from classes implementing the specified\
@@ -6355,7 +6369,10 @@ rewrite-migrate-java:
         \ 8 or higher. `sun.misc` is not exported by the Java module system and accessing\
         \ this class will result in a warning in Java 11 and an error in Java 17."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/usejavautilbase64"
-      options: []
+      options:
+      - name: "useMimeCoder"
+        type: "boolean"
+        required: false
       isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.UseTabsOrSpaces:
@@ -11685,6 +11702,27 @@ rewrite-static-analysis:
       name: "org.openrewrite.staticanalysis.SimplifyDurationCreationUnits"
       description: "Simplifies `java.time.Duration` units to be more human-readable."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/simplifydurationcreationunits"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.SimplifyTernaryRecipes:
+      name: "org.openrewrite.staticanalysis.SimplifyTernaryRecipes"
+      description: "Refaster template recipes for `org.openrewrite.staticanalysis.SimplifyTernary`."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/simplifyternaryrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.SimplifyTernaryRecipes$SimplifyTernaryFalseTrueRecipe:
+      name: "org.openrewrite.staticanalysis.SimplifyTernaryRecipes$SimplifyTernaryFalseTrueRecipe"
+      description: "Simplify `expr ? false : true` to `!expr`."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/simplifyternaryrecipes$simplifyternaryfalsetruerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.SimplifyTernaryRecipes$SimplifyTernaryTrueFalseRecipe:
+      name: "org.openrewrite.staticanalysis.SimplifyTernaryRecipes$SimplifyTernaryTrueFalseRecipe"
+      description: "Simplify `expr ? true : false` to `expr`."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/simplifyternaryrecipes$simplifyternarytruefalserecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
