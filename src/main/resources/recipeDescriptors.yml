@@ -2924,7 +2924,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "2.1.4"
+  version: "2.2.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.security.FindTextDirectionChanges:
       name: "org.openrewrite.java.security.FindTextDirectionChanges"
@@ -9051,7 +9051,7 @@ rewrite-recommendations:
       artifactId: "rewrite-recommendations"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "5.1.7"
+  version: "5.2.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin:
       name: "org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin"
@@ -10113,6 +10113,13 @@ rewrite-spring:
       description: "Migrate applications built on Spring Batch 4.3 to the latest Spring\
         \ Batch 5.0 release."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/springbatch4to5migration"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.boot3.SpringBoot3BestPractices:
+      name: "org.openrewrite.java.spring.boot3.SpringBoot3BestPractices"
+      description: "Applies best practices to Spring Boot 3 applications."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/springboot3bestpractices"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
