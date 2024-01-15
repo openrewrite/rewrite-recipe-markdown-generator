@@ -1079,7 +1079,7 @@ class RecipeMarkdownGenerator : Runnable {
                         mavenPluginVersion,
                         suppressMaven,
                         suppressGradle,
-                        getCliSnippet(recipeDescriptor),
+                        getCliSnippet(exampleRecipeName),
                     )
                 } else {
                     writeSnippetsWithConfigurationWithoutDependency(
@@ -1088,7 +1088,7 @@ class RecipeMarkdownGenerator : Runnable {
                         mavenPluginVersion,
                         suppressMaven,
                         suppressGradle,
-                        getCliSnippet(recipeDescriptor),
+                        getCliSnippet(exampleRecipeName),
                     )
                 }
             } else {
@@ -1099,7 +1099,7 @@ class RecipeMarkdownGenerator : Runnable {
                         mavenPluginVersion,
                         suppressMaven,
                         suppressGradle,
-                        getCliSnippet(recipeDescriptor),
+                        getCliSnippet(recipeDescriptor.name),
                     )
                 } else {
                     writeSnippetForOtherLibrary(
@@ -1109,7 +1109,7 @@ class RecipeMarkdownGenerator : Runnable {
                         mavenPluginVersion,
                         suppressMaven,
                         suppressGradle,
-                        getCliSnippet(recipeDescriptor),
+                        getCliSnippet(recipeDescriptor.name),
                     )
                 }
             }
@@ -1242,13 +1242,13 @@ class RecipeMarkdownGenerator : Runnable {
     }
 
     private fun getCliSnippet(
-        recipeDescriptor: RecipeDescriptor,
+        name: String,
     ): String {
-        val lastPeriod = recipeDescriptor.name.lastIndexOf('.')
-        var trimmedRecipeName = recipeDescriptor.name
+        val lastPeriod = name.lastIndexOf('.')
+        var trimmedRecipeName = name
 
         if (lastPeriod >= 0) {
-            trimmedRecipeName = recipeDescriptor.name.substring(lastPeriod + 1)
+            trimmedRecipeName = name.substring(lastPeriod + 1)
         }
 
         return """
