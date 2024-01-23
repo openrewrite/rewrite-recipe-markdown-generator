@@ -26,6 +26,11 @@ fun RecipeDescriptor.asYaml(): String {
     if (recipeList.isNotEmpty()) {
         s.appendLine("recipeList:")
         for (subRecipe in recipeList) {
+            // https://github.com/openrewrite/rewrite-docs/issues/250
+            if (subRecipe.name.contains("Bellwether")) {
+                continue;
+            }
+
             s.append("  - ${subRecipe.name}")
             if (subRecipe.options.isEmpty()) {
                 s.appendLine()
