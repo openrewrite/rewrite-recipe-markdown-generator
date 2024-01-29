@@ -32,7 +32,7 @@ jobs:
           distribution: temurin
           java-version: 17
       - name: build
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: ${{ env.GRADLE_SWITCHES }} check markdownToHtml
 
