@@ -71,12 +71,15 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-yaml")
     "recipe"("org.openrewrite:rewrite-java-test")
 
-//    "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion") // Pending implementation of JS parser
+//    "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
+//    "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-kotlin:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
+//    "recipe"("org.openrewrite:rewrite-ruby:$rewriteVersion")
 
 //    "recipe"("org.openrewrite.recipe:rewrite-all:$rewriteVersion") // Exclude language composition data table recipes
     "recipe"("org.openrewrite.meta:rewrite-analysis:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-ai-search:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-circleci:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-cloud-suitability-analyzer:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-concourse:$rewriteVersion")
@@ -94,6 +97,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-micronaut:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-migrate-java:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-okhttp:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-openapi:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-quarkus:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-recommendations:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
@@ -101,6 +105,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-static-analysis:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-terraform:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-third-party:$rewriteVersion")
 }
 
 java {
