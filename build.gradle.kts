@@ -79,7 +79,7 @@ dependencies {
 
 //    "recipe"("org.openrewrite.recipe:rewrite-all:$rewriteVersion") // Exclude language composition data table recipes
     "recipe"("org.openrewrite.meta:rewrite-analysis:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-ai-search:$rewriteVersion")
+//    "recipe"("org.openrewrite.recipe:rewrite-ai-search:$rewriteVersion") Needs further attention
     "recipe"("org.openrewrite.recipe:rewrite-circleci:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-cloud-suitability-analyzer:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-concourse:$rewriteVersion")
@@ -105,7 +105,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-static-analysis:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-terraform:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-third-party:$rewriteVersion")
+//    "recipe"("org.openrewrite.recipe:rewrite-third-party:$rewriteVersion") Needs further attention
 }
 
 java {
