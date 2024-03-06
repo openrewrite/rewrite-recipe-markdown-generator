@@ -74,7 +74,7 @@ dependencies {
 //    "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-kotlin:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
+//    "recipe"("org.openrewrite:rewrite-python:$rewriteVersion") // Removed based on Olga request
 //    "recipe"("org.openrewrite:rewrite-ruby:$rewriteVersion")
 
 //    "recipe"("org.openrewrite.recipe:rewrite-all:$rewriteVersion") // Exclude language composition data table recipes
