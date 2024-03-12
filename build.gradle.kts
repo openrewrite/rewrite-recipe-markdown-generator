@@ -97,6 +97,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-micrometer:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-micronaut:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-migrate-java:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-nodejs:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-okhttp:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-openapi:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-quarkus:$rewriteVersion")
@@ -104,6 +105,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-sql:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-static-analysis:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-struts:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-terraform:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
 //    "recipe"("org.openrewrite.recipe:rewrite-third-party:$rewriteVersion") Needs further attention
