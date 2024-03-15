@@ -840,7 +840,16 @@ class RecipeMarkdownGenerator : Runnable {
                     if (option.valid?.isNotEmpty()?: false) {
                         description += " Valid options: " + option.valid?.joinToString { "`$it`" }
                     }
-                    val example = if (option.example != null) "`${option.example}`" else ""
+                    // Preserve table cell formatting for multiline examples
+                    val example = if (option.example != null) {
+                        if (option.example.contains("\n")) {
+                            "<pre>${option.example.replace("<", "\\<")}</pre>".replace("\n", "<br />")
+                        } else {
+                            "`${option.example}`"
+                        }
+                    } else {
+                        ""
+                    }
                     writeln(
                         """
                         | `${option.type}` | ${option.name} | $description | $example |
