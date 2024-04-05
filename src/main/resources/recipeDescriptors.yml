@@ -63,7 +63,7 @@ rewrite-analysis:
       artifactId: "rewrite-analysis"
 rewrite-apache:
   artifactId: "rewrite-apache"
-  version: "0.1.2"
+  version: "1.0.0"
   markdownRecipeDescriptors:
     org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64:
       name: "org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64"
@@ -72,6 +72,16 @@ rewrite-apache:
       docLink: "https://docs.openrewrite.org/recipes/apache/commons/codec/apachebase64tojavabase64"
       options: []
       isImperative: true
+      artifactId: "rewrite-apache"
+    org.openrewrite.apache.commons.collections.UpgradeApacheCommonsCollections_3_4:
+      name: "org.openrewrite.apache.commons.collections.UpgradeApacheCommonsCollections_3_4"
+      description: "Migrate applications to the latest Apache Commons Collections\
+        \ 4.x release. This recipe modifies  application's build files, make changes\
+        \ to deprecated/preferred APIs, and migrates configuration settings that have\
+        \ changes between versions.\n"
+      docLink: "https://docs.openrewrite.org/recipes/apache/commons/collections/upgradeapachecommonscollections_3_4"
+      options: []
+      isImperative: false
       artifactId: "rewrite-apache"
     org.openrewrite.apache.commons.io.ApacheCommonsFileUtilsRecipes:
       name: "org.openrewrite.apache.commons.io.ApacheCommonsFileUtilsRecipes"
@@ -292,6 +302,24 @@ rewrite-apache:
       docLink: "https://docs.openrewrite.org/recipes/apache/commons/lang/isnotemptytojdk"
       options: []
       isImperative: true
+      artifactId: "rewrite-apache"
+    org.openrewrite.apache.commons.lang.UpgradeApacheCommonsLang_2_3:
+      name: "org.openrewrite.apache.commons.lang.UpgradeApacheCommonsLang_2_3"
+      description: "Migrate applications to the latest Apache Commons Lang 3.x release.\
+        \ This recipe modifies  application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrates configuration settings that have changes between versions.\n"
+      docLink: "https://docs.openrewrite.org/recipes/apache/commons/lang/upgradeapachecommonslang_2_3"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-apache"
+    org.openrewrite.apache.commons.math.UpgradeApacheCommonsMath_2_3:
+      name: "org.openrewrite.apache.commons.math.UpgradeApacheCommonsMath_2_3"
+      description: "Migrate applications to the latest Apache Commons Math 3.x release.\
+        \ This recipe modifies  application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrates configuration settings that have changes between versions.\n"
+      docLink: "https://docs.openrewrite.org/recipes/apache/commons/math/upgradeapachecommonsmath_2_3"
+      options: []
+      isImperative: false
       artifactId: "rewrite-apache"
     org.openrewrite.apache.httpclient4.MappingDeprecatedClasses:
       name: "org.openrewrite.apache.httpclient4.MappingDeprecatedClasses"
@@ -956,7 +984,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.21.0"
+  version: "8.23.1"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -1508,7 +1536,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.21.0"
+  version: "8.23.1"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -2130,7 +2158,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.21.0"
+  version: "8.23.1"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.AutoFormat:
       name: "org.openrewrite.groovy.format.AutoFormat"
@@ -2166,7 +2194,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.21.0"
+  version: "8.23.1"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -2324,7 +2352,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.21.0"
+  version: "8.23.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -4261,7 +4289,7 @@ rewrite-jenkins:
       artifactId: "rewrite-jenkins"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.21.0"
+  version: "8.23.1"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -5341,7 +5369,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.21.0"
+  version: "8.23.1"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -5745,9 +5773,6 @@ rewrite-maven:
       - name: "oldRelativePath"
         type: "String"
         required: false
-      - name: "retainVersions"
-        type: "List"
-        required: false
       - name: "versionPattern"
         type: "String"
         required: false
@@ -6137,8 +6162,8 @@ rewrite-maven:
       artifactId: "rewrite-maven"
     org.openrewrite.maven.UpgradeParentVersion:
       name: "org.openrewrite.maven.UpgradeParentVersion"
-      description: "Set the parent pom version number according to a node-style semver\
-        \ selector or to a specific version number."
+      description: "Set the parent pom version number according to a [version selector](https://docs.openrewrite.org/reference/dependency-version-selectors)\
+        \ or to a specific version number."
       docLink: "https://docs.openrewrite.org/recipes/maven/upgradeparentversion"
       options:
       - name: "artifactId"
@@ -6150,9 +6175,6 @@ rewrite-maven:
       - name: "newVersion"
         type: "String"
         required: true
-      - name: "retainVersions"
-        type: "List"
-        required: false
       - name: "versionPattern"
         type: "String"
         required: false
@@ -9238,7 +9260,7 @@ rewrite-openapi:
       artifactId: "rewrite-openapi"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.21.0"
+  version: "8.23.1"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -14254,7 +14276,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.21.0"
+  version: "8.23.1"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -14487,7 +14509,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.21.0"
+  version: "8.23.1"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
