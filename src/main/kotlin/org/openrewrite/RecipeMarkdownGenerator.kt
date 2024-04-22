@@ -166,7 +166,10 @@ class RecipeMarkdownGenerator : Runnable {
             val docLink =
                 docBaseUrl + recipeDescriptor.name.lowercase(Locale.getDefault()).removePrefix("org.openrewrite.")
                     .replace('.', '/')
-                    .replace("$", "usd") // needed for refaster templates + gitbook as we have started using $ in our recipe descriptors :(
+                    .replace(
+                        "$",
+                        "usd"
+                    ) // needed for refaster templates + gitbook as we have started using $ in our recipe descriptors :(
 
             val recipeSource = recipeDescriptor.source.toString()
             var isImperative = true
@@ -777,7 +780,9 @@ class RecipeMarkdownGenerator : Runnable {
                 writeln("### Tags")
                 newLine()
                 for (tag in recipeDescriptor.tags) {
-                    if (tag.lowercase().startsWith("rspec-")) {
+                    if (tag.lowercase().startsWith("rspec-s")) {
+                        writeln("* [$tag](https://sonarsource.github.io/rspec/#/rspec/${tag.substring(6)})")
+                    } else if (tag.lowercase().startsWith("rspec-")) {
                         writeln("* [$tag](https://sonarsource.github.io/rspec/#/rspec/S${tag.substring(6)})")
                     } else {
                         writeln("* $tag")
@@ -841,7 +846,7 @@ class RecipeMarkdownGenerator : Runnable {
                         "[${match.value}](/reference/method-patterns.md)"
                     }
                     // Add valid options to description
-                    if (option.valid?.isNotEmpty()?: false) {
+                    if (option.valid?.isNotEmpty() ?: false) {
                         description += " Valid options: " + option.valid?.joinToString { "`$it`" }
                     }
                     // Preserve table cell formatting for multiline examples
