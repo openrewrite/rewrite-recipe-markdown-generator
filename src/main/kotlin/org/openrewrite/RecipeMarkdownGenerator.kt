@@ -777,7 +777,11 @@ class RecipeMarkdownGenerator : Runnable {
                 writeln("### Tags")
                 newLine()
                 for (tag in recipeDescriptor.tags) {
-                    writeln("* $tag")
+                    if (tag.lowercase().startsWith("rspec-")) {
+                        writeln("* [$tag](https://sonarsource.github.io/rspec/#/rspec/S${tag.substring(6)})")
+                    } else {
+                        writeln("* $tag")
+                    }
                 }
                 newLine()
             }
