@@ -834,7 +834,7 @@ class RecipeMarkdownGenerator : Runnable {
                     var description = if (option.description == null) {
                         ""
                     } else {
-                        option.description
+                        option.description.replace("\n", "<br />")
                     }
                     description = if (option.isRequired) {
                         description
