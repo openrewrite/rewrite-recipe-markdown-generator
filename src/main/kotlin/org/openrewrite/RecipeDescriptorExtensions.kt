@@ -32,7 +32,7 @@ fun RecipeDescriptor.asYaml(): String {
             }
 
             s.append("  - ${subRecipe.name}")
-            if (subRecipe.options.isEmpty()) {
+            if (subRecipe.options.isEmpty() || subRecipe.options.all { it.value == null }) {
                 s.appendLine()
             } else {
                 s.appendLine(":")
