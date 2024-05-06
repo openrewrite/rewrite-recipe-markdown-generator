@@ -87,6 +87,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-github-actions:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-hibernate:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-jackson:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-java-dependencies:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-java-security:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-jenkins:$rewriteVersion")
