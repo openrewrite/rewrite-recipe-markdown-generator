@@ -8,6 +8,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.Patch
 import org.openrewrite.config.CategoryDescriptor
+import org.openrewrite.config.DataTableDescriptor
 import org.openrewrite.config.Environment
 import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.internal.StringUtils
@@ -884,7 +885,7 @@ class RecipeMarkdownGenerator : Runnable {
             if (filteredDataTables.isNotEmpty()) {
                 writeln(
                     """
-                        ## Data Tables (Only available on the [Moderne platform](https://app.moderne.io/))
+                        ## Data Tables
 
                     """.trimIndent()
                 )
@@ -1046,6 +1047,13 @@ class RecipeMarkdownGenerator : Runnable {
             val suppressGradle = recipeDescriptor.name.contains(".maven.")
             val requiresConfiguration = recipeDescriptor.options.any { it.isRequired }
             val requiresDependency = !origin.isFromCoreLibrary()
+
+            val dataTableSnippet = if (filteredDataTables.isEmpty()) "" else """
+                    <exportDatatables>true</exportDatatables>
+                """.trimIndent()
+
+            val dataTableCommandLineSnippet = if (filteredDataTables.isEmpty()) "" else "-Drewrite.exportDatatables=true"
+
             if (requiresConfiguration) {
                 val exampleRecipeName =
                     "com.yourorg." + recipeDescriptor.name.substring(recipeDescriptor.name.lastIndexOf('.') + 1) + "Example"
@@ -1089,6 +1097,7 @@ class RecipeMarkdownGenerator : Runnable {
                 writeln("```")
                 writeln("{% endcode %}")
                 newLine()
+
                 if (requiresDependency) {
                     writeSnippetsWithConfigurationWithDependency(
                         exampleRecipeName,
@@ -1098,6 +1107,7 @@ class RecipeMarkdownGenerator : Runnable {
                         suppressMaven,
                         suppressGradle,
                         getCliSnippet(exampleRecipeName),
+                        dataTableSnippet,
                     )
                 } else {
                     writeSnippetsWithConfigurationWithoutDependency(
@@ -1107,6 +1117,7 @@ class RecipeMarkdownGenerator : Runnable {
                         suppressMaven,
                         suppressGradle,
                         getCliSnippet(exampleRecipeName),
+                        dataTableSnippet,
                     )
                 }
             } else {
@@ -1118,6 +1129,8 @@ class RecipeMarkdownGenerator : Runnable {
                         suppressMaven,
                         suppressGradle,
                         getCliSnippet(recipeDescriptor.name),
+                        dataTableSnippet,
+                        dataTableCommandLineSnippet,
                     )
                 } else {
                     writeSnippetForOtherLibrary(
@@ -1128,6 +1141,8 @@ class RecipeMarkdownGenerator : Runnable {
                         suppressMaven,
                         suppressGradle,
                         getCliSnippet(recipeDescriptor.name),
+                        dataTableSnippet,
+                        dataTableCommandLineSnippet,
                     )
                 }
             }
@@ -1289,6 +1304,7 @@ class RecipeMarkdownGenerator : Runnable {
         suppressMaven: Boolean,
         suppressGradle: Boolean,
         cliSnippet: String,
+        dataTableSnippet: String,
     ) {
         val gradleSnippet = if (suppressGradle) "" else """
                             {% tab title="Gradle" %}
@@ -1325,6 +1341,7 @@ class RecipeMarkdownGenerator : Runnable {
                                     <artifactId>rewrite-maven-plugin</artifactId>
                                     <version>$mavenPluginVersion</version>
                                     <configuration>
+                                      $dataTableSnippet
                                       <activeRecipes>
                                         <recipe>$exampleRecipeName</recipe>
                                       </activeRecipes>
@@ -1359,6 +1376,7 @@ $cliSnippet
         suppressMaven: Boolean,
         suppressGradle: Boolean,
         cliSnippet: String,
+        dataTableSnippet: String,
     ) {
         val gradleSnippet = if (suppressGradle) "" else """
                             {% tab title="Gradle" %}
@@ -1399,6 +1417,7 @@ $cliSnippet
                                     <artifactId>rewrite-maven-plugin</artifactId>
                                     <version>$mavenPluginVersion</version>
                                     <configuration>
+                                      $dataTableSnippet
                                       <activeRecipes>
                                         <recipe>$exampleRecipeName</recipe>
                                       </activeRecipes>
@@ -1439,6 +1458,8 @@ $cliSnippet
         suppressMaven: Boolean,
         suppressGradle: Boolean,
         cliSnippet: String,
+        dataTableSnippet: String,
+        dataTableCommandLineSnippet: String,
     ) {
         writeln(
             "This recipe has no required configuration parameters and comes from a rewrite core library. " +
@@ -1512,6 +1533,7 @@ $cliSnippet
                                     <artifactId>rewrite-maven-plugin</artifactId>
                                     <version>$mavenPluginVersion</version>
                                     <configuration>
+                                      $dataTableSnippet
                                       <activeRecipes>
                                         <recipe>${recipeDescriptor.name}</recipe>
                                       </activeRecipes>
@@ -1531,7 +1553,7 @@ $cliSnippet
 
                             {% code title="shell" overflow="wrap"%}
                             ```shell
-                            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.activeRecipes=${recipeDescriptor.name}
+                            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.activeRecipes=${recipeDescriptor.name} $dataTableCommandLineSnippet
                             ```
                             {% endcode %}
                             {% endtab %}
@@ -1555,6 +1577,8 @@ $cliSnippet
         suppressMaven: Boolean,
         suppressGradle: Boolean,
         cliSnippet: String,
+        dataTableSnippet: String,
+        dataTableCommandLineSnippet: String,
     ) {
         writeln(
             "This recipe has no required configuration options. It can be activated by adding a dependency on " +
@@ -1632,6 +1656,7 @@ $cliSnippet
                                     <artifactId>rewrite-maven-plugin</artifactId>
                                     <version>$mavenPluginVersion</version>
                                     <configuration>
+                                      $dataTableSnippet
                                       <activeRecipes>
                                         <recipe>${recipeDescriptor.name}</recipe>
                                       </activeRecipes>
@@ -1658,7 +1683,7 @@ $cliSnippet
 
                             {% code title="shell" overflow="wrap" %}
                             ```shell
-                            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:RELEASE -Drewrite.activeRecipes=${recipeDescriptor.name}
+                            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:RELEASE -Drewrite.activeRecipes=${recipeDescriptor.name} $dataTableCommandLineSnippet
                             ```
                             {% endcode %}
                             {% endtab %}
