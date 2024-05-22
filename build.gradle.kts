@@ -82,7 +82,6 @@ dependencies {
 //    "recipe"("org.openrewrite.recipe:rewrite-ai-search:$rewriteVersion") Needs further attention
     "recipe"("org.openrewrite.recipe:rewrite-apache:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-circleci:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-cloud-suitability-analyzer:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-concourse:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-github-actions:$rewriteVersion")
