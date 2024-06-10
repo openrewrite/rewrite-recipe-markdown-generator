@@ -166,6 +166,7 @@ class RecipeMarkdownGenerator : Runnable {
             // Changes something like org.openrewrite.circleci.InstallOrb to https://docs.openrewrite.org/recipes/circleci/installorb
             val docLink =
                 docBaseUrl + recipeDescriptor.name.lowercase(Locale.getDefault()).removePrefix("org.openrewrite.")
+                    .removePrefix("io.moderne.")
                     .replace('.', '/')
                     .replace(
                         "$",
