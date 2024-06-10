@@ -1731,6 +1731,8 @@ $cliSnippet
         private fun getRecipePath(recipe: RecipeDescriptor): String =
             if (recipe.name.startsWith("org.openrewrite")) {
                 recipe.name.substring(16).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
+            } else if (recipe.name.startsWith("io.moderne")) {
+                recipe.name.substring(11).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
             } else {
                 throw RuntimeException("Recipe package unrecognized: ${recipe.name}")
             }
