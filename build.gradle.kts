@@ -108,7 +108,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-struts")
     "recipe"("org.openrewrite.recipe:rewrite-terraform")
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks")
-//    "recipe"("org.openrewrite.recipe:rewrite-third-party") Needs further attention
+    "recipe"("org.openrewrite.recipe:rewrite-third-party")
 }
 
 java {

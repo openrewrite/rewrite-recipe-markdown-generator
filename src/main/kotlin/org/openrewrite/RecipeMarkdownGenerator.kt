@@ -165,7 +165,8 @@ class RecipeMarkdownGenerator : Runnable {
 
             // Changes something like org.openrewrite.circleci.InstallOrb to https://docs.openrewrite.org/recipes/circleci/installorb
             val docLink =
-                docBaseUrl + recipeDescriptor.name.lowercase(Locale.getDefault()).removePrefix("org.openrewrite.")
+                docBaseUrl + recipeDescriptor.name.lowercase(Locale.getDefault())
+                    .removePrefix("org.openrewrite.")
                     .removePrefix("io.moderne.")
                     .replace('.', '/')
                     .replace(
@@ -1734,6 +1735,13 @@ $cliSnippet
                 recipe.name.substring(16).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
             } else if (recipe.name.startsWith("io.moderne")) {
                 recipe.name.substring(11).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
+            } else if (
+                recipe.name.startsWith("ai.timefold") ||
+                recipe.name.startsWith("io.quarkus") ||
+                recipe.name.startsWith("org.apache") ||
+                recipe.name.startsWith("org.axonframework") ||
+                recipe.name.startsWith("tech.picnic")) {
+                recipe.name.replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
             } else {
                 throw RuntimeException("Recipe package unrecognized: ${recipe.name}")
             }
