@@ -21,6 +21,10 @@ class RecipeOrigin(
         recipeName.replace('.', '/').replace(Regex("Recipes?\\$?.*"), "") + ".java"
 
     fun githubUrl(recipeName: String, source: URI): String {
+        if (artifactId == "rewrite-third-party") {
+            return "https://github.com/search?type=code&q=$recipeName"
+        }
+
         val sourceString = source.toString()
         val baseUrl = if (isFromCoreLibrary()) {
             "https://github.com/openrewrite/rewrite/blob/main/$artifactId/src/main"
