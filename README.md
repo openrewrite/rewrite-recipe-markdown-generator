@@ -84,6 +84,12 @@ Quickstart:
 ./gradlew markdownToHtml
 ```
 
+### Replace rewrite-docs references
+```shell
+rm -rf ../../rewrite-docs/reference/recipes
+cp -r build/docs/reference/recipes ../../rewrite-docs/reference/
+```
+
 ## Known Issues
 
 The `SUMMARY_snippet.md` file generated does not entirely match the one in the `rewrite-docs` repository. This is 
