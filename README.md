@@ -46,19 +46,22 @@ Note: It's possible that with old versions of Rewrite that the markdown generato
 ### Automated Recipe Docs
 
 When you run this project for either a snapshot or a full release, all documentation will be updated in the 
-`build/docs` directory. There are two key pieces to that: the `reference` folder and the `SUMMARY_snippet.md` file. 
+`build/docs` directory. There are three key pieces to that: the `reference` folder and the `SUMMARY_snippet.md` 
+and `latest-versions-of-every-openrewrite-module.md` files. 
 
 If you wish to update the [docs](https://docs.openrewrite.org/reference/recipes), you should replace [this directory](https://github.com/openrewrite/rewrite-docs/tree/master/reference/recipes)
-with the `reference/recipe` folder generated here. After that, you should update the [SUMMARY.md](https://github.com/openrewrite/rewrite-docs/blob/master/SUMMARY.md?plain=1#L53-L1066)
+with the `reference/recipe` folder generated here.
+After that, you should update the [SUMMARY.md](https://github.com/openrewrite/rewrite-docs/blob/master/SUMMARY.md?plain=1#L53-L1066)
 with the snippet generated in the `SUMMARY_snippet.md` file.
+You can replace [latest-versions-of-every-openrewrite-module.md](https://github.com/openrewrite/rewrite-docs/blob/master/reference/latest-versions-of-every-openrewrite-module.md) with the one in `build/docs`,
+but be sure to fill in the `rewrite-recipe-bom` version with the latest version of the BOM. 
 
 Please note that for snapshot releases, you should not copy over all the generated files. This is because we want
 the docs to generally only show full release information. Rather, you should copy over the specific new docs you want
 (as well as the updates to the `SUMMARY_snippet.md`).
 
 Also note that this does not cover _all_ of the documentation that needs to be updated with a release. There are still
-many docs such as the [latest versions](https://docs.openrewrite.org/reference/latest-versions-of-every-openrewrite-module) doc
-that needs to be updated manually.
+others docs that needs to be updated manually.
 
 ## Usage
 
