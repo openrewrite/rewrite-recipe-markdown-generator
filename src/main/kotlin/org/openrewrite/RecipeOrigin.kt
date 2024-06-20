@@ -20,6 +20,14 @@ class RecipeOrigin(
     private fun convertNameToJavaPath(recipeName: String): String =
         recipeName.replace('.', '/').replace(Regex("Recipes?\\$?.*"), "") + ".java"
 
+    fun githubUrl(): String {
+        return if (isFromCoreLibrary()) {
+            "https://github.com/openrewrite/rewrite"
+        } else {
+            "https://github.com/openrewrite/$artifactId"
+        }
+    }
+
     fun githubUrl(recipeName: String, source: URI): String {
         if (artifactId == "rewrite-third-party") {
             return "https://github.com/search?type=code&q=$recipeName"
