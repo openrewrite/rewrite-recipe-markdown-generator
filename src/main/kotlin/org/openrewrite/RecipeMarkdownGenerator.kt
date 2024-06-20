@@ -8,7 +8,6 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.Patch
 import org.openrewrite.config.CategoryDescriptor
-import org.openrewrite.config.DataTableDescriptor
 import org.openrewrite.config.Environment
 import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.internal.StringUtils
@@ -97,6 +96,33 @@ class RecipeMarkdownGenerator : Runnable {
         // Load recipe details into memory
         if (recipeSources.isNotEmpty() && recipeClasspath.isNotEmpty()) {
             recipeOrigins = RecipeOrigin.parse(recipeSources)
+
+            // Write VERSIONS_snippet.md
+            val versionsSnippetPath = outputPath.resolve("latest-versions-of-every-openrewrite-module.md")
+            Files.newBufferedWriter(versionsSnippetPath, StandardOpenOption.CREATE).useAndApply {
+                writeln("""
+                    # Latest versions of every OpenRewrite module
+                    
+                    OpenRewrite's modules are published to [Maven Central](https://search.maven.org/search?q=org.openrewrite).
+                    Each time a release is made, a bill of materials artifact is also published to correctly align and manage the versions of all published artifacts.
+                    The Gradle plugin is published to the [Gradle Plugin Portal](https://plugins.gradle.org/plugin/org.openrewrite.rewrite).
+                    
+                    It is highly recommended that developers use the [rewrite-recipe-bom](https://github.com/openrewrite/rewrite-recipe-bom)
+                    to align the versions of Rewrite's modules to ensure compatibility.
+                    The use of the "bill of materials" means that a developer will only need to specify explicit versions of the BOM and the build plugins:
+                    
+                    | Module                                                                                                                | Version    |
+                    |-----------------------------------------------------------------------------------------------------------------------| ---------- |
+                    | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    |            |
+                    | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenPluginVersion}** |
+                    | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradlePluginVersion}** |
+                    """.trimIndent())
+                for (recipeOrigin in recipeOrigins.values) {
+                    val repoLink = "[${recipeOrigin.groupId}:${recipeOrigin.artifactId}](${recipeOrigin.githubUrl()})"
+                    val releaseLink = "[${recipeOrigin.version}](${recipeOrigin.githubUrl()}/releases/tag/v${recipeOrigin.version})"
+                    writeln("| ${repoLink.padEnd(117)} | ${releaseLink} |")
+                }
+            }
 
             val classloader = recipeClasspath.split(";")
                 .map(Paths::get)

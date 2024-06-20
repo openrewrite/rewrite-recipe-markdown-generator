@@ -88,6 +88,7 @@ Quickstart:
 ```shell
 rm -rf ../../rewrite-docs/reference/recipes
 cp -r build/docs/reference/recipes ../../rewrite-docs/reference/
+cp -r build/docs/latest-versions-of-every-openrewrite-module.md ../../rewrite-docs/reference/
 ```
 
 ## Known Issues
