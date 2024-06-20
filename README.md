@@ -61,7 +61,7 @@ the docs to generally only show full release information. Rather, you should cop
 (as well as the updates to the `SUMMARY_snippet.md`).
 
 Also note that this does not cover _all_ of the documentation that needs to be updated with a release. There are still
-others docs that needs to be updated manually.
+others docs that needs to be updated manually, in particular around versions used in popular recipe guides.
 
 ## Usage
 
