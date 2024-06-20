@@ -100,8 +100,8 @@ class RecipeMarkdownGenerator : Runnable {
             // Write latest-versions-of-every-openrewrite-module.md
             val versionsSnippetPath = outputPath.resolve("latest-versions-of-every-openrewrite-module.md")
             Files.newBufferedWriter(versionsSnippetPath, StandardOpenOption.CREATE).useAndApply {
-                val mavenLink = "https://github.com/openrewrite/rewrite-maven-plugin/releases/tag/v${mavenPluginVersion}"
-                val gradleLink = "https://github.com/openrewrite/rewrite-gradle-plugin/releases/tag/v${gradlePluginVersion}"
+                val mavenLink = "[${mavenPluginVersion}](https://github.com/openrewrite/rewrite-maven-plugin/releases/tag/v${mavenPluginVersion})"
+                val gradleLink = "[${gradlePluginVersion}](https://github.com/openrewrite/rewrite-gradle-plugin/releases/tag/v${gradlePluginVersion})"
                 writeln("""
                     # Latest versions of every OpenRewrite module
                     
