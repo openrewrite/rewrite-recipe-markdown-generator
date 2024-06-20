@@ -97,9 +97,11 @@ class RecipeMarkdownGenerator : Runnable {
         if (recipeSources.isNotEmpty() && recipeClasspath.isNotEmpty()) {
             recipeOrigins = RecipeOrigin.parse(recipeSources)
 
-            // Write VERSIONS_snippet.md
+            // Write latest-versions-of-every-openrewrite-module.md
             val versionsSnippetPath = outputPath.resolve("latest-versions-of-every-openrewrite-module.md")
             Files.newBufferedWriter(versionsSnippetPath, StandardOpenOption.CREATE).useAndApply {
+                val mavenLink = "https://github.com/openrewrite/rewrite-maven-plugin/releases/tag/v${mavenPluginVersion}"
+                val gradleLink = "https://github.com/openrewrite/rewrite-gradle-plugin/releases/tag/v${gradlePluginVersion}"
                 writeln("""
                     # Latest versions of every OpenRewrite module
                     
@@ -114,8 +116,8 @@ class RecipeMarkdownGenerator : Runnable {
                     | Module                                                                                                                | Version    |
                     |-----------------------------------------------------------------------------------------------------------------------| ---------- |
                     | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    |            |
-                    | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenPluginVersion}** |
-                    | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradlePluginVersion}** |
+                    | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenLink}** |
+                    | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** |
                     """.trimIndent())
                 for (recipeOrigin in recipeOrigins.values) {
                     val repoLink = "[${recipeOrigin.groupId}:${recipeOrigin.artifactId}](${recipeOrigin.githubUrl()})"
