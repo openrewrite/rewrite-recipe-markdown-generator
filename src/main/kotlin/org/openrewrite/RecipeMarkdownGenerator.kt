@@ -28,6 +28,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.stream.Collectors
+import kotlin.collections.ArrayList
 import kotlin.io.path.toPath
 import kotlin.system.exitProcess
 
@@ -158,6 +159,8 @@ class RecipeMarkdownGenerator : Runnable {
         val categoryDescriptors = ArrayList(env.listCategoryDescriptors())
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
 
+        val recipesWithDataTables = ArrayList<RecipeDescriptor>();
+
         // Create the recipe docs
         for (recipeDescriptor in recipeDescriptors) {
             var origin: RecipeOrigin?
@@ -176,6 +179,21 @@ class RecipeMarkdownGenerator : Runnable {
             }
             requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeDescriptor.source }
             writeRecipe(recipeDescriptor, recipesPath, origin, gradlePluginVersion, mavenPluginVersion)
+
+            // These are common in every recipe - so let's not document them everywhere.
+            val dataTablesToIgnore = listOf(
+                "org.openrewrite.table.SourcesFileResults",
+                "org.openrewrite.table.SourcesFileErrors",
+                "org.openrewrite.table.RecipeRunStats"
+            )
+
+            val filteredDataTables = recipeDescriptor.dataTables.filter { dataTable ->
+                dataTable.name !in dataTablesToIgnore
+            }
+
+            if (filteredDataTables.isNotEmpty()) {
+                recipesWithDataTables.add(recipeDescriptor);
+            }
 
             val recipeOptions = TreeSet<RecipeOption>()
             for (recipeOption in recipeDescriptor.options) {
@@ -281,6 +299,30 @@ class RecipeMarkdownGenerator : Runnable {
         Files.newBufferedWriter(summarySnippetPath, StandardOpenOption.CREATE).useAndApply {
             for (category in categories) {
                 write(category.summarySnippet(0))
+            }
+        }
+
+        // Write recipes-with-data-tables.md
+        val recipesWithDataTablesPath = outputPath.resolve("recipes-with-data-tables.md")
+        Files.newBufferedWriter(recipesWithDataTablesPath, StandardOpenOption.CREATE).useAndApply {
+            for (recipe in recipesWithDataTables) {
+                writeln("* ${recipe.displayName}: ${recipe.description}")
+
+                val dataTablesToIgnore = listOf(
+                    "org.openrewrite.table.SourcesFileResults",
+                    "org.openrewrite.table.SourcesFileErrors",
+                    "org.openrewrite.table.RecipeRunStats"
+                )
+
+                val filteredDataTables = recipe.dataTables.filter { dataTable ->
+                    dataTable.name !in dataTablesToIgnore
+                }
+
+                for (dataTable in filteredDataTables){
+                    writeln("    * ${dataTable.name}: ${dataTable.description}")
+                }
+
+                writeln("\n")
             }
         }
 
