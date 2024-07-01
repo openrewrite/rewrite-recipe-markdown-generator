@@ -801,6 +801,13 @@ class RecipeMarkdownGenerator : Runnable {
                     }
                 }
 
+                // Also need to make an empty README for GitBook linking
+                val emptyReadmePath = outputRoot.resolve("README.md")
+
+                Files.newBufferedWriter(emptyReadmePath, StandardOpenOption.CREATE).useAndApply {
+                    writeln("# Recipes")
+                }
+
                 return
             }
             val outputPath = outputRoot.resolve("$path/README.md")

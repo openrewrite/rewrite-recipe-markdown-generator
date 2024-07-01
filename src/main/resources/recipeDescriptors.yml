@@ -1006,6 +1006,13 @@ rewrite-core:
       options: []
       isImperative: true
       artifactId: "rewrite-core"
+    org.openrewrite.MyRecipe:
+      name: "org.openrewrite.MyRecipe"
+      description: ""
+      docLink: "https://docs.openrewrite.org/recipes/myrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-core"
     org.openrewrite.RenameFile:
       name: "org.openrewrite.RenameFile"
       description: "Rename a file while keeping it in the same directory."
