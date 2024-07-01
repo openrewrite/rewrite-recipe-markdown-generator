@@ -82,6 +82,13 @@ class RecipeMarkdownGenerator : Runnable {
     )
     lateinit var diffFileName: String
 
+    // These are common in every recipe - so let's not document them everywhere.
+    val dataTablesToIgnore = listOf(
+        "org.openrewrite.table.SourcesFileResults",
+        "org.openrewrite.table.SourcesFileErrors",
+        "org.openrewrite.table.RecipeRunStats"
+    )
+
     override fun run() {
         val outputPath = Paths.get(destinationDirectoryName)
         val recipesPath = outputPath.resolve("reference/recipes")
@@ -179,13 +186,6 @@ class RecipeMarkdownGenerator : Runnable {
             }
             requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeDescriptor.source }
             writeRecipe(recipeDescriptor, recipesPath, origin, gradlePluginVersion, mavenPluginVersion)
-
-            // These are common in every recipe - so let's not document them everywhere.
-            val dataTablesToIgnore = listOf(
-                "org.openrewrite.table.SourcesFileResults",
-                "org.openrewrite.table.SourcesFileErrors",
-                "org.openrewrite.table.RecipeRunStats"
-            )
 
             val filteredDataTables = recipeDescriptor.dataTables.filter { dataTable ->
                 dataTable.name !in dataTablesToIgnore
@@ -305,21 +305,17 @@ class RecipeMarkdownGenerator : Runnable {
         // Write recipes-with-data-tables.md
         val recipesWithDataTablesPath = outputPath.resolve("recipes-with-data-tables.md")
         Files.newBufferedWriter(recipesWithDataTablesPath, StandardOpenOption.CREATE).useAndApply {
-            for (recipe in recipesWithDataTables) {
-                writeln("* ${recipe.displayName}: ${recipe.description}")
+            writeln("# Recipes with Data Tables\n")
 
-                val dataTablesToIgnore = listOf(
-                    "org.openrewrite.table.SourcesFileResults",
-                    "org.openrewrite.table.SourcesFileErrors",
-                    "org.openrewrite.table.RecipeRunStats"
-                )
+            for (recipe in recipesWithDataTables) {
+                writeln("* [${recipe.displayName}](https://docs.openrewrite.org/?q=${recipe.name}): ${recipe.description.replace("\n", " ")}\n")
 
                 val filteredDataTables = recipe.dataTables.filter { dataTable ->
                     dataTable.name !in dataTablesToIgnore
                 }
 
                 for (dataTable in filteredDataTables){
-                    writeln("    * ${dataTable.name}: ${dataTable.description}")
+                    writeln("    * **${dataTable.name}**: ${dataTable.description.replace("\n", " ")}")
                 }
 
                 writeln("\n")
@@ -683,7 +679,7 @@ class RecipeMarkdownGenerator : Runnable {
 
             if (path == "") {
                 // Recipes that don't have a path are part of the "core" set of recipes
-                result.appendLine("$indent* [Core](reference/recipes/core-README.md)")
+                result.appendLine("$indent* [Core](reference/recipes/core.md)")
             } else {
                 // Some nested recipes have a `github` path which gets converted into `Github` when it should be `GitHub`.
                 if (displayName == "Github") {
@@ -788,7 +784,7 @@ class RecipeMarkdownGenerator : Runnable {
         fun writeCategoryIndex(outputRoot: Path) {
             if (path.isBlank()) {
                 // "Core" recipes need to be handled differently as they do not have a path like other recipes.
-                val corePath = outputRoot.resolve("core-README.md")
+                val corePath = outputRoot.resolve("core.md")
 
                 Files.newBufferedWriter(corePath, StandardOpenOption.CREATE).useAndApply {
                     writeln("# Core Recipes")
@@ -801,15 +797,8 @@ class RecipeMarkdownGenerator : Runnable {
                     for (recipe in recipes) {
                         val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
 
-                        writeln("* [${recipe.displayName}](${recipeSimpleName}.md)")
+                        writeln("* [${recipe.displayName}](./${recipeSimpleName}.md)")
                     }
-                }
-
-                // Also need to make an empty README for GitBook linking
-                val emptyReadmePath = outputRoot.resolve("README.md")
-
-                Files.newBufferedWriter(emptyReadmePath, StandardOpenOption.CREATE).useAndApply {
-                    writeln("# Recipes")
                 }
 
                 return
@@ -942,14 +931,6 @@ class RecipeMarkdownGenerator : Runnable {
             }
 
             // Data Tables
-
-            // These are common in every recipe - so let's not document them everywhere.
-            val dataTablesToIgnore = listOf(
-                "org.openrewrite.table.SourcesFileResults",
-                "org.openrewrite.table.SourcesFileErrors",
-                "org.openrewrite.table.RecipeRunStats"
-            )
-
             val filteredDataTables = recipeDescriptor.dataTables.filter { dataTable ->
                 dataTable.name !in dataTablesToIgnore
             }
