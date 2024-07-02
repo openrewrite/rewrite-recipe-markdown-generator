@@ -83,7 +83,7 @@ class RecipeMarkdownGenerator : Runnable {
     lateinit var diffFileName: String
 
     // These are common in every recipe - so let's not document them everywhere.
-    val dataTablesToIgnore = listOf(
+    private val dataTablesToIgnore = listOf(
         "org.openrewrite.table.SourcesFileResults",
         "org.openrewrite.table.SourcesFileErrors",
         "org.openrewrite.table.RecipeRunStats"
@@ -308,14 +308,14 @@ class RecipeMarkdownGenerator : Runnable {
             writeln("# Recipes with Data Tables\n")
 
             for (recipe in recipesWithDataTables) {
-                writeln("* [${recipe.displayName}](https://docs.openrewrite.org/?q=${recipe.name}): ${recipe.description.replace("\n", " ")}\n")
+                writeln("**[${recipe.displayName}](https://docs.openrewrite.org/?q=${recipe.name})**: ${recipe.description}\n")
 
                 val filteredDataTables = recipe.dataTables.filter { dataTable ->
                     dataTable.name !in dataTablesToIgnore
                 }
 
                 for (dataTable in filteredDataTables){
-                    writeln("    * **${dataTable.name}**: ${dataTable.description.replace("\n", " ")}")
+                    writeln("  * ${dataTable.name}: *${dataTable.description.replace("\n", " ")}*")
                 }
 
                 writeln("\n")
