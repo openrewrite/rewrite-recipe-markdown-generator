@@ -1,6 +1,6 @@
 rewrite-ai-search:
   artifactId: "rewrite-ai-search"
-  version: "0.14.1"
+  version: "0.14.2"
   markdownRecipeDescriptors:
     io.moderne.ai.FindCommentsLanguage:
       name: "io.moderne.ai.FindCommentsLanguage"
@@ -89,7 +89,7 @@ rewrite-ai-search:
       artifactId: "rewrite-ai-search"
 rewrite-analysis:
   artifactId: "rewrite-analysis"
-  version: "2.9.1"
+  version: "2.9.2"
   markdownRecipeDescriptors:
     org.openrewrite.analysis.controlflow.ControlFlowVisualization:
       name: "org.openrewrite.analysis.controlflow.ControlFlowVisualization"
@@ -152,7 +152,7 @@ rewrite-analysis:
       artifactId: "rewrite-analysis"
 rewrite-apache:
   artifactId: "rewrite-apache"
-  version: "1.4.1"
+  version: "1.4.2"
   markdownRecipeDescriptors:
     org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64:
       name: "org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64"
@@ -795,7 +795,7 @@ rewrite-apache:
       artifactId: "rewrite-apache"
 rewrite-circleci:
   artifactId: "rewrite-circleci"
-  version: "2.5.1"
+  version: "2.5.2"
   markdownRecipeDescriptors:
     org.openrewrite.circleci.InstallOrb:
       name: "org.openrewrite.circleci.InstallOrb"
@@ -823,7 +823,7 @@ rewrite-circleci:
       artifactId: "rewrite-circleci"
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "2.5.1"
+  version: "2.5.2"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -903,7 +903,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.28.1"
+  version: "8.29.0"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -1003,13 +1003,6 @@ rewrite-core:
       description: "A diagnostic utility which emits the runtime classpath to a data\
         \ table."
       docLink: "https://docs.openrewrite.org/recipes/listruntimeclasspath"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-core"
-    org.openrewrite.MyRecipe:
-      name: "org.openrewrite.MyRecipe"
-      description: ""
-      docLink: "https://docs.openrewrite.org/recipes/myrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-core"
@@ -1206,6 +1199,9 @@ rewrite-core:
       - name: "multiline"
         type: "Boolean"
         required: false
+      - name: "plaintextOnly"
+        type: "Boolean"
+        required: false
       - name: "regex"
         type: "Boolean"
         required: false
@@ -1236,7 +1232,7 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
-  version: "1.5.1"
+  version: "1.5.2"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite"
@@ -1315,7 +1311,7 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "2.6.1"
+  version: "2.6.2"
   markdownRecipeDescriptors:
     org.openrewrite.github.AddCronTrigger:
       name: "org.openrewrite.github.AddCronTrigger"
@@ -1504,7 +1500,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.28.1"
+  version: "8.29.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -1704,6 +1700,18 @@ rewrite-gradle:
       - name: "value"
         type: "String"
         required: true
+      isImperative: true
+      artifactId: "rewrite-gradle"
+    org.openrewrite.gradle.DependencyConstraintToRule:
+      name: "org.openrewrite.gradle.DependencyConstraintToRule"
+      description: "Gradle [dependency constraints](https://docs.gradle.org/current/userguide/dependency_constraints.html#dependency-constraints)\
+        \ are useful for managing the versions of transitive dependencies. Some plugins,\
+        \ such as the Spring Dependency Management plugin, do not respect these constraints.\
+        \ This recipe converts constraints into [resolution rules](https://docs.gradle.org/current/userguide/resolution_rules.html),\
+        \ which can achieve similar effects to constraints but are harder for plugins\
+        \ to ignore."
+      docLink: "https://docs.openrewrite.org/recipes/gradle/dependencyconstrainttorule"
+      options: []
       isImperative: true
       artifactId: "rewrite-gradle"
     org.openrewrite.gradle.DependencyUseMapNotation:
@@ -2145,7 +2153,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.28.1"
+  version: "8.29.0"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.AutoFormat:
       name: "org.openrewrite.groovy.format.AutoFormat"
@@ -2181,7 +2189,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.28.1"
+  version: "8.29.0"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -2265,7 +2273,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-hibernate:
   artifactId: "rewrite-hibernate"
-  version: "1.7.1"
+  version: "1.8.0"
   markdownRecipeDescriptors:
     org.openrewrite.hibernate.MigrateBooleanMappings:
       name: "org.openrewrite.hibernate.MigrateBooleanMappings"
@@ -2370,8 +2378,16 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-jackson:
   artifactId: "rewrite-jackson"
-  version: "0.3.2"
+  version: "0.4.0"
   markdownRecipeDescriptors:
+    org.openrewrite.java.jackson.CodehausClassesToFasterXML:
+      name: "org.openrewrite.java.jackson.CodehausClassesToFasterXML"
+      description: "In Jackson 2, the package and dependency coordinates moved from\
+        \ Codehaus to FasterXML.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/jackson/codehausclassestofasterxml"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-jackson"
     org.openrewrite.java.jackson.CodehausToFasterXML:
       name: "org.openrewrite.java.jackson.CodehausToFasterXML"
       description: "In Jackson 2, the package and dependency coordinates moved from\
@@ -2379,6 +2395,17 @@ rewrite-jackson:
       docLink: "https://docs.openrewrite.org/recipes/java/jackson/codehaustofasterxml"
       options: []
       isImperative: false
+      artifactId: "rewrite-jackson"
+    org.openrewrite.java.jackson.codehaus.CodehausDependencyToFasterXML:
+      name: "org.openrewrite.java.jackson.codehaus.CodehausDependencyToFasterXML"
+      description: "Replace Codehaus Jackson dependencies with FasterXML Jackson dependencies,\
+        \ and add databind if needed."
+      docLink: "https://docs.openrewrite.org/recipes/java/jackson/codehaus/codehausdependencytofasterxml"
+      options:
+      - name: "version"
+        type: "String"
+        required: false
+      isImperative: true
       artifactId: "rewrite-jackson"
     org.openrewrite.java.jackson.codehaus.JsonIncludeAnnotation:
       name: "org.openrewrite.java.jackson.codehaus.JsonIncludeAnnotation"
@@ -2390,7 +2417,7 @@ rewrite-jackson:
       artifactId: "rewrite-jackson"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.28.1"
+  version: "8.29.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -3459,7 +3486,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "1.11.1"
+  version: "1.12.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.AddDependency:
       name: "org.openrewrite.java.dependencies.AddDependency"
@@ -3781,7 +3808,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "2.10.2"
+  version: "2.10.3"
   markdownRecipeDescriptors:
     org.openrewrite.java.security.FindTextDirectionChanges:
       name: "org.openrewrite.java.security.FindTextDirectionChanges"
@@ -4268,7 +4295,7 @@ rewrite-java-security:
       artifactId: "rewrite-java-security"
 rewrite-jenkins:
   artifactId: "rewrite-jenkins"
-  version: "0.8.1"
+  version: "0.8.2"
   markdownRecipeDescriptors:
     org.openrewrite.jenkins.AddPluginsBom:
       name: "org.openrewrite.jenkins.AddPluginsBom"
@@ -4425,7 +4452,7 @@ rewrite-jenkins:
       artifactId: "rewrite-jenkins"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.28.1"
+  version: "8.29.0"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -4475,7 +4502,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.18.1"
+  version: "1.18.2"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -4576,7 +4603,7 @@ rewrite-kotlin:
       artifactId: "rewrite-kotlin"
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "2.6.1"
+  version: "2.7.0"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -5041,7 +5068,7 @@ rewrite-kubernetes:
       artifactId: "rewrite-kubernetes"
 rewrite-launchdarkly:
   artifactId: "rewrite-launchdarkly"
-  version: "0.6.1"
+  version: "0.6.2"
   markdownRecipeDescriptors:
     org.openrewrite.launchdarkly.ChangeVariationDefault:
       name: "org.openrewrite.launchdarkly.ChangeVariationDefault"
@@ -5113,7 +5140,7 @@ rewrite-launchdarkly:
       artifactId: "rewrite-launchdarkly"
 rewrite-liberty:
   artifactId: "rewrite-liberty"
-  version: "1.6.1"
+  version: "1.6.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty:
       name: "org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty"
@@ -5197,7 +5224,7 @@ rewrite-liberty:
       artifactId: "rewrite-liberty"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "2.9.1"
+  version: "2.10.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.logging.ChangeLombokLogAnnotation:
       name: "org.openrewrite.java.logging.ChangeLombokLogAnnotation"
@@ -5684,12 +5711,149 @@ rewrite-logging-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulParameterizedArguments:
+      name: "org.openrewrite.java.logging.slf4j.JulParameterizedArguments"
+      description: "Replace calls to parameterized `Logger.log(Level,String,…)` call\
+        \ with the corresponding slf4j method calls transforming the formatter and\
+        \ parameter lists."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/julparameterizedarguments"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
     org.openrewrite.java.logging.slf4j.JulToSlf4j:
       name: "org.openrewrite.java.logging.slf4j.JulToSlf4j"
       description: "Migrates usage of Java Util Logging (JUL) to using SLF4J directly."
       docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4j"
       options: []
       isImperative: false
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes"
+      description: "Replace calls to `Logger.isLoggable(Level)` with the corresponding\
+        \ SLF4J method calls."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierConfigRecipe:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierConfigRecipe"
+      description: "Replace calls to `java.util.logging.Logger.config(Supplier<String>)`\
+        \ with `org.slf4j.Logger.atInfo().log(Supplier<String>)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipesusdjultoslf4jsupplierconfigrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierFineRecipe:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierFineRecipe"
+      description: "Replace calls to `java.util.logging.Logger.fine(Supplier<String>)`\
+        \ with `org.slf4j.Logger.atDebug().log(Supplier<String>)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipesusdjultoslf4jsupplierfinerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierFinerRecipe:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierFinerRecipe"
+      description: "Replace calls to `java.util.logging.Logger.finer(Supplier<String>)`\
+        \ with `org.slf4j.Logger.atTrace().log(Supplier<String>)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipesusdjultoslf4jsupplierfinerrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierFinestRecipe:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierFinestRecipe"
+      description: "Replace calls to `java.util.logging.Logger.finest(Supplier<String>)`\
+        \ with `org.slf4j.Logger.atTrace().log(Supplier<String>)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipesusdjultoslf4jsupplierfinestrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierInfoRecipe:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierInfoRecipe"
+      description: "Replace calls to `java.util.logging.Logger.info(Supplier<String>)`\
+        \ with `org.slf4j.Logger.atInfo().log(Supplier<String>)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipesusdjultoslf4jsupplierinforecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogAllRecipe:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogAllRecipe"
+      description: "Replace calls to `java.util.logging.Logger.log(Level.ALL, Supplier<String>)`\
+        \ with `org.slf4j.Logger.atTrace().log(Supplier<String>)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipesusdjultoslf4jsupplierlogallrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogConfigRecipe:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogConfigRecipe"
+      description: "Replace calls to `java.util.logging.Logger.log(Level.CONFIG, Supplier<String>)`\
+        \ with `org.slf4j.Logger.atInfo().log(Supplier<String>)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipesusdjultoslf4jsupplierlogconfigrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogFineRecipe:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogFineRecipe"
+      description: "Replace calls to `java.util.logging.Logger.log(Level.FINE, Supplier<String>)`\
+        \ with `org.slf4j.Logger.atDebug().log(Supplier<String>)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipesusdjultoslf4jsupplierlogfinerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogFinerRecipe:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogFinerRecipe"
+      description: "Replace calls to `java.util.logging.Logger.log(Level.FINER, Supplier<String>)`\
+        \ with `org.slf4j.Logger.atTrace().log(Supplier<String>)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipesusdjultoslf4jsupplierlogfinerrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogFinestRecipe:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogFinestRecipe"
+      description: "Replace calls to `java.util.logging.Logger.log(Level.FINEST, Supplier<String>)`\
+        \ with `org.slf4j.Logger.atTrace().log(Supplier<String>)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipesusdjultoslf4jsupplierlogfinestrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogInfoRecipe:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogInfoRecipe"
+      description: "Replace calls to `java.util.logging.Logger.log(Level.INFO, Supplier<String>)`\
+        \ with `org.slf4j.Logger.atInfo().log(Supplier<String>)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipesusdjultoslf4jsupplierloginforecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogSevereRecipe:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogSevereRecipe"
+      description: "Replace calls to `java.util.logging.Logger.log(Level.SEVERE, Supplier<String>)`\
+        \ with `org.slf4j.Logger.atError().log(Supplier<String>)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipesusdjultoslf4jsupplierlogsevererecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogWarningRecipe:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierLogWarningRecipe"
+      description: "Replace calls to `java.util.logging.Logger.log(Level.WARNING,\
+        \ Supplier<String>)` with `org.slf4j.Logger.atWarn().log(Supplier<String>)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipesusdjultoslf4jsupplierlogwarningrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierSevereRecipe:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierSevereRecipe"
+      description: "Replace calls to `java.util.logging.Logger.severe(Supplier<String>)`\
+        \ with `org.slf4j.Logger.atError().log(Supplier<String>)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipesusdjultoslf4jsuppliersevererecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierWarningRecipe:
+      name: "org.openrewrite.java.logging.slf4j.JulToSlf4jLambdaSupplierRecipes$JulToSlf4jSupplierWarningRecipe"
+      description: "Replace calls to `java.util.logging.Logger.warning(Supplier<String>)`\
+        \ with `org.slf4j.Logger.atWarn().log(Supplier<String>)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/jultoslf4jlambdasupplierrecipesusdjultoslf4jsupplierwarningrecipe"
+      options: []
+      isImperative: true
       artifactId: "rewrite-logging-frameworks"
     org.openrewrite.java.logging.slf4j.Log4j1ToSlf4j1:
       name: "org.openrewrite.java.logging.slf4j.Log4j1ToSlf4j1"
@@ -5752,7 +5916,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.28.1"
+  version: "8.29.0"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -5874,6 +6038,29 @@ rewrite-maven:
       - name: "type"
         type: "String"
         required: false
+      - name: "version"
+        type: "String"
+        required: true
+      - name: "versionPattern"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-maven"
+    org.openrewrite.maven.AddParentPom:
+      name: "org.openrewrite.maven.AddParentPom"
+      description: "Add a parent pom to a Maven pom.xml. Does nothing if a parent\
+        \ pom is already present."
+      docLink: "https://docs.openrewrite.org/recipes/maven/addparentpom"
+      options:
+      - name: "artifactId"
+        type: "String"
+        required: true
+      - name: "groupId"
+        type: "String"
+        required: true
+      - name: "relativePath"
+        type: "String"
+        required: true
       - name: "version"
         type: "String"
         required: true
@@ -6879,7 +7066,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micrometer:
   artifactId: "rewrite-micrometer"
-  version: "0.5.1"
+  version: "0.5.2"
   markdownRecipeDescriptors:
     org.openrewrite.micrometer.TimerToObservation:
       name: "org.openrewrite.micrometer.TimerToObservation"
@@ -6928,7 +7115,7 @@ rewrite-micrometer:
       artifactId: "rewrite-micrometer"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "2.7.1"
+  version: "2.7.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.AddAnnotationProcessorPath:
       name: "org.openrewrite.java.micronaut.AddAnnotationProcessorPath"
@@ -7272,7 +7459,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "2.18.1"
+  version: "2.19.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.migrate.AddJDeprScanPlugin:
       name: "org.openrewrite.java.migrate.AddJDeprScanPlugin"
@@ -7349,6 +7536,14 @@ rewrite-migrate-java:
         type: "String"
         required: true
       isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.DeleteDeprecatedFinalize:
+      name: "org.openrewrite.java.migrate.DeleteDeprecatedFinalize"
+      description: "The java.desktop module had a few implementations of finalize()\
+        \ that did nothing and have been removed. This recipe will remove these methods."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/deletedeprecatedfinalize"
+      options: []
+      isImperative: false
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.DeprecatedCountStackFramesMethod:
       name: "org.openrewrite.java.migrate.DeprecatedCountStackFramesMethod"
@@ -7528,6 +7723,29 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.RemovedJavaXMLWSModuleProvided:
+      name: "org.openrewrite.java.migrate.RemovedJavaXMLWSModuleProvided"
+      description: "The `java.xml.ws` module was removed in Java11. Websphere Liberty\
+        \ provides its own implementation of the module, which can be used by specifying\
+        \ the `jaxws-2.2` feature in the server.xml file. This recipe removes the\
+        \ `javax.xml.ws` module from the application's build dependency in favor of\
+        \ the Websphere Liberty implementation to avoid class loading issues."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/removedjavaxmlwsmoduleprovided"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.RemovedJaxBModuleProvided:
+      name: "org.openrewrite.java.migrate.RemovedJaxBModuleProvided"
+      description: "The `java.xml.bind` and `java.activation` modules were removed\
+        \ in Java11. Websphere Liberty provides its own implementation of the modules,\
+        \ which can be used by specifying the `jaxb-2.2` feature in the server.xml\
+        \ file. This recipe removes the `javax.xml.bind` and `javax.activation` modules\
+        \ from the application's build dependency in favor of the Websphere Liberty\
+        \ implementation to avoid class loading issues."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/removedjaxbmoduleprovided"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.RemovedLegacySunJSSEProviderName:
       name: "org.openrewrite.java.migrate.RemovedLegacySunJSSEProviderName"
       description: "The `com.sun.net.ssl.internal.ssl.Provider` provider name was\
@@ -7630,6 +7848,16 @@ rewrite-migrate-java:
         \ intended for internal use only and replacement APIs can be found in the\
         \ `javax.net.ssl` package.\n"
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/sunnetsslpackageunavailable"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.ThreadStopDestroy:
+      name: "org.openrewrite.java.migrate.ThreadStopDestroy"
+      description: "The `java.lang.Thread.destroy()` method was never implemented,\
+        \ and the `java.lang.Thread.stop(java.lang.Throwable)`\nmethod has been unusable\
+        \ since Java SE 8. This recipe removes any usage of these methods from your\
+        \ application.\n"
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/threadstopdestroy"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -8528,6 +8756,14 @@ rewrite-migrate-java:
       description: "Jakarta EE 9 is the first version of Jakarta EE that uses the\
         \ new `jakarta` namespace."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/javaxmigrationtojakarta"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.JavaxOrmXmlToJakartaOrmXml:
+      name: "org.openrewrite.java.migrate.jakarta.JavaxOrmXmlToJakartaOrmXml"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/javaxormxmltojakartaormxml"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -9809,7 +10045,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-nodejs:
   artifactId: "rewrite-nodejs"
-  version: "0.4.2"
+  version: "0.4.3"
   markdownRecipeDescriptors:
     org.openrewrite.nodejs.UpgradeDependencyVersion:
       name: "org.openrewrite.nodejs.UpgradeDependencyVersion"
@@ -9850,7 +10086,7 @@ rewrite-nodejs:
       artifactId: "rewrite-nodejs"
 rewrite-okhttp:
   artifactId: "rewrite-okhttp"
-  version: "0.3.2"
+  version: "0.3.3"
   markdownRecipeDescriptors:
     org.openrewrite.okhttp.ReorderRequestBodyCreateArguments:
       name: "org.openrewrite.okhttp.ReorderRequestBodyCreateArguments"
@@ -9907,7 +10143,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-openapi:
   artifactId: "rewrite-openapi"
-  version: "0.5.1"
+  version: "0.5.2"
   markdownRecipeDescriptors:
     org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings:
       name: "org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings"
@@ -9974,7 +10210,7 @@ rewrite-openapi:
       artifactId: "rewrite-openapi"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.28.1"
+  version: "8.29.0"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -10082,7 +10318,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "2.7.1"
+  version: "2.7.2"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.AddQuarkusProperty:
       name: "org.openrewrite.quarkus.AddQuarkusProperty"
@@ -10301,7 +10537,7 @@ rewrite-quarkus:
       artifactId: "rewrite-quarkus"
 rewrite-recommendations:
   artifactId: "rewrite-recommendations"
-  version: "1.6.1"
+  version: "1.7.0"
   markdownRecipeDescriptors:
     org.openrewrite.recipes.JavaRecipeBestPractices:
       name: "org.openrewrite.recipes.JavaRecipeBestPractices"
@@ -10362,7 +10598,7 @@ rewrite-recommendations:
       artifactId: "rewrite-recommendations"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "5.13.2"
+  version: "5.14.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin:
       name: "org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin"
@@ -11667,7 +11903,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.http.ReplaceStringLiteralsWithHttpHeadersConstants:
       name: "org.openrewrite.java.spring.http.ReplaceStringLiteralsWithHttpHeadersConstants"
-      description: "Replace String literals with `org.springframework.http.MediaType`\
+      description: "Replace String literals with `org.springframework.http.HttpHeaders`\
         \ constants."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/http/replacestringliteralswithhttpheadersconstants"
       options: []
@@ -11675,7 +11911,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.http.ReplaceStringLiteralsWithMediaTypeConstants:
       name: "org.openrewrite.java.spring.http.ReplaceStringLiteralsWithMediaTypeConstants"
-      description: "Replace String literals with `org.springframework.http.HttpHeaders`\
+      description: "Replace String literals with `org.springframework.http.MediaType`\
         \ constants."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/http/replacestringliteralswithmediatypeconstants"
       options: []
@@ -12037,7 +12273,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-sql:
   artifactId: "rewrite-sql"
-  version: "1.6.1"
+  version: "1.7.0"
   markdownRecipeDescriptors:
     org.openrewrite.sql.ChangeFunctionName:
       name: "org.openrewrite.sql.ChangeFunctionName"
@@ -12094,7 +12330,7 @@ rewrite-sql:
       artifactId: "rewrite-sql"
 rewrite-static-analysis:
   artifactId: "rewrite-static-analysis"
-  version: "1.10.1"
+  version: "1.11.0"
   markdownRecipeDescriptors:
     org.openrewrite.staticanalysis.AddSerialVersionUidToSerializable:
       name: "org.openrewrite.staticanalysis.AddSerialVersionUidToSerializable"
@@ -12491,6 +12727,14 @@ rewrite-static-analysis:
         \ letters, numbers, and dashes. This recipe converts any uppercase letters\
         \ in package names to be lowercase."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/lowercasepackage"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.MaskCreditCardNumbers:
+      name: "org.openrewrite.staticanalysis.MaskCreditCardNumbers"
+      description: "When encountering string literals which appear to be credit card\
+        \ numbers, mask the last eight digits with the letter 'X'."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/maskcreditcardnumbers"
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
@@ -13326,7 +13570,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
 rewrite-struts:
   artifactId: "rewrite-struts"
-  version: "0.4.4"
+  version: "0.4.5"
   markdownRecipeDescriptors:
     org.openrewrite.java.struts.MigrateStrutsDtd:
       name: "org.openrewrite.java.struts.MigrateStrutsDtd"
@@ -13384,7 +13628,7 @@ rewrite-struts:
       artifactId: "rewrite-struts"
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "2.3.2"
+  version: "2.3.3"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -14277,7 +14521,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "2.12.2"
+  version: "2.13.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.archunit.ArchUnit0to1Migration:
       name: "org.openrewrite.java.testing.archunit.ArchUnit0to1Migration"
@@ -14644,17 +14888,19 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.jmockit.JMockitExpectationsToMockito:
-      name: "org.openrewrite.java.testing.jmockit.JMockitExpectationsToMockito"
-      description: "Rewrites JMockit `Expectations` blocks to Mockito statements."
-      docLink: "https://docs.openrewrite.org/recipes/java/testing/jmockit/jmockitexpectationstomockito"
+    org.openrewrite.java.testing.jmockit.JMockitAnnotatedArgumentToMockito:
+      name: "org.openrewrite.java.testing.jmockit.JMockitAnnotatedArgumentToMockito"
+      description: "Convert JMockit `@Mocked` and `@Injectable` annotated arguments\
+        \ into Mockito statements."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/jmockit/jmockitannotatedargumenttomockito"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.jmockit.JMockitMockedVariableToMockito:
-      name: "org.openrewrite.java.testing.jmockit.JMockitMockedVariableToMockito"
-      description: "Rewrites JMockit `Mocked Variable` to Mockito statements."
-      docLink: "https://docs.openrewrite.org/recipes/java/testing/jmockit/jmockitmockedvariabletomockito"
+    org.openrewrite.java.testing.jmockit.JMockitBlockToMockito:
+      name: "org.openrewrite.java.testing.jmockit.JMockitBlockToMockito"
+      description: "Rewrites JMockit `Expectations and Verifications` blocks to Mockito\
+        \ statements."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/jmockit/jmockitblocktomockito"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
@@ -15113,7 +15359,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-third-party:
   artifactId: "rewrite-third-party"
-  version: "0.5.1"
+  version: "0.5.2"
   markdownRecipeDescriptors:
     ai.timefold.solver.migration.ChangeVersion:
       name: "ai.timefold.solver.migration.ChangeVersion"
@@ -21648,7 +21894,7 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.28.1"
+  version: "8.29.0"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -21672,7 +21918,13 @@ rewrite-xml:
       - name: "elementName"
         type: "String"
         required: false
+      - name: "newSchemaLocation"
+        type: "String"
+        required: false
       - name: "newValue"
+        type: "String"
+        required: true
+      - name: "newVersion"
         type: "String"
         required: true
       - name: "oldValue"
@@ -21826,6 +22078,20 @@ rewrite-xml:
       options: []
       isImperative: true
       artifactId: "rewrite-xml"
+    org.openrewrite.xml.search.FindNamespacePrefix:
+      name: "org.openrewrite.xml.search.FindNamespacePrefix"
+      description: "Find XML namespace prefixes, optionally restricting the search\
+        \ by a XPath expression."
+      docLink: "https://docs.openrewrite.org/recipes/xml/search/findnamespaceprefix"
+      options:
+      - name: "namespacePrefix"
+        type: "String"
+        required: true
+      - name: "xPath"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-xml"
     org.openrewrite.xml.search.FindTags:
       name: "org.openrewrite.xml.search.FindTags"
       description: "Find XML tags by XPath expression."
@@ -21834,6 +22100,20 @@ rewrite-xml:
       - name: "xPath"
         type: "String"
         required: true
+      isImperative: true
+      artifactId: "rewrite-xml"
+    org.openrewrite.xml.search.HasNamespaceUri:
+      name: "org.openrewrite.xml.search.HasNamespaceUri"
+      description: "Find XML namespace URIs, optionally restricting the search by\
+        \ a XPath expression."
+      docLink: "https://docs.openrewrite.org/recipes/xml/search/hasnamespaceuri"
+      options:
+      - name: "namespaceUri"
+        type: "String"
+        required: true
+      - name: "xPath"
+        type: "String"
+        required: false
       isImperative: true
       artifactId: "rewrite-xml"
     org.openrewrite.xml.security.AddOwaspDateBoundSuppressions:
@@ -21881,7 +22161,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.28.1"
+  version: "8.29.0"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
