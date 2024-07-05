@@ -462,7 +462,9 @@ class RecipeMarkdownGenerator : Runnable {
             changelog.appendText("# X.XX.X release ($formatted)")
 
             changelog.appendText("\n\n{% hint style=\"info\" %}")
-            changelog.appendText("\nThis changelog only shows what recipes have been added, removed, or changed. OpenRewrite may do releases that do not include these types of changes. To see these changes, please go to the [releases page](https://github.com/openrewrite/rewrite/releases).")
+            changelog.appendText("\nThis changelog only shows what recipes have been added, removed, or changed.")
+            changelog.appendText("\nOpenRewrite may do releases that do not include these types of changes.")
+            changelog.appendText("\nTo see these changes, please go to the [releases page](https://github.com/openrewrite/rewrite-recipe-bom/releases).")
             changelog.appendText("\n{% endhint %}\n\n")
         }
 
