@@ -28,7 +28,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.stream.Collectors
-import kotlin.collections.ArrayList
 import kotlin.io.path.toPath
 import kotlin.system.exitProcess
 
@@ -308,14 +307,16 @@ class RecipeMarkdownGenerator : Runnable {
             writeln("# Recipes with Data Tables\n")
 
             for (recipe in recipesWithDataTables) {
-                writeln("**[${recipe.displayName}](https://docs.openrewrite.org/?q=${recipe.name})**: ${recipe.description}\n")
+                writeln("**[${recipe.displayName}](https://docs.openrewrite.org/?q=${recipe.name})**  ")
+                writeln("**${recipe.name}**  ")
+                writeln("${recipe.description}\n")
 
                 val filteredDataTables = recipe.dataTables.filter { dataTable ->
                     dataTable.name !in dataTablesToIgnore
                 }
 
-                for (dataTable in filteredDataTables){
-                    writeln("  * ${dataTable.name}: *${dataTable.description.replace("\n", " ")}*")
+                for (dataTable in filteredDataTables) {
+                    writeln("  * **${dataTable.name}**: *${dataTable.description.replace("\n", " ")}*")
                 }
 
                 writeln("\n")
@@ -955,6 +956,7 @@ class RecipeMarkdownGenerator : Runnable {
                 writeln(
                     """
                     ### ${dataTable.displayName}
+                    **${dataTable.name}**
 
                     _${dataTable.description}_
 
