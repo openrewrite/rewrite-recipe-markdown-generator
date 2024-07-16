@@ -43,10 +43,10 @@ jobs:
       - name: build
         uses: gradle/actions/setup-gradle@v3
         with:
-          arguments: ${{ env.GRADLE_SWITCHES }} check markdownToHtml
+          arguments: ${{ env.GRADLE_SWITCHES }} run
 
       - name: Create index.html
-        run: cp build/html/SUMMARY_snippet.html build/html/index.html
+        run: cp build/docs/SUMMARY_snippet.md build/docs/index.md
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: 'build/html'
+          path: 'build/docs'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

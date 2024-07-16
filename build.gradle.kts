@@ -1,10 +1,7 @@
-import org.kordamp.gradle.plugin.markdown.tasks.MarkdownToHtmlTask
-
 plugins {
     application
     id("org.jetbrains.kotlin.jvm").version("1.7.20")
     id("org.owasp.dependencycheck") version "7.0.4.1"
-    id("org.kordamp.gradle.markdown") version "2.2.0"
 }
 
 dependencyCheck {
@@ -174,16 +171,3 @@ tasks.named<JavaExec>("run").configure {
 }
 
 defaultTasks = mutableListOf("run")
-
-tasks.withType<MarkdownToHtmlTask> {
-    dependsOn("run")
-    sourceDir = file("build/docs")
-    outputDir = file("build/html")
-    fencedCodeBlocks = true
-    tables = true
-    doLast {
-        this as MarkdownToHtmlTask
-        @Suppress("UNNECESSARY_NOT_NULL_ASSERTION") // IntelliJ says this is unnecessary, kotlin compiler disagrees
-        logger.lifecycle("Wrote generated html to: file://${outputDir}")
-    }
-}
