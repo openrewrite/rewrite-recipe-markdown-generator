@@ -81,7 +81,7 @@ class RecipeMarkdownGenerator : Runnable {
     )
     lateinit var diffFileName: String
 
-    // These are common in every recipe - so let's not document them everywhere.
+    // These are common in every recipe - so let's not use them when generating the list of recipes with data tables.
     private val dataTablesToIgnore = listOf(
         "org.openrewrite.table.SourcesFileResults",
         "org.openrewrite.table.SourcesFileErrors",
@@ -939,11 +939,7 @@ class RecipeMarkdownGenerator : Runnable {
             }
 
             // Data Tables
-            val filteredDataTables = recipeDescriptor.dataTables.filter { dataTable ->
-                dataTable.name !in dataTablesToIgnore
-            }
-
-            if (filteredDataTables.isNotEmpty()) {
+            if (recipeDescriptor.dataTables.isNotEmpty()) {
                 writeln(
                     """
                         ## Data Tables
@@ -952,7 +948,7 @@ class RecipeMarkdownGenerator : Runnable {
                 )
             }
 
-            for (dataTable in filteredDataTables) {
+            for (dataTable in recipeDescriptor.dataTables) {
                 writeln(
                     """
                     ### ${dataTable.displayName}
@@ -1110,11 +1106,9 @@ class RecipeMarkdownGenerator : Runnable {
             val requiresConfiguration = recipeDescriptor.options.any { it.isRequired }
             val requiresDependency = !origin.isFromCoreLibrary()
 
-            val dataTableSnippet = if (filteredDataTables.isEmpty()) "" else """
-                    <exportDatatables>true</exportDatatables>
-                """.trimIndent()
+            val dataTableSnippet = if (recipeDescriptor.dataTables.isEmpty()) "" else "<exportDatatables>true</exportDatatables>"
 
-            val dataTableCommandLineSnippet = if (filteredDataTables.isEmpty()) "" else "-Drewrite.exportDatatables=true"
+            val dataTableCommandLineSnippet = if (recipeDescriptor.dataTables.isEmpty()) "" else "-Drewrite.exportDatatables=true"
 
             if (requiresConfiguration) {
                 val exampleRecipeName =
