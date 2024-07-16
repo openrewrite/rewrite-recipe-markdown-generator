@@ -306,6 +306,10 @@ class RecipeMarkdownGenerator : Runnable {
         Files.newBufferedWriter(recipesWithDataTablesPath, StandardOpenOption.CREATE).useAndApply {
             writeln("# Recipes with Data Tables\n")
 
+            writeln("_This doc contains all of the recipes with **unique** data tables that have been explicitly " +
+                    "added by the recipe author. If a recipe contains only the default data tables, " +
+                    "it won't be included in this list._\n")
+
             for (recipe in recipesWithDataTables) {
                 writeln("**[${recipe.displayName}](https://docs.openrewrite.org/?q=${recipe.name})**  ")
                 writeln("**${recipe.name}**  ")
