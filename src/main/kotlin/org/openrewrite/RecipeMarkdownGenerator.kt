@@ -1377,6 +1377,7 @@ class RecipeMarkdownGenerator : Runnable {
                             
                             rewrite {
                                 activeRecipe("$exampleRecipeName")
+                                exportDatatables = true
                             }
                             
                             repositories {
@@ -1449,6 +1450,7 @@ $cliSnippet
                             
                             rewrite {
                                 activeRecipe("$exampleRecipeName")
+                                exportDatatables = true
                             }
                             
                             repositories {
@@ -1537,6 +1539,7 @@ $cliSnippet
                             
                             rewrite {
                                 activeRecipe("${recipeDescriptor.name}")
+                                exportDatatables = true
                             }
                             
                             repositories {
@@ -1565,6 +1568,7 @@ $cliSnippet
                                 }
                                 rewrite {
                                     activeRecipe("${recipeDescriptor.name}")
+                                    exportDatatables = true
                                 }
                                 afterEvaluate {
                                     if (repositories.isEmpty()) {
@@ -1657,6 +1661,7 @@ $cliSnippet
                             
                             rewrite {
                                 activeRecipe("${recipeDescriptor.name}")
+                                exportDatatables = true
                             }
                             
                             repositories {
@@ -1688,6 +1693,7 @@ $cliSnippet
                                 }
                                 rewrite {
                                     activeRecipe("${recipeDescriptor.name}")
+                                    exportDatatables = true
                                 }
                                 afterEvaluate {
                                     if (repositories.isEmpty()) {
