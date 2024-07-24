@@ -74,7 +74,7 @@ dependencies {
 //    "recipe"("org.openrewrite:rewrite-python") // Removed based on Olga request
 //    "recipe"("org.openrewrite:rewrite-ruby")
 
-//    "recipe"("org.openrewrite.recipe:rewrite-all") // Exclude language composition data table recipes
+    "recipe"("org.openrewrite.recipe:rewrite-all")
     "recipe"("org.openrewrite.meta:rewrite-analysis")
     "recipe"("org.openrewrite.recipe:rewrite-ai-search")
     "recipe"("org.openrewrite.recipe:rewrite-apache")
@@ -132,7 +132,7 @@ application {
 }
 
 tasks.named<JavaExec>("run").configure {
-    val targetDir = File(project.buildDir, "docs")
+    val targetDir = layout.buildDirectory.dir("docs").get().asFile
     // Collect all of the dependencies from recipeConf, then stuff them into a string representation
     val recipeModules = recipeConf.resolvedConfiguration.firstLevelModuleDependencies.flatMap { dep ->
         dep.moduleArtifacts.map { artifact ->
