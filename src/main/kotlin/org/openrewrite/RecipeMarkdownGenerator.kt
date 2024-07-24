@@ -865,426 +865,452 @@ class RecipeMarkdownGenerator : Runnable {
                 newLine()
             }
 
+            writeSourceLinks(recipeDescriptor, origin)
+            writeOptions(recipeDescriptor)
+            writeDefinition(recipeDescriptor)
+            writeUsage(recipeDescriptor, origin, gradlePluginVersion, mavenPluginVersion)
+            writeModerneLink(recipeDescriptor)
+            writeDataTables(recipeDescriptor)
+            writeExamples(recipeDescriptor)
+            writeContributors(recipeDescriptor)
+        }
+    }
+
+    private fun BufferedWriter.writeSourceLinks(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin) {
+        writeln(
+            """
+                    ## Recipe source
+                    
+                    [GitHub](${
+                origin.githubUrl(
+                    recipeDescriptor.name,
+                    recipeDescriptor.source
+                )
+            }), [Issue Tracker](${origin.issueTrackerUrl()}), [Maven Central](https://central.sonatype.com/artifact/${origin.groupId}/${origin.artifactId}/${origin.version}/jar)
+                    
+                    * groupId: ${origin.groupId}
+                    * artifactId: ${origin.artifactId}
+                    * version: ${origin.version}
+                    
+                """.trimIndent()
+        )
+
+        if (recipeDescriptor.recipeList.size > 1) {
             writeln(
                 """
-                ## Recipe source
-                
-                [GitHub](${
-                    origin.githubUrl(
-                        recipeDescriptor.name,
-                        recipeDescriptor.source
-                    )
-                }), [Issue Tracker](${origin.issueTrackerUrl()}), [Maven Central](https://central.sonatype.com/artifact/${origin.groupId}/${origin.artifactId}/${origin.version}/jar)
-                
-                * groupId: ${origin.groupId}
-                * artifactId: ${origin.artifactId}
-                * version: ${origin.version}
-                
-            """.trimIndent()
-            )
-
-            if (recipeDescriptor.recipeList.size > 1) {
-                writeln(
-                    """
                     {% hint style="info" %}
                     This recipe is composed of more than one recipe. If you want to customize the set of recipes this is composed of, you can find and copy the GitHub source for the recipe from the link above.
                     {% endhint %}
                     """.trimIndent()
-                )
-            }
+            )
+        }
+    }
 
-
-            // Options
-            if (recipeDescriptor.options.isNotEmpty()) {
-                writeln(
-                    """
-                    ## Options
-                    
-                    | Type | Name | Description | Example |
-                    | -- | -- | -- | -- |
-                """.trimIndent()
-                )
-                for (option in recipeDescriptor.options) {
-                    var description = if (option.description == null) {
-                        ""
-                    } else {
-                        option.description.replace("\n", "<br />")
-                    }
-                    description = if (option.isRequired) {
-                        description
-                    } else {
-                        "*Optional*. $description"
-                    }
-                    // This should preserve casing and plurality
-                    description = description.replace("method patterns?".toRegex(RegexOption.IGNORE_CASE)) { match ->
-                        "[${match.value}](/reference/method-patterns.md)"
-                    }
-                    // Add valid options to description
-                    if (option.valid?.isNotEmpty() ?: false) {
-                        description += " Valid options: " + option.valid?.joinToString { "`$it`" }
-                    }
-                    // Preserve table cell formatting for multiline examples
-                    val example = if (option.example != null) {
-                        if (option.example.contains("\n")) {
-                            "<pre>${option.example.replace("<", "\\<")}</pre>".replace("\n", "<br />")
-                        } else {
-                            "`${option.example}`"
-                        }
-                    } else {
-                        ""
-                    }
-                    writeln(
-                        """
-                        | `${option.type}` | ${option.name} | $description | $example |
+    private fun BufferedWriter.writeOptions(recipeDescriptor: RecipeDescriptor) {
+        if (recipeDescriptor.options.isNotEmpty()) {
+            writeln(
+                """
+                        ## Options
+                        
+                        | Type | Name | Description | Example |
+                        | -- | -- | -- | -- |
                     """.trimIndent()
-                    )
+            )
+            for (option in recipeDescriptor.options) {
+                var description = if (option.description == null) {
+                    ""
+                } else {
+                    option.description.replace("\n", "<br />")
                 }
-                newLine()
-            }
-
-            // Data Tables
-            if (recipeDescriptor.dataTables.isNotEmpty()) {
+                description = if (option.isRequired) {
+                    description
+                } else {
+                    "*Optional*. $description"
+                }
+                // This should preserve casing and plurality
+                description = description.replace("method patterns?".toRegex(RegexOption.IGNORE_CASE)) { match ->
+                    "[${match.value}](/reference/method-patterns.md)"
+                }
+                // Add valid options to description
+                if (option.valid?.isNotEmpty() ?: false) {
+                    description += " Valid options: " + option.valid?.joinToString { "`$it`" }
+                }
+                // Preserve table cell formatting for multiline examples
+                val example = if (option.example != null) {
+                    if (option.example.contains("\n")) {
+                        "<pre>${option.example.replace("<", "\\<")}</pre>".replace("\n", "<br />")
+                    } else {
+                        "`${option.example}`"
+                    }
+                } else {
+                    ""
+                }
                 writeln(
                     """
-                        ## Data Tables
-
-                    """.trimIndent()
+                            | `${option.type}` | ${option.name} | $description | $example |
+                        """.trimIndent()
                 )
             }
+            newLine()
+        }
+    }
+
+    private fun BufferedWriter.writeDataTables(recipeDescriptor: RecipeDescriptor) {
+        if (recipeDescriptor.dataTables.isNotEmpty()) {
+            writeln(
+                """
+                            ## Data Tables
+    
+                        """.trimIndent()
+            )
 
             for (dataTable in recipeDescriptor.dataTables) {
                 writeln(
                     """
-                    ### ${dataTable.displayName}
-                    **${dataTable.name}**
-
-                    _${dataTable.description}_
-
-                    | Column Name | Description |
-                    | ----------- | ----------- |
-                """.trimIndent()
+                        ### ${dataTable.displayName}
+                        **${dataTable.name}**
+    
+                        _${dataTable.description}_
+    
+                        | Column Name | Description |
+                        | ----------- | ----------- |
+                    """.trimIndent()
                 )
 
                 for (column in dataTable.columns) {
                     writeln(
                         """
-                       | ${column.displayName} | ${column.description} |
-                    """.trimIndent()
+                           | ${column.displayName} | ${column.description} |
+                        """.trimIndent()
                     )
                 }
 
                 newLine()
             }
+        }
+    }
 
-            // Examples
-            if (recipeDescriptor.examples.isNotEmpty()) {
-                val subject = if (recipeDescriptor.examples.size > 1) "Examples" else "Example"
-                writeln("## $subject")
+    private fun BufferedWriter.writeExamples(recipeDescriptor: RecipeDescriptor) {
+        if (recipeDescriptor.examples.isNotEmpty()) {
+            val subject = if (recipeDescriptor.examples.size > 1) "Examples" else "Example"
+            writeln("## $subject")
 
-                for (i in 0 until recipeDescriptor.examples.size) {
-                    if (i > 0) {
-                        newLine()
-                        writeln("---")
+            for (i in 0 until recipeDescriptor.examples.size) {
+                if (i > 0) {
+                    newLine()
+                    writeln("---")
+                    newLine()
+                }
+
+                val example = recipeDescriptor.examples[i]
+                val description =
+                    if (example.description.isNotEmpty()) example.description else ""
+
+                if (recipeDescriptor.examples.size > 1) {
+                    writeln("##### Example ${i + 1}")
+                    if (description.isNotEmpty()) {
+                        writeln(description)
+                    }
+                }
+
+                newLine()
+
+                // Parameters
+                if (example.parameters.isNotEmpty() && recipeDescriptor.options.isNotEmpty()) {
+                    writeln("###### Parameters")
+                    writeln("| Parameter | Value |")
+                    writeln("| -- | -- |")
+                    for (n in 0 until recipeDescriptor.options.size) {
+                        write("|")
+                        write(recipeDescriptor.options[n].name)
+                        write("|")
+                        if (n < example.parameters.size) {
+                            write("`${example.parameters[n]}`")
+                        }
+                        write("|")
                         newLine()
                     }
+                    newLine()
+                }
 
-                    val example = recipeDescriptor.examples[i]
-                    val description =
-                        if (example.description.isNotEmpty()) example.description else ""
+                // Example files
+                for (sourceIndex in 0 until example.sources.size) {
+                    val source = example.sources[sourceIndex]
+                    val hasChange = source.after != null && source.after.isNotEmpty()
+                    val beforeTitle = if (hasChange) "Before" else "Unchanged"
+                    val isNewFile = source.before == null && source.after != null
+                    val afterTile = if (isNewFile) "New file" else "After"
 
-                    if (recipeDescriptor.examples.size > 1) {
-                        writeln("##### Example ${i + 1}")
-                        if (description.isNotEmpty()) {
-                            writeln(description)
-                        }
+
+                    if (hasChange && source.before != null) {
+                        newLine()
+                        val tabName = source.path ?: (source.language ?: "Before / After")
+                        writeln("{% tabs %}")
+                        writeln("{% tab title=\"${tabName}\" %}")
                     }
 
                     newLine()
 
-                    // Parameters
-                    if (example.parameters.isNotEmpty() && recipeDescriptor.options.isNotEmpty()) {
-                        writeln("###### Parameters")
-                        writeln("| Parameter | Value |")
-                        writeln("| -- | -- |")
-                        for (n in 0 until recipeDescriptor.options.size) {
-                            write("|")
-                            write(recipeDescriptor.options[n].name)
-                            write("|")
-                            if (n < example.parameters.size) {
-                                write("`${example.parameters[n]}`")
-                            }
-                            write("|")
+                    if (source.before != null) {
+                        writeln("###### $beforeTitle")
+
+                        if (source.path != null) {
+                            writeln("{% code title=\"${source.path}\" %}")
+                        } else {
+                            writeln("{% code %}")
+                        }
+
+                        writeln("```${source.language}")
+                        write(source.before)
+                        if (source.before != null && !source.before.endsWith("\n")) {
                             newLine()
                         }
-                        newLine()
+                        writeln("```")
+
+                        writeln("{% endcode %}")
                     }
 
-                    // Example files
-                    for (sourceIndex in 0 until example.sources.size) {
-                        val source = example.sources[sourceIndex]
-                        val hasChange = source.after != null && source.after.isNotEmpty()
-                        val beforeTitle = if (hasChange) "Before" else "Unchanged"
-                        val isNewFile = source.before == null && source.after != null
-                        val afterTile = if (isNewFile) "New file" else "After"
+                    if (hasChange) {
+                        newLine()
+                        writeln("###### $afterTile")
 
-
-                        if (hasChange && source.before != null) {
-                            newLine()
-                            val tabName = source.path ?: (source.language ?: "Before / After")
-                            writeln("{% tabs %}")
-                            writeln("{% tab title=\"${tabName}\" %}")
+                        if (source.path != null) {
+                            writeln("{% code title=\"${source.path}\" %}")
+                        } else {
+                            writeln("{% code %}")
                         }
 
+                        writeln("```${source.language}")
+                        write(source.after)
+                        if (source.after != null && !source.after.endsWith("\n")) {
+                            newLine()
+                        }
+                        writeln("```")
+
+                        writeln("{% endcode %}")
                         newLine()
 
+                        // diff
                         if (source.before != null) {
-                            writeln("###### $beforeTitle")
+                            writeln("{% endtab %}")
+                            writeln("{% tab title=\"Diff\" %}")
 
-                            if (source.path != null) {
-                                writeln("{% code title=\"${source.path}\" %}")
-                            } else {
-                                writeln("{% code %}")
-                            }
+                            val diff = generateDiff(source.path, source.before, source.after)
 
-                            writeln("```${source.language}")
-                            write(source.before)
-                            if (source.before != null && !source.before.endsWith("\n")) {
-                                newLine()
-                            }
-                            writeln("```")
-
+                            writeln("{% code %}")
+                            writeln(
+                                """
+                                    |```diff
+                                    |${diff}```
+                                    """.trimMargin()
+                            )
                             writeln("{% endcode %}")
-                        }
-
-                        if (hasChange) {
-                            newLine()
-                            writeln("###### $afterTile")
-
-                            if (source.path != null) {
-                                writeln("{% code title=\"${source.path}\" %}")
-                            } else {
-                                writeln("{% code %}")
-                            }
-
-                            writeln("```${source.language}")
-                            write(source.after)
-                            if (source.after != null && !source.after.endsWith("\n")) {
-                                newLine()
-                            }
-                            writeln("```")
-
-                            writeln("{% endcode %}")
-                            newLine()
-
-                            // diff
-                            if (source.before != null) {
-                                writeln("{% endtab %}")
-                                writeln("{% tab title=\"Diff\" %}")
-
-                                val diff = generateDiff(source.path, source.before, source.after)
-
-                                writeln("{% code %}")
-                                writeln(
-                                    """
-                                |```diff
-                                |${diff}```
-                                """.trimMargin()
-                                )
-                                writeln("{% endcode %}")
-                                writeln("{% endtab %}")
-                                writeln("{% endtabs %}")
-                            }
+                            writeln("{% endtab %}")
+                            writeln("{% endtabs %}")
                         }
                     }
                 }
-                newLine()
             }
-
-            // Usage
             newLine()
-            writeln("## Usage")
+        }
+    }
+
+    private fun BufferedWriter.writeUsage(
+        recipeDescriptor: RecipeDescriptor,
+        origin: RecipeOrigin,
+        gradlePluginVersion: String,
+        mavenPluginVersion: String
+    ) {
+        // Usage
+        newLine()
+        writeln("## Usage")
+        newLine()
+
+        val suppressMaven = recipeDescriptor.name.contains(".gradle.")
+        val suppressGradle = recipeDescriptor.name.contains(".maven.")
+        val requiresConfiguration = recipeDescriptor.options.any { it.isRequired }
+        val requiresDependency = !origin.isFromCoreLibrary()
+
+        val dataTableSnippet =
+            if (recipeDescriptor.dataTables.isEmpty()) "" else "<exportDatatables>true</exportDatatables>"
+
+        val dataTableCommandLineSnippet =
+            if (recipeDescriptor.dataTables.isEmpty()) "" else "-Drewrite.exportDatatables=true"
+
+        if (requiresConfiguration) {
+            val exampleRecipeName =
+                "com.yourorg." + recipeDescriptor.name.substring(recipeDescriptor.name.lastIndexOf('.') + 1) + "Example"
+            write("This recipe has required configuration parameters. ")
+            write("Recipes with required configuration parameters cannot be activated directly. ")
+            write("To activate this recipe you must create a new recipe which fills in the required parameters. ")
+            write("In your `rewrite.yml` create a new recipe with a unique name. ")
+            write("For example: `$exampleRecipeName`.")
             newLine()
-
-            val suppressMaven = recipeDescriptor.name.contains(".gradle.")
-            val suppressGradle = recipeDescriptor.name.contains(".maven.")
-            val requiresConfiguration = recipeDescriptor.options.any { it.isRequired }
-            val requiresDependency = !origin.isFromCoreLibrary()
-
-            val dataTableSnippet = if (recipeDescriptor.dataTables.isEmpty()) "" else "<exportDatatables>true</exportDatatables>"
-
-            val dataTableCommandLineSnippet = if (recipeDescriptor.dataTables.isEmpty()) "" else "-Drewrite.exportDatatables=true"
-
-            if (requiresConfiguration) {
-                val exampleRecipeName =
-                    "com.yourorg." + recipeDescriptor.name.substring(recipeDescriptor.name.lastIndexOf('.') + 1) + "Example"
-                write("This recipe has required configuration parameters. ")
-                write("Recipes with required configuration parameters cannot be activated directly. ")
-                write("To activate this recipe you must create a new recipe which fills in the required parameters. ")
-                write("In your `rewrite.yml` create a new recipe with a unique name. ")
-                write("For example: `$exampleRecipeName`.")
-                newLine()
-                writeln("Here's how you can define and customize such a recipe within your rewrite.yml:")
-                write(
-                    """
-                    
-                    {% code title="rewrite.yml" %}
-                    ```yaml
-                    ---
-                    type: specs.openrewrite.org/v1beta/recipe
-                    name: $exampleRecipeName
-                    displayName: ${recipeDescriptor.displayName} example
-                    recipeList:
-                      - ${recipeDescriptor.name}:
-                    
-                """.trimIndent()
-                )
-                for (option in recipeDescriptor.options) {
-                    if (!option.isRequired && option.example == null) {
-                        continue
-                    }
-                    val ex = if (option.example != null && "String" == option.type
-                        && (option.example.matches("^[{}\\[\\],`|=%@*!?-].*".toRegex())
-                                || option.example.matches(".*:\\s.*".toRegex()))
-                    ) {
-                        "'" + option.example + "'"
-                    } else if (option.type == "boolean") {
-                        "false"
-                    } else {
-                        option.example
-                    }
-                    writeln("      ${option.name}: $ex")
+            writeln("Here's how you can define and customize such a recipe within your rewrite.yml:")
+            write(
+                """
+                        
+                        {% code title="rewrite.yml" %}
+                        ```yaml
+                        ---
+                        type: specs.openrewrite.org/v1beta/recipe
+                        name: $exampleRecipeName
+                        displayName: ${recipeDescriptor.displayName} example
+                        recipeList:
+                          - ${recipeDescriptor.name}:
+                        
+                    """.trimIndent()
+            )
+            for (option in recipeDescriptor.options) {
+                if (!option.isRequired && option.example == null) {
+                    continue
                 }
-                writeln("```")
-                writeln("{% endcode %}")
-                newLine()
-
-                if (requiresDependency) {
-                    writeSnippetsWithConfigurationWithDependency(
-                        exampleRecipeName,
-                        origin,
-                        gradlePluginVersion,
-                        mavenPluginVersion,
-                        suppressMaven,
-                        suppressGradle,
-                        getCliSnippet(exampleRecipeName),
-                        dataTableSnippet,
-                    )
+                val ex = if (option.example != null && "String" == option.type
+                    && (option.example.matches("^[{}\\[\\],`|=%@*!?-].*".toRegex())
+                            || option.example.matches(".*:\\s.*".toRegex()))
+                ) {
+                    "'" + option.example + "'"
+                } else if (option.type == "boolean") {
+                    "false"
                 } else {
-                    writeSnippetsWithConfigurationWithoutDependency(
-                        exampleRecipeName,
-                        gradlePluginVersion,
-                        mavenPluginVersion,
-                        suppressMaven,
-                        suppressGradle,
-                        getCliSnippet(exampleRecipeName),
-                        dataTableSnippet,
-                    )
+                    option.example
                 }
+                writeln("      ${option.name}: $ex")
+            }
+            writeln("```")
+            writeln("{% endcode %}")
+            newLine()
+
+            if (requiresDependency) {
+                writeSnippetsWithConfigurationWithDependency(
+                    exampleRecipeName,
+                    origin,
+                    gradlePluginVersion,
+                    mavenPluginVersion,
+                    suppressMaven,
+                    suppressGradle,
+                    getCliSnippet(exampleRecipeName),
+                    dataTableSnippet,
+                )
             } else {
-                if (origin.isFromCoreLibrary()) {
-                    writeSnippetsFromCoreLibrary(
-                        recipeDescriptor,
-                        gradlePluginVersion,
-                        mavenPluginVersion,
-                        suppressMaven,
-                        suppressGradle,
-                        getCliSnippet(recipeDescriptor.name),
-                        dataTableSnippet,
-                        dataTableCommandLineSnippet,
-                    )
-                } else {
-                    writeSnippetForOtherLibrary(
-                        origin,
-                        recipeDescriptor,
-                        gradlePluginVersion,
-                        mavenPluginVersion,
-                        suppressMaven,
-                        suppressGradle,
-                        getCliSnippet(recipeDescriptor.name),
-                        dataTableSnippet,
-                        dataTableCommandLineSnippet,
-                    )
-                }
-            }
-
-            if (recipeDescriptor.recipeList.isNotEmpty()) {
-                writeln(
-                    """
-                    
-                    ## Definition
-                    
-                    {% tabs %}
-                    {% tab title="Recipe List" %}
-                """.trimIndent()
+                writeSnippetsWithConfigurationWithoutDependency(
+                    exampleRecipeName,
+                    gradlePluginVersion,
+                    mavenPluginVersion,
+                    suppressMaven,
+                    suppressGradle,
+                    getCliSnippet(exampleRecipeName),
+                    dataTableSnippet,
                 )
-                val recipeDepth = getRecipePath(recipeDescriptor).chars().filter { ch: Int -> ch == '/'.code }.count()
-                val pathToRecipesBuilder = StringBuilder()
-                for (i in 0 until recipeDepth) {
-                    pathToRecipesBuilder.append("../")
-                }
-                val pathToRecipes = pathToRecipesBuilder.toString()
-                for (recipe in recipeDescriptor.recipeList) {
-                    // https://github.com/openrewrite/rewrite-docs/issues/250
-                    if (recipe.displayName == "Precondition bellwether") {
-                        continue
-                    }
+            }
+        } else {
+            if (origin.isFromCoreLibrary()) {
+                writeSnippetsFromCoreLibrary(
+                    recipeDescriptor,
+                    gradlePluginVersion,
+                    mavenPluginVersion,
+                    suppressMaven,
+                    suppressGradle,
+                    getCliSnippet(recipeDescriptor.name),
+                    dataTableSnippet,
+                    dataTableCommandLineSnippet,
+                )
+            } else {
+                writeSnippetForOtherLibrary(
+                    origin,
+                    recipeDescriptor,
+                    gradlePluginVersion,
+                    mavenPluginVersion,
+                    suppressMaven,
+                    suppressGradle,
+                    getCliSnippet(recipeDescriptor.name),
+                    dataTableSnippet,
+                    dataTableCommandLineSnippet,
+                )
+            }
+        }
+    }
 
-                    writeln("* [" + recipe.displayName + "](" + pathToRecipes + getRecipePath(recipe) + ".md)")
-                    if (recipe.options.isNotEmpty()) {
-                        for (option in recipe.options) {
-                            if (option.value != null) {
-                                writeln("  * " + option.name + ": `" + printValue(option.value!!) + "`")
-                            }
+    private fun BufferedWriter.writeDefinition(recipeDescriptor: RecipeDescriptor) {
+        if (recipeDescriptor.recipeList.isNotEmpty()) {
+            writeln(
+                """
+                        
+                        ## Definition
+                        
+                        {% tabs %}
+                        {% tab title="Recipe List" %}
+                    """.trimIndent()
+            )
+            val recipeDepth = getRecipePath(recipeDescriptor).chars().filter { ch: Int -> ch == '/'.code }.count()
+            val pathToRecipesBuilder = StringBuilder()
+            for (i in 0 until recipeDepth) {
+                pathToRecipesBuilder.append("../")
+            }
+            val pathToRecipes = pathToRecipesBuilder.toString()
+            for (recipe in recipeDescriptor.recipeList) {
+                // https://github.com/openrewrite/rewrite-docs/issues/250
+                if (recipe.displayName == "Precondition bellwether") {
+                    continue
+                }
+
+                writeln("* [" + recipe.displayName + "](" + pathToRecipes + getRecipePath(recipe) + ".md)")
+                if (recipe.options.isNotEmpty()) {
+                    for (option in recipe.options) {
+                        if (option.value != null) {
+                            writeln("  * " + option.name + ": `" + printValue(option.value!!) + "`")
                         }
                     }
                 }
-                newLine()
-                writeln(
-                    """
-                    {% endtab %}
-
-                    {% tab title="Yaml Recipe List" %}
-                    ```yaml
-                """.trimIndent()
-                )
-                writeln(recipeDescriptor.asYaml())
-                writeln(
-                    """
-                    ```
-                    {% endtab %}
-                    {% endtabs %}
-                """.trimIndent()
-                )
             }
-
             newLine()
             writeln(
                 """
-                ## See how this recipe works across multiple open-source repositories
-
-                [![Moderne Link Image](/.gitbook/assets/ModerneRecipeButton.png)](https://app.moderne.io/recipes/${recipeDescriptor.name})
-
-                The community edition of the Moderne platform enables you to easily run recipes across thousands of open-source repositories.
-
-                Please [contact Moderne](https://moderne.io/product) for more information about safely running the recipes on your own codebase in a private SaaS.
-            """.trimIndent()
+                        {% endtab %}
+    
+                        {% tab title="Yaml Recipe List" %}
+                        ```yaml
+                    """.trimIndent()
             )
+            writeln(recipeDescriptor.asYaml())
+            writeln(
+                """
+                        ```
+                        {% endtab %}
+                        {% endtabs %}
+                    """.trimIndent()
+            )
+        }
+    }
 
-            // Contributors
-            if (recipeDescriptor.contributors.isNotEmpty()) {
-                newLine()
-                writeln("## Contributors")
-                writeln(
-                    recipeDescriptor.contributors.stream()
-                        .map { contributor: Contributor ->
-                            if (contributor.email.contains("noreply")) {
-                                contributor.name
-                            } else {
-                                "[" + contributor.name + "](mailto:" + contributor.email + ")"
-                            }
-                        }.collect(Collectors.joining(", "))
-                )
-            }
+    private fun BufferedWriter.writeModerneLink(recipeDescriptor: RecipeDescriptor) {
+        writeln(
+            """
+                    ## See how this recipe works across multiple open-source repositories
+    
+                    [![Moderne Link Image](/.gitbook/assets/ModerneRecipeButton.png)](https://app.moderne.io/recipes/${recipeDescriptor.name})
+    
+                    The community edition of the Moderne platform enables you to easily run recipes across thousands of open-source repositories.
+    
+                    Please [contact Moderne](https://moderne.io/product) for more information about safely running the recipes on your own codebase in a private SaaS.
+                """.trimIndent()
+        )
+    }
+
+    private fun BufferedWriter.writeContributors(recipeDescriptor: RecipeDescriptor) {
+        if (recipeDescriptor.contributors.isNotEmpty()) {
+            newLine()
+            writeln("## Contributors")
+            writeln(
+                recipeDescriptor.contributors.stream()
+                    .map { contributor: Contributor ->
+                        if (contributor.email.contains("noreply")) {
+                            contributor.name
+                        } else {
+                            "[" + contributor.name + "](mailto:" + contributor.email + ")"
+                        }
+                    }.collect(Collectors.joining(", "))
+            )
         }
     }
 
@@ -1804,7 +1830,8 @@ $cliSnippet
                 recipe.name.startsWith("io.quarkus") ||
                 recipe.name.startsWith("org.apache") ||
                 recipe.name.startsWith("org.axonframework") ||
-                recipe.name.startsWith("tech.picnic")) {
+                recipe.name.startsWith("tech.picnic")
+            ) {
                 recipe.name.replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
             } else {
                 throw RuntimeException("Recipe package unrecognized: ${recipe.name}")
