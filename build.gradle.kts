@@ -81,10 +81,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-circleci")
     "recipe"("org.openrewrite.recipe:rewrite-concourse")
     "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm")
-
-// Removed rewrite-docker as even with the following change it was breaking the build in confusing ways
-//    "recipe"("org.openrewrite.recipe:rewrite-docker:1.+") // FIXME drop override once managed version is 1.0.1+
-
+    "recipe"("org.openrewrite.recipe:rewrite-docker")
     "recipe"("org.openrewrite.recipe:rewrite-github-actions")
     "recipe"("org.openrewrite.recipe:rewrite-hibernate")
     "recipe"("org.openrewrite.recipe:rewrite-jackson")
