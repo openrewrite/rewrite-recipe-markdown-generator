@@ -1299,6 +1299,7 @@ class RecipeMarkdownGenerator : Runnable {
     private fun BufferedWriter.writeModerneLink(recipeDescriptor: RecipeDescriptor) {
         writeln(
             """
+
                     ## See how this recipe works across multiple open-source repositories
     
                     [![Moderne Link Image](/.gitbook/assets/ModerneRecipeButton.png)](https://app.moderne.io/recipes/${recipeDescriptor.name})
