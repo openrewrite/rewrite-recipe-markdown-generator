@@ -946,7 +946,16 @@ class RecipeMarkdownGenerator : Runnable {
                 }
                 // Add valid options to description
                 if (option.valid?.isNotEmpty() ?: false) {
-                    description += " Valid options: " + option.valid?.joinToString { "`$it`" }
+                    val combinedOptions = option.valid?.joinToString(", ") {
+                        // Appropriately handle empty string and a space as a valid option
+                        when (it) {
+                            "" -> "\"\""
+                            " " -> "\" \""
+                            else -> "`$it`"
+                        }
+                    }
+
+                    description += " Valid options: $combinedOptions"
                 }
                 // Preserve table cell formatting for multiline examples
                 val example = if (option.example != null) {
