@@ -304,7 +304,7 @@ class RecipeMarkdownGenerator : Runnable {
         // write the latest recipe information to a file for next time
         mapper.writeValue(File(recipeDescriptorFile), markdownArtifacts)
 
-        val categories = Category.fromDescriptors(recipeDescriptors, categoryDescriptors)
+        val categories = Category.fromDescriptors(recipeDescriptors, categoryDescriptors).sortedBy { it.simpleName }
 
         // Write SUMMARY_snippet.md
         val summarySnippetPath = outputPath.resolve("SUMMARY_snippet.md")
@@ -718,9 +718,11 @@ class RecipeMarkdownGenerator : Runnable {
                     }](${getRecipeRelativePath(recipe)}.md)"
                 )
             }
-            for (category in subcategories) {
+
+            for (category in subcategories.sortedBy { it.simpleName }) {
                 result.append(category.summarySnippet(indentationDepth + 1))
             }
+
             return result.toString()
         }
 
