@@ -1631,7 +1631,12 @@ $cliSnippet
                             }
                             ```
                             {% endcode %}
-                            2. Run `gradle --init-script init.gradle rewriteRun` to run the recipe.
+                            2. Run the recipe.
+                            {% code title="shell" overflow="wrap"%}
+                            ```shell
+                            gradle --init-script init.gradle rewriteRun
+                            ```
+                            {% endcode %}
                             {% endtab %}
                             """.trimIndent()
 
@@ -1756,7 +1761,12 @@ $cliSnippet
                             }
                             ```
                             {% endcode %}
-                            2. Run `gradle --init-script init.gradle rewriteRun` to run the recipe.
+                            2. Run the recipe.
+                            {% code title="shell" overflow="wrap"%}
+                            ```shell
+                            gradle --init-script init.gradle rewriteRun
+                            ```
+                            {% endcode %}
                             {% endtab %}
                             """.trimIndent()
 
