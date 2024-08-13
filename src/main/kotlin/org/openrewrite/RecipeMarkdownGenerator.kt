@@ -56,26 +56,33 @@ class RecipeMarkdownGenerator : Runnable {
     @Parameters(
         index = "3",
         defaultValue = "latest.release",
+        description = ["The version of the rewrite-recipe-bom to display on all module versions page"]
+    )
+    lateinit var rewriteRecipeBomVersion: String
+
+    @Parameters(
+        index = "4",
+        defaultValue = "latest.release",
         description = ["The version of the Rewrite Gradle Plugin to display in relevant samples"]
     )
     lateinit var gradlePluginVersion: String
 
     @Parameters(
-        index = "4",
+        index = "5",
         defaultValue = "",
         description = ["The version of the Rewrite Maven Plugin to display in relevant samples"]
     )
     lateinit var mavenPluginVersion: String
 
     @Parameters(
-        index = "5",
+        index = "6",
         defaultValue = "release",
         description = ["The type of deploy being done (either release or snapshot)"]
     )
     lateinit var deployType: String
 
     @Parameters(
-        index = "6",
+        index = "7",
         defaultValue = "renameMe",
         description = ["The name of the diff file to be generated when making a diff log"]
     )
@@ -107,6 +114,7 @@ class RecipeMarkdownGenerator : Runnable {
             // Write latest-versions-of-every-openrewrite-module.md
             val versionsSnippetPath = outputPath.resolve("latest-versions-of-every-openrewrite-module.md")
             Files.newBufferedWriter(versionsSnippetPath, StandardOpenOption.CREATE).useAndApply {
+                val bomLink = "[${rewriteRecipeBomVersion}](https://github.com/openrewrite/rewrite-recipe-bom/releases/tag/v${rewriteRecipeBomVersion})"
                 val mavenLink = "[${mavenPluginVersion}](https://github.com/openrewrite/rewrite-maven-plugin/releases/tag/v${mavenPluginVersion})"
                 val gradleLink = "[${gradlePluginVersion}](https://github.com/openrewrite/rewrite-gradle-plugin/releases/tag/v${gradlePluginVersion})"
                 writeln("""
@@ -122,7 +130,7 @@ class RecipeMarkdownGenerator : Runnable {
                     
                     | Module                                                                                                                | Version    |
                     |-----------------------------------------------------------------------------------------------------------------------| ---------- |
-                    | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    |            |
+                    | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **${bomLink}** |
                     | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenLink}** |
                     | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** |
                     """.trimIndent())
