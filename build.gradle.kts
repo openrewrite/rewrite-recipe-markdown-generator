@@ -139,23 +139,41 @@ tasks.named<JavaExec>("run").configure {
     }.joinToString(";")
     // recipeModules doesn't include transitive dependencies, but those are needed to load recipes and their descriptors
     val recipeClasspath = recipeConf.resolvedConfiguration.files.asSequence()
-            .map { it.absolutePath }
-            .joinToString(";")
+        .map { it.absolutePath }
+        .joinToString(";")
 
-    val gradlePluginVersion = configurations.detachedConfiguration(dependencies.create("org.openrewrite:plugin:latest.release"))
+    val rewriteRecipeBomVersion =
+        configurations.detachedConfiguration(dependencies.create("org.openrewrite.recipe:rewrite-recipe-bom:latest.release"))
             .resolvedConfiguration
             .firstLevelModuleDependencies
             .first()
             .moduleVersion
 
-    val mavenPluginVersion = configurations.detachedConfiguration(dependencies.create("org.openrewrite.maven:rewrite-maven-plugin:latest.release"))
+    val gradlePluginVersion =
+        configurations.detachedConfiguration(dependencies.create("org.openrewrite:plugin:latest.release"))
+            .resolvedConfiguration
+            .firstLevelModuleDependencies
+            .first()
+            .moduleVersion
+
+    val mavenPluginVersion =
+        configurations.detachedConfiguration(dependencies.create("org.openrewrite.maven:rewrite-maven-plugin:latest.release"))
             .resolvedConfiguration
             .firstLevelModuleDependencies
             .first()
             .moduleVersion
 
     description = "Writes generated markdown docs to $targetDir"
-    args = listOf(targetDir.toString(), recipeModules, recipeClasspath, gradlePluginVersion, mavenPluginVersion, deployType, diffFileName)
+    args = listOf(
+        targetDir.toString(),
+        recipeModules,
+        recipeClasspath,
+        rewriteRecipeBomVersion,
+        gradlePluginVersion,
+        mavenPluginVersion,
+        deployType,
+        diffFileName
+    )
     doFirst {
         logger.lifecycle("Recipe modules: ")
         logger.lifecycle(recipeModules.replace(";", "\n"))
