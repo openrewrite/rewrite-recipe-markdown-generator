@@ -1478,7 +1478,7 @@ class RecipeMarkdownGenerator : Runnable {
 
         writeln(
             """
-Now that `$exampleRecipeName` has been defined activate it in your build file:
+Now that `$exampleRecipeName` has been defined, activate it in your build file:
 {% tabs %}
 $gradleSnippet
 $mavenSnippet
@@ -1562,7 +1562,7 @@ $cliSnippet
 
         writeln(
             """
-Now that `$exampleRecipeName` has been defined activate it and take a dependency on ${origin.groupId}:${origin.artifactId}:${origin.version} in your build file:
+Now that `$exampleRecipeName` has been defined, activate it and take a dependency on ${origin.groupId}:${origin.artifactId}:${origin.version} in your build file:
 {% tabs %}
 $gradleSnippet
 $mavenSnippet
