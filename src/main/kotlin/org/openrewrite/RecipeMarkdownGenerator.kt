@@ -1158,8 +1158,9 @@ class RecipeMarkdownGenerator : Runnable {
         writeln("## Usage")
         newLine()
 
-        val suppressMaven = recipeDescriptor.name.contains(".gradle.")
-        val suppressGradle = recipeDescriptor.name.contains(".maven.")
+        val suppressJava = recipeDescriptor.name.contains(".csharp.") || recipeDescriptor.name.contains(".python.")
+        val suppressMaven = suppressJava || recipeDescriptor.name.contains(".gradle.")
+        val suppressGradle = suppressJava || recipeDescriptor.name.contains(".maven.")
         val requiresConfiguration = recipeDescriptor.options.any { it.isRequired }
         val requiresDependency = !origin.isFromCoreLibrary()
 
