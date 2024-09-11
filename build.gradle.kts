@@ -79,6 +79,8 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-ai-search")
     "recipe"("org.openrewrite.recipe:rewrite-apache")
     "recipe"("org.openrewrite.recipe:rewrite-circleci")
+    "recipe"("org.openrewrite.recipe:rewrite-codemods")
+    "recipe"("org.openrewrite.recipe:rewrite-codemods-ng")
     "recipe"("org.openrewrite.recipe:rewrite-concourse")
     "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm")
     "recipe"("org.openrewrite.recipe:rewrite-docker")
