@@ -145,6 +145,13 @@ tasks.named<JavaExec>("run").configure {
         .map { it.absolutePath }
         .joinToString(";")
 
+    val rewriteBomVersion =
+        configurations.detachedConfiguration(dependencies.create("org.openrewrite:rewrite-bom:latest.release"))
+            .resolvedConfiguration
+            .firstLevelModuleDependencies
+            .first()
+            .moduleVersion
+
     val rewriteRecipeBomVersion =
         configurations.detachedConfiguration(dependencies.create("org.openrewrite.recipe:rewrite-recipe-bom:latest.release"))
             .resolvedConfiguration
@@ -171,6 +178,7 @@ tasks.named<JavaExec>("run").configure {
         targetDir.toString(),
         recipeModules,
         recipeClasspath,
+        rewriteBomVersion,
         rewriteRecipeBomVersion,
         gradlePluginVersion,
         mavenPluginVersion,
