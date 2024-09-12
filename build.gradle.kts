@@ -44,8 +44,9 @@ val diffFileName = "desjardins"
 
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
+    implementation(platform("org.openrewrite.recipe:rewrite-recipe-bom:$rewriteVersion"))
     implementation("info.picocli:picocli:latest.release")
-    implementation("org.openrewrite:rewrite-core:$rewriteVersion")
+    implementation("org.openrewrite:rewrite-core")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2")
     implementation("io.github.java-diff-utils:java-diff-utils:4.11")
