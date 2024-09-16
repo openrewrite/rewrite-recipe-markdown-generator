@@ -56,33 +56,40 @@ class RecipeMarkdownGenerator : Runnable {
     @Parameters(
         index = "3",
         defaultValue = "latest.release",
+        description = ["The version of the rewrite-bom to display on the changelog page"]
+    )
+    lateinit var rewriteBomVersion: String
+
+    @Parameters(
+        index = "4",
+        defaultValue = "latest.release",
         description = ["The version of the rewrite-recipe-bom to display on all module versions page"]
     )
     lateinit var rewriteRecipeBomVersion: String
 
     @Parameters(
-        index = "4",
+        index = "5",
         defaultValue = "latest.release",
         description = ["The version of the Rewrite Gradle Plugin to display in relevant samples"]
     )
     lateinit var gradlePluginVersion: String
 
     @Parameters(
-        index = "5",
+        index = "6",
         defaultValue = "",
         description = ["The version of the Rewrite Maven Plugin to display in relevant samples"]
     )
     lateinit var mavenPluginVersion: String
 
     @Parameters(
-        index = "6",
+        index = "7",
         defaultValue = "release",
         description = ["The type of deploy being done (either release or snapshot)"]
     )
     lateinit var deployType: String
 
     @Parameters(
-        index = "7",
+        index = "8",
         defaultValue = "renameMe",
         description = ["The name of the diff file to be generated when making a diff log"]
     )
@@ -320,6 +327,10 @@ class RecipeMarkdownGenerator : Runnable {
             for (category in categories) {
                 write(category.summarySnippet(0))
             }
+            write("""
+                * [Changelog](changelog/changelog.md)
+                  * [$rewriteBomVersion Release (${getDateFormattedYYYYMMDD()})](/changelog/${rewriteBomVersion.replace('.','-')}-Release.md)
+                """.trimIndent())
         }
 
         // Write recipes-with-data-tables.md
@@ -465,12 +476,10 @@ class RecipeMarkdownGenerator : Runnable {
         deployType: String
     ) {
         // Get the date to label the changelog
-        val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val formatted = current.format(formatter)
+        val formatted = getDateFormattedYYYYMMDD()
 
         val changelog: File = if (deployType == "release") {
-            File("src/main/resources/CHANGELOG-$formatted.md")
+            File("src/main/resources/${rewriteBomVersion.replace('.','-')}-Release.md")
         } else {
             File("src/main/resources/snapshot-CHANGELOG-$formatted.md")
         }
@@ -485,7 +494,7 @@ class RecipeMarkdownGenerator : Runnable {
             changelog.appendText("\nWant to learn how to use snapshot versions in your project? Check out our [snapshot version guide](/reference/snapshot-instructions.md).")
             changelog.appendText("\n{% endhint %}\n\n")
         } else {
-            changelog.appendText("# X.XX.X release ($formatted)")
+            changelog.appendText("# $rewriteBomVersion release ($formatted)")
 
             changelog.appendText("\n\n{% hint style=\"info\" %}")
             changelog.appendText("\nThis changelog only shows what recipes have been added, removed, or changed. OpenRewrite may do releases that do not include these types of changes. To see these changes, please go to the [releases page](https://github.com/openrewrite/rewrite/releases).")
@@ -560,6 +569,12 @@ class RecipeMarkdownGenerator : Runnable {
                 }
             }
         }
+    }
+
+    private fun getDateFormattedYYYYMMDD(): String? {
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return current.format(formatter)
     }
 
     private fun buildDiffLog(
