@@ -1213,9 +1213,9 @@ class RecipeMarkdownGenerator : Runnable {
                 if (!option.isRequired && option.example == null) {
                     continue
                 }
-                val ex = if (option.example != null && "String" == option.type
-                    && (option.example.matches("^[{}\\[\\],`|=%@*!?-].*".toRegex())
-                            || option.example.matches(".*:\\s.*".toRegex()))
+                val ex = if (option.example != null && "String" == option.type &&
+                    (option.example.matches("^[{}\\[\\],`|=%@*!?-].*".toRegex()) ||
+                            option.example.matches(".*:\\s.*".toRegex()))
                 ) {
                     "'" + option.example + "'"
                 } else if (option.type == "boolean") {
