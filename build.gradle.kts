@@ -86,6 +86,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-concourse")
     "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm")
     "recipe"("org.openrewrite.recipe:rewrite-docker")
+//    "recipe"("org.openrewrite.recipe:rewrite-dotnet")
     "recipe"("org.openrewrite.recipe:rewrite-feature-flags")
     "recipe"("org.openrewrite.recipe:rewrite-github-actions")
 //    "recipe"("org.openrewrite.recipe:rewrite-gitlab")
