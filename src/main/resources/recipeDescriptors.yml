@@ -1,6 +1,6 @@
 rewrite-ai-search:
   artifactId: "rewrite-ai-search"
-  version: "0.16.3"
+  version: "0.17.0"
   markdownRecipeDescriptors:
     io.moderne.ai.FindCommentsLanguage:
       name: "io.moderne.ai.FindCommentsLanguage"
@@ -89,7 +89,7 @@ rewrite-ai-search:
       artifactId: "rewrite-ai-search"
 rewrite-all:
   artifactId: "rewrite-all"
-  version: "1.5.0"
+  version: "1.6.0"
   markdownRecipeDescriptors:
     org.openrewrite.FindCallGraph:
       name: "org.openrewrite.FindCallGraph"
@@ -121,7 +121,7 @@ rewrite-all:
       artifactId: "rewrite-all"
 rewrite-analysis:
   artifactId: "rewrite-analysis"
-  version: "2.10.5"
+  version: "2.11.0"
   markdownRecipeDescriptors:
     org.openrewrite.analysis.controlflow.ControlFlowVisualization:
       name: "org.openrewrite.analysis.controlflow.ControlFlowVisualization"
@@ -182,9 +182,45 @@ rewrite-analysis:
       options: []
       isImperative: true
       artifactId: "rewrite-analysis"
+rewrite-android:
+  artifactId: "rewrite-android"
+  version: "0.1.0"
+  markdownRecipeDescriptors:
+    org.openrewrite.android.ChangeAndroidSdkVersion:
+      name: "org.openrewrite.android.ChangeAndroidSdkVersion"
+      description: "Change `compileSdk`, `compileSdkVersion`, `targetSdk` and `targetSdkVersion`\
+        \ in an Android Gradle build file to the argument version."
+      docLink: "https://docs.openrewrite.org/recipes/android/changeandroidsdkversion"
+      options:
+      - name: "version"
+        type: "Integer"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-android"
+    org.openrewrite.android.UpgradeToAndroidSDK33:
+      name: "org.openrewrite.android.UpgradeToAndroidSDK33"
+      description: "Recipes to upgrade to Android SDK version 33."
+      docLink: "https://docs.openrewrite.org/recipes/android/upgradetoandroidsdk33"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-android"
+    org.openrewrite.android.UpgradeToAndroidSDK34:
+      name: "org.openrewrite.android.UpgradeToAndroidSDK34"
+      description: "Recipes to upgrade to Android SDK version 34."
+      docLink: "https://docs.openrewrite.org/recipes/android/upgradetoandroidsdk34"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-android"
+    org.openrewrite.android.UpgradeToAndroidSDK35:
+      name: "org.openrewrite.android.UpgradeToAndroidSDK35"
+      description: "Recipes to upgrade to Android SDK version 35."
+      docLink: "https://docs.openrewrite.org/recipes/android/upgradetoandroidsdk35"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-android"
 rewrite-apache:
   artifactId: "rewrite-apache"
-  version: "1.6.0"
+  version: "1.7.0"
   markdownRecipeDescriptors:
     org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64:
       name: "org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64"
@@ -908,7 +944,7 @@ rewrite-apache:
       artifactId: "rewrite-apache"
 rewrite-circleci:
   artifactId: "rewrite-circleci"
-  version: "2.6.5"
+  version: "2.7.0"
   markdownRecipeDescriptors:
     org.openrewrite.circleci.InstallOrb:
       name: "org.openrewrite.circleci.InstallOrb"
@@ -936,7 +972,7 @@ rewrite-circleci:
       artifactId: "rewrite-circleci"
 rewrite-codemods:
   artifactId: "rewrite-codemods"
-  version: "0.2.0"
+  version: "0.3.0"
   markdownRecipeDescriptors:
     org.openrewrite.codemods.ApplyCodemod:
       name: "org.openrewrite.codemods.ApplyCodemod"
@@ -1279,8 +1315,8 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.javascript.NoLonelyIf:
       name: "org.openrewrite.codemods.cleanup.javascript.NoLonelyIf"
-      description: "Disallow if statements as the only statement in else blocks \n\
-        See [rule details](https://eslint.org/docs/latest/rules/no-lonely-if)\n"
+      description: "Disallow `if` statements as the only statement in `if` blocks\
+        \ without `else`.\nSee [rule details](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-lonely-if.md)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/javascript/nolonelyif"
       options: []
       isImperative: false
@@ -2549,14 +2585,14 @@ rewrite-codemods:
     org.openrewrite.codemods.cleanup.vue.ArrayBracketNewline:
       name: "org.openrewrite.codemods.cleanup.vue.ArrayBracketNewline"
       description: "Enforce linebreaks after opening and before closing array brackets\
-        \ in <template>\nSee rule details for [vue/array-bracket-newline](https://eslint.vuejs.org/rules/array-bracket-newline.html)\n"
+        \ in `<template>`\nSee rule details for [vue/array-bracket-newline](https://eslint.vuejs.org/rules/array-bracket-newline.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/arraybracketnewline"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.ArrayBracketSpacing:
       name: "org.openrewrite.codemods.cleanup.vue.ArrayBracketSpacing"
-      description: "Enforce consistent spacing inside array brackets in <template>\n\
+      description: "Enforce consistent spacing inside array brackets in `<template>`\n\
         See rule details for [vue/array-bracket-spacing](https://eslint.vuejs.org/rules/array-bracket-spacing.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/arraybracketspacing"
       options: []
@@ -2564,8 +2600,8 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.ArrayElementNewline:
       name: "org.openrewrite.codemods.cleanup.vue.ArrayElementNewline"
-      description: "Enforce line breaks after each array element in <template>\nSee\
-        \ rule details for [vue/array-element-newline](https://eslint.vuejs.org/rules/array-element-newline.html)\n"
+      description: "Enforce line breaks after each array element in `<template>`\n\
+        See rule details for [vue/array-element-newline](https://eslint.vuejs.org/rules/array-element-newline.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/arrayelementnewline"
       options: []
       isImperative: false
@@ -2573,7 +2609,7 @@ rewrite-codemods:
     org.openrewrite.codemods.cleanup.vue.ArrowSpacing:
       name: "org.openrewrite.codemods.cleanup.vue.ArrowSpacing"
       description: "Enforce consistent spacing before and after the arrow in arrow\
-        \ functions in <template>\nSee rule details for [vue/arrow-spacing](https://eslint.vuejs.org/rules/arrow-spacing.html)\n"
+        \ functions in `<template>`\nSee rule details for [vue/arrow-spacing](https://eslint.vuejs.org/rules/arrow-spacing.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/arrowspacing"
       options: []
       isImperative: false
@@ -2596,7 +2632,7 @@ rewrite-codemods:
     org.openrewrite.codemods.cleanup.vue.BlockSpacing:
       name: "org.openrewrite.codemods.cleanup.vue.BlockSpacing"
       description: "Disallow or enforce spaces inside of blocks after opening block\
-        \ and before closing block in <template>\nSee rule details for [vue/block-spacing](https://eslint.vuejs.org/rules/block-spacing.html)\n"
+        \ and before closing block in `<template>`\nSee rule details for [vue/block-spacing](https://eslint.vuejs.org/rules/block-spacing.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/blockspacing"
       options: []
       isImperative: false
@@ -2611,23 +2647,23 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.BraceStyle:
       name: "org.openrewrite.codemods.cleanup.vue.BraceStyle"
-      description: "Enforce consistent brace style for blocks in <template>\nSee rule\
-        \ details for [vue/brace-style](https://eslint.vuejs.org/rules/brace-style.html)\n"
+      description: "Enforce consistent brace style for blocks in `<template>`\nSee\
+        \ rule details for [vue/brace-style](https://eslint.vuejs.org/rules/brace-style.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/bracestyle"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.CommaDangle:
       name: "org.openrewrite.codemods.cleanup.vue.CommaDangle"
-      description: "Require or disallow trailing commas in <template>\nSee rule details\
-        \ for [vue/comma-dangle](https://eslint.vuejs.org/rules/comma-dangle.html)\n"
+      description: "Require or disallow trailing commas in `<template>`\nSee rule\
+        \ details for [vue/comma-dangle](https://eslint.vuejs.org/rules/comma-dangle.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/commadangle"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.CommaSpacing:
       name: "org.openrewrite.codemods.cleanup.vue.CommaSpacing"
-      description: "Enforce consistent spacing before and after commas in <template>\n\
+      description: "Enforce consistent spacing before and after commas in `<template>`\n\
         See rule details for [vue/comma-spacing](https://eslint.vuejs.org/rules/comma-spacing.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/commaspacing"
       options: []
@@ -2635,7 +2671,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.CommaStyle:
       name: "org.openrewrite.codemods.cleanup.vue.CommaStyle"
-      description: "Enforce consistent comma style in <template>\nSee rule details\
+      description: "Enforce consistent comma style in `<template>`\nSee rule details\
         \ for [vue/comma-style](https://eslint.vuejs.org/rules/comma-style.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/commastyle"
       options: []
@@ -2675,7 +2711,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.DotLocation:
       name: "org.openrewrite.codemods.cleanup.vue.DotLocation"
-      description: "Enforce consistent newlines before and after dots in <template>\n\
+      description: "Enforce consistent newlines before and after dots in `<template>`\n\
         See rule details for [vue/dot-location](https://eslint.vuejs.org/rules/dot-location.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/dotlocation"
       options: []
@@ -2683,7 +2719,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.DotNotation:
       name: "org.openrewrite.codemods.cleanup.vue.DotNotation"
-      description: "Enforce dot notation whenever possible in <template>\nSee rule\
+      description: "Enforce dot notation whenever possible in `<template>`\nSee rule\
         \ details for [vue/dot-notation](https://eslint.vuejs.org/rules/dot-notation.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/dotnotation"
       options: []
@@ -2691,7 +2727,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.Eqeqeq:
       name: "org.openrewrite.codemods.cleanup.vue.Eqeqeq"
-      description: "Require the use of === and !== in <template>\nSee rule details\
+      description: "Require the use of === and !== in `<template>`\nSee rule details\
         \ for [vue/eqeqeq](https://eslint.vuejs.org/rules/eqeqeq.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/eqeqeq"
       options: []
@@ -2700,7 +2736,7 @@ rewrite-codemods:
     org.openrewrite.codemods.cleanup.vue.FuncCallSpacing:
       name: "org.openrewrite.codemods.cleanup.vue.FuncCallSpacing"
       description: "Require or disallow spacing between function identifiers and their\
-        \ invocations in <template>\nSee rule details for [vue/func-call-spacing](https://eslint.vuejs.org/rules/func-call-spacing.html)\n"
+        \ invocations in `<template>`\nSee rule details for [vue/func-call-spacing](https://eslint.vuejs.org/rules/func-call-spacing.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/funccallspacing"
       options: []
       isImperative: false
@@ -2732,14 +2768,14 @@ rewrite-codemods:
     org.openrewrite.codemods.cleanup.vue.KeySpacing:
       name: "org.openrewrite.codemods.cleanup.vue.KeySpacing"
       description: "Enforce consistent spacing between keys and values in object literal\
-        \ properties in <template>\nSee rule details for [vue/key-spacing](https://eslint.vuejs.org/rules/key-spacing.html)\n"
+        \ properties in `<template>`\nSee rule details for [vue/key-spacing](https://eslint.vuejs.org/rules/key-spacing.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/keyspacing"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.KeywordSpacing:
       name: "org.openrewrite.codemods.cleanup.vue.KeywordSpacing"
-      description: "Enforce consistent spacing before and after keywords in <template>\n\
+      description: "Enforce consistent spacing before and after keywords in `<template>`\n\
         See rule details for [vue/keyword-spacing](https://eslint.vuejs.org/rules/keyword-spacing.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/keywordspacing"
       options: []
@@ -2747,7 +2783,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.MultilineTernary:
       name: "org.openrewrite.codemods.cleanup.vue.MultilineTernary"
-      description: "Enforce newlines between operands of ternary expressions in <template>\n\
+      description: "Enforce newlines between operands of ternary expressions in `<template>`\n\
         See rule details for [vue/multiline-ternary](https://eslint.vuejs.org/rules/multiline-ternary.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/multilineternary"
       options: []
@@ -2771,7 +2807,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.NoExtraParens:
       name: "org.openrewrite.codemods.cleanup.vue.NoExtraParens"
-      description: "Disallow unnecessary parentheses in <template>\nSee rule details\
+      description: "Disallow unnecessary parentheses in `<template>`\nSee rule details\
         \ for [vue/no-extra-parens](https://eslint.vuejs.org/rules/no-extra-parens.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/noextraparens"
       options: []
@@ -2811,22 +2847,22 @@ rewrite-codemods:
     org.openrewrite.codemods.cleanup.vue.ObjectCurlyNewline:
       name: "org.openrewrite.codemods.cleanup.vue.ObjectCurlyNewline"
       description: "Enforce consistent line breaks after opening and before closing\
-        \ braces in <template>\nSee rule details for [vue/object-curly-newline](https://eslint.vuejs.org/rules/object-curly-newline.html)\n"
+        \ braces in `<template>`\nSee rule details for [vue/object-curly-newline](https://eslint.vuejs.org/rules/object-curly-newline.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/objectcurlynewline"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.ObjectCurlySpacing:
       name: "org.openrewrite.codemods.cleanup.vue.ObjectCurlySpacing"
-      description: "Enforce consistent spacing inside braces in <template>\nSee rule\
-        \ details for [vue/object-curly-spacing](https://eslint.vuejs.org/rules/object-curly-spacing.html)\n"
+      description: "Enforce consistent spacing inside braces in `<template>`\nSee\
+        \ rule details for [vue/object-curly-spacing](https://eslint.vuejs.org/rules/object-curly-spacing.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/objectcurlyspacing"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.ObjectPropertyNewline:
       name: "org.openrewrite.codemods.cleanup.vue.ObjectPropertyNewline"
-      description: "Enforce placing object properties on separate lines in <template>\n\
+      description: "Enforce placing object properties on separate lines in `<template>`\n\
         See rule details for [vue/object-property-newline](https://eslint.vuejs.org/rules/object-property-newline.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/objectpropertynewline"
       options: []
@@ -2835,14 +2871,14 @@ rewrite-codemods:
     org.openrewrite.codemods.cleanup.vue.ObjectShorthand:
       name: "org.openrewrite.codemods.cleanup.vue.ObjectShorthand"
       description: "Require or disallow method and property shorthand syntax for object\
-        \ literals in <template>\nSee rule details for [vue/object-shorthand](https://eslint.vuejs.org/rules/object-shorthand.html)\n"
+        \ literals in `<template>`\nSee rule details for [vue/object-shorthand](https://eslint.vuejs.org/rules/object-shorthand.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/objectshorthand"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.OperatorLinebreak:
       name: "org.openrewrite.codemods.cleanup.vue.OperatorLinebreak"
-      description: "Enforce consistent linebreak style for operators in <template>\n\
+      description: "Enforce consistent linebreak style for operators in `<template>`\n\
         See rule details for [vue/operator-linebreak](https://eslint.vuejs.org/rules/operator-linebreak.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/operatorlinebreak"
       options: []
@@ -2898,7 +2934,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.PreferTemplate:
       name: "org.openrewrite.codemods.cleanup.vue.PreferTemplate"
-      description: "Require template literals instead of string concatenation in <template>\n\
+      description: "Require template literals instead of string concatenation in `<template>`\n\
         See rule details for [vue/prefer-template](https://eslint.vuejs.org/rules/prefer-template.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/prefertemplate"
       options: []
@@ -2906,7 +2942,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.QuoteProps:
       name: "org.openrewrite.codemods.cleanup.vue.QuoteProps"
-      description: "Require quotes around object literal property names in <template>\n\
+      description: "Require quotes around object literal property names in `<template>`\n\
         See rule details for [vue/quote-props](https://eslint.vuejs.org/rules/quote-props.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/quoteprops"
       options: []
@@ -2929,7 +2965,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.SpaceInParens:
       name: "org.openrewrite.codemods.cleanup.vue.SpaceInParens"
-      description: "Enforce consistent spacing inside parentheses in <template>\n\
+      description: "Enforce consistent spacing inside parentheses in `<template>`\n\
         See rule details for [vue/space-in-parens](https://eslint.vuejs.org/rules/space-in-parens.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/spaceinparens"
       options: []
@@ -2937,7 +2973,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.vue.SpaceInfixOps:
       name: "org.openrewrite.codemods.cleanup.vue.SpaceInfixOps"
-      description: "Require spacing around infix operators in <template>\nSee rule\
+      description: "Require spacing around infix operators in `<template>`\nSee rule\
         \ details for [vue/space-infix-ops](https://eslint.vuejs.org/rules/space-infix-ops.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/spaceinfixops"
       options: []
@@ -2946,7 +2982,7 @@ rewrite-codemods:
     org.openrewrite.codemods.cleanup.vue.SpaceUnaryOps:
       name: "org.openrewrite.codemods.cleanup.vue.SpaceUnaryOps"
       description: "Enforce consistent spacing before or after unary operators in\
-        \ <template>\nSee rule details for [vue/space-unary-ops](https://eslint.vuejs.org/rules/space-unary-ops.html)\n"
+        \ `<template>`\nSee rule details for [vue/space-unary-ops](https://eslint.vuejs.org/rules/space-unary-ops.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/spaceunaryops"
       options: []
       isImperative: false
@@ -2961,7 +2997,7 @@ rewrite-codemods:
     org.openrewrite.codemods.cleanup.vue.TemplateCurlySpacing:
       name: "org.openrewrite.codemods.cleanup.vue.TemplateCurlySpacing"
       description: "Require or disallow spacing around embedded expressions of template\
-        \ strings in <template>\nSee rule details for [vue/template-curly-spacing](https://eslint.vuejs.org/rules/template-curly-spacing.html)\n"
+        \ strings in `<template>`\nSee rule details for [vue/template-curly-spacing](https://eslint.vuejs.org/rules/template-curly-spacing.html)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/vue/templatecurlyspacing"
       options: []
       isImperative: false
@@ -4446,7 +4482,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
 rewrite-codemods-ng:
   artifactId: "rewrite-codemods-ng"
-  version: "0.3.0"
+  version: "0.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.codemods.migrate.angular.ApplyAngularCLI:
       name: "org.openrewrite.codemods.migrate.angular.ApplyAngularCLI"
@@ -4482,7 +4518,7 @@ rewrite-codemods-ng:
       artifactId: "rewrite-codemods-ng"
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "2.6.5"
+  version: "2.7.0"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -4562,7 +4598,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.35.0"
+  version: "8.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -4898,7 +4934,7 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
-  version: "1.5.7"
+  version: "1.6.0"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite"
@@ -4977,7 +5013,7 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
 rewrite-docker:
   artifactId: "rewrite-docker"
-  version: "1.0.7"
+  version: "1.1.0"
   markdownRecipeDescriptors:
     org.openrewrite.docker.search.FindDockerImageUses:
       name: "org.openrewrite.docker.search.FindDockerImageUses"
@@ -4988,7 +5024,7 @@ rewrite-docker:
       artifactId: "rewrite-docker"
 rewrite-feature-flags:
   artifactId: "rewrite-feature-flags"
-  version: "0.7.2"
+  version: "0.8.0"
   markdownRecipeDescriptors:
     org.openrewrite.featureflags.RemoveBooleanFlag:
       name: "org.openrewrite.featureflags.RemoveBooleanFlag"
@@ -5004,6 +5040,23 @@ rewrite-feature-flags:
         required: true
       - name: "replacementValue"
         type: "Boolean"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-feature-flags"
+    org.openrewrite.featureflags.RemoveStringFlag:
+      name: "org.openrewrite.featureflags.RemoveStringFlag"
+      description: "Replace method invocations for feature key with value, and simplify\
+        \ constant if branch execution."
+      docLink: "https://docs.openrewrite.org/recipes/featureflags/removestringflag"
+      options:
+      - name: "featureKey"
+        type: "String"
+        required: true
+      - name: "methodPattern"
+        type: "String"
+        required: true
+      - name: "replacementValue"
+        type: "String"
         required: true
       isImperative: true
       artifactId: "rewrite-feature-flags"
@@ -5064,6 +5117,20 @@ rewrite-feature-flags:
         required: true
       - name: "replacementValue"
         type: "Boolean"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-feature-flags"
+    org.openrewrite.featureflags.launchdarkly.RemoveStringVariation:
+      name: "org.openrewrite.featureflags.launchdarkly.RemoveStringVariation"
+      description: "Replace `boolVariation` invocations for feature key with value,\
+        \ and simplify constant if branch execution."
+      docLink: "https://docs.openrewrite.org/recipes/featureflags/launchdarkly/removestringvariation"
+      options:
+      - name: "featureKey"
+        type: "String"
+        required: true
+      - name: "replacementValue"
+        type: "String"
         required: true
       isImperative: true
       artifactId: "rewrite-feature-flags"
@@ -5159,7 +5226,7 @@ rewrite-feature-flags:
       artifactId: "rewrite-feature-flags"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "2.7.5"
+  version: "2.8.0"
   markdownRecipeDescriptors:
     org.openrewrite.github.AddCronTrigger:
       name: "org.openrewrite.github.AddCronTrigger"
@@ -5356,7 +5423,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.35.0"
+  version: "8.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -5612,6 +5679,43 @@ rewrite-gradle:
         \ documentation](https://docs.gradle.org/current/userguide/performance.html#parallel_execution)\
         \ for more information."
       docLink: "https://docs.openrewrite.org/recipes/gradle/enablegradleparallelexecution"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-gradle"
+    org.openrewrite.gradle.MigrateToGradle5:
+      name: "org.openrewrite.gradle.MigrateToGradle5"
+      description: "Migrate to version 5.x. See the Gradle upgrade guide from [version\
+        \ 4.x to 5.0](https://docs.gradle.org/current/userguide/upgrading_version_4.html)\
+        \ for more information."
+      docLink: "https://docs.openrewrite.org/recipes/gradle/migratetogradle5"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-gradle"
+    org.openrewrite.gradle.MigrateToGradle6:
+      name: "org.openrewrite.gradle.MigrateToGradle6"
+      description: "Migrate to version 6.x. See the Gradle upgrade guide from [version\
+        \ 5.x to 6.0](https://docs.gradle.org/current/userguide/upgrading_version_5.html)\
+        \ for more information."
+      docLink: "https://docs.openrewrite.org/recipes/gradle/migratetogradle6"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-gradle"
+    org.openrewrite.gradle.MigrateToGradle7:
+      name: "org.openrewrite.gradle.MigrateToGradle7"
+      description: "Migrate to version 7.x. See the Gradle upgrade guide from [version\
+        \ 6.x to 7.0](https://docs.gradle.org/current/userguide/upgrading_version_6.html)\
+        \ for more information."
+      docLink: "https://docs.openrewrite.org/recipes/gradle/migratetogradle7"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-gradle"
+    org.openrewrite.gradle.MigrateToGradle8:
+      name: "org.openrewrite.gradle.MigrateToGradle8"
+      description: "Migrate to version 8.x. See the Gradle upgrade guide from [version\
+        \ 7.x to 8.0](https://docs.gradle.org/current/userguide/upgrading_version_7.html)\
+        \ and [version 8.x to latest](https://docs.gradle.org/current/userguide/upgrading_version_8.html)\
+        \ for more information."
+      docLink: "https://docs.openrewrite.org/recipes/gradle/migratetogradle8"
       options: []
       isImperative: false
       artifactId: "rewrite-gradle"
@@ -6020,7 +6124,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.35.0"
+  version: "8.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.AutoFormat:
       name: "org.openrewrite.groovy.format.AutoFormat"
@@ -6056,7 +6160,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.35.0"
+  version: "8.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -6161,7 +6265,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-hibernate:
   artifactId: "rewrite-hibernate"
-  version: "1.8.6"
+  version: "1.9.0"
   markdownRecipeDescriptors:
     org.openrewrite.hibernate.MigrateBooleanMappings:
       name: "org.openrewrite.hibernate.MigrateBooleanMappings"
@@ -6266,7 +6370,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-jackson:
   artifactId: "rewrite-jackson"
-  version: "0.4.5"
+  version: "0.5.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jackson.CodehausClassesToFasterXML:
       name: "org.openrewrite.java.jackson.CodehausClassesToFasterXML"
@@ -6305,7 +6409,7 @@ rewrite-jackson:
       artifactId: "rewrite-jackson"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.35.0"
+  version: "8.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -6913,13 +7017,6 @@ rewrite-java:
       options: []
       isImperative: true
       artifactId: "rewrite-java"
-    org.openrewrite.java.format.OperatorWrap:
-      name: "org.openrewrite.java.format.OperatorWrap"
-      description: "Fixes line wrapping policies on operators."
-      docLink: "https://docs.openrewrite.org/recipes/java/format/operatorwrap"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
     org.openrewrite.java.format.PadEmptyForLoopComponents:
       name: "org.openrewrite.java.format.PadEmptyForLoopComponents"
       description: "Fixes padding on empty `for` loop iterators and initializers to\
@@ -7415,7 +7512,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "1.18.0"
+  version: "1.19.0"
   markdownRecipeDescriptors:
     org.openrewrite.csharp.dependencies.DependencyInsight:
       name: "org.openrewrite.csharp.dependencies.DependencyInsight"
@@ -7560,6 +7657,9 @@ rewrite-java-dependencies:
       - name: "groupIdPattern"
         type: "String"
         required: true
+      - name: "scope"
+        type: "String"
+        required: false
       - name: "version"
         type: "String"
         required: false
@@ -7632,9 +7732,6 @@ rewrite-java-dependencies:
         \ will see their _patch_ version updated where applicable."
       docLink: "https://docs.openrewrite.org/recipes/java/dependencies/dependencyvulnerabilitycheck"
       options:
-      - name: "addMarkers"
-        type: "Boolean"
-        required: false
       - name: "overrideTransitive"
         type: "Boolean"
         required: false
@@ -7746,6 +7843,9 @@ rewrite-java-dependencies:
       - name: "artifactId"
         type: "String"
         required: true
+      - name: "because"
+        type: "String"
+        required: false
       - name: "classifier"
         type: "String"
         required: false
@@ -7794,7 +7894,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "2.12.0"
+  version: "2.13.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.security.FindTextDirectionChanges:
       name: "org.openrewrite.java.security.FindTextDirectionChanges"
@@ -8281,7 +8381,7 @@ rewrite-java-security:
       artifactId: "rewrite-java-security"
 rewrite-jenkins:
   artifactId: "rewrite-jenkins"
-  version: "0.13.0"
+  version: "0.14.0"
   markdownRecipeDescriptors:
     org.openrewrite.jenkins.AddPluginsBom:
       name: "org.openrewrite.jenkins.AddPluginsBom"
@@ -8438,7 +8538,7 @@ rewrite-jenkins:
       artifactId: "rewrite-jenkins"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.35.0"
+  version: "8.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.json.ChangeKey:
       name: "org.openrewrite.json.ChangeKey"
@@ -8488,7 +8588,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "1.19.7"
+  version: "1.20.0"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -8589,7 +8689,7 @@ rewrite-kotlin:
       artifactId: "rewrite-kotlin"
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "2.8.3"
+  version: "2.9.0"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -9054,7 +9154,7 @@ rewrite-kubernetes:
       artifactId: "rewrite-kubernetes"
 rewrite-liberty:
   artifactId: "rewrite-liberty"
-  version: "1.6.7"
+  version: "1.7.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty:
       name: "org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty"
@@ -9138,7 +9238,7 @@ rewrite-liberty:
       artifactId: "rewrite-liberty"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "2.13.0"
+  version: "2.14.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.logging.ChangeLombokLogAnnotation:
       name: "org.openrewrite.java.logging.ChangeLombokLogAnnotation"
@@ -9974,7 +10074,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.35.0"
+  version: "8.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddCommentToMavenDependency:
       name: "org.openrewrite.maven.AddCommentToMavenDependency"
@@ -11150,7 +11250,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micrometer:
   artifactId: "rewrite-micrometer"
-  version: "0.7.2"
+  version: "0.8.0"
   markdownRecipeDescriptors:
     org.openrewrite.micrometer.TimerToObservation:
       name: "org.openrewrite.micrometer.TimerToObservation"
@@ -11209,7 +11309,7 @@ rewrite-micrometer:
       artifactId: "rewrite-micrometer"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "2.8.3"
+  version: "2.9.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.AddAnnotationProcessorPath:
       name: "org.openrewrite.java.micronaut.AddAnnotationProcessorPath"
@@ -11553,7 +11653,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "2.24.0"
+  version: "2.26.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jspecify.MigrateFromJakartaAnnotationApi:
       name: "org.openrewrite.java.jspecify.MigrateFromJakartaAnnotationApi"
@@ -11769,6 +11869,16 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.JREThrowableFinalMethods:
+      name: "org.openrewrite.java.migrate.JREThrowableFinalMethods"
+      description: "The recipe renames  `getSuppressed()` and `addSuppressed(Throwable\
+        \ exception)` methods  in classes that extend `java.lang.Throwable` to `myGetSuppressed`\
+        \ and `myAddSuppressed(Throwable)`.These methods were added to Throwable in\
+        \ Java 7 and are marked final which cannot be overridden."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jrethrowablefinalmethods"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.JREWrapperInterface:
       name: "org.openrewrite.java.migrate.JREWrapperInterface"
       description: "Add method implementations stubs to classes that implement `java.sql.Wrapper`."
@@ -11815,6 +11925,16 @@ rewrite-migrate-java:
       name: "org.openrewrite.java.migrate.MXBeanRule"
       description: "Sets visibility of MBean and MXBean interfaces to public."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/mxbeanrule"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.ReferenceCloneMethod:
+      name: "org.openrewrite.java.migrate.ReferenceCloneMethod"
+      description: "The recipe replaces any clone calls that may resolve to a `java.lang.ref.Reference.clone()`\
+        \ or any of its known subclasses: `java.lang.ref.PhantomReference`, `java.lang.ref.SoftReference`,\
+        \ and `java.lang.ref.WeakReference` with a constructor call passing in the\
+        \ referent and reference queue as parameters."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/referenceclonemethod"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
@@ -11962,6 +12082,21 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/removedzipfinalizemethods"
       options: []
       isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.ReplaceAWTGetPeerMethod:
+      name: "org.openrewrite.java.migrate.ReplaceAWTGetPeerMethod"
+      description: "This recipe replaces the use of `getPeer()` method in `java.awt.*`\
+        \ classes. `component.getPeer() != null` is replaced with `component.isDisplayable()`\
+        \ and `component.getPeer() instanceof LightweightPeer` is replaced with `component.isLightweight()`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/replaceawtgetpeermethod"
+      options:
+      - name: "getPeerMethodPattern"
+        type: "String"
+        required: false
+      - name: "lightweightPeerFQCN"
+        type: "String"
+        required: false
+      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.ReplaceComSunAWTUtilitiesMethods:
       name: "org.openrewrite.java.migrate.ReplaceComSunAWTUtilitiesMethods"
@@ -13931,7 +14066,7 @@ rewrite-migrate-java:
         \ including:\n\n * `java.version`\n * `jdk.version`\n * `javaVersion`\n *\
         \ `jdkVersion`\n * `maven.compiler.source`\n * `maven.compiler.target`\n *\
         \ `maven.compiler.release`\n * `release.version`\n\nIf none of these properties\
-        \ are in use and the maven compiler plugin is not otherwise configured adds\
+        \ are in use and the maven compiler plugin is not otherwise configured, adds\
         \ the `maven.compiler.release` property."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/maven/updatemavenprojectpropertyjavaversion"
       options:
@@ -14081,10 +14216,29 @@ rewrite-migrate-java:
         required: true
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.search.FindInternalJavaxApis:
+      name: "org.openrewrite.java.migrate.search.FindInternalJavaxApis"
+      description: "The libraries that define these APIs will have to be migrated\
+        \ before any of the repositories that use them."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/search/findinternaljavaxapis"
+      options:
+      - name: "methodPattern"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.search.FindJavaVersion:
       name: "org.openrewrite.java.migrate.search.FindJavaVersion"
       description: "Finds Java versions in use."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/search/findjavaversion"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.search.PlanJavaMigration:
+      name: "org.openrewrite.java.migrate.search.PlanJavaMigration"
+      description: "Study the set of Java versions and associated tools in use across\
+        \ many repositories."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/search/planjavamigration"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
@@ -14268,7 +14422,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-nodejs:
   artifactId: "rewrite-nodejs"
-  version: "0.8.0"
+  version: "0.9.1"
   markdownRecipeDescriptors:
     org.openrewrite.nodejs.DependencyVulnerabilityCheck:
       name: "org.openrewrite.nodejs.DependencyVulnerabilityCheck"
@@ -14417,7 +14571,7 @@ rewrite-nodejs:
       artifactId: "rewrite-nodejs"
 rewrite-okhttp:
   artifactId: "rewrite-okhttp"
-  version: "0.3.8"
+  version: "0.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.okhttp.ReorderRequestBodyCreateArguments:
       name: "org.openrewrite.okhttp.ReorderRequestBodyCreateArguments"
@@ -14474,7 +14628,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-openapi:
   artifactId: "rewrite-openapi"
-  version: "0.6.1"
+  version: "0.7.0"
   markdownRecipeDescriptors:
     org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings:
       name: "org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings"
@@ -14548,7 +14702,7 @@ rewrite-openapi:
       artifactId: "rewrite-openapi"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.35.0"
+  version: "8.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -14656,7 +14810,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "2.8.4"
+  version: "2.9.0"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.AddQuarkusProperty:
       name: "org.openrewrite.quarkus.AddQuarkusProperty"
@@ -14912,7 +15066,7 @@ rewrite-quarkus:
       artifactId: "rewrite-quarkus"
 rewrite-reactive-streams:
   artifactId: "rewrite-reactive-streams"
-  version: "0.1.2"
+  version: "0.2.0"
   markdownRecipeDescriptors:
     org.openrewrite.reactive.reactor.ReactorProcessorCacheToSinkRecipes:
       name: "org.openrewrite.reactive.reactor.ReactorProcessorCacheToSinkRecipes"
@@ -15077,7 +15231,7 @@ rewrite-reactive-streams:
       artifactId: "rewrite-reactive-streams"
 rewrite-recommendations:
   artifactId: "rewrite-recommendations"
-  version: "1.9.0"
+  version: "1.10.0"
   markdownRecipeDescriptors:
     org.openrewrite.recipes.JavaRecipeBestPractices:
       name: "org.openrewrite.recipes.JavaRecipeBestPractices"
@@ -15138,7 +15292,7 @@ rewrite-recommendations:
       artifactId: "rewrite-recommendations"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "5.19.0"
+  version: "5.20.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin:
       name: "org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin"
@@ -16381,6 +16535,14 @@ rewrite-spring:
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.framework.MigrateResponseEntityExceptionHandlerHttpStatusToHttpStatusCode:
+      name: "org.openrewrite.java.spring.framework.MigrateResponseEntityExceptionHandlerHttpStatusToHttpStatusCode"
+      description: "With Spring 6 `HttpStatus` was replaced by `HttpStatusCode` in\
+        \ most method signatures in the `ResponseEntityExceptionHandler`."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/framework/migrateresponseentityexceptionhandlerhttpstatustohttpstatuscode"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.framework.MigrateSpringAssert:
       name: "org.openrewrite.java.spring.framework.MigrateSpringAssert"
       description: "Assert methods without a message argument have been removed in\
@@ -16883,7 +17045,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-sql:
   artifactId: "rewrite-sql"
-  version: "1.9.3"
+  version: "1.10.0"
   markdownRecipeDescriptors:
     org.openrewrite.sql.ChangeFunctionName:
       name: "org.openrewrite.sql.ChangeFunctionName"
@@ -16940,10 +17102,10 @@ rewrite-sql:
       artifactId: "rewrite-sql"
 rewrite-static-analysis:
   artifactId: "rewrite-static-analysis"
-  version: "1.16.0"
+  version: "1.17.0"
   markdownRecipeDescriptors:
-    org.openrewrite.staticanalysis.AddSerialAnnotationToserialVersionUID:
-      name: "org.openrewrite.staticanalysis.AddSerialAnnotationToserialVersionUID"
+    org.openrewrite.staticanalysis.AddSerialAnnotationToSerialVersionUID:
+      name: "org.openrewrite.staticanalysis.AddSerialAnnotationToSerialVersionUID"
       description: "Annotation any `serialVersionUID` fields with `@Serial` to indicate\
         \ it's part of the serialization mechanism."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/addserialannotationtoserialversionuid"
@@ -17532,7 +17694,10 @@ rewrite-static-analysis:
       name: "org.openrewrite.staticanalysis.OperatorWrap"
       description: "Fixes line wrapping policies on operators."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/operatorwrap"
-      options: []
+      options:
+      - name: "wrapOption"
+        type: "WrapOption"
+        required: false
       isImperative: true
       artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.PrimitiveWrapperClassConstructorToValueOf:
@@ -18208,7 +18373,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
 rewrite-struts:
   artifactId: "rewrite-struts"
-  version: "0.6.2"
+  version: "0.7.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.struts.MigrateStrutsDtd:
       name: "org.openrewrite.java.struts.MigrateStrutsDtd"
@@ -18274,7 +18439,7 @@ rewrite-struts:
       artifactId: "rewrite-struts"
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "2.3.9"
+  version: "2.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -19167,7 +19332,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "2.18.0"
+  version: "2.19.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.archunit.ArchUnit0to1Migration:
       name: "org.openrewrite.java.testing.archunit.ArchUnit0to1Migration"
@@ -20010,6 +20175,14 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.MockitoWhenOnStaticToMockStatic:
+      name: "org.openrewrite.java.testing.mockito.MockitoWhenOnStaticToMockStatic"
+      description: "Replace `Mockito.when` on static (non mock) with try-with-resource\
+        \ with MockedStatic as Mockito4 no longer allows this."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/mockitowhenonstatictomockstatic"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.PowerMockitoMockStaticToMockito:
       name: "org.openrewrite.java.testing.mockito.PowerMockitoMockStaticToMockito"
       description: "Replaces `PowerMockito.mockStatic()` by `Mockito.mockStatic()`.\
@@ -20020,7 +20193,8 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.ReplacePowerMockito:
       name: "org.openrewrite.java.testing.mockito.ReplacePowerMockito"
-      description: "Upgrade to Mockito 5 and replace PowerMockito with raw Mockito."
+      description: "PowerMockito with raw Mockito; best executed as part of a Mockito\
+        \ upgrade."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/replacepowermockito"
       options: []
       isImperative: false
@@ -20077,7 +20251,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-third-party:
   artifactId: "rewrite-third-party"
-  version: "0.7.1"
+  version: "0.8.0"
   markdownRecipeDescriptors:
     ai.timefold.solver.migration.ChangeVersion:
       name: "ai.timefold.solver.migration.ChangeVersion"
@@ -26623,7 +26797,7 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.35.0"
+  version: "8.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -26916,7 +27090,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.35.0"
+  version: "8.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
