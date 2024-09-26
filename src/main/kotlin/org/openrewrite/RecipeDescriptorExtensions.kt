@@ -6,11 +6,11 @@ import org.openrewrite.config.RecipeDescriptor
 fun RecipeDescriptor.asYaml(): String {
     val s = StringBuilder()
     s.appendLine("""
-        ---
-        type: specs.openrewrite.org/v1beta/recipe
-        name: $name
-        displayName: $displayName
-        description: $description
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: $name
+displayName: $displayName
+description: ${description?.replace("\n", " – ") ?: ""}
     """.trimIndent())
     if (tags.isNotEmpty()) {
         s.appendLine("tags:")

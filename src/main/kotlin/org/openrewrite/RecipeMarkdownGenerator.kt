@@ -119,34 +119,7 @@ class RecipeMarkdownGenerator : Runnable {
             recipeOrigins = RecipeOrigin.parse(recipeSources)
 
             // Write latest-versions-of-every-openrewrite-module.md
-            val versionsSnippetPath = outputPath.resolve("latest-versions-of-every-openrewrite-module.md")
-            Files.newBufferedWriter(versionsSnippetPath, StandardOpenOption.CREATE).useAndApply {
-                val bomLink = "[${rewriteRecipeBomVersion}](https://github.com/openrewrite/rewrite-recipe-bom/releases/tag/v${rewriteRecipeBomVersion})"
-                val mavenLink = "[${mavenPluginVersion}](https://github.com/openrewrite/rewrite-maven-plugin/releases/tag/v${mavenPluginVersion})"
-                val gradleLink = "[${gradlePluginVersion}](https://github.com/openrewrite/rewrite-gradle-plugin/releases/tag/v${gradlePluginVersion})"
-                writeln("""
-                    # Latest versions of every OpenRewrite module
-                    
-                    OpenRewrite's modules are published to [Maven Central](https://search.maven.org/search?q=org.openrewrite).
-                    Each time a release is made, a bill of materials artifact is also published to correctly align and manage the versions of all published artifacts.
-                    The Gradle plugin is published to the [Gradle Plugin Portal](https://plugins.gradle.org/plugin/org.openrewrite.rewrite).
-                    
-                    It is highly recommended that developers use the [rewrite-recipe-bom](https://github.com/openrewrite/rewrite-recipe-bom)
-                    to align the versions of Rewrite's modules to ensure compatibility.
-                    The use of the "bill of materials" means that a developer will only need to specify explicit versions of the BOM and the build plugins:
-                    
-                    | Module                                                                                                                | Version    |
-                    |-----------------------------------------------------------------------------------------------------------------------| ---------- |
-                    | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **${bomLink}** |
-                    | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenLink}** |
-                    | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** |
-                    """.trimIndent())
-                for (recipeOrigin in recipeOrigins.values) {
-                    val repoLink = "[${recipeOrigin.groupId}:${recipeOrigin.artifactId}](${recipeOrigin.githubUrl()})"
-                    val releaseLink = "[${recipeOrigin.version}](${recipeOrigin.githubUrl()}/releases/tag/v${recipeOrigin.version})"
-                    writeln("| ${repoLink.padEnd(117)} | ${releaseLink} |")
-                }
-            }
+            createLatestVersionsFile(outputPath, recipeOrigins)
 
             val classloader = recipeClasspath.split(";")
                 .map(Paths::get)
@@ -349,8 +322,48 @@ class RecipeMarkdownGenerator : Runnable {
 
         // Write the README.md for each category
         for (category in categories) {
-            val categoryIndexPath = outputPath.resolve("/recipes/")
+            val categoryIndexPath = outputPath.resolve("recipes/")
             category.writeCategoryIndex(categoryIndexPath)
+        }
+    }
+
+    private fun createLatestVersionsFile(
+        outputPath: Path,
+        recipeOrigins: Map<URI, RecipeOrigin>
+    ) {
+        val versionsSnippetPath = outputPath.resolve("latest-versions-of-every-openrewrite-module.md")
+        Files.newBufferedWriter(versionsSnippetPath, StandardOpenOption.CREATE).useAndApply {
+            val bomLink =
+                "[${rewriteRecipeBomVersion}](https://github.com/openrewrite/rewrite-recipe-bom/releases/tag/v${rewriteRecipeBomVersion})"
+            val mavenLink =
+                "[${mavenPluginVersion}](https://github.com/openrewrite/rewrite-maven-plugin/releases/tag/v${mavenPluginVersion})"
+            val gradleLink =
+                "[${gradlePluginVersion}](https://github.com/openrewrite/rewrite-gradle-plugin/releases/tag/v${gradlePluginVersion})"
+            writeln(
+                """
+                        # Latest versions of every OpenRewrite module
+
+                        OpenRewrite's modules are published to [Maven Central](https://search.maven.org/search?q=org.openrewrite).
+                        Each time a release is made, a bill of materials artifact is also published to correctly align and manage the versions of all published artifacts.
+                        The Gradle plugin is published to the [Gradle Plugin Portal](https://plugins.gradle.org/plugin/org.openrewrite.rewrite).
+
+                        It is highly recommended that developers use the [rewrite-recipe-bom](https://github.com/openrewrite/rewrite-recipe-bom)
+                        to align the versions of Rewrite's modules to ensure compatibility.
+                        The use of the "bill of materials" means that a developer will only need to specify explicit versions of the BOM and the build plugins:
+
+                        | Module                                                                                                                | Version    |
+                        |-----------------------------------------------------------------------------------------------------------------------| ---------- |
+                        | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **${bomLink}** |
+                        | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenLink}** |
+                        | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** |
+                        """.trimIndent()
+            )
+            for (recipeOrigin in recipeOrigins.values) {
+                val repoLink = "[${recipeOrigin.groupId}:${recipeOrigin.artifactId}](${recipeOrigin.githubUrl()})"
+                val releaseLink =
+                    "[${recipeOrigin.version}](${recipeOrigin.githubUrl()}/releases/tag/v${recipeOrigin.version})"
+                writeln("| ${repoLink.padEnd(117)} | ${releaseLink} |")
+            }
         }
     }
 
@@ -741,10 +754,13 @@ class RecipeMarkdownGenerator : Runnable {
 
                         for (recipe in compositeRecipes) {
                             val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
+                            val formattedDisplayName = recipe.displayName
+                                .replace("<script>", "\\<script\\>")
+                                .replace("<p>", "< p >")
 
                             // Anything except a relative link ending in .md will be mangled.
                             // If you touch this line double check that it works when imported into gitbook
-                            appendLine("* [${recipe.displayName}](./${recipeSimpleName}.md)")
+                            appendLine("* [${formattedDisplayName}](./${recipeSimpleName}.md)")
                         }
 
                         appendLine()
@@ -756,10 +772,13 @@ class RecipeMarkdownGenerator : Runnable {
 
                         for (recipe in normalRecipes) {
                             val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
+                            val formattedDisplayName = recipe.displayName
+                                .replace("<script>", "\\<script\\>")
+                                .replace("<p>", "< p >")
 
                             // Anything except a relative link ending in .md will be mangled.
                             // If you touch this line double check that it works when imported into gitbook
-                            appendLine("* [${recipe.displayName}](./${recipeSimpleName}.md)")
+                            appendLine("* [${formattedDisplayName}](./${recipeSimpleName}.md)")
                         }
 
                         appendLine()
@@ -784,8 +803,11 @@ class RecipeMarkdownGenerator : Runnable {
 
                     for (recipe in recipes) {
                         val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
+                        val formattedDisplayName = recipe.displayName
+                            .replace("<", "\\<")
+                            .replace(">", "\\>")
 
-                        writeln("* [${recipe.displayName}](./${recipeSimpleName}.md)")
+                        writeln("* [${formattedDisplayName}](./${recipeSimpleName}.md)")
                     }
                 }
 
@@ -808,29 +830,57 @@ class RecipeMarkdownGenerator : Runnable {
         gradlePluginVersion: String,
         mavenPluginVersion: String
     ) {
+        val sidebarFormattedName = recipeDescriptor.displayName
+            .replace("`","")
+            .replace("\"", "\\\"")
+            .replace("<script>", "<script >")
+            .replace("<p>", "< p >")
+            .trim()
+
+        val formattedRecipeTitle = recipeDescriptor?.displayName
+            ?.replace("`<", "&lt;")
+            ?.replace(">`", "&gt;")
+            ?.replace("<", "&lt;")
+            ?.replace(">", "&gt;")
+            ?.trim()
+
+        val formattedRecipeDescription = "_" +
+                recipeDescriptor?.description
+                    ?.replace("`<", "&lt;")
+                    ?.replace(">`", "&gt;")
+                    ?.replace("<", "&lt;")
+                    ?.replace(">", "&gt;")
+                    ?.replace("{", "&lcub;")
+                    ?.replace("}", "&rcub;")
+                    ?.replace("\n", " ")
+                    ?.trim() +
+                    "_"
+
+        val formattedLongRecipeName = recipeDescriptor.name.replace("_".toRegex(), "\\\\_").trim()
+
         val recipeMarkdownPath = getRecipePath(outputPath, recipeDescriptor)
         Files.createDirectories(recipeMarkdownPath.parent)
         Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE).useAndApply {
             write(
-                """
-                ---
-                sidebar_label: "${recipeDescriptor.displayName.replace("`","").replace("\"", "\\\"").replace("<script>", "<script >")}"
-                ---
+"""
+---
+sidebar_label: "$sidebarFormattedName"
+---
 
-                import Tabs from '@theme/Tabs';
-                import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-                # ${recipeDescriptor.displayName.replace("<", "&lt;").replace(">", "&gt;")}
-                
-                **${recipeDescriptor.name.replace("_".toRegex(), "\\\\_").replace("<", "&lt;").replace(">", "&gt;")}**
-                
+# $formattedRecipeTitle
+
+**$formattedLongRecipeName**
+
             """.trimIndent()
             )
 
             newLine()
 
             if (!isNullOrEmpty(recipeDescriptor.description)) {
-                writeln("_" + recipeDescriptor.description.replace("<", "&lt;").replace(">", "&gt;").trim() + "_")
+                writeln(formattedRecipeDescription)
             }
             newLine()
             if (recipeDescriptor.tags.isNotEmpty()) {
@@ -1237,7 +1287,11 @@ class RecipeMarkdownGenerator : Runnable {
                     continue
                 }
 
-                writeln("    * [" + recipe.displayName + "](" + pathToRecipes + getRecipePath(recipe) + ".md)")
+                val formattedRecipeDisplayName = recipe.displayName
+                    .replace("<p>", "< p >")
+                    .replace("<script>", "//<script//>")
+
+                writeln("    * [" + formattedRecipeDisplayName + "](" + pathToRecipes + getRecipePath(recipe) + ")")
             }
             newLine()
             writeln(
@@ -1800,9 +1854,6 @@ $cliSnippet
 
         private fun getRecipePath(recipesPath: Path, recipeDescriptor: RecipeDescriptor) =
             recipesPath.resolve(getRecipePath(recipeDescriptor) + ".md")
-
-        private fun getRecipeRelativePath(recipe: RecipeDescriptor): String =
-            "/recipes/" + getRecipePath(recipe)
 
         private fun findCategoryDescriptor(
             categoryPathFragment: String,
