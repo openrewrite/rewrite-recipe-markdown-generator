@@ -104,7 +104,7 @@ class RecipeMarkdownGenerator : Runnable {
 
     override fun run() {
         val outputPath = Paths.get(destinationDirectoryName)
-        val recipesPath = outputPath.resolve("reference/recipes")
+        val recipesPath = outputPath.resolve("recipes")
         try {
             Files.createDirectories(recipesPath)
         } catch (e: IOException) {
@@ -321,18 +321,6 @@ class RecipeMarkdownGenerator : Runnable {
 
         val categories = Category.fromDescriptors(recipeDescriptors, categoryDescriptors).sortedBy { it.simpleName }
 
-        // Write SUMMARY_snippet.md
-        val summarySnippetPath = outputPath.resolve("SUMMARY_snippet.md")
-        Files.newBufferedWriter(summarySnippetPath, StandardOpenOption.CREATE).useAndApply {
-            for (category in categories) {
-                write(category.summarySnippet(0))
-            }
-            write("""
-                * [Changelog](changelog/changelog.md)
-                  * [$rewriteBomVersion Release (${getDateFormattedYYYYMMDD()})](/changelog/${rewriteBomVersion.replace('.','-')}-Release.md)
-                """.trimIndent())
-        }
-
         // Write recipes-with-data-tables.md
         val recipesWithDataTablesPath = outputPath.resolve("recipes-with-data-tables.md")
         Files.newBufferedWriter(recipesWithDataTablesPath, StandardOpenOption.CREATE).useAndApply {
@@ -361,7 +349,7 @@ class RecipeMarkdownGenerator : Runnable {
 
         // Write the README.md for each category
         for (category in categories) {
-            val categoryIndexPath = outputPath.resolve("reference/recipes/")
+            val categoryIndexPath = outputPath.resolve("/recipes/")
             category.writeCategoryIndex(categoryIndexPath)
         }
     }
@@ -707,49 +695,6 @@ class RecipeMarkdownGenerator : Runnable {
             }
 
         /**
-         * Produce the snippet for this category to be fitted into Gitbook's SUMMARY.md, which provides the index
-         * that makes markdown documents accessible through gitbook's interface
-         */
-        fun summarySnippet(indentationDepth: Int): String {
-            val indentBuilder = StringBuilder("  ")
-            for (i in 0 until indentationDepth) {
-                indentBuilder.append("  ")
-            }
-            val indent = indentBuilder.toString()
-            val result = StringBuilder()
-
-            if (path == "") {
-                // Recipes that don't have a path are part of the "core" set of recipes
-                result.appendLine("$indent* [Core](reference/recipes/core.md)")
-            } else {
-                // Some nested recipes have a `github` path which gets converted into `Github` when it should be `GitHub`.
-                if (displayName == "Github") {
-                    displayName = "GitHub"
-                }
-
-                result.appendLine("$indent* [$displayName](reference/recipes/$path/README.md)")
-            }
-
-            for (recipe in recipes) {
-                // Section headings will display backticks, rather than rendering as code. Omit them so it doesn't look terrible
-                result.appendLine(
-                    "$indent  * [${
-                        recipe.displayName.replace(
-                            "`",
-                            ""
-                        )
-                    }](${getRecipeRelativePath(recipe)}.md)"
-                )
-            }
-
-            for (category in subcategories.sortedBy { it.simpleName }) {
-                result.append(category.summarySnippet(indentationDepth + 1))
-            }
-
-            return result.toString()
-        }
-
-        /**
          * Produce the contents of the README.md file for this category.
          */
         private fun categoryIndex(): String {
@@ -771,7 +716,7 @@ class RecipeMarkdownGenerator : Runnable {
                     appendLine("## Categories")
                     appendLine()
                     for (subcategory in subcategories) {
-                        appendLine("* [${subcategory.displayName}](/reference/recipes/${subcategory.path})")
+                        appendLine("* [${subcategory.displayName}](/recipes/${subcategory.path})")
                     }
                     appendLine()
                 }
@@ -844,13 +789,6 @@ class RecipeMarkdownGenerator : Runnable {
                     }
                 }
 
-                // Also need to make an empty README for GitBook linking
-                val emptyReadmePath = outputRoot.resolve("README.md")
-
-                Files.newBufferedWriter(emptyReadmePath, StandardOpenOption.CREATE).useAndApply {
-                    writeln("# Recipes")
-                }
-
                 return
             }
             val outputPath = outputRoot.resolve("$path/README.md")
@@ -875,9 +813,16 @@ class RecipeMarkdownGenerator : Runnable {
         Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE).useAndApply {
             write(
                 """
-                # ${recipeDescriptor.displayName}
+                ---
+                sidebar_label: "${recipeDescriptor.displayName.replace("`","").replace("\"", "\\\"").replace("<script>", "<script >")}"
+                ---
+
+                import Tabs from '@theme/Tabs';
+                import TabItem from '@theme/TabItem';
+
+                # ${recipeDescriptor.displayName.replace("<", "&lt;").replace(">", "&gt;")}
                 
-                **${recipeDescriptor.name.replace("_".toRegex(), "\\\\_")}**
+                **${recipeDescriptor.name.replace("_".toRegex(), "\\\\_").replace("<", "&lt;").replace(">", "&gt;")}**
                 
             """.trimIndent()
             )
@@ -885,7 +830,7 @@ class RecipeMarkdownGenerator : Runnable {
             newLine()
 
             if (!isNullOrEmpty(recipeDescriptor.description)) {
-                writeln("_" + recipeDescriptor.description.trim() + "_")
+                writeln("_" + recipeDescriptor.description.replace("<", "&lt;").replace(">", "&gt;").trim() + "_")
             }
             newLine()
             if (recipeDescriptor.tags.isNotEmpty()) {
@@ -1092,8 +1037,8 @@ class RecipeMarkdownGenerator : Runnable {
                     if (hasChange && source.before != null) {
                         newLine()
                         val tabName = source.path ?: (source.language ?: "Before / After")
-                        writeln("<Tabs>")
-                        writeln("  <TabItem value=\"${tabName}\" title=\"${tabName}\">")
+                        writeln("<Tabs groupId=\"before-after\">")
+                        writeln("<TabItem value=\"${tabName}\" title=\"${tabName}\">")
                     }
 
                     newLine()
@@ -1134,8 +1079,8 @@ class RecipeMarkdownGenerator : Runnable {
 
                         // diff
                         if (source.before != null) {
-                            writeln("  </TabItem>")
-                            writeln("<TabItem title=\"Diff\" >")
+                            writeln("</TabItem>")
+                            writeln("<TabItem value=\"diff\" title=\"Diff\" >")
 
                             val diff = generateDiff(source.path, source.before, source.after)
 
@@ -1276,8 +1221,8 @@ class RecipeMarkdownGenerator : Runnable {
                         
                         ## Definition
                         
-                        <Tab>
-                          <TabItem title="Recipe List" >
+                        <Tabs groupId="recipe-type">
+                        <TabItem value="recipe-list" title="Recipe List" >
                     """.trimIndent()
             )
             val recipeDepth = getRecipePath(recipeDescriptor).chars().filter { ch: Int -> ch == '/'.code }.count()
@@ -1292,21 +1237,14 @@ class RecipeMarkdownGenerator : Runnable {
                     continue
                 }
 
-                writeln("* [" + recipe.displayName + "](" + pathToRecipes + getRecipePath(recipe) + ".md)")
-                if (recipe.options.isNotEmpty()) {
-                    for (option in recipe.options) {
-                        if (option.value != null) {
-                            writeln("  * " + option.name + ": `" + printValue(option.value!!) + "`")
-                        }
-                    }
-                }
+                writeln("    * [" + recipe.displayName + "](" + pathToRecipes + getRecipePath(recipe) + ".md)")
             }
             newLine()
             writeln(
                 """
-                          </TabItem>
+                        </TabItem>
     
-                          <TabItem title="Yaml Recipe List">
+                        <TabItem value="yaml-recipe-list" title="Yaml Recipe List">
                         ```yaml
                     """.trimIndent()
             )
@@ -1314,7 +1252,7 @@ class RecipeMarkdownGenerator : Runnable {
             writeln(
                 """
                         ```
-                          </TabItem>
+                        </TabItem>
                         </Tabs>
                     """.trimIndent()
             )
@@ -1326,9 +1264,15 @@ class RecipeMarkdownGenerator : Runnable {
             """
 
                     ## See how this recipe works across multiple open-source repositories
-    
-                    [![Moderne Link Image](/.gitbook/assets/ModerneRecipeButton.png)](https://app.moderne.io/recipes/${recipeDescriptor.name})
-    
+                    
+                    <a href="https://app.moderne.io/recipes/${recipeDescriptor.name}">
+                        <img
+                        src={require("/static/img/ModerneRecipeButton.png").default}
+                        alt="Moderne Link Image"
+                        width="50%"
+                        />
+                    </a>
+        
                     The community edition of the Moderne platform enables you to easily run recipes across thousands of open-source repositories.
     
                     Please [contact Moderne](https://moderne.io/product) for more information about safely running the recipes on your own codebase in a private SaaS.
@@ -1410,7 +1354,7 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         return """
-                <TabItem title="Moderne CLI">
+                <TabItem value="moderne-cli" title="Moderne CLI">
                     You will need to have configured the [Moderne CLI](https://docs.moderne.io/moderne-cli/cli-intro) on your machine before you can run the following command.
     
                     ```shell title="shell"
@@ -1430,7 +1374,7 @@ class RecipeMarkdownGenerator : Runnable {
         dataTableSnippet: String,
     ) {
         val gradleSnippet = if (suppressGradle) "" else """
-                            <TabItem title="Gradle">
+                            <TabItem value="gradle" title="Gradle">
                                 1. Add the following to your `build.gradle` file:
                                 ```groovy title="build.gradle"
                                 plugins {
@@ -1451,7 +1395,7 @@ class RecipeMarkdownGenerator : Runnable {
                             """.trimIndent()
 
         val mavenSnippet = if (suppressMaven) "" else """
-                            <TabItem title="Maven">
+                            <TabItem value="maven" title="Maven">
                                 1. Add the following to your `pom.xml` file:
                                 ```xml title="pom.xml"
                                 <project>
@@ -1479,10 +1423,10 @@ class RecipeMarkdownGenerator : Runnable {
         writeln(
             """
 Now that `$exampleRecipeName` has been defined, activate it in your build file:
-<Tabs>
-  $gradleSnippet
-  $mavenSnippet
-  $cliSnippet
+<Tabs groupId="project-type">
+$gradleSnippet
+$mavenSnippet
+$cliSnippet
 </Tabs>
 """.trimIndent()
         )
@@ -1499,7 +1443,7 @@ Now that `$exampleRecipeName` has been defined, activate it in your build file:
         dataTableSnippet: String,
     ) {
         val gradleSnippet = if (suppressGradle) "" else """
-                            <TabItem title="Gradle">
+                            <TabItem value="gradle" title="Gradle">
                                 1. Add the following to your `build.gradle` file:
                                 ```groovy title="build.gradle"
                                 plugins {
@@ -1524,7 +1468,7 @@ Now that `$exampleRecipeName` has been defined, activate it in your build file:
                             """.trimIndent()
 
         val mavenSnippet = if (suppressMaven) "" else """
-                            <TabItem title="Maven">
+                            <TabItem value="maven" title="Maven">
                                 1. Add the following to your `pom.xml` file:
                                 ```xml title="pom.xml"
                                 <project>
@@ -1559,10 +1503,10 @@ Now that `$exampleRecipeName` has been defined, activate it in your build file:
         writeln(
             """
 Now that `$exampleRecipeName` has been defined, activate it and take a dependency on ${origin.groupId}:${origin.artifactId}:${origin.version} in your build file:
-<Tabs>
-  $gradleSnippet
-  $mavenSnippet
-  $cliSnippet
+<Tabs groupId="project-type">
+$gradleSnippet
+$mavenSnippet
+$cliSnippet
 </Tabs>
 """.trimIndent()
         )
@@ -1584,7 +1528,7 @@ Now that `$exampleRecipeName` has been defined, activate it and take a dependenc
         )
 
         val gradleSnippet = if (suppressGradle) "" else """
-                            <TabItem title="Gradle">
+                            <TabItem value="gradle" title="Gradle">
                                 1. Add the following to your `build.gradle` file:
                                 ```groovy title="build.gradle"
                                 plugins {
@@ -1604,7 +1548,7 @@ Now that `$exampleRecipeName` has been defined, activate it and take a dependenc
                                 2. Run `gradle rewriteRun` to run the recipe.
                             </TabItem>
                             
-                            <TabItem title="Gradle init script">
+                            <TabItem value="gradle-init-script" title="Gradle init script">
                                 1. Create a file named `init.gradle` in the root of your project.
                                 ```groovy title="init.gradle"
                                 initscript {
@@ -1639,7 +1583,7 @@ Now that `$exampleRecipeName` has been defined, activate it and take a dependenc
                             """.trimIndent()
 
         val mavenSnippet = if (suppressMaven) "" else """
-                            <TabItem title="Maven POM">
+                            <TabItem value="maven" title="Maven POM">
                                 1. Add the following to your `pom.xml` file:
                                 ```xml title="pom.xml"
                                 <project>
@@ -1663,7 +1607,7 @@ Now that `$exampleRecipeName` has been defined, activate it and take a dependenc
                                 2. Run `mvn rewrite:run` to run the recipe.
                             </TabItem>
                             
-                            <TabItem title="Maven Command Line">
+                            <TabItem value="maven-command-line" title="Maven Command Line">
                                 You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
     
                                 ```shell title="shell"
@@ -1673,10 +1617,10 @@ Now that `$exampleRecipeName` has been defined, activate it and take a dependenc
                             """.trimIndent()
         writeln(
             """
-<Tabs>
-  $gradleSnippet
-  $mavenSnippet
-  $cliSnippet
+<Tabs groupId="project-type">
+$gradleSnippet
+$mavenSnippet
+$cliSnippet
 </Tabs>
 """.trimIndent()
         )
@@ -1700,7 +1644,7 @@ Now that `$exampleRecipeName` has been defined, activate it and take a dependenc
         )
 
         val gradleSnippet = if (suppressGradle) "" else """
-                            <TabItem title="Gradle">
+                            <TabItem value="gradle" title="Gradle">
                                 1. Add the following to your `build.gradle` file:
                                 ```groovy title="build.gradle"
                                 plugins {
@@ -1723,7 +1667,7 @@ Now that `$exampleRecipeName` has been defined, activate it and take a dependenc
                                 2. Run `gradle rewriteRun` to run the recipe.
                             </TabItem>
                             
-                            <TabItem title="Gradle init script">
+                            <TabItem value="gradle-init-script" title="Gradle init script">
                                 1. Create a file named `init.gradle` in the root of your project.
                                 ```groovy title="init.gradle"
                                 initscript {
@@ -1758,7 +1702,7 @@ Now that `$exampleRecipeName` has been defined, activate it and take a dependenc
                             """.trimIndent()
 
         val mavenSnippet = if (suppressMaven) "" else """
-                            <TabItem title="Maven POM">
+                            <TabItem value="maven" title="Maven POM">
                                 1. Add the following to your `pom.xml` file:
                                 ```xml title="pom.xml"
                                 <project>
@@ -1789,7 +1733,7 @@ Now that `$exampleRecipeName` has been defined, activate it and take a dependenc
                                 2. Run `mvn rewrite:run` to run the recipe.
                             </TabItem>
                             
-                            <TabItem title="Maven Command Line">
+                            <TabItem value="maven-command-line" title="Maven Command Line">
                                 You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
     
                                 ```shell title="shell"
@@ -1800,10 +1744,10 @@ Now that `$exampleRecipeName` has been defined, activate it and take a dependenc
 
         writeln(
             """
-<Tabs>
-  $gradleSnippet
-  $mavenSnippet
-  $cliSnippet
+<Tabs groupId="project-type">
+$gradleSnippet
+$mavenSnippet
+$cliSnippet
 </Tabs>
 """.trimIndent()
         )
@@ -1858,7 +1802,7 @@ Now that `$exampleRecipeName` has been defined, activate it and take a dependenc
             recipesPath.resolve(getRecipePath(recipeDescriptor) + ".md")
 
         private fun getRecipeRelativePath(recipe: RecipeDescriptor): String =
-            "reference/recipes/" + getRecipePath(recipe)
+            "/recipes/" + getRecipePath(recipe)
 
         private fun findCategoryDescriptor(
             categoryPathFragment: String,
