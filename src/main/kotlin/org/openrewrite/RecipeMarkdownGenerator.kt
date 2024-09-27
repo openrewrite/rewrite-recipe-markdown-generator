@@ -790,8 +790,16 @@ class RecipeMarkdownGenerator : Runnable {
 
         fun writeCategoryIndex(outputRoot: Path) {
             if (path.isBlank()) {
+                // Create a core directory
+                val recipesPath = outputRoot.resolve("core")
+                try {
+                    Files.createDirectories(recipesPath)
+                } catch (e: IOException) {
+                    throw RuntimeException(e)
+                }
+
                 // "Core" recipes need to be handled differently as they do not have a path like other recipes.
-                val corePath = outputRoot.resolve("core.md")
+                val corePath = outputRoot.resolve("core/README.md")
 
                 Files.newBufferedWriter(corePath, StandardOpenOption.CREATE).useAndApply {
                     writeln("# Core Recipes")
@@ -813,10 +821,12 @@ class RecipeMarkdownGenerator : Runnable {
 
                 return
             }
+
             val outputPath = outputRoot.resolve("$path/README.md")
             Files.newBufferedWriter(outputPath, StandardOpenOption.CREATE).useAndApply {
                 writeln(categoryIndex())
             }
+
             for (subcategory in subcategories) {
                 subcategory.writeCategoryIndex(outputRoot)
             }
@@ -1837,7 +1847,14 @@ $cliSnippet
 
         private fun getRecipePath(recipe: RecipeDescriptor): String =
             if (recipe.name.startsWith("org.openrewrite")) {
-                recipe.name.substring(16).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
+                // If the recipe path only has two periods, it's part of the core recipes and should be adjusted accordingly.
+                if (recipe.name.count{ it == '.' } == 2) {
+                    "core/" + recipe.name
+                        .substring(16)
+                        .lowercase(Locale.getDefault())
+                } else {
+                    recipe.name.substring(16).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
+                }
             } else if (recipe.name.startsWith("io.moderne")) {
                 recipe.name.substring(11).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
             } else if (
