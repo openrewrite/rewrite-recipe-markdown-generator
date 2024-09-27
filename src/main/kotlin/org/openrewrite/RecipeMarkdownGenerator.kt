@@ -962,7 +962,7 @@ import TabItem from '@theme/TabItem';
                 }
                 // This should preserve casing and plurality
                 description = description.replace("method patterns?".toRegex(RegexOption.IGNORE_CASE)) { match ->
-                    "[${match.value}](/reference/method-patterns.md)"
+                    "[${match.value}](/reference/method-patterns)"
                 }
                 // Add valid options to description
                 if (option.valid?.isNotEmpty() ?: false) {
