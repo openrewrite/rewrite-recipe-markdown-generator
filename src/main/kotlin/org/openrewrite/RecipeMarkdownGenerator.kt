@@ -964,6 +964,13 @@ import TabItem from '@theme/TabItem';
                     ""
                 } else {
                     option.description.replace("\n", "<br />")
+
+                    // Ensure that anything that matches ${variable} is wrapped in ``
+                    // Otherwise Docusaurus tries to parse it as a variable.
+                    val regex = Regex("(?<!`)\\$\\{[^}]+}(?!`)")
+                    option.description.replace(regex) { matchResult ->
+                        "`${matchResult.value}`"
+                    }
                 }
                 description = if (option.isRequired) {
                     description
@@ -1301,7 +1308,18 @@ import TabItem from '@theme/TabItem';
                     .replace("<p>", "< p >")
                     .replace("<script>", "//<script//>")
 
-                writeln("    * [" + formattedRecipeDisplayName + "](" + pathToRecipes + getRecipePath(recipe) + ")")
+                writeln("* [" + formattedRecipeDisplayName + "](" + pathToRecipes + getRecipePath(recipe) + ")")
+                if (recipe.options.isNotEmpty()) {
+                    for (option in recipe.options) {
+                        if (option.value != null) {
+                            val formattedOptionString = printValue(option.value!!)
+                                .replace("<p>", "< p >")
+                                .replace("\n", " ")
+
+                            writeln("  * " + option.name + ": `" + formattedOptionString + "`")
+                        }
+                    }
+                }
             }
             newLine()
             writeln(
