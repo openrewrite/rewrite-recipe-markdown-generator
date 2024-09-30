@@ -753,10 +753,17 @@ class RecipeMarkdownGenerator : Runnable {
                         appendLine()
 
                         for (recipe in compositeRecipes) {
-                            val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
+                            var recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
                             val formattedDisplayName = recipe.displayName
                                 .replace("<script>", "\\<script\\>")
                                 .replace("<p>", "< p >")
+
+                            // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
+                            // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
+                            // docs so that they parse correctly.
+                            if (recipe.name == "org.openrewrite.java.testing.assertj.Assertj") {
+                                recipeSimpleName = "assertj-best-practices"
+                            }
 
                             // Anything except a relative link ending in .md will be mangled.
                             // If you touch this line double check that it works when imported into gitbook
@@ -1864,7 +1871,12 @@ $cliSnippet
         }
 
         private fun getRecipePath(recipe: RecipeDescriptor): String =
-            if (recipe.name.startsWith("org.openrewrite")) {
+            // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
+            // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
+            // docs so that they parse correctly.
+            if (recipe.name == "org.openrewrite.java.testing.assertj.Assertj") {
+                "java/testing/assertj/assertj-best-practices"
+            } else if (recipe.name.startsWith("org.openrewrite")) {
                 // If the recipe path only has two periods, it's part of the core recipes and should be adjusted accordingly.
                 if (recipe.name.count{ it == '.' } == 2) {
                     "core/" + recipe.name
