@@ -304,9 +304,10 @@ class RecipeMarkdownGenerator : Runnable {
                     "it won't be included in this list._\n")
 
             for (recipe in recipesWithDataTables) {
-                writeln("**[${recipe.displayName}](https://docs.openrewrite.org/?q=${recipe.name})**  ")
-                writeln("**${recipe.name}**  ")
+                writeln("### [${recipe.displayName}](https://docs.openrewrite.org/?q=${recipe.name})\n ")
+                writeln("_${recipe.name}_\n")
                 writeln("${recipe.description}\n")
+                writeln("#### Data tables:\n")
 
                 val filteredDataTables = recipe.dataTables.filter { dataTable ->
                     dataTable.name !in dataTablesToIgnore
