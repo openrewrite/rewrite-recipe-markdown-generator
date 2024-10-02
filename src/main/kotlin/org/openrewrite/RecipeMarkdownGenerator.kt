@@ -759,11 +759,17 @@ class RecipeMarkdownGenerator : Runnable {
                                 .replace("<script>", "\\<script\\>")
                                 .replace("<p>", "< p >")
 
+                            val recipePathToDocusaurusRenamedPath: Map<String, String> = mapOf(
+                                "org.openrewrite.java.testing.assertj.Assertj" to "assertj-best-practices",
+                                "org.openrewrite.java.migrate.javaee7" to "javaee7-recipe",
+                                "org.openrewrite.java.migrate.javaee8" to "javaee8-recipe"
+                            )
+
                             // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
                             // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
                             // docs so that they parse correctly.
-                            if (recipe.name == "org.openrewrite.java.testing.assertj.Assertj") {
-                                recipeSimpleName = "assertj-best-practices"
+                            if (recipePathToDocusaurusRenamedPath.containsKey(recipe.name)) {
+                                recipeSimpleName = recipePathToDocusaurusRenamedPath[recipe.name]!!
                             }
 
                             // Anything except a relative link ending in .md will be mangled.
@@ -1871,12 +1877,18 @@ $cliSnippet
             }
         }
 
+        private val recipePathToDocusaurusRenamedPath: Map<String, String> = mapOf(
+            "org.openrewrite.java.testing.assertj.Assertj" to "java/testing/assertj/assertj-best-practices",
+            "org.openrewrite.java.migrate.javaee7" to "java/migrate/javaee7-recipe",
+            "org.openrewrite.java.migrate.javaee8" to "java/migrate/javaee8-recipe"
+        )
+
         private fun getRecipePath(recipe: RecipeDescriptor): String =
             // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
             // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
             // docs so that they parse correctly.
-            if (recipe.name == "org.openrewrite.java.testing.assertj.Assertj") {
-                "java/testing/assertj/assertj-best-practices"
+            if (recipePathToDocusaurusRenamedPath.containsKey(recipe.name)) {
+                recipePathToDocusaurusRenamedPath[recipe.name]!!
             } else if (recipe.name.startsWith("org.openrewrite")) {
                 // If the recipe path only has two periods, it's part of the core recipes and should be adjusted accordingly.
                 if (recipe.name.count{ it == '.' } == 2) {
