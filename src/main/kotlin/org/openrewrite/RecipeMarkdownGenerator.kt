@@ -713,7 +713,14 @@ class RecipeMarkdownGenerator : Runnable {
          */
         private fun categoryIndex(): String {
             return StringBuilder().apply {
-                appendLine("# $displayName")
+                // Docusaurus gets confused when parsing C# as the sidebar title. We need to surround it in backticks
+                // so it displays correctly.
+                if (displayName == "C#") {
+                    appendLine("# `C#`")
+                } else {
+                    appendLine("# $displayName")
+                }
+
                 // While the description is not _supposed_ to be nullable it has happened before
                 @Suppress("SENSELESS_COMPARISON")
                 if (descriptor != null && descriptor.description != null) {
