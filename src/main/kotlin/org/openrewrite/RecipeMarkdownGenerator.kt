@@ -717,7 +717,11 @@ class RecipeMarkdownGenerator : Runnable {
                 // so it displays correctly.
                 if (displayName == "C#") {
                     appendLine("# `C#`")
-                } else {
+                // Ai is not capitalized by default - so let's switch it to be AI
+                } else if (displayName == "Ai") {
+                    appendLine("# AI")
+                }
+                else {
                     appendLine("# $displayName")
                 }
 
@@ -1125,8 +1129,8 @@ import TabItem from '@theme/TabItem';
                     if (hasChange && source.before != null) {
                         newLine()
                         val tabName = source.path ?: (source.language ?: "Before / After")
-                        writeln("<Tabs groupId=\"before-after\">")
-                        writeln("<TabItem value=\"${tabName}\" title=\"${tabName}\">")
+                        writeln("<Tabs groupId=\"beforeAfter\">")
+                        writeln("<TabItem value=\"${tabName}\" label=\"${tabName}\">")
                     }
 
                     newLine()
@@ -1168,7 +1172,7 @@ import TabItem from '@theme/TabItem';
                         // diff
                         if (source.before != null) {
                             writeln("</TabItem>")
-                            writeln("<TabItem value=\"diff\" title=\"Diff\" >")
+                            writeln("<TabItem value=\"diff\" label=\"Diff\" >")
 
                             val diff = generateDiff(source.path, source.before, source.after)
 
@@ -1309,8 +1313,8 @@ import TabItem from '@theme/TabItem';
                         
                         ## Definition
                         
-                        <Tabs groupId="recipe-type">
-                        <TabItem value="recipe-list" title="Recipe List" >
+                        <Tabs groupId="recipeType">
+                        <TabItem value="recipe-list" label="Recipe List" >
                     """.trimIndent()
             )
             val recipeDepth = getRecipePath(recipeDescriptor).chars().filter { ch: Int -> ch == '/'.code }.count()
@@ -1347,7 +1351,7 @@ import TabItem from '@theme/TabItem';
                 """
                         </TabItem>
     
-                        <TabItem value="yaml-recipe-list" title="Yaml Recipe List">
+                        <TabItem value="yaml-recipe-list" label="Yaml Recipe List">
                         ```yaml
                     """.trimIndent()
             )
@@ -1457,7 +1461,7 @@ import TabItem from '@theme/TabItem';
         }
 
         return """
-                <TabItem value="moderne-cli" title="Moderne CLI">
+                <TabItem value="moderne-cli" label="Moderne CLI">
                     You will need to have configured the [Moderne CLI](https://docs.moderne.io/moderne-cli/cli-intro) on your machine before you can run the following command.
     
                     ```shell title="shell"
@@ -1477,7 +1481,7 @@ import TabItem from '@theme/TabItem';
         dataTableSnippet: String,
     ) {
         val gradleSnippet = if (suppressGradle) "" else """
-                            <TabItem value="gradle" title="Gradle">
+                            <TabItem value="gradle" label="Gradle">
                                 1. Add the following to your `build.gradle` file:
                                 ```groovy title="build.gradle"
                                 plugins {
@@ -1498,7 +1502,7 @@ import TabItem from '@theme/TabItem';
                             """.trimIndent()
 
         val mavenSnippet = if (suppressMaven) "" else """
-                            <TabItem value="maven" title="Maven">
+                            <TabItem value="maven" label="Maven">
                                 1. Add the following to your `pom.xml` file:
                                 ```xml title="pom.xml"
                                 <project>
@@ -1526,7 +1530,7 @@ import TabItem from '@theme/TabItem';
         writeln(
             """
 Now that `$exampleRecipeName` has been defined, activate it in your build file:
-<Tabs groupId="project-type">
+<Tabs groupId="projectType">
 $gradleSnippet
 $mavenSnippet
 $cliSnippet
@@ -1546,7 +1550,7 @@ $cliSnippet
         dataTableSnippet: String,
     ) {
         val gradleSnippet = if (suppressGradle) "" else """
-                            <TabItem value="gradle" title="Gradle">
+                            <TabItem value="gradle" label="Gradle">
                                 1. Add the following to your `build.gradle` file:
                                 ```groovy title="build.gradle"
                                 plugins {
@@ -1571,7 +1575,7 @@ $cliSnippet
                             """.trimIndent()
 
         val mavenSnippet = if (suppressMaven) "" else """
-                            <TabItem value="maven" title="Maven">
+                            <TabItem value="maven" label="Maven">
                                 1. Add the following to your `pom.xml` file:
                                 ```xml title="pom.xml"
                                 <project>
@@ -1606,7 +1610,7 @@ $cliSnippet
         writeln(
             """
 Now that `$exampleRecipeName` has been defined, activate it and take a dependency on ${origin.groupId}:${origin.artifactId}:${origin.version} in your build file:
-<Tabs groupId="project-type">
+<Tabs groupId="projectType">
 $gradleSnippet
 $mavenSnippet
 $cliSnippet
@@ -1631,7 +1635,7 @@ $cliSnippet
         )
 
         val gradleSnippet = if (suppressGradle) "" else """
-                            <TabItem value="gradle" title="Gradle">
+                            <TabItem value="gradle" label="Gradle">
                                 1. Add the following to your `build.gradle` file:
                                 ```groovy title="build.gradle"
                                 plugins {
@@ -1651,7 +1655,7 @@ $cliSnippet
                                 2. Run `gradle rewriteRun` to run the recipe.
                             </TabItem>
                             
-                            <TabItem value="gradle-init-script" title="Gradle init script">
+                            <TabItem value="gradle-init-script" label="Gradle init script">
                                 1. Create a file named `init.gradle` in the root of your project.
                                 ```groovy title="init.gradle"
                                 initscript {
@@ -1686,7 +1690,7 @@ $cliSnippet
                             """.trimIndent()
 
         val mavenSnippet = if (suppressMaven) "" else """
-                            <TabItem value="maven" title="Maven POM">
+                            <TabItem value="maven" label="Maven POM">
                                 1. Add the following to your `pom.xml` file:
                                 ```xml title="pom.xml"
                                 <project>
@@ -1710,7 +1714,7 @@ $cliSnippet
                                 2. Run `mvn rewrite:run` to run the recipe.
                             </TabItem>
                             
-                            <TabItem value="maven-command-line" title="Maven Command Line">
+                            <TabItem value="maven-command-line" label="Maven Command Line">
                                 You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
     
                                 ```shell title="shell"
@@ -1720,7 +1724,7 @@ $cliSnippet
                             """.trimIndent()
         writeln(
             """
-<Tabs groupId="project-type">
+<Tabs groupId="projectType">
 $gradleSnippet
 $mavenSnippet
 $cliSnippet
@@ -1747,7 +1751,7 @@ $cliSnippet
         )
 
         val gradleSnippet = if (suppressGradle) "" else """
-                            <TabItem value="gradle" title="Gradle">
+                            <TabItem value="gradle" label="Gradle">
                                 1. Add the following to your `build.gradle` file:
                                 ```groovy title="build.gradle"
                                 plugins {
@@ -1770,7 +1774,7 @@ $cliSnippet
                                 2. Run `gradle rewriteRun` to run the recipe.
                             </TabItem>
                             
-                            <TabItem value="gradle-init-script" title="Gradle init script">
+                            <TabItem value="gradle-init-script" label="Gradle init script">
                                 1. Create a file named `init.gradle` in the root of your project.
                                 ```groovy title="init.gradle"
                                 initscript {
@@ -1805,7 +1809,7 @@ $cliSnippet
                             """.trimIndent()
 
         val mavenSnippet = if (suppressMaven) "" else """
-                            <TabItem value="maven" title="Maven POM">
+                            <TabItem value="maven" label="Maven POM">
                                 1. Add the following to your `pom.xml` file:
                                 ```xml title="pom.xml"
                                 <project>
@@ -1836,7 +1840,7 @@ $cliSnippet
                                 2. Run `mvn rewrite:run` to run the recipe.
                             </TabItem>
                             
-                            <TabItem value="maven-command-line" title="Maven Command Line">
+                            <TabItem value="maven-command-line" label="Maven Command Line">
                                 You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
     
                                 ```shell title="shell"
@@ -1847,7 +1851,7 @@ $cliSnippet
 
         writeln(
             """
-<Tabs groupId="project-type">
+<Tabs groupId="projectType">
 $gradleSnippet
 $mavenSnippet
 $cliSnippet
