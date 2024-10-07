@@ -309,6 +309,8 @@ class RecipeMarkdownGenerator : Runnable {
                 if (recipe.name.count { it == '.' } == 2 &&
                     recipe.name.contains("org.openrewrite.")) {
                     recipePath = "recipes/core/" + recipe.name.removePrefix("org.openrewrite.").lowercase();
+                } else if (recipe.name.contains("io.moderne.ai")) {
+                    recipePath = "recipes/ai/" + recipe.name.removePrefix("io.moderne.ai.").replace(".", "/").lowercase();
                 } else {
                     recipePath = "recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase();
                 }
