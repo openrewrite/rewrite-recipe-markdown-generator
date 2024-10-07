@@ -304,7 +304,16 @@ class RecipeMarkdownGenerator : Runnable {
                     "it won't be included in this list._\n")
 
             for (recipe in recipesWithDataTables) {
-                writeln("### [${recipe.displayName}](https://docs.openrewrite.org/?q=${recipe.name})\n ")
+                var recipePath = "";
+
+                if (recipe.name.count { it == '.' } == 2 &&
+                    recipe.name.contains("org.openrewrite.")) {
+                    recipePath = "recipes/core/" + recipe.name.removePrefix("org.openrewrite.");
+                } else {
+                    recipePath = "recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase();
+                }
+
+                writeln("### [${recipe.displayName}](/${recipePath})\n ")
                 writeln("_${recipe.name}_\n")
                 writeln("${recipe.description}\n")
                 writeln("#### Data tables:\n")
