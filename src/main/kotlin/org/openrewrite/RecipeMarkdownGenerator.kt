@@ -308,12 +308,12 @@ class RecipeMarkdownGenerator : Runnable {
 
                 if (recipe.name.count { it == '.' } == 2 &&
                     recipe.name.contains("org.openrewrite.")) {
-                    recipePath = "docs/recipes/core/" + recipe.name.removePrefix("org.openrewrite.").lowercase();
+                    recipePath = "recipes/core/" + recipe.name.removePrefix("org.openrewrite.").lowercase();
                 } else {
-                    recipePath = "docs/recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase();
+                    recipePath = "recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase();
                 }
 
-                writeln("### [${recipe.displayName}](/${recipePath})\n ")
+                writeln("### [${recipe.displayName}](../${recipePath})\n ")
                 writeln("_${recipe.name}_\n")
                 writeln("${recipe.description}\n")
                 writeln("#### Data tables:\n")
