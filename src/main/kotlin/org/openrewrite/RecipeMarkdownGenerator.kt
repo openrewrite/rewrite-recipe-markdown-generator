@@ -308,9 +308,9 @@ class RecipeMarkdownGenerator : Runnable {
 
                 if (recipe.name.count { it == '.' } == 2 &&
                     recipe.name.contains("org.openrewrite.")) {
-                    recipePath = "recipes/core/" + recipe.name.removePrefix("org.openrewrite.");
+                    recipePath = "docs/recipes/core/" + recipe.name.removePrefix("org.openrewrite.").lowercase();
                 } else {
-                    recipePath = "recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase();
+                    recipePath = "docs/recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase();
                 }
 
                 writeln("### [${recipe.displayName}](/${recipePath})\n ")
@@ -888,17 +888,7 @@ class RecipeMarkdownGenerator : Runnable {
             ?.replace(">", "&gt;")
             ?.trim()
 
-        val formattedRecipeDescription = "_" +
-                recipeDescriptor?.description
-                    ?.replace("`<", "&lt;")
-                    ?.replace(">`", "&gt;")
-                    ?.replace("<", "&lt;")
-                    ?.replace(">", "&gt;")
-                    ?.replace("{", "&lcub;")
-                    ?.replace("}", "&rcub;")
-                    ?.replace("\n", " ")
-                    ?.trim() +
-                    "_"
+        val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor)
 
         val formattedLongRecipeName = recipeDescriptor.name.replace("_".toRegex(), "\\\\_").trim()
 
@@ -950,6 +940,17 @@ import TabItem from '@theme/TabItem';
             writeDataTables(recipeDescriptor)
             writeExamples(recipeDescriptor)
             writeContributors(recipeDescriptor)
+        }
+    }
+
+    private fun getFormattedRecipeDescription(recipeDescriptor: RecipeDescriptor): String {
+        val specialCharacters = listOf('<', '>', '{', '}')
+        val formattedRecipeDescription = recipeDescriptor?.description
+
+        if (specialCharacters.any { recipeDescriptor?.description?.contains(it) == true } ) {
+            return "```\n${formattedRecipeDescription?.replace("```", "")?.trim()}\n```\n"
+        } else {
+            return "_" + formattedRecipeDescription?.replace("\n", " ")?.trim() + "_"
         }
     }
 
