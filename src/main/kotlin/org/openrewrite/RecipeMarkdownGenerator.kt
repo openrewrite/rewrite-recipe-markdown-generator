@@ -1959,6 +1959,7 @@ $cliSnippet
                 recipe.name.startsWith("io.quarkus") ||
                 recipe.name.startsWith("org.apache") ||
                 recipe.name.startsWith("org.axonframework") ||
+                recipe.name.startsWith("software.amazon.awssdk") ||
                 recipe.name.startsWith("tech.picnic")
             ) {
                 recipe.name.replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
