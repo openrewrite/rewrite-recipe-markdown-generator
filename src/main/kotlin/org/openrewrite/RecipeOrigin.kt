@@ -18,7 +18,9 @@ class RecipeOrigin(
     fun isFromCoreLibrary() = groupId == "org.openrewrite" && coreLibs.contains(artifactId)
 
     private fun convertNameToJavaPath(recipeName: String): String =
-        recipeName.replace('.', '/').replace(Regex("Recipes?\\$?.*"), "") + ".java"
+        recipeName
+            .replace('.', '/')
+            .replace(Regex("Recipes?\\$?.*"), "") + ".java"
 
     fun githubUrl(): String {
         return if (isFromCoreLibrary()) {
@@ -59,7 +61,18 @@ class RecipeOrigin(
     companion object {
         private val parsePattern = Pattern.compile("([^:]+):([^:]+):([^:]+):(.+)")
         private val coreLibs = setOf(
-            "rewrite-core", "rewrite-gradle", "rewrite-groovy", "rewrite-hcl", "rewrite-java", "rewrite-json", "rewrite-maven", "rewrite-properties", "rewrite-xml", "rewrite-yaml"
+            "rewrite-core",
+            "rewrite-gradle",
+            "rewrite-groovy",
+            "rewrite-hcl",
+            "rewrite-java",
+            "rewrite-java-test",
+            "rewrite-json",
+            "rewrite-maven",
+            "rewrite-properties",
+            "rewrite-protobuf",
+            "rewrite-xml",
+            "rewrite-yaml"
         )
 
         fun fromString(encoded: String): RecipeOrigin {
