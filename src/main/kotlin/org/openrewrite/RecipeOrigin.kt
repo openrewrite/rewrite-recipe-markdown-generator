@@ -20,7 +20,8 @@ class RecipeOrigin(
     private fun convertNameToJavaPath(recipeName: String): String =
         recipeName
             .replace('.', '/')
-            .replace(Regex("Recipes?\\$?.*"), "") + ".java"
+            .replace(Regex("\\$.*"), "")
+            .replace(Regex("Recipes?$"), "") + ".java"
 
     fun githubUrl(): String {
         return if (isFromCoreLibrary()) {
