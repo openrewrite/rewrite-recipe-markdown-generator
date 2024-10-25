@@ -31,6 +31,12 @@ import java.util.stream.Collectors
 import kotlin.io.path.toPath
 import kotlin.system.exitProcess
 
+// These recipes contain invalid markdown and would cause issues
+// with doc generation if left in.
+private val recipesToIgnore = listOf(
+    "org.apache.camel.upgrade.camel45.UseExtendedCamelContextGetters"
+)
+
 @Command(
     name = "rewrite-recipe-markdown-generator",
     mixinStandardHelpOptions = true,
@@ -776,6 +782,10 @@ class RecipeMarkdownGenerator : Runnable {
                         appendLine()
 
                         for (recipe in compositeRecipes) {
+                            if (recipesToIgnore.contains(recipe.name)) {
+                                continue;
+                            }
+
                             var recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
                             val formattedDisplayName = recipe.displayName
                                 .replace("<script>", "\\<script\\>")
@@ -876,6 +886,10 @@ class RecipeMarkdownGenerator : Runnable {
         gradlePluginVersion: String,
         mavenPluginVersion: String
     ) {
+        if (recipesToIgnore.contains(recipeDescriptor.name)) {
+            return;
+        }
+
         val sidebarFormattedName = recipeDescriptor.displayName
             .replace("`","")
             .replace("\"", "\\\"")
@@ -1335,6 +1349,15 @@ import TabItem from '@theme/TabItem';
                 pathToRecipesBuilder.append("../")
             }
             val pathToRecipes = pathToRecipesBuilder.toString()
+
+            // These recipes contain other recipes that are not parseable.
+            // Until we support this - let's remove links for these recipes.
+            // https://github.com/openrewrite/rewrite-spring/issues/601
+            val recipesThatShouldHaveLinksRemoved = listOf(
+                "org.openrewrite.java.spring.boot2.MigrateDatabaseCredentials",
+                "org.openrewrite.java.spring.PropertiesToKebabCase"
+            )
+
             for (recipe in recipeDescriptor.recipeList) {
                 // https://github.com/openrewrite/rewrite-docs/issues/250
                 if (recipe.displayName == "Precondition bellwether") {
@@ -1345,7 +1368,16 @@ import TabItem from '@theme/TabItem';
                     .replace("<p>", "< p >")
                     .replace("<script>", "//<script//>")
 
-                writeln("* [" + formattedRecipeDisplayName + "](" + pathToRecipes + getRecipePath(recipe) + ")")
+                if (recipesToIgnore.contains(recipe.name)) {
+                    continue;
+                }
+
+                if (recipesThatShouldHaveLinksRemoved.contains(recipeDescriptor.name)) {
+                    writeln("* $formattedRecipeDisplayName");
+                } else {
+                    writeln("* [" + formattedRecipeDisplayName + "](" + pathToRecipes + getRecipePath(recipe) + ")")
+                }
+
                 if (recipe.options.isNotEmpty()) {
                     for (option in recipe.options) {
                         if (option.value != null) {
