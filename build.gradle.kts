@@ -72,7 +72,7 @@ dependencies {
 //    "recipe"("org.openrewrite:rewrite-csharp")
 //    "recipe"("org.openrewrite:rewrite-javascript")
     "recipe"("org.openrewrite:rewrite-kotlin")
-//    "recipe"("org.openrewrite:rewrite-python") // Removed based on Olga request
+    "recipe"("org.openrewrite:rewrite-python")
 //    "recipe"("org.openrewrite:rewrite-ruby")
 
     "recipe"("org.openrewrite.recipe:rewrite-all")
