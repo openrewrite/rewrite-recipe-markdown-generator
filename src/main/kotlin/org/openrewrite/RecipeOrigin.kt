@@ -17,11 +17,27 @@ class RecipeOrigin(
      */
     fun isFromCoreLibrary() = groupId == "org.openrewrite" && coreLibs.contains(artifactId)
 
-    private fun convertNameToJavaPath(recipeName: String): String =
-        recipeName
-            .replace('.', '/')
-            .replace(Regex("\\$.*"), "")
-            .replace(Regex("Recipes?$"), "") + ".java"
+    private fun convertNameToJavaPath(recipeName: String): String {
+        // These recipes are not Refaster recipes and should keep
+        // Recipe or Recipes in their name when linking to them.
+        val recipesToNotReplace = listOf(
+            "org.openrewrite.config.CompositeRecipe",
+            "org.openrewrite.java.migrate.util.OptionalStreamRecipe",
+            "org.openrewrite.java.recipes.FindRecipes",
+            "org.openrewrite.java.recipes.NoMutableStaticFieldsInRecipes",
+            "org.openrewrite.java.spring.boot2.search.IntegrationSchedulerPoolRecipe"
+        )
+
+        val updatedRecipeName = recipeName.replace('.', '/')
+
+        return if (recipesToNotReplace.contains(recipeName)) {
+            "$updatedRecipeName.java"
+        } else {
+            updatedRecipeName
+                .replace(Regex("\\$.*"), "")
+                .replace(Regex("Recipes?$"), "") + ".java"
+        }
+    }
 
     fun githubUrl(): String {
         return if (isFromCoreLibrary()) {
