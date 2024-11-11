@@ -1533,7 +1533,7 @@ import TabItem from '@theme/TabItem';
                             
                             rewrite {
                                 activeRecipe("$exampleRecipeName")
-                                exportDatatables(true)
+                                setExportDatatables(true)
                             }
                             
                             repositories {
@@ -1606,7 +1606,7 @@ $cliSnippet
                             
                             rewrite {
                                 activeRecipe("$exampleRecipeName")
-                                exportDatatables(true)
+                                setExportDatatables(true)
                             }
                             
                             repositories {
@@ -1695,7 +1695,7 @@ $cliSnippet
                             
                             rewrite {
                                 activeRecipe("${recipeDescriptor.name}")
-                                exportDatatables(true)
+                                setExportDatatables(true)
                             }
                             
                             repositories {
@@ -1724,7 +1724,7 @@ $cliSnippet
                                 }
                                 rewrite {
                                     activeRecipe("${recipeDescriptor.name}")
-                                    exportDatatables(true)
+                                    setExportDatatables(true)
                                 }
                                 afterEvaluate {
                                     if (repositories.isEmpty()) {
@@ -1822,7 +1822,7 @@ $cliSnippet
                             
                             rewrite {
                                 activeRecipe("${recipeDescriptor.name}")
-                                exportDatatables(true)
+                                setExportDatatables(true)
                             }
                             
                             repositories {
@@ -1855,7 +1855,7 @@ $cliSnippet
                                 }
                                 rewrite {
                                     activeRecipe("${recipeDescriptor.name}")
-                                    exportDatatables(true)
+                                    setExportDatatables(true)
                                 }
                                 afterEvaluate {
                                     if (repositories.isEmpty()) {
