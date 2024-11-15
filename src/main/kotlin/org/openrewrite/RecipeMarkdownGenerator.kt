@@ -1290,7 +1290,7 @@ import TabItem from '@theme/TabItem';
                     mavenPluginVersion,
                     suppressMaven,
                     suppressGradle,
-                    getCliSnippet(exampleRecipeName),
+                    getCliSnippet(exampleRecipeName, origin),
                     dataTableSnippet,
                 )
             } else {
@@ -1300,7 +1300,7 @@ import TabItem from '@theme/TabItem';
                     mavenPluginVersion,
                     suppressMaven,
                     suppressGradle,
-                    getCliSnippet(exampleRecipeName),
+                    getCliSnippet(exampleRecipeName, origin),
                     dataTableSnippet,
                 )
             }
@@ -1312,7 +1312,7 @@ import TabItem from '@theme/TabItem';
                     mavenPluginVersion,
                     suppressMaven,
                     suppressGradle,
-                    getCliSnippet(recipeDescriptor.name),
+                    getCliSnippet(recipeDescriptor.name, origin),
                     dataTableSnippet,
                     dataTableCommandLineSnippet,
                 )
@@ -1324,7 +1324,7 @@ import TabItem from '@theme/TabItem';
                     mavenPluginVersion,
                     suppressMaven,
                     suppressGradle,
-                    getCliSnippet(recipeDescriptor.name),
+                    getCliSnippet(recipeDescriptor.name, origin),
                     dataTableSnippet,
                     dataTableCommandLineSnippet,
                 )
@@ -1491,16 +1491,8 @@ import TabItem from '@theme/TabItem';
         return diffContent.toString()
     }
 
-    private fun getCliSnippet(
-        name: String,
-    ): String {
-        val lastPeriod = name.lastIndexOf('.')
-        var trimmedRecipeName = name
-
-        if (lastPeriod >= 0) {
-            trimmedRecipeName = name.substring(lastPeriod + 1)
-        }
-
+    private fun getCliSnippet(name: String, origin: RecipeOrigin): String {
+        val trimmedRecipeName = name.substring(name.lastIndexOf('.') + 1)
         return """
                 <TabItem value="moderne-cli" label="Moderne CLI">
 
@@ -1508,6 +1500,11 @@ import TabItem from '@theme/TabItem';
 
                 ```shell title="shell"
                 mod run . --recipe $trimmedRecipeName
+                ```
+
+                If the recipe is not available locally, then you can install it using:
+                ```shell
+                mod config recipes jar install ${origin.groupId}:${origin.artifactId}:${origin.version}
                 ```
                 </TabItem>
         """.trimIndent()
