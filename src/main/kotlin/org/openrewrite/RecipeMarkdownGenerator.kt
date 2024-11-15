@@ -215,7 +215,7 @@ class RecipeMarkdownGenerator : Runnable {
             // Some of our recipes fall in a "core" category. These do not have a package like other recipes.
             // For example: org.openrewrite.recipeName
             // In this case, we want the generated link to include the /core/ directory.
-            if (recipeDescriptor.name.count{ it == '.' } == 2) {
+            if (recipeDescriptor.name.count { it == '.' } == 2) {
                 docLink = docBaseUrl + "core/" + recipeDescriptor.name.lowercase(Locale.getDefault())
                     .removePrefix("org.openrewrite.")
                     .removePrefix("io.moderne.")
@@ -376,12 +376,27 @@ class RecipeMarkdownGenerator : Runnable {
                         | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** |
                         """.trimIndent()
             )
-            for (recipeOrigin in recipeOrigins.values) {
-                val repoLink = "[${recipeOrigin.groupId}:${recipeOrigin.artifactId}](${recipeOrigin.githubUrl()})"
+            var cliInstallGavs = ""
+            for (origin in recipeOrigins.values) {
+                cliInstallGavs += "${origin.groupId}:${origin.artifactId}:${origin.version} "
+                val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.githubUrl()})"
                 val releaseLink =
-                    "[${recipeOrigin.version}](${recipeOrigin.githubUrl()}/releases/tag/v${recipeOrigin.version})"
+                    "[${origin.version}](${origin.githubUrl()}/releases/tag/v${origin.version})"
                 writeln("| ${repoLink.padEnd(117)} | ${releaseLink} |")
             }
+            writeln(
+                """
+                        |-----------------------------------------------------------------------------------------------------------------------| ---------- |
+                        
+                        ## CLI Installation
+                        
+                        Install all of the latest versions of the OpenRewrite recipe modules into the Moderne CLI:
+                        
+                        ```bash
+                        mod config recipes jar install ${cliInstallGavs}
+                        ```
+                        """.trimIndent()
+            )
         }
     }
 
@@ -498,7 +513,7 @@ class RecipeMarkdownGenerator : Runnable {
         val formatted = getDateFormattedYYYYMMDD()
 
         val changelog: File = if (deployType == "release") {
-            File("src/main/resources/${rewriteBomVersion.replace('.','-')}-Release.md")
+            File("src/main/resources/${rewriteBomVersion.replace('.', '-')}-Release.md")
         } else {
             File("src/main/resources/snapshot-CHANGELOG-$formatted.md")
         }
@@ -546,7 +561,11 @@ class RecipeMarkdownGenerator : Runnable {
             changelog.appendText("## New Recipes\n")
 
             for (newRecipe in newRecipes) {
-                changelog.appendText("\n* [${newRecipe.name}](${newRecipe.docLink}): ${newRecipe.description.trim().replace("\n", "<br />")} ")
+                changelog.appendText(
+                    "\n* [${newRecipe.name}](${newRecipe.docLink}): ${
+                        newRecipe.description.trim().replace("\n", "<br />")
+                    } "
+                )
             }
 
             changelog.appendText("\n\n")
@@ -734,11 +753,10 @@ class RecipeMarkdownGenerator : Runnable {
                 // so it displays correctly.
                 if (displayName == "C#") {
                     appendLine("# `C#`")
-                // Ai is not capitalized by default - so let's switch it to be AI
                 } else if (displayName == "Ai") {
+                    // Ai is not capitalized by default - so let's switch it to be AI
                     appendLine("# AI")
-                }
-                else {
+                } else {
                     appendLine("# $displayName")
                 }
 
@@ -891,7 +909,7 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         val sidebarFormattedName = recipeDescriptor.displayName
-            .replace("`","")
+            .replace("`", "")
             .replace("\"", "\\\"")
             .replace("<script>", "<script >")
             .replace("<p>", "< p >")
@@ -924,7 +942,7 @@ import TabItem from '@theme/TabItem';
 
 **$formattedLongRecipeName**
 
-            """.trimIndent()
+""".trimIndent()
             )
 
             newLine()
@@ -963,7 +981,7 @@ import TabItem from '@theme/TabItem';
         val specialCharacters = listOf('<', '>', '{', '}')
         val formattedRecipeDescription = recipeDescriptor?.description
 
-        if (specialCharacters.any { recipeDescriptor?.description?.contains(it) == true } ) {
+        if (specialCharacters.any { recipeDescriptor?.description?.contains(it) == true }) {
             return "```\n${formattedRecipeDescription?.replace("```", "")?.trim()}\n```\n"
         } else {
             return "_" + formattedRecipeDescription?.replace("\n", " ")?.trim() + "_"
@@ -1970,7 +1988,7 @@ $cliSnippet
                 recipePathToDocusaurusRenamedPath[recipe.name]!!
             } else if (recipe.name.startsWith("org.openrewrite")) {
                 // If the recipe path only has two periods, it's part of the core recipes and should be adjusted accordingly.
-                if (recipe.name.count{ it == '.' } == 2) {
+                if (recipe.name.count { it == '.' } == 2) {
                     "core/" + recipe.name
                         .substring(16)
                         .lowercase(Locale.getDefault())
