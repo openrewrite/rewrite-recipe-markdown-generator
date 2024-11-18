@@ -57,8 +57,8 @@ dependencies {
 
     "recipe"(platform("org.openrewrite.recipe:rewrite-recipe-bom:$rewriteVersion"))
     "recipe"("org.openrewrite:rewrite-core")
-    "recipe"("org.openrewrite:rewrite-groovy")
     "recipe"("org.openrewrite:rewrite-gradle")
+    "recipe"("org.openrewrite:rewrite-groovy")
     "recipe"("org.openrewrite:rewrite-hcl")
     "recipe"("org.openrewrite:rewrite-java")
     "recipe"("org.openrewrite:rewrite-json")
@@ -67,7 +67,6 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-protobuf")
     "recipe"("org.openrewrite:rewrite-xml")
     "recipe"("org.openrewrite:rewrite-yaml")
-    "recipe"("org.openrewrite:rewrite-java-test")
 
 //    "recipe"("org.openrewrite:rewrite-csharp")
 //    "recipe"("org.openrewrite:rewrite-javascript")
