@@ -110,23 +110,20 @@ class RecipeMarkdownGenerator : Runnable {
 
     override fun run() {
         val outputPath = Paths.get(destinationDirectoryName)
-        val recipesPath = outputPath.resolve("recipes")
-        try {
-            Files.createDirectories(recipesPath)
-        } catch (e: IOException) {
-            throw RuntimeException(e)
-        }
 
         val env: Environment
         val recipeOrigins: Map<URI, RecipeOrigin>
 
-        // Load recipe details into memory
-        if (recipeSources.isNotEmpty() && recipeClasspath.isNotEmpty()) {
+        if (recipeSources.isNotEmpty()) {
             recipeOrigins = RecipeOrigin.parse(recipeSources)
 
             // Write latest-versions-of-every-openrewrite-module.md
             createLatestVersionsFile(outputPath, recipeOrigins)
+            if (recipeClasspath.isEmpty()) {
+                return
+            }
 
+            // Load recipe details into memory
             val classloader = recipeClasspath.split(";")
                 .map(Paths::get)
                 .map(Path::toUri)
@@ -152,6 +149,13 @@ class RecipeMarkdownGenerator : Runnable {
             env = Environment.builder()
                 .scanRuntimeClasspath()
                 .build()
+        }
+
+        val recipesPath = outputPath.resolve("recipes")
+        try {
+            Files.createDirectories(recipesPath)
+        } catch (e: IOException) {
+            throw RuntimeException(e)
         }
 
         // Recipes fully loaded into recipeDescriptors

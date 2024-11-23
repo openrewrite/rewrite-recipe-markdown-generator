@@ -202,4 +202,36 @@ tasks.named<JavaExec>("run").configure {
     }
 }
 
+tasks.register<JavaExec>("latestVersionsMarkdown").configure {
+    classpath(sourceSets.main.get().runtimeClasspath)
+    mainClass.set("org.openrewrite.RecipeMarkdownGenerator")
+
+    val targetDir = layout.buildDirectory.dir("docs").get().asFile
+    // Collect all of the dependencies from recipeConf, then stuff them into a string representation
+    val recipeModules = recipeConf.resolvedConfiguration.firstLevelModuleDependencies.flatMap { dep ->
+        dep.moduleArtifacts.map { artifact ->
+            "${dep.moduleGroup}:${dep.moduleName}:${dep.moduleVersion}:${artifact.file}"
+        }
+    }.joinToString(";")
+
+    description = "Writes generated markdown docs to $targetDir"
+    args = listOf(
+        targetDir.toString(),
+        recipeModules
+    )
+    doFirst {
+        logger.lifecycle("Recipe modules: ")
+        logger.lifecycle(recipeModules.replace(";", "\n"))
+
+        // Ensure no stale output from previous runs is in the output directory
+        targetDir.deleteRecursively()
+        targetDir.mkdirs()
+    }
+    doLast {
+        this as JavaExec
+        @Suppress("UNNECESSARY_NOT_NULL_ASSERTION") // IntelliJ says this is unnecessary, kotlin compiler disagrees
+        logger.lifecycle("Wrote generated docs to: file://${args!!.first()}")
+    }
+}
+
 defaultTasks = mutableListOf("run")
