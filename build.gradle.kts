@@ -147,43 +147,15 @@ tasks.named<JavaExec>("run").configure {
         .map { it.absolutePath }
         .joinToString(";")
 
-    val rewriteBomVersion =
-        configurations.detachedConfiguration(dependencies.create("org.openrewrite:rewrite-bom:latest.release"))
-            .resolvedConfiguration
-            .firstLevelModuleDependencies
-            .first()
-            .moduleVersion
-
-    val rewriteRecipeBomVersion =
-        configurations.detachedConfiguration(dependencies.create("org.openrewrite.recipe:rewrite-recipe-bom:latest.release"))
-            .resolvedConfiguration
-            .firstLevelModuleDependencies
-            .first()
-            .moduleVersion
-
-    val gradlePluginVersion =
-        configurations.detachedConfiguration(dependencies.create("org.openrewrite:plugin:latest.release"))
-            .resolvedConfiguration
-            .firstLevelModuleDependencies
-            .first()
-            .moduleVersion
-
-    val mavenPluginVersion =
-        configurations.detachedConfiguration(dependencies.create("org.openrewrite.maven:rewrite-maven-plugin:latest.release"))
-            .resolvedConfiguration
-            .firstLevelModuleDependencies
-            .first()
-            .moduleVersion
-
     description = "Writes generated markdown docs to $targetDir"
     args = listOf(
         targetDir.toString(),
         recipeModules,
         recipeClasspath,
-        rewriteBomVersion,
-        rewriteRecipeBomVersion,
-        gradlePluginVersion,
-        mavenPluginVersion,
+        latestVersion("org.openrewrite:rewrite-bom:latest.release"),
+        latestVersion("org.openrewrite.recipe:rewrite-recipe-bom:latest.release"),
+        latestVersion("org.openrewrite:plugin:latest.release"),
+        latestVersion("org.openrewrite.maven:rewrite-maven-plugin:latest.release"),
         deployType,
         diffFileName
     )
@@ -217,7 +189,12 @@ tasks.register<JavaExec>("latestVersionsMarkdown").configure {
     description = "Writes generated markdown docs to $targetDir"
     args = listOf(
         targetDir.toString(),
-        recipeModules
+        recipeModules,
+        "", // intentionally left out to exit early
+        latestVersion("org.openrewrite:rewrite-bom:latest.release"),
+        latestVersion("org.openrewrite.recipe:rewrite-recipe-bom:latest.release"),
+        latestVersion("org.openrewrite:plugin:latest.release"),
+        latestVersion("org.openrewrite.maven:rewrite-maven-plugin:latest.release"),
     )
     doFirst {
         logger.lifecycle("Recipe modules: ")
@@ -235,3 +212,10 @@ tasks.register<JavaExec>("latestVersionsMarkdown").configure {
 }
 
 defaultTasks = mutableListOf("run")
+
+fun latestVersion(arg: String) =
+    configurations.detachedConfiguration(dependencies.create(arg))
+        .resolvedConfiguration
+        .firstLevelModuleDependencies
+        .first()
+        .moduleVersion
