@@ -1518,7 +1518,7 @@ import TabItem from '@theme/TabItem';
         return """
                 <TabItem value="moderne-cli" label="Moderne CLI">
 
-                You will need to have configured the [Moderne CLI](https://docs.moderne.io/moderne-cli/cli-intro) on your machine before you can run the following command.
+                You will need to have configured the [Moderne CLI](https://docs.moderne.io/user-documentation/moderne-cli/getting-started/cli-intro) on your machine before you can run the following command.
 
                 ```shell title="shell"
                 mod run . --recipe $trimmedRecipeName
