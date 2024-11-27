@@ -46,7 +46,7 @@ Note: It's possible that with old versions of Rewrite that the markdown generato
 ### Automated Recipe Docs
 
 When you run this project for either a snapshot or a full release, all documentation will be updated in the 
-`build/docs` directory. There are three key pieces to that: the `reference` folder and the `SUMMARY_snippet.md` 
+`build/docs` directory. There are three key pieces to that: the `recipes` folder and the `SUMMARY_snippet.md` 
 and `latest-versions-of-every-openrewrite-module.md` files. 
 
 If you wish to update the [docs](https://docs.openrewrite.org/reference/recipes), you should replace [this directory](https://github.com/openrewrite/rewrite-docs/tree/master/reference/recipes)
@@ -89,9 +89,10 @@ Quickstart:
 
 ### Replace rewrite-docs references
 ```shell
-rm -rf ../../rewrite-docs/reference/recipes
-cp -r build/docs/reference/recipes ../../rewrite-docs/reference/
-cp -r build/docs/latest-versions-of-every-openrewrite-module.md ../../rewrite-docs/reference/
+rm -rf ../rewrite-docs/docs/recipes/
+cp -r build/docs/recipes ../rewrite-docs/docs/recipes
+cp -r build/docs/*.md ../rewrite-docs/docs/reference/
+cp src/main/resources/8-*-Release.md ../rewrite-docs/docs/changelog/
 ```
 
 ## Known Issues
