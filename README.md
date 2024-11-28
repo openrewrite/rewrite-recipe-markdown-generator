@@ -1,4 +1,4 @@
-![Logo](https://github.com/openrewrite/rewrite/raw/main/doc/logo-oss.png)
+**![Logo](https://github.com/openrewrite/rewrite/raw/main/doc/logo-oss.png)
 ## What is this?
 
 This project implements a utility that generates OpenRewrite recipe documentation in markdown format for all recipes on the classpath.
@@ -27,7 +27,7 @@ A few important things to note:
 
 ### Diff log
 
-It's possible to configure the markdown generator to create a diff log that generates something like [this](https://gist.github.com/mike-solomon/b72f6f857a7a8e40c996ec47c838ae95).
+It's possible to configure the markdown generator to create a diff log.
 That doc shows all of the recipes created since a particular version of OpenRewrite. Companies may want to see the work
 we've done for them since they've signed on. In order to make this log, please follow these steps:
 
@@ -46,21 +46,9 @@ Note: It's possible that with old versions of Rewrite that the markdown generato
 ### Automated Recipe Docs
 
 When you run this project for either a snapshot or a full release, all documentation will be updated in the 
-`build/docs` directory. There are three key pieces to that: the `recipes` folder and the `SUMMARY_snippet.md` 
-and `latest-versions-of-every-openrewrite-module.md` files. 
+`build/docs` directory.
 
-If you wish to update the [docs](https://docs.openrewrite.org/reference/recipes), you should replace [this directory](https://github.com/openrewrite/rewrite-docs/tree/master/reference/recipes)
-with the `reference/recipe` folder generated here.
-After that, you should update the [SUMMARY.md](https://github.com/openrewrite/rewrite-docs/blob/master/SUMMARY.md?plain=1#L53-L1066)
-with the snippet generated in the `SUMMARY_snippet.md` file.
-You can replace [latest-versions-of-every-openrewrite-module.md](https://github.com/openrewrite/rewrite-docs/blob/master/reference/latest-versions-of-every-openrewrite-module.md) with the one in `build/docs`,
-but be sure to fill in the `rewrite-recipe-bom` version with the latest version of the BOM. 
-
-Please note that for snapshot releases, you should not copy over all the generated files. This is because we want
-the docs to generally only show full release information. Rather, you should copy over the specific new docs you want
-(as well as the updates to the `SUMMARY_snippet.md`).
-
-Also note that this does not cover _all_ of the documentation that needs to be updated with a release. There are still
+Note that this does not cover _all_ of the documentation that needs to be updated with a release. There are still
 others docs that needs to be updated manually, in particular around versions used in popular recipe guides.
 
 ## Usage
@@ -82,12 +70,9 @@ Quickstart:
 ./gradlew run --args="--help"
 ```
 
-### Create HTML files from Markdown
-```shell
-./gradlew markdownToHtml
-```
+### Update rewrite-docs
+Assumes you have `rewrite-docs` checked out in the same directory as `rewrite-recipe-markdown-generator`.
 
-### Replace rewrite-docs references
 ```shell
 rm -rf ../rewrite-docs/docs/recipes/
 cp -r build/docs/recipes ../rewrite-docs/docs/recipes
@@ -95,7 +80,6 @@ cp -r build/docs/*.md ../rewrite-docs/docs/reference/
 cp src/main/resources/8-*-Release.md ../rewrite-docs/docs/changelog/
 ```
 
-## Known Issues
+#### Manual step
 
-The `SUMMARY_snippet.md` file generated does not entirely match the one in the `rewrite-docs` repository. This is 
-because GitBook makes some strange changes at time automatically. This hasn't been investigated, yet.
+Update `../rewrite-docs/sidebars.ts` to include a link to the new changelog.
