@@ -118,7 +118,8 @@ class RecipeMarkdownGenerator : Runnable {
             recipeOrigins = RecipeOrigin.parse(recipeSources)
 
             // Write latest-versions-of-every-openrewrite-module.md
-            createLatestVersionsFile(outputPath, recipeOrigins)
+            createLatestVersionsJs(outputPath, recipeOrigins)
+            createLatestVersionsMarkdown(outputPath, recipeOrigins)
             if (recipeClasspath.isEmpty()) {
                 return
             }
@@ -349,7 +350,7 @@ class RecipeMarkdownGenerator : Runnable {
         }
     }
 
-    private fun createLatestVersionsFile(
+    private fun createLatestVersionsMarkdown(
         outputPath: Path,
         recipeOrigins: Map<URI, RecipeOrigin>
     ) {
@@ -400,6 +401,32 @@ class RecipeMarkdownGenerator : Runnable {
                         mod config recipes jar install ${cliInstallGavs}
                         ```
                         """.trimIndent()
+            )
+        }
+    }
+
+    private fun createLatestVersionsJs(
+        outputPath: Path,
+        recipeOrigins: Map<URI, RecipeOrigin>
+    ) {
+        val versionsSnippetPath = outputPath.resolve("latest-versions.js")
+        Files.newBufferedWriter(versionsSnippetPath, StandardOpenOption.CREATE).useAndApply {
+            var recipeModuleVersions = ""
+            for (origin in recipeOrigins.values) {
+                val key = origin.artifactId.uppercase().replace('-', '_')
+                recipeModuleVersions += "                  \"{{VERSION_$key}}\": \"${origin.version}\",\n"
+            }
+            writeln(
+                //language=ts
+                """
+                const latestVersions = {
+                  "{{VERSION_REWRITE_RECIPE_BOM}}": "${rewriteRecipeBomVersion}",
+                  "{{VERSION_REWRITE_GRADLE_PLUGIN}}": "${gradlePluginVersion}",
+                  "{{VERSION_REWRITE_MAVEN_PLUGIN}}": "${mavenPluginVersion}",
+                  ${recipeModuleVersions.trim()}
+                };
+                export default latestVersions;
+                """.trimIndent()
             )
         }
     }
@@ -934,7 +961,7 @@ class RecipeMarkdownGenerator : Runnable {
         Files.createDirectories(recipeMarkdownPath.parent)
         Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE).useAndApply {
             write(
-"""
+                """
 ---
 sidebar_label: "$sidebarFormattedName"
 ---
@@ -1985,8 +2012,8 @@ $cliSnippet
         )
 
         private fun getRecipePath(recipe: RecipeDescriptor): String =
-            // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
-            // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
+        // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
+        // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
             // docs so that they parse correctly.
             if (recipePathToDocusaurusRenamedPath.containsKey(recipe.name)) {
                 recipePathToDocusaurusRenamedPath[recipe.name]!!

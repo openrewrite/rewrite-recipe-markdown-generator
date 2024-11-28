@@ -60,6 +60,11 @@ Quickstart:
 ./gradlew run
 ```
 
+### Create only latest versions files in `build/docs`
+```shell
+./gradlew latestVersionsMarkdown
+```
+
 ### Create Markdown files in a specific directory
 ```shell
 ./gradlew run --args="desired/output/path"
@@ -77,6 +82,7 @@ Assumes you have `rewrite-docs` checked out in the same directory as `rewrite-re
 rm -rf ../rewrite-docs/docs/recipes/
 cp -r build/docs/recipes ../rewrite-docs/docs/recipes
 cp -r build/docs/*.md ../rewrite-docs/docs/reference/
+cp -r build/docs/*.js ../rewrite-docs/src/plugins/
 cp src/main/resources/8-*-Release.md ../rewrite-docs/docs/changelog/
 ```
 

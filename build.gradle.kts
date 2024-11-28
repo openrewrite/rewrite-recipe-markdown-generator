@@ -73,6 +73,7 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-kotlin")
 //    "recipe"("org.openrewrite:rewrite-python") // Removed based on Olga request
 //    "recipe"("org.openrewrite:rewrite-ruby")
+    "recipe"("org.openrewrite:rewrite-templating") // To show in latest versions
 
     "recipe"("org.openrewrite.recipe:rewrite-all")
     "recipe"("org.openrewrite.meta:rewrite-analysis")
