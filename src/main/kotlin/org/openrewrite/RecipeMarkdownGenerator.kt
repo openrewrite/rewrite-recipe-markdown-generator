@@ -310,6 +310,7 @@ class RecipeMarkdownGenerator : Runnable {
         Files.newBufferedWriter(recipesWithDataTablesPath, StandardOpenOption.CREATE).useAndApply {
             writeln("# Recipes with Data Tables\n")
 
+            //language=markdown
             writeln("_This doc contains all of the recipes with **unique** data tables that have been explicitly " +
                     "added by the recipe author. If a recipe contains only the default data tables, " +
                     "it won't be included in this list._\n")
@@ -378,7 +379,7 @@ class RecipeMarkdownGenerator : Runnable {
             )
             var cliInstallGavs = ""
             for (origin in recipeOrigins.values) {
-                val versionPlaceholder = "{{VERSION_" + origin.artifactId.uppercase().replace('-', '_') + "}}"
+                val versionPlaceholder = "{{VERSION_${origin.artifactId.uppercase().replace('-', '_')}}}"
                 cliInstallGavs += "${origin.groupId}:${origin.artifactId}:${versionPlaceholder} "
                 val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.githubUrl()})"
                 val releaseLink = "[${versionPlaceholder}](${origin.githubUrl()}/releases/tag/v${versionPlaceholder})"
@@ -1016,7 +1017,7 @@ import TabItem from '@theme/TabItem';
     }
 
     private fun BufferedWriter.writeSourceLinks(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin) {
-        val versionPlaceholderKey = "{{VERSION_" + origin.artifactId.uppercase().replace('-', '_') + "}}"
+        val versionPlaceholderKey = "{{VERSION_${origin.artifactId.uppercase().replace('-', '_')}}}"
         //language=markdown
         writeln(
             """
@@ -1539,7 +1540,7 @@ import TabItem from '@theme/TabItem';
 
     private fun getCliSnippet(name: String, origin: RecipeOrigin): String {
         val trimmedRecipeName = name.substring(name.lastIndexOf('.') + 1)
-        val versionPlaceholderKey = origin.artifactId.uppercase().replace('-', '_')
+        val versionPlaceholderKey = "{{VERSION_${origin.artifactId.uppercase().replace('-', '_')}}}"
         //language=markdown
         return """
             <TabItem value="moderne-cli" label="Moderne CLI">
@@ -1552,7 +1553,7 @@ import TabItem from '@theme/TabItem';
 
             If the recipe is not available locally, then you can install it using:
             ```shell
-            mod config recipes jar install ${origin.groupId}:${origin.artifactId}:{{$versionPlaceholderKey}}
+            mod config recipes jar install ${origin.groupId}:${origin.artifactId}:$versionPlaceholderKey
             ```
             </TabItem>
             """.trimIndent()
@@ -1637,7 +1638,7 @@ $cliSnippet
         cliSnippet: String,
         dataTableSnippet: String,
     ) {
-        val versionPlaceholderKey = origin.artifactId.uppercase().replace('-', '_')
+        val versionPlaceholderKey = "{{VERSION_${origin.artifactId.uppercase().replace('-', '_')}}}"
         //language=markdown
         val gradleSnippet = if (suppressGradle) "" else """
             <TabItem value="gradle" label="Gradle">
@@ -1659,7 +1660,7 @@ $cliSnippet
             }
             
             dependencies {
-                rewrite("${origin.groupId}:${origin.artifactId}:{{$versionPlaceholderKey}}")
+                rewrite("${origin.groupId}:${origin.artifactId}:${versionPlaceholderKey}")
             }
             ```
             2. Run `gradle rewriteRun` to run the recipe.
@@ -1690,7 +1691,7 @@ $cliSnippet
                       <dependency>
                         <groupId>${origin.groupId}</groupId>
                         <artifactId>${origin.artifactId}</artifactId>
-                        <version>{{$versionPlaceholderKey}}</version>
+                        <version>${versionPlaceholderKey}</version>
                       </dependency>
                     </dependencies>
                   </plugin>
@@ -1704,7 +1705,7 @@ $cliSnippet
 
         writeln(
             """
-Now that `$exampleRecipeName` has been defined, activate it and take a dependency on ${origin.groupId}:${origin.artifactId}:{{$versionPlaceholderKey}} in your build file:
+Now that `$exampleRecipeName` has been defined, activate it and take a dependency on ${origin.groupId}:${origin.artifactId}:${versionPlaceholderKey} in your build file:
 <Tabs groupId="projectType">
 $gradleSnippet
 $mavenSnippet
@@ -1848,10 +1849,10 @@ $cliSnippet
         dataTableSnippet: String,
         dataTableCommandLineSnippet: String,
     ) {
-        val versionPlaceholderKey = origin.artifactId.uppercase().replace('-', '_')
+        val versionPlaceholderKey = "{{VERSION_${origin.artifactId.uppercase().replace('-', '_')}}}"
         writeln(
             "This recipe has no required configuration options. It can be activated by adding a dependency on " +
-                    "`${origin.groupId}:${origin.artifactId}:{{$versionPlaceholderKey}}` in your build file or by running a shell " +
+                    "`${origin.groupId}:${origin.artifactId}:${versionPlaceholderKey}` in your build file or by running a shell " +
                     "command (in which case no build changes are needed): "
         )
 
@@ -1876,7 +1877,7 @@ $cliSnippet
             }
             
             dependencies {
-                rewrite("${origin.groupId}:${origin.artifactId}:{{$versionPlaceholderKey}}")
+                rewrite("${origin.groupId}:${origin.artifactId}:${versionPlaceholderKey}")
             }
             ```
 
@@ -1897,7 +1898,7 @@ $cliSnippet
             rootProject {
                 plugins.apply(org.openrewrite.gradle.RewritePlugin)
                 dependencies {
-                    rewrite("${origin.groupId}:${origin.artifactId}:{{$versionPlaceholderKey}}")
+                    rewrite("${origin.groupId}:${origin.artifactId}:${versionPlaceholderKey}")
                 }
                 rewrite {
                     activeRecipe("${recipeDescriptor.name}")
@@ -1946,7 +1947,7 @@ $cliSnippet
                       <dependency>
                         <groupId>${origin.groupId}</groupId>
                         <artifactId>${origin.artifactId}</artifactId>
-                        <version>{{$versionPlaceholderKey}}</version>
+                        <version>${versionPlaceholderKey}</version>
                       </dependency>
                     </dependencies>
                   </plugin>
