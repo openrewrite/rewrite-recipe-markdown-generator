@@ -371,7 +371,7 @@ class RecipeMarkdownGenerator : Runnable {
 
                 | Module                                                                                                                | Version    |
                 |-----------------------------------------------------------------------------------------------------------------------| ---------- |
-                | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **[{{VERSION_REWRITE_RECIPE_BOM}](https://github.com/openrewrite/rewrite-recipe-bom/releases/tag/v{{VERSION_REWRITE_RECIPE_BOM}})** |
+                | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **[{{VERSION_REWRITE_RECIPE_BOM}}](https://github.com/openrewrite/rewrite-recipe-bom/releases/tag/v{{VERSION_REWRITE_RECIPE_BOM}})** |
                 | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **[{{VERSION_REWRITE_MAVEN_PLUGIN}}](https://github.com/openrewrite/rewrite-maven-plugin/releases/tag/v{{VERSION_REWRITE_MAVEN_PLUGIN}})** |
                 | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **[{{VERSION_REWRITE_GRADLE_PLUGIN}}](https://github.com/openrewrite/rewrite-gradle-plugin/releases/tag/v{{VERSION_REWRITE_GRADLE_PLUGIN}})** |
                 """.trimIndent()
