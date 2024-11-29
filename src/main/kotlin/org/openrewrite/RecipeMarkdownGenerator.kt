@@ -1316,6 +1316,7 @@ import TabItem from '@theme/TabItem';
                 
                 """.trimIndent()
             )
+            var cliOptions = ""
             for (option in recipeDescriptor.options) {
                 if (!option.isRequired && option.example == null) {
                     continue
@@ -1330,18 +1331,20 @@ import TabItem from '@theme/TabItem';
                 } else {
                     option.example
                 }
+                cliOptions += " --recipe-option \"${option.name}=$ex\""
                 writeln("      ${option.name}: $ex")
             }
             writeln("```")
             newLine()
 
+            val cliSnippet = getCliSnippet(recipeDescriptor.name, cliOptions, origin)
             if (requiresDependency) {
                 writeSnippetsWithConfigurationWithDependency(
                     exampleRecipeName,
                     origin,
                     suppressMaven,
                     suppressGradle,
-                    getCliSnippet(exampleRecipeName, origin),
+                    cliSnippet,
                     dataTableSnippet,
                 )
             } else {
@@ -1349,17 +1352,18 @@ import TabItem from '@theme/TabItem';
                     exampleRecipeName,
                     suppressMaven,
                     suppressGradle,
-                    getCliSnippet(exampleRecipeName, origin),
+                    cliSnippet,
                     dataTableSnippet,
                 )
             }
         } else {
+            val cliSnippet = getCliSnippet(recipeDescriptor.name, "", origin)
             if (origin.isFromCoreLibrary()) {
                 writeSnippetsFromCoreLibrary(
                     recipeDescriptor,
                     suppressMaven,
                     suppressGradle,
-                    getCliSnippet(recipeDescriptor.name, origin),
+                    cliSnippet,
                     dataTableSnippet,
                     dataTableCommandLineSnippet,
                 )
@@ -1369,7 +1373,7 @@ import TabItem from '@theme/TabItem';
                     recipeDescriptor,
                     suppressMaven,
                     suppressGradle,
-                    getCliSnippet(recipeDescriptor.name, origin),
+                    cliSnippet,
                     dataTableSnippet,
                     dataTableCommandLineSnippet,
                 )
@@ -1540,7 +1544,7 @@ import TabItem from '@theme/TabItem';
         return diffContent.toString()
     }
 
-    private fun getCliSnippet(name: String, origin: RecipeOrigin): String {
+    private fun getCliSnippet(name: String, cliOptions: String, origin: RecipeOrigin): String {
         val trimmedRecipeName = name.substring(name.lastIndexOf('.') + 1)
         val versionPlaceholderKey = "{{VERSION_${origin.artifactId.uppercase().replace('-', '_')}}}"
         //language=markdown
@@ -1550,12 +1554,12 @@ import TabItem from '@theme/TabItem';
             You will need to have configured the [Moderne CLI](https://docs.moderne.io/user-documentation/moderne-cli/getting-started/cli-intro) on your machine before you can run the following command.
 
             ```shell title="shell"
-            mod run . --recipe $trimmedRecipeName
+            mod run . --recipe ${trimmedRecipeName}${cliOptions}
             ```
 
             If the recipe is not available locally, then you can install it using:
             ```shell
-            mod config recipes jar install ${origin.groupId}:${origin.artifactId}:$versionPlaceholderKey
+            mod config recipes jar install ${origin.groupId}:${origin.artifactId}:${versionPlaceholderKey}
             ```
             </TabItem>
             """.trimIndent()

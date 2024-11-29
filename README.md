@@ -23,7 +23,6 @@ A few important things to note:
 
 * The snapshot descriptors are not updated when a full release is run. You should make sure to run the snapshot code when you do a full release so that it can be kept up-to-date.
 * When doing snapshot releases, you generally don't want to copy over all of the files to the rewrite-docs (as it will show snapshot versions instead of full versions). Rather, please only copy over the exact files you need.
-* When copying over the files from the previous step, make sure you update the `SUMMARY.md`. If you don't, those new files won't appear.
 
 ### Diff log
 
