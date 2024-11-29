@@ -395,7 +395,6 @@ class RecipeMarkdownGenerator : Runnable {
             //language=markdown
             writeln(
                 """
-                |-----------------------------------------------------------------------------------------------------------------------| ---------- |
                 
                 ## CLI Installation
                 
