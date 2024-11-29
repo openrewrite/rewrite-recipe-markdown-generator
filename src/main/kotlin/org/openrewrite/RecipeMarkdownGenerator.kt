@@ -357,6 +357,13 @@ class RecipeMarkdownGenerator : Runnable {
     ) {
         val versionsSnippetPath = outputPath.resolve("latest-versions-of-every-openrewrite-module.md")
         Files.newBufferedWriter(versionsSnippetPath, StandardOpenOption.CREATE).useAndApply {
+            val bomLink =
+                "[${rewriteRecipeBomVersion}](https://github.com/openrewrite/rewrite-recipe-bom/releases/tag/v${rewriteRecipeBomVersion})"
+            val mavenLink =
+                "[${mavenPluginVersion}](https://github.com/openrewrite/rewrite-maven-plugin/releases/tag/v${mavenPluginVersion})"
+            val gradleLink =
+                "[${gradlePluginVersion}](https://github.com/openrewrite/rewrite-gradle-plugin/releases/tag/v${gradlePluginVersion})"
+
             //language=markdown
             writeln(
                 """
@@ -372,9 +379,9 @@ class RecipeMarkdownGenerator : Runnable {
 
                 | Module                                                                                                                | Version    |
                 |-----------------------------------------------------------------------------------------------------------------------| ---------- |
-                | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **[{{VERSION_REWRITE_RECIPE_BOM}}](https://github.com/openrewrite/rewrite-recipe-bom/releases/tag/v{{VERSION_REWRITE_RECIPE_BOM}})** |
-                | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **[{{VERSION_REWRITE_MAVEN_PLUGIN}}](https://github.com/openrewrite/rewrite-maven-plugin/releases/tag/v{{VERSION_REWRITE_MAVEN_PLUGIN}})** |
-                | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **[{{VERSION_REWRITE_GRADLE_PLUGIN}}](https://github.com/openrewrite/rewrite-gradle-plugin/releases/tag/v{{VERSION_REWRITE_GRADLE_PLUGIN}})** |
+                | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **${bomLink}** |
+                | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenLink}** |
+                | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** |
                 """.trimIndent()
             )
             var cliInstallGavs = ""
@@ -382,8 +389,8 @@ class RecipeMarkdownGenerator : Runnable {
                 val versionPlaceholder = "{{VERSION_${origin.artifactId.uppercase().replace('-', '_')}}}"
                 cliInstallGavs += "${origin.groupId}:${origin.artifactId}:${versionPlaceholder} "
                 val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.githubUrl()})"
-                val releaseLink = "[${versionPlaceholder}](${origin.githubUrl()}/releases/tag/v${versionPlaceholder})"
-                writeln("| ${repoLink.padEnd(117)} | ${releaseLink} |")
+                val releaseLink = "[${origin.version}](${origin.githubUrl()}/releases/tag/v${origin.version})"
+                writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} |")
             }
             //language=markdown
             writeln(
@@ -1021,20 +1028,16 @@ import TabItem from '@theme/TabItem';
         //language=markdown
         writeln(
             """
-                    ## Recipe source
-                    
-                    [GitHub](${
+            ## Recipe source
+            
+            [GitHub](${
                 origin.githubUrl(
                     recipeDescriptor.name,
                     recipeDescriptor.source
                 )
-            }), [Issue Tracker](${origin.issueTrackerUrl()}), [Maven Central](https://central.sonatype.com/artifact/${origin.groupId}/${origin.artifactId}/${versionPlaceholderKey}/jar)
-                    
-                    * groupId: ${origin.groupId}
-                    * artifactId: ${origin.artifactId}
-                    * version: ${versionPlaceholderKey}
-                    
-                """.trimIndent()
+            }), [Issue Tracker](${origin.issueTrackerUrl()}), [Maven Central](https://central.sonatype.com/artifact/${origin.groupId}/${origin.artifactId}/)
+
+            """.trimIndent()
         )
 
         if (recipeDescriptor.recipeList.size > 1) {
@@ -1705,7 +1708,7 @@ $cliSnippet
 
         writeln(
             """
-Now that `$exampleRecipeName` has been defined, activate it and take a dependency on ${origin.groupId}:${origin.artifactId}:${versionPlaceholderKey} in your build file:
+Now that `$exampleRecipeName` has been defined, activate it and take a dependency on `${origin.groupId}:${origin.artifactId}:${versionPlaceholderKey}` in your build file:
 <Tabs groupId="projectType">
 $gradleSnippet
 $mavenSnippet
