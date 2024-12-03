@@ -1321,11 +1321,13 @@ import TabItem from '@theme/TabItem';
                 if (!option.isRequired && option.example == null) {
                     continue
                 }
-                val ex = if (option.example != null && "String" == option.type &&
+                val ex = if (option.example != null && option.type == "String" &&
                     (option.example.matches("^[{}\\[\\],`|=%@*!?-].*".toRegex()) ||
                             option.example.matches(".*:\\s.*".toRegex()))
                 ) {
                     "'" + option.example + "'"
+                } else if (option.example != null && option.type == "String" && option.example.contains('\n')) {
+                    ">\n        " + option.example.replace("\n", "\n        ")
                 } else if (option.type == "boolean") {
                     "false"
                 } else {
