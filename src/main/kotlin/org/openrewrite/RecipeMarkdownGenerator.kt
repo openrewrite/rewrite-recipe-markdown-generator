@@ -1281,7 +1281,10 @@ import TabItem from '@theme/TabItem';
         writeln("## Usage")
         newLine()
 
-        val suppressJava = recipeDescriptor.name.contains(".csharp.") || recipeDescriptor.name.contains(".python.")
+        val suppressJava = recipeDescriptor.name.contains(".csharp.") ||
+                recipeDescriptor.name.contains(".dotnet.") ||
+                recipeDescriptor.name.contains(".nodejs.") ||
+                recipeDescriptor.name.contains(".python.")
         val suppressMaven = suppressJava || recipeDescriptor.name.contains(".gradle.")
         val suppressGradle = suppressJava || recipeDescriptor.name.contains(".maven.")
         val requiresConfiguration = recipeDescriptor.options.any { it.isRequired }
@@ -1857,13 +1860,11 @@ $cliSnippet
         dataTableSnippet: String,
         dataTableCommandLineSnippet: String,
     ) {
-        val versionPlaceholderKey = "{{VERSION_${origin.artifactId.uppercase().replace('-', '_')}}}"
         writeln(
-            "This recipe has no required configuration options. It can be activated by adding a dependency on " +
-                    "`${origin.groupId}:${origin.artifactId}:${versionPlaceholderKey}` in your build file or by running a shell " +
-                    "command (in which case no build changes are needed): "
+            """This recipe has no required configuration options. It can be activated by adding a dependency on `${origin.groupId}:${origin.artifactId}` in your build file or by running a shell command (in which case no build changes are needed): """
         )
 
+        val versionPlaceholderKey = "{{VERSION_${origin.artifactId.uppercase().replace('-', '_')}}}"
         //language=markdown
         val gradleSnippet = if (suppressGradle) "" else """
             <TabItem value="gradle" label="Gradle">
