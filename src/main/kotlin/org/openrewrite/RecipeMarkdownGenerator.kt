@@ -120,6 +120,7 @@ class RecipeMarkdownGenerator : Runnable {
             // Write latest-versions-of-every-openrewrite-module.md
             createLatestVersionsJs(outputPath, recipeOrigins)
             createLatestVersionsMarkdown(outputPath, recipeOrigins)
+
             if (recipeClasspath.isEmpty()) {
                 return
             }
@@ -163,8 +164,8 @@ class RecipeMarkdownGenerator : Runnable {
         val recipeDescriptors: Collection<RecipeDescriptor> = env.listRecipeDescriptors()
         val categoryDescriptors = ArrayList(env.listCategoryDescriptors())
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
-
         val recipesWithDataTables = ArrayList<RecipeDescriptor>();
+        val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
 
         // Create the recipe docs
         for (recipeDescriptor in recipeDescriptors) {
@@ -191,6 +192,10 @@ class RecipeMarkdownGenerator : Runnable {
 
             if (filteredDataTables.isNotEmpty()) {
                 recipesWithDataTables.add(recipeDescriptor);
+            }
+
+            if (getLicense(origin) == License.Proprietary) {
+                moderneProprietaryRecipes.computeIfAbsent(origin.artifactId) { mutableListOf() }.add(recipeDescriptor)
             }
 
             val recipeOptions = TreeSet<RecipeOption>()
@@ -259,6 +264,9 @@ class RecipeMarkdownGenerator : Runnable {
             }
             markdownArtifact.markdownRecipeDescriptors[recipeDescriptor.name] = markdownRecipeDescriptor
         }
+
+        // Create moderne-recipes.md
+        createModerneRecipes(outputPath, moderneProprietaryRecipes)
 
         val mapper = ObjectMapper(YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER))
         mapper.registerKotlinModule()
@@ -431,6 +439,49 @@ class RecipeMarkdownGenerator : Runnable {
                 export default latestVersions;
                 """.trimIndent()
             )
+        }
+    }
+
+    private fun createModerneRecipes(
+        outputPath: Path,
+        moderneProprietaryRecipesMap: TreeMap<String, MutableList<RecipeDescriptor>>
+    ) {
+        val moderneRecipesPath = outputPath.resolve("moderne-recipes.md")
+
+        Files.newBufferedWriter(moderneRecipesPath, StandardOpenOption.CREATE).useAndApply {
+            writeln("# Moderne Recipes\n")
+
+            writeln("This doc includes every recipe that is exclusive to Moderne customers. " +
+                    "For a full list of all recipes, check out our [recipe catalog](https://docs.openrewrite.org/recipes). " +
+                    "For more information about how to use Moderne for automating code refactoring and analysis at scale, " +
+                    "[contact us](https://www.moderne.ai/contact-us).\n")
+
+            for (entry in moderneProprietaryRecipesMap) {
+                // Artifact ID
+                writeln("## ${entry.key}\n")
+
+                val sortedEntries = entry.value.sortedBy { it.displayName }
+
+                for (recipe in sortedEntries) {
+                    var recipePath = ""
+
+                    if (recipe.name.count { it == '.' } == 2 &&
+                        recipe.name.contains("org.openrewrite.")) {
+                        recipePath = "recipes/core/" + recipe.name.removePrefix("org.openrewrite.").lowercase()
+                    } else if (recipe.name.contains("io.moderne.ai")) {
+                        recipePath = "recipes/ai/" + recipe.name.removePrefix("io.moderne.ai.").replace(".", "/").lowercase()
+                    } else {
+                        recipePath = "recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase()
+                    }
+
+                    val formattedDisplayName = recipe.displayName
+                        .replace("<script>", "`<script>`")
+
+                    writeln("* [${formattedDisplayName}](../${recipePath})")
+                }
+
+                writeln("")
+            }
         }
     }
 
