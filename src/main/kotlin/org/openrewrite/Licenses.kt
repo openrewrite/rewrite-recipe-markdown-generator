@@ -34,6 +34,7 @@ fun getLicense(recipeOrigin: RecipeOrigin): License {
         "rewrite-jenkins",
         "rewrite-logging-frameworks",
         "rewrite-micrometer",
+        "rewrite-migrate-java",
         "rewrite-python",
         "rewrite-okhttp",
         "rewrite-spring",
