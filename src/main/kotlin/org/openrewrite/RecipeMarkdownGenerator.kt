@@ -165,7 +165,7 @@ class RecipeMarkdownGenerator : Runnable {
         val categoryDescriptors = ArrayList(env.listCategoryDescriptors())
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
         val recipesWithDataTables = ArrayList<RecipeDescriptor>();
-        val moderneProprietaryRecipes: MutableMap<String, MutableList<RecipeDescriptor>> = mutableMapOf()
+        val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
 
         // Create the recipe docs
         for (recipeDescriptor in recipeDescriptors) {
@@ -444,7 +444,7 @@ class RecipeMarkdownGenerator : Runnable {
 
     private fun createModerneRecipes(
         outputPath: Path,
-        moderneProprietaryRecipesMap: MutableMap<String, MutableList<RecipeDescriptor>>
+        moderneProprietaryRecipesMap: TreeMap<String, MutableList<RecipeDescriptor>>
     ) {
         val moderneRecipesPath = outputPath.resolve("moderne-recipes.md")
 
@@ -455,7 +455,9 @@ class RecipeMarkdownGenerator : Runnable {
                 // Artifact ID
                 writeln("## ${entry.key}\n")
 
-                for (recipe in entry.value) {
+                val sortedEntries = entry.value.sortedBy { it.displayName }
+
+                for (recipe in sortedEntries) {
                     var recipePath = ""
 
                     if (recipe.name.count { it == '.' } == 2 &&
