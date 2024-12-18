@@ -183,7 +183,7 @@ class RecipeMarkdownGenerator : Runnable {
                 origin = recipeOrigins[jarOnlyUri]
             }
             requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeDescriptor.source }
-            writeRecipe(recipeDescriptor, recipesPath, origin, gradlePluginVersion, mavenPluginVersion)
+            writeRecipe(recipeDescriptor, recipesPath, origin)
 
             val filteredDataTables = recipeDescriptor.dataTables.filter { dataTable ->
                 dataTable.name !in dataTablesToIgnore
@@ -934,9 +934,7 @@ class RecipeMarkdownGenerator : Runnable {
     private fun writeRecipe(
         recipeDescriptor: RecipeDescriptor,
         outputPath: Path,
-        origin: RecipeOrigin,
-        gradlePluginVersion: String,
-        mavenPluginVersion: String
+        origin: RecipeOrigin
     ) {
         if (recipesToIgnore.contains(recipeDescriptor.name)) {
             return;
@@ -1002,7 +1000,7 @@ import TabItem from '@theme/TabItem';
 
             writeSourceLinks(recipeDescriptor, origin)
             writeOptions(recipeDescriptor)
-            writeDefinition(recipeDescriptor)
+            writeDefinition(recipeDescriptor, origin)
             writeUsage(recipeDescriptor, origin)
             writeModerneLink(recipeDescriptor)
             writeDataTables(recipeDescriptor)
@@ -1284,7 +1282,8 @@ import TabItem from '@theme/TabItem';
         val suppressJava = recipeDescriptor.name.contains(".csharp.") ||
                 recipeDescriptor.name.contains(".dotnet.") ||
                 recipeDescriptor.name.contains(".nodejs.") ||
-                recipeDescriptor.name.contains(".python.")
+                recipeDescriptor.name.contains(".python.") ||
+                getLicense(origin) == License.Proprietary
         val suppressMaven = suppressJava || recipeDescriptor.name.contains(".gradle.")
         val suppressGradle = suppressJava || recipeDescriptor.name.contains(".maven.")
         val requiresConfiguration = recipeDescriptor.options.any { it.isRequired }
@@ -1386,8 +1385,8 @@ import TabItem from '@theme/TabItem';
         }
     }
 
-    private fun BufferedWriter.writeDefinition(recipeDescriptor: RecipeDescriptor) {
-        if (recipeDescriptor.recipeList.isNotEmpty()) {
+    private fun BufferedWriter.writeDefinition(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin) {
+        if (recipeDescriptor.recipeList.isNotEmpty() && getLicense(origin) != License.Proprietary) {
             //language=markdown
             writeln(
                 """
