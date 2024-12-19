@@ -1977,7 +1977,7 @@ $cliSnippet
         dataTableCommandLineSnippet: String,
     ) {
         if (getLicense(origin) == License.Proprietary) {
-            writeln("This recipe has no required configuration options. Moderne users can run it via the Moderne CLI:")
+            writeln("This recipe has no required configuration options. Users of Moderne users run it via the Moderne CLI:")
         } else {
             writeln("This recipe has no required configuration options. " +
                     "It can be activated by adding a dependency on `${origin.groupId}:${origin.artifactId}` " +
