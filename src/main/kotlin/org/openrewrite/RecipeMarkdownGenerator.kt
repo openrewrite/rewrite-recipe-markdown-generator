@@ -166,9 +166,11 @@ class RecipeMarkdownGenerator : Runnable {
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
         val recipesWithDataTables = ArrayList<RecipeDescriptor>();
         val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
+        var recipeCount = 0
 
         // Create the recipe docs
         for (recipeDescriptor in recipeDescriptors) {
+            recipeCount++;
             var origin: RecipeOrigin?
             var rawUri = recipeDescriptor.source.toString()
             val exclamationIndex = rawUri.indexOf('!')
@@ -303,7 +305,7 @@ class RecipeMarkdownGenerator : Runnable {
                 removedRecipes.isNotEmpty() ||
                 changedRecipes.isNotEmpty()
             ) {
-                buildChangelog(newArtifacts, removedArtifacts, newRecipes, removedRecipes, changedRecipes, deployType)
+                buildChangelog(newArtifacts, removedArtifacts, newRecipes, removedRecipes, changedRecipes, deployType, recipeCount)
             }
         }
 
@@ -592,7 +594,8 @@ class RecipeMarkdownGenerator : Runnable {
         newRecipes: TreeSet<MarkdownRecipeDescriptor>,
         removedRecipes: TreeSet<MarkdownRecipeDescriptor>,
         changedRecipes: TreeSet<ChangedRecipe>,
-        deployType: String
+        deployType: String,
+        recipeCount: Int,
     ) {
         // Get the date to label the changelog
         val formatted = getDateFormattedYYYYMMDD()
@@ -609,6 +612,7 @@ class RecipeMarkdownGenerator : Runnable {
         if (deployType == "snapshot") {
             changelog.appendText("# Snapshot ($formatted)")
 
+            changelog.appendText("\n\n_Total recipe count: ${recipeCount}_")
             changelog.appendText("\n\n:::info")
             changelog.appendText("\nWant to learn how to use snapshot versions in your project? Check out our [snapshot version guide](/reference/snapshot-instructions.md).")
             changelog.appendText("\n:::\n\n")
