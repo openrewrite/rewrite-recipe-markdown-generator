@@ -451,7 +451,7 @@ class RecipeMarkdownGenerator : Runnable {
         Files.newBufferedWriter(moderneRecipesPath, StandardOpenOption.CREATE).useAndApply {
             writeln("# Moderne Recipes\n")
 
-            writeln("This doc includes every recipe that is exclusive to Moderne customers. " +
+            writeln("This doc includes every recipe that is exclusive to users of Moderne. " +
                     "For a full list of all recipes, check out our [recipe catalog](https://docs.openrewrite.org/recipes). " +
                     "For more information about how to use Moderne for automating code refactoring and analysis at scale, " +
                     "[contact us](https://www.moderne.ai/contact-us).\n")
@@ -1051,6 +1051,7 @@ import TabItem from '@theme/TabItem';
 
             writeSourceLinks(recipeDescriptor, origin)
             writeOptions(recipeDescriptor)
+            writeLicense(recipeDescriptor, origin)
             writeDefinition(recipeDescriptor, origin)
             writeUsage(recipeDescriptor, origin)
             writeModerneLink(recipeDescriptor)
@@ -1072,31 +1073,38 @@ import TabItem from '@theme/TabItem';
     }
 
     private fun BufferedWriter.writeSourceLinks(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin) {
-        val versionPlaceholderKey = "{{VERSION_${origin.artifactId.uppercase().replace('-', '_')}}}"
-        //language=markdown
-        writeln(
-            """
-            ## Recipe source
-            
-            [GitHub](${
-                origin.githubUrl(
-                    recipeDescriptor.name,
-                    recipeDescriptor.source
-                )
-            }), [Issue Tracker](${origin.issueTrackerUrl()}), [Maven Central](https://central.sonatype.com/artifact/${origin.groupId}/${origin.artifactId}/)
-
-            """.trimIndent()
-        )
-
-        if (recipeDescriptor.recipeList.size > 1) {
+        if (getLicense(origin) == License.Proprietary) {
             //language=markdown
             writeln(
                 """
+                    ## Recipe source
+
+                    This recipe is only available to users of [Moderne](https://docs.moderne.io/).
+
+                    """.trimIndent()
+            )
+        } else {
+            //language=markdown
+            writeln(
+                """
+            ## Recipe source
+            
+            [GitHub](${origin.githubUrl(recipeDescriptor.name, recipeDescriptor.source)}), 
+            [Issue Tracker](${origin.issueTrackerUrl()}), 
+            [Maven Central](https://central.sonatype.com/artifact/${origin.groupId}/${origin.artifactId}/)
+            """.trimIndent()
+            )
+
+            if (recipeDescriptor.recipeList.size > 1) {
+                //language=markdown
+                writeln(
+                    """
                 :::info
                 This recipe is composed of more than one recipe. If you want to customize the set of recipes this is composed of, you can find and copy the GitHub source for the recipe from the link above.
                 :::
                 """.trimIndent()
-            )
+                )
+            }
         }
     }
 
@@ -1163,6 +1171,24 @@ import TabItem from '@theme/TabItem';
             }
             newLine()
         }
+    }
+
+    private fun BufferedWriter.writeLicense(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin) {
+        val licenseText = when (getLicense(origin)) {
+            License.Apache2 -> "This recipe is available under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)."
+            License.MSAL -> "This recipe is available under the [Moderne Source Available License](https://docs.moderne.io/licensing/moderne-source-available-license/)."
+            else -> "This recipe is available under the [Moderne Proprietary License](https://docs.moderne.io/licensing/overview/)."
+        }
+
+        //language=markdown
+        writeln(
+            """
+            ## License
+
+            $licenseText
+
+            """.trimIndent()
+        )
     }
 
     private fun BufferedWriter.writeDataTables(recipeDescriptor: RecipeDescriptor) {
@@ -1349,16 +1375,35 @@ import TabItem from '@theme/TabItem';
         if (requiresConfiguration) {
             val exampleRecipeName =
                 "com.yourorg." + recipeDescriptor.name.substring(recipeDescriptor.name.lastIndexOf('.') + 1) + "Example"
-            write("This recipe has required configuration parameters. ")
-            write("Recipes with required configuration parameters cannot be activated directly. ")
-            write("To activate this recipe you must create a new recipe which fills in the required parameters. ")
-            write("In your `rewrite.yml` create a new recipe with a unique name. ")
-            write("For example: `$exampleRecipeName`.")
-            newLine()
-            writeln("Here's how you can define and customize such a recipe within your rewrite.yml:")
-            //language=markdown
-            write(
-                """
+
+            if (getLicense(origin) == License.Proprietary) {
+                //language=markdown
+                write("""
+                    This recipe has required configuration parameters and can only be run by users of Moderne.
+                    To run this recipe, you will need to provide the Moderne CLI run command with the required options. 
+                    Or, if you'd like to create a declarative recipe, please see the below example of a `rewrite.yml` file:
+
+                    ```yaml title="rewrite.yml"
+                    ---
+                    type: specs.openrewrite.org/v1beta/recipe
+                    name: $exampleRecipeName
+                    displayName: ${recipeDescriptor.displayName} example
+                    recipeList:
+                      - ${recipeDescriptor.name}: 
+
+                    """.trimIndent()
+                )
+            } else {
+                write("This recipe has required configuration parameters. ")
+                write("Recipes with required configuration parameters cannot be activated directly (unless you are running them via the Moderne CLI). ")
+                write("To activate this recipe you must create a new recipe which fills in the required parameters. ")
+                write("In your `rewrite.yml` create a new recipe with a unique name. ")
+                write("For example: `$exampleRecipeName`.")
+                newLine()
+                writeln("Here's how you can define and customize such a recipe within your rewrite.yml:")
+                //language=markdown
+                write(
+                    """
                 ```yaml title="rewrite.yml"
                 ---
                 type: specs.openrewrite.org/v1beta/recipe
@@ -1366,9 +1411,10 @@ import TabItem from '@theme/TabItem';
                 displayName: ${recipeDescriptor.displayName} example
                 recipeList:
                   - ${recipeDescriptor.name}:
-                
                 """.trimIndent()
-            )
+                )
+            }
+
             var cliOptions = ""
             for (option in recipeDescriptor.options) {
                 if (!option.isRequired && option.example == null) {
@@ -1409,6 +1455,7 @@ import TabItem from '@theme/TabItem';
                     suppressGradle,
                     cliSnippet,
                     dataTableSnippet,
+                    origin,
                 )
             }
         } else {
@@ -1626,6 +1673,7 @@ import TabItem from '@theme/TabItem';
         suppressGradle: Boolean,
         cliSnippet: String,
         dataTableSnippet: String,
+        origin: RecipeOrigin,
     ) {
         //language=markdown
         val gradleSnippet = if (suppressGradle) "" else """
@@ -1679,8 +1727,15 @@ import TabItem from '@theme/TabItem';
             </TabItem>
             """.trimIndent()
 
-        writeln(
-            """
+        if (getLicense(origin) == License.Proprietary) {
+            writeln("""
+<Tabs groupId="projectType">
+$cliSnippet
+</Tabs>
+""".trimIndent())
+        } else {
+            writeln(
+                """
 Now that `$exampleRecipeName` has been defined, activate it in your build file:
 <Tabs groupId="projectType">
 $gradleSnippet
@@ -1688,7 +1743,8 @@ $mavenSnippet
 $cliSnippet
 </Tabs>
 """.trimIndent()
-        )
+            )
+        }
     }
 
     private fun BufferedWriter.writeSnippetsWithConfigurationWithDependency(
@@ -1764,8 +1820,16 @@ $cliSnippet
             </TabItem>
             """.trimIndent()
 
-        writeln(
-            """
+        if (getLicense(origin) == License.Proprietary) {
+            writeln(
+                """
+<Tabs groupId="projectType">
+$cliSnippet
+</Tabs>
+""".trimIndent())
+        } else {
+            writeln(
+                """
 Now that `$exampleRecipeName` has been defined, activate it and take a dependency on `${origin.groupId}:${origin.artifactId}:${versionPlaceholderKey}` in your build file:
 <Tabs groupId="projectType">
 $gradleSnippet
@@ -1773,7 +1837,8 @@ $mavenSnippet
 $cliSnippet
 </Tabs>
 """.trimIndent()
-        )
+            )
+        }
     }
 
     private fun BufferedWriter.writeSnippetsFromCoreLibrary(
@@ -1910,9 +1975,13 @@ $cliSnippet
         dataTableSnippet: String,
         dataTableCommandLineSnippet: String,
     ) {
-        writeln(
-            """This recipe has no required configuration options. It can be activated by adding a dependency on `${origin.groupId}:${origin.artifactId}` in your build file or by running a shell command (in which case no build changes are needed): """
-        )
+        if (getLicense(origin) == License.Proprietary) {
+            writeln("This recipe has no required configuration options. Users of Moderne users run it via the Moderne CLI:")
+        } else {
+            writeln("This recipe has no required configuration options. " +
+                    "It can be activated by adding a dependency on `${origin.groupId}:${origin.artifactId}` " +
+                    "in your build file or by running a shell command (in which case no build changes are needed):")
+        }
 
         val versionPlaceholderKey = "{{VERSION_${origin.artifactId.uppercase().replace('-', '_')}}}"
         //language=markdown
