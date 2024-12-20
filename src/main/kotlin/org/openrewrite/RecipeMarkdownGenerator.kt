@@ -1049,20 +1049,7 @@ import TabItem from '@theme/TabItem';
                 newLine()
             }
 
-            if (getLicense(origin) == License.Proprietary) {
-                //language=markdown
-                writeln(
-                    """
-                    ## Recipe source
-
-                    This recipe is only available to users of [Moderne](https://docs.moderne.io/).
-
-                    """.trimIndent()
-                )
-            } else {
-                writeSourceLinks(recipeDescriptor, origin)
-            }
-
+            writeSourceLinks(recipeDescriptor, origin)
             writeOptions(recipeDescriptor)
             writeLicense(recipeDescriptor, origin)
             writeDefinition(recipeDescriptor, origin)
@@ -1086,26 +1073,38 @@ import TabItem from '@theme/TabItem';
     }
 
     private fun BufferedWriter.writeSourceLinks(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin) {
-        //language=markdown
-        writeln(
-            """
+        if (getLicense(origin) == License.Proprietary) {
+            //language=markdown
+            writeln(
+                """
+                    ## Recipe source
+
+                    This recipe is only available to users of [Moderne](https://docs.moderne.io/).
+
+                    """.trimIndent()
+            )
+        } else {
+            //language=markdown
+            writeln(
+                """
             ## Recipe source
             
             [GitHub](${origin.githubUrl(recipeDescriptor.name, recipeDescriptor.source)}), 
             [Issue Tracker](${origin.issueTrackerUrl()}), 
             [Maven Central](https://central.sonatype.com/artifact/${origin.groupId}/${origin.artifactId}/)
             """.trimIndent()
-        )
+            )
 
-        if (recipeDescriptor.recipeList.size > 1) {
-            //language=markdown
-            writeln(
-                """
+            if (recipeDescriptor.recipeList.size > 1) {
+                //language=markdown
+                writeln(
+                    """
                 :::info
                 This recipe is composed of more than one recipe. If you want to customize the set of recipes this is composed of, you can find and copy the GitHub source for the recipe from the link above.
                 :::
                 """.trimIndent()
-            )
+                )
+            }
         }
     }
 
