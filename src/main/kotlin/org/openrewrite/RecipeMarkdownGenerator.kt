@@ -1065,15 +1065,18 @@ import TabItem from '@theme/TabItem';
         }
     }
 
+    @Suppress("UNNECESSARY_SAFE_CALL") // Recipes from third parties may lack description
     private fun getFormattedRecipeDescription(recipeDescriptor: RecipeDescriptor): String {
         val specialCharacters = listOf('<', '>', '{', '}')
         val formattedRecipeDescription = recipeDescriptor?.description
-
+        if (formattedRecipeDescription?.contains('`') == true) {
+            // Assume that the recipe description is already Markdown formatted
+            return formattedRecipeDescription
+        }
         if (specialCharacters.any { recipeDescriptor?.description?.contains(it) == true }) {
             return "```\n${formattedRecipeDescription?.replace("```", "")?.trim()}\n```\n"
-        } else {
-            return "_" + formattedRecipeDescription?.replace("\n", " ")?.trim() + "_"
         }
+        return "_" + formattedRecipeDescription?.replace("\n", " ")?.trim() + "_"
     }
 
     private fun BufferedWriter.writeSourceLinks(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin) {
