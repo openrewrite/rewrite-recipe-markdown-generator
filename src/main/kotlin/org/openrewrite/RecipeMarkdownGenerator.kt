@@ -140,6 +140,7 @@ class RecipeMarkdownGenerator : Runnable {
 
             val envBuilder = Environment.builder()
             for (recipeOrigin in recipeOrigins) {
+                println("Scanning ${recipeOrigin.key.toPath().fileName}")
                 // If you are running this with an old version of Rewrite (for diff log purposes), you'll need
                 // to update the below line to look like this instead:
                 // envBuilder.scanJar(recipeOrigin.key.toPath(), classloader)
