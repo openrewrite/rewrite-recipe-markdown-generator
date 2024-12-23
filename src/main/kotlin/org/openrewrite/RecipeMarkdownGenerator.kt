@@ -1069,8 +1069,8 @@ import TabItem from '@theme/TabItem';
     private fun getFormattedRecipeDescription(recipeDescriptor: RecipeDescriptor): String {
         val specialCharacters = listOf('<', '>', '{', '}')
         val formattedRecipeDescription = recipeDescriptor?.description
-        if (formattedRecipeDescription?.contains('`') == true) {
-            // Assume that the recipe description is already Markdown formatted
+        if (formattedRecipeDescription?.contains("```") == true) {
+            // Assume that the recipe description is already Markdown
             return formattedRecipeDescription
         }
         if (specialCharacters.any { recipeDescriptor?.description?.contains(it) == true }) {
