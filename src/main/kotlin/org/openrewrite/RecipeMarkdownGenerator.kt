@@ -1418,6 +1418,7 @@ import TabItem from '@theme/TabItem';
                 displayName: ${recipeDescriptor.displayName} example
                 recipeList:
                   - ${recipeDescriptor.name}:
+                
                 """.trimIndent()
                 )
             }
