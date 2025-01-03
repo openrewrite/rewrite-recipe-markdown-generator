@@ -271,6 +271,7 @@ class RecipeMarkdownGenerator : Runnable {
         // Create moderne-recipes.md
         createModerneRecipes(outputPath, moderneProprietaryRecipes)
 
+
         val mapper = ObjectMapper(YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER))
         mapper.registerKotlinModule()
 
@@ -338,7 +339,7 @@ class RecipeMarkdownGenerator : Runnable {
                     recipePath = "recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase();
                 }
 
-                writeln("### [${recipe.displayName}](../${recipePath})\n ")
+                writeln("### [${recipe.displayName}](../${recipePath}.md)\n ")
                 writeln("_${recipe.name}_\n")
                 writeln("${recipe.description}\n")
                 writeln("#### Data tables:\n")
@@ -480,7 +481,12 @@ class RecipeMarkdownGenerator : Runnable {
                     val formattedDisplayName = recipe.displayName
                         .replace("<script>", "`<script>`")
 
-                    writeln("* [${formattedDisplayName}](../${recipePath})")
+                    // This was a joke recipe that is in a weird state and not normally available
+                    if (recipe.displayName == "SpongeBob-case comments") {
+                        continue
+                    }
+
+                    writeln("* [${formattedDisplayName}](../${recipePath}.md)")
                 }
 
                 writeln("")
