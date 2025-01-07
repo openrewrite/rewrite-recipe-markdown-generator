@@ -45,7 +45,10 @@ fun getLicense(recipeOrigin: RecipeOrigin): License {
 
     if (recipeOrigin.groupId == "org.openrewrite") {
         return License.Apache2
+    } else if (recipeOrigin.groupId == "io.moderne.recipe") {
+        return License.Proprietary
     }
+
     return when {
         apache2.contains(recipeOrigin.artifactId) -> License.Apache2
         msal.contains(recipeOrigin.artifactId) -> License.MSAL
