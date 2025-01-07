@@ -47,6 +47,8 @@ fun getLicense(recipeOrigin: RecipeOrigin): License {
         return License.Apache2
     } else if (recipeOrigin.groupId == "io.moderne.recipe") {
         return License.Proprietary
+    } else if (recipeOrigin.groupId == "org.openrewrite.recipe" && recipeOrigin.artifactId == "rewrite-java-security") {
+        return License.Proprietary
     }
 
     return when {
