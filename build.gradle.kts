@@ -83,6 +83,9 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-circleci")
     "recipe"("org.openrewrite.recipe:rewrite-codemods")
     "recipe"("org.openrewrite.recipe:rewrite-codemods-ng")
+    // TODO Drop versions after inclusion in recipe BOM
+    "recipe"("org.openrewrite.recipe:rewrite-compiled-analysis:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-comprehension:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-concourse")
     "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm")
     "recipe"("org.openrewrite.recipe:rewrite-docker")
@@ -114,6 +117,8 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-terraform")
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks")
     "recipe"("org.openrewrite.recipe:rewrite-third-party")
+
+//    "recipe"("io.moderne.recipe:rewrite-spring:$rewriteVersion") // TODO Drop version after inclusion in recipe BOM
 }
 
 java {
