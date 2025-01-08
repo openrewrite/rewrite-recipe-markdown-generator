@@ -66,7 +66,7 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-maven")
     "recipe"("org.openrewrite:rewrite-properties")
     "recipe"("org.openrewrite:rewrite-protobuf")
-    "recipe"("org.openrewrite:rewrite-toml")
+    "recipe"("org.openrewrite:rewrite-toml:latest.integration") // TODO Remove version after inclusion in rewrite BOM
     "recipe"("org.openrewrite:rewrite-xml")
     "recipe"("org.openrewrite:rewrite-yaml")
 
