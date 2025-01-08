@@ -399,9 +399,9 @@ class RecipeMarkdownGenerator : Runnable {
 
                 | Module                                                                                                                | Version    | License |
                 |-----------------------------------------------------------------------------------------------------------------------| ---------- | ------- |
-                | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **${bomLink}** | Apache License Version 2.0 |
-                | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenLink}** | Moderne Source Available   |
-                | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** | Moderne Source Available   |
+                | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **${bomLink}** | ${License.Apache2.markdown()} |
+                | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenLink}** | ${License.MSAL.markdown()} |
+                | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** |${License.MSAL.markdown()} |
                 """.trimIndent()
             )
             var cliInstallGavs = ""
@@ -410,9 +410,7 @@ class RecipeMarkdownGenerator : Runnable {
                 cliInstallGavs += "${origin.groupId}:${origin.artifactId}:${versionPlaceholder} "
                 val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.githubUrl()})"
                 val releaseLink = "[${origin.version}](${origin.githubUrl()}/releases/tag/v${origin.version})"
-                val license = getLicense(origin)
-                val licenseLink = "[${license.label()}](${license.url()})"
-                writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${licenseLink} |")
+                writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${getLicense(origin).markdown()} |")
             }
             //language=markdown
             writeln(

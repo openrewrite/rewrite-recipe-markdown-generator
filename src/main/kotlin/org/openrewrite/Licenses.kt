@@ -5,16 +5,17 @@ enum class License {
     MSAL,
     Proprietary;
 
-    fun label() = when(this) {
+    private fun label() = when(this) {
         Apache2 -> "Apache License Version 2.0"
         MSAL -> "Moderne Source Available"
         Proprietary -> "Moderne Proprietary"
     }
-    fun url() = when(this) {
+    private fun url() = when(this) {
         Apache2 -> "https://www.apache.org/licenses/LICENSE-2.0"
         MSAL -> "https://docs.moderne.io/licensing/moderne-source-available-license"
         Proprietary -> "https://docs.moderne.io/licensing/overview"
     }
+    fun markdown() = "[${label()}](${url()})"
 }
 
 fun getLicense(recipeOrigin: RecipeOrigin): License {
