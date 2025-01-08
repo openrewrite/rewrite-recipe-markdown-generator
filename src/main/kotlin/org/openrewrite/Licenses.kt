@@ -3,7 +3,13 @@ package org.openrewrite
 enum class License {
     Apache2,
     MSAL,
-    Proprietary
+    Proprietary;
+
+    override fun toString() = when(this) {
+        Apache2 -> "Apache License Version 2.0"
+        MSAL -> "Moderne Source Available"
+        Proprietary -> "Moderne Proprietary"
+    }
 }
 
 fun getLicense(recipeOrigin: RecipeOrigin): License {

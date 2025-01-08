@@ -173,13 +173,13 @@ class RecipeMarkdownGenerator : Runnable {
         val recipeDescriptors: Collection<RecipeDescriptor> = env.listRecipeDescriptors()
         val categoryDescriptors = ArrayList(env.listCategoryDescriptors())
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
-        val recipesWithDataTables = ArrayList<RecipeDescriptor>();
+        val recipesWithDataTables = ArrayList<RecipeDescriptor>()
         val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
         var recipeCount = 0
 
         // Create the recipe docs
         for (recipeDescriptor in recipeDescriptors) {
-            recipeCount++;
+            recipeCount++
             var origin: RecipeOrigin?
             var rawUri = recipeDescriptor.source.toString()
             val exclamationIndex = rawUri.indexOf('!')
@@ -202,7 +202,7 @@ class RecipeMarkdownGenerator : Runnable {
             }
 
             if (filteredDataTables.isNotEmpty()) {
-                recipesWithDataTables.add(recipeDescriptor);
+                recipesWithDataTables.add(recipeDescriptor)
             }
 
             if (getLicense(origin) == License.Proprietary) {
@@ -336,15 +336,15 @@ class RecipeMarkdownGenerator : Runnable {
                     "it won't be included in this list._\n")
 
             for (recipe in recipesWithDataTables) {
-                var recipePath = "";
+                var recipePath: String
 
                 if (recipe.name.count { it == '.' } == 2 &&
                     recipe.name.contains("org.openrewrite.")) {
-                    recipePath = "recipes/core/" + recipe.name.removePrefix("org.openrewrite.").lowercase();
+                    recipePath = "recipes/core/" + recipe.name.removePrefix("org.openrewrite.").lowercase()
                 } else if (recipe.name.contains("io.moderne.ai")) {
-                    recipePath = "recipes/ai/" + recipe.name.removePrefix("io.moderne.ai.").replace(".", "/").lowercase();
+                    recipePath = "recipes/ai/" + recipe.name.removePrefix("io.moderne.ai.").replace(".", "/").lowercase()
                 } else {
-                    recipePath = "recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase();
+                    recipePath = "recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase()
                 }
 
                 writeln("### [${recipe.displayName}](../${recipePath}.md)\n ")
@@ -397,11 +397,11 @@ class RecipeMarkdownGenerator : Runnable {
                 to align the versions of Rewrite's modules to ensure compatibility.
                 The use of the "bill of materials" means that a developer will only need to specify explicit versions of the BOM and the build plugins:
 
-                | Module                                                                                                                | Version    |
-                |-----------------------------------------------------------------------------------------------------------------------| ---------- |
-                | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **${bomLink}** |
-                | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenLink}** |
-                | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** |
+                | Module                                                                                                                | Version    | License |
+                |-----------------------------------------------------------------------------------------------------------------------| ---------- | ------- |
+                | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **${bomLink}** | Apache License Version 2.0 |
+                | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenLink}** | Moderne Source Available   |
+                | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** | Moderne Source Available   |
                 """.trimIndent()
             )
             var cliInstallGavs = ""
@@ -410,7 +410,8 @@ class RecipeMarkdownGenerator : Runnable {
                 cliInstallGavs += "${origin.groupId}:${origin.artifactId}:${versionPlaceholder} "
                 val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.githubUrl()})"
                 val releaseLink = "[${origin.version}](${origin.githubUrl()}/releases/tag/v${origin.version})"
-                writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} |")
+                val license = getLicense(origin).toString()
+                writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${license.padEnd(26)} |")
             }
             //language=markdown
             writeln(
@@ -1007,7 +1008,7 @@ class RecipeMarkdownGenerator : Runnable {
         origin: RecipeOrigin
     ) {
         if (recipesToIgnore.contains(recipeDescriptor.name)) {
-            return;
+            return
         }
 
         val sidebarFormattedName = recipeDescriptor.displayName
@@ -1070,7 +1071,7 @@ import TabItem from '@theme/TabItem';
 
             writeSourceLinks(recipeDescriptor, origin)
             writeOptions(recipeDescriptor)
-            writeLicense(recipeDescriptor, origin)
+            writeLicense(origin)
             writeDefinition(recipeDescriptor, origin)
             writeUsage(recipeDescriptor, origin)
             writeModerneLink(recipeDescriptor)
@@ -1195,7 +1196,7 @@ import TabItem from '@theme/TabItem';
         }
     }
 
-    private fun BufferedWriter.writeLicense(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin) {
+    private fun BufferedWriter.writeLicense(origin: RecipeOrigin) {
         val licenseText = when (getLicense(origin)) {
             License.Apache2 -> "This recipe is available under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)."
             License.MSAL -> "This recipe is available under the [Moderne Source Available License](https://docs.moderne.io/licensing/moderne-source-available-license/)."
@@ -1544,11 +1545,11 @@ import TabItem from '@theme/TabItem';
                     .replace("<script>", "//<script//>")
 
                 if (recipesToIgnore.contains(recipe.name)) {
-                    continue;
+                    continue
                 }
 
                 if (recipesThatShouldHaveLinksRemoved.contains(recipeDescriptor.name)) {
-                    writeln("* $formattedRecipeDisplayName");
+                    writeln("* $formattedRecipeDisplayName")
                 } else {
                     writeln("* [" + formattedRecipeDisplayName + "](" + pathToRecipes + getRecipePath(recipe) + ")")
                 }
