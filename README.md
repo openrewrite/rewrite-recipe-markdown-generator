@@ -62,6 +62,8 @@ Quickstart:
 ### Create only latest versions files in `build/docs`
 ```shell
 ./gradlew latestVersionsMarkdown
+cp -r build/docs/*.md ../rewrite-docs/docs/reference/
+cp -r build/docs/*.js ../rewrite-docs/src/plugins/
 ```
 
 ### Create Markdown files in a specific directory

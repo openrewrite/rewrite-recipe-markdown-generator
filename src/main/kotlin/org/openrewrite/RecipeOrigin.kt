@@ -88,6 +88,8 @@ class RecipeOrigin(
             "rewrite-maven",
             "rewrite-properties",
             "rewrite-protobuf",
+            "rewrite-test",
+            "rewrite-toml",
             "rewrite-xml",
             "rewrite-yaml"
         )

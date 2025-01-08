@@ -152,6 +152,14 @@ class RecipeMarkdownGenerator : Runnable {
             env = Environment.builder()
                 .scanRuntimeClasspath()
                 .build()
+
+            // Write latest-versions-of-every-openrewrite-module.md
+            createLatestVersionsJs(outputPath, recipeOrigins)
+            createLatestVersionsMarkdown(outputPath, recipeOrigins)
+
+            if (recipeClasspath.isEmpty()) {
+                return
+            }
         }
 
         val recipesPath = outputPath.resolve("recipes")
