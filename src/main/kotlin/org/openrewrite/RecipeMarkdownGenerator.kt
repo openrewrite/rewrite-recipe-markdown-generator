@@ -410,8 +410,9 @@ class RecipeMarkdownGenerator : Runnable {
                 cliInstallGavs += "${origin.groupId}:${origin.artifactId}:${versionPlaceholder} "
                 val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.githubUrl()})"
                 val releaseLink = "[${origin.version}](${origin.githubUrl()}/releases/tag/v${origin.version})"
-                val license = getLicense(origin).toString()
-                writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${license.padEnd(26)} |")
+                val license = getLicense(origin)
+                val licenseLink = "[${license.label()}](${license.url()})"
+                writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${licenseLink} |")
             }
             //language=markdown
             writeln(
