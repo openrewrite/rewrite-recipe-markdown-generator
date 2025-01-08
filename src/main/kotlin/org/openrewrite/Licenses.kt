@@ -43,12 +43,22 @@ fun getLicense(recipeOrigin: RecipeOrigin): License {
         "rewrite-testing-frameworks",
     )
 
-    if (recipeOrigin.groupId == "org.openrewrite") {
-        return License.Apache2
-    }
+    // Non-exhaustive list of proprietary recipes; such that those under "org.openrewrite" are assigned correctly
+    val proprietary = setOf(
+        "rewrite-cobol",
+        "rewrite-java-security",
+        "rewrite-polyglot",
+        "rewrite-remote",
+    )
+
     return when {
-        apache2.contains(recipeOrigin.artifactId) -> License.Apache2
+        // Moderne internal recipes are proprietary, and checked first to pick up internal complementary modules
+        recipeOrigin.groupId == "io.moderne.recipe" || proprietary.contains(recipeOrigin.artifactId) -> License.Proprietary
+        // Then check for MSAL modules, which might publish under "org.openrewrite" or "org.openrewrite.recipe"
         msal.contains(recipeOrigin.artifactId) -> License.MSAL
+        // Finally, check for Apache2 recipes
+        recipeOrigin.groupId == "org.openrewrite" || apache2.contains(recipeOrigin.artifactId) -> License.Apache2
+        // Anything not explicitly declared is proprietary
         else -> License.Proprietary
     }
 }
