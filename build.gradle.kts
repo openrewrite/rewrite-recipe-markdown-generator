@@ -66,16 +66,17 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-maven")
     "recipe"("org.openrewrite:rewrite-properties")
     "recipe"("org.openrewrite:rewrite-protobuf")
-    "recipe"("org.openrewrite:rewrite-toml:latest.integration") // TODO Remove version after inclusion in rewrite BOM
+    "recipe"("org.openrewrite:rewrite-toml")
     "recipe"("org.openrewrite:rewrite-xml")
     "recipe"("org.openrewrite:rewrite-yaml")
 
+// Enable the following lines to show in latest versions
 //    "recipe"("org.openrewrite:rewrite-csharp")
 //    "recipe"("org.openrewrite:rewrite-javascript")
     "recipe"("org.openrewrite:rewrite-kotlin")
-//    "recipe"("org.openrewrite:rewrite-python") // Removed based on Olga request
+//    "recipe"("org.openrewrite:rewrite-python")
 //    "recipe"("org.openrewrite:rewrite-ruby")
-    "recipe"("org.openrewrite:rewrite-templating") // To show in latest versions
+    "recipe"("org.openrewrite:rewrite-templating")
 
     "recipe"("org.openrewrite.recipe:rewrite-all")
     "recipe"("org.openrewrite.meta:rewrite-analysis")
@@ -85,9 +86,8 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-circleci")
     "recipe"("org.openrewrite.recipe:rewrite-codemods")
     "recipe"("org.openrewrite.recipe:rewrite-codemods-ng")
-    // TODO Drop versions after inclusion in recipe BOM
-    "recipe"("org.openrewrite.recipe:rewrite-compiled-analysis:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-comprehension:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-compiled-analysis")
+    "recipe"("org.openrewrite.recipe:rewrite-comprehension")
     "recipe"("org.openrewrite.recipe:rewrite-concourse")
     "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm")
     "recipe"("org.openrewrite.recipe:rewrite-docker")
@@ -120,7 +120,8 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks")
     "recipe"("org.openrewrite.recipe:rewrite-third-party")
 
-    "recipe"("io.moderne.recipe:rewrite-spring:latest.integration") // TODO Drop version after inclusion in recipe BOM
+    // XXX Drop version once included in a recipe BOM
+//    "recipe"("io.moderne.recipe:rewrite-spring:$rewriteVersion")
 }
 
 java {
