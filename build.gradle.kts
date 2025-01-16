@@ -46,6 +46,7 @@ val diffFileName = "desjardins"
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation(platform("org.openrewrite.recipe:rewrite-recipe-bom:$rewriteVersion"))
+
     implementation("info.picocli:picocli:latest.release")
     implementation("org.openrewrite:rewrite-core")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
@@ -57,6 +58,8 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:latest.release")
 
     "recipe"(platform("org.openrewrite.recipe:rewrite-recipe-bom:$rewriteVersion"))
+    "recipe"(platform("io.moderne.recipe:moderne-recipe-bom:latest.integration")) // TODO Use $rewriteVersion once available
+
     "recipe"("org.openrewrite:rewrite-core")
     "recipe"("org.openrewrite:rewrite-gradle")
     "recipe"("org.openrewrite:rewrite-groovy")
@@ -120,8 +123,8 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks")
     "recipe"("org.openrewrite.recipe:rewrite-third-party")
 
-    // XXX Drop version once included in a recipe BOM
-//    "recipe"("io.moderne.recipe:rewrite-spring:$rewriteVersion")
+    "recipe"("io.moderne.recipe:rewrite-hibernate")
+    "recipe"("io.moderne.recipe:rewrite-spring")
 }
 
 java {
