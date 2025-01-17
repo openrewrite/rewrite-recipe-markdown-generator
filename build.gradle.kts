@@ -73,13 +73,12 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-xml")
     "recipe"("org.openrewrite:rewrite-yaml")
 
-// Enable the following lines to show in latest versions
+// Do not yet show recipes associated with these languages
 //    "recipe"("org.openrewrite:rewrite-csharp")
 //    "recipe"("org.openrewrite:rewrite-javascript")
     "recipe"("org.openrewrite:rewrite-kotlin")
 //    "recipe"("org.openrewrite:rewrite-python")
 //    "recipe"("org.openrewrite:rewrite-ruby")
-    "recipe"("org.openrewrite:rewrite-templating")
 
     "recipe"("org.openrewrite.recipe:rewrite-all")
     "recipe"("org.openrewrite.meta:rewrite-analysis")
@@ -122,8 +121,9 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks")
     "recipe"("org.openrewrite.recipe:rewrite-third-party")
 
-    "recipe"("io.moderne.recipe:rewrite-hibernate")
-    "recipe"("io.moderne.recipe:rewrite-spring")
+// Enable once released and managed
+//    "recipe"("io.moderne.recipe:rewrite-hibernate")
+//    "recipe"("io.moderne.recipe:rewrite-spring")
 }
 
 java {
@@ -188,6 +188,15 @@ tasks.named<JavaExec>("run").configure {
 tasks.register<JavaExec>("latestVersionsMarkdown").configure {
     classpath(sourceSets.main.get().runtimeClasspath)
     mainClass.set("org.openrewrite.RecipeMarkdownGenerator")
+
+    // Additional modules whose versions we want to show, but not (yet) their recipes
+    dependencies {
+        "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
+        "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
+        "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
+        "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
+        "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
+    }
 
     val targetDir = layout.buildDirectory.dir("docs").get().asFile
     // Collect all of the dependencies from recipeConf, then stuff them into a string representation
