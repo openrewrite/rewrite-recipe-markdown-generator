@@ -58,7 +58,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:latest.release")
 
     "recipe"(platform("org.openrewrite.recipe:rewrite-recipe-bom:$rewriteVersion"))
-    "recipe"(platform("io.moderne.recipe:moderne-recipe-bom:latest.integration")) // TODO $rewriteVersion
+    "recipe"(platform("io.moderne.recipe:moderne-recipe-bom:$rewriteVersion"))
 
     "recipe"("org.openrewrite:rewrite-core")
     "recipe"("org.openrewrite:rewrite-gradle")
