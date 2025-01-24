@@ -422,7 +422,7 @@ class RecipeMarkdownGenerator : Runnable {
                 Install all of the latest versions of the OpenRewrite recipe modules into the Moderne CLI:
                 
                 ```bash
-                mod config recipes jar install ${cliInstallGavs}
+                mod config recipes jar install --parallel ${cliInstallGavs}
                 ```
                 """.trimIndent()
             )
