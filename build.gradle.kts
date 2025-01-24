@@ -46,6 +46,7 @@ val diffFileName = "desjardins"
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation(platform("org.openrewrite.recipe:rewrite-recipe-bom:$rewriteVersion"))
+
     implementation("info.picocli:picocli:latest.release")
     implementation("org.openrewrite:rewrite-core")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
@@ -57,6 +58,8 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:latest.release")
 
     "recipe"(platform("org.openrewrite.recipe:rewrite-recipe-bom:$rewriteVersion"))
+    "recipe"(platform("io.moderne.recipe:moderne-recipe-bom:$rewriteVersion"))
+
     "recipe"("org.openrewrite:rewrite-core")
     "recipe"("org.openrewrite:rewrite-gradle")
     "recipe"("org.openrewrite:rewrite-groovy")
@@ -66,16 +69,16 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-maven")
     "recipe"("org.openrewrite:rewrite-properties")
     "recipe"("org.openrewrite:rewrite-protobuf")
-    "recipe"("org.openrewrite:rewrite-toml:latest.integration") // TODO Remove version after inclusion in rewrite BOM
+    "recipe"("org.openrewrite:rewrite-toml")
     "recipe"("org.openrewrite:rewrite-xml")
     "recipe"("org.openrewrite:rewrite-yaml")
 
+// Do not yet show recipes associated with these languages
 //    "recipe"("org.openrewrite:rewrite-csharp")
 //    "recipe"("org.openrewrite:rewrite-javascript")
     "recipe"("org.openrewrite:rewrite-kotlin")
-//    "recipe"("org.openrewrite:rewrite-python") // Removed based on Olga request
+//    "recipe"("org.openrewrite:rewrite-python")
 //    "recipe"("org.openrewrite:rewrite-ruby")
-    "recipe"("org.openrewrite:rewrite-templating") // To show in latest versions
 
     "recipe"("org.openrewrite.recipe:rewrite-all")
     "recipe"("org.openrewrite.meta:rewrite-analysis")
@@ -85,9 +88,8 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-circleci")
     "recipe"("org.openrewrite.recipe:rewrite-codemods")
     "recipe"("org.openrewrite.recipe:rewrite-codemods-ng")
-    // TODO Drop versions after inclusion in recipe BOM
-    "recipe"("org.openrewrite.recipe:rewrite-compiled-analysis:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-comprehension:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-compiled-analysis")
+    "recipe"("org.openrewrite.recipe:rewrite-comprehension")
     "recipe"("org.openrewrite.recipe:rewrite-concourse")
     "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm")
     "recipe"("org.openrewrite.recipe:rewrite-docker")
@@ -111,7 +113,6 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-openapi")
     "recipe"("org.openrewrite.recipe:rewrite-quarkus")
     "recipe"("org.openrewrite.recipe:rewrite-reactive-streams")
-    "recipe"("org.openrewrite.recipe:rewrite-recommendations")
     "recipe"("org.openrewrite.recipe:rewrite-spring")
     "recipe"("org.openrewrite.recipe:rewrite-sql")
     "recipe"("org.openrewrite.recipe:rewrite-static-analysis")
@@ -120,7 +121,9 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks")
     "recipe"("org.openrewrite.recipe:rewrite-third-party")
 
-    "recipe"("io.moderne.recipe:rewrite-spring:latest.integration") // TODO Drop version after inclusion in recipe BOM
+// Enable once released and managed
+//    "recipe"("io.moderne.recipe:rewrite-hibernate")
+//    "recipe"("io.moderne.recipe:rewrite-spring")
 }
 
 java {
@@ -185,6 +188,16 @@ tasks.named<JavaExec>("run").configure {
 tasks.register<JavaExec>("latestVersionsMarkdown").configure {
     classpath(sourceSets.main.get().runtimeClasspath)
     mainClass.set("org.openrewrite.RecipeMarkdownGenerator")
+
+    // Additional modules whose versions we want to show, but not (yet) their recipes
+    dependencies {
+        "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
+        "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
+        "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
+        "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
+        "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
+        "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
+    }
 
     val targetDir = layout.buildDirectory.dir("docs").get().asFile
     // Collect all of the dependencies from recipeConf, then stuff them into a string representation

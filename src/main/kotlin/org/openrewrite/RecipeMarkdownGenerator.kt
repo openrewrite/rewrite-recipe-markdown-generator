@@ -27,6 +27,7 @@ import java.nio.file.StandardOpenOption
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.regex.Pattern
 import java.util.stream.Collectors
 import kotlin.io.path.toPath
 import kotlin.system.exitProcess
@@ -1082,15 +1083,20 @@ import TabItem from '@theme/TabItem';
 
     @Suppress("UNNECESSARY_SAFE_CALL") // Recipes from third parties may lack description
     private fun getFormattedRecipeDescription(recipeDescriptor: RecipeDescriptor): String {
-        val specialCharacters = listOf('<', '>', '{', '}')
-        val formattedRecipeDescription = recipeDescriptor?.description
+        val formattedRecipeDescription = recipeDescriptor?.description ?: ""
+        val specialCharsOutsideBackticksRegex = Pattern.compile("[<>{}](?=(?:[^`]*`[^`]*`)*[^`]*\$)")
+
         if (formattedRecipeDescription?.contains("```") == true) {
             // Assume that the recipe description is already Markdown
             return formattedRecipeDescription
         }
-        if (specialCharacters.any { recipeDescriptor?.description?.contains(it) == true }) {
+
+        if (specialCharsOutsideBackticksRegex.matcher(formattedRecipeDescription).find()) {
+            // If special characters exist and are not wrapped in backticks, wrap the entire string in triple backticks
             return "```\n${formattedRecipeDescription?.replace("```", "")?.trim()}\n```\n"
         }
+
+        // Special characters may exist here - but they are already wrapped in backticks
         return "_" + formattedRecipeDescription?.replace("\n", " ")?.trim() + "_"
     }
 

@@ -28,6 +28,7 @@ fun getLicense(recipeOrigin: RecipeOrigin): License {
         "rewrite-liberty",
         "rewrite-micronaut",
         "rewrite-openapi",
+        "rewrite-polyglot",
         "rewrite-quarkus",
         "rewrite-recommendations",
         "rewrite-third-party",
@@ -40,6 +41,7 @@ fun getLicense(recipeOrigin: RecipeOrigin): License {
         "rewrite-cucumber-jvm",
         "rewrite-docker",
         "rewrite-feature-flags",
+        "rewrite-github-actions",
         "rewrite-gitlab",
         "rewrite-hibernate",
         "rewrite-javascript",
@@ -59,7 +61,6 @@ fun getLicense(recipeOrigin: RecipeOrigin): License {
     val proprietary = setOf(
         "rewrite-cobol",
         "rewrite-java-security",
-        "rewrite-polyglot",
         "rewrite-remote",
     )
 

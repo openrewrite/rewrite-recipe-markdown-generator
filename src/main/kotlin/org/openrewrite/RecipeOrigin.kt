@@ -42,6 +42,8 @@ class RecipeOrigin(
     fun githubUrl(): String {
         return if (isFromCoreLibrary()) {
             "https://github.com/openrewrite/rewrite"
+        } else if (getLicense(this) == License.Proprietary) {
+            "https://github.com/moderneinc/$artifactId"
         } else {
             "https://github.com/openrewrite/$artifactId"
         }
@@ -56,7 +58,7 @@ class RecipeOrigin(
         val baseUrl = if (isFromCoreLibrary()) {
             "https://github.com/openrewrite/rewrite/blob/main/$artifactId/src/main"
         } else {
-            "https://github.com/openrewrite/$artifactId/blob/main/src/main"
+            githubUrl() + "/blob/main/src/main"
         }
 
         // YAML recipes will have a source that ends with META-INF/rewrite/something.yml
@@ -68,12 +70,7 @@ class RecipeOrigin(
         }
     }
 
-    fun issueTrackerUrl() =
-        if (isFromCoreLibrary()) {
-            "https://github.com/openrewrite/rewrite/issues"
-        } else {
-            "https://github.com/openrewrite/$artifactId/issues"
-        }
+    fun issueTrackerUrl() = githubUrl() + "/issues"
 
     companion object {
         private val parsePattern = Pattern.compile("([^:]+):([^:]+):([^:]+):(.+)")
