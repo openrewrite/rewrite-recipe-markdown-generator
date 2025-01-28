@@ -401,8 +401,8 @@ class RecipeMarkdownGenerator : Runnable {
                 | Module                                                                                                                | Version    | License |
                 |-----------------------------------------------------------------------------------------------------------------------| ---------- | ------- |
                 | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **${bomLink}** | ${License.Apache2.markdown()} |
-                | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenLink}** | ${License.MSAL.markdown()} |
-                | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** |${License.MSAL.markdown()} |
+                | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenLink}** | ${License.Apache2.markdown()} |
+                | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** | ${License.Apache2.markdown()} |
                 """.trimIndent()
             )
             var cliInstallGavs = ""
