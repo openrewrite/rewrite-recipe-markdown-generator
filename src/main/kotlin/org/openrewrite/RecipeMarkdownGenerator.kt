@@ -658,6 +658,7 @@ class RecipeMarkdownGenerator : Runnable {
             """.trimIndent())
             changelog.appendText("\n# $rewriteBomVersion release ($formatted)")
 
+            changelog.appendText("\n\n_Total recipe count: ${recipeCount}_")
             changelog.appendText("\n\n:::info")
             changelog.appendText("\nThis changelog only shows what recipes have been added, removed, or changed. OpenRewrite may do releases that do not include these types of changes. To see these changes, please go to the [releases page](https://github.com/openrewrite/rewrite/releases).")
             changelog.appendText("\n:::\n\n")
