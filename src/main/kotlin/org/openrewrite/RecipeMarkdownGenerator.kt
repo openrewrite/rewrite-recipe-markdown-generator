@@ -350,6 +350,8 @@ class RecipeMarkdownGenerator : Runnable {
                     recipePath = "recipes/core/" + recipe.name.removePrefix("org.openrewrite.").lowercase()
                 } else if (recipe.name.contains("io.moderne.ai")) {
                     recipePath = "recipes/ai/" + recipe.name.removePrefix("io.moderne.ai.").replace(".", "/").lowercase()
+                } else if (recipe.name.contains("io.moderne")) {
+                    recipePath = "recipes/" + recipe.name.removePrefix("io.moderne.").replace(".", "/").lowercase()
                 } else {
                     recipePath = "recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase()
                 }
@@ -499,6 +501,8 @@ class RecipeMarkdownGenerator : Runnable {
                         recipePath = "recipes/core/" + recipe.name.removePrefix("org.openrewrite.").lowercase()
                     } else if (recipe.name.contains("io.moderne.ai")) {
                         recipePath = "recipes/ai/" + recipe.name.removePrefix("io.moderne.ai.").replace(".", "/").lowercase()
+                    } else if (recipe.name.contains("io.moderne")) {
+                        recipePath = "recipes/" + recipe.name.removePrefix("io.moderne.").replace(".", "/").lowercase()
                     } else {
                         recipePath = "recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase()
                     }
