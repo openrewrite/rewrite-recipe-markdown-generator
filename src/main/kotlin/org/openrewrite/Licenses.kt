@@ -55,6 +55,7 @@ fun getLicense(recipeOrigin: RecipeOrigin): License {
         "rewrite-static-analysis",
         "rewrite-struts",
         "rewrite-testing-frameworks",
+        "rewrite-rewrite",
     )
 
     // Non-exhaustive list of proprietary recipes; such that those under "org.openrewrite" are assigned correctly
