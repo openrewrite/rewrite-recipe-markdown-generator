@@ -120,6 +120,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-terraform")
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks")
     "recipe"("org.openrewrite.recipe:rewrite-third-party")
+    "recipe"("org.openrewrite.recipe:rewrite-rewrite")
 
 // Enable once released and managed
 //    "recipe"("io.moderne.recipe:rewrite-hibernate")
