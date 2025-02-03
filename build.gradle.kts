@@ -113,6 +113,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-openapi")
     "recipe"("org.openrewrite.recipe:rewrite-quarkus")
     "recipe"("org.openrewrite.recipe:rewrite-reactive-streams")
+    "recipe"("org.openrewrite.recipe:rewrite-rewrite")
     "recipe"("org.openrewrite.recipe:rewrite-spring")
     "recipe"("org.openrewrite.recipe:rewrite-sql")
     "recipe"("org.openrewrite.recipe:rewrite-static-analysis")
@@ -121,12 +122,8 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks")
     "recipe"("org.openrewrite.recipe:rewrite-third-party")
 
-//    Commenting out as it says this dependency could not be found.
-//    "recipe"("org.openrewrite.recipe:rewrite-rewrite")
-
-// Enable once released and managed
-//    "recipe"("io.moderne.recipe:rewrite-hibernate")
-//    "recipe"("io.moderne.recipe:rewrite-spring")
+    "recipe"("io.moderne.recipe:rewrite-hibernate")
+    "recipe"("io.moderne.recipe:rewrite-spring")
 }
 
 java {
