@@ -77,26 +77,33 @@ class RecipeMarkdownGenerator : Runnable {
     @Parameters(
         index = "5",
         defaultValue = "latest.release",
+        description = ["The version of the moderne-recipe-bom to display on all module versions page"]
+    )
+    lateinit var moderneRecipeBomVersion: String
+
+    @Parameters(
+        index = "6",
+        defaultValue = "latest.release",
         description = ["The version of the Rewrite Gradle Plugin to display in relevant samples"]
     )
     lateinit var gradlePluginVersion: String
 
     @Parameters(
-        index = "6",
+        index = "7",
         defaultValue = "",
         description = ["The version of the Rewrite Maven Plugin to display in relevant samples"]
     )
     lateinit var mavenPluginVersion: String
 
     @Parameters(
-        index = "7",
+        index = "8",
         defaultValue = "release",
         description = ["The type of deploy being done (either release or snapshot)"]
     )
     lateinit var deployType: String
 
     @Parameters(
-        index = "8",
+        index = "9",
         defaultValue = "renameMe",
         description = ["The name of the diff file to be generated when making a diff log"]
     )
@@ -386,8 +393,12 @@ class RecipeMarkdownGenerator : Runnable {
     ) {
         val versionsSnippetPath = outputPath.resolve("latest-versions-of-every-openrewrite-module.md")
         Files.newBufferedWriter(versionsSnippetPath, StandardOpenOption.CREATE).useAndApply {
-            val bomLink =
+            val rewriteBomLink =
+                "[${rewriteBomVersion}](https://github.com/openrewrite/rewrite/releases/tag/v${rewriteBomVersion})"
+            val rewriteRecipeBomLink =
                 "[${rewriteRecipeBomVersion}](https://github.com/openrewrite/rewrite-recipe-bom/releases/tag/v${rewriteRecipeBomVersion})"
+            val moderneBomLink =
+                "[${moderneRecipeBomVersion}](https://github.com/moderneinc/rewrite-recipe-bom/releases/tag/v${moderneRecipeBomVersion})"
             val mavenLink =
                 "[${mavenPluginVersion}](https://github.com/openrewrite/rewrite-maven-plugin/releases/tag/v${mavenPluginVersion})"
             val gradleLink =
@@ -412,9 +423,11 @@ class RecipeMarkdownGenerator : Runnable {
 
                 | Module                                                                                                                | Version    | License |
                 |-----------------------------------------------------------------------------------------------------------------------| ---------- | ------- |
-                | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **${bomLink}** | ${License.Apache2.markdown()} |
+                | [**org.openrewrite:rewrite-bom**](https://github.com/openrewrite/rewrite)                                             | **${rewriteBomLink}** | ${License.Apache2.markdown()} |
                 | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenLink}** | ${License.Apache2.markdown()} |
                 | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** | ${License.Apache2.markdown()} |
+                | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **${rewriteRecipeBomLink}** | ${License.Apache2.markdown()} |
+                | [**io.moderne.recipe:moderne-recipe-bom**](https://github.com/moderneinc/moderne-recipe-bom)                          | **${moderneBomLink}** | ${License.Proprietary.markdown()} |
                 """.trimIndent()
             )
             var cliInstallGavs = ""
@@ -431,7 +444,7 @@ class RecipeMarkdownGenerator : Runnable {
                 
                 ## CLI Installation
                 
-                Install all of the latest versions of the OpenRewrite recipe modules into the Moderne CLI:
+                Install the latest versions of all the OpenRewrite recipe modules into the Moderne CLI:
                 
                 ```bash
                 mod config recipes jar install --parallel ${cliInstallGavs}

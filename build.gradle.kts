@@ -113,7 +113,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-openapi")
     "recipe"("org.openrewrite.recipe:rewrite-quarkus")
     "recipe"("org.openrewrite.recipe:rewrite-reactive-streams")
-    "recipe"("org.openrewrite.recipe:rewrite-rewrite")
+//    "recipe"("org.openrewrite.recipe:rewrite-rewrite")
     "recipe"("org.openrewrite.recipe:rewrite-spring")
     "recipe"("org.openrewrite.recipe:rewrite-sql")
     "recipe"("org.openrewrite.recipe:rewrite-static-analysis")
@@ -165,6 +165,7 @@ tasks.named<JavaExec>("run").configure {
         recipeClasspath,
         latestVersion("org.openrewrite:rewrite-bom:latest.release"),
         latestVersion("org.openrewrite.recipe:rewrite-recipe-bom:latest.release"),
+        latestVersion("io.moderne.recipe:moderne-recipe-bom:latest.release"),
         latestVersion("org.openrewrite:plugin:latest.release"),
         latestVersion("org.openrewrite.maven:rewrite-maven-plugin:latest.release"),
         deployType,
@@ -214,6 +215,7 @@ tasks.register<JavaExec>("latestVersionsMarkdown").configure {
         "", // intentionally left out to exit early
         latestVersion("org.openrewrite:rewrite-bom:latest.release"),
         latestVersion("org.openrewrite.recipe:rewrite-recipe-bom:latest.release"),
+        latestVersion("io.moderne.recipe:moderne-recipe-bom:latest.release"),
         latestVersion("org.openrewrite:plugin:latest.release"),
         latestVersion("org.openrewrite.maven:rewrite-maven-plugin:latest.release"),
     )
