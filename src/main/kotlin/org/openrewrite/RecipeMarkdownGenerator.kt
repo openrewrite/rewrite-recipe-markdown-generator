@@ -1056,10 +1056,10 @@ class RecipeMarkdownGenerator : Runnable {
             .trim()
 
         val formattedRecipeTitle = recipeDescriptor?.displayName
-            ?.replace("`<", "&lt;")
-            ?.replace(">`", "&gt;")
             ?.replace("<", "&lt;")
             ?.replace(">", "&gt;")
+            ?.replace("`&lt;", "`<")
+            ?.replace("&gt;`", ">`")
             ?.trim()
 
         val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor)

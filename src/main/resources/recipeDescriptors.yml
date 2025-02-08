@@ -4496,7 +4496,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.nextjs.v13_0.NewLink:
       name: "org.openrewrite.codemods.migrate.nextjs.v13_0.NewLink"
-      description: "Remove `&lt;a&gt;` tags inside Link Components or add a `legacyBehavior`\
+      description: "Remove `<a>` tags inside Link Components or add a `legacyBehavior`\
         \ prop to Links that cannot be auto-fixed."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/nextjs/v13_0/newlink"
       options: []
