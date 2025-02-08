@@ -707,11 +707,7 @@ class RecipeMarkdownGenerator : Runnable {
             changelog.appendText("## New Recipes\n")
 
             for (newRecipe in newRecipes) {
-                changelog.appendText(
-                    "\n* [${newRecipe.name}](${newRecipe.docLink}): ${
-                        newRecipe.description.trim().replace("\n", "<br />")
-                    } "
-                )
+                changelog.appendText("\n* [${newRecipe.name}](${newRecipe.docLink}): ${newRecipe.description.trim()} ")
             }
 
             changelog.appendText("\n\n")
