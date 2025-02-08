@@ -113,7 +113,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-openapi")
     "recipe"("org.openrewrite.recipe:rewrite-quarkus")
     "recipe"("org.openrewrite.recipe:rewrite-reactive-streams")
-//    "recipe"("org.openrewrite.recipe:rewrite-rewrite")
+    "recipe"("org.openrewrite.recipe:rewrite-rewrite")
     "recipe"("org.openrewrite.recipe:rewrite-spring")
     "recipe"("org.openrewrite.recipe:rewrite-sql")
     "recipe"("org.openrewrite.recipe:rewrite-static-analysis")
