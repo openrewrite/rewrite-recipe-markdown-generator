@@ -36,6 +36,7 @@ fun getLicense(recipeOrigin: RecipeOrigin): License {
 
     val msal = setOf(
         "rewrite-apache",
+        "rewrite-codemods",
         "rewrite-csharp",
         "rewrite-csharp-recipes",
         "rewrite-cucumber-jvm",
