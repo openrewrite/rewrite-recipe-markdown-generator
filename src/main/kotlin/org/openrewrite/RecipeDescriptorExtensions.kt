@@ -10,7 +10,8 @@ fun RecipeDescriptor.asYaml(): String {
 type: specs.openrewrite.org/v1beta/recipe
 name: $name
 displayName: $displayName
-description: ${description?.replace("\n", " – ") ?: ""}
+description: |
+  ${description?.replace("\n", "\n  ")?.replace("```. [Source]", "```\n  [Source]") ?: ""}
     """.trimIndent())
     if (tags.isNotEmpty()) {
         s.appendLine("tags:")

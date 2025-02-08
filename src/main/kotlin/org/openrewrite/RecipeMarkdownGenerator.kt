@@ -228,6 +228,7 @@ class RecipeMarkdownGenerator : Runnable {
             if (recipeDescriptor.description.isNullOrEmpty()) {
                 recipeDescription = ""
             }
+            recipeDescription.replace("```. [Source]", "```\n[Source]")
 
             val docBaseUrl = "https://docs.openrewrite.org/recipes/"
 
