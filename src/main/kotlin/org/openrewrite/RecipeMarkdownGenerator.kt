@@ -670,7 +670,7 @@ class RecipeMarkdownGenerator : Runnable {
             changelog.appendText(
             """
             ---
-            description: What's changed in OpenRewrite version: ${rewriteBomVersion}.
+            description: What's changed in OpenRewrite version ${rewriteBomVersion}.
             ---
 
             """.trimIndent())
