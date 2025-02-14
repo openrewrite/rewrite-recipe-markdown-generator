@@ -59,6 +59,8 @@ fun OptionDescriptor.asYaml(indentation: Int = 0): String {
     val formattedValue = if (value is Array<*>) {
         val asArray =  value as Array<*>
         "[${asArray.joinToString(", ")}]"
+    } else if (value == "*") {
+        "\"*\""
     } else {
         value
     }
