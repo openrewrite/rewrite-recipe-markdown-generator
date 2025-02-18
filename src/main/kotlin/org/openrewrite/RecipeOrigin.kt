@@ -70,6 +70,11 @@ class RecipeOrigin(
         }
     }
 
+    fun versionPlaceholderKey() = "VERSION_${groupId}_${artifactId}"
+        .uppercase()
+        .replace('-', '_')
+        .replace('.', '_')
+
     fun issueTrackerUrl() = githubUrl() + "/issues"
 
     companion object {
