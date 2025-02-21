@@ -45,7 +45,7 @@ val diffFileName = "desjardins"
 
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-    implementation(platform("org.openrewrite.recipe:rewrite-recipe-bom:$rewriteVersion"))
+    implementation(platform("io.moderne.recipe:moderne-recipe-bom:$rewriteVersion"))
 
     implementation("info.picocli:picocli:latest.release")
     implementation("org.openrewrite:rewrite-core")
@@ -57,7 +57,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:latest.release")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:latest.release")
 
-    "recipe"(platform("org.openrewrite.recipe:rewrite-recipe-bom:$rewriteVersion"))
     "recipe"(platform("io.moderne.recipe:moderne-recipe-bom:$rewriteVersion"))
 
     "recipe"("org.openrewrite:rewrite-core")
@@ -146,6 +145,16 @@ application {
 }
 
 tasks.named<JavaExec>("run").configure {
+    // Additional modules whose versions we want to show, but not (yet) their recipes
+    dependencies {
+        "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
+        "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
+        "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
+        "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
+        "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
+        "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
+    }
+
     val targetDir = layout.buildDirectory.dir("docs").get().asFile
     // Collect all of the dependencies from recipeConf, then stuff them into a string representation
     val recipeModules = recipeConf.resolvedConfiguration.firstLevelModuleDependencies.flatMap { dep ->
