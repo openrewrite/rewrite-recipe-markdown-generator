@@ -1,6 +1,6 @@
 plugins {
     application
-    id("org.jetbrains.kotlin.jvm").version("1.7.20")
+    id("org.jetbrains.kotlin.jvm").version("1.9.25")
     id("org.owasp.dependencycheck") version "7.0.4.1"
 }
 
@@ -54,8 +54,8 @@ dependencies {
     implementation("io.github.java-diff-utils:java-diff-utils:4.11")
     runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:latest.release")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:latest.release")
+    testImplementation("org.junit.jupiter:junit-jupiter:latest.release")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     "recipe"(platform("io.moderne.recipe:moderne-recipe-bom:$rewriteVersion"))
 
