@@ -1077,78 +1077,6 @@ rewrite-circleci:
         required: true
       isImperative: true
       artifactId: "rewrite-circleci"
-rewrite-cobol:
-  artifactId: "rewrite-cobol"
-  version: "2.13.0"
-  markdownRecipeDescriptors:
-    org.openrewrite.cobol.cleanup.RemoveWithDebuggingMode:
-      name: "org.openrewrite.cobol.cleanup.RemoveWithDebuggingMode"
-      description: "Remove debugging mode from SOURCE-COMPUTER paragraphs."
-      docLink: "https://docs.openrewrite.org/recipes/cobol/cleanup/removewithdebuggingmode"
-      options:
-      - name: "updateSequenceAreas"
-        type: "Boolean"
-        required: false
-      isImperative: true
-      artifactId: "rewrite-cobol"
-    org.openrewrite.cobol.search.FindCopybook:
-      name: "org.openrewrite.cobol.search.FindCopybook"
-      description: "Find all copy statements with the copybook name."
-      docLink: "https://docs.openrewrite.org/recipes/cobol/search/findcopybook"
-      options:
-      - name: "copybookName"
-        type: "String"
-        required: false
-      - name: "onlyMissingCopybooks"
-        type: "Boolean"
-        required: false
-      isImperative: true
-      artifactId: "rewrite-cobol"
-    org.openrewrite.cobol.search.FindIndicators:
-      name: "org.openrewrite.cobol.search.FindIndicators"
-      description: "Find matching indicators. Currently, this recipe will not mark\
-        \ indicators on copybook code."
-      docLink: "https://docs.openrewrite.org/recipes/cobol/search/findindicators"
-      options:
-      - name: "indicator"
-        type: "String"
-        required: true
-      isImperative: true
-      artifactId: "rewrite-cobol"
-    org.openrewrite.cobol.search.FindReference:
-      name: "org.openrewrite.cobol.search.FindReference"
-      description: "Finds an identifier by an exact match or regex pattern in COBOL,\
-        \ copybooks, and/or JCL."
-      docLink: "https://docs.openrewrite.org/recipes/cobol/search/findreference"
-      options:
-      - name: "exactMatch"
-        type: "Boolean"
-        required: true
-      - name: "searchTerm"
-        type: "String"
-        required: true
-      isImperative: true
-      artifactId: "rewrite-cobol"
-    org.openrewrite.cobol.search.FindRelationships:
-      name: "org.openrewrite.cobol.search.FindRelationships"
-      description: "Build a list of relationships for diagramming and exploration."
-      docLink: "https://docs.openrewrite.org/recipes/cobol/search/findrelationships"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-cobol"
-    org.openrewrite.cobol.search.FindWord:
-      name: "org.openrewrite.cobol.search.FindWord"
-      description: "Search for COBOL words based on a search term."
-      docLink: "https://docs.openrewrite.org/recipes/cobol/search/findword"
-      options:
-      - name: "exactMatch"
-        type: "Boolean"
-        required: true
-      - name: "searchTerm"
-        type: "String"
-        required: true
-      isImperative: true
-      artifactId: "rewrite-cobol"
 rewrite-codemods:
   artifactId: "rewrite-codemods"
   version: "0.10.0"
@@ -9143,53 +9071,6 @@ rewrite-java-security:
         required: false
       isImperative: true
       artifactId: "rewrite-java-security"
-rewrite-javascript:
-  artifactId: "rewrite-javascript"
-  version: "0.33.0"
-  markdownRecipeDescriptors:
-    org.openrewrite.javascript.AddLicenseHeader:
-      name: "org.openrewrite.javascript.AddLicenseHeader"
-      description: "Adds license headers to JavaScript source files when missing.\
-        \ Does not override existing license headers."
-      docLink: "https://docs.openrewrite.org/recipes/javascript/addlicenseheader"
-      options:
-      - name: "licenseText"
-        type: "String"
-        required: true
-      isImperative: true
-      artifactId: "rewrite-javascript"
-    org.openrewrite.javascript.StaticAnalysis:
-      name: "org.openrewrite.javascript.StaticAnalysis"
-      description: "Static analysis fixes for JavaScript sources."
-      docLink: "https://docs.openrewrite.org/recipes/javascript/staticanalysis"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-javascript"
-    org.openrewrite.javascript.cleanup.UseCaseFallThrough:
-      name: "org.openrewrite.javascript.cleanup.UseCaseFallThrough"
-      description: "The comma `,` operator evaluates each of its operands (from left\
-        \ to right) and returns the value of the last operand.The logical OR `||`\
-        \ operator only evaluates the first argument.This recipe replaces the comma\
-        \ and logical OR operator with fall-through cases in switch statements."
-      docLink: "https://docs.openrewrite.org/recipes/javascript/cleanup/usecasefallthrough"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-javascript"
-    org.openrewrite.javascript.format.JavaScriptSpaces:
-      name: "org.openrewrite.javascript.format.JavaScriptSpaces"
-      description: "Format whitespace in Java/Type Script code."
-      docLink: "https://docs.openrewrite.org/recipes/javascript/format/javascriptspaces"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-javascript"
-    org.openrewrite.javascript.search.FindJavaScriptSources:
-      name: "org.openrewrite.javascript.search.FindJavaScriptSources"
-      description: "Use data table to collect source files types and counts of files\
-        \ with extensions `.js`, `.jsx`, `.mjs`, `.cjs`, `.ts`, `.tsx`, `.mts`, `.cts`."
-      docLink: "https://docs.openrewrite.org/recipes/javascript/search/findjavascriptsources"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-javascript"
 rewrite-jenkins:
   artifactId: "rewrite-jenkins"
   version: "0.22.0"
@@ -16084,34 +15965,6 @@ rewrite-properties:
         required: false
       isImperative: true
       artifactId: "rewrite-properties"
-rewrite-python:
-  artifactId: "rewrite-python"
-  version: "1.33.0"
-  markdownRecipeDescriptors:
-    org.openrewrite.python.ChangeMethodName:
-      name: "org.openrewrite.python.ChangeMethodName"
-      description: "Renames a method."
-      docLink: "https://docs.openrewrite.org/recipes/python/changemethodname"
-      options:
-      - name: "ignoreDefinition"
-        type: "Boolean"
-        required: false
-      - name: "newMethodName"
-        type: "String"
-        required: true
-      - name: "oldMethodName"
-        type: "String"
-        required: true
-      isImperative: true
-      artifactId: "rewrite-python"
-    org.openrewrite.python.format.PythonSpaces:
-      name: "org.openrewrite.python.format.PythonSpaces"
-      description: "Standardizes spaces in Python code. Currently limited to formatting\
-        \ method arguments."
-      docLink: "https://docs.openrewrite.org/recipes/python/format/pythonspaces"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-python"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
   version: "2.16.0"
