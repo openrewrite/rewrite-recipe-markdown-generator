@@ -87,6 +87,7 @@ class RecipeOrigin(
             "rewrite-java",
             "rewrite-java-test",
             "rewrite-json",
+            "rewrite-kotlin",
             "rewrite-maven",
             "rewrite-properties",
             "rewrite-protobuf",
