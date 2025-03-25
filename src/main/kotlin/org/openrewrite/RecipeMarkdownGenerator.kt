@@ -228,7 +228,6 @@ class RecipeMarkdownGenerator : Runnable {
             if (recipeDescriptor.description.isNullOrEmpty()) {
                 recipeDescription = ""
             }
-            recipeDescription.replace("```. [Source]", "```\n[Source]")
 
             val docBaseUrl = "https://docs.openrewrite.org/recipes/"
 
@@ -1119,8 +1118,12 @@ import TabItem from '@theme/TabItem';
 
     @Suppress("UNNECESSARY_SAFE_CALL") // Recipes from third parties may lack description
     private fun getFormattedRecipeDescription(recipeDescriptor: RecipeDescriptor): String {
-        val formattedRecipeDescription = recipeDescriptor?.description ?: ""
+        var formattedRecipeDescription = recipeDescriptor?.description ?: ""
         val specialCharsOutsideBackticksRegex = Pattern.compile("[<>{}](?=(?:[^`]*`[^`]*`)*[^`]*\$)")
+
+        if (formattedRecipeDescription.contains("```. [Source]")) {
+            formattedRecipeDescription = formattedRecipeDescription.replace("```. [Source]", "```\n\n[Source]")
+        }
 
         if (formattedRecipeDescription?.contains("```") == true) {
             // Assume that the recipe description is already Markdown
@@ -1163,6 +1166,7 @@ import TabItem from '@theme/TabItem';
                 //language=markdown
                 writeln(
                 """
+
                 :::info
                 This recipe is composed of more than one recipe. If you want to customize the set of recipes this is composed of, you can find and copy the GitHub source for the recipe from the link above.
                 :::
