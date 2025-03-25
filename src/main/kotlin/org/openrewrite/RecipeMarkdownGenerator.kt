@@ -1200,10 +1200,7 @@ import TabItem from '@theme/TabItem';
                 } else {
                     "*Optional*. $description"
                 }
-                // This should preserve casing and plurality
-                description = description.replace("method patterns?".toRegex(RegexOption.IGNORE_CASE)) { match ->
-                    "[${match.value}](/reference/method-patterns)"
-                }
+
                 // Add valid options to description
                 if (option.valid?.isNotEmpty() ?: false) {
                     val combinedOptions = option.valid?.joinToString(", ") {
