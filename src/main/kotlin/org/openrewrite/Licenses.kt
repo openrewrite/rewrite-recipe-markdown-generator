@@ -1,24 +1,29 @@
 package org.openrewrite
 
-enum class License {
-    Apache2,
-    MSAL,
-    Proprietary;
+import java.net.URI
 
-    private fun label() = when(this) {
-        Apache2 -> "Apache License Version 2.0"
-        MSAL -> "Moderne Source Available"
-        Proprietary -> "Moderne Proprietary"
-    }
-    private fun url() = when(this) {
-        Apache2 -> "https://www.apache.org/licenses/LICENSE-2.0"
-        MSAL -> "https://docs.moderne.io/licensing/moderne-source-available-license"
-        Proprietary -> "https://docs.moderne.io/licensing/overview"
-    }
-    fun markdown() = "[${label()}](${url()})"
+data class License (val uri: URI, val name: String) {
+    fun markdown() = "[${name}](${uri})"
 }
 
-fun getLicense(recipeOrigin: RecipeOrigin): License {
+data object Licenses {
+    val Apache2 = License(URI("https://www.apache.org/licenses/LICENSE-2.0"), "Apache License Version 2.0")
+    val MSAL = License(URI("https://docs.moderne.io/licensing/moderne-source-available-license"), "Moderne Source Available")
+    val Proprietary = License(URI("https://docs.moderne.io/licensing/overview"), "Moderne Proprietary")
+    val Unknown = License(URI(""), "License Unknown")
+
+    fun get(url: String?, name: String?): License = when {
+        url == null -> Unknown
+        url == "https://www.apache.org/licenses/LICENSE-2.0" -> Apache2
+        url == "https://docs.moderne.io/licensing/moderne-source-available-license" -> MSAL
+        url == "https://docs.moderne.io/licensing/overview" -> Proprietary
+        name != null -> License(URI(url), name)
+        else -> Unknown
+    }
+}
+
+//todo remove logic after all recipe artifacts have been released with MANIFEST.MF containing license information
+fun getLicenseFallback(recipeOrigin: RecipeOrigin): License {
     val apache2 = setOf(
         "rewrite-all",
         "rewrite-analysis",
@@ -68,12 +73,12 @@ fun getLicense(recipeOrigin: RecipeOrigin): License {
 
     return when {
         // Moderne internal recipes are proprietary, and checked first to pick up internal complementary modules
-        recipeOrigin.groupId == "io.moderne.recipe" || proprietary.contains(recipeOrigin.artifactId) -> License.Proprietary
+        recipeOrigin.groupId == "io.moderne.recipe" || proprietary.contains(recipeOrigin.artifactId) -> Licenses.Proprietary
         // Then check for MSAL modules, which might publish under "org.openrewrite" or "org.openrewrite.recipe"
-        msal.contains(recipeOrigin.artifactId) -> License.MSAL
+        msal.contains(recipeOrigin.artifactId) -> Licenses.MSAL
         // Finally, check for Apache2 recipes
-        recipeOrigin.groupId == "org.openrewrite" || apache2.contains(recipeOrigin.artifactId) -> License.Apache2
+        recipeOrigin.groupId == "org.openrewrite" || apache2.contains(recipeOrigin.artifactId) -> Licenses.Apache2
         // Anything not explicitly declared is proprietary
-        else -> License.Proprietary
+        else -> Licenses.Proprietary
     }
 }

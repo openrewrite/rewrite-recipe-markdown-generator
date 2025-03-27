@@ -10,6 +10,8 @@ class RecipeOrigin(
     val version: String,
     val jarLocation: URI
 ) {
+    var gitHubLocation: String = "" // containing tree/main and module path if present
+    var license: License = Licenses.Unknown
     /**
      * The build plugins automatically have dependencies on the core libraries.
      * It isn't necessary to explicitly take dependencies on the core libraries to access their recipes.
@@ -40,13 +42,7 @@ class RecipeOrigin(
     }
 
     fun githubUrl(): String {
-        return if (isFromCoreLibrary()) {
-            "https://github.com/openrewrite/rewrite"
-        } else if (getLicense(this) == License.Proprietary) {
-            "https://github.com/moderneinc/$artifactId"
-        } else {
-            "https://github.com/openrewrite/$artifactId"
-        }
+        return gitHubLocation.toString()
     }
 
     fun githubUrl(recipeName: String, source: URI): String {
@@ -55,18 +51,14 @@ class RecipeOrigin(
         }
 
         val sourceString = source.toString()
-        val baseUrl = if (isFromCoreLibrary()) {
-            "https://github.com/openrewrite/rewrite/blob/main/$artifactId/src/main"
-        } else {
-            githubUrl() + "/blob/main/src/main"
-        }
+        val baseUrl = githubUrl()
 
         // YAML recipes will have a source that ends with META-INF/rewrite/something.yml
         return if (sourceString.substring(sourceString.length - 3) == "yml") {
             val ymlPath = sourceString.substring(source.toString().lastIndexOf("META-INF"))
-            "$baseUrl/resources/$ymlPath"
+            "$baseUrl/src/main/resources/$ymlPath"
         } else {
-            baseUrl + "/java/" + convertNameToJavaPath(recipeName)
+            baseUrl + "/src/main/java/" + convertNameToJavaPath(recipeName)
         }
     }
 
