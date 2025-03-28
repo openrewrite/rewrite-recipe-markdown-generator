@@ -1,79 +1,27 @@
 package org.openrewrite
 
-enum class License {
-    Apache2,
-    MSAL,
-    Proprietary;
+import java.net.URI
 
-    private fun label() = when(this) {
-        Apache2 -> "Apache License Version 2.0"
-        MSAL -> "Moderne Source Available"
-        Proprietary -> "Moderne Proprietary"
-    }
-    private fun url() = when(this) {
-        Apache2 -> "https://www.apache.org/licenses/LICENSE-2.0"
-        MSAL -> "https://docs.moderne.io/licensing/moderne-source-available-license"
-        Proprietary -> "https://docs.moderne.io/licensing/overview"
-    }
-    fun markdown() = "[${label()}](${url()})"
+data class License (val uri: URI, val name: String) {
+    fun markdown() = "[${name}](${uri})"
 }
 
-fun getLicense(recipeOrigin: RecipeOrigin): License {
-    val apache2 = setOf(
-        "rewrite-all",
-        "rewrite-analysis",
-        "rewrite-generative-ai",
-        "rewrite-java-dependencies",
-        "rewrite-kotlin",
-        "rewrite-liberty",
-        "rewrite-micronaut",
-        "rewrite-openapi",
-        "rewrite-polyglot",
-        "rewrite-quarkus",
-        "rewrite-recommendations",
-        "rewrite-third-party",
-    )
+data object Licenses {
+    private val Apache_URI = "https://www.apache.org/licenses/LICENSE-2.0"
+    private val MSAL_URI = "https://docs.moderne.io/licensing/moderne-source-available-license/"
+    private val Proprietary_URI = "https://docs.moderne.io/licensing/overview/"
 
-    val msal = setOf(
-        "rewrite-apache",
-        "rewrite-codemods",
-        "rewrite-csharp",
-        "rewrite-csharp-recipes",
-        "rewrite-cucumber-jvm",
-        "rewrite-docker",
-        "rewrite-feature-flags",
-        "rewrite-github-actions",
-        "rewrite-gitlab",
-        "rewrite-hibernate",
-        "rewrite-javascript",
-        "rewrite-jenkins",
-        "rewrite-logging-frameworks",
-        "rewrite-micrometer",
-        "rewrite-migrate-java",
-        "rewrite-python",
-        "rewrite-okhttp",
-        "rewrite-spring",
-        "rewrite-static-analysis",
-        "rewrite-struts",
-        "rewrite-testing-frameworks",
-        "rewrite-rewrite",
-    )
+    val Apache2 = License(URI(Apache_URI), "Apache License Version 2.0")
+    val Proprietary = License(URI(Proprietary_URI), "Moderne Proprietary")
+    val MSAL = License(URI(MSAL_URI), "Moderne Source Available")
+    val Unknown = License(URI(""), "License Unknown")
 
-    // Non-exhaustive list of proprietary recipes; such that those under "org.openrewrite" are assigned correctly
-    val proprietary = setOf(
-        "rewrite-cobol",
-        "rewrite-java-security",
-        "rewrite-remote",
-    )
-
-    return when {
-        // Moderne internal recipes are proprietary, and checked first to pick up internal complementary modules
-        recipeOrigin.groupId == "io.moderne.recipe" || proprietary.contains(recipeOrigin.artifactId) -> License.Proprietary
-        // Then check for MSAL modules, which might publish under "org.openrewrite" or "org.openrewrite.recipe"
-        msal.contains(recipeOrigin.artifactId) -> License.MSAL
-        // Finally, check for Apache2 recipes
-        recipeOrigin.groupId == "org.openrewrite" || apache2.contains(recipeOrigin.artifactId) -> License.Apache2
-        // Anything not explicitly declared is proprietary
-        else -> License.Proprietary
+    fun get(url: String?, name: String?): License = when {
+        url == null -> Unknown
+        url == Apache_URI -> Apache2
+        url == MSAL_URI -> MSAL
+        url == Proprietary_URI -> Proprietary
+        name != null -> License(URI(url), name)
+        else -> Unknown
     }
 }

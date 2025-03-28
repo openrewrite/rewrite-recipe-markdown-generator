@@ -10,6 +10,8 @@ class RecipeOrigin(
     val version: String,
     val jarLocation: URI
 ) {
+    var repositoryUrl: String = ""
+    var license: License = Licenses.Unknown
     /**
      * The build plugins automatically have dependencies on the core libraries.
      * It isn't necessary to explicitly take dependencies on the core libraries to access their recipes.
@@ -39,34 +41,21 @@ class RecipeOrigin(
         }
     }
 
-    fun githubUrl(): String {
-        return if (isFromCoreLibrary()) {
-            "https://github.com/openrewrite/rewrite"
-        } else if (getLicense(this) == License.Proprietary) {
-            "https://github.com/moderneinc/$artifactId"
-        } else {
-            "https://github.com/openrewrite/$artifactId"
-        }
-    }
-
     fun githubUrl(recipeName: String, source: URI): String {
+        //todo we can remove this I think, as third party recipes can now define there very own License
         if (artifactId == "rewrite-third-party") {
             return "https://github.com/search?type=code&q=$recipeName"
         }
 
         val sourceString = source.toString()
-        val baseUrl = if (isFromCoreLibrary()) {
-            "https://github.com/openrewrite/rewrite/blob/main/$artifactId/src/main"
-        } else {
-            githubUrl() + "/blob/main/src/main"
-        }
 
         // YAML recipes will have a source that ends with META-INF/rewrite/something.yml
         return if (sourceString.substring(sourceString.length - 3) == "yml") {
             val ymlPath = sourceString.substring(source.toString().lastIndexOf("META-INF"))
-            "$baseUrl/resources/$ymlPath"
+            "${repositoryUrl.removeSuffix("/")}/src/main/resources/${ymlPath.removePrefix("/")}"
         } else {
-            baseUrl + "/java/" + convertNameToJavaPath(recipeName)
+            val javaPath = convertNameToJavaPath(recipeName)
+            "${repositoryUrl.removeSuffix("/")}/src/main/java/${javaPath.removePrefix("/")}"
         }
     }
 
@@ -75,7 +64,7 @@ class RecipeOrigin(
         .replace('-', '_')
         .replace('.', '_')
 
-    fun issueTrackerUrl() = githubUrl() + "/issues"
+    fun issueTrackerUrl() = "${repositoryUrl}/issues"
 
     companion object {
         private val parsePattern = Pattern.compile("([^:]+):([^:]+):([^:]+):(.+)")
