@@ -7,16 +7,20 @@ data class License (val uri: URI, val name: String) {
 }
 
 data object Licenses {
-    val Apache2 = License(URI("https://www.apache.org/licenses/LICENSE-2.0"), "Apache License Version 2.0")
-    val MSAL = License(URI("https://docs.moderne.io/licensing/moderne-source-available-license"), "Moderne Source Available")
-    val Proprietary = License(URI("https://docs.moderne.io/licensing/overview"), "Moderne Proprietary")
+^    private val Apache_URI = "https://www.apache.org/licenses/LICENSE-2.0"
+    private val MSAL_URI = "https://docs.moderne.io/licensing/moderne-source-available-license/"
+    private val Proprietary_URI = "https://docs.moderne.io/licensing/overview/"
+
+    val Apache2 = License(URI(Apache_URI), "Apache License Version 2.0")
+    val Proprietary = License(URI(Proprietary_URI), "Moderne Proprietary")
+    val MSAL = License(URI(MSAL_URI), "Moderne Source Available")
     val Unknown = License(URI(""), "License Unknown")
 
     fun get(url: String?, name: String?): License = when {
         url == null -> Unknown
-        url == "https://www.apache.org/licenses/LICENSE-2.0" -> Apache2
-        url == "https://docs.moderne.io/licensing/moderne-source-available-license" -> MSAL
-        url == "https://docs.moderne.io/licensing/overview" -> Proprietary
+        url == Apache_URI -> Apache2
+        url == MSAL_URI -> MSAL
+        url == Proprietary_URI -> Proprietary
         name != null -> License(URI(url), name)
         else -> Unknown
     }
