@@ -126,11 +126,10 @@ class RecipeMarkdownGenerator : Runnable {
         if (recipeSources.isNotEmpty()) {
             recipeOrigins = RecipeOrigin.parse(recipeSources)
 
-            // Write latest-versions-of-every-openrewrite-module.md
-            createLatestVersionsJs(outputPath, recipeOrigins)
-            createLatestVersionsMarkdown(outputPath, recipeOrigins)
-
             if (recipeClasspath.isEmpty()) {
+                // Write latest-versions-of-every-openrewrite-module.md for the base recipes only
+                createLatestVersionsJs(outputPath, recipeOrigins)
+                createLatestVersionsMarkdown(outputPath, recipeOrigins)
                 return
             }
 
@@ -142,12 +141,16 @@ class RecipeMarkdownGenerator : Runnable {
                 .toTypedArray()
                 .let { URLClassLoader(it) }
 
+            // Write latest-versions-of-every-openrewrite-module.md, for all recipes
+            addInfosFromManifests(recipeOrigins, classloader)
+            createLatestVersionsJs(outputPath, recipeOrigins)
+            createLatestVersionsMarkdown(outputPath, recipeOrigins)
+
             val dependencies: MutableCollection<Path> = mutableListOf()
             recipeClasspath.split(";")
                 .map(Paths::get)
                 .toCollection(dependencies)
 
-            addInfosFromManifests(recipeOrigins, classloader)
 
             val envBuilder = Environment.builder()
             for (recipeOrigin in recipeOrigins) {
