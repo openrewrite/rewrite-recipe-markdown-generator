@@ -10,7 +10,7 @@ class RecipeOrigin(
     val version: String,
     val jarLocation: URI
 ) {
-    var repositoryUrl: String = "" // containing tree/main and module path if present
+    var repositoryUrl: String = ""
     var license: License = Licenses.Unknown
     /**
      * The build plugins automatically have dependencies on the core libraries.
@@ -52,10 +52,10 @@ class RecipeOrigin(
         // YAML recipes will have a source that ends with META-INF/rewrite/something.yml
         return if (sourceString.substring(sourceString.length - 3) == "yml") {
             val ymlPath = sourceString.substring(source.toString().lastIndexOf("META-INF"))
-            "${repositoryUrl}/src/main/resources/${ymlPath}"
+            "${repositoryUrl.removeSuffix("/")}/src/main/resources/${ymlPath.removePrefix("/")}"
         } else {
             val javaPath = convertNameToJavaPath(recipeName)
-            "${repositoryUrl}/src/main/java/${javaPath}"
+            "${repositoryUrl.removeSuffix("/")}/src/main/java/${javaPath.removePrefix("/")}"
         }
     }
 
