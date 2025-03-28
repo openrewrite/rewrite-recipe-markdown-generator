@@ -7,7 +7,7 @@ data class License (val uri: URI, val name: String) {
 }
 
 data object Licenses {
-^    private val Apache_URI = "https://www.apache.org/licenses/LICENSE-2.0"
+    private val Apache_URI = "https://www.apache.org/licenses/LICENSE-2.0"
     private val MSAL_URI = "https://docs.moderne.io/licensing/moderne-source-available-license/"
     private val Proprietary_URI = "https://docs.moderne.io/licensing/overview/"
 
