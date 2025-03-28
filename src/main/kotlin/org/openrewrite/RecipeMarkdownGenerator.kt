@@ -432,7 +432,7 @@ class RecipeMarkdownGenerator : Runnable {
                     path,
                     Pair(
                         mfValues.first,
-                        if (mfValues.second.isNotEmpty()) "${mfValues.second}/tree/main/${mfValues.third ?: ""}" else ""
+                        if (mfValues.second.isNotEmpty()) "${mfValues.second}/blob/main/${mfValues.third ?: ""}" else ""
                     )
                 )
             }
@@ -1308,7 +1308,7 @@ import TabItem from '@theme/TabItem';
     private fun BufferedWriter.writeLicense(origin: RecipeOrigin) {
         val licenseText = when (origin.license) {
             Licenses.Unknown -> "The license for this recipe is unknown."
-            else -> "This recipe is available under the [${origin.license.markdown()} License."
+            else -> "This recipe is available under the ${origin.license.markdown()} License."
         }
 
         //language=markdown
@@ -2269,13 +2269,6 @@ $cliSnippet
                 recipePath.substring(0, slashIndex)
             }
         }
-
-        private val recipePathToDocusaurusRenamedPath: Map<String, String> = mapOf(
-            "org.openrewrite.java.testing.assertj.Assertj" to "java/testing/assertj/assertj-best-practices",
-            "org.openrewrite.java.migrate.javaee7" to "java/migrate/javaee7-recipe",
-            "org.openrewrite.java.migrate.javaee8" to "java/migrate/javaee8-recipe"
-        )
-
         private fun getRecipePath(recipe: RecipeDescriptor): String =
         // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
         // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
@@ -2296,6 +2289,7 @@ $cliSnippet
             } else if (
                 recipe.name.startsWith("ai.timefold") ||
                 recipe.name.startsWith("io.quarkus") ||
+                recipe.name.startsWith("io.quakus") ||
                 recipe.name.startsWith("org.apache") ||
                 recipe.name.startsWith("org.axonframework") ||
                 recipe.name.startsWith("software.amazon.awssdk") ||
@@ -2305,6 +2299,13 @@ $cliSnippet
             } else {
                 throw RuntimeException("Recipe package unrecognized: ${recipe.name}")
             }
+
+        private val recipePathToDocusaurusRenamedPath: Map<String, String> = mapOf(
+            "org.openrewrite.java.testing.assertj.Assertj" to "java/testing/assertj/assertj-best-practices",
+            "org.openrewrite.java.migrate.javaee7" to "java/migrate/javaee7-recipe",
+            "org.openrewrite.java.migrate.javaee8" to "java/migrate/javaee8-recipe"
+        )
+
 
         private fun getRecipePath(recipesPath: Path, recipeDescriptor: RecipeDescriptor) =
             recipesPath.resolve(getRecipePath(recipeDescriptor) + ".md")
