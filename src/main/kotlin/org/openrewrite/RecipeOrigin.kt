@@ -10,7 +10,7 @@ class RecipeOrigin(
     val version: String,
     val jarLocation: URI
 ) {
-    var gitHubLocation: String = "" // containing tree/main and module path if present
+    var repositoryUrl: String = "" // containing tree/main and module path if present
     var license: License = Licenses.Unknown
     /**
      * The build plugins automatically have dependencies on the core libraries.
@@ -41,24 +41,21 @@ class RecipeOrigin(
         }
     }
 
-    fun githubUrl(): String {
-        return gitHubLocation.toString()
-    }
-
     fun githubUrl(recipeName: String, source: URI): String {
+        //todo we can remove this I think, as third party recipes can now define there very own License
         if (artifactId == "rewrite-third-party") {
             return "https://github.com/search?type=code&q=$recipeName"
         }
 
         val sourceString = source.toString()
-        val baseUrl = githubUrl()
 
         // YAML recipes will have a source that ends with META-INF/rewrite/something.yml
         return if (sourceString.substring(sourceString.length - 3) == "yml") {
             val ymlPath = sourceString.substring(source.toString().lastIndexOf("META-INF"))
-            "$baseUrl/src/main/resources/$ymlPath"
+            "${repositoryUrl}/src/main/resources/${ymlPath}"
         } else {
-            baseUrl + "/src/main/java/" + convertNameToJavaPath(recipeName)
+            val javaPath = convertNameToJavaPath(recipeName)
+            "${repositoryUrl}/src/main/java/${javaPath}"
         }
     }
 
@@ -67,7 +64,7 @@ class RecipeOrigin(
         .replace('-', '_')
         .replace('.', '_')
 
-    fun issueTrackerUrl() = githubUrl() + "/issues"
+    fun issueTrackerUrl() = "${repositoryUrl}/issues"
 
     companion object {
         private val parsePattern = Pattern.compile("([^:]+):([^:]+):([^:]+):(.+)")

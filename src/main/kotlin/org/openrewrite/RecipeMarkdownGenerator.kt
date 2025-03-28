@@ -122,7 +122,6 @@ class RecipeMarkdownGenerator : Runnable {
 
         val env: Environment
         val recipeOrigins: Map<URI, RecipeOrigin>
-        val manifestInfos: Map<URI, Pair<License, String>>
 
         if (recipeSources.isNotEmpty()) {
             recipeOrigins = RecipeOrigin.parse(recipeSources)
@@ -406,8 +405,7 @@ class RecipeMarkdownGenerator : Runnable {
     }
 
     private fun addInfosFromManifests(recipeOrigins: Map<URI, RecipeOrigin>, cl: ClassLoader) {
-        val mfInfos = cl.getResources("META-INF/MANIFEST.MF")
-            .toList()
+        val mfInfos = cl.getResources("META-INF/MANIFEST.MF").asSequence()
             .filter { it.path != null }
             .map {
                 Pair(
@@ -446,7 +444,7 @@ class RecipeMarkdownGenerator : Runnable {
             } else {
                 println("Unable to determine License for ${it.value}")
             }
-            it.value.gitHubLocation = mfInfos[it.key]?.second ?: ""
+            it.value.repositoryUrl = mfInfos[it.key]?.second ?: ""
         }
     }
 
@@ -496,8 +494,8 @@ class RecipeMarkdownGenerator : Runnable {
             var cliInstallGavs = ""
             for (origin in recipeOrigins.values) {
                 cliInstallGavs += "${origin.groupId}:${origin.artifactId}:{{${origin.versionPlaceholderKey()}}} "
-                val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.githubUrl()})"
-                val releaseLink = "[${origin.version}](${origin.githubUrl()}/releases/tag/v${origin.version})"
+                val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.repositoryUrl})"
+                val releaseLink = "[${origin.version}](${origin.repositoryUrl}/releases/tag/v${origin.version})"
                 writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${origin.license.markdown()} |")
             }
             //language=markdown
