@@ -1,6 +1,6 @@
 rewrite-ai-search:
   artifactId: "rewrite-ai-search"
-  version: "0.25.1"
+  version: "0.25.2"
   markdownRecipeDescriptors:
     io.moderne.ai.FindCommentsLanguage:
       name: "io.moderne.ai.FindCommentsLanguage"
@@ -82,7 +82,7 @@ rewrite-ai-search:
       artifactId: "rewrite-ai-search"
 rewrite-all:
   artifactId: "rewrite-all"
-  version: "1.13.0"
+  version: "1.14.0"
   markdownRecipeDescriptors:
     org.openrewrite.FindCallGraph:
       name: "org.openrewrite.FindCallGraph"
@@ -114,7 +114,7 @@ rewrite-all:
       artifactId: "rewrite-all"
 rewrite-analysis:
   artifactId: "rewrite-analysis"
-  version: "2.19.0"
+  version: "2.19.1"
   markdownRecipeDescriptors:
     org.openrewrite.analysis.controlflow.ControlFlowVisualization:
       name: "org.openrewrite.analysis.controlflow.ControlFlowVisualization"
@@ -177,7 +177,7 @@ rewrite-analysis:
       artifactId: "rewrite-analysis"
 rewrite-android:
   artifactId: "rewrite-android"
-  version: "0.7.4"
+  version: "0.7.5"
   markdownRecipeDescriptors:
     org.openrewrite.android.ChangeAndroidSdkVersion:
       name: "org.openrewrite.android.ChangeAndroidSdkVersion"
@@ -304,7 +304,7 @@ rewrite-android:
       artifactId: "rewrite-android"
 rewrite-apache:
   artifactId: "rewrite-apache"
-  version: "2.4.0"
+  version: "2.5.0"
   markdownRecipeDescriptors:
     org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64:
       name: "org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64"
@@ -802,75 +802,20 @@ rewrite-apache:
       options: []
       isImperative: true
       artifactId: "rewrite-apache"
-    org.openrewrite.apache.poi.ReplaceSetBoldweightWithSetBoldRecipes:
-      name: "org.openrewrite.apache.poi.ReplaceSetBoldweightWithSetBoldRecipes"
+    org.openrewrite.apache.poi.ReplaceSetBoldweightWithSetBold:
+      name: "org.openrewrite.apache.poi.ReplaceSetBoldweightWithSetBold"
       description: "Replace `Font.setBoldweight(short)` or equivalent with `Font.setBold(boolean)`."
-      docLink: "https://docs.openrewrite.org/recipes/apache/poi/replacesetboldweightwithsetboldrecipes"
+      docLink: "https://docs.openrewrite.org/recipes/apache/poi/replacesetboldweightwithsetbold"
       options: []
       isImperative: true
       artifactId: "rewrite-apache"
-    org.openrewrite.apache.poi.ReplaceSetBoldweightWithSetBoldRecipes$ReplaceSetBoldweightBoldWithSetBoldTrueRecipe:
-      name: "org.openrewrite.apache.poi.ReplaceSetBoldweightWithSetBoldRecipes$ReplaceSetBoldweightBoldWithSetBoldTrueRecipe"
-      description: "Replace `Font.setBoldweight(Font.BOLDWEIGHT_BOLD)` or equivalent\
-        \ with `Font.setBold(true)`."
-      docLink: "https://docs.openrewrite.org/recipes/apache/poi/replacesetboldweightwithsetboldrecipesusdreplacesetboldweightboldwithsetboldtruerecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-apache"
-    org.openrewrite.apache.poi.ReplaceSetBoldweightWithSetBoldRecipes$ReplaceSetBoldweightNormalWithSetBoldFalseRecipe:
-      name: "org.openrewrite.apache.poi.ReplaceSetBoldweightWithSetBoldRecipes$ReplaceSetBoldweightNormalWithSetBoldFalseRecipe"
-      description: "Replace `Font.setBoldweight(Font.BOLDWEIGHT_NORMAL)` or equivalent\
-        \ with `Font.setBold(false)`."
-      docLink: "https://docs.openrewrite.org/recipes/apache/poi/replacesetboldweightwithsetboldrecipesusdreplacesetboldweightnormalwithsetboldfalserecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-apache"
-    org.openrewrite.apache.poi.ReplaceSetCellTypeRecipes:
-      name: "org.openrewrite.apache.poi.ReplaceSetCellTypeRecipes"
-      description: "Replace `Cell.setCellType(int)` with equivalent `Cell.setCellType(CellType)`."
-      docLink: "https://docs.openrewrite.org/recipes/apache/poi/replacesetcelltyperecipes"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-apache"
-    org.openrewrite.apache.poi.ReplaceSetCellTypeRecipes$ReplaceSetCellTypeBlankRecipe:
-      name: "org.openrewrite.apache.poi.ReplaceSetCellTypeRecipes$ReplaceSetCellTypeBlankRecipe"
-      description: "Replace `Cell.setCellType(Cell.CELL_TYPE_BLANK)` with `Cell.setCellType(CellType.BLANK)`."
-      docLink: "https://docs.openrewrite.org/recipes/apache/poi/replacesetcelltyperecipesusdreplacesetcelltypeblankrecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-apache"
-    org.openrewrite.apache.poi.ReplaceSetCellTypeRecipes$ReplaceSetCellTypeBooleanRecipe:
-      name: "org.openrewrite.apache.poi.ReplaceSetCellTypeRecipes$ReplaceSetCellTypeBooleanRecipe"
-      description: "Replace `Cell.setCellType(Cell.CELL_TYPE_BOOLEAN)` with `Cell.setCellType(CellType.BOOLEAN)`."
-      docLink: "https://docs.openrewrite.org/recipes/apache/poi/replacesetcelltyperecipesusdreplacesetcelltypebooleanrecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-apache"
-    org.openrewrite.apache.poi.ReplaceSetCellTypeRecipes$ReplaceSetCellTypeErrorRecipe:
-      name: "org.openrewrite.apache.poi.ReplaceSetCellTypeRecipes$ReplaceSetCellTypeErrorRecipe"
-      description: "Replace `Cell.setCellType(Cell.CELL_TYPE_ERROR)` with `Cell.setCellType(CellType.ERROR)`."
-      docLink: "https://docs.openrewrite.org/recipes/apache/poi/replacesetcelltyperecipesusdreplacesetcelltypeerrorrecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-apache"
-    org.openrewrite.apache.poi.ReplaceSetCellTypeRecipes$ReplaceSetCellTypeFormulaRecipe:
-      name: "org.openrewrite.apache.poi.ReplaceSetCellTypeRecipes$ReplaceSetCellTypeFormulaRecipe"
-      description: "Replace `Cell.setCellType(Cell.CELL_TYPE_FORMULA)` with `Cell.setCellType(CellType.FORMULA)`."
-      docLink: "https://docs.openrewrite.org/recipes/apache/poi/replacesetcelltyperecipesusdreplacesetcelltypeformularecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-apache"
-    org.openrewrite.apache.poi.ReplaceSetCellTypeRecipes$ReplaceSetCellTypeNumericRecipe:
-      name: "org.openrewrite.apache.poi.ReplaceSetCellTypeRecipes$ReplaceSetCellTypeNumericRecipe"
-      description: "Replace `Cell.setCellType(Cell.CELL_TYPE_NUMERIC)` with `Cell.setCellType(CellType.NUMERIC)`."
-      docLink: "https://docs.openrewrite.org/recipes/apache/poi/replacesetcelltyperecipesusdreplacesetcelltypenumericrecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-apache"
-    org.openrewrite.apache.poi.ReplaceSetCellTypeRecipes$ReplaceSetCellTypeStringRecipe:
-      name: "org.openrewrite.apache.poi.ReplaceSetCellTypeRecipes$ReplaceSetCellTypeStringRecipe"
-      description: "Replace `Cell.setCellType(Cell.CELL_TYPE_STRING)` with `Cell.setCellType(CellType.STRING)`."
-      docLink: "https://docs.openrewrite.org/recipes/apache/poi/replacesetcelltyperecipesusdreplacesetcelltypestringrecipe"
+    org.openrewrite.apache.poi.ReplaceSetCellType:
+      name: "org.openrewrite.apache.poi.ReplaceSetCellType"
+      description: "`Cell.setCellType()` can be configured with either an integer\
+        \ or a the `CellType` enumeration. It is clearer and less error-prone to use\
+        \ the `CellType` enumeration, so this recipe converts all `setCellType()`\
+        \ calls to use it."
+      docLink: "https://docs.openrewrite.org/recipes/apache/poi/replacesetcelltype"
       options: []
       isImperative: true
       artifactId: "rewrite-apache"
@@ -1051,7 +996,7 @@ rewrite-apache:
       artifactId: "rewrite-apache"
 rewrite-circleci:
   artifactId: "rewrite-circleci"
-  version: "3.3.1"
+  version: "3.3.2"
   markdownRecipeDescriptors:
     org.openrewrite.circleci.InstallOrb:
       name: "org.openrewrite.circleci.InstallOrb"
@@ -1079,7 +1024,7 @@ rewrite-circleci:
       artifactId: "rewrite-circleci"
 rewrite-codemods:
   artifactId: "rewrite-codemods"
-  version: "0.10.0"
+  version: "0.11.0"
   markdownRecipeDescriptors:
     org.openrewrite.codemods.ApplyCodemod:
       name: "org.openrewrite.codemods.ApplyCodemod"
@@ -4576,19 +4521,9 @@ rewrite-codemods:
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
-    org.openrewrite.codemods.migrate.react.ClassComponentToFunctionComponent:
-      name: "org.openrewrite.codemods.migrate.react.ClassComponentToFunctionComponent"
-      description: "Class components are still going to be supported by React for\
-        \ the foreseeable future. However, it is no longer recommended to write new\
-        \ components in class-style.\n\n  This recipe will convert class components\
-        \ to function components using [react-declassify](https://github.com/wantedly/react-declassify)\n"
-      docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/react/classcomponenttofunctioncomponent"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-codemods"
 rewrite-codemods-ng:
   artifactId: "rewrite-codemods-ng"
-  version: "0.7.4"
+  version: "0.7.5"
   markdownRecipeDescriptors:
     org.openrewrite.codemods.migrate.angular.ApplyAngularCLI:
       name: "org.openrewrite.codemods.migrate.angular.ApplyAngularCLI"
@@ -4638,7 +4573,7 @@ rewrite-codemods-ng:
       artifactId: "rewrite-codemods-ng"
 rewrite-compiled-analysis:
   artifactId: "rewrite-compiled-analysis"
-  version: "0.2.6"
+  version: "0.3.0"
   markdownRecipeDescriptors:
     io.moderne.compiled.verification.ChangeListMethodAndVerify:
       name: "io.moderne.compiled.verification.ChangeListMethodAndVerify"
@@ -4660,7 +4595,7 @@ rewrite-compiled-analysis:
       artifactId: "rewrite-compiled-analysis"
 rewrite-comprehension:
   artifactId: "rewrite-comprehension"
-  version: "0.5.0"
+  version: "0.5.1"
   markdownRecipeDescriptors:
     io.moderne.knowledge.ComprehendCode:
       name: "io.moderne.knowledge.ComprehendCode"
@@ -4716,7 +4651,7 @@ rewrite-comprehension:
       artifactId: "rewrite-comprehension"
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "3.2.1"
+  version: "3.2.2"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -4796,7 +4731,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.48.0"
+  version: "8.49.0"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -5138,7 +5073,7 @@ rewrite-core:
       options:
       - name: "filePattern"
         type: "String"
-        required: true
+        required: false
       - name: "find"
         type: "String"
         required: true
@@ -5152,7 +5087,7 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
-  version: "2.3.0"
+  version: "2.3.1"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite"
@@ -5231,7 +5166,7 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
 rewrite-docker:
   artifactId: "rewrite-docker"
-  version: "2.3.0"
+  version: "2.3.1"
   markdownRecipeDescriptors:
     org.openrewrite.docker.search.FindDockerImageUses:
       name: "org.openrewrite.docker.search.FindDockerImageUses"
@@ -5243,7 +5178,7 @@ rewrite-docker:
       artifactId: "rewrite-docker"
 rewrite-dotnet:
   artifactId: "rewrite-dotnet"
-  version: "0.8.1"
+  version: "0.8.2"
   markdownRecipeDescriptors:
     org.openrewrite.dotnet.MigrateToNet6:
       name: "org.openrewrite.dotnet.MigrateToNet6"
@@ -5306,7 +5241,7 @@ rewrite-dotnet:
       artifactId: "rewrite-dotnet"
 rewrite-feature-flags:
   artifactId: "rewrite-feature-flags"
-  version: "1.4.0"
+  version: "1.4.1"
   markdownRecipeDescriptors:
     org.openrewrite.featureflags.RemoveBooleanFlag:
       name: "org.openrewrite.featureflags.RemoveBooleanFlag"
@@ -5508,7 +5443,7 @@ rewrite-feature-flags:
       artifactId: "rewrite-feature-flags"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "3.3.0"
+  version: "3.3.1"
   markdownRecipeDescriptors:
     org.openrewrite.github.AddCronTrigger:
       name: "org.openrewrite.github.AddCronTrigger"
@@ -5719,7 +5654,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gitlab:
   artifactId: "rewrite-gitlab"
-  version: "0.9.0"
+  version: "0.9.1"
   markdownRecipeDescriptors:
     org.openrewrite.gitlab.AddComponent:
       name: "org.openrewrite.gitlab.AddComponent"
@@ -5807,7 +5742,7 @@ rewrite-gitlab:
       artifactId: "rewrite-gitlab"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.48.0"
+  version: "8.49.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -5861,7 +5796,7 @@ rewrite-gradle:
       options:
       - name: "filePattern"
         type: "String"
-        required: true
+        required: false
       - name: "key"
         type: "String"
         required: true
@@ -6594,7 +6529,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.48.0"
+  version: "8.49.0"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.AutoFormat:
       name: "org.openrewrite.groovy.format.AutoFormat"
@@ -6630,7 +6565,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.48.0"
+  version: "8.49.0"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -6743,7 +6678,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-hibernate:
   artifactId: "rewrite-hibernate"
-  version: "0.2.1"
+  version: "0.2.2"
   markdownRecipeDescriptors:
     io.moderne.hibernate.MigrateToHibernate66:
       name: "io.moderne.hibernate.MigrateToHibernate66"
@@ -6945,7 +6880,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-jackson:
   artifactId: "rewrite-jackson"
-  version: "0.15.0"
+  version: "0.16.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jackson.CodehausClassesToFasterXML:
       name: "org.openrewrite.java.jackson.CodehausClassesToFasterXML"
@@ -7009,7 +6944,7 @@ rewrite-jackson:
       artifactId: "rewrite-jackson"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.48.0"
+  version: "8.49.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -7115,22 +7050,22 @@ rewrite-java:
       options:
       - name: "addOnly"
         type: "Boolean"
-        required: true
+        required: false
       - name: "annotationType"
         type: "String"
         required: true
       - name: "appendArray"
         type: "Boolean"
-        required: true
+        required: false
       - name: "attributeName"
         type: "String"
         required: false
       - name: "attributeValue"
         type: "String"
-        required: true
+        required: false
       - name: "oldAttributeValue"
         type: "String"
-        required: true
+        required: false
       isImperative: true
       artifactId: "rewrite-java"
     org.openrewrite.java.ChangeAnnotationAttributeName:
@@ -8058,7 +7993,10 @@ rewrite-java:
       description: "This is a diagnostic recipe to highlight where LSTs are missing\
         \ type attribution information."
       docLink: "https://docs.openrewrite.org/recipes/java/search/findmissingtypes"
-      options: []
+      options:
+      - name: "checkDocumentation"
+        type: "boolean"
+        required: false
       isImperative: true
       artifactId: "rewrite-java"
     org.openrewrite.java.search.FindRepeatableAnnotations:
@@ -8186,7 +8124,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "1.30.0"
+  version: "1.31.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.AddDependency:
       name: "org.openrewrite.java.dependencies.AddDependency"
@@ -8301,13 +8239,13 @@ rewrite-java-dependencies:
       options:
       - name: "includeTransitive"
         type: "boolean"
-        required: true
+        required: false
       - name: "scope"
         type: "Scope"
-        required: true
+        required: false
       - name: "validateResolvable"
         type: "boolean"
-        required: true
+        required: false
       isImperative: true
       artifactId: "rewrite-java-dependencies"
     org.openrewrite.java.dependencies.DependencyResolutionDiagnostic:
@@ -8473,7 +8411,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "3.3.0"
+  version: "3.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.csharp.dependencies.DependencyInsight:
       name: "org.openrewrite.csharp.dependencies.DependencyInsight"
@@ -8554,6 +8492,9 @@ rewrite-java-security:
         required: false
       - name: "overrideTransitive"
         type: "Boolean"
+        required: false
+      - name: "overrideVulnerabilityDatabase"
+        type: "URI"
         required: false
       - name: "scope"
         type: "String"
@@ -9073,7 +9014,7 @@ rewrite-java-security:
       artifactId: "rewrite-java-security"
 rewrite-jenkins:
   artifactId: "rewrite-jenkins"
-  version: "0.22.0"
+  version: "0.22.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3:
       name: "org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3"
@@ -9238,7 +9179,7 @@ rewrite-jenkins:
       artifactId: "rewrite-jenkins"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.48.0"
+  version: "8.49.0"
   markdownRecipeDescriptors:
     org.openrewrite.json.AddKeyValue:
       name: "org.openrewrite.json.AddKeyValue"
@@ -9330,7 +9271,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "8.48.0"
+  version: "8.49.0"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -9431,7 +9372,7 @@ rewrite-kotlin:
       artifactId: "rewrite-kotlin"
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "3.2.2"
+  version: "3.2.3"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -9975,7 +9916,7 @@ rewrite-kubernetes:
       artifactId: "rewrite-kubernetes"
 rewrite-liberty:
   artifactId: "rewrite-liberty"
-  version: "1.14.0"
+  version: "1.14.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty:
       name: "org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty"
@@ -10067,8 +10008,19 @@ rewrite-liberty:
       artifactId: "rewrite-liberty"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "3.4.0"
+  version: "3.5.0"
   markdownRecipeDescriptors:
+    org.openrewrite.java.logging.CatchBlockLogLevel:
+      name: "org.openrewrite.java.logging.CatchBlockLogLevel"
+      description: "Sometimes exceptions are caught and logged at the wrong log level.\
+        \ This will set the log level of logging statements within a catch block not\
+        \ containing an exception to \"warn\", and the log level of logging statements\
+        \ containing an exception to \"error\". This supports SLF4J, Log4J1, Log4j2,\
+        \ and Logback."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/catchblockloglevel"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
     org.openrewrite.java.logging.ChangeLombokLogAnnotation:
       name: "org.openrewrite.java.logging.ChangeLombokLogAnnotation"
       description: "Replace Lombok annotations such as `@CommonsLog` and `@Log4j`\
@@ -10375,6 +10327,21 @@ rewrite-logging-frameworks:
       docLink: "https://docs.openrewrite.org/recipes/java/logging/log4j/upgradelog4j2dependencyversion"
       options: []
       isImperative: false
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.logback.ConfigureLoggerLevel:
+      name: "org.openrewrite.java.logging.logback.ConfigureLoggerLevel"
+      description: "Within logback.xml configuration files sets the specified log\
+        \ level for a particular class. Will not create a logback.xml if one does\
+        \ not already exist."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/logback/configureloggerlevel"
+      options:
+      - name: "className"
+        type: "String"
+        required: true
+      - name: "logLevel"
+        type: "LogLevel"
+        required: true
+      isImperative: true
       artifactId: "rewrite-logging-frameworks"
     org.openrewrite.java.logging.logback.Log4jAppenderToLogback:
       name: "org.openrewrite.java.logging.logback.Log4jAppenderToLogback"
@@ -10910,7 +10877,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.48.0"
+  version: "8.49.0"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddAnnotationProcessor:
       name: "org.openrewrite.maven.AddAnnotationProcessor"
@@ -12167,7 +12134,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micrometer:
   artifactId: "rewrite-micrometer"
-  version: "0.17.0"
+  version: "0.17.1"
   markdownRecipeDescriptors:
     org.openrewrite.micrometer.TimerToObservation:
       name: "org.openrewrite.micrometer.TimerToObservation"
@@ -12226,7 +12193,7 @@ rewrite-micrometer:
       artifactId: "rewrite-micrometer"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "2.19.0"
+  version: "2.19.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.AddAnnotationProcessorPath:
       name: "org.openrewrite.java.micronaut.AddAnnotationProcessorPath"
@@ -12570,7 +12537,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "3.4.0"
+  version: "3.5.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jspecify.MigrateFromJakartaAnnotationApi:
       name: "org.openrewrite.java.jspecify.MigrateFromJakartaAnnotationApi"
@@ -13804,14 +13771,6 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.jakarta.BeanValidationMessages:
-      name: "org.openrewrite.java.migrate.jakarta.BeanValidationMessages"
-      description: "Migrate `javax.validation.constraints` messages found in Java\
-        \ files to `jakarta.validation.constraints` equivalents."
-      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/beanvalidationmessages"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.DeprecatedCDIAPIsRemoved40:
       name: "org.openrewrite.java.migrate.jakarta.DeprecatedCDIAPIsRemoved40"
       description: "Deprecated APIs have been removed in CDI 4.0. This recipe removes\
@@ -14323,6 +14282,31 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.UpdateAnnotationAttributeJavaxToJakarta:
+      name: "org.openrewrite.java.migrate.jakarta.UpdateAnnotationAttributeJavaxToJakarta"
+      description: "Replace `javax` with `jakarta` in annotation attributes for matching\
+        \ annotation signatures."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/updateannotationattributejavaxtojakarta"
+      options:
+      - name: "signature"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.UpdateApacheCommonsEmailDependencies:
+      name: "org.openrewrite.java.migrate.jakarta.UpdateApacheCommonsEmailDependencies"
+      description: "Update Apache Commons Email to Email2 for Jakarta."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/updateapachecommonsemaildependencies"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.UpdateApacheShiroDependencies:
+      name: "org.openrewrite.java.migrate.jakarta.UpdateApacheShiroDependencies"
+      description: "Update Apache Shiro Dependencies to 2.0.x."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/updateapacheshirodependencies"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.UpdateApacheWSSecurityPackages:
       name: "org.openrewrite.java.migrate.jakarta.UpdateApacheWSSecurityPackages"
       description: "Java EE has been rebranded to Jakarta EE.  This recipe replaces\
@@ -14337,6 +14321,13 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/updatebeanmanagermethods"
       options: []
       isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.UpdateEclipseLinkDependencies:
+      name: "org.openrewrite.java.migrate.jakarta.UpdateEclipseLinkDependencies"
+      description: "Update EclipseLink Dependencies to 4.x."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/updateeclipselinkdependencies"
+      options: []
+      isImperative: false
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.UpdateGetRealPath:
       name: "org.openrewrite.java.migrate.jakarta.UpdateGetRealPath"
@@ -14371,6 +14362,20 @@ rewrite-migrate-java:
       name: "org.openrewrite.java.migrate.jakarta.UpdateJakartaXmlWsEE10"
       description: "Update Jakarta EE XML Web Services Dependencies for EE 10."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/updatejakartaxmlwsee10"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.UpdateJerseyDependencies:
+      name: "org.openrewrite.java.migrate.jakarta.UpdateJerseyDependencies"
+      description: "Update GlassFish Jersey Dependencies to 3.1.x."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/updatejerseydependencies"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.UpdateYassonDependencies:
+      name: "org.openrewrite.java.migrate.jakarta.UpdateYassonDependencies"
+      description: "Update Eclipse Yasson Dependencies to 3.0.x."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/updateyassondependencies"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -14983,8 +14988,8 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.lang.var.UseVarForGenericMethodInvocations:
       name: "org.openrewrite.java.migrate.lang.var.UseVarForGenericMethodInvocations"
-      description: "Apply `var` to variables initialized by invocations of Generic\
-        \ Methods. This recipe ignores generic factory methods without parameters,\
+      description: "Apply `var` to variables initialized by invocations of generic\
+        \ methods. This recipe ignores generic factory methods without parameters,\
         \ because open rewrite cannot handle them correctly ATM."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/lang/var/usevarforgenericmethodinvocations"
       options: []
@@ -15532,7 +15537,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-nodejs:
   artifactId: "rewrite-nodejs"
-  version: "0.19.0"
+  version: "0.20.0"
   markdownRecipeDescriptors:
     org.openrewrite.nodejs.DependencyVulnerabilityCheck:
       name: "org.openrewrite.nodejs.DependencyVulnerabilityCheck"
@@ -15681,7 +15686,7 @@ rewrite-nodejs:
       artifactId: "rewrite-nodejs"
 rewrite-okhttp:
   artifactId: "rewrite-okhttp"
-  version: "0.11.0"
+  version: "0.11.1"
   markdownRecipeDescriptors:
     org.openrewrite.okhttp.ReorderRequestBodyCreateArguments:
       name: "org.openrewrite.okhttp.ReorderRequestBodyCreateArguments"
@@ -15738,7 +15743,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-openapi:
   artifactId: "rewrite-openapi"
-  version: "0.16.0"
+  version: "0.16.1"
   markdownRecipeDescriptors:
     org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings:
       name: "org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings"
@@ -15842,7 +15847,7 @@ rewrite-openapi:
       artifactId: "rewrite-openapi"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.48.0"
+  version: "8.49.0"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -15967,7 +15972,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "2.16.0"
+  version: "2.16.1"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.AddQuarkusProperty:
       name: "org.openrewrite.quarkus.AddQuarkusProperty"
@@ -16226,7 +16231,7 @@ rewrite-quarkus:
       artifactId: "rewrite-quarkus"
 rewrite-reactive-streams:
   artifactId: "rewrite-reactive-streams"
-  version: "0.11.0"
+  version: "0.11.1"
   markdownRecipeDescriptors:
     org.openrewrite.reactive.reactor.ReactorBestPractices:
       name: "org.openrewrite.reactive.reactor.ReactorBestPractices"
@@ -16406,7 +16411,7 @@ rewrite-reactive-streams:
       artifactId: "rewrite-reactive-streams"
 rewrite-rewrite:
   artifactId: "rewrite-rewrite"
-  version: "0.2.0"
+  version: "0.2.1"
   markdownRecipeDescriptors:
     org.openrewrite.recipes.JavaRecipeBestPractices:
       name: "org.openrewrite.recipes.JavaRecipeBestPractices"
@@ -16439,7 +16444,7 @@ rewrite-rewrite:
       artifactId: "rewrite-rewrite"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "0.3.2"
+  version: "0.3.3"
   markdownRecipeDescriptors:
     io.moderne.java.spring.boot3.AddValidToConfigurationPropertiesFields:
       name: "io.moderne.java.spring.boot3.AddValidToConfigurationPropertiesFields"
@@ -17643,10 +17648,10 @@ rewrite-spring:
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
-    org.openrewrite.java.spring.boot3.SpringBoot3BestPractices:
-      name: "org.openrewrite.java.spring.boot3.SpringBoot3BestPractices"
+    org.openrewrite.java.spring.boot3.SpringBoot33BestPractices:
+      name: "org.openrewrite.java.spring.boot3.SpringBoot33BestPractices"
       description: "Applies best practices to Spring Boot 3 applications."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/springboot3bestpractices"
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/springboot33bestpractices"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -18571,7 +18576,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-sql:
   artifactId: "rewrite-sql"
-  version: "2.1.3"
+  version: "2.1.4"
   markdownRecipeDescriptors:
     org.openrewrite.sql.ChangeFunctionName:
       name: "org.openrewrite.sql.ChangeFunctionName"
@@ -18628,7 +18633,7 @@ rewrite-sql:
       artifactId: "rewrite-sql"
 rewrite-static-analysis:
   artifactId: "rewrite-static-analysis"
-  version: "2.4.0"
+  version: "2.5.1"
   markdownRecipeDescriptors:
     org.openrewrite.staticanalysis.AbstractClassPublicConstructor:
       name: "org.openrewrite.staticanalysis.AbstractClassPublicConstructor"
@@ -20010,7 +20015,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
 rewrite-struts:
   artifactId: "rewrite-struts"
-  version: "0.12.0"
+  version: "0.12.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.struts.MigrateStrutsDtd:
       name: "org.openrewrite.java.struts.MigrateStrutsDtd"
@@ -20076,7 +20081,7 @@ rewrite-struts:
       artifactId: "rewrite-struts"
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "3.1.3"
+  version: "3.1.4"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -20969,7 +20974,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "3.4.0"
+  version: "3.5.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.archunit.ArchUnit0to1Migration:
       name: "org.openrewrite.java.testing.archunit.ArchUnit0to1Migration"
@@ -21939,7 +21944,11 @@ rewrite-testing-frameworks:
     org.openrewrite.java.testing.mockito.MockitoWhenOnStaticToMockStatic:
       name: "org.openrewrite.java.testing.mockito.MockitoWhenOnStaticToMockStatic"
       description: "Replace `Mockito.when` on static (non mock) with try-with-resource\
-        \ with MockedStatic as Mockito4 no longer allows this."
+        \ with MockedStatic as Mockito4 no longer allows this.When `@Before` or `@BeforeClass`\
+        \ is used, a `close` method is added to either the `@After` or `@AfterClass`\
+        \ method.This change moves away from implicit bytecode manipulation for static\
+        \ method stubbing, making mocking behavior more explicit and scoped to avoid\
+        \ unintended side effects."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/mockitowhenonstatictomockstatic"
       options: []
       isImperative: true
@@ -21957,6 +21966,14 @@ rewrite-testing-frameworks:
       description: "Replaces `PowerMockito.mockStatic()` by `Mockito.mockStatic()`.\
         \ Removes the `@PrepareForTest` annotation."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/powermockitomockstatictomockito"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.PowerMockitoWhenNewToMockito:
+      name: "org.openrewrite.java.testing.mockito.PowerMockitoWhenNewToMockito"
+      description: "Replaces `PowerMockito.whenNew` calls with respective `Mockito.whenConstructed`\
+        \ calls."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/powermockitowhennewtomockito"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
@@ -22062,7 +22079,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-third-party:
   artifactId: "rewrite-third-party"
-  version: "0.17.0"
+  version: "0.18.0"
   markdownRecipeDescriptors:
     ai.timefold.solver.migration.ChangeVersion:
       name: "ai.timefold.solver.migration.ChangeVersion"
@@ -22160,6 +22177,13 @@ rewrite-third-party:
       name: "ai.timefold.solver.migration.v8.SolverManagerBuilderRecipe"
       description: "Use `solveBuilder()` instead of deprecated solve methods on `SolveManager`."
       docLink: "https://docs.openrewrite.org/recipes/ai/timefold/solver/migration/v8/solvermanagerbuilderrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    io.quakus.updates.minio.minio38.UpdateAll:
+      name: "io.quakus.updates.minio.minio38.UpdateAll"
+      description: ""
+      docLink: "https://docs.openrewrite.org/recipes/io/quakus/updates/minio/minio38/updateall"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -22765,6 +22789,13 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus321.TlsRegistrySplitPackagesFix:
+      name: "io.quarkus.updates.core.quarkus321.TlsRegistrySplitPackagesFix"
+      description: ""
+      docLink: "https://docs.openrewrite.org/recipes/io/quarkus/updates/core/quarkus321/tlsregistrysplitpackagesfix"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     io.quarkus.updates.core.quarkus33.ApplicationProperties:
       name: "io.quarkus.updates.core.quarkus33.ApplicationProperties"
       description: ""
@@ -23066,6 +23097,20 @@ rewrite-third-party:
       name: "io.quarkus.updates.core.quarkus39.UpdateConfigRoots"
       description: ""
       docLink: "https://docs.openrewrite.org/recipes/io/quarkus/updates/core/quarkus39/updateconfigroots"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.minio.minio38.UpdateProperties:
+      name: "io.quarkus.updates.minio.minio38.UpdateProperties"
+      description: ""
+      docLink: "https://docs.openrewrite.org/recipes/io/quarkus/updates/minio/minio38/updateproperties"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.quarkiverse.minio.minio38.AdjustURLPropertyValue:
+      name: "io.quarkus.updates.quarkiverse.minio.minio38.AdjustURLPropertyValue"
+      description: "Adjust quarkus.minio.url property key to quarkus.minio.host."
+      docLink: "https://docs.openrewrite.org/recipes/io/quarkus/updates/quarkiverse/minio/minio38/adjusturlpropertyvalue"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -23725,6 +23770,13 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    software.amazon.awssdk.v2migration.DateToInstant:
+      name: "software.amazon.awssdk.v2migration.DateToInstant"
+      description: "Convert Date to Instant by calling Date#toInstant"
+      docLink: "https://docs.openrewrite.org/recipes/software/amazon/awssdk/v2migration/datetoinstant"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     software.amazon.awssdk.v2migration.EnumCasingToV2:
       name: "software.amazon.awssdk.v2migration.EnumCasingToV2"
       description: "Transforms V1 enum constants from pascal case to screaming snake\
@@ -23813,6 +23865,14 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    software.amazon.awssdk.v2migration.S3PutObjectRequestToV2:
+      name: "software.amazon.awssdk.v2migration.S3PutObjectRequestToV2"
+      description: "Transform V1 S3 PutObjectRequest to V2, as well as methods that\
+        \ take it as an argument."
+      docLink: "https://docs.openrewrite.org/recipes/software/amazon/awssdk/v2migration/s3putobjectrequesttov2"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     software.amazon.awssdk.v2migration.S3StreamingRequestToV2:
       name: "software.amazon.awssdk.v2migration.S3StreamingRequestToV2"
       description: "Transform usage of V1 S3 streaming requests such as PutObject\
@@ -23886,7 +23946,7 @@ rewrite-third-party:
         \ This is\n because `BigDecimal#equals(Object)` considers not only the numeric\
         \ value of compared\n instances, but also their scale. As a result various\
         \ seemingly straightforward transformations\n would actually subtly change\
-        \ the assertion's semantics. [Source](https://error-prone.picnic.tech/refasterrules/AssertJBigDecimalRules)."
+        \ the assertion's semantics.\n[Source](https://error-prone.picnic.tech/refasterrules/AssertJBigDecimalRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjbigdecimalrulesrecipes"
       options: []
       isImperative: true
@@ -23921,8 +23981,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJBigIntegerRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJBigIntegerRulesRecipes"
-      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJBigIntegerRules`.\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/AssertJBigIntegerRules)."
+      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJBigIntegerRules`.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJBigIntegerRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjbigintegerrulesrecipes"
       options: []
       isImperative: true
@@ -23996,8 +24056,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJBooleanRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJBooleanRulesRecipes"
-      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJBooleanRules`.\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/AssertJBooleanRules)."
+      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJBooleanRules`.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJBooleanRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjbooleanrulesrecipes"
       options: []
       isImperative: true
@@ -24080,8 +24140,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJByteRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJByteRulesRecipes"
-      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJByteRules`.\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/AssertJByteRules)."
+      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJByteRules`.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJByteRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjbyterulesrecipes"
       options: []
       isImperative: true
@@ -24150,8 +24210,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJCharSequenceRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJCharSequenceRulesRecipes"
-      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJCharSequenceRules`.\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/AssertJCharSequenceRules)."
+      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJCharSequenceRules`.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJCharSequenceRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjcharsequencerulesrecipes"
       options: []
       isImperative: true
@@ -24199,8 +24259,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJDoubleRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJDoubleRulesRecipes"
-      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJDoubleRules`.\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/AssertJDoubleRules)."
+      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJDoubleRules`.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJDoubleRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjdoublerulesrecipes"
       options: []
       isImperative: true
@@ -24286,8 +24346,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJFloatRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJFloatRulesRecipes"
-      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJFloatRules`.\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/AssertJFloatRules)."
+      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJFloatRules`.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJFloatRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjfloatrulesrecipes"
       options: []
       isImperative: true
@@ -24371,8 +24431,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJIntegerRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJIntegerRulesRecipes"
-      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJIntegerRules`.\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/AssertJIntegerRules)."
+      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJIntegerRules`.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJIntegerRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjintegerrulesrecipes"
       options: []
       isImperative: true
@@ -24441,8 +24501,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJLongRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJLongRulesRecipes"
-      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJLongRules`.\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/AssertJLongRules)."
+      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJLongRules`.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJLongRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjlongrulesrecipes"
       options: []
       isImperative: true
@@ -24511,8 +24571,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJNumberRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJNumberRulesRecipes"
-      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJNumberRules`.\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/AssertJNumberRules)."
+      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJNumberRules`.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJNumberRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjnumberrulesrecipes"
       options: []
       isImperative: true
@@ -24640,8 +24700,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJPrimitiveRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJPrimitiveRulesRecipes"
-      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJPrimitiveRules`.\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/AssertJPrimitiveRules)."
+      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJPrimitiveRules`.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJPrimitiveRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjprimitiverulesrecipes"
       options: []
       isImperative: true
@@ -24738,7 +24798,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJRulesRecipes"
-      description: "Refaster rules related to AssertJ expressions and statements [Source](https://error-prone.picnic.tech/refasterrules/AssertJRules)."
+      description: "Refaster rules related to AssertJ expressions and statements\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjrulesrecipes"
       options: []
       isImperative: true
@@ -24785,8 +24846,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJShortRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJShortRulesRecipes"
-      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJShortRules`.\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/AssertJShortRules)."
+      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJShortRules`.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJShortRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjshortrulesrecipes"
       options: []
       isImperative: true
@@ -24855,8 +24916,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJStringRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJStringRulesRecipes"
-      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJStringRules`.\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/AssertJStringRules)."
+      description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJStringRules`.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJStringRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjstringrulesrecipes"
       options: []
       isImperative: true
@@ -24968,7 +25029,7 @@ rewrite-third-party:
       description: "For reasons of consistency we prefer `org.assertj.core.api.Assertions#assertThatThrownBy`\
         \ over static methods for specific exception\n types. Note that only the most\
         \ common assertion expressions are rewritten here; covering all\n cases would\
-        \ require the implementation of an Error Prone check instead. [Source](https://error-prone.picnic.tech/refasterrules/AssertJThrowingCallableRules)."
+        \ require the implementation of an Error Prone check instead.\n[Source](https://error-prone.picnic.tech/refasterrules/AssertJThrowingCallableRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjthrowingcallablerulesrecipes"
       options: []
       isImperative: true
@@ -25397,7 +25458,7 @@ rewrite-third-party:
     tech.picnic.errorprone.refasterrules.AssortedRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssortedRulesRecipes"
       description: "Assorted Refaster rules that do not (yet) belong in one of the\
-        \ other classes with more topical Refaster rules [Source](https://error-prone.picnic.tech/refasterrules/AssortedRules)."
+        \ other classes with more topical Refaster rules\n[Source](https://error-prone.picnic.tech/refasterrules/AssortedRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assortedrulesrecipes"
       options: []
       isImperative: true
@@ -25426,8 +25487,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.BigDecimalRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.BigDecimalRulesRecipes"
-      description: "Refaster rules related to expressions dealing with `BigDecimal`s\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/BigDecimalRules)."
+      description: "Refaster rules related to expressions dealing with `BigDecimal`s\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/BigDecimalRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/bigdecimalrulesrecipes"
       options: []
       isImperative: true
@@ -25486,7 +25547,7 @@ rewrite-third-party:
     tech.picnic.errorprone.refasterrules.BugCheckerRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.BugCheckerRulesRecipes"
       description: "Refaster rules related to `com.google.errorprone.bugpatterns.BugChecker`\
-        \ classes [Source](https://error-prone.picnic.tech/refasterrules/BugCheckerRules)."
+        \ classes\n[Source](https://error-prone.picnic.tech/refasterrules/BugCheckerRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/bugcheckerrulesrecipes"
       options: []
       isImperative: true
@@ -25517,8 +25578,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.CharSequenceRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.CharSequenceRulesRecipes"
-      description: "Refaster rules related to expressions dealing with `CharSequence`s\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/CharSequenceRules)."
+      description: "Refaster rules related to expressions dealing with `CharSequence`s\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/CharSequenceRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/charsequencerulesrecipes"
       options: []
       isImperative: true
@@ -25533,8 +25594,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.DoubleStreamRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.DoubleStreamRulesRecipes"
-      description: "Refaster rules related to expressions dealing with `DoubleStream`s\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/DoubleStreamRules)."
+      description: "Refaster rules related to expressions dealing with `DoubleStream`s\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/DoubleStreamRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/doublestreamrulesrecipes"
       options: []
       isImperative: true
@@ -25632,8 +25693,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.EqualityRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.EqualityRulesRecipes"
-      description: "Refaster rules related to expressions dealing with (in)equalities\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/EqualityRules)."
+      description: "Refaster rules related to expressions dealing with (in)equalities\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/EqualityRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/equalityrulesrecipes"
       options: []
       isImperative: true
@@ -25663,8 +25724,16 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.FileRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.FileRulesRecipes"
-      description: "Refaster rules related to expressions dealing with files [Source](https://error-prone.picnic.tech/refasterrules/FileRules)."
+      description: "Refaster rules related to expressions dealing with files\n[Source](https://error-prone.picnic.tech/refasterrules/FileRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/filerulesrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.FileRulesRecipes$FileMkDirsFileExistsRecipe:
+      name: "tech.picnic.errorprone.refasterrules.FileRulesRecipes$FileMkDirsFileExistsRecipe"
+      description: "Invoke `File#mkdirs()` before `File#exists()` to avoid concurrency\
+        \ issues"
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/filerulesrecipesusdfilemkdirsfileexistsrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -25718,10 +25787,18 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.FileRulesRecipes$PathToFileMkDirsFilesExistsRecipe:
+      name: "tech.picnic.errorprone.refasterrules.FileRulesRecipes$PathToFileMkDirsFilesExistsRecipe"
+      description: "Invoke `File#mkdirs()` before `Files#exists(Path, LinkOption...)`\
+        \ to avoid concurrency issues"
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/filerulesrecipesusdpathtofilemkdirsfilesexistsrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.InputStreamRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.InputStreamRulesRecipes"
-      description: "Refaster rules related to expressions dealing with `InputStream`s\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/InputStreamRules)."
+      description: "Refaster rules related to expressions dealing with `InputStream`s\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/InputStreamRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/inputstreamrulesrecipes"
       options: []
       isImperative: true
@@ -25774,8 +25851,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.IntStreamRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.IntStreamRulesRecipes"
-      description: "Refaster rules related to expressions dealing with `IntStream`s\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/IntStreamRules)."
+      description: "Refaster rules related to expressions dealing with `IntStream`s\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/IntStreamRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/intstreamrulesrecipes"
       options: []
       isImperative: true
@@ -25880,7 +25957,7 @@ rewrite-third-party:
     tech.picnic.errorprone.refasterrules.JUnitToAssertJRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.JUnitToAssertJRulesRecipes"
       description: "Note that, while both libraries throw an `AssertionError` in case\
-        \ of an assertion\n failure, the exact subtype used generally differs. [Source](https://error-prone.picnic.tech/refasterrules/JUnitToAssertJRules)."
+        \ of an assertion\n failure, the exact subtype used generally differs.\n[Source](https://error-prone.picnic.tech/refasterrules/JUnitToAssertJRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/junittoassertjrulesrecipes"
       options: []
       isImperative: true
@@ -26611,8 +26688,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.LongStreamRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.LongStreamRulesRecipes"
-      description: "Refaster rules related to expressions dealing with `LongStream`s\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/LongStreamRules)."
+      description: "Refaster rules related to expressions dealing with `LongStream`s\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/LongStreamRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/longstreamrulesrecipes"
       options: []
       isImperative: true
@@ -26717,8 +26794,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.MicrometerRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.MicrometerRulesRecipes"
-      description: "Refaster rules related to expressions dealing with Micrometer\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/MicrometerRules)."
+      description: "Refaster rules related to expressions dealing with Micrometer\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/MicrometerRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/micrometerrulesrecipes"
       options: []
       isImperative: true
@@ -26760,7 +26837,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.MockitoRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.MockitoRulesRecipes"
-      description: "Refaster rules related to Mockito expressions and statements [Source](https://error-prone.picnic.tech/refasterrules/MockitoRules)."
+      description: "Refaster rules related to Mockito expressions and statements\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/MockitoRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/mockitorulesrecipes"
       options: []
       isImperative: true
@@ -26787,7 +26865,7 @@ rewrite-third-party:
     tech.picnic.errorprone.refasterrules.NullRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.NullRulesRecipes"
       description: "Refaster rules related to expressions dealing with (possibly)\
-        \ null values [Source](https://error-prone.picnic.tech/refasterrules/NullRules)."
+        \ null values\n[Source](https://error-prone.picnic.tech/refasterrules/NullRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/nullrulesrecipes"
       options: []
       isImperative: true
@@ -26810,8 +26888,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.PatternRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.PatternRulesRecipes"
-      description: "Refaster rules related to code dealing with regular expressions\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/PatternRules)."
+      description: "Refaster rules related to code dealing with regular expressions\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/PatternRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/patternrulesrecipes"
       options: []
       isImperative: true
@@ -26832,8 +26910,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.PrimitiveRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.PrimitiveRulesRecipes"
-      description: "Refaster rules related to expressions dealing with primitives\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/PrimitiveRules)."
+      description: "Refaster rules related to expressions dealing with primitives\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/PrimitiveRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/primitiverulesrecipes"
       options: []
       isImperative: true
@@ -27004,7 +27082,7 @@ rewrite-third-party:
     tech.picnic.errorprone.refasterrules.PrimitiveRulesRecipes$IntegerToUnsignedStringWithRadixRecipe:
       name: "tech.picnic.errorprone.refasterrules.PrimitiveRulesRecipes$IntegerToUnsignedStringWithRadixRecipe"
       description: "Prefer JDK's `Integer#toUnsignedString(int,int)` over third-party\
-        \ or more verbose alternatives"
+        \ alternatives"
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/primitiverulesrecipesusdintegertounsignedstringwithradixrecipe"
       options: []
       isImperative: true
@@ -27112,7 +27190,7 @@ rewrite-third-party:
     tech.picnic.errorprone.refasterrules.PrimitiveRulesRecipes$LongToUnsignedStringWithRadixRecipe:
       name: "tech.picnic.errorprone.refasterrules.PrimitiveRulesRecipes$LongToUnsignedStringWithRadixRecipe"
       description: "Prefer JDK's `Long#toUnsignedString(long,int)` over third-party\
-        \ or more verbose alternatives"
+        \ alternatives"
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/primitiverulesrecipesusdlongtounsignedstringwithradixrecipe"
       options: []
       isImperative: true
@@ -27133,7 +27211,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.ReactorRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.ReactorRulesRecipes"
-      description: "Refaster rules related to Reactor expressions and statements [Source](https://error-prone.picnic.tech/refasterrules/ReactorRules)."
+      description: "Refaster rules related to Reactor expressions and statements\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/ReactorRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/reactorrulesrecipes"
       options: []
       isImperative: true
@@ -27210,8 +27289,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.RxJava2AdapterRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.RxJava2AdapterRulesRecipes"
-      description: "Refaster rules related to expressions dealing with `RxJava2Adapter`\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/RxJava2AdapterRules)."
+      description: "Refaster rules related to expressions dealing with `RxJava2Adapter`\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/RxJava2AdapterRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/rxjava2adapterrulesrecipes"
       options: []
       isImperative: true
@@ -27225,7 +27304,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.StreamRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.StreamRulesRecipes"
-      description: "Refaster rules related to expressions dealing with `Stream`s [Source](https://error-prone.picnic.tech/refasterrules/StreamRules)."
+      description: "Refaster rules related to expressions dealing with `Stream`s\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/StreamRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/streamrulesrecipes"
       options: []
       isImperative: true
@@ -27240,7 +27320,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.StringRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.StringRulesRecipes"
-      description: "Refaster rules related to expressions dealing with `String`s [Source](https://error-prone.picnic.tech/refasterrules/StringRules)."
+      description: "Refaster rules related to expressions dealing with `String`s\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/StringRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/stringrulesrecipes"
       options: []
       isImperative: true
@@ -27379,8 +27460,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.SuggestedFixRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.SuggestedFixRulesRecipes"
-      description: "Refaster rules related to expressions dealing with `SuggestedFix`es\
-        \ [Source](https://error-prone.picnic.tech/refasterrules/SuggestedFixRules)."
+      description: "Refaster rules related to expressions dealing with `SuggestedFix`es\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/SuggestedFixRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/suggestedfixrulesrecipes"
       options: []
       isImperative: true
@@ -27434,7 +27515,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.SuggestedFixRulesRecipes$SuggestedFixSwapRecipe:
       name: "tech.picnic.errorprone.refasterrules.SuggestedFixRulesRecipes$SuggestedFixSwapRecipe"
-      description: "Prefer `SuggestedFix#swap(Tree, Tree)` over more contrived alternatives"
+      description: "Prefer `SuggestedFix#swap(Tree, Tree, VisitorState)` over more\
+        \ contrived alternatives"
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/suggestedfixrulesrecipesusdsuggestedfixswaprecipe"
       options: []
       isImperative: true
@@ -27452,7 +27534,7 @@ rewrite-third-party:
         \ type parameters of the map on the right-hand side will\n be inferred to\
         \ be `<Object, Object>` rather than `<String, Object>`).\n\n ```java\n List<Map<String,\
         \ Object>> myMaps = new ArrayList<>();\n assertEquals(myMaps, ImmutableList.of(ImmutableMap.of()));\n\
-        \ ```. [Source](https://error-prone.picnic.tech/refasterrules/TestNGToAssertJRules)."
+        \ ```\n.\n[Source](https://error-prone.picnic.tech/refasterrules/TestNGToAssertJRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/testngtoassertjrulesrecipes"
       options: []
       isImperative: true
@@ -27651,68 +27733,68 @@ rewrite-third-party:
     tech.picnic.errorprone.refasterrules.TestNGToAssertJRulesRecipes$AssertEqualRecipe:
       name: "tech.picnic.errorprone.refasterrules.TestNGToAssertJRulesRecipes$AssertEqualRecipe"
       description: "Recipe created for the following Refaster template:\n```java\n\
-        static final class AssertEqual {\n    \n    @BeforeTemplate\n    void before(boolean\
-        \ actual, boolean expected) {\n        assertEquals(actual, expected);\n \
-        \   }\n    \n    @BeforeTemplate\n    void before(boolean actual, Boolean\
-        \ expected) {\n        assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n\
-        \    void before(Boolean actual, boolean expected) {\n        assertEquals(actual,\
-        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(Boolean actual,\
-        \ Boolean expected) {\n        assertEquals(actual, expected);\n    }\n  \
-        \  \n    @BeforeTemplate\n    void before(byte actual, byte expected) {\n\
-        \        assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n\
-        \    void before(byte actual, Byte expected) {\n        assertEquals(actual,\
-        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(Byte actual,\
-        \ byte expected) {\n        assertEquals(actual, expected);\n    }\n    \n\
-        \    @BeforeTemplate\n    void before(Byte actual, Byte expected) {\n    \
-        \    assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n \
-        \   void before(char actual, char expected) {\n        assertEquals(actual,\
-        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(char actual,\
-        \ Character expected) {\n        assertEquals(actual, expected);\n    }\n\
-        \    \n    @BeforeTemplate\n    void before(Character actual, char expected)\
+        @SuppressWarnings(value = \"java:S1448\")\nstatic final class AssertEqual\
+        \ {\n    \n    @BeforeTemplate\n    void before(boolean actual, boolean expected)\
         \ {\n        assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n\
-        \    void before(Character actual, Character expected) {\n        assertEquals(actual,\
-        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(short actual,\
-        \ short expected) {\n        assertEquals(actual, expected);\n    }\n    \n\
-        \    @BeforeTemplate\n    void before(short actual, Short expected) {\n  \
-        \      assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n\
-        \    void before(Short actual, short expected) {\n        assertEquals(actual,\
-        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(Short actual,\
-        \ Short expected) {\n        assertEquals(actual, expected);\n    }\n    \n\
-        \    @BeforeTemplate\n    void before(int actual, int expected) {\n      \
-        \  assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n   \
-        \ void before(int actual, Integer expected) {\n        assertEquals(actual,\
-        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(Integer actual,\
-        \ int expected) {\n        assertEquals(actual, expected);\n    }\n    \n\
-        \    @BeforeTemplate\n    void before(Integer actual, Integer expected) {\n\
-        \        assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n\
-        \    void before(long actual, long expected) {\n        assertEquals(actual,\
-        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(long actual,\
-        \ Long expected) {\n        assertEquals(actual, expected);\n    }\n    \n\
-        \    @BeforeTemplate\n    void before(Long actual, long expected) {\n    \
+        \    void before(boolean actual, Boolean expected) {\n        assertEquals(actual,\
+        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(Boolean actual,\
+        \ boolean expected) {\n        assertEquals(actual, expected);\n    }\n  \
+        \  \n    @BeforeTemplate\n    void before(Boolean actual, Boolean expected)\
+        \ {\n        assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n\
+        \    void before(byte actual, byte expected) {\n        assertEquals(actual,\
+        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(byte actual,\
+        \ Byte expected) {\n        assertEquals(actual, expected);\n    }\n    \n\
+        \    @BeforeTemplate\n    void before(Byte actual, byte expected) {\n    \
         \    assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n \
-        \   void before(Long actual, Long expected) {\n        assertEquals(actual,\
-        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(float actual,\
-        \ float expected) {\n        assertEquals(actual, expected);\n    }\n    \n\
-        \    @BeforeTemplate\n    void before(float actual, Float expected) {\n  \
+        \   void before(Byte actual, Byte expected) {\n        assertEquals(actual,\
+        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(char actual,\
+        \ char expected) {\n        assertEquals(actual, expected);\n    }\n    \n\
+        \    @BeforeTemplate\n    void before(char actual, Character expected) {\n\
+        \        assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n\
+        \    void before(Character actual, char expected) {\n        assertEquals(actual,\
+        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(Character\
+        \ actual, Character expected) {\n        assertEquals(actual, expected);\n\
+        \    }\n    \n    @BeforeTemplate\n    void before(short actual, short expected)\
+        \ {\n        assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n\
+        \    void before(short actual, Short expected) {\n        assertEquals(actual,\
+        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(Short actual,\
+        \ short expected) {\n        assertEquals(actual, expected);\n    }\n    \n\
+        \    @BeforeTemplate\n    void before(Short actual, Short expected) {\n  \
         \      assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n\
-        \    void before(Float actual, float expected) {\n        assertEquals(actual,\
+        \    void before(int actual, int expected) {\n        assertEquals(actual,\
+        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(int actual,\
+        \ Integer expected) {\n        assertEquals(actual, expected);\n    }\n  \
+        \  \n    @BeforeTemplate\n    void before(Integer actual, int expected) {\n\
+        \        assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n\
+        \    void before(Integer actual, Integer expected) {\n        assertEquals(actual,\
+        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(long actual,\
+        \ long expected) {\n        assertEquals(actual, expected);\n    }\n    \n\
+        \    @BeforeTemplate\n    void before(long actual, Long expected) {\n    \
+        \    assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n \
+        \   void before(Long actual, long expected) {\n        assertEquals(actual,\
+        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(Long actual,\
+        \ Long expected) {\n        assertEquals(actual, expected);\n    }\n    \n\
+        \    @BeforeTemplate\n    void before(float actual, float expected) {\n  \
+        \      assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n\
+        \    void before(float actual, Float expected) {\n        assertEquals(actual,\
         \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(Float actual,\
-        \ Float expected) {\n        assertEquals(actual, expected);\n    }\n    \n\
-        \    @BeforeTemplate\n    void before(double actual, double expected) {\n\
+        \ float expected) {\n        assertEquals(actual, expected);\n    }\n    \n\
+        \    @BeforeTemplate\n    void before(Float actual, Float expected) {\n  \
+        \      assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n\
+        \    void before(double actual, double expected) {\n        assertEquals(actual,\
+        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(double actual,\
+        \ Double expected) {\n        assertEquals(actual, expected);\n    }\n   \
+        \ \n    @BeforeTemplate\n    void before(Double actual, double expected) {\n\
         \        assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n\
-        \    void before(double actual, Double expected) {\n        assertEquals(actual,\
-        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(Double actual,\
-        \ double expected) {\n        assertEquals(actual, expected);\n    }\n   \
-        \ \n    @BeforeTemplate\n    void before(Double actual, Double expected) {\n\
+        \    void before(Double actual, Double expected) {\n        assertEquals(actual,\
+        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(Object actual,\
+        \ Object expected) {\n        assertEquals(actual, expected);\n    }\n   \
+        \ \n    @BeforeTemplate\n    void before(String actual, String expected) {\n\
         \        assertEquals(actual, expected);\n    }\n    \n    @BeforeTemplate\n\
-        \    void before(Object actual, Object expected) {\n        assertEquals(actual,\
-        \ expected);\n    }\n    \n    @BeforeTemplate\n    void before(String actual,\
-        \ String expected) {\n        assertEquals(actual, expected);\n    }\n   \
-        \ \n    @BeforeTemplate\n    void before(Map<?, ?> actual, Map<?, ?> expected)\
-        \ {\n        assertEquals(actual, expected);\n    }\n    \n    @AfterTemplate\n\
-        \    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n    void after(Object\
-        \ actual, Object expected) {\n        assertThat(actual).isEqualTo(expected);\n\
-        \    }\n}\n```\n."
+        \    void before(Map<?, ?> actual, Map<?, ?> expected) {\n        assertEquals(actual,\
+        \ expected);\n    }\n    \n    @AfterTemplate\n    @UseImportPolicy(value\
+        \ = STATIC_IMPORT_ALWAYS)\n    void after(Object actual, Object expected)\
+        \ {\n        assertThat(actual).isEqualTo(expected);\n    }\n}\n```\n."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/testngtoassertjrulesrecipesusdassertequalrecipe"
       options: []
       isImperative: true
@@ -27720,78 +27802,81 @@ rewrite-third-party:
     tech.picnic.errorprone.refasterrules.TestNGToAssertJRulesRecipes$AssertEqualWithMessageRecipe:
       name: "tech.picnic.errorprone.refasterrules.TestNGToAssertJRulesRecipes$AssertEqualWithMessageRecipe"
       description: "Recipe created for the following Refaster template:\n```java\n\
-        static final class AssertEqualWithMessage {\n    \n    @BeforeTemplate\n \
-        \   void before(boolean actual, String message, boolean expected) {\n    \
-        \    assertEquals(actual, expected, message);\n    }\n    \n    @BeforeTemplate\n\
-        \    void before(boolean actual, String message, Boolean expected) {\n   \
-        \     assertEquals(actual, expected, message);\n    }\n    \n    @BeforeTemplate\n\
-        \    void before(Boolean actual, String message, boolean expected) {\n   \
-        \     assertEquals(actual, expected, message);\n    }\n    \n    @BeforeTemplate\n\
-        \    void before(Boolean actual, String message, Boolean expected) {\n   \
-        \     assertEquals(actual, expected, message);\n    }\n    \n    @BeforeTemplate\n\
-        \    void before(byte actual, String message, byte expected) {\n        assertEquals(actual,\
-        \ expected, message);\n    }\n    \n    @BeforeTemplate\n    void before(byte\
-        \ actual, String message, Byte expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Byte actual,\
-        \ String message, byte expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Byte actual,\
-        \ String message, Byte expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(char actual,\
-        \ String message, char expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(char actual,\
-        \ String message, Character expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Character actual,\
-        \ String message, char expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Character actual,\
-        \ String message, Character expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(short actual,\
-        \ String message, short expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(short actual,\
-        \ String message, Short expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Short actual,\
-        \ String message, short expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Short actual,\
-        \ String message, Short expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(int actual,\
-        \ String message, int expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(int actual,\
-        \ String message, Integer expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Integer actual,\
-        \ String message, int expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Integer actual,\
-        \ String message, Integer expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(long actual,\
-        \ String message, long expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Long actual,\
-        \ String message, long expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Long actual,\
-        \ String message, Long expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(float actual,\
-        \ String message, float expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(float actual,\
-        \ String message, Float expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Float actual,\
-        \ String message, float expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Float actual,\
-        \ String message, Float expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(double actual,\
-        \ String message, double expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(double actual,\
-        \ String message, Double expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Double actual,\
-        \ String message, double expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Double actual,\
-        \ String message, Double expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Object actual,\
-        \ String message, Object expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(String actual,\
-        \ String message, String expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @BeforeTemplate\n    void before(Map<?, ?> actual,\
-        \ String message, Map<?, ?> expected) {\n        assertEquals(actual, expected,\
-        \ message);\n    }\n    \n    @AfterTemplate\n    @UseImportPolicy(value =\
-        \ STATIC_IMPORT_ALWAYS)\n    void after(Object actual, String message, Object\
-        \ expected) {\n        assertThat(actual).withFailMessage(message).isEqualTo(expected);\n\
-        \    }\n}\n```\n."
+        @SuppressWarnings(value = \"java:S1448\")\nstatic final class AssertEqualWithMessage\
+        \ {\n    \n    @BeforeTemplate\n    void before(boolean actual, String message,\
+        \ boolean expected) {\n        assertEquals(actual, expected, message);\n\
+        \    }\n    \n    @BeforeTemplate\n    void before(boolean actual, String\
+        \ message, Boolean expected) {\n        assertEquals(actual, expected, message);\n\
+        \    }\n    \n    @BeforeTemplate\n    void before(Boolean actual, String\
+        \ message, boolean expected) {\n        assertEquals(actual, expected, message);\n\
+        \    }\n    \n    @BeforeTemplate\n    void before(Boolean actual, String\
+        \ message, Boolean expected) {\n        assertEquals(actual, expected, message);\n\
+        \    }\n    \n    @BeforeTemplate\n    void before(byte actual, String message,\
+        \ byte expected) {\n        assertEquals(actual, expected, message);\n   \
+        \ }\n    \n    @BeforeTemplate\n    void before(byte actual, String message,\
+        \ Byte expected) {\n        assertEquals(actual, expected, message);\n   \
+        \ }\n    \n    @BeforeTemplate\n    void before(Byte actual, String message,\
+        \ byte expected) {\n        assertEquals(actual, expected, message);\n   \
+        \ }\n    \n    @BeforeTemplate\n    void before(Byte actual, String message,\
+        \ Byte expected) {\n        assertEquals(actual, expected, message);\n   \
+        \ }\n    \n    @BeforeTemplate\n    void before(char actual, String message,\
+        \ char expected) {\n        assertEquals(actual, expected, message);\n   \
+        \ }\n    \n    @BeforeTemplate\n    void before(char actual, String message,\
+        \ Character expected) {\n        assertEquals(actual, expected, message);\n\
+        \    }\n    \n    @BeforeTemplate\n    void before(Character actual, String\
+        \ message, char expected) {\n        assertEquals(actual, expected, message);\n\
+        \    }\n    \n    @BeforeTemplate\n    void before(Character actual, String\
+        \ message, Character expected) {\n        assertEquals(actual, expected, message);\n\
+        \    }\n    \n    @BeforeTemplate\n    void before(short actual, String message,\
+        \ short expected) {\n        assertEquals(actual, expected, message);\n  \
+        \  }\n    \n    @BeforeTemplate\n    void before(short actual, String message,\
+        \ Short expected) {\n        assertEquals(actual, expected, message);\n  \
+        \  }\n    \n    @BeforeTemplate\n    void before(Short actual, String message,\
+        \ short expected) {\n        assertEquals(actual, expected, message);\n  \
+        \  }\n    \n    @BeforeTemplate\n    void before(Short actual, String message,\
+        \ Short expected) {\n        assertEquals(actual, expected, message);\n  \
+        \  }\n    \n    @BeforeTemplate\n    void before(int actual, String message,\
+        \ int expected) {\n        assertEquals(actual, expected, message);\n    }\n\
+        \    \n    @BeforeTemplate\n    void before(int actual, String message, Integer\
+        \ expected) {\n        assertEquals(actual, expected, message);\n    }\n \
+        \   \n    @BeforeTemplate\n    void before(Integer actual, String message,\
+        \ int expected) {\n        assertEquals(actual, expected, message);\n    }\n\
+        \    \n    @BeforeTemplate\n    void before(Integer actual, String message,\
+        \ Integer expected) {\n        assertEquals(actual, expected, message);\n\
+        \    }\n    \n    @BeforeTemplate\n    void before(long actual, String message,\
+        \ long expected) {\n        assertEquals(actual, expected, message);\n   \
+        \ }\n    \n    @BeforeTemplate\n    void before(long actual, String message,\
+        \ Long expected) {\n        assertEquals(actual, expected, message);\n   \
+        \ }\n    \n    @BeforeTemplate\n    void before(Long actual, String message,\
+        \ long expected) {\n        assertEquals(actual, expected, message);\n   \
+        \ }\n    \n    @BeforeTemplate\n    void before(Long actual, String message,\
+        \ Long expected) {\n        assertEquals(actual, expected, message);\n   \
+        \ }\n    \n    @BeforeTemplate\n    void before(float actual, String message,\
+        \ float expected) {\n        assertEquals(actual, expected, message);\n  \
+        \  }\n    \n    @BeforeTemplate\n    void before(float actual, String message,\
+        \ Float expected) {\n        assertEquals(actual, expected, message);\n  \
+        \  }\n    \n    @BeforeTemplate\n    void before(Float actual, String message,\
+        \ float expected) {\n        assertEquals(actual, expected, message);\n  \
+        \  }\n    \n    @BeforeTemplate\n    void before(Float actual, String message,\
+        \ Float expected) {\n        assertEquals(actual, expected, message);\n  \
+        \  }\n    \n    @BeforeTemplate\n    void before(double actual, String message,\
+        \ double expected) {\n        assertEquals(actual, expected, message);\n \
+        \   }\n    \n    @BeforeTemplate\n    void before(double actual, String message,\
+        \ Double expected) {\n        assertEquals(actual, expected, message);\n \
+        \   }\n    \n    @BeforeTemplate\n    void before(Double actual, String message,\
+        \ double expected) {\n        assertEquals(actual, expected, message);\n \
+        \   }\n    \n    @BeforeTemplate\n    void before(Double actual, String message,\
+        \ Double expected) {\n        assertEquals(actual, expected, message);\n \
+        \   }\n    \n    @BeforeTemplate\n    void before(Object actual, String message,\
+        \ Object expected) {\n        assertEquals(actual, expected, message);\n \
+        \   }\n    \n    @BeforeTemplate\n    void before(String actual, String message,\
+        \ String expected) {\n        assertEquals(actual, expected, message);\n \
+        \   }\n    \n    @BeforeTemplate\n    void before(Map<?, ?> actual, String\
+        \ message, Map<?, ?> expected) {\n        assertEquals(actual, expected, message);\n\
+        \    }\n    \n    @AfterTemplate\n    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n\
+        \    void after(Object actual, String message, Object expected) {\n      \
+        \  assertThat(actual).withFailMessage(message).isEqualTo(expected);\n    }\n\
+        }\n```\n."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/testngtoassertjrulesrecipesusdassertequalwithmessagerecipe"
       options: []
       isImperative: true
@@ -28108,7 +28193,7 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.TimeRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.TimeRulesRecipes"
-      description: "Refaster rules related to expressions dealing with time [Source](https://error-prone.picnic.tech/refasterrules/TimeRules)."
+      description: "Refaster rules related to expressions dealing with time\n[Source](https://error-prone.picnic.tech/refasterrules/TimeRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/timerulesrecipes"
       options: []
       isImperative: true
@@ -28920,7 +29005,7 @@ rewrite-third-party:
     tech.picnic.errorprone.refasterrules.WebClientRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.WebClientRulesRecipes"
       description: "Refaster rules related to expressions dealing with `org.springframework.web.reactive.function.client.WebClient`\
-        \ and related types [Source](https://error-prone.picnic.tech/refasterrules/WebClientRules)."
+        \ and related types\n[Source](https://error-prone.picnic.tech/refasterrules/WebClientRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/webclientrulesrecipes"
       options: []
       isImperative: true
@@ -28975,7 +29060,7 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.48.0"
+  version: "8.49.0"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -29295,7 +29380,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.48.0"
+  version: "8.49.0"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
