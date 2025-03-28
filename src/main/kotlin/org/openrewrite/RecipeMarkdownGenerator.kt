@@ -440,7 +440,12 @@ class RecipeMarkdownGenerator : Runnable {
             }
 
         recipeOrigins.forEach {
-            it.value.license = mfInfos[it.key]?.first ?: getLicenseFallback(it.value) // we fall back to hard coded here as long as not every module is released
+            val license = mfInfos[it.key]?.first
+            if (license != null) {
+                it.value.license = license
+            } else {
+                println("Unable to determine License for ${it.value}")
+            }
             it.value.gitHubLocation = mfInfos[it.key]?.second ?: ""
         }
     }
