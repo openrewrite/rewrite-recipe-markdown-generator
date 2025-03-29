@@ -41,6 +41,7 @@ fun getLicense(recipeOrigin: RecipeOrigin): License {
         "rewrite-csharp-recipes",
         "rewrite-cucumber-jvm",
         "rewrite-docker",
+        "rewrite-dropwizard",
         "rewrite-feature-flags",
         "rewrite-github-actions",
         "rewrite-gitlab",
