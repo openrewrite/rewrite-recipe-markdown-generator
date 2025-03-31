@@ -126,13 +126,6 @@ class RecipeMarkdownGenerator : Runnable {
         if (recipeSources.isNotEmpty()) {
             recipeOrigins = RecipeOrigin.parse(recipeSources)
 
-            if (recipeClasspath.isEmpty()) {
-                // Write latest-versions-of-every-openrewrite-module.md for the base recipes only
-                createLatestVersionsJs(outputPath, recipeOrigins)
-                createLatestVersionsMarkdown(outputPath, recipeOrigins)
-                return
-            }
-
             // Load recipe details into memory
             val classloader = recipeClasspath.split(";")
                 .map(Paths::get)
@@ -408,7 +401,7 @@ class RecipeMarkdownGenerator : Runnable {
     }
 
     private fun addInfosFromManifests(recipeOrigins: Map<URI, RecipeOrigin>, cl: ClassLoader) {
-        val mfInfos = cl.getResources("META-INF/MANIFEST.MF").asSequence()
+        val mfInfos: Map<URI, Pair<License, String>> = cl.getResources("META-INF/MANIFEST.MF").asSequence()
             .filter { it.path != null }
             .map {
                 Pair(
@@ -441,7 +434,7 @@ class RecipeMarkdownGenerator : Runnable {
             }
 
         recipeOrigins.forEach {
-            val license = mfInfos[it.key]?.first
+            val license: License? = mfInfos[it.key]?.first
             if (license != null) {
                 it.value.license = license
             } else {
@@ -1311,7 +1304,9 @@ import TabItem from '@theme/TabItem';
     private fun BufferedWriter.writeLicense(origin: RecipeOrigin) {
         val licenseText = when (origin.license) {
             Licenses.Unknown -> "The license for this recipe is unknown."
-            else -> "This recipe is available under the ${origin.license.markdown()} License."
+            Licenses.Apache2 -> "This recipe is available under the ${origin.license.markdown()}."
+            Licenses.Proprietary, Licenses.MSAL -> "This recipe is available under the ${origin.license.markdown()} License."
+            else -> "This recipe is available under the ${origin.license.markdown()} License, as defined by the recipe authors."
         }
 
         //language=markdown
