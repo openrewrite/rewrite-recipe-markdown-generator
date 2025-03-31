@@ -33,5 +33,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: Generate Markdown
         run: |
-          ./gradlew ${{ env.GRADLE_SWITCHES }} latestVersionsMarkdown
+          ./gradlew ${{ env.GRADLE_SWITCHES }} run -Parg="--latest-versions-only"
           cat build/docs/latest-versions-of-every-openrewrite-module.md
