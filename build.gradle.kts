@@ -157,9 +157,8 @@ tasks.named<JavaExec>("run").configure {
         .map { it.absolutePath }
         .joinToString(";")
 
-    val additionalArgs = providers.gradleProperty("args").getOrElse("")
     description = "Writes generated markdown docs to $targetDir"
-    args = listOf(
+    val arguments = mutableListOf(
         targetDir.toString(),
         recipeModules,
         recipeClasspath,
@@ -169,9 +168,13 @@ tasks.named<JavaExec>("run").configure {
         latestVersion("org.openrewrite:plugin:latest.release"),
         latestVersion("org.openrewrite.maven:rewrite-maven-plugin:latest.release"),
         deployType,
-        diffFileName,
-        additionalArgs
+        diffFileName
     )
+    val gradleProperty = providers.gradleProperty("arg")
+    if (gradleProperty.isPresent() && gradleProperty.get().isNotEmpty()) {
+        arguments.add(gradleProperty.get())
+    }
+    args = arguments
     doFirst {
         logger.lifecycle("Recipe modules: ")
         logger.lifecycle(recipeModules.replace(";", "\n"))

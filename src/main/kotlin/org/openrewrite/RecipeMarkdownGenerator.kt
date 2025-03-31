@@ -111,7 +111,6 @@ class RecipeMarkdownGenerator : Runnable {
     )
     lateinit var diffFileName: String
 
-
     @Option(names = ["--latest-versions-only"])
     var latestVersionsOnly: Boolean = false
 
