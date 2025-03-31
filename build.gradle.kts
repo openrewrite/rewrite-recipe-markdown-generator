@@ -157,6 +157,7 @@ tasks.named<JavaExec>("run").configure {
         .map { it.absolutePath }
         .joinToString(";")
 
+    val additionalArgs = providers.gradleProperty("args").getOrElse("")
     description = "Writes generated markdown docs to $targetDir"
     args = listOf(
         targetDir.toString(),
@@ -168,55 +169,8 @@ tasks.named<JavaExec>("run").configure {
         latestVersion("org.openrewrite:plugin:latest.release"),
         latestVersion("org.openrewrite.maven:rewrite-maven-plugin:latest.release"),
         deployType,
-        diffFileName
-    )
-    doFirst {
-        logger.lifecycle("Recipe modules: ")
-        logger.lifecycle(recipeModules.replace(";", "\n"))
-
-        // Ensure no stale output from previous runs is in the output directory
-        targetDir.deleteRecursively()
-        targetDir.mkdirs()
-    }
-    doLast {
-        this as JavaExec
-        @Suppress("UNNECESSARY_NOT_NULL_ASSERTION") // IntelliJ says this is unnecessary, kotlin compiler disagrees
-        logger.lifecycle("Wrote generated docs to: file://${args!!.first()}")
-    }
-}
-
-tasks.register<JavaExec>("latestVersionsMarkdown").configure {
-    classpath(sourceSets.main.get().runtimeClasspath)
-    mainClass.set("org.openrewrite.RecipeMarkdownGenerator")
-
-    // Additional modules whose versions we want to show, but not (yet) their recipes
-    dependencies {
-        "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
-        "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
-        "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
-        "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
-        "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
-        "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
-    }
-
-    val targetDir = layout.buildDirectory.dir("docs").get().asFile
-    // Collect all of the dependencies from recipeConf, then stuff them into a string representation
-    val recipeModules = recipeConf.resolvedConfiguration.firstLevelModuleDependencies.flatMap { dep ->
-        dep.moduleArtifacts.map { artifact ->
-            "${dep.moduleGroup}:${dep.moduleName}:${dep.moduleVersion}:${artifact.file}"
-        }
-    }.joinToString(";")
-
-    description = "Writes generated markdown docs to $targetDir"
-    args = listOf(
-        targetDir.toString(),
-        recipeModules,
-        "", // intentionally left out to exit early
-        latestVersion("org.openrewrite:rewrite-bom:latest.release"),
-        latestVersion("org.openrewrite.recipe:rewrite-recipe-bom:latest.release"),
-        latestVersion("io.moderne.recipe:moderne-recipe-bom:latest.release"),
-        latestVersion("org.openrewrite:plugin:latest.release"),
-        latestVersion("org.openrewrite.maven:rewrite-maven-plugin:latest.release"),
+        diffFileName,
+        additionalArgs
     )
     doFirst {
         logger.lifecycle("Recipe modules: ")

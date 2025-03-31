@@ -14,6 +14,7 @@ import org.openrewrite.internal.StringUtils
 import org.openrewrite.internal.StringUtils.isNullOrEmpty
 import picocli.CommandLine
 import picocli.CommandLine.Command
+import picocli.CommandLine.Option
 import picocli.CommandLine.Parameters
 import java.io.BufferedWriter
 import java.io.File
@@ -110,6 +111,10 @@ class RecipeMarkdownGenerator : Runnable {
     )
     lateinit var diffFileName: String
 
+
+    @Option(names = ["--latest-versions-only"])
+    var latestVersionsOnly: Boolean = false
+
     // These are common in every recipe - so let's not use them when generating the list of recipes with data tables.
     private val dataTablesToIgnore = listOf(
         "org.openrewrite.table.SourcesFileResults",
@@ -139,11 +144,14 @@ class RecipeMarkdownGenerator : Runnable {
             createLatestVersionsJs(outputPath, recipeOrigins)
             createLatestVersionsMarkdown(outputPath, recipeOrigins)
 
+            if (latestVersionsOnly) {
+                return
+            }
+
             val dependencies: MutableCollection<Path> = mutableListOf()
             recipeClasspath.split(";")
                 .map(Paths::get)
                 .toCollection(dependencies)
-
 
             val envBuilder = Environment.builder()
             for (recipeOrigin in recipeOrigins) {
