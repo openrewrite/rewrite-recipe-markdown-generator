@@ -65,6 +65,7 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-hcl")
     "recipe"("org.openrewrite:rewrite-java")
     "recipe"("org.openrewrite:rewrite-json")
+    "recipe"("org.openrewrite:rewrite-kotlin")
     "recipe"("org.openrewrite:rewrite-maven")
     "recipe"("org.openrewrite:rewrite-properties")
     "recipe"("org.openrewrite:rewrite-protobuf")
@@ -72,12 +73,13 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-xml")
     "recipe"("org.openrewrite:rewrite-yaml")
 
-// Do not yet show recipes associated with these languages
-//    "recipe"("org.openrewrite:rewrite-csharp")
-//    "recipe"("org.openrewrite:rewrite-javascript")
-    "recipe"("org.openrewrite:rewrite-kotlin")
-//    "recipe"("org.openrewrite:rewrite-python")
-//    "recipe"("org.openrewrite:rewrite-ruby")
+    // Show the versions of these modules too
+    "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
 
     "recipe"("org.openrewrite.recipe:rewrite-all")
     "recipe"("org.openrewrite.meta:rewrite-analysis")
@@ -146,6 +148,20 @@ application {
 
 tasks.named<JavaExec>("run").configure {
     val targetDir = layout.buildDirectory.dir("docs").get().asFile
+
+    val latestVersionsOnly = providers.gradleProperty("latestVersionsOnly").getOrElse("").equals("true")
+    if (latestVersionsOnly) {
+        // Additional modules whose versions we want to show, but not (yet) their recipes
+        dependencies {
+            "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
+            "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
+            "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
+            "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
+            "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
+            "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
+        }
+    }
+
     // Collect all of the dependencies from recipeConf, then stuff them into a string representation
     val recipeModules = recipeConf.resolvedConfiguration.firstLevelModuleDependencies.flatMap { dep ->
         dep.moduleArtifacts.map { artifact ->
@@ -170,9 +186,8 @@ tasks.named<JavaExec>("run").configure {
         deployType,
         diffFileName
     )
-    val gradleProperty = providers.gradleProperty("arg")
-    if (gradleProperty.isPresent() && gradleProperty.get().isNotEmpty()) {
-        arguments.add(gradleProperty.get())
+    if (latestVersionsOnly) {
+        arguments.add("--latest-versions-only")
     }
     args = arguments
     doFirst {
