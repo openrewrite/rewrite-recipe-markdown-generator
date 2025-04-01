@@ -3,7 +3,13 @@ package org.openrewrite
 import java.net.URI
 
 data class License (val uri: URI, val name: String) {
-    fun markdown() = "[${name}](${uri})"
+    fun markdown(): String {
+        return if (uri.toString().isEmpty()) {
+            name
+        } else {
+            "[${name}](${uri})"
+        }
+    }
 }
 
 data object Licenses {
