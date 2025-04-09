@@ -1311,8 +1311,7 @@ import TabItem from '@theme/TabItem';
     private fun BufferedWriter.writeLicense(origin: RecipeOrigin) {
         val licenseText = when (origin.license) {
             Licenses.Unknown -> "The license for this recipe is unknown."
-            Licenses.Apache2 -> "This recipe is available under the ${origin.license.markdown()}."
-            Licenses.Proprietary, Licenses.MSAL -> "This recipe is available under the ${origin.license.markdown()} License."
+            Licenses.Apache2, Licenses.Proprietary, Licenses.MSAL -> "This recipe is available under the ${origin.license.markdown()}."
             else -> "This recipe is available under the ${origin.license.markdown()} License, as defined by the recipe authors."
         }
 
