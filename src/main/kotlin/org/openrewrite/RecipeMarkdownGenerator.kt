@@ -509,8 +509,7 @@ class RecipeMarkdownGenerator : Runnable {
                     version: "LATEST"
                   ) {
                     id
-                  }
-                """.trimIndent()
+                  }"""
 
                 val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.repositoryUrl})"
                 val releaseLink = "[${origin.version}](${origin.repositoryUrl}/releases/tag/v${origin.version})"
@@ -527,11 +526,6 @@ class RecipeMarkdownGenerator : Runnable {
                 ```bash
                 mod config recipes jar install ${cliInstallGavs}
                 ```
-                """.trimIndent()
-            )
-            //language=markdown
-            writeln(
-                """
                 
                 ## Moderne Installation
                 
