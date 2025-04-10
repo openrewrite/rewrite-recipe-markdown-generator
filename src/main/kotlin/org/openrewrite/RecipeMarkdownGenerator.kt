@@ -500,7 +500,9 @@ class RecipeMarkdownGenerator : Runnable {
 
                 cliInstallGavs += "${origin.groupId}:${origin.artifactId}:{{${origin.versionPlaceholderKey()}}} "
 
-                val loadCommand = "load_" + (origin.groupId + '_' + origin.artifactId).replace('-', '_')
+                val loadCommand = "load_" + (origin.groupId + '_' + origin.artifactId)
+                    .replace('-', '_')
+                    .replace('.', '_')
                 //language=graphql
                 loadRecipesAsync += """
                   $loadCommand: loadRecipesAsync(
