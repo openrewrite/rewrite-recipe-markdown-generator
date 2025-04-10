@@ -64,7 +64,7 @@ class RecipeOrigin(
         .replace('-', '_')
         .replace('.', '_')
 
-    fun issueTrackerUrl() = "${repositoryUrl}/issues"
+    fun issueTrackerUrl() = repositoryUrl.replace(Regex("/blob/main/.*"), "/issues")
 
     companion object {
         private val parsePattern = Pattern.compile("([^:]+):([^:]+):([^:]+):(.+)")
