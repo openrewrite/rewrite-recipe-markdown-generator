@@ -529,13 +529,20 @@ class RecipeMarkdownGenerator : Runnable {
                 
                 ## Moderne Installation
                 
-                Install the latest versions of all the OpenRewrite recipe modules into Moderne:
+                Install the latest versions of all the OpenRewrite [recipe modules into Moderne](https://docs.moderne.io/administrator-documentation/moderne-dx/how-to-guides/deploying-recipe-artifacts-in-moderne-dx) using the GraphQL endpoint.
+                
+                <details>
+                <summary>
+                Show GraphQL mutation.
+                </summary>
                 
                 ```graphql
                 mutation seedOpenRewriteArtifacts() {
                 ${loadRecipesAsync}
                 }
                 ```
+                
+                </details>
                 """.trimIndent()
             )
         }
