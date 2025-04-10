@@ -73,13 +73,13 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-xml")
     "recipe"("org.openrewrite:rewrite-yaml")
 
-    // Show the versions of these modules too
-    "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
+    // Only show the versions of these modules below
+//    "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
+//    "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
+//    "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
+//    "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
+//    "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
+//    "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
 
     "recipe"("org.openrewrite.recipe:rewrite-all")
     "recipe"("org.openrewrite.meta:rewrite-analysis")
