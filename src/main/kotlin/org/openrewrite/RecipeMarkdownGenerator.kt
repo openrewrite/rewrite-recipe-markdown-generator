@@ -2326,6 +2326,7 @@ $cliSnippet
                 recipe.name.substring(11).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
             } else if (
                 recipe.name.startsWith("ai.timefold") ||
+                recipe.name.startsWith("com.oracle") ||
                 recipe.name.startsWith("io.quarkus") ||
                 recipe.name.startsWith("io.quakus") ||
                 recipe.name.startsWith("org.apache") ||

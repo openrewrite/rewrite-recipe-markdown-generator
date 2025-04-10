@@ -1,6 +1,6 @@
 rewrite-ai-search:
   artifactId: "rewrite-ai-search"
-  version: "0.25.2"
+  version: "0.25.4"
   markdownRecipeDescriptors:
     io.moderne.ai.FindCommentsLanguage:
       name: "io.moderne.ai.FindCommentsLanguage"
@@ -73,16 +73,9 @@ rewrite-ai-search:
         required: true
       isImperative: true
       artifactId: "rewrite-ai-search"
-    io.moderne.transposeCapitalization.SpongeBobCase:
-      name: "io.moderne.transposeCapitalization.SpongeBobCase"
-      description: "Change all your comments to be SpongeBob-case."
-      docLink: "https://docs.openrewrite.org/recipes/transposecapitalization/spongebobcase"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-ai-search"
 rewrite-all:
   artifactId: "rewrite-all"
-  version: "1.14.0"
+  version: "1.14.2"
   markdownRecipeDescriptors:
     org.openrewrite.FindCallGraph:
       name: "org.openrewrite.FindCallGraph"
@@ -114,7 +107,7 @@ rewrite-all:
       artifactId: "rewrite-all"
 rewrite-analysis:
   artifactId: "rewrite-analysis"
-  version: "2.19.1"
+  version: "2.19.3"
   markdownRecipeDescriptors:
     org.openrewrite.analysis.controlflow.ControlFlowVisualization:
       name: "org.openrewrite.analysis.controlflow.ControlFlowVisualization"
@@ -177,7 +170,7 @@ rewrite-analysis:
       artifactId: "rewrite-analysis"
 rewrite-android:
   artifactId: "rewrite-android"
-  version: "0.7.5"
+  version: "0.7.7"
   markdownRecipeDescriptors:
     org.openrewrite.android.ChangeAndroidSdkVersion:
       name: "org.openrewrite.android.ChangeAndroidSdkVersion"
@@ -304,7 +297,7 @@ rewrite-android:
       artifactId: "rewrite-android"
 rewrite-apache:
   artifactId: "rewrite-apache"
-  version: "2.5.0"
+  version: "2.7.0"
   markdownRecipeDescriptors:
     org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64:
       name: "org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64"
@@ -996,7 +989,7 @@ rewrite-apache:
       artifactId: "rewrite-apache"
 rewrite-circleci:
   artifactId: "rewrite-circleci"
-  version: "3.3.2"
+  version: "3.3.4"
   markdownRecipeDescriptors:
     org.openrewrite.circleci.InstallOrb:
       name: "org.openrewrite.circleci.InstallOrb"
@@ -1024,7 +1017,7 @@ rewrite-circleci:
       artifactId: "rewrite-circleci"
 rewrite-codemods:
   artifactId: "rewrite-codemods"
-  version: "0.11.0"
+  version: "0.12.1"
   markdownRecipeDescriptors:
     org.openrewrite.codemods.ApplyCodemod:
       name: "org.openrewrite.codemods.ApplyCodemod"
@@ -3878,546 +3871,546 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.AdapterV:
       name: "org.openrewrite.codemods.migrate.mui.AdapterV"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#adapter-v4)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#adapter-v4)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/adapterv"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.All:
       name: "org.openrewrite.codemods.migrate.mui.All"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#all)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#all)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/all"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.AutocompleteRenameCloseicon:
       name: "org.openrewrite.codemods.migrate.mui.AutocompleteRenameCloseicon"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#autocomplete-rename-closeicon)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#autocomplete-rename-closeicon)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/autocompleterenamecloseicon"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.AutocompleteRenameOption:
       name: "org.openrewrite.codemods.migrate.mui.AutocompleteRenameOption"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#autocomplete-rename-option)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#autocomplete-rename-option)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/autocompleterenameoption"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.AvatarCircleCircular:
       name: "org.openrewrite.codemods.migrate.mui.AvatarCircleCircular"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#avatar-circle-circular)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#avatar-circle-circular)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/avatarcirclecircular"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.BadgeOverlapValue:
       name: "org.openrewrite.codemods.migrate.mui.BadgeOverlapValue"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#badge-overlap-value)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#badge-overlap-value)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/badgeoverlapvalue"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.BaseHookImports:
       name: "org.openrewrite.codemods.migrate.mui.BaseHookImports"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#base-hook-imports)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#base-hook-imports)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/basehookimports"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.BaseRemoveComponentProp:
       name: "org.openrewrite.codemods.migrate.mui.BaseRemoveComponentProp"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#base-remove-component-prop)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#base-remove-component-prop)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/baseremovecomponentprop"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.BaseRemoveUnstyledSuffix:
       name: "org.openrewrite.codemods.migrate.mui.BaseRemoveUnstyledSuffix"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#base-remove-unstyled-suffix)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#base-remove-unstyled-suffix)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/baseremoveunstyledsuffix"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.BaseRenameComponentsToSlots:
       name: "org.openrewrite.codemods.migrate.mui.BaseRenameComponentsToSlots"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#base-rename-components-to-slots)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#base-rename-components-to-slots)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/baserenamecomponentstoslots"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.BaseUseNamedExports:
       name: "org.openrewrite.codemods.migrate.mui.BaseUseNamedExports"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#base-use-named-exports)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#base-use-named-exports)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/baseusenamedexports"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.BoxBorderradiusValues:
       name: "org.openrewrite.codemods.migrate.mui.BoxBorderradiusValues"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#box-borderradius-values)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#box-borderradius-values)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/boxborderradiusvalues"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.BoxRenameCss:
       name: "org.openrewrite.codemods.migrate.mui.BoxRenameCss"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#box-rename-css)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#box-rename-css)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/boxrenamecss"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.BoxRenameGap:
       name: "org.openrewrite.codemods.migrate.mui.BoxRenameGap"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#box-rename-gap)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#box-rename-gap)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/boxrenamegap"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.BoxSxProp:
       name: "org.openrewrite.codemods.migrate.mui.BoxSxProp"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#box-sx-prop)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#box-sx-prop)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/boxsxprop"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.ButtonColorProp:
       name: "org.openrewrite.codemods.migrate.mui.ButtonColorProp"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#button-color-prop)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#button-color-prop)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/buttoncolorprop"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.ChipVariantProp:
       name: "org.openrewrite.codemods.migrate.mui.ChipVariantProp"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#chip-variant-prop)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#chip-variant-prop)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/chipvariantprop"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.CircularprogressVariant:
       name: "org.openrewrite.codemods.migrate.mui.CircularprogressVariant"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#circularprogress-variant)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#circularprogress-variant)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/circularprogressvariant"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.CollapseRenameCollapsedheight:
       name: "org.openrewrite.codemods.migrate.mui.CollapseRenameCollapsedheight"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#collapse-rename-collapsedheight)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#collapse-rename-collapsedheight)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/collapserenamecollapsedheight"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.ComponentRenameProp:
       name: "org.openrewrite.codemods.migrate.mui.ComponentRenameProp"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#component-rename-prop)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#component-rename-prop)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/componentrenameprop"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.CoreStylesImport:
       name: "org.openrewrite.codemods.migrate.mui.CoreStylesImport"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#core-styles-import)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#core-styles-import)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/corestylesimport"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.CreateTheme:
       name: "org.openrewrite.codemods.migrate.mui.CreateTheme"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#create-theme)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#create-theme)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/createtheme"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.DatePickersMovedToX:
       name: "org.openrewrite.codemods.migrate.mui.DatePickersMovedToX"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#date-pickers-moved-to-x)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#date-pickers-moved-to-x)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/datepickersmovedtox"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.DialogProps:
       name: "org.openrewrite.codemods.migrate.mui.DialogProps"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#dialog-props)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#dialog-props)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/dialogprops"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.DialogTitleProps:
       name: "org.openrewrite.codemods.migrate.mui.DialogTitleProps"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#dialog-title-props)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#dialog-title-props)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/dialogtitleprops"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.EmotionPrependCache:
       name: "org.openrewrite.codemods.migrate.mui.EmotionPrependCache"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#emotion-prepend-cache)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#emotion-prepend-cache)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/emotionprependcache"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.ExpansionPanelComponent:
       name: "org.openrewrite.codemods.migrate.mui.ExpansionPanelComponent"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#expansion-panel-component)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#expansion-panel-component)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/expansionpanelcomponent"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.FabVariant:
       name: "org.openrewrite.codemods.migrate.mui.FabVariant"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#fab-variant)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#fab-variant)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/fabvariant"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.FadeRenameAlpha:
       name: "org.openrewrite.codemods.migrate.mui.FadeRenameAlpha"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#fade-rename-alpha)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#fade-rename-alpha)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/faderenamealpha"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.GridJustifyJustifycontent:
       name: "org.openrewrite.codemods.migrate.mui.GridJustifyJustifycontent"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#grid-justify-justifycontent)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#grid-justify-justifycontent)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/gridjustifyjustifycontent"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.GridListComponent:
       name: "org.openrewrite.codemods.migrate.mui.GridListComponent"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#grid-list-component)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#grid-list-component)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/gridlistcomponent"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.GridVProps:
       name: "org.openrewrite.codemods.migrate.mui.GridVProps"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#grid-v2-props)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#grid-v2-props)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/gridvprops"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.HiddenDownProps:
       name: "org.openrewrite.codemods.migrate.mui.HiddenDownProps"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#hidden-down-props)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#hidden-down-props)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/hiddendownprops"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.IconButtonSize:
       name: "org.openrewrite.codemods.migrate.mui.IconButtonSize"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#icon-button-size)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#icon-button-size)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/iconbuttonsize"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.JoyAvatarRemoveImgprops:
       name: "org.openrewrite.codemods.migrate.mui.JoyAvatarRemoveImgprops"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#joy-avatar-remove-imgProps)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#joy-avatar-remove-imgProps)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/joyavatarremoveimgprops"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.JoyRenameClassnamePrefix:
       name: "org.openrewrite.codemods.migrate.mui.JoyRenameClassnamePrefix"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#joy-rename-classname-prefix)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#joy-rename-classname-prefix)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/joyrenameclassnameprefix"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.JoyRenameComponentsToSlots:
       name: "org.openrewrite.codemods.migrate.mui.JoyRenameComponentsToSlots"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#joy-rename-components-to-slots)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#joy-rename-components-to-slots)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/joyrenamecomponentstoslots"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.JoyRenameRowProp:
       name: "org.openrewrite.codemods.migrate.mui.JoyRenameRowProp"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#joy-rename-row-prop)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#joy-rename-row-prop)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/joyrenamerowprop"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.JoyTextFieldToInput:
       name: "org.openrewrite.codemods.migrate.mui.JoyTextFieldToInput"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#joy-text-field-to-input)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#joy-text-field-to-input)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/joytextfieldtoinput"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.JssToStyled:
       name: "org.openrewrite.codemods.migrate.mui.JssToStyled"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#jss-to-styled)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#jss-to-styled)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/jsstostyled"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.JssToTssReact:
       name: "org.openrewrite.codemods.migrate.mui.JssToTssReact"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#jss-to-tss-react)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#jss-to-tss-react)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/jsstotssreact"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.LinkUnderlineHover:
       name: "org.openrewrite.codemods.migrate.mui.LinkUnderlineHover"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#link-underline-hover)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#link-underline-hover)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/linkunderlinehover"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.MaterialUiStyles:
       name: "org.openrewrite.codemods.migrate.mui.MaterialUiStyles"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#material-ui-styles)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#material-ui-styles)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/materialuistyles"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.MaterialUiTypes:
       name: "org.openrewrite.codemods.migrate.mui.MaterialUiTypes"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#material-ui-types)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#material-ui-types)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/materialuitypes"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.ModalProps:
       name: "org.openrewrite.codemods.migrate.mui.ModalProps"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#modal-props)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#modal-props)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/modalprops"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.MovedLabModules:
       name: "org.openrewrite.codemods.migrate.mui.MovedLabModules"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#moved-lab-modules)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#moved-lab-modules)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/movedlabmodules"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.MuiReplace:
       name: "org.openrewrite.codemods.migrate.mui.MuiReplace"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#mui-replace)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#mui-replace)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/muireplace"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.OptimalImports:
       name: "org.openrewrite.codemods.migrate.mui.OptimalImports"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#optimal-imports)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#optimal-imports)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/optimalimports"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.PaginationRoundCircular:
       name: "org.openrewrite.codemods.migrate.mui.PaginationRoundCircular"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#pagination-round-circular)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#pagination-round-circular)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/paginationroundcircular"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.PresetSafe:
       name: "org.openrewrite.codemods.migrate.mui.PresetSafe"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#preset-safe)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#preset-safe)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/presetsafe"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.RenameCssVariables:
       name: "org.openrewrite.codemods.migrate.mui.RenameCssVariables"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#rename-css-variables)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#rename-css-variables)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/renamecssvariables"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.RootRef:
       name: "org.openrewrite.codemods.migrate.mui.RootRef"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#root-ref)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#root-ref)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/rootref"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.SkeletonVariant:
       name: "org.openrewrite.codemods.migrate.mui.SkeletonVariant"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#skeleton-variant)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#skeleton-variant)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/skeletonvariant"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.Styled:
       name: "org.openrewrite.codemods.migrate.mui.Styled"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#styled)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#styled)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/styled"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.StyledEngineProvider:
       name: "org.openrewrite.codemods.migrate.mui.StyledEngineProvider"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#styled-engine-provider)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#styled-engine-provider)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/styledengineprovider"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.SxProp:
       name: "org.openrewrite.codemods.migrate.mui.SxProp"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#sx-prop)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#sx-prop)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/sxprop"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.SystemProps:
       name: "org.openrewrite.codemods.migrate.mui.SystemProps"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#system-props)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#system-props)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/systemprops"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.TableProps:
       name: "org.openrewrite.codemods.migrate.mui.TableProps"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#table-props)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#table-props)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/tableprops"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.TabsScrollButtons:
       name: "org.openrewrite.codemods.migrate.mui.TabsScrollButtons"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#tabs-scroll-buttons)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#tabs-scroll-buttons)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/tabsscrollbuttons"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.TextareaMinmaxRows:
       name: "org.openrewrite.codemods.migrate.mui.TextareaMinmaxRows"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#textarea-minmax-rows)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#textarea-minmax-rows)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/textareaminmaxrows"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.ThemeAugment:
       name: "org.openrewrite.codemods.migrate.mui.ThemeAugment"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-augment)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-augment)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/themeaugment"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.ThemeBreakpoints:
       name: "org.openrewrite.codemods.migrate.mui.ThemeBreakpoints"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-breakpoints)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-breakpoints)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/themebreakpoints"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.ThemeBreakpointsWidth:
       name: "org.openrewrite.codemods.migrate.mui.ThemeBreakpointsWidth"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-breakpoints-width)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-breakpoints-width)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/themebreakpointswidth"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.ThemeOptions:
       name: "org.openrewrite.codemods.migrate.mui.ThemeOptions"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-options)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-options)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/themeoptions"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.ThemePaletteMode:
       name: "org.openrewrite.codemods.migrate.mui.ThemePaletteMode"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-palette-mode)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-palette-mode)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/themepalettemode"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.ThemeProvider:
       name: "org.openrewrite.codemods.migrate.mui.ThemeProvider"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-provider)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-provider)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/themeprovider"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.ThemeSpacing:
       name: "org.openrewrite.codemods.migrate.mui.ThemeSpacing"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-spacing)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-spacing)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/themespacing"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.ThemeSpacingApi:
       name: "org.openrewrite.codemods.migrate.mui.ThemeSpacingApi"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-spacing-api)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-spacing-api)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/themespacingapi"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.ThemeTypographyRound:
       name: "org.openrewrite.codemods.migrate.mui.ThemeTypographyRound"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-typography-round)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-typography-round)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/themetypographyround"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.ThemeV:
       name: "org.openrewrite.codemods.migrate.mui.ThemeV"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-v6)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#theme-v6)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/themev"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.TopLevelImports:
       name: "org.openrewrite.codemods.migrate.mui.TopLevelImports"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#top-level-imports)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#top-level-imports)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/toplevelimports"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.Transitions:
       name: "org.openrewrite.codemods.migrate.mui.Transitions"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#transitions)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#transitions)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/transitions"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.TreeViewMovedToX:
       name: "org.openrewrite.codemods.migrate.mui.TreeViewMovedToX"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#tree-view-moved-to-x)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#tree-view-moved-to-x)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/treeviewmovedtox"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.UseAutocomplete:
       name: "org.openrewrite.codemods.migrate.mui.UseAutocomplete"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#use-autocomplete)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#use-autocomplete)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/useautocomplete"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.UseTransitionprops:
       name: "org.openrewrite.codemods.migrate.mui.UseTransitionprops"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#use-transitionprops)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#use-transitionprops)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/usetransitionprops"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.VariantProp:
       name: "org.openrewrite.codemods.migrate.mui.VariantProp"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#variant-prop)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#variant-prop)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/variantprop"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.WithMobileDialog:
       name: "org.openrewrite.codemods.migrate.mui.WithMobileDialog"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#with-mobile-dialog)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#with-mobile-dialog)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/withmobiledialog"
       options: []
       isImperative: false
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.migrate.mui.WithWidth:
       name: "org.openrewrite.codemods.migrate.mui.WithWidth"
-      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#with-width)\n"
+      description: "See Material UI codemod projects for more [details](https://github.com/mui/material-ui/tree/master/packages/mui-codemod#with-width)."
       docLink: "https://docs.openrewrite.org/recipes/codemods/migrate/mui/withwidth"
       options: []
       isImperative: false
@@ -4523,7 +4516,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
 rewrite-codemods-ng:
   artifactId: "rewrite-codemods-ng"
-  version: "0.7.5"
+  version: "0.8.1"
   markdownRecipeDescriptors:
     org.openrewrite.codemods.migrate.angular.ApplyAngularCLI:
       name: "org.openrewrite.codemods.migrate.angular.ApplyAngularCLI"
@@ -4573,7 +4566,7 @@ rewrite-codemods-ng:
       artifactId: "rewrite-codemods-ng"
 rewrite-compiled-analysis:
   artifactId: "rewrite-compiled-analysis"
-  version: "0.3.0"
+  version: "0.4.1"
   markdownRecipeDescriptors:
     io.moderne.compiled.verification.ChangeListMethodAndVerify:
       name: "io.moderne.compiled.verification.ChangeListMethodAndVerify"
@@ -4595,7 +4588,7 @@ rewrite-compiled-analysis:
       artifactId: "rewrite-compiled-analysis"
 rewrite-comprehension:
   artifactId: "rewrite-comprehension"
-  version: "0.5.1"
+  version: "0.5.3"
   markdownRecipeDescriptors:
     io.moderne.knowledge.ComprehendCode:
       name: "io.moderne.knowledge.ComprehendCode"
@@ -4651,7 +4644,7 @@ rewrite-comprehension:
       artifactId: "rewrite-comprehension"
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "3.2.2"
+  version: "3.2.4"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -4731,7 +4724,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.49.0"
+  version: "8.50.2"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -4889,13 +4882,6 @@ rewrite-core:
       docLink: "https://docs.openrewrite.org/recipes/config/compositerecipe"
       options: []
       isImperative: true
-      artifactId: "rewrite-core"
-    org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations:
-      name: "org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations"
-      description: "Migrate from OpenRewrite's JSR-305 meta-annotations to JSpecify."
-      docLink: "https://docs.openrewrite.org/recipes/java/jspecify/migratefromopenrewriteannotations"
-      options: []
-      isImperative: false
       artifactId: "rewrite-core"
     org.openrewrite.search.FindBuildMetadata:
       name: "org.openrewrite.search.FindBuildMetadata"
@@ -5087,7 +5073,7 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
-  version: "2.3.1"
+  version: "2.4.1"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite"
@@ -5166,7 +5152,7 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
 rewrite-docker:
   artifactId: "rewrite-docker"
-  version: "2.3.1"
+  version: "2.4.1"
   markdownRecipeDescriptors:
     org.openrewrite.docker.search.FindDockerImageUses:
       name: "org.openrewrite.docker.search.FindDockerImageUses"
@@ -5178,7 +5164,7 @@ rewrite-docker:
       artifactId: "rewrite-docker"
 rewrite-dotnet:
   artifactId: "rewrite-dotnet"
-  version: "0.8.2"
+  version: "0.8.4"
   markdownRecipeDescriptors:
     org.openrewrite.dotnet.MigrateToNet6:
       name: "org.openrewrite.dotnet.MigrateToNet6"
@@ -5241,7 +5227,7 @@ rewrite-dotnet:
       artifactId: "rewrite-dotnet"
 rewrite-feature-flags:
   artifactId: "rewrite-feature-flags"
-  version: "1.4.1"
+  version: "1.5.1"
   markdownRecipeDescriptors:
     org.openrewrite.featureflags.RemoveBooleanFlag:
       name: "org.openrewrite.featureflags.RemoveBooleanFlag"
@@ -5443,7 +5429,7 @@ rewrite-feature-flags:
       artifactId: "rewrite-feature-flags"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "3.3.1"
+  version: "3.4.1"
   markdownRecipeDescriptors:
     org.openrewrite.github.AddCronTrigger:
       name: "org.openrewrite.github.AddCronTrigger"
@@ -5654,7 +5640,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gitlab:
   artifactId: "rewrite-gitlab"
-  version: "0.9.1"
+  version: "0.10.1"
   markdownRecipeDescriptors:
     org.openrewrite.gitlab.AddComponent:
       name: "org.openrewrite.gitlab.AddComponent"
@@ -5742,7 +5728,7 @@ rewrite-gitlab:
       artifactId: "rewrite-gitlab"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.49.0"
+  version: "8.50.2"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -6529,7 +6515,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.49.0"
+  version: "8.50.2"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.AutoFormat:
       name: "org.openrewrite.groovy.format.AutoFormat"
@@ -6565,7 +6551,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.49.0"
+  version: "8.50.2"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -6678,12 +6664,12 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-hibernate:
   artifactId: "rewrite-hibernate"
-  version: "0.2.2"
+  version: "0.3.1"
   markdownRecipeDescriptors:
     io.moderne.hibernate.MigrateToHibernate66:
       name: "io.moderne.hibernate.MigrateToHibernate66"
       description: "This recipe will apply changes commonly needed when migrating\
-        \ to Hibernate 6.5.x."
+        \ to Hibernate 6.6.x."
       docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernate66"
       options: []
       isImperative: false
@@ -6880,7 +6866,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-jackson:
   artifactId: "rewrite-jackson"
-  version: "0.16.0"
+  version: "0.16.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.jackson.CodehausClassesToFasterXML:
       name: "org.openrewrite.java.jackson.CodehausClassesToFasterXML"
@@ -6944,7 +6930,7 @@ rewrite-jackson:
       artifactId: "rewrite-jackson"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.49.0"
+  version: "8.50.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -7662,97 +7648,6 @@ rewrite-java:
       options: []
       isImperative: true
       artifactId: "rewrite-java"
-    org.openrewrite.java.recipes.BlankLinesAroundFieldsWithAnnotations:
-      name: "org.openrewrite.java.recipes.BlankLinesAroundFieldsWithAnnotations"
-      description: "Fields with annotations should have a blank line before them to\
-        \ clearly separate them from the field above. If another field follows, it\
-        \ should also have a blank line after so that the field with the annotation\
-        \ has space on either side of it, visually distinguishing it from its neighbors."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/blanklinesaroundfieldswithannotations"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.recipes.ExecutionContextParameterName:
-      name: "org.openrewrite.java.recipes.ExecutionContextParameterName"
-      description: "Visitors that are parameterized with `ExecutionContext` should\
-        \ use the parameter name `ctx`."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/executioncontextparametername"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.recipes.FindRecipes:
-      name: "org.openrewrite.java.recipes.FindRecipes"
-      description: "This recipe finds all OpenRewrite recipes, primarily to produce\
-        \ a data table that is being used to experiment with fine-tuning a large language\
-        \ model to produce more recipes."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/findrecipes"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.recipes.MissingOptionExample:
-      name: "org.openrewrite.java.recipes.MissingOptionExample"
-      description: "Find `@Option` annotations that are missing `example` values for\
-        \ documentation."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/missingoptionexample"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.recipes.NoMutableStaticFieldsInRecipes:
-      name: "org.openrewrite.java.recipes.NoMutableStaticFieldsInRecipes"
-      description: "Remove mutable static fields from Recipe classes to discourage\
-        \ their use."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/nomutablestaticfieldsinrecipes"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.recipes.RecipeEqualsAndHashCodeCallSuper:
-      name: "org.openrewrite.java.recipes.RecipeEqualsAndHashCodeCallSuper"
-      description: "Recipes are value objects, so should use `@EqualsAndHashCode(callSuper\
-        \ = false)`. While in most cases recipes do not extend other classes and so\
-        \ the option is moot, as a matter of stylistic consistency and to enforce\
-        \ the idea that recipes are value objects, this value should be set to `false`."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/recipeequalsandhashcodecallsuper"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.recipes.RewriteTestClassesShouldNotBePublic:
-      name: "org.openrewrite.java.recipes.RewriteTestClassesShouldNotBePublic"
-      description: "Remove the public modifier from classes that implement RewriteTest."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/rewritetestclassesshouldnotbepublic"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.recipes.SelectRecipeExamples:
-      name: "org.openrewrite.java.recipes.SelectRecipeExamples"
-      description: "Add `@DocumentExample` to the first non-issue and not a disabled\
-        \ unit test of a recipe as an example, if there are not any examples yet."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/selectrecipeexamples"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.recipes.SetDefaultEstimatedEffortPerOccurrence:
-      name: "org.openrewrite.java.recipes.SetDefaultEstimatedEffortPerOccurrence"
-      description: "Retrofit recipes with a default estimated effort per occurrence."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/setdefaultestimatedeffortperoccurrence"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.recipes.SourceSpecTextBlockIndentation:
-      name: "org.openrewrite.java.recipes.SourceSpecTextBlockIndentation"
-      description: "Text blocks that assert before and after source code should have\
-        \ minimal indentation."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/sourcespectextblockindentation"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
-    org.openrewrite.java.recipes.UseTreeRandomId:
-      name: "org.openrewrite.java.recipes.UseTreeRandomId"
-      description: "Replaces occurrences of `UUID.randomUUID()` with `Tree.randomId()`\
-        \ when passed as an argument to a constructor call for LST elements."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/usetreerandomid"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-java"
     org.openrewrite.java.search.ClasspathTypeCounts:
       name: "org.openrewrite.java.search.ClasspathTypeCounts"
       description: "Emit one data table row per source set in a project, with the\
@@ -8124,7 +8019,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "1.31.0"
+  version: "1.32.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.AddDependency:
       name: "org.openrewrite.java.dependencies.AddDependency"
@@ -8411,7 +8306,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "3.4.0"
+  version: "3.6.1"
   markdownRecipeDescriptors:
     org.openrewrite.csharp.dependencies.DependencyInsight:
       name: "org.openrewrite.csharp.dependencies.DependencyInsight"
@@ -8484,7 +8379,7 @@ rewrite-java-security:
         \ which aggregates vulnerability data from several public databases, including\
         \ the [National Vulnerability Database](https://nvd.nist.gov/) maintained\
         \ by the United States government. Upgrades dependencies versioned according\
-        \ to [Semantic Versioning](https://semver.org/)."
+        \ to [Semantic Versioning](https://semver.org/). Last updated: 2025-04-07T1102."
       docLink: "https://docs.openrewrite.org/recipes/java/dependencies/dependencyvulnerabilitycheck"
       options:
       - name: "maximumUpgradeDelta"
@@ -8492,9 +8387,6 @@ rewrite-java-security:
         required: false
       - name: "overrideTransitive"
         type: "Boolean"
-        required: false
-      - name: "overrideVulnerabilityDatabase"
-        type: "URI"
         required: false
       - name: "scope"
         type: "String"
@@ -9012,9 +8904,17 @@ rewrite-java-security:
         required: false
       isImperative: true
       artifactId: "rewrite-java-security"
+    org.openrewrite.text.FindHardcodedPrivateIPAddresses:
+      name: "org.openrewrite.text.FindHardcodedPrivateIPAddresses"
+      description: "Locates mentions of hard-coded IPv4 addresses from private IP\
+        \ ranges."
+      docLink: "https://docs.openrewrite.org/recipes/text/findhardcodedprivateipaddresses"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-java-security"
 rewrite-jenkins:
   artifactId: "rewrite-jenkins"
-  version: "0.22.1"
+  version: "0.23.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3:
       name: "org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3"
@@ -9179,7 +9079,7 @@ rewrite-jenkins:
       artifactId: "rewrite-jenkins"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.49.0"
+  version: "8.50.2"
   markdownRecipeDescriptors:
     org.openrewrite.json.AddKeyValue:
       name: "org.openrewrite.json.AddKeyValue"
@@ -9271,7 +9171,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "8.49.0"
+  version: "8.50.2"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -9328,6 +9228,13 @@ rewrite-kotlin:
       options: []
       isImperative: true
       artifactId: "rewrite-kotlin"
+    org.openrewrite.kotlin.cleanup.RemoveLambdaArgumentParentheses:
+      name: "org.openrewrite.kotlin.cleanup.RemoveLambdaArgumentParentheses"
+      description: "For example, convert `1.let({ it + 1 })` to `1.let { it + 1 }`."
+      docLink: "https://docs.openrewrite.org/recipes/kotlin/cleanup/removelambdaargumentparentheses"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-kotlin"
     org.openrewrite.kotlin.cleanup.RemoveTrailingComma:
       name: "org.openrewrite.kotlin.cleanup.RemoveTrailingComma"
       description: "Remove trailing commas in variable, parameter, and class property\
@@ -9372,7 +9279,7 @@ rewrite-kotlin:
       artifactId: "rewrite-kotlin"
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "3.2.3"
+  version: "3.2.5"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -9916,7 +9823,7 @@ rewrite-kubernetes:
       artifactId: "rewrite-kubernetes"
 rewrite-liberty:
   artifactId: "rewrite-liberty"
-  version: "1.14.1"
+  version: "1.14.3"
   markdownRecipeDescriptors:
     org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty:
       name: "org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty"
@@ -10008,7 +9915,7 @@ rewrite-liberty:
       artifactId: "rewrite-liberty"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "3.5.0"
+  version: "3.6.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.logging.CatchBlockLogLevel:
       name: "org.openrewrite.java.logging.CatchBlockLogLevel"
@@ -10877,7 +10784,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.49.0"
+  version: "8.50.2"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddAnnotationProcessor:
       name: "org.openrewrite.maven.AddAnnotationProcessor"
@@ -11409,7 +11316,8 @@ rewrite-maven:
     org.openrewrite.maven.ChangePluginGroupIdAndArtifactId:
       name: "org.openrewrite.maven.ChangePluginGroupIdAndArtifactId"
       description: "Change the groupId and/or the artifactId of a specified Maven\
-        \ plugin. Optionally update the plugin version."
+        \ plugin. Optionally update the plugin version. This recipe does not perform\
+        \ any validation and assumes all values passed are valid."
       docLink: "https://docs.openrewrite.org/recipes/maven/changeplugingroupidandartifactid"
       options:
       - name: "newArtifactId"
@@ -12134,7 +12042,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micrometer:
   artifactId: "rewrite-micrometer"
-  version: "0.17.1"
+  version: "0.18.1"
   markdownRecipeDescriptors:
     org.openrewrite.micrometer.TimerToObservation:
       name: "org.openrewrite.micrometer.TimerToObservation"
@@ -12193,7 +12101,7 @@ rewrite-micrometer:
       artifactId: "rewrite-micrometer"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "2.19.1"
+  version: "2.20.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.AddAnnotationProcessorPath:
       name: "org.openrewrite.java.micronaut.AddAnnotationProcessorPath"
@@ -12537,7 +12445,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "3.5.0"
+  version: "3.7.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jspecify.MigrateFromJakartaAnnotationApi:
       name: "org.openrewrite.java.jspecify.MigrateFromJakartaAnnotationApi"
@@ -14149,6 +14057,14 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.JavaxXmlToJakartaXmlXJCBinding:
+      name: "org.openrewrite.java.migrate.jakarta.JavaxXmlToJakartaXmlXJCBinding"
+      description: "Java EE has been rebranded to Jakarta EE, migrates the namespace\
+        \ and version in XJC bindings."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/javaxxmltojakartaxmlxjcbinding"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.JavaxXmlWsMigrationToJakartaXmlWs:
       name: "org.openrewrite.java.migrate.jakarta.JavaxXmlWsMigrationToJakartaXmlWs"
       description: "Java EE has been rebranded to Jakarta EE, necessitating a package\
@@ -15537,7 +15453,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-nodejs:
   artifactId: "rewrite-nodejs"
-  version: "0.20.0"
+  version: "0.21.1"
   markdownRecipeDescriptors:
     org.openrewrite.nodejs.DependencyVulnerabilityCheck:
       name: "org.openrewrite.nodejs.DependencyVulnerabilityCheck"
@@ -15686,7 +15602,7 @@ rewrite-nodejs:
       artifactId: "rewrite-nodejs"
 rewrite-okhttp:
   artifactId: "rewrite-okhttp"
-  version: "0.11.1"
+  version: "0.12.1"
   markdownRecipeDescriptors:
     org.openrewrite.okhttp.ReorderRequestBodyCreateArguments:
       name: "org.openrewrite.okhttp.ReorderRequestBodyCreateArguments"
@@ -15743,7 +15659,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-openapi:
   artifactId: "rewrite-openapi"
-  version: "0.16.1"
+  version: "0.17.1"
   markdownRecipeDescriptors:
     org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings:
       name: "org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings"
@@ -15847,7 +15763,7 @@ rewrite-openapi:
       artifactId: "rewrite-openapi"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.49.0"
+  version: "8.50.2"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -15972,7 +15888,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "2.16.1"
+  version: "2.17.1"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.AddQuarkusProperty:
       name: "org.openrewrite.quarkus.AddQuarkusProperty"
@@ -16231,7 +16147,7 @@ rewrite-quarkus:
       artifactId: "rewrite-quarkus"
 rewrite-reactive-streams:
   artifactId: "rewrite-reactive-streams"
-  version: "0.11.1"
+  version: "0.11.3"
   markdownRecipeDescriptors:
     org.openrewrite.reactive.reactor.ReactorBestPractices:
       name: "org.openrewrite.reactive.reactor.ReactorBestPractices"
@@ -16411,8 +16327,117 @@ rewrite-reactive-streams:
       artifactId: "rewrite-reactive-streams"
 rewrite-rewrite:
   artifactId: "rewrite-rewrite"
-  version: "0.2.1"
+  version: "0.4.0"
   markdownRecipeDescriptors:
+    org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations:
+      name: "org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations"
+      description: "Migrate from OpenRewrite's JSR-305 meta-annotations to JSpecify."
+      docLink: "https://docs.openrewrite.org/recipes/java/jspecify/migratefromopenrewriteannotations"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-rewrite"
+    org.openrewrite.java.recipes.BlankLinesAroundFieldsWithAnnotations:
+      name: "org.openrewrite.java.recipes.BlankLinesAroundFieldsWithAnnotations"
+      description: "Fields with annotations should have a blank line before them to\
+        \ clearly separate them from the field above. If another field follows, it\
+        \ should also have a blank line after so that the field with the annotation\
+        \ has space on either side of it, visually distinguishing it from its neighbors."
+      docLink: "https://docs.openrewrite.org/recipes/java/recipes/blanklinesaroundfieldswithannotations"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-rewrite"
+    org.openrewrite.java.recipes.CorrectlySpacedDescriptions:
+      name: "org.openrewrite.java.recipes.CorrectlySpacedDescriptions"
+      description: "Recipe descriptions should be cleanly formatted. This recipe forces\
+        \ correct spacing in multiline descriptions. In a multi line description the\
+        \ lines should not start with whitespace and end with a single space except\
+        \ for the last line which should end with a \".\" (e.g.\n```\n  return \"\
+        This is a correct \" + \n   \"multi line description\";\n```\n)."
+      docLink: "https://docs.openrewrite.org/recipes/java/recipes/correctlyspaceddescriptions"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-rewrite"
+    org.openrewrite.java.recipes.ExecutionContextParameterName:
+      name: "org.openrewrite.java.recipes.ExecutionContextParameterName"
+      description: "Visitors that are parameterized with `ExecutionContext` should\
+        \ use the parameter name `ctx`."
+      docLink: "https://docs.openrewrite.org/recipes/java/recipes/executioncontextparametername"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-rewrite"
+    org.openrewrite.java.recipes.FindRecipes:
+      name: "org.openrewrite.java.recipes.FindRecipes"
+      description: "This recipe finds all OpenRewrite recipes, primarily to produce\
+        \ a data table that is being used to experiment with fine-tuning a large language\
+        \ model to produce more recipes."
+      docLink: "https://docs.openrewrite.org/recipes/java/recipes/findrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-rewrite"
+    org.openrewrite.java.recipes.MissingOptionExample:
+      name: "org.openrewrite.java.recipes.MissingOptionExample"
+      description: "Find `@Option` annotations that are missing `example` values for\
+        \ documentation."
+      docLink: "https://docs.openrewrite.org/recipes/java/recipes/missingoptionexample"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-rewrite"
+    org.openrewrite.java.recipes.NoMutableStaticFieldsInRecipes:
+      name: "org.openrewrite.java.recipes.NoMutableStaticFieldsInRecipes"
+      description: "Remove mutable static fields from Recipe classes to discourage\
+        \ their use."
+      docLink: "https://docs.openrewrite.org/recipes/java/recipes/nomutablestaticfieldsinrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-rewrite"
+    org.openrewrite.java.recipes.RecipeEqualsAndHashCodeCallSuper:
+      name: "org.openrewrite.java.recipes.RecipeEqualsAndHashCodeCallSuper"
+      description: "Recipes are value objects, so should use `@EqualsAndHashCode(callSuper\
+        \ = false)`. While in most cases recipes do not extend other classes and so\
+        \ the option is moot, as a matter of stylistic consistency and to enforce\
+        \ the idea that recipes are value objects, this value should be set to `false`."
+      docLink: "https://docs.openrewrite.org/recipes/java/recipes/recipeequalsandhashcodecallsuper"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-rewrite"
+    org.openrewrite.java.recipes.RewriteTestClassesShouldNotBePublic:
+      name: "org.openrewrite.java.recipes.RewriteTestClassesShouldNotBePublic"
+      description: "Remove the public modifier from classes that implement RewriteTest."
+      docLink: "https://docs.openrewrite.org/recipes/java/recipes/rewritetestclassesshouldnotbepublic"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-rewrite"
+    org.openrewrite.java.recipes.SelectRecipeExamples:
+      name: "org.openrewrite.java.recipes.SelectRecipeExamples"
+      description: "Add `@DocumentExample` to the first non-issue and not a disabled\
+        \ unit test of a recipe as an example, if there are not any examples yet."
+      docLink: "https://docs.openrewrite.org/recipes/java/recipes/selectrecipeexamples"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-rewrite"
+    org.openrewrite.java.recipes.SetDefaultEstimatedEffortPerOccurrence:
+      name: "org.openrewrite.java.recipes.SetDefaultEstimatedEffortPerOccurrence"
+      description: "Retrofit recipes with a default estimated effort per occurrence."
+      docLink: "https://docs.openrewrite.org/recipes/java/recipes/setdefaultestimatedeffortperoccurrence"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-rewrite"
+    org.openrewrite.java.recipes.SourceSpecTextBlockIndentation:
+      name: "org.openrewrite.java.recipes.SourceSpecTextBlockIndentation"
+      description: "Text blocks that assert before and after source code should have\
+        \ minimal indentation."
+      docLink: "https://docs.openrewrite.org/recipes/java/recipes/sourcespectextblockindentation"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-rewrite"
+    org.openrewrite.java.recipes.UseTreeRandomId:
+      name: "org.openrewrite.java.recipes.UseTreeRandomId"
+      description: "Replaces occurrences of `UUID.randomUUID()` with `Tree.randomId()`\
+        \ when passed as an argument to a constructor call for LST elements."
+      docLink: "https://docs.openrewrite.org/recipes/java/recipes/usetreerandomid"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-rewrite"
     org.openrewrite.recipes.JavaRecipeBestPractices:
       name: "org.openrewrite.recipes.JavaRecipeBestPractices"
       description: "Best practices for Java recipe development."
@@ -16444,7 +16469,7 @@ rewrite-rewrite:
       artifactId: "rewrite-rewrite"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "0.3.3"
+  version: "0.4.1"
   markdownRecipeDescriptors:
     io.moderne.java.spring.boot3.AddValidToConfigurationPropertiesFields:
       name: "io.moderne.java.spring.boot3.AddValidToConfigurationPropertiesFields"
@@ -16508,6 +16533,15 @@ rewrite-spring:
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
+    io.moderne.java.spring.boot3.ReplaceKafkaTransactionManagerSetter:
+      name: "io.moderne.java.spring.boot3.ReplaceKafkaTransactionManagerSetter"
+      description: "Replace deprecated `ContainerProperties#setTransactionManager(org.springframework.transaction.PlatformTransactionManager)`\
+        \ method with `ContainerProperties#setKafkaAwareTransactionManager(org.springframework.kafka.transaction.KafkaAwareTransactionManager)`.\
+        \ The method will be replaced only if its argument has the type `KafkaAwareTransactionManager`."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/replacekafkatransactionmanagersetter"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
     io.moderne.java.spring.boot3.SpringBoot3BestPractices:
       name: "io.moderne.java.spring.boot3.SpringBoot3BestPractices"
       description: "Applies best practices to Spring Boot 3.4+ applications."
@@ -16561,6 +16595,13 @@ rewrite-spring:
         \ Spring Data, etc) that are required as part of the migration to Spring Boot\
         \ 3.4."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/upgradespringboot_3_4"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    io.moderne.java.spring.boot3.UpgradeSpringKafka_3_3:
+      name: "io.moderne.java.spring.boot3.UpgradeSpringKafka_3_3"
+      description: "Migrate applications to the latest Spring Kafka 3.3 release."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/upgradespringkafka_3_3"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -16818,6 +16859,21 @@ rewrite-spring:
         required: false
       isImperative: true
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.batch.ConvertReceiveTypeWhenCallStepExecutionMethod:
+      name: "org.openrewrite.java.spring.batch.ConvertReceiveTypeWhenCallStepExecutionMethod"
+      description: "Convert receive type in some invocation of StepExecution.xx()."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/batch/convertreceivetypewhencallstepexecutionmethod"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.batch.JobParameterToString:
+      name: "org.openrewrite.java.spring.batch.JobParameterToString"
+      description: "JobParameter.toString() logic is quite different in spring batch\
+        \ 5, need take JobParameter.getValue.toString replace the JobParameter.toString."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/batch/jobparametertostring"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.batch.ListenerSupportClassToInterface:
       name: "org.openrewrite.java.spring.batch.ListenerSupportClassToInterface"
       description: "As of 5.0 `*Listener` interfaces default methods (made possible\
@@ -16840,6 +16896,21 @@ rewrite-spring:
       description: "`JobBuilderFactory` was deprecated in spring-batch 5.x. It is\
         \ replaced by `JobBuilder`."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/batch/migratejobbuilderfactory"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.batch.MigrateJobParameter:
+      name: "org.openrewrite.java.spring.batch.MigrateJobParameter"
+      description: "Migration Job Parameter, parameterized type is essential in Spring\
+        \ Batch 5."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/batch/migratejobparameter"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.batch.MigrateMethodAnnotatedByBatchAPI:
+      name: "org.openrewrite.java.spring.batch.MigrateMethodAnnotatedByBatchAPI"
+      description: "Migrate method when it annotated by Spring Batch API."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/batch/migratemethodannotatedbybatchapi"
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
@@ -17872,6 +17943,14 @@ rewrite-spring:
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.data.JdbcTemplateQueryForLongMigration:
+      name: "org.openrewrite.java.spring.data.JdbcTemplateQueryForLongMigration"
+      description: "Replaces calls to `JdbcTemplate.queryForLong(..)` with `queryForObject(String,\
+        \ Class, Object...)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/data/jdbctemplatequeryforlongmigration"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.data.MigrateAuditorAwareToOptional:
       name: "org.openrewrite.java.spring.data.MigrateAuditorAwareToOptional"
       description: "As of Spring boot 2.0, the `AuditorAware.getCurrentAuditor` method\
@@ -18008,6 +18087,14 @@ rewrite-spring:
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.framework.MigrateBase64Utils:
+      name: "org.openrewrite.java.spring.framework.MigrateBase64Utils"
+      description: "Replaces usages of deprecated `org.springframework.util.Base64Utils`\
+        \ with `java.util.Base64`."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/framework/migratebase64utils"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.framework.MigrateHandlerInterceptor:
       name: "org.openrewrite.java.spring.framework.MigrateHandlerInterceptor"
       description: "Deprecated as of 5.3 in favor of implementing `HandlerInterceptor`\
@@ -18016,11 +18103,43 @@ rewrite-spring:
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.framework.MigrateHandlerResultHasExceptionHandlerMethod:
+      name: "org.openrewrite.java.spring.framework.MigrateHandlerResultHasExceptionHandlerMethod"
+      description: "`org.springframework.web.reactive.HandlerResult.hasExceptionHandler()`\
+        \ was deprecated, in favor of `getExceptionHandler()`."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/framework/migratehandlerresulthasexceptionhandlermethod"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.framework.MigrateHandlerResultSetExceptionHandlerMethod:
+      name: "org.openrewrite.java.spring.framework.MigrateHandlerResultSetExceptionHandlerMethod"
+      description: "`org.springframework.web.reactive.HandlerResult.setExceptionHandler(Function<Throwable,\
+        \ Mono<HandlerResult>>)` was deprecated, in favor of `setExceptionHandler(DispatchExceptionHandler)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/framework/migratehandlerresultsetexceptionhandlermethod"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.framework.MigrateInstantiationAwareBeanPostProcessorAdapter:
       name: "org.openrewrite.java.spring.framework.MigrateInstantiationAwareBeanPostProcessorAdapter"
       description: "As of Spring-Framework 5.3 `InstantiationAwareBeanPostProcessorAdapter`\
         \ is deprecated in favor of the existing default methods in `SmartInstantiationAwareBeanPostProcessor`."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/framework/migrateinstantiationawarebeanpostprocessoradapter"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.framework.MigrateMethodArgumentNotValidExceptionErrorMethod:
+      name: "org.openrewrite.java.spring.framework.MigrateMethodArgumentNotValidExceptionErrorMethod"
+      description: "`org.springframework.web.bind.MethodArgumentNotValidException.errorsToStringList`\
+        \ and `resolveErrorMessages` method was deprecated, in favor of `BindErrorUtils`."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/framework/migratemethodargumentnotvalidexceptionerrormethod"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.framework.MigrateResourceHttpMessageWriterAddHeadersMethod:
+      name: "org.openrewrite.java.spring.framework.MigrateResourceHttpMessageWriterAddHeadersMethod"
+      description: "`org.springframework.http.codec.ResourceHttpMessageWriter.addHeaders`\
+        \ was deprecated, in favor of `addDefaultHeaders` method."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/framework/migrateresourcehttpmessagewriteraddheadersmethod"
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
@@ -18066,11 +18185,27 @@ rewrite-spring:
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.framework.MigrateUriComponentsBuilderMethods:
+      name: "org.openrewrite.java.spring.framework.MigrateUriComponentsBuilderMethods"
+      description: "The `fromHttpRequest` and `parseForwardedFor` methods in `org.springframework.web.util.UriComponentsBuilder`\
+        \ were deprecated, in favor of `org.springframework.web.util.ForwardedHeaderUtils`."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/framework/migrateuricomponentsbuildermethods"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.framework.MigrateUtf8MediaTypes:
       name: "org.openrewrite.java.spring.framework.MigrateUtf8MediaTypes"
       description: "Spring Web `MediaType#APPLICATION_JSON_UTF8` and `MediaType#APPLICATION_PROBLEM_JSON_UTF8`\
         \ were deprecated in 5.2."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/framework/migrateutf8mediatypes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.framework.MigrateWebExchangeBindExceptionResolveErrorMethod:
+      name: "org.openrewrite.java.spring.framework.MigrateWebExchangeBindExceptionResolveErrorMethod"
+      description: "`org.springframework.web.bind.support.WebExchangeBindException.resolveErrorMessages`\
+        \ was deprecated, in favor of `BindErrorUtils`."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/framework/migratewebexchangebindexceptionresolveerrormethod"
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
@@ -18122,6 +18257,13 @@ rewrite-spring:
       name: "org.openrewrite.java.spring.framework.UpgradeSpringFramework_6_1"
       description: "Migrate applications to the latest Spring Framework 6.1 release."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/framework/upgradespringframework_6_1"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.framework.UpgradeSpringFramework_6_2:
+      name: "org.openrewrite.java.spring.framework.UpgradeSpringFramework_6_2"
+      description: "Migrate applications to the latest Spring Framework 6.2 release."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/framework/upgradespringframework_6_2"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -18576,7 +18718,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-sql:
   artifactId: "rewrite-sql"
-  version: "2.1.4"
+  version: "2.1.6"
   markdownRecipeDescriptors:
     org.openrewrite.sql.ChangeFunctionName:
       name: "org.openrewrite.sql.ChangeFunctionName"
@@ -18633,7 +18775,7 @@ rewrite-sql:
       artifactId: "rewrite-sql"
 rewrite-static-analysis:
   artifactId: "rewrite-static-analysis"
-  version: "2.5.1"
+  version: "2.7.1"
   markdownRecipeDescriptors:
     org.openrewrite.staticanalysis.AbstractClassPublicConstructor:
       name: "org.openrewrite.staticanalysis.AbstractClassPublicConstructor"
@@ -18664,15 +18806,21 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.AnnotateNullableMethods:
       name: "org.openrewrite.staticanalysis.AnnotateNullableMethods"
-      description: "Add the `@org.jspecify.annotation.Nullable` to non-private methods\
-        \ that may return `null`. This recipe scans for methods that do not already\
-        \ have a `@Nullable` annotation and checks their return statements for potential\
-        \ null values. It also identifies known methods from standard libraries that\
-        \ may return null, such as methods from `Map`, `Queue`, `Deque`, `NavigableSet`,\
-        \ and `Spliterator`. The return of streams, or lambdas are not taken into\
-        \ account."
+      description: "Add `@Nullable` to non-private methods that may return `null`.\
+        \ By default `org.jspecify.annotations.Nullable` is used, but through the\
+        \ `nullableAnnotationClass` option a custom annotation can be provided. When\
+        \ providing a custom `nullableAnnotationClass` that annotation should be meta\
+        \ annotated with `@Target(TYPE_USE)`. This recipe scans for methods that do\
+        \ not already have a `@Nullable` annotation and checks their return statements\
+        \ for potential null values. It also identifies known methods from standard\
+        \ libraries that may return null, such as methods from `Map`, `Queue`, `Deque`,\
+        \ `NavigableSet`, and `Spliterator`. The return of streams, or lambdas are\
+        \ not taken into account."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/annotatenullablemethods"
-      options: []
+      options:
+      - name: "nullableAnnotationClass"
+        type: "String"
+        required: false
       isImperative: true
       artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.AtomicPrimitiveEqualsUsesGet:
@@ -20015,7 +20163,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
 rewrite-struts:
   artifactId: "rewrite-struts"
-  version: "0.12.1"
+  version: "0.13.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.struts.MigrateStrutsDtd:
       name: "org.openrewrite.java.struts.MigrateStrutsDtd"
@@ -20081,7 +20229,7 @@ rewrite-struts:
       artifactId: "rewrite-struts"
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "3.1.4"
+  version: "3.1.6"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -20974,7 +21122,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "3.5.1"
+  version: "3.6.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.archunit.ArchUnit0to1Migration:
       name: "org.openrewrite.java.testing.archunit.ArchUnit0to1Migration"
@@ -21022,6 +21170,15 @@ rewrite-testing-frameworks:
       docLink: "https://docs.openrewrite.org/recipes/java/testing/assertj/collapseconsecutiveassertthatstatements"
       options: []
       isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.assertj.FestToAssertj:
+      name: "org.openrewrite.java.testing.assertj.FestToAssertj"
+      description: "AssertJ provides a rich set of assertions, truly helpful error\
+        \ messages, improves test code readability. Converts Fest 2.x imports to AssertJ\
+        \ imports."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/assertj/festtoassertj"
+      options: []
+      isImperative: false
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.assertj.IsEqualToIgnoringMillisToIsCloseToRecipe:
       name: "org.openrewrite.java.testing.assertj.IsEqualToIgnoringMillisToIsCloseToRecipe"
@@ -21174,6 +21331,14 @@ rewrite-testing-frameworks:
       docLink: "https://docs.openrewrite.org/recipes/java/testing/assertj/simplifychainedassertjassertions"
       options: []
       isImperative: false
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.assertj.SimplifyHasSizeAssertion:
+      name: "org.openrewrite.java.testing.assertj.SimplifyHasSizeAssertion"
+      description: "Simplify AssertJ assertions by replacing `hasSize` with `hasSameSizeAs`\
+        \ dedicated assertions."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/assertj/simplifyhassizeassertion"
+      options: []
+      isImperative: true
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.assertj.StaticImports:
       name: "org.openrewrite.java.testing.assertj.StaticImports"
@@ -21772,6 +21937,14 @@ rewrite-testing-frameworks:
       options: []
       isImperative: false
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.TimeoutRuleToClassAnnotation:
+      name: "org.openrewrite.java.testing.junit5.TimeoutRuleToClassAnnotation"
+      description: "Replace usages of JUnit 4's `@Rule Timeout` with JUnit 5 `Timeout`\
+        \ class annotation."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/junit5/timeoutruletoclassannotation"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.UpdateBeforeAfterAnnotations:
       name: "org.openrewrite.java.testing.junit5.UpdateBeforeAfterAnnotations"
       description: "Replace JUnit 4's `@Before`, `@BeforeClass`, `@After`, and `@AfterClass`\
@@ -22079,7 +22252,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-third-party:
   artifactId: "rewrite-third-party"
-  version: "0.18.0"
+  version: "0.19.1"
   markdownRecipeDescriptors:
     ai.timefold.solver.migration.ChangeVersion:
       name: "ai.timefold.solver.migration.ChangeVersion"
@@ -22180,10 +22353,825 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
-    io.quakus.updates.minio.minio38.UpdateAll:
-      name: "io.quakus.updates.minio.minio38.UpdateAll"
-      description: ""
-      docLink: "https://docs.openrewrite.org/recipes/io/quakus/updates/minio/minio38/updateall"
+    com.oracle.weblogic.rewrite.ChangeJAXBBindAPIDependencyScope:
+      name: "com.oracle.weblogic.rewrite.ChangeJAXBBindAPIDependencyScope"
+      description: "This recipe will change the jakarta.xml.bind-api dependency scope\
+        \ to provided when jakarta.jakartaee-api version 9.x is provided in WebLogic\
+        \ 15.1.1. This prevents the jakarta.xml.bind-api jar from being deployed to\
+        \ WebLogic which can cause class conflicts."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/changejaxbbindapidependencyscope"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.ChangeJakartaInjectAPIDependencyScope:
+      name: "com.oracle.weblogic.rewrite.ChangeJakartaInjectAPIDependencyScope"
+      description: "This recipe will change the jakarta.inject-api dependency scope\
+        \ to provided when jakarta.jakartaee-api version 9.x is provided in WebLogic\
+        \ 15.1.1. This prevents the jakarta.inject-api jar from being deployed to\
+        \ WebLogic which can cause class conflicts."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/changejakartainjectapidependencyscope"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.CheckAndCommentOutDeprecations1412:
+      name: "com.oracle.weblogic.rewrite.CheckAndCommentOutDeprecations1412"
+      description: "This recipe will check and comment out deprecations on WebLogic\
+        \ version 14.1.2."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/checkandcommentoutdeprecations1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.CheckAndCommentOutDeprecations1511:
+      name: "com.oracle.weblogic.rewrite.CheckAndCommentOutDeprecations1511"
+      description: "This recipe will check and comment out deprecations on WebLogic\
+        \ version 15.1.1."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/checkandcommentoutdeprecations1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.FacesMigrationToJakartaFaces2x:
+      name: "com.oracle.weblogic.rewrite.FacesMigrationToJakartaFaces2x"
+      description: "Jakarta EE 8 uses Faces 2.3 a major upgrade to Jakarta packages\
+        \ and XML namespaces. This recipe will migrate JSF 1.x to Jakarta Server Faces\
+        \ 2.3 on WebLogic 14.1.2 or older."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/facesmigrationtojakartafaces2x"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.JakartaEE9_1:
+      name: "com.oracle.weblogic.rewrite.JakartaEE9_1"
+      description: "These recipes help with Migration to Jakarta EE 9.1, flagging\
+        \ and updating deprecated methods."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakartaee9_1"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.MigrateWebLogicSchemasTo1412:
+      name: "com.oracle.weblogic.rewrite.MigrateWebLogicSchemasTo1412"
+      description: "This recipe will migrate WebLogic schemas to 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/migrateweblogicschemasto1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.MigrateWebLogicSchemasTo1511:
+      name: "com.oracle.weblogic.rewrite.MigrateWebLogicSchemasTo1511"
+      description: "This recipe will migrate WebLogic schemas to 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/migrateweblogicschemasto1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.OutputRecipeVersion:
+      name: "com.oracle.weblogic.rewrite.OutputRecipeVersion"
+      description: "Displays the version of the recipe after it runs."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/outputrecipeversion"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.UpdateBuildToWebLogic1412:
+      name: "com.oracle.weblogic.rewrite.UpdateBuildToWebLogic1412"
+      description: "This recipe will update the WebLogic version to 14.1.2 for Maven\
+        \ build."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/updatebuildtoweblogic1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.UpdateBuildToWebLogic1511:
+      name: "com.oracle.weblogic.rewrite.UpdateBuildToWebLogic1511"
+      description: "This recipe will update the WebLogic version to 15.1.1 for Maven\
+        \ build."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/updatebuildtoweblogic1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.UpgradeTo1411:
+      name: "com.oracle.weblogic.rewrite.UpgradeTo1411"
+      description: "This recipe will apply changes required for migrating to WebLogic\
+        \ 14.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/upgradeto1411"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.UpgradeTo1412:
+      name: "com.oracle.weblogic.rewrite.UpgradeTo1412"
+      description: "This recipe will apply changes required for migrating to WebLogic\
+        \ 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/upgradeto1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.UpgradeTo1511:
+      name: "com.oracle.weblogic.rewrite.UpgradeTo1511"
+      description: "This recipe will apply changes required for migrating to WebLogic\
+        \ 15.1.1 and Jakarta EE 9.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/upgradeto1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.UpgradeWeblogicMavenPropertyVersion:
+      name: "com.oracle.weblogic.rewrite.UpgradeWeblogicMavenPropertyVersion"
+      description: "Set the Maven weblogic.version property according to a node-style\
+        \ semver selector or to a specific version number."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/upgradeweblogicmavenpropertyversion"
+      options:
+      - name: "newVersion"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogic1412JavaXmlBindMitigation:
+      name: "com.oracle.weblogic.rewrite.WebLogic1412JavaXmlBindMitigation"
+      description: "This recipe will mitigate the Javax XML Bind deprecation in Java\
+        \ 11 vs WebLogic 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogic1412javaxmlbindmitigation"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicApplicationClientXmlNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicApplicationClientXmlNamespace1412"
+      description: "Migrate xmlns entries in WebLogic Application Client schema files\
+        \ to WebLogic 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicapplicationclientxmlnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicApplicationClientXmlNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicApplicationClientXmlNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `application-client.xml`\
+        \ files to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicapplicationclientxmlnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicApplicationXmlNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicApplicationXmlNamespace1412"
+      description: "Migrate xmlns entries in WebLogic Application schema files to\
+        \ WebLogic 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicapplicationxmlnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicApplicationXmlNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicApplicationXmlNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `weblogic-application.xml`\
+        \ files to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicapplicationxmlnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicEjbJar32XmlNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicEjbJar32XmlNamespace1412"
+      description: "Migrate xmlns entries in WebLogic EJB 3.2 schema files to WebLogic\
+        \ 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicejbjar32xmlnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicEjbJar32XmlNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicEjbJar32XmlNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `weblogic-ejb-jar.xml`\
+        \ files to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicejbjar32xmlnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicJdbcXmlNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicJdbcXmlNamespace1412"
+      description: "Migrate xmlns entries in WebLogic JDBC schema files to WebLogic\
+        \ 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicjdbcxmlnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicJdbcXmlNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicJdbcXmlNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `*-jdbc.xml` files\
+        \ to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicjdbcxmlnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicJmsXmlNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicJmsXmlNamespace1412"
+      description: "Migrate xmlns entries in WebLogic JMS schema files to WebLogic\
+        \ 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicjmsxmlnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicJmsXmlNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicJmsXmlNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `*-jms.xml` files\
+        \ to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicjmsxmlnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicPersistenceConfigurationXmlNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicPersistenceConfigurationXmlNamespace1412"
+      description: "Migrate xmlns entries in WebLogic EJB 3.2 Persistence Configuration\
+        \ schema files to WebLogic 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicpersistenceconfigurationxmlnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicPersistenceConfigurationXmlNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicPersistenceConfigurationXmlNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `persistence-configuration.xml`\
+        \ files to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicpersistenceconfigurationxmlnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicPlanXmlNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicPlanXmlNamespace1412"
+      description: "Migrate xmlns entries in WebLogic Plan schema files to WebLogic\
+        \ 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicplanxmlnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicPlanXmlNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicPlanXmlNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `plan.xml` files\
+        \ to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicplanxmlnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicPubSubXmlNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicPubSubXmlNamespace1412"
+      description: "Migrate xmlns entries in WebLogic PubSub schema files to WebLogic\
+        \ 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicpubsubxmlnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicPubSubXmlNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicPubSubXmlNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `weblogic-pubsub.xml`\
+        \ files to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicpubsubxmlnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicRaXmlNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicRaXmlNamespace1412"
+      description: "Migrate xmlns entries in WebLogic Resource Adapter schema files\
+        \ to WebLogic 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicraxmlnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicRaXmlNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicRaXmlNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `weblogic-ra.xml`\
+        \ files to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicraxmlnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicRdbmsJarXmlNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicRdbmsJarXmlNamespace1412"
+      description: "Migrate xmlns entries in WebLogic EJB 3.2 RDBMS schema files to\
+        \ WebLogic 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicrdbmsjarxmlnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicRdbmsJarXmlNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicRdbmsJarXmlNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `weblogic-rdbms-jar.xml`\
+        \ files to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicrdbmsjarxmlnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicResourceDeploymentPlanXmlNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicResourceDeploymentPlanXmlNamespace1412"
+      description: "Migrate xmlns entries in WebLogic Resource Deployment Plan schema\
+        \ files to WebLogic 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicresourcedeploymentplanxmlnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicResourceDeploymentPlanXmlNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicResourceDeploymentPlanXmlNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `resource-deployment-plan.xml`\
+        \ files to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicresourcedeploymentplanxmlnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicWebServicesXmlNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicWebServicesXmlNamespace1412"
+      description: "Migrate xmlns entries in WebLogic Web Services schema files to\
+        \ WebLogic 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicwebservicesxmlnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicWebServicesXmlNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicWebServicesXmlNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `weblogic-webservices.xml`\
+        \ files to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicwebservicesxmlnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicWebservicesPolicyRefXmlNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicWebservicesPolicyRefXmlNamespace1412"
+      description: "Migrate xmlns entries in WebLogic Web Service Policy Reference\
+        \ schema files to WebLogic 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicwebservicespolicyrefxmlnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicWebservicesPolicyRefXmlNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicWebservicesPolicyRefXmlNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `weblogic-webservices-policy.xml`\
+        \ files to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicwebservicespolicyrefxmlnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicWseeClientHandlerChainXmlNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicWseeClientHandlerChainXmlNamespace1412"
+      description: "Migrate xmlns entries in WebLogic WSEE Client Handler Chains schema\
+        \ files to WebLogic 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicwseeclienthandlerchainxmlnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicWseeClientHandlerChainXmlNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicWseeClientHandlerChainXmlNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `weblogic-wsee-clientHandlerChain.xml`\
+        \ files to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicwseeclienthandlerchainxmlnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicWseeStandaloneClientXmlNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicWseeStandaloneClientXmlNamespace1412"
+      description: "Migrate xmlns entries in WebLogic WSEE Standalone Client schema\
+        \ files to WebLogic 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicwseestandaloneclientxmlnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicWseeStandaloneClientXmlNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicWseeStandaloneClientXmlNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `weblogic-wsee-standaloneclient.xml`\
+        \ files to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicwseestandaloneclientxmlnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicXmlWebAppNamespace1412:
+      name: "com.oracle.weblogic.rewrite.WebLogicXmlWebAppNamespace1412"
+      description: "Migrate xmlns entries in WebLogic schema files to WebLogic 14.1.2"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicxmlwebappnamespace1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.WebLogicXmlWebAppNamespace1511:
+      name: "com.oracle.weblogic.rewrite.WebLogicXmlWebAppNamespace1511"
+      description: "This recipe will update the `xmlns` entries in `weblogic.xml`\
+        \ files to WebLogic 15.1.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/weblogicxmlwebappnamespace1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.examples.AddImplicitTldFileWithTaglib2_1:
+      name: "com.oracle.weblogic.rewrite.examples.AddImplicitTldFileWithTaglib2_1"
+      description: "Add `implicit.tld` file with taglib 2.1 to `src/main/webapp/WEB-INF/tags`."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/examples/addimplicittldfilewithtaglib2_1"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.examples.AddImplicitTldFileWithTaglib3_0:
+      name: "com.oracle.weblogic.rewrite.examples.AddImplicitTldFileWithTaglib3_0"
+      description: "Add `implicit.tld` file with taglib 3.0 to `src/main/webapp/WEB-INF/tags`."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/examples/addimplicittldfilewithtaglib3_0"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.examples.spring.ChangeCacheManagerToSimpleCacheManager:
+      name: "com.oracle.weblogic.rewrite.examples.spring.ChangeCacheManagerToSimpleCacheManager"
+      description: "Change cacheManager to use the SimpleCacheManager."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/examples/spring/changecachemanagertosimplecachemanager"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.examples.spring.MigratedPetClinicExtrasFor1511:
+      name: "com.oracle.weblogic.rewrite.examples.spring.MigratedPetClinicExtrasFor1511"
+      description: "Run migration extras for migrated Spring Framework PetClinic example\
+        \ run on WebLogic 15.1.1."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/examples/spring/migratedpetclinicextrasfor1511"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.examples.spring.SetupSpringFrameworkPetClinicFor1412:
+      name: "com.oracle.weblogic.rewrite.examples.spring.SetupSpringFrameworkPetClinicFor1412"
+      description: "Setup Spring Framework 5.3.x PetClinic for WebLogic 14.1.2."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/examples/spring/setupspringframeworkpetclinicfor1412"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.hibernate.AddHibernateOrmCore61:
+      name: "com.oracle.weblogic.rewrite.hibernate.AddHibernateOrmCore61"
+      description: "This recipe will add Hibernate ORM Core if has dependencies."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/hibernate/addhibernateormcore61"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.hibernate.MigrateHibernateToJakartaEE9:
+      name: "com.oracle.weblogic.rewrite.hibernate.MigrateHibernateToJakartaEE9"
+      description: "Upgrade hibernate libraries to Jakarta EE9 versions."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/hibernate/migratehibernatetojakartaee9"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.AddJakartaEE9ServletDependencyIfUsingServletContext:
+      name: "com.oracle.weblogic.rewrite.jakarta.AddJakartaEE9ServletDependencyIfUsingServletContext"
+      description: "Add Jakarta EE 9 Servlet Dependency if using jakarta.servlet.ServletContext"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/addjakartaee9servletdependencyifusingservletcontext"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.ChangeJakartaFacesMethodCalls:
+      name: "com.oracle.weblogic.rewrite.jakarta.ChangeJakartaFacesMethodCalls"
+      description: "Handle method call changes for deprecated Faces/EL methods with\
+        \ different arguments from the original."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/changejakartafacesmethodcalls"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.Faces2xMigrationToJakartaFaces3x:
+      name: "com.oracle.weblogic.rewrite.jakarta.Faces2xMigrationToJakartaFaces3x"
+      description: "Jakarta EE 9 uses Faces 3.0 a major upgrade to Jakarta packages\
+        \ and XML namespaces."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/faces2xmigrationtojakartafaces3x"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.FacesJNDINamesChanged3:
+      name: "com.oracle.weblogic.rewrite.jakarta.FacesJNDINamesChanged3"
+      description: "The `jsf/ClientSideSecretKey` JNDI name has been renamed to `faces/ClientSideSecretKey`,\
+        \  and the `jsf/FlashSecretKey` JNDI name has been renamed to `faces/FlashSecretKey`.\
+        \  The JNDI keys that have been renamed are updated to allow use of the keys.\n"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/facesjndinameschanged3"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.FacesManagedBeansRemoved3:
+      name: "com.oracle.weblogic.rewrite.jakarta.FacesManagedBeansRemoved3"
+      description: "This recipe substitutes Faces Managed Beans, which were deprecated\
+        \ in JavaServer Faces 2.3 and have been removed from Jakarta Faces 3.0. It\
+        \ also replaces the deprecated jakarta.faces.bean.ManagedBean annotation with\
+        \ the jarkarta.inject.Named annotation.\n"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/facesmanagedbeansremoved3"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JakartaEeNamespaces9_1:
+      name: "com.oracle.weblogic.rewrite.jakarta.JakartaEeNamespaces9_1"
+      description: "These recipes help with Migration From JavaX to Jakarta EE 9.1\
+        \ Namespaces."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/jakartaeenamespaces9_1"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JakartaFaces3Xhtml:
+      name: "com.oracle.weblogic.rewrite.jakarta.JakartaFaces3Xhtml"
+      description: "Find and replace legacy JSF namespaces and javax references with\
+        \ Jakarta Faces values in XHTML files."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/jakartafaces3xhtml"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxAnnotationMigrationToJakarta9Annotation:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxAnnotationMigrationToJakarta9Annotation"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating a package\
+        \ relocation.\n"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxannotationmigrationtojakarta9annotation"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxApplicationClientXmlToJakarta9ApplicationClientXml:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxApplicationClientXmlToJakarta9ApplicationClientXml"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxapplicationclientxmltojakarta9applicationclientxml"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxApplicationXmlToJakarta9ApplicationXml:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxApplicationXmlToJakarta9ApplicationXml"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxapplicationxmltojakarta9applicationxml"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxBatchJobsXmlsToJakarta9BatchJobsXmls:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxBatchJobsXmlsToJakarta9BatchJobsXmls"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxbatchjobsxmlstojakarta9batchjobsxmls"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxBatchXmlToJakarta9BatchXml:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxBatchXmlToJakarta9BatchXml"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxbatchxmltojakarta9batchxml"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxBeansXmlToJakarta9BeansXml:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxBeansXmlToJakarta9BeansXml"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxbeansxmltojakarta9beansxml"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxBindingsSchemaXjbsToJakarta9BindingsSchemaXjbs:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxBindingsSchemaXjbsToJakarta9BindingsSchemaXjbs"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxbindingsschemaxjbstojakarta9bindingsschemaxjbs"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxEjbJarXmlToJakarta9EjbJarXml:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxEjbJarXmlToJakarta9EjbJarXml"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxejbjarxmltojakarta9ejbjarxml"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxFacesConfigXmlToJakartaFaces3ConfigXml:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxFacesConfigXmlToJakartaFaces3ConfigXml"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxfacesconfigxmltojakartafaces3configxml"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxFacesTagLibraryXmlToJakartaFaces3TagLibraryXml:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxFacesTagLibraryXmlToJakartaFaces3TagLibraryXml"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxfacestaglibraryxmltojakartafaces3taglibraryxml"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxJmsToJakartaJmsOnMdb:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxJmsToJakartaJmsOnMdb"
+      description: "Migrate javax.jms to jakarta.jms on MDB"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxjmstojakartajmsonmdb"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxPermissionsXmlToJakarta9PermissionsXml:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxPermissionsXmlToJakarta9PermissionsXml"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxpermissionsxmltojakarta9permissionsxml"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxRaXmlToJakarta9RaXml:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxRaXmlToJakarta9RaXml"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxraxmltojakarta9raxml"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxTestWebXmlToJakartaTestWebXml5:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxTestWebXmlToJakartaTestWebXml5"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation for test interfaces like arquillian."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxtestwebxmltojakartatestwebxml5"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxTestXmlsToJakartaTestsXmls:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxTestXmlsToJakartaTestsXmls"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation for test interfaces like arquillian."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxtestxmlstojakartatestsxmls"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxToJakartaCdiExtensions:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxToJakartaCdiExtensions"
+      description: "Rename `javax.enterprise.inject.spi.Extension` to `jakarta.enterprise.inject.spi.Extension`."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxtojakartacdiextensions"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxValidationMappingXmlsToJakarta9ValidationMappingXmls:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxValidationMappingXmlsToJakarta9ValidationMappingXmls"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxvalidationmappingxmlstojakarta9validationmappingxmls"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxWebFragmentXmlToJakartaWebFragmentXml5:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxWebFragmentXmlToJakartaWebFragmentXml5"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxwebfragmentxmltojakartawebfragmentxml5"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxWebHandlerXmlToJakarta9HandlerXml:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxWebHandlerXmlToJakarta9HandlerXml"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxwebhandlerxmltojakarta9handlerxml"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxWebJspTagLibraryTldsToJakarta9WebJspTagLibraryTlds:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxWebJspTagLibraryTldsToJakarta9WebJspTagLibraryTlds"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxwebjsptaglibrarytldstojakarta9webjsptaglibrarytlds"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxWebServicesXmlToJakarta9WebServicesXml:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxWebServicesXmlToJakarta9WebServicesXml"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxwebservicesxmltojakarta9webservicesxml"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.JavaxWebXmlToJakartaWebXml5:
+      name: "com.oracle.weblogic.rewrite.jakarta.JavaxWebXmlToJakartaWebXml5"
+      description: "Java EE has been rebranded to Jakarta EE, necessitating an XML\
+        \ namespace relocation."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/javaxwebxmltojakartawebxml5"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.MigrateJavaxMVCToJakartaEE9:
+      name: "com.oracle.weblogic.rewrite.jakarta.MigrateJavaxMVCToJakartaEE9"
+      description: "Upgrade Jakarta Model-View-Controller libraries to 2.0 (Jakarta\
+        \ EE9) versions."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/migratejavaxmvctojakartaee9"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.MigrateJavaxWebToJakartaWeb9:
+      name: "com.oracle.weblogic.rewrite.jakarta.MigrateJavaxWebToJakartaWeb9"
+      description: "Update Java EE Web API dependency to Jakarta EE Web Profile API\
+        \ 9.1"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/migratejavaxwebtojakartaweb9"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.MigrateTagLibsToJakartaEE9:
+      name: "com.oracle.weblogic.rewrite.jakarta.MigrateTagLibsToJakartaEE9"
+      description: "Upgrade Jakarta Standard Tag libraries to 2.0 (Jakarta EE9) versions."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/migratetaglibstojakartaee9"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.MitigateUnaffectedNonEEJakarta9Packages:
+      name: "com.oracle.weblogic.rewrite.jakarta.MitigateUnaffectedNonEEJakarta9Packages"
+      description: "Mitigate Unaffected Non-EE Jakarta 9 Packages. Reference: [https://github.com/jakartaee/platform/blob/main/namespace/unaffected-packages.adoc](https://github.com/jakartaee/platform/blob/main/namespace/unaffected-packages.adoc)\n"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/mitigateunaffectednoneejakarta9packages"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.OrgGlassfishJavaxElToJakartaEl:
+      name: "com.oracle.weblogic.rewrite.jakarta.OrgGlassfishJavaxElToJakartaEl"
+      description: "Package relocation for rebranded Javax to Jakarta EE."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/orgglassfishjavaxeltojakartael"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.RemovalsServletJakarta9:
+      name: "com.oracle.weblogic.rewrite.jakarta.RemovalsServletJakarta9"
+      description: "This recipe replaces the classes and methods deprecated in Jakarta\
+        \ Servlet 5.0\n"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/removalsservletjakarta9"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.RemovedJakartaFaces3ExpressionLanguageClasses:
+      name: "com.oracle.weblogic.rewrite.jakarta.RemovedJakartaFaces3ExpressionLanguageClasses"
+      description: "Several classes were removed and replaced in Jakarta Server Faces\
+        \ 3.0. The only Object definition not removed in the `jakarta.faces.el` package\
+        \ is the CompositeComponentExpressionHolder interface.\n"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/removedjakartafaces3expressionlanguageclasses"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.RemovedJakartaFaces3ResourceResolver:
+      name: "com.oracle.weblogic.rewrite.jakarta.RemovedJakartaFaces3ResourceResolver"
+      description: "The `ResourceResolver` class was removed in Jakarta Faces 3.0.\
+        \  The functionality provided by that class can be replaced by using the `jakarta.faces.application.ResourceHandler`\
+        \ class.\n"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/removedjakartafaces3resourceresolver"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.RemovedStateManagerMethods3:
+      name: "com.oracle.weblogic.rewrite.jakarta.RemovedStateManagerMethods3"
+      description: "Methods that were removed from the `jakarta.faces.application.StateManager`\
+        \ and `javax.faces.application.StateManager` classes in Jakarta Faces 3.0\
+        \ are replaced by `jakarta.faces.view.StateManagementStrategy` or `javax.faces.view.StateManagementStrategy`\
+        \ based on JakartaEE9 migration in Faces 3.0\n"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/removedstatemanagermethods3"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.UpdateJakartaFacesMethodCalls:
+      name: "com.oracle.weblogic.rewrite.jakarta.UpdateJakartaFacesMethodCalls"
+      description: "Custom recipe to handle method call changes for deprecated Faces/EL\
+        \ methods where the method argument lists have changed. This recipe should\
+        \ be run _after_ all the Jakarta Faces related type changes are completed.\n"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/updatejakartafacesmethodcalls"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.UpdateJakartaPlatform9_1:
+      name: "com.oracle.weblogic.rewrite.jakarta.UpdateJakartaPlatform9_1"
+      description: "Update Jakarta EE Platform Dependencies to 9.1.0"
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/updatejakartaplatform9_1"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.UpgradeCommonOpenSourceLibraries:
+      name: "com.oracle.weblogic.rewrite.jakarta.UpgradeCommonOpenSourceLibraries"
+      description: "Upgrade Common open source libraries libraries to Jakarta EE9\
+        \ versions."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/upgradecommonopensourcelibraries"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.UpgradeFacesOpenSourceLibraries2:
+      name: "com.oracle.weblogic.rewrite.jakarta.UpgradeFacesOpenSourceLibraries2"
+      description: "Upgrade PrimeFaces, OmniFaces, and MyFaces libraries to Jakarta\
+        \ EE9 versions."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/upgradefacesopensourcelibraries2"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.jakarta.UpgradeFacesOpenSourceLibraries3:
+      name: "com.oracle.weblogic.rewrite.jakarta.UpgradeFacesOpenSourceLibraries3"
+      description: "Upgrade PrimeFaces, OmniFaces, and MyFaces libraries to Jakarta\
+        \ EE9 versions."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/jakarta/upgradefacesopensourcelibraries3"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.spring.data.UpgradeSpringDataBom:
+      name: "com.oracle.weblogic.rewrite.spring.data.UpgradeSpringDataBom"
+      description: "Upgrade Spring Data BOM to 2024.1.x version."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/spring/data/upgradespringdatabom"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.spring.framework.DefaultServletHandler:
+      name: "com.oracle.weblogic.rewrite.spring.framework.DefaultServletHandler"
+      description: "This recipe will update Spring Framework default servlet handler\
+        \ if empty, as noted in the Spring Framework 6.2 [documentation](https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-config/default-servlet-handler.html)."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/spring/framework/defaultservlethandler"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.spring.framework.ReplaceWebLogicJtaTransactionManager:
+      name: "com.oracle.weblogic.rewrite.spring.framework.ReplaceWebLogicJtaTransactionManager"
+      description: "Replace removed WebLogicJtaTransactionManager with JtaTransactionManager\
+        \ from Spring Framework 6.2.x."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/spring/framework/replaceweblogicjtatransactionmanager"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.spring.framework.ReplaceWebLogicLoadTimeWeaver:
+      name: "com.oracle.weblogic.rewrite.spring.framework.ReplaceWebLogicLoadTimeWeaver"
+      description: "Replace removed WebLogicLoadTimeWeaver with LoadTimeWeaver from\
+        \ Spring Framework 6.2.x."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/spring/framework/replaceweblogicloadtimeweaver"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    com.oracle.weblogic.rewrite.spring.framework.UpgradeToSpringFramework_6_2:
+      name: "com.oracle.weblogic.rewrite.spring.framework.UpgradeToSpringFramework_6_2"
+      description: "Migrate applications to the Spring Framework 6.2 release and compatibility\
+        \ with WebLogic 15.1.1."
+      docLink: "https://docs.openrewrite.org/recipes/com/oracle/weblogic/rewrite/spring/framework/upgradetospringframework_6_2"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -22761,6 +23749,13 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus319.HibernateORMValidationMode:
+      name: "io.quarkus.updates.core.quarkus319.HibernateORMValidationMode"
+      description: ""
+      docLink: "https://docs.openrewrite.org/recipes/io/quarkus/updates/core/quarkus319/hibernateormvalidationmode"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     io.quarkus.updates.core.quarkus319.MoveAccessTokenAnnotationToNewPackage:
       name: "io.quarkus.updates.core.quarkus319.MoveAccessTokenAnnotationToNewPackage"
       description: ""
@@ -23097,6 +24092,13 @@ rewrite-third-party:
       name: "io.quarkus.updates.core.quarkus39.UpdateConfigRoots"
       description: ""
       docLink: "https://docs.openrewrite.org/recipes/io/quarkus/updates/core/quarkus39/updateconfigroots"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.minio.minio38.UpdateAll:
+      name: "io.quarkus.updates.minio.minio38.UpdateAll"
+      description: ""
+      docLink: "https://docs.openrewrite.org/recipes/io/quarkus/updates/minio/minio38/updateall"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -23888,10 +24890,24 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    software.amazon.awssdk.v2migration.S3UriToV2:
+      name: "software.amazon.awssdk.v2migration.S3UriToV2"
+      description: "Convert v1 AmazonS3URI to v2 S3Uri"
+      docLink: "https://docs.openrewrite.org/recipes/software/amazon/awssdk/v2migration/s3uritov2"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     software.amazon.awssdk.v2migration.SdkBytesToByteBuffer:
       name: "software.amazon.awssdk.v2migration.SdkBytesToByteBuffer"
       description: "Convert SdkBytes to ByteBuffer by calling SdkBytes#asByteBuffer()"
       docLink: "https://docs.openrewrite.org/recipes/software/amazon/awssdk/v2migration/sdkbytestobytebuffer"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    software.amazon.awssdk.v2migration.SettersToBuilderV2:
+      name: "software.amazon.awssdk.v2migration.SettersToBuilderV2"
+      description: "Convert V1 setters to V2 toBuilder setters"
+      docLink: "https://docs.openrewrite.org/recipes/software/amazon/awssdk/v2migration/setterstobuilderv2"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -29060,7 +30076,7 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.49.0"
+  version: "8.50.2"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -29380,7 +30396,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.49.0"
+  version: "8.50.2"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
@@ -29607,6 +30623,18 @@ rewrite-yaml:
         required: false
       - name: "yaml"
         type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-yaml"
+    org.openrewrite.yaml.UnfoldProperties:
+      name: "org.openrewrite.yaml.UnfoldProperties"
+      description: "Transforms dot-separated property keys in YAML files into nested\
+        \ map hierarchies to enhance clarity and readability, or for compatibility\
+        \ with tools expecting structured YAML."
+      docLink: "https://docs.openrewrite.org/recipes/yaml/unfoldproperties"
+      options:
+      - name: "exclusions"
+        type: "List"
         required: true
       isImperative: true
       artifactId: "rewrite-yaml"
