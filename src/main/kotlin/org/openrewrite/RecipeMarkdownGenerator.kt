@@ -2383,11 +2383,9 @@ $cliSnippet
                 val recipePath = recipePath(recipe.name)
                 writeln("""
                     ### [${recipe.displayName}](../${recipePath}.md)
-                    _${recipe.name}_
-                    
-                    ${recipe.description}
-                    
                     """.trimIndent())
+                writeln("_${recipe.name}_\n")
+                writeln("${recipe.description}\n")
             }
         }
     }
