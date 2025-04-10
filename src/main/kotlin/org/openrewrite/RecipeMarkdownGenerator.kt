@@ -495,8 +495,22 @@ class RecipeMarkdownGenerator : Runnable {
                 """.trimIndent()
             )
             var cliInstallGavs = ""
+            var loadRecipesAsync = ""
             for (origin in recipeOrigins.values) {
+
                 cliInstallGavs += "${origin.groupId}:${origin.artifactId}:{{${origin.versionPlaceholderKey()}}} "
+
+                val loadCommand = "load_" + (origin.groupId + '_' + origin.artifactId).replace('-', '_')
+                //language=graphql
+                loadRecipesAsync += """
+                  $loadCommand: loadRecipesAsync(
+                    groupId: "${origin.groupId}"
+                    artifactId: "${origin.artifactId}"
+                    version: "LATEST"
+                  ) {
+                    id
+                  }"""
+
                 val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.repositoryUrl})"
                 val releaseLink = "[${origin.version}](${origin.repositoryUrl}/releases/tag/v${origin.version})"
                 writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${origin.license.markdown()} |")
@@ -512,6 +526,23 @@ class RecipeMarkdownGenerator : Runnable {
                 ```bash
                 mod config recipes jar install ${cliInstallGavs}
                 ```
+                
+                ## Moderne Installation
+                
+                Install the latest versions of all the OpenRewrite [recipe modules into Moderne](https://docs.moderne.io/administrator-documentation/moderne-dx/how-to-guides/deploying-recipe-artifacts-in-moderne-dx) using the GraphQL endpoint.
+                
+                <details>
+                <summary>
+                Show GraphQL mutation.
+                </summary>
+                
+                ```graphql
+                mutation seedOpenRewriteArtifacts() {
+                ${loadRecipesAsync}
+                }
+                ```
+                
+                </details>
                 """.trimIndent()
             )
         }
@@ -2273,6 +2304,7 @@ $cliSnippet
                 recipePath.substring(0, slashIndex)
             }
         }
+
         private fun getRecipePath(recipe: RecipeDescriptor): String =
         // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
         // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
