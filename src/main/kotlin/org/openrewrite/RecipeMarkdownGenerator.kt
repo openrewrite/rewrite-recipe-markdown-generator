@@ -13,9 +13,8 @@ import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.internal.StringUtils
 import org.openrewrite.internal.StringUtils.isNullOrEmpty
 import picocli.CommandLine
-import picocli.CommandLine.Command
+import picocli.CommandLine.*
 import picocli.CommandLine.Option
-import picocli.CommandLine.Parameters
 import java.io.BufferedWriter
 import java.io.File
 import java.io.IOException
@@ -122,62 +121,18 @@ class RecipeMarkdownGenerator : Runnable {
     )
 
     override fun run() {
+        // Load recipe details into memory
+        val classloader = recipeClasspath.split(";")
+            .map(Paths::get)
+            .map(Path::toUri)
+            .map(URI::toURL)
+            .toTypedArray()
+            .let { URLClassLoader(it) }
+
+        val recipeOrigins: Map<URI, RecipeOrigin> = RecipeOrigin.parse(recipeSources)
+        addInfosFromManifests(recipeOrigins, classloader)
+
         val outputPath = Paths.get(destinationDirectoryName)
-
-        val env: Environment
-        val recipeOrigins: Map<URI, RecipeOrigin>
-
-        if (recipeSources.isNotEmpty()) {
-            recipeOrigins = RecipeOrigin.parse(recipeSources)
-
-            // Load recipe details into memory
-            val classloader = recipeClasspath.split(";")
-                .map(Paths::get)
-                .map(Path::toUri)
-                .map(URI::toURL)
-                .toTypedArray()
-                .let { URLClassLoader(it) }
-
-            // Write latest-versions-of-every-openrewrite-module.md, for all recipes
-            addInfosFromManifests(recipeOrigins, classloader)
-            createLatestVersionsJs(outputPath, recipeOrigins)
-            createLatestVersionsMarkdown(outputPath, recipeOrigins)
-
-            if (latestVersionsOnly) {
-                return
-            }
-
-            val dependencies: MutableCollection<Path> = mutableListOf()
-            recipeClasspath.split(";")
-                .map(Paths::get)
-                .toCollection(dependencies)
-
-            val envBuilder = Environment.builder()
-            for (recipeOrigin in recipeOrigins) {
-                println("Scanning ${recipeOrigin.key.toPath().fileName}")
-                // If you are running this with an old version of Rewrite (for diff log purposes), you'll need
-                // to update the below line to look like this instead:
-                // envBuilder.scanJar(recipeOrigin.key.toPath(), classloader)
-                envBuilder.scanJar(recipeOrigin.key.toPath(), dependencies, classloader)
-            }
-            env = envBuilder.build()
-        } else {
-            recipeOrigins = emptyMap()
-            env = Environment.builder()
-                .scanRuntimeClasspath()
-                .build()
-
-            addInfosFromManifests(recipeOrigins, env.javaClass.classLoader)
-
-            // Write latest-versions-of-every-openrewrite-module.md
-            createLatestVersionsJs(outputPath, recipeOrigins)
-            createLatestVersionsMarkdown(outputPath, recipeOrigins)
-
-            if (recipeClasspath.isEmpty()) {
-                return
-            }
-        }
-
         val recipesPath = outputPath.resolve("recipes")
         try {
             Files.createDirectories(recipesPath)
@@ -185,17 +140,34 @@ class RecipeMarkdownGenerator : Runnable {
             throw RuntimeException(e)
         }
 
+        // Write latest-versions-of-every-openrewrite-module.md, for all recipes
+        createLatestVersionsJs(outputPath, recipeOrigins)
+        createLatestVersionsMarkdown(outputPath, recipeOrigins)
+
+        if (latestVersionsOnly) {
+            return
+        }
+
+        val dependencies = recipeClasspath.split(";").map(Paths::get).toList()
+        val envBuilder = Environment.builder()
+        for (recipeOrigin in recipeOrigins) {
+            println("Scanning ${recipeOrigin.key.toPath().fileName}")
+            // If you are running this with an old version of Rewrite (for diff log purposes), you'll need
+            // to update the below line to look like this instead:
+            // envBuilder.scanJar(recipeOrigin.key.toPath(), classloader)
+            envBuilder.scanJar(recipeOrigin.key.toPath(), dependencies, classloader)
+        }
+
         // Recipes fully loaded into recipeDescriptors
+        val env: Environment = envBuilder.build()
         val recipeDescriptors: Collection<RecipeDescriptor> = env.listRecipeDescriptors()
         val categoryDescriptors = ArrayList(env.listCategoryDescriptors())
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
         val recipesWithDataTables = ArrayList<RecipeDescriptor>()
         val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
-        var recipeCount = 0
 
         // Create the recipe docs
         for (recipeDescriptor in recipeDescriptors) {
-            recipeCount++
             var origin: RecipeOrigin?
             var rawUri = recipeDescriptor.source.toString()
             val exclamationIndex = rawUri.indexOf('!')
@@ -292,10 +264,24 @@ class RecipeMarkdownGenerator : Runnable {
             markdownArtifact.markdownRecipeDescriptors[recipeDescriptor.name] = markdownRecipeDescriptor
         }
 
-        // Create moderne-recipes.md
+        // Create various additional files
+        createRecipeDescriptorsYaml(markdownArtifacts, recipeDescriptors.size)
         createModerneRecipes(outputPath, moderneProprietaryRecipes)
+        createRecipesWithDataTables(recipesWithDataTables, outputPath)
+        createScanningRecipes(env.listRecipes().filter { it -> it is ScanningRecipe<*> }, outputPath)
 
+        // Write the README.md for each category
+        val categories = Category.fromDescriptors(recipeDescriptors, categoryDescriptors).sortedBy { it.simpleName }
+        for (category in categories) {
+            val categoryIndexPath = outputPath.resolve("recipes/")
+            category.writeCategoryIndex(categoryIndexPath)
+        }
+    }
 
+    private fun createRecipeDescriptorsYaml(
+        markdownArtifacts: TreeMap<String, MarkdownRecipeArtifact>,
+        recipeCount: Int
+    ) {
         val mapper = ObjectMapper(YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER))
         mapper.registerKotlinModule()
 
@@ -346,20 +332,6 @@ class RecipeMarkdownGenerator : Runnable {
         // Now that we've compared the versions and built the changelog,
         // write the latest recipe information to a file for next time
         mapper.writeValue(File(recipeDescriptorFile), markdownArtifacts)
-
-        val categories = Category.fromDescriptors(recipeDescriptors, categoryDescriptors).sortedBy { it.simpleName }
-
-        // Write recipes-with-data-tables.md
-        writeRecipesWithDataTables(recipesWithDataTables, outputPath)
-
-        // Write scanning-recipes.md
-        writeScanningRecipes(env.listRecipes().filter { it -> it is ScanningRecipe<*> }, outputPath)
-
-        // Write the README.md for each category
-        for (category in categories) {
-            val categoryIndexPath = outputPath.resolve("recipes/")
-            category.writeCategoryIndex(categoryIndexPath)
-        }
     }
 
     private fun addInfosFromManifests(recipeOrigins: Map<URI, RecipeOrigin>, cl: ClassLoader) {
@@ -577,11 +549,6 @@ class RecipeMarkdownGenerator : Runnable {
 
                     val formattedDisplayName = recipe.displayName
                         .replace("<script>", "`<script>`")
-
-                    // This was a joke recipe that is in a weird state and not normally available
-                    if (recipe.displayName == "SpongeBob-case comments") {
-                        continue
-                    }
 
                     writeln("* [${formattedDisplayName}](../${recipePath}.md)")
                 }
@@ -2319,7 +2286,7 @@ $cliSnippet
         }
     }
 
-    private fun writeRecipesWithDataTables(
+    private fun createRecipesWithDataTables(
         recipesWithDataTables: ArrayList<RecipeDescriptor>,
         outputPath: Path
     ) {
@@ -2362,7 +2329,7 @@ $cliSnippet
         }
     }
 
-    private fun writeScanningRecipes(scanningRecipes: List<Recipe>, outputPath: Path) {
+    private fun createScanningRecipes(scanningRecipes: List<Recipe>, outputPath: Path) {
         val markdown = outputPath.resolve("scanning-recipes.md")
         Files.newBufferedWriter(markdown, StandardOpenOption.CREATE).useAndApply {
             writeln(
@@ -2381,9 +2348,11 @@ $cliSnippet
 
             for (recipe in scanningRecipes) {
                 val recipePath = recipePath(recipe.name)
-                writeln("""
+                writeln(
+                    """
                     ### [${recipe.displayName}](../${recipePath}.md)
-                    """.trimIndent())
+                    """.trimIndent()
+                )
                 writeln("_${recipe.name}_\n")
                 writeln("${recipe.description}\n")
             }
