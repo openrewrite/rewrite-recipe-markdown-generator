@@ -1131,12 +1131,11 @@ import TabItem from '@theme/TabItem';
 
             writeSourceLinks(recipeDescriptor, origin)
             writeOptions(recipeDescriptor)
-            writeLicense(origin)
             writeDefinition(recipeDescriptor, origin)
+            writeExamples(recipeDescriptor)
             writeUsage(recipeDescriptor, origin)
             writeModerneLink(recipeDescriptor)
             writeDataTables(recipeDescriptor)
-            writeExamples(recipeDescriptor)
             writeContributors(recipeDescriptor)
         }
     }
@@ -1199,6 +1198,25 @@ import TabItem from '@theme/TabItem';
                 )
             }
         }
+
+        writeLicense(origin)
+    }
+
+    private fun BufferedWriter.writeLicense(origin: RecipeOrigin) {
+        val licenseText = when (origin.license) {
+            Licenses.Unknown -> "The license for this recipe is unknown."
+            Licenses.Apache2, Licenses.Proprietary, Licenses.MSAL -> "This recipe is available under the ${origin.license.markdown()}."
+            else -> "This recipe is available under the ${origin.license.markdown()} License, as defined by the recipe authors."
+        }
+
+        //language=markdown
+        writeln(
+            """
+
+            $licenseText
+
+            """.trimIndent()
+        )
     }
 
     private fun BufferedWriter.writeOptions(recipeDescriptor: RecipeDescriptor) {
@@ -1263,24 +1281,6 @@ import TabItem from '@theme/TabItem';
         }
     }
 
-    private fun BufferedWriter.writeLicense(origin: RecipeOrigin) {
-        val licenseText = when (origin.license) {
-            Licenses.Unknown -> "The license for this recipe is unknown."
-            Licenses.Apache2, Licenses.Proprietary, Licenses.MSAL -> "This recipe is available under the ${origin.license.markdown()}."
-            else -> "This recipe is available under the ${origin.license.markdown()} License, as defined by the recipe authors."
-        }
-
-        //language=markdown
-        writeln(
-            """
-            ## License
-
-            $licenseText
-
-            """.trimIndent()
-        )
-    }
-
     private fun BufferedWriter.writeDataTables(recipeDescriptor: RecipeDescriptor) {
         if (recipeDescriptor.dataTables.isNotEmpty()) {
             writeln(
@@ -1288,6 +1288,7 @@ import TabItem from '@theme/TabItem';
                 """
                 ## Data Tables
 
+                <Tabs groupId="data-tables">
                 """.trimIndent()
             )
 
@@ -1295,6 +1296,8 @@ import TabItem from '@theme/TabItem';
                 //language=markdown
                 writeln(
                     """
+                    <TabItem value="${dataTable.name}" label="${dataTable.name.substringAfterLast('.')}">
+
                     ### ${dataTable.displayName}
                     **${dataTable.name}**
 
@@ -1314,8 +1317,22 @@ import TabItem from '@theme/TabItem';
                     )
                 }
 
+                writeln(
+                    """
+                    
+                    </TabItem>
+                    """.trimIndent()
+                )
+
                 newLine()
             }
+
+            writeln(
+                //language=markdown
+                """
+                </Tabs>
+                """.trimIndent()
+            )
         }
     }
 
