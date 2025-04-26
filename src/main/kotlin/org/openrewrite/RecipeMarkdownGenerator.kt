@@ -2358,7 +2358,7 @@ $cliSnippet
                 
                 # Scanning Recipes
                 
-                _This doc contains all [scanning recipes](/concepts-and-explanations/recipes#scanning-recipes). Scanning recipes can not be used as preconditions._
+                _This doc contains all [scanning recipes](/concepts-and-explanations/recipes#scanning-recipes)._
                 
                 """.trimIndent()
             )
