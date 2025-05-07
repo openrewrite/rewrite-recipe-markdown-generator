@@ -8,6 +8,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.Patch
 import org.openrewrite.config.CategoryDescriptor
+import org.openrewrite.config.DeclarativeRecipe
 import org.openrewrite.config.Environment
 import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.internal.StringUtils
@@ -268,7 +269,7 @@ class RecipeMarkdownGenerator : Runnable {
         createRecipeDescriptorsYaml(markdownArtifacts, recipeDescriptors.size)
         createModerneRecipes(outputPath, moderneProprietaryRecipes)
         createRecipesWithDataTables(recipesWithDataTables, outputPath)
-        createScanningRecipes(env.listRecipes().filter { it -> it is ScanningRecipe<*> }, outputPath)
+        createScanningRecipes(env.listRecipes().filter { it is ScanningRecipe<*> && it !is DeclarativeRecipe }, outputPath)
 
         // Write the README.md for each category
         val categories = Category.fromDescriptors(recipeDescriptors, categoryDescriptors).sortedBy { it.simpleName }
