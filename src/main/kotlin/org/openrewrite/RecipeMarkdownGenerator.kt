@@ -8,13 +8,14 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.Patch
 import org.openrewrite.config.CategoryDescriptor
+import org.openrewrite.config.DeclarativeRecipe
 import org.openrewrite.config.Environment
 import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.internal.StringUtils
 import org.openrewrite.internal.StringUtils.isNullOrEmpty
 import picocli.CommandLine
-import picocli.CommandLine.Command
-import picocli.CommandLine.Parameters
+import picocli.CommandLine.*
+import picocli.CommandLine.Option
 import java.io.BufferedWriter
 import java.io.File
 import java.io.IOException
@@ -27,6 +28,7 @@ import java.nio.file.StandardOpenOption
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.jar.Manifest
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 import kotlin.io.path.toPath
@@ -109,6 +111,9 @@ class RecipeMarkdownGenerator : Runnable {
     )
     lateinit var diffFileName: String
 
+    @Option(names = ["--latest-versions-only"])
+    var latestVersionsOnly: Boolean = false
+
     // These are common in every recipe - so let's not use them when generating the list of recipes with data tables.
     private val dataTablesToIgnore = listOf(
         "org.openrewrite.table.SourcesFileResults",
@@ -117,59 +122,18 @@ class RecipeMarkdownGenerator : Runnable {
     )
 
     override fun run() {
+        // Load recipe details into memory
+        val classloader = recipeClasspath.split(";")
+            .map(Paths::get)
+            .map(Path::toUri)
+            .map(URI::toURL)
+            .toTypedArray()
+            .let { URLClassLoader(it) }
+
+        val recipeOrigins: Map<URI, RecipeOrigin> = RecipeOrigin.parse(recipeSources)
+        addInfosFromManifests(recipeOrigins, classloader)
+
         val outputPath = Paths.get(destinationDirectoryName)
-
-        val env: Environment
-        val recipeOrigins: Map<URI, RecipeOrigin>
-
-        if (recipeSources.isNotEmpty()) {
-            recipeOrigins = RecipeOrigin.parse(recipeSources)
-
-            // Write latest-versions-of-every-openrewrite-module.md
-            createLatestVersionsJs(outputPath, recipeOrigins)
-            createLatestVersionsMarkdown(outputPath, recipeOrigins)
-
-            if (recipeClasspath.isEmpty()) {
-                return
-            }
-
-            // Load recipe details into memory
-            val classloader = recipeClasspath.split(";")
-                .map(Paths::get)
-                .map(Path::toUri)
-                .map(URI::toURL)
-                .toTypedArray()
-                .let { URLClassLoader(it) }
-
-            val dependencies: MutableCollection<Path> = mutableListOf()
-            recipeClasspath.split(";")
-                .map(Paths::get)
-                .toCollection(dependencies)
-
-            val envBuilder = Environment.builder()
-            for (recipeOrigin in recipeOrigins) {
-                println("Scanning ${recipeOrigin.key.toPath().fileName}")
-                // If you are running this with an old version of Rewrite (for diff log purposes), you'll need
-                // to update the below line to look like this instead:
-                // envBuilder.scanJar(recipeOrigin.key.toPath(), classloader)
-                envBuilder.scanJar(recipeOrigin.key.toPath(), dependencies, classloader)
-            }
-            env = envBuilder.build()
-        } else {
-            recipeOrigins = emptyMap()
-            env = Environment.builder()
-                .scanRuntimeClasspath()
-                .build()
-
-            // Write latest-versions-of-every-openrewrite-module.md
-            createLatestVersionsJs(outputPath, recipeOrigins)
-            createLatestVersionsMarkdown(outputPath, recipeOrigins)
-
-            if (recipeClasspath.isEmpty()) {
-                return
-            }
-        }
-
         val recipesPath = outputPath.resolve("recipes")
         try {
             Files.createDirectories(recipesPath)
@@ -177,17 +141,34 @@ class RecipeMarkdownGenerator : Runnable {
             throw RuntimeException(e)
         }
 
+        // Write latest-versions-of-every-openrewrite-module.md, for all recipes
+        createLatestVersionsJs(outputPath, recipeOrigins)
+        createLatestVersionsMarkdown(outputPath, recipeOrigins)
+
+        if (latestVersionsOnly) {
+            return
+        }
+
+        val dependencies = recipeClasspath.split(";").map(Paths::get).toList()
+        val envBuilder = Environment.builder()
+        for (recipeOrigin in recipeOrigins) {
+            println("Scanning ${recipeOrigin.key.toPath().fileName}")
+            // If you are running this with an old version of Rewrite (for diff log purposes), you'll need
+            // to update the below line to look like this instead:
+            // envBuilder.scanJar(recipeOrigin.key.toPath(), classloader)
+            envBuilder.scanJar(recipeOrigin.key.toPath(), dependencies, classloader)
+        }
+
         // Recipes fully loaded into recipeDescriptors
+        val env: Environment = envBuilder.build()
         val recipeDescriptors: Collection<RecipeDescriptor> = env.listRecipeDescriptors()
         val categoryDescriptors = ArrayList(env.listCategoryDescriptors())
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
         val recipesWithDataTables = ArrayList<RecipeDescriptor>()
         val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
-        var recipeCount = 0
 
         // Create the recipe docs
         for (recipeDescriptor in recipeDescriptors) {
-            recipeCount++
             var origin: RecipeOrigin?
             var rawUri = recipeDescriptor.source.toString()
             val exclamationIndex = rawUri.indexOf('!')
@@ -213,7 +194,7 @@ class RecipeMarkdownGenerator : Runnable {
                 recipesWithDataTables.add(recipeDescriptor)
             }
 
-            if (getLicense(origin) == License.Proprietary) {
+            if (origin.license == Licenses.Proprietary) {
                 moderneProprietaryRecipes.computeIfAbsent(origin.artifactId) { mutableListOf() }.add(recipeDescriptor)
             }
 
@@ -228,7 +209,6 @@ class RecipeMarkdownGenerator : Runnable {
             if (recipeDescriptor.description.isNullOrEmpty()) {
                 recipeDescription = ""
             }
-            recipeDescription.replace("```. [Source]", "```\n[Source]")
 
             val docBaseUrl = "https://docs.openrewrite.org/recipes/"
 
@@ -279,16 +259,30 @@ class RecipeMarkdownGenerator : Runnable {
                 MarkdownRecipeArtifact(
                     origin.artifactId,
                     origin.version,
-                    TreeMap<String, MarkdownRecipeDescriptor>()
+                    TreeMap<String, MarkdownRecipeDescriptor>(),
                 )
             }
             markdownArtifact.markdownRecipeDescriptors[recipeDescriptor.name] = markdownRecipeDescriptor
         }
 
-        // Create moderne-recipes.md
+        // Create various additional files
+        createRecipeDescriptorsYaml(markdownArtifacts, recipeDescriptors.size)
         createModerneRecipes(outputPath, moderneProprietaryRecipes)
+        createRecipesWithDataTables(recipesWithDataTables, outputPath)
+        createScanningRecipes(env.listRecipes().filter { it is ScanningRecipe<*> && it !is DeclarativeRecipe }, outputPath)
 
+        // Write the README.md for each category
+        val categories = Category.fromDescriptors(recipeDescriptors, categoryDescriptors).sortedBy { it.simpleName }
+        for (category in categories) {
+            val categoryIndexPath = outputPath.resolve("recipes/")
+            category.writeCategoryIndex(categoryIndexPath)
+        }
+    }
 
+    private fun createRecipeDescriptorsYaml(
+        markdownArtifacts: TreeMap<String, MarkdownRecipeArtifact>,
+        recipeCount: Int
+    ) {
         val mapper = ObjectMapper(YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER))
         mapper.registerKotlinModule()
 
@@ -324,67 +318,64 @@ class RecipeMarkdownGenerator : Runnable {
                 removedRecipes.isNotEmpty() ||
                 changedRecipes.isNotEmpty()
             ) {
-                buildChangelog(newArtifacts, removedArtifacts, newRecipes, removedRecipes, changedRecipes, deployType, recipeCount)
+                buildChangelog(
+                    newArtifacts,
+                    removedArtifacts,
+                    newRecipes,
+                    removedRecipes,
+                    changedRecipes,
+                    deployType,
+                    recipeCount
+                )
             }
         }
 
         // Now that we've compared the versions and built the changelog,
         // write the latest recipe information to a file for next time
         mapper.writeValue(File(recipeDescriptorFile), markdownArtifacts)
+    }
 
-        val categories = Category.fromDescriptors(recipeDescriptors, categoryDescriptors).sortedBy { it.simpleName }
-
-        // Write recipes-with-data-tables.md
-        val recipesWithDataTablesPath = outputPath.resolve("recipes-with-data-tables.md")
-        Files.newBufferedWriter(recipesWithDataTablesPath, StandardOpenOption.CREATE).useAndApply {
-            writeln(
-            """
-            ---
-            description: An autogenerated list of all recipes that contain a unique data table.
-            ---
-            """.trimIndent())
-            writeln("\n# Recipes with Data Tables\n")
-
-            //language=markdown
-            writeln("_This doc contains all of the recipes with **unique** data tables that have been explicitly " +
-                    "added by the recipe author. If a recipe contains only the default data tables, " +
-                    "it won't be included in this list._\n")
-
-            for (recipe in recipesWithDataTables) {
-                var recipePath: String
-
-                if (recipe.name.count { it == '.' } == 2 &&
-                    recipe.name.contains("org.openrewrite.")) {
-                    recipePath = "recipes/core/" + recipe.name.removePrefix("org.openrewrite.").lowercase()
-                } else if (recipe.name.contains("io.moderne.ai")) {
-                    recipePath = "recipes/ai/" + recipe.name.removePrefix("io.moderne.ai.").replace(".", "/").lowercase()
-                } else if (recipe.name.contains("io.moderne")) {
-                    recipePath = "recipes/" + recipe.name.removePrefix("io.moderne.").replace(".", "/").lowercase()
-                } else {
-                    recipePath = "recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase()
-                }
-
-                writeln("### [${recipe.displayName}](../${recipePath}.md)\n ")
-                writeln("_${recipe.name}_\n")
-                writeln("${recipe.description}\n")
-                writeln("#### Data tables:\n")
-
-                val filteredDataTables = recipe.dataTables.filter { dataTable ->
-                    dataTable.name !in dataTablesToIgnore
-                }
-
-                for (dataTable in filteredDataTables) {
-                    writeln("  * **${dataTable.name}**: *${dataTable.description.replace("\n", " ")}*")
-                }
-
-                writeln("\n")
+    private fun addInfosFromManifests(recipeOrigins: Map<URI, RecipeOrigin>, cl: ClassLoader) {
+        val mfInfos: Map<URI, Pair<License, String>> = cl.getResources("META-INF/MANIFEST.MF").asSequence()
+            .filter { it.path != null }
+            .map {
+                Pair(
+                    URI(it.path.substringBeforeLast("!")),
+                    Manifest(it.openStream()).mainAttributes
+                )
             }
-        }
+            .map { (p, attr) ->
+                Pair(
+                    p,
+                    Triple(
+                        Licenses.get(
+                            attr.getValue("License-Url") ?: Licenses.Unknown.uri.toString(),
+                            attr.getValue("License-Name") ?: Licenses.Unknown.name
+                        ),
+                        attr.getValue("Module-Origin")?.substringBefore(".git") ?: "",
+                        attr.getValue("Module-Source")?.removePrefix("/")
+                    )
+                )
+            }
+            .filter { it.second.second.startsWith("http") }
+            .associate { (path, mfValues) ->
+                Pair(
+                    path,
+                    Pair(
+                        mfValues.first,
+                        if (mfValues.second.isNotEmpty()) "${mfValues.second}/blob/main/${mfValues.third ?: ""}" else ""
+                    )
+                )
+            }
 
-        // Write the README.md for each category
-        for (category in categories) {
-            val categoryIndexPath = outputPath.resolve("recipes/")
-            category.writeCategoryIndex(categoryIndexPath)
+        recipeOrigins.forEach {
+            val license: License? = mfInfos[it.key]?.first
+            if (license != null) {
+                it.value.license = license
+            } else {
+                println("Unable to determine License for ${it.value}")
+            }
+            it.value.repositoryUrl = mfInfos[it.key]?.second ?: ""
         }
     }
 
@@ -424,19 +415,35 @@ class RecipeMarkdownGenerator : Runnable {
 
                 | Module                                                                                                                | Version    | License |
                 |-----------------------------------------------------------------------------------------------------------------------| ---------- | ------- |
-                | [**org.openrewrite:rewrite-bom**](https://github.com/openrewrite/rewrite)                                             | **${rewriteBomLink}** | ${License.Apache2.markdown()} |
-                | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenLink}** | ${License.Apache2.markdown()} |
-                | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** | ${License.Apache2.markdown()} |
-                | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **${rewriteRecipeBomLink}** | ${License.Apache2.markdown()} |
-                | [**io.moderne.recipe:moderne-recipe-bom**](https://github.com/moderneinc/moderne-recipe-bom)                          | **${moderneBomLink}** | ${License.Proprietary.markdown()} |
+                | [**org.openrewrite:rewrite-bom**](https://github.com/openrewrite/rewrite)                                             | **${rewriteBomLink}** | ${Licenses.Apache2.markdown()} |
+                | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenLink}** | ${Licenses.Apache2.markdown()} |
+                | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** | ${Licenses.Apache2.markdown()} |
+                | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **${rewriteRecipeBomLink}** | ${Licenses.Apache2.markdown()} |
+                | [**io.moderne.recipe:moderne-recipe-bom**](https://github.com/moderneinc/moderne-recipe-bom)                          | **${moderneBomLink}** | ${Licenses.Proprietary.markdown()} |
                 """.trimIndent()
             )
             var cliInstallGavs = ""
+            var loadRecipesAsync = ""
             for (origin in recipeOrigins.values) {
+
                 cliInstallGavs += "${origin.groupId}:${origin.artifactId}:{{${origin.versionPlaceholderKey()}}} "
-                val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.githubUrl()})"
-                val releaseLink = "[${origin.version}](${origin.githubUrl()}/releases/tag/v${origin.version})"
-                writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${getLicense(origin).markdown()} |")
+
+                val loadCommand = "load_" + (origin.groupId + '_' + origin.artifactId)
+                    .replace('-', '_')
+                    .replace('.', '_')
+                //language=graphql
+                loadRecipesAsync += """
+                  $loadCommand: loadRecipesAsync(
+                    groupId: "${origin.groupId}"
+                    artifactId: "${origin.artifactId}"
+                    version: "LATEST"
+                  ) {
+                    id
+                  }"""
+
+                val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.repositoryUrl})"
+                val releaseLink = "[${origin.version}](${origin.repositoryUrl}/releases/tag/v${origin.version})"
+                writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${origin.license.markdown()} |")
             }
             //language=markdown
             writeln(
@@ -449,6 +456,23 @@ class RecipeMarkdownGenerator : Runnable {
                 ```bash
                 mod config recipes jar install ${cliInstallGavs}
                 ```
+                
+                ## Moderne Installation
+                
+                Install the latest versions of all the OpenRewrite [recipe modules into Moderne](https://docs.moderne.io/administrator-documentation/moderne-dx/how-to-guides/deploying-recipe-artifacts-in-moderne-dx) using the GraphQL endpoint.
+                
+                <details>
+                <summary>
+                Show GraphQL mutation.
+                </summary>
+                
+                ```graphql
+                mutation seedOpenRewriteArtifacts() {
+                ${loadRecipesAsync}
+                }
+                ```
+                
+                </details>
                 """.trimIndent()
             )
         }
@@ -487,17 +511,20 @@ class RecipeMarkdownGenerator : Runnable {
 
         Files.newBufferedWriter(moderneRecipesPath, StandardOpenOption.CREATE).useAndApply {
             writeln(
-            """
+                """
             ---
             description: An autogenerated list of recipes that are exclusive to Moderne.
             ---
-            """.trimIndent())
+            """.trimIndent()
+            )
             writeln("\n# Moderne Recipes\n")
 
-            writeln("This doc includes every recipe that is exclusive to users of Moderne. " +
-                    "For a full list of all recipes, check out our [recipe catalog](https://docs.openrewrite.org/recipes). " +
-                    "For more information about how to use Moderne for automating code refactoring and analysis at scale, " +
-                    "[contact us](https://www.moderne.ai/contact-us).\n")
+            writeln(
+                "This doc includes every recipe that is exclusive to users of Moderne. " +
+                        "For a full list of all recipes, check out our [recipe catalog](https://docs.openrewrite.org/recipes). " +
+                        "For more information about how to use Moderne for automating code refactoring and analysis at scale, " +
+                        "[contact us](https://www.moderne.ai/contact-us).\n"
+            )
 
             for (entry in moderneProprietaryRecipesMap) {
                 // Artifact ID
@@ -512,20 +539,17 @@ class RecipeMarkdownGenerator : Runnable {
                         recipe.name.contains("org.openrewrite.")) {
                         recipePath = "recipes/core/" + recipe.name.removePrefix("org.openrewrite.").lowercase()
                     } else if (recipe.name.contains("io.moderne.ai")) {
-                        recipePath = "recipes/ai/" + recipe.name.removePrefix("io.moderne.ai.").replace(".", "/").lowercase()
+                        recipePath =
+                            "recipes/ai/" + recipe.name.removePrefix("io.moderne.ai.").replace(".", "/").lowercase()
                     } else if (recipe.name.contains("io.moderne")) {
                         recipePath = "recipes/" + recipe.name.removePrefix("io.moderne.").replace(".", "/").lowercase()
                     } else {
-                        recipePath = "recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase()
+                        recipePath =
+                            "recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase()
                     }
 
                     val formattedDisplayName = recipe.displayName
                         .replace("<script>", "`<script>`")
-
-                    // This was a joke recipe that is in a weird state and not normally available
-                    if (recipe.displayName == "SpongeBob-case comments") {
-                        continue
-                    }
 
                     writeln("* [${formattedDisplayName}](../${recipePath}.md)")
                 }
@@ -666,12 +690,13 @@ class RecipeMarkdownGenerator : Runnable {
             changelog.appendText("\n:::\n\n")
         } else {
             changelog.appendText(
-            """
+                """
             ---
             description: What's changed in OpenRewrite version ${rewriteBomVersion}.
             ---
 
-            """.trimIndent())
+            """.trimIndent()
+            )
             changelog.appendText("\n# $rewriteBomVersion release ($formatted)")
 
             changelog.appendText("\n\n_Total recipe count: ${recipeCount}_")
@@ -1107,20 +1132,23 @@ import TabItem from '@theme/TabItem';
 
             writeSourceLinks(recipeDescriptor, origin)
             writeOptions(recipeDescriptor)
-            writeLicense(origin)
             writeDefinition(recipeDescriptor, origin)
+            writeExamples(recipeDescriptor)
             writeUsage(recipeDescriptor, origin)
             writeModerneLink(recipeDescriptor)
             writeDataTables(recipeDescriptor)
-            writeExamples(recipeDescriptor)
             writeContributors(recipeDescriptor)
         }
     }
 
     @Suppress("UNNECESSARY_SAFE_CALL") // Recipes from third parties may lack description
     private fun getFormattedRecipeDescription(recipeDescriptor: RecipeDescriptor): String {
-        val formattedRecipeDescription = recipeDescriptor?.description ?: ""
+        var formattedRecipeDescription = recipeDescriptor?.description ?: ""
         val specialCharsOutsideBackticksRegex = Pattern.compile("[<>{}](?=(?:[^`]*`[^`]*`)*[^`]*\$)")
+
+        if (formattedRecipeDescription.contains("```. [Source]")) {
+            formattedRecipeDescription = formattedRecipeDescription.replace("```. [Source]", "```\n\n[Source]")
+        }
 
         if (formattedRecipeDescription?.contains("```") == true) {
             // Assume that the recipe description is already Markdown
@@ -1137,7 +1165,7 @@ import TabItem from '@theme/TabItem';
     }
 
     private fun BufferedWriter.writeSourceLinks(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin) {
-        if (getLicense(origin) == License.Proprietary) {
+        if (origin.license == Licenses.Proprietary) {
             //language=markdown
             writeln(
                 """
@@ -1150,7 +1178,7 @@ import TabItem from '@theme/TabItem';
         } else {
             //language=markdown
             writeln(
-            """
+                """
             ## Recipe source
             
             [GitHub](${origin.githubUrl(recipeDescriptor.name, recipeDescriptor.source)}), 
@@ -1162,7 +1190,8 @@ import TabItem from '@theme/TabItem';
             if (recipeDescriptor.recipeList.size > 1) {
                 //language=markdown
                 writeln(
-                """
+                    """
+
                 :::info
                 This recipe is composed of more than one recipe. If you want to customize the set of recipes this is composed of, you can find and copy the GitHub source for the recipe from the link above.
                 :::
@@ -1170,6 +1199,25 @@ import TabItem from '@theme/TabItem';
                 )
             }
         }
+
+        writeLicense(origin)
+    }
+
+    private fun BufferedWriter.writeLicense(origin: RecipeOrigin) {
+        val licenseText = when (origin.license) {
+            Licenses.Unknown -> "The license for this recipe is unknown."
+            Licenses.Apache2, Licenses.Proprietary, Licenses.MSAL -> "This recipe is available under the ${origin.license.markdown()}."
+            else -> "This recipe is available under the ${origin.license.markdown()} License, as defined by the recipe authors."
+        }
+
+        //language=markdown
+        writeln(
+            """
+
+            $licenseText
+
+            """.trimIndent()
+        )
     }
 
     private fun BufferedWriter.writeOptions(recipeDescriptor: RecipeDescriptor) {
@@ -1200,10 +1248,7 @@ import TabItem from '@theme/TabItem';
                 } else {
                     "*Optional*. $description"
                 }
-                // This should preserve casing and plurality
-                description = description.replace("method patterns?".toRegex(RegexOption.IGNORE_CASE)) { match ->
-                    "[${match.value}](/reference/method-patterns)"
-                }
+
                 // Add valid options to description
                 if (option.valid?.isNotEmpty() ?: false) {
                     val combinedOptions = option.valid?.joinToString(", ") {
@@ -1237,24 +1282,6 @@ import TabItem from '@theme/TabItem';
         }
     }
 
-    private fun BufferedWriter.writeLicense(origin: RecipeOrigin) {
-        val licenseText = when (getLicense(origin)) {
-            License.Apache2 -> "This recipe is available under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)."
-            License.MSAL -> "This recipe is available under the [Moderne Source Available License](https://docs.moderne.io/licensing/moderne-source-available-license/)."
-            else -> "This recipe is available under the [Moderne Proprietary License](https://docs.moderne.io/licensing/overview/)."
-        }
-
-        //language=markdown
-        writeln(
-            """
-            ## License
-
-            $licenseText
-
-            """.trimIndent()
-        )
-    }
-
     private fun BufferedWriter.writeDataTables(recipeDescriptor: RecipeDescriptor) {
         if (recipeDescriptor.dataTables.isNotEmpty()) {
             writeln(
@@ -1262,6 +1289,7 @@ import TabItem from '@theme/TabItem';
                 """
                 ## Data Tables
 
+                <Tabs groupId="data-tables">
                 """.trimIndent()
             )
 
@@ -1269,6 +1297,8 @@ import TabItem from '@theme/TabItem';
                 //language=markdown
                 writeln(
                     """
+                    <TabItem value="${dataTable.name}" label="${dataTable.name.substringAfterLast('.')}">
+
                     ### ${dataTable.displayName}
                     **${dataTable.name}**
 
@@ -1288,8 +1318,22 @@ import TabItem from '@theme/TabItem';
                     )
                 }
 
+                writeln(
+                    """
+                    
+                    </TabItem>
+                    """.trimIndent()
+                )
+
                 newLine()
             }
+
+            writeln(
+                //language=markdown
+                """
+                </Tabs>
+                """.trimIndent()
+            )
         }
     }
 
@@ -1424,7 +1468,7 @@ import TabItem from '@theme/TabItem';
                 recipeDescriptor.name.contains(".dotnet.") ||
                 recipeDescriptor.name.contains(".nodejs.") ||
                 recipeDescriptor.name.contains(".python.") ||
-                getLicense(origin) == License.Proprietary
+                origin.license == Licenses.Proprietary
         val suppressMaven = suppressJava || recipeDescriptor.name.contains(".gradle.")
         val suppressGradle = suppressJava || recipeDescriptor.name.contains(".maven.")
         val requiresConfiguration = recipeDescriptor.options.any { it.isRequired }
@@ -1440,7 +1484,7 @@ import TabItem from '@theme/TabItem';
             val exampleRecipeName =
                 "com.yourorg." + recipeDescriptor.name.substring(recipeDescriptor.name.lastIndexOf('.') + 1) + "Example"
 
-            if (getLicense(origin) == License.Proprietary) {
+            if (origin.license == Licenses.Proprietary) {
                 //language=markdown
                 write(
                     """
@@ -1468,7 +1512,7 @@ import TabItem from '@theme/TabItem';
                 writeln("Here's how you can define and customize such a recipe within your rewrite.yml:")
                 //language=markdown
                 write(
-                """
+                    """
                 ```yaml title="rewrite.yml"
                 ---
                 type: specs.openrewrite.org/v1beta/recipe
@@ -1550,7 +1594,7 @@ import TabItem from '@theme/TabItem';
     }
 
     private fun BufferedWriter.writeDefinition(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin) {
-        if (recipeDescriptor.recipeList.isNotEmpty() && getLicense(origin) != License.Proprietary) {
+        if (recipeDescriptor.recipeList.isNotEmpty() && origin.license != Licenses.Proprietary) {
             //language=markdown
             writeln(
                 """
@@ -1792,16 +1836,17 @@ import TabItem from '@theme/TabItem';
             </TabItem>
             """.trimIndent()
 
-        if (getLicense(origin) == License.Proprietary) {
+        if (origin.license == Licenses.Proprietary) {
             writeln(
-"""
+                """
 <Tabs groupId="projectType">
 $cliSnippet
 </Tabs>
-""".trimIndent())
+""".trimIndent()
+            )
         } else {
             writeln(
-"""
+                """
 Now that `$exampleRecipeName` has been defined, activate it in your build file:
 <Tabs groupId="projectType">
 $gradleSnippet
@@ -1885,13 +1930,14 @@ $cliSnippet
             </TabItem>
             """.trimIndent()
 
-        if (getLicense(origin) == License.Proprietary) {
+        if (origin.license == Licenses.Proprietary) {
             writeln(
-"""
+                """
 <Tabs groupId="projectType">
 $cliSnippet
 </Tabs>
-""".trimIndent())
+""".trimIndent()
+            )
         } else {
             writeln(
                 """
@@ -2040,12 +2086,14 @@ $cliSnippet
         dataTableSnippet: String,
         dataTableCommandLineSnippet: String,
     ) {
-        if (getLicense(origin) == License.Proprietary) {
+        if (origin.license == Licenses.Proprietary) {
             writeln("This recipe has no required configuration options. Users of Moderne can run it via the Moderne CLI:")
         } else {
-            writeln("This recipe has no required configuration options. " +
-                    "It can be activated by adding a dependency on `${origin.groupId}:${origin.artifactId}` " +
-                    "in your build file or by running a shell command (in which case no build changes are needed):")
+            writeln(
+                "This recipe has no required configuration options. " +
+                        "It can be activated by adding a dependency on `${origin.groupId}:${origin.artifactId}` " +
+                        "in your build file or by running a shell command (in which case no build changes are needed):"
+            )
         }
 
         //language=markdown
@@ -2161,7 +2209,7 @@ $cliSnippet
             """.trimIndent()
 
         writeln(
-"""
+            """
 <Tabs groupId="projectType">
 $gradleSnippet
 $mavenSnippet
@@ -2199,12 +2247,6 @@ $cliSnippet
             }
         }
 
-        private val recipePathToDocusaurusRenamedPath: Map<String, String> = mapOf(
-            "org.openrewrite.java.testing.assertj.Assertj" to "java/testing/assertj/assertj-best-practices",
-            "org.openrewrite.java.migrate.javaee7" to "java/migrate/javaee7-recipe",
-            "org.openrewrite.java.migrate.javaee8" to "java/migrate/javaee8-recipe"
-        )
-
         private fun getRecipePath(recipe: RecipeDescriptor): String =
         // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
         // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
@@ -2224,7 +2266,9 @@ $cliSnippet
                 recipe.name.substring(11).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
             } else if (
                 recipe.name.startsWith("ai.timefold") ||
+                recipe.name.startsWith("com.oracle") ||
                 recipe.name.startsWith("io.quarkus") ||
+                recipe.name.startsWith("io.quakus") ||
                 recipe.name.startsWith("org.apache") ||
                 recipe.name.startsWith("org.axonframework") ||
                 recipe.name.startsWith("software.amazon.awssdk") ||
@@ -2234,6 +2278,13 @@ $cliSnippet
             } else {
                 throw RuntimeException("Recipe package unrecognized: ${recipe.name}")
             }
+
+        private val recipePathToDocusaurusRenamedPath: Map<String, String> = mapOf(
+            "org.openrewrite.java.testing.assertj.Assertj" to "java/testing/assertj/assertj-best-practices",
+            "org.openrewrite.java.migrate.javaee7" to "java/migrate/javaee7-recipe",
+            "org.openrewrite.java.migrate.javaee8" to "java/migrate/javaee8-recipe"
+        )
+
 
         private fun getRecipePath(recipesPath: Path, recipeDescriptor: RecipeDescriptor) =
             recipesPath.resolve(getRecipePath(recipeDescriptor) + ".md")
@@ -2251,5 +2302,90 @@ $cliSnippet
             val exitCode = CommandLine(RecipeMarkdownGenerator()).execute(*args)
             exitProcess(exitCode)
         }
+    }
+
+    private fun createRecipesWithDataTables(
+        recipesWithDataTables: ArrayList<RecipeDescriptor>,
+        outputPath: Path
+    ) {
+        val recipesWithDataTablesPath = outputPath.resolve("recipes-with-data-tables.md")
+        Files.newBufferedWriter(recipesWithDataTablesPath, StandardOpenOption.CREATE).useAndApply {
+            writeln(
+                """
+                ---
+                description: An autogenerated list of all recipes that contain a unique data table.
+                ---
+                """.trimIndent()
+            )
+            writeln("\n# Recipes with Data Tables\n")
+
+            //language=markdown
+            writeln(
+                "_This doc contains all of the recipes with **unique** data tables that have been explicitly " +
+                        "added by the recipe author. If a recipe contains only the default data tables, " +
+                        "it won't be included in this list._\n"
+            )
+
+            for (recipe in recipesWithDataTables) {
+                val recipePath = recipePath(recipe.name)
+
+                writeln("### [${recipe.displayName}](../${recipePath}.md)\n ")
+                writeln("_${recipe.name}_\n")
+                writeln("${recipe.description}\n")
+                writeln("#### Data tables:\n")
+
+                val filteredDataTables = recipe.dataTables.filter { dataTable ->
+                    dataTable.name !in dataTablesToIgnore
+                }
+
+                for (dataTable in filteredDataTables) {
+                    writeln("  * **${dataTable.name}**: *${dataTable.description.replace("\n", " ")}*")
+                }
+
+                writeln("\n")
+            }
+        }
+    }
+
+    private fun createScanningRecipes(scanningRecipes: List<Recipe>, outputPath: Path) {
+        val markdown = outputPath.resolve("scanning-recipes.md")
+        Files.newBufferedWriter(markdown, StandardOpenOption.CREATE).useAndApply {
+            writeln(
+                //language=markdown
+                """
+                ---
+                description: An autogenerated list of all scanning recipes.
+                ---
+                
+                # Scanning Recipes
+                
+                _This doc contains all [scanning recipes](/concepts-and-explanations/recipes#scanning-recipes)._
+                
+                """.trimIndent()
+            )
+
+            for (recipe in scanningRecipes) {
+                val recipePath = recipePath(recipe.name)
+                writeln(
+                    """
+                    ### [${recipe.displayName}](../${recipePath}.md)
+                    """.trimIndent()
+                )
+                writeln("_${recipe.name}_\n")
+                writeln("${recipe.description}\n")
+            }
+        }
+    }
+
+    private fun recipePath(name: String): String {
+        if (name.count { it == '.' } == 2 &&
+            name.contains("org.openrewrite.")) {
+            return "recipes/core/" + name.removePrefix("org.openrewrite.").lowercase()
+        } else if (name.contains("io.moderne.ai")) {
+            return "recipes/ai/" + name.removePrefix("io.moderne.ai.").replace(".", "/").lowercase()
+        } else if (name.contains("io.moderne")) {
+            return "recipes/" + name.removePrefix("io.moderne.").replace(".", "/").lowercase()
+        }
+        return "recipes/" + name.removePrefix("org.openrewrite.").replace(".", "/").lowercase()
     }
 }
