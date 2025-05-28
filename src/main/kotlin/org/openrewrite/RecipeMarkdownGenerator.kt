@@ -7,6 +7,10 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.Patch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 import org.openrewrite.config.CategoryDescriptor
 import org.openrewrite.config.DeclarativeRecipe
 import org.openrewrite.config.Environment
@@ -33,6 +37,7 @@ import java.util.regex.Pattern
 import java.util.stream.Collectors
 import kotlin.io.path.toPath
 import kotlin.system.exitProcess
+
 
 // These recipes contain invalid markdown and would cause issues
 // with doc generation if left in.
@@ -121,6 +126,47 @@ class RecipeMarkdownGenerator : Runnable {
         "org.openrewrite.table.RecipeRunStats"
     )
 
+    /** Data class to hold both descriptors and recipes */
+    data class EnvironmentData(
+        val recipeDescriptors: Collection<RecipeDescriptor>,
+        val categoryDescriptors: Collection<CategoryDescriptor>,
+        val recipes: Collection<Recipe>
+    )
+
+    // Process recipe jars in parallel and collect both descriptors and recipes
+    fun loadEnvironmentDataAsync(
+        recipeOrigins: Map<URI, RecipeOrigin>,
+        dependencies: List<Path>,
+        classloader: ClassLoader
+    ): List<EnvironmentData> = runBlocking {
+        println("Starting parallel recipe loading...")
+        recipeOrigins.entries
+            .chunked(4) // Process in batches of 4 jars
+            .flatMap { batch ->
+                batch.map { recipeOrigin ->
+                    async(Dispatchers.IO) {
+                        println("Processing ${recipeOrigin.key.toPath().fileName}")
+                        // Create a separate environment for each jar
+                        val batchEnvBuilder = Environment.builder()
+                        // If you are running this with an old version of Rewrite (for diff log purposes), you'll need
+                        // to update the below line to look like this instead:
+                        // batchEnvBuilder.scanJar(recipeOrigin.key.toPath(), classloader)
+                        batchEnvBuilder.scanJar(recipeOrigin.key.toPath(), dependencies, classloader)
+                        val batchEnv = batchEnvBuilder.build()
+                        EnvironmentData(
+                            batchEnv.listRecipeDescriptors(),
+                            batchEnv.listCategoryDescriptors(),
+                            batchEnv.listRecipes()
+                        ).also {
+                            println("Loaded ${it.recipeDescriptors.size} recipe descriptors from ${recipeOrigin.key.toPath().fileName}")
+                        }
+                    }
+                }.awaitAll()
+            }.also {
+                println("Finished loading all recipes.")
+            }
+    }
+
     override fun run() {
         // Load recipe details into memory
         val classloader = recipeClasspath.split(";")
@@ -150,25 +196,25 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         val dependencies = recipeClasspath.split(";").map(Paths::get).toList()
-        val envBuilder = Environment.builder()
-        for (recipeOrigin in recipeOrigins) {
-            println("Scanning ${recipeOrigin.key.toPath().fileName}")
-            // If you are running this with an old version of Rewrite (for diff log purposes), you'll need
-            // to update the below line to look like this instead:
-            // envBuilder.scanJar(recipeOrigin.key.toPath(), classloader)
-            envBuilder.scanJar(recipeOrigin.key.toPath(), dependencies, classloader)
-        }
+        val environmentData : List<EnvironmentData> = loadEnvironmentDataAsync(
+            recipeOrigins,
+            dependencies,
+            classloader
+        )
 
-        // Recipes fully loaded into recipeDescriptors
-        val env: Environment = envBuilder.build()
-        val recipeDescriptors: Collection<RecipeDescriptor> = env.listRecipeDescriptors()
-        val categoryDescriptors = ArrayList(env.listCategoryDescriptors())
+        // Combine all the results
+        val allRecipeDescriptors = environmentData.flatMap { it.recipeDescriptors }
+        val allCategoryDescriptors = environmentData.flatMap { it.categoryDescriptors }
+        val allRecipes = environmentData.flatMap { it.recipes }
+
+        println("Found ${allRecipeDescriptors.size} descriptor(s).")
+
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
         val recipesWithDataTables = ArrayList<RecipeDescriptor>()
         val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
 
         // Create the recipe docs
-        for (recipeDescriptor in recipeDescriptors) {
+        for (recipeDescriptor in allRecipeDescriptors) {
             var origin: RecipeOrigin?
             var rawUri = recipeDescriptor.source.toString()
             val exclamationIndex = rawUri.indexOf('!')
@@ -266,13 +312,13 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         // Create various additional files
-        createRecipeDescriptorsYaml(markdownArtifacts, recipeDescriptors.size)
+        createRecipeDescriptorsYaml(markdownArtifacts, allRecipeDescriptors.size)
         createModerneRecipes(outputPath, moderneProprietaryRecipes)
         createRecipesWithDataTables(recipesWithDataTables, outputPath)
-        createScanningRecipes(env.listRecipes().filter { it is ScanningRecipe<*> && it !is DeclarativeRecipe }, outputPath)
+        createScanningRecipes(allRecipes.filter { it is ScanningRecipe<*> && it !is DeclarativeRecipe }, outputPath)
 
         // Write the README.md for each category
-        val categories = Category.fromDescriptors(recipeDescriptors, categoryDescriptors).sortedBy { it.simpleName }
+        val categories = Category.fromDescriptors(allRecipeDescriptors, allCategoryDescriptors).sortedBy { it.simpleName }
         for (category in categories) {
             val categoryIndexPath = outputPath.resolve("recipes/")
             category.writeCategoryIndex(categoryIndexPath)
