@@ -81,7 +81,6 @@ Assumes you have `rewrite-docs` checked out in the same directory as `rewrite-re
 
 ```shell
 ./gradlew run
-./gradlew run -PlatestVersionsOnly=true # Once more to include all language modules
 rm -rf ../rewrite-docs/docs/recipes/
 cp -r build/docs/recipes ../rewrite-docs/docs/recipes
 cp -r build/docs/*.md ../rewrite-docs/docs/reference/
