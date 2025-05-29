@@ -5232,6 +5232,29 @@ rewrite-cucumber-jvm:
       options: []
       isImperative: false
       artifactId: "rewrite-cucumber-jvm"
+rewrite-diffblue:
+  artifactId: "rewrite-diffblue"
+  version: "0.1.0-SNAPSHOT"
+  markdownRecipeDescriptors:
+    io.moderne.diffblue.GenerateUnitTests:
+      name: "io.moderne.diffblue.GenerateUnitTests"
+      description: "Use the Diffblue Cover tool to generate unit tests for Java classes."
+      docLink: "https://docs.openrewrite.org/recipes/diffblue/generateunittests"
+      options:
+      - name: "arguments"
+        type: "List"
+        required: false
+      - name: "iterations"
+        type: "Integer"
+        required: false
+      - name: "license"
+        type: "String"
+        required: true
+      - name: "skipVerification"
+        type: "Boolean"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-diffblue"
 rewrite-docker:
   artifactId: "rewrite-docker"
   version: "2.7.0"

@@ -19,6 +19,7 @@ repositories {
     mavenCentral()
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
     maven { url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/") }
+    maven { url = uri("https://maven.diffblue.com/snapshot") }
     gradlePluginPortal()
 }
 
@@ -95,7 +96,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-comprehension")
     "recipe"("org.openrewrite.recipe:rewrite-concourse")
     "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm")
-//    "recipe"("org.openrewrite.recipe:rewrite-diffblue")
+    "recipe"("org.openrewrite.recipe:rewrite-diffblue:latest.integration") // Not released yet
     "recipe"("org.openrewrite.recipe:rewrite-docker")
     "recipe"("org.openrewrite.recipe:rewrite-dotnet")
     "recipe"("org.openrewrite.recipe:rewrite-dropwizard")
