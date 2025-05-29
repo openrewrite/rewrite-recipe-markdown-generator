@@ -513,7 +513,7 @@ class RecipeMarkdownGenerator : Runnable {
                 </summary>
                 
                 ```graphql
-                mutation seedOpenRewriteArtifacts() {
+                mutation seedOpenRewriteArtifacts {
                 ${loadRecipesAsync}
                 }
                 ```
