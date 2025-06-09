@@ -1118,14 +1118,20 @@ class RecipeMarkdownGenerator : Runnable {
             return
         }
 
-        val sidebarFormattedName = recipeDescriptor.displayName
+        val editionSuffix = when (recipeDescriptor.name) {
+            "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4" -> " (Moderne Edition)"
+            "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4" -> " (Community Edition)"
+            else -> ""
+        }
+
+        val sidebarFormattedName = (recipeDescriptor.displayName + editionSuffix)
             .replace("`", "")
             .replace("\"", "\\\"")
             .replace("<script>", "<script >")
             .replace("<p>", "< p >")
             .trim()
 
-        val formattedRecipeTitle = recipeDescriptor?.displayName
+        val formattedRecipeTitle = (recipeDescriptor?.displayName + editionSuffix)
             ?.replace("<", "&lt;")
             ?.replace(">", "&gt;")
             ?.replace("`&lt;", "`<")
@@ -2294,11 +2300,16 @@ $cliSnippet
         }
 
         private fun getRecipePath(recipe: RecipeDescriptor): String =
-        // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
-        // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
+            // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
+            // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
             // docs so that they parse correctly.
             if (recipePathToDocusaurusRenamedPath.containsKey(recipe.name)) {
                 recipePathToDocusaurusRenamedPath[recipe.name]!!
+            } else if (recipe.name == "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4") {
+                // The spring boot recipes clashes with one another so let's make them distinct
+                "java/spring/boot3/upgradespringboot_3_4-moderne-edition"
+            } else if (recipe.name == "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4") {
+                "java/spring/boot3/upgradespringboot_3_4-community-edition"
             } else if (recipe.name.startsWith("org.openrewrite")) {
                 // If the recipe path only has two periods, it's part of the core recipes and should be adjusted accordingly.
                 if (recipe.name.count { it == '.' } == 2) {
