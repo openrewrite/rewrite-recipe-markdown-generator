@@ -256,32 +256,8 @@ class RecipeMarkdownGenerator : Runnable {
                 recipeDescription = ""
             }
 
-            val docBaseUrl = "https://docs.openrewrite.org/recipes/"
-
             // Changes something like org.openrewrite.circleci.InstallOrb to https://docs.openrewrite.org/recipes/circleci/installorb
-            var docLink = docBaseUrl + recipeDescriptor.name.lowercase(Locale.getDefault())
-                .removePrefix("org.openrewrite.")
-                .removePrefix("io.moderne.")
-                .replace('.', '/')
-                .replace(
-                    "$",
-                    "usd"
-                ) // needed for refaster templates + gitbook as we have started using $ in our recipe descriptors :(
-
-            // Some of our recipes fall in a "core" category. These do not have a package like other recipes.
-            // For example: org.openrewrite.recipeName
-            // In this case, we want the generated link to include the /core/ directory.
-            if (recipeDescriptor.name.count { it == '.' } == 2) {
-                docLink = docBaseUrl + "core/" + recipeDescriptor.name.lowercase(Locale.getDefault())
-                    .removePrefix("org.openrewrite.")
-                    .removePrefix("io.moderne.")
-                    .replace('.', '/')
-                    .replace(
-                        "$",
-                        "usd"
-                    ) // needed for refaster templates + gitbook as we have started using $ in our recipe descriptors :(
-            }
-
+            val docLink = "https://docs.openrewrite.org/recipes/" + getRecipePath(recipeDescriptor)
             val recipeSource = recipeDescriptor.source.toString()
             var isImperative = true
 

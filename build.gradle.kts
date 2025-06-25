@@ -129,8 +129,8 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks")
     "recipe"("org.openrewrite.recipe:rewrite-third-party")
 
-    "recipe"("io.moderne.recipe:rewrite-cryptography:latest.release") // Not managed yet
-    "recipe"("io.moderne.recipe:rewrite-devcenter:latest.release") // Not managed yet
+    "recipe"("io.moderne.recipe:rewrite-cryptography")
+    "recipe"("io.moderne.recipe:rewrite-devcenter")
     "recipe"("io.moderne.recipe:rewrite-hibernate")
     "recipe"("io.moderne.recipe:rewrite-spring")
     "recipe"("io.moderne.recipe:rewrite-vulncheck")
