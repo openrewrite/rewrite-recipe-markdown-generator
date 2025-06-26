@@ -2368,7 +2368,10 @@ $cliSnippet
             for (recipe in recipesWithDataTables) {
                 val recipePath = recipePath(recipe.name)
 
-                writeln("### [${recipe.displayName}](../${recipePath}.md)\n ")
+                val formattedDisplayName = recipe.displayName
+                        .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
+
+                writeln("### [${formattedDisplayName}](../${recipePath}.md)\n ")
                 writeln("_${recipe.name}_\n")
                 writeln("${recipe.description}\n")
                 writeln("#### Data tables:\n")
