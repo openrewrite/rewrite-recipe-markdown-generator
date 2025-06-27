@@ -96,7 +96,10 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-comprehension")
     "recipe"("org.openrewrite.recipe:rewrite-concourse")
     "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm")
-    "recipe"("org.openrewrite.recipe:rewrite-diffblue:latest.integration") // Not released yet
+    "recipe"("org.openrewrite.recipe:rewrite-diffblue:latest.integration") { // Not released yet
+        exclude(group = "org.openrewrite")
+        exclude(group = "org.openrewrite.recipe")
+    }
     "recipe"("org.openrewrite.recipe:rewrite-docker")
     "recipe"("org.openrewrite.recipe:rewrite-dotnet")
     "recipe"("org.openrewrite.recipe:rewrite-dropwizard")
