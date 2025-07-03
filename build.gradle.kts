@@ -96,10 +96,11 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-comprehension")
     "recipe"("org.openrewrite.recipe:rewrite-concourse")
     "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm")
-    "recipe"("org.openrewrite.recipe:rewrite-diffblue:latest.integration") { // Not released yet
-        exclude(group = "org.openrewrite")
-        exclude(group = "org.openrewrite.recipe")
-    }
+    // Not released yet; when uncommented it pulls in snapshot versions of dependencies into the generated docs
+//    "recipe"("org.openrewrite.recipe:rewrite-diffblue:latest.integration") {
+//        exclude(group = "org.openrewrite")
+//        exclude(group = "org.openrewrite.recipe")
+//    }
     "recipe"("org.openrewrite.recipe:rewrite-docker")
     "recipe"("org.openrewrite.recipe:rewrite-dotnet")
     "recipe"("org.openrewrite.recipe:rewrite-dropwizard")
