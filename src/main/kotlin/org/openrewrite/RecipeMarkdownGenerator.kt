@@ -1065,13 +1065,12 @@ class RecipeMarkdownGenerator : Runnable {
                     newLine()
 
                     for (recipe in recipes) {
-                        val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
                         val formattedDisplayName = recipe.displayName
                             .replace("<", "\\<")
                             .replace(">", "\\>")
                             .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
-
-                        writeln("* [${formattedDisplayName}](./${recipeSimpleName}.md)")
+                        val relativePath = getRecipePath(recipe).substringAfterLast('/')
+                        writeln("* [${formattedDisplayName}](./$relativePath.md)")
                     }
                 }
 
