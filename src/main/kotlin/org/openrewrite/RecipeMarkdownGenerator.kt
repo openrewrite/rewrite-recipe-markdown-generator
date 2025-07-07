@@ -2365,12 +2365,10 @@ $cliSnippet
             )
 
             for (recipe in recipesWithDataTables) {
-                val recipePath = recipePath(recipe.name)
-
                 val formattedDisplayName = recipe.displayName
                         .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
 
-                writeln("### [${formattedDisplayName}](../${recipePath}.md)\n ")
+                writeln("### [${formattedDisplayName}](../${getRecipePath(recipe)}.md)\n ")
                 writeln("_${recipe.name}_\n")
                 writeln("${recipe.description}\n")
                 writeln("#### Data tables:\n")
@@ -2406,27 +2404,14 @@ $cliSnippet
             )
 
             for (recipe in scanningRecipes) {
-                val recipePath = recipePath(recipe.name)
                 writeln(
                     """
-                    ### [${recipe.displayName}](../${recipePath}.md)
+                    ### [${recipe.displayName}](../${getRecipePath(recipe.descriptor)}.md)
                     """.trimIndent()
                 )
                 writeln("_${recipe.name}_\n")
                 writeln("${recipe.description}\n")
             }
         }
-    }
-
-    private fun recipePath(name: String): String {
-        if (name.count { it == '.' } == 2 &&
-            name.contains("org.openrewrite.")) {
-            return "recipes/core/" + name.removePrefix("org.openrewrite.").lowercase()
-        } else if (name.contains("io.moderne.ai")) {
-            return "recipes/ai/" + name.removePrefix("io.moderne.ai.").replace(".", "/").lowercase()
-        } else if (name.contains("io.moderne")) {
-            return "recipes/" + name.removePrefix("io.moderne.").replace(".", "/").lowercase()
-        }
-        return "recipes/" + name.removePrefix("org.openrewrite.").replace(".", "/").lowercase()
     }
 }
