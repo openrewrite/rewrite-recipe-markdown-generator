@@ -2368,7 +2368,7 @@ $cliSnippet
                 val formattedDisplayName = recipe.displayName
                         .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
 
-                writeln("### [${formattedDisplayName}](../${getRecipePath(recipe)}.md)\n ")
+                writeln("### [${formattedDisplayName}](../recipes/${getRecipePath(recipe)}.md)\n ")
                 writeln("_${recipe.name}_\n")
                 writeln("${recipe.description}\n")
                 writeln("#### Data tables:\n")
@@ -2406,7 +2406,7 @@ $cliSnippet
             for (recipe in scanningRecipes) {
                 writeln(
                     """
-                    ### [${recipe.displayName}](../${getRecipePath(recipe.descriptor)}.md)
+                    ### [${recipe.displayName}](../recipes/${getRecipePath(recipe.descriptor)}.md)
                     """.trimIndent()
                 )
                 writeln("_${recipe.name}_\n")
