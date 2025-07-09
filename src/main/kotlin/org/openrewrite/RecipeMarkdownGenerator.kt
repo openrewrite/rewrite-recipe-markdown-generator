@@ -555,26 +555,10 @@ class RecipeMarkdownGenerator : Runnable {
                 val sortedEntries = entry.value.sortedBy { it.displayName }
 
                 for (recipe in sortedEntries) {
-                    var recipePath = ""
-
-                    if (recipe.name.count { it == '.' } == 2 &&
-                        recipe.name.contains("org.openrewrite.")) {
-                        recipePath = "recipes/core/" + recipe.name.removePrefix("org.openrewrite.").lowercase()
-                    } else if (recipe.name.contains("io.moderne.ai")) {
-                        recipePath =
-                            "recipes/ai/" + recipe.name.removePrefix("io.moderne.ai.").replace(".", "/").lowercase()
-                    } else if (recipe.name.contains("io.moderne")) {
-                        recipePath = "recipes/" + recipe.name.removePrefix("io.moderne.").replace(".", "/").lowercase()
-                    } else {
-                        recipePath =
-                            "recipes/" + recipe.name.removePrefix("org.openrewrite.").replace(".", "/").lowercase()
-                    }
-
                     val formattedDisplayName = recipe.displayName
                         .replace("<script>", "`<script>`")
                         .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
-
-                    writeln("* [${formattedDisplayName}](../${recipePath}.md)")
+                    writeln("* [${formattedDisplayName}](../recipes/${getRecipePath(recipe)}.md)")
                 }
 
                 writeln("")
@@ -993,7 +977,6 @@ class RecipeMarkdownGenerator : Runnable {
                                 continue;
                             }
 
-                            var recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
                             val formattedDisplayName = recipe.displayName
                                 .replace("<script>", "\\<script\\>")
                                 .replace("<p>", "< p >")
@@ -1005,16 +988,9 @@ class RecipeMarkdownGenerator : Runnable {
                                 "org.openrewrite.java.migrate.javaee8" to "javaee8-recipe"
                             )
 
-                            // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
-                            // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
-                            // docs so that they parse correctly.
-                            if (recipePathToDocusaurusRenamedPath.containsKey(recipe.name)) {
-                                recipeSimpleName = recipePathToDocusaurusRenamedPath[recipe.name]!!
-                            }
-
                             // Anything except a relative link ending in .md will be mangled.
                             // If you touch this line double check that it works when imported into gitbook
-                            appendLine("* [${formattedDisplayName}](./${recipeSimpleName}.md)")
+                            appendLine("* [${formattedDisplayName}](${getRecipePath(recipe)}.md)")
                         }
 
                         appendLine()
