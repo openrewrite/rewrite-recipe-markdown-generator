@@ -982,15 +982,9 @@ class RecipeMarkdownGenerator : Runnable {
                                 .replace("<p>", "< p >")
                                 .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
 
-                            val recipePathToDocusaurusRenamedPath: Map<String, String> = mapOf(
-                                "org.openrewrite.java.testing.assertj.Assertj" to "assertj-best-practices",
-                                "org.openrewrite.java.migrate.javaee7" to "javaee7-recipe",
-                                "org.openrewrite.java.migrate.javaee8" to "javaee8-recipe"
-                            )
-
                             // Anything except a relative link ending in .md will be mangled.
-                            // If you touch this line double check that it works when imported into gitbook
-                            appendLine("* [${formattedDisplayName}](${getRecipePath(recipe)}.md)")
+                            val localPath = getRecipePath(recipe).substringAfterLast('/')
+                            appendLine("* [${formattedDisplayName}](./$localPath.md)")
                         }
 
                         appendLine()
@@ -1001,15 +995,14 @@ class RecipeMarkdownGenerator : Runnable {
                         appendLine()
 
                         for (recipe in normalRecipes) {
-                            val recipeSimpleName = recipe.name.substring(recipe.name.lastIndexOf('.') + 1).lowercase()
                             val formattedDisplayName = recipe.displayName
                                 .replace("<script>", "\\<script\\>")
                                 .replace("<p>", "< p >")
                                 .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
 
                             // Anything except a relative link ending in .md will be mangled.
-                            // If you touch this line double check that it works when imported into gitbook
-                            appendLine("* [${formattedDisplayName}](./${recipeSimpleName}.md)")
+                            val localPath = getRecipePath(recipe).substringAfterLast('/')
+                            appendLine("* [${formattedDisplayName}](./${localPath}.md)")
                         }
 
                         appendLine()
