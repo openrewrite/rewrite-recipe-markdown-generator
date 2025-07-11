@@ -25,6 +25,7 @@ class RecipeMarkdownGeneratorTest {
 
             "8.x", // Rewrite
             "2.x", // Recipe BOM
+            "1.x", // Moderne Recipe BOM
             "6.x", // Gradle plugin
             "5.x", // Maven plugin
         )
