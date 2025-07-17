@@ -93,7 +93,11 @@ class RecipeOrigin(
         }
 
         fun parse(text: String): Map<URI, RecipeOrigin> {
+            if (text.isBlank()) {
+                return emptyMap()
+            }
             return text.split(";").asSequence()
+                .filter { it.isNotBlank() }
                 .map(Companion::fromString)
                 .sortedWith(compareBy({ it.groupId }, { it.artifactId }, { it.version }))
                 .associateBy { it.jarLocation }
