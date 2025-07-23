@@ -2389,7 +2389,7 @@ $cliSnippet
 
     private fun createRecipesByTag(allRecipeDescriptors: List<RecipeDescriptor>, outputPath: Path) {
         val tagToRecipes = TreeMap<String, TreeSet<RecipeDescriptor>>(String.CASE_INSENSITIVE_ORDER)
-        
+
         // Collect all tags and their associated recipes
         for (recipeDescriptor in allRecipeDescriptors) {
             for (tag in recipeDescriptor.tags) {
@@ -2397,7 +2397,7 @@ $cliSnippet
                     .add(recipeDescriptor)
             }
         }
-        
+
         val markdown = outputPath.resolve("recipes-by-tag.md")
         Files.newBufferedWriter(markdown, StandardOpenOption.CREATE).useAndApply {
             writeln(
@@ -2413,21 +2413,29 @@ $cliSnippet
                 
                 """.trimIndent()
             )
-            
+
             if (tagToRecipes.isEmpty()) {
                 writeln("No tagged recipes found.")
             } else {
                 writeln("Total tags: ${tagToRecipes.size}\n")
-                
+
                 for ((tag, recipes) in tagToRecipes) {
                     writeln("## ${tag}")
                     writeln("\n_${recipes.size} recipe${if (recipes.size != 1) "s" else ""}_\n")
-                    
+
                     for (recipe in recipes) {
                         val displayName = recipe.displayName.replace("`", "")
-                        writeln("* [${displayName}](../recipes/${getRecipePath(recipe)}.md) - _${recipe.description.replace("\n", " ")}_")
+                        writeln(
+                            "* [${displayName}](../recipes/${getRecipePath(recipe)}.md) - _${
+                                recipe.description.replace(
+                                    "\n",
+                                    " "
+                                )
+                            }_"
+                        )
                     }
                     writeln("")
+                }
             }
         }
     }
