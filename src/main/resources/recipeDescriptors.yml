@@ -1,6 +1,6 @@
 rewrite-ai-search:
   artifactId: "rewrite-ai-search"
-  version: "0.28.1"
+  version: "0.29.1"
   markdownRecipeDescriptors:
     io.moderne.ai.FindCommentsLanguage:
       name: "io.moderne.ai.FindCommentsLanguage"
@@ -75,7 +75,7 @@ rewrite-ai-search:
       artifactId: "rewrite-ai-search"
 rewrite-all:
   artifactId: "rewrite-all"
-  version: "1.18.1"
+  version: "1.19.1"
   markdownRecipeDescriptors:
     org.openrewrite.FindCallGraph:
       name: "org.openrewrite.FindCallGraph"
@@ -107,7 +107,7 @@ rewrite-all:
       artifactId: "rewrite-all"
 rewrite-analysis:
   artifactId: "rewrite-analysis"
-  version: "2.24.0"
+  version: "2.25.1"
   markdownRecipeDescriptors:
     org.openrewrite.analysis.controlflow.ControlFlowVisualization:
       name: "org.openrewrite.analysis.controlflow.ControlFlowVisualization"
@@ -170,7 +170,7 @@ rewrite-analysis:
       artifactId: "rewrite-analysis"
 rewrite-android:
   artifactId: "rewrite-android"
-  version: "0.10.1"
+  version: "0.11.1"
   markdownRecipeDescriptors:
     org.openrewrite.android.ChangeAndroidSdkVersion:
       name: "org.openrewrite.android.ChangeAndroidSdkVersion"
@@ -297,7 +297,7 @@ rewrite-android:
       artifactId: "rewrite-android"
 rewrite-apache:
   artifactId: "rewrite-apache"
-  version: "2.12.0"
+  version: "2.13.1"
   markdownRecipeDescriptors:
     org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64:
       name: "org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64"
@@ -699,6 +699,13 @@ rewrite-apache:
       options: []
       isImperative: false
       artifactId: "rewrite-apache"
+    org.openrewrite.apache.httpclient5.UpgradeApacheHttpClientDependencies:
+      name: "org.openrewrite.apache.httpclient5.UpgradeApacheHttpClientDependencies"
+      description: "Adopt `org.apache.httpcomponents.client5:httpclient5` from `org.apache.httpcomponents`"
+      docLink: "https://docs.openrewrite.org/recipes/apache/httpclient5/upgradeapachehttpclientdependencies"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-apache"
     org.openrewrite.apache.httpclient5.UpgradeApacheHttpClient_5:
       name: "org.openrewrite.apache.httpclient5.UpgradeApacheHttpClient_5"
       description: "Migrate applications to the latest Apache HttpClient 5.x release.\
@@ -728,6 +735,13 @@ rewrite-apache:
       description: "Apache HttpClient 5.x Timeout and duration methods need an extra\
         \ the TimeUnit argument. This recipe uses milliseconds as a default unit."
       docLink: "https://docs.openrewrite.org/recipes/apache/httpclient5/upgradeapachehttpclient_5_timeunit"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-apache"
+    org.openrewrite.apache.httpclient5.UpgradeApacheHttpCoreNioDependencies:
+      name: "org.openrewrite.apache.httpclient5.UpgradeApacheHttpCoreNioDependencies"
+      description: "Adopt `org.apache.httpcomponents.core5:httpcore5` from `org.apache.httpcomponents:httpcore-nio`"
+      docLink: "https://docs.openrewrite.org/recipes/apache/httpclient5/upgradeapachehttpcoreniodependencies"
       options: []
       isImperative: false
       artifactId: "rewrite-apache"
@@ -1060,7 +1074,7 @@ rewrite-apache:
       artifactId: "rewrite-apache"
 rewrite-azul:
   artifactId: "rewrite-azul"
-  version: "0.3.1"
+  version: "0.4.1"
   markdownRecipeDescriptors:
     io.moderne.azul.EliminateUnusedClasses:
       name: "io.moderne.azul.EliminateUnusedClasses"
@@ -1101,7 +1115,7 @@ rewrite-azul:
       artifactId: "rewrite-azul"
 rewrite-circleci:
   artifactId: "rewrite-circleci"
-  version: "3.6.1"
+  version: "3.7.1"
   markdownRecipeDescriptors:
     org.openrewrite.circleci.InstallOrb:
       name: "org.openrewrite.circleci.InstallOrb"
@@ -1129,7 +1143,7 @@ rewrite-circleci:
       artifactId: "rewrite-circleci"
 rewrite-codemods:
   artifactId: "rewrite-codemods"
-  version: "0.15.0"
+  version: "0.16.1"
   markdownRecipeDescriptors:
     org.openrewrite.codemods.ApplyCodemod:
       name: "org.openrewrite.codemods.ApplyCodemod"
@@ -1492,8 +1506,8 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.javascript.NoLonelyIf:
       name: "org.openrewrite.codemods.cleanup.javascript.NoLonelyIf"
-      description: "Disallow `if` statements as the only statement in `if` blocks\
-        \ without `else`.\nSee [rule details](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-lonely-if.md)\n"
+      description: "Disallow if statements as the only statement in else blocks \n\
+        See [rule details](https://eslint.org/docs/latest/rules/no-lonely-if)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/javascript/nolonelyif"
       options: []
       isImperative: false
@@ -4628,7 +4642,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
 rewrite-codemods-ng:
   artifactId: "rewrite-codemods-ng"
-  version: "0.11.0"
+  version: "0.12.1"
   markdownRecipeDescriptors:
     org.openrewrite.codemods.migrate.angular.ApplyAngularCLI:
       name: "org.openrewrite.codemods.migrate.angular.ApplyAngularCLI"
@@ -4678,7 +4692,7 @@ rewrite-codemods-ng:
       artifactId: "rewrite-codemods-ng"
 rewrite-compiled-analysis:
   artifactId: "rewrite-compiled-analysis"
-  version: "0.7.1"
+  version: "0.7.3"
   markdownRecipeDescriptors:
     io.moderne.compiled.verification.ChangeListMethodAndVerify:
       name: "io.moderne.compiled.verification.ChangeListMethodAndVerify"
@@ -4700,7 +4714,7 @@ rewrite-compiled-analysis:
       artifactId: "rewrite-compiled-analysis"
 rewrite-comprehension:
   artifactId: "rewrite-comprehension"
-  version: "0.7.1"
+  version: "0.7.3"
   markdownRecipeDescriptors:
     io.moderne.knowledge.ComprehendCode:
       name: "io.moderne.knowledge.ComprehendCode"
@@ -4756,7 +4770,7 @@ rewrite-comprehension:
       artifactId: "rewrite-comprehension"
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "3.5.1"
+  version: "3.6.1"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -4836,7 +4850,7 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.57.0"
+  version: "8.59.1"
   markdownRecipeDescriptors:
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
@@ -5219,7 +5233,7 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-cryptography:
   artifactId: "rewrite-cryptography"
-  version: "0.5.0"
+  version: "0.6.1"
   markdownRecipeDescriptors:
     io.moderne.cryptography.FindHardcodedAlgorithmChoice:
       name: "io.moderne.cryptography.FindHardcodedAlgorithmChoice"
@@ -5366,7 +5380,7 @@ rewrite-cryptography:
       artifactId: "rewrite-cryptography"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
-  version: "2.8.1"
+  version: "2.8.3"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite"
@@ -5445,7 +5459,7 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
 rewrite-devcenter:
   artifactId: "rewrite-devcenter"
-  version: "1.4.5"
+  version: "1.5.0"
   markdownRecipeDescriptors:
     io.moderne.devcenter.DevCenterStarter:
       name: "io.moderne.devcenter.DevCenterStarter"
@@ -5539,14 +5553,6 @@ rewrite-devcenter:
         required: false
       isImperative: true
       artifactId: "rewrite-devcenter"
-    io.moderne.devcenter.SecurityOriginalStarter:
-      name: "io.moderne.devcenter.SecurityOriginalStarter"
-      description: "This is the same set of recipes as the original DevCenter security\
-        \ card."
-      docLink: "https://docs.openrewrite.org/recipes/devcenter/securityoriginalstarter"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-devcenter"
     io.moderne.devcenter.SecurityStarter:
       name: "io.moderne.devcenter.SecurityStarter"
       description: "This recipe is a starter card to reveal common OWASP Top 10 issues\
@@ -5559,7 +5565,7 @@ rewrite-devcenter:
       artifactId: "rewrite-devcenter"
 rewrite-docker:
   artifactId: "rewrite-docker"
-  version: "2.8.1"
+  version: "2.9.1"
   markdownRecipeDescriptors:
     org.openrewrite.docker.search.FindDockerImageUses:
       name: "org.openrewrite.docker.search.FindDockerImageUses"
@@ -5571,7 +5577,7 @@ rewrite-docker:
       artifactId: "rewrite-docker"
 rewrite-dotnet:
   artifactId: "rewrite-dotnet"
-  version: "0.11.1"
+  version: "0.12.1"
   markdownRecipeDescriptors:
     org.openrewrite.dotnet.MigrateToNet6:
       name: "org.openrewrite.dotnet.MigrateToNet6"
@@ -5634,7 +5640,7 @@ rewrite-dotnet:
       artifactId: "rewrite-dotnet"
 rewrite-dropwizard:
   artifactId: "rewrite-dropwizard"
-  version: "0.3.0"
+  version: "0.4.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.dropwizard.AddActuatorConfiguration:
       name: "org.openrewrite.java.dropwizard.AddActuatorConfiguration"
@@ -5886,7 +5892,7 @@ rewrite-dropwizard:
       artifactId: "rewrite-dropwizard"
 rewrite-feature-flags:
   artifactId: "rewrite-feature-flags"
-  version: "1.10.0"
+  version: "1.11.1"
   markdownRecipeDescriptors:
     org.openrewrite.featureflags.RemoveBooleanFlag:
       name: "org.openrewrite.featureflags.RemoveBooleanFlag"
@@ -6088,7 +6094,7 @@ rewrite-feature-flags:
       artifactId: "rewrite-feature-flags"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "3.9.0"
+  version: "3.9.2"
   markdownRecipeDescriptors:
     org.openrewrite.github.AddCronTrigger:
       name: "org.openrewrite.github.AddCronTrigger"
@@ -6342,7 +6348,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gitlab:
   artifactId: "rewrite-gitlab"
-  version: "0.14.1"
+  version: "0.14.3"
   markdownRecipeDescriptors:
     org.openrewrite.gitlab.AddComponent:
       name: "org.openrewrite.gitlab.AddComponent"
@@ -6458,7 +6464,7 @@ rewrite-gitlab:
       artifactId: "rewrite-gitlab"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.57.0"
+  version: "8.59.1"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -7141,7 +7147,9 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
     org.openrewrite.gradle.plugins.UpgradePluginVersion:
       name: "org.openrewrite.gradle.plugins.UpgradePluginVersion"
-      description: "Update a Gradle plugin by id to a later version."
+      description: "Update a Gradle plugin by id to a later version defined by the\
+        \ plugins DSL.To upgrade a plugin dependency defined by `buildscript.dependencies`,\
+        \ use the `UpgradeDependencyVersion` recipe instead."
       docLink: "https://docs.openrewrite.org/recipes/gradle/plugins/upgradepluginversion"
       options:
       - name: "newVersion"
@@ -7174,6 +7182,24 @@ rewrite-gradle:
       - name: "version"
         type: "String"
         required: false
+      isImperative: true
+      artifactId: "rewrite-gradle"
+    org.openrewrite.gradle.search.DoesNotIncludeDependency:
+      name: "org.openrewrite.gradle.search.DoesNotIncludeDependency"
+      description: "A precondition which returns false if visiting a Gradle file which\
+        \ includes the specified dependency in the classpath of some scope. For compatibility\
+        \ with multimodule projects, this should most often be applied as a precondition."
+      docLink: "https://docs.openrewrite.org/recipes/gradle/search/doesnotincludedependency"
+      options:
+      - name: "artifactId"
+        type: "String"
+        required: true
+      - name: "configuration"
+        type: "String"
+        required: false
+      - name: "groupId"
+        type: "String"
+        required: true
       isImperative: true
       artifactId: "rewrite-gradle"
     org.openrewrite.gradle.search.FindDependency:
@@ -7331,7 +7357,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.57.0"
+  version: "8.59.1"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.AutoFormat:
       name: "org.openrewrite.groovy.format.AutoFormat"
@@ -7367,7 +7393,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.57.0"
+  version: "8.59.1"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -7480,7 +7506,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-hibernate:
   artifactId: "rewrite-hibernate"
-  version: "0.7.0"
+  version: "0.8.1"
   markdownRecipeDescriptors:
     io.moderne.hibernate.MigrateToHibernate66:
       name: "io.moderne.hibernate.MigrateToHibernate66"
@@ -7522,6 +7548,24 @@ rewrite-hibernate:
       description: "For Single Table Inherited Entities Hibernate ignores the `@Table`\
         \ annotation on child entities. From Version 6.6 it is considered an error."
       docLink: "https://docs.openrewrite.org/recipes/hibernate/update66/removetablefrominheritedentity"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-hibernate"
+    io.moderne.hibernate.update70.MigrateSessionInterface:
+      name: "io.moderne.hibernate.update70.MigrateSessionInterface"
+      description: "Migrates code using deprecated Session interface methods to their\
+        \ Hibernate 7.0 replacements."
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratesessioninterface"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-hibernate"
+    io.moderne.hibernate.update70.MigrateSessionSaveUpdateDelete:
+      name: "io.moderne.hibernate.update70.MigrateSessionSaveUpdateDelete"
+      description: "Migrates code using deprecated Session save/update/delete methods\
+        \ to their Hibernate 7.0 replacements. Session#save -> Session#persist, Session#update\
+        \ -> Session#merge, Session#saveOrUpdate -> Session#persist or Session#merge,\
+        \ Session#delete -> Session#remove."
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratesessionsaveupdatedelete"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -7698,7 +7742,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-jackson:
   artifactId: "rewrite-jackson"
-  version: "1.0.0"
+  version: "1.1.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.jackson.CodehausClassesToFasterXML:
       name: "org.openrewrite.java.jackson.CodehausClassesToFasterXML"
@@ -7715,6 +7759,22 @@ rewrite-jackson:
       docLink: "https://docs.openrewrite.org/recipes/java/jackson/codehaustofasterxml"
       options: []
       isImperative: false
+      artifactId: "rewrite-jackson"
+    org.openrewrite.java.jackson.JacksonBestPractices:
+      name: "org.openrewrite.java.jackson.JacksonBestPractices"
+      description: "Apply best practices for using Jackson library, including upgrade\
+        \ to Jackson 2.x and removing redundant annotations."
+      docLink: "https://docs.openrewrite.org/recipes/java/jackson/jacksonbestpractices"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-jackson"
+    org.openrewrite.java.jackson.RemoveRedundantJsonPropertyValue:
+      name: "org.openrewrite.java.jackson.RemoveRedundantJsonPropertyValue"
+      description: "Remove `@JsonProperty` annotation or value attribute when the\
+        \ value matches the argument name."
+      docLink: "https://docs.openrewrite.org/recipes/java/jackson/removeredundantjsonpropertyvalue"
+      options: []
+      isImperative: true
       artifactId: "rewrite-jackson"
     org.openrewrite.java.jackson.UpgradeJackson_2_3:
       name: "org.openrewrite.java.jackson.UpgradeJackson_2_3"
@@ -7778,7 +7838,7 @@ rewrite-jackson:
       artifactId: "rewrite-jackson"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.57.0"
+  version: "8.59.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -7790,8 +7850,24 @@ rewrite-java:
       artifactId: "rewrite-java"
     org.openrewrite.java.AddCommentToMethod:
       name: "org.openrewrite.java.AddCommentToMethod"
-      description: "Add a comment to a Java source file."
+      description: "Add a comment to method declarations in a Java source file."
       docLink: "https://docs.openrewrite.org/recipes/java/addcommenttomethod"
+      options:
+      - name: "comment"
+        type: "String"
+        required: true
+      - name: "isMultiline"
+        type: "Boolean"
+        required: false
+      - name: "methodPattern"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-java"
+    org.openrewrite.java.AddCommentToMethodInvocations:
+      name: "org.openrewrite.java.AddCommentToMethodInvocations"
+      description: "Add a comment to method invocations in a Java source file."
+      docLink: "https://docs.openrewrite.org/recipes/java/addcommenttomethodinvocations"
       options:
       - name: "comment"
         type: "String"
@@ -8378,6 +8454,15 @@ rewrite-java:
         required: true
       isImperative: true
       artifactId: "rewrite-java"
+    org.openrewrite.java.SimplifySingleElementAnnotation:
+      name: "org.openrewrite.java.SimplifySingleElementAnnotation"
+      description: "This recipe will remove the attribute `value` on single-element\
+        \ annotations. According to JLS, a _single-element annotation_, is a shorthand\
+        \ designed for use with single-element annotation types."
+      docLink: "https://docs.openrewrite.org/recipes/java/simplifysingleelementannotation"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-java"
     org.openrewrite.java.UpdateSourcePositions:
       name: "org.openrewrite.java.UpdateSourcePositions"
       description: "Calculate start position and length for every LST element."
@@ -8907,7 +8992,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "1.37.0"
+  version: "1.39.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.AddDependency:
       name: "org.openrewrite.java.dependencies.AddDependency"
@@ -9266,7 +9351,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "3.14.0"
+  version: "3.15.0"
   markdownRecipeDescriptors:
     org.openrewrite.csharp.dependencies.DependencyInsight:
       name: "org.openrewrite.csharp.dependencies.DependencyInsight"
@@ -9339,13 +9424,16 @@ rewrite-java-security:
         \ which aggregates vulnerability data from several public databases, including\
         \ the [National Vulnerability Database](https://nvd.nist.gov/) maintained\
         \ by the United States government. Upgrades dependencies versioned according\
-        \ to [Semantic Versioning](https://semver.org/). Last updated: 2025-07-07T1102."
+        \ to [Semantic Versioning](https://semver.org/). Last updated: 2025-07-21T1102."
       docLink: "https://docs.openrewrite.org/recipes/java/dependencies/dependencyvulnerabilitycheck"
       options:
       - name: "maximumUpgradeDelta"
         type: "UpgradeDelta"
         required: false
       - name: "overrideTransitive"
+        type: "Boolean"
+        required: false
+      - name: "preferDirectUpgrade"
         type: "Boolean"
         required: false
       - name: "scope"
@@ -9359,8 +9447,8 @@ rewrite-java-security:
         \ removing any dependencies that are not used from Maven or Gradle build files.\
         \ This recipe takes reflective access into account: When reflective access\
         \ to a class is made unambiguously via a string literal, such as: `Class.forName(\"\
-        java.util.List\")` that is counted correctly.When reflective access to a class\
-        \ is made ambiguously via anything other than a string literal no dependencies\
+        java.util.List\")` that is counted correctly. When reflective access to a\
+        \ class is made ambiguously via anything other than a string literal no dependencies\
         \ will be removed. This recipe takes transitive dependencies into account:\
         \ When a direct dependency is not used but a transitive dependency it brings\
         \ in _is_ in use the direct dependency is not removed."
@@ -9869,6 +9957,16 @@ rewrite-java-security:
         required: false
       isImperative: true
       artifactId: "rewrite-java-security"
+    org.openrewrite.text.FindHardcodedLoopbackAddresses:
+      name: "org.openrewrite.text.FindHardcodedLoopbackAddresses"
+      description: "Locates mentions of hard-coded IPv4 addresses from the loopback\
+        \ IP range. The loopback IP range includes `127.0.0.0` to `127.255.255.255`.\
+        \ This detects the entire localhost/loopback subnet range, not just the commonly\
+        \ used `127.0.0.1`."
+      docLink: "https://docs.openrewrite.org/recipes/text/findhardcodedloopbackaddresses"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-java-security"
     org.openrewrite.text.FindHardcodedPrivateIPAddresses:
       name: "org.openrewrite.text.FindHardcodedPrivateIPAddresses"
       description: "Locates mentions of hard-coded IPv4 addresses from private IP\
@@ -9881,7 +9979,7 @@ rewrite-java-security:
       artifactId: "rewrite-java-security"
 rewrite-jenkins:
   artifactId: "rewrite-jenkins"
-  version: "0.28.0"
+  version: "0.29.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3:
       name: "org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3"
@@ -10061,7 +10159,7 @@ rewrite-jenkins:
       artifactId: "rewrite-jenkins"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.57.0"
+  version: "8.59.1"
   markdownRecipeDescriptors:
     org.openrewrite.json.AddKeyValue:
       name: "org.openrewrite.json.AddKeyValue"
@@ -10153,7 +10251,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "8.57.0"
+  version: "8.59.1"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -10261,7 +10359,7 @@ rewrite-kotlin:
       artifactId: "rewrite-kotlin"
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "3.7.0"
+  version: "3.8.1"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -10805,7 +10903,7 @@ rewrite-kubernetes:
       artifactId: "rewrite-kubernetes"
 rewrite-liberty:
   artifactId: "rewrite-liberty"
-  version: "1.19.0"
+  version: "1.20.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty:
       name: "org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty"
@@ -10913,7 +11011,7 @@ rewrite-liberty:
       artifactId: "rewrite-liberty"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "3.11.0"
+  version: "3.12.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.logging.CatchBlockLogLevel:
       name: "org.openrewrite.java.logging.CatchBlockLogLevel"
@@ -11251,6 +11349,9 @@ rewrite-logging-frameworks:
       - name: "className"
         type: "String"
         required: true
+      - name: "filePattern"
+        type: "String"
+        required: false
       - name: "logLevel"
         type: "LogLevel"
         required: true
@@ -11821,7 +11922,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.57.0"
+  version: "8.59.1"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddAnnotationProcessor:
       name: "org.openrewrite.maven.AddAnnotationProcessor"
@@ -12719,6 +12820,13 @@ rewrite-maven:
         required: false
       isImperative: true
       artifactId: "rewrite-maven"
+    org.openrewrite.maven.UpdateScmFromGitOrigin:
+      name: "org.openrewrite.maven.UpdateScmFromGitOrigin"
+      description: "Updates the Maven `<scm>` section based on the Git remote origin."
+      docLink: "https://docs.openrewrite.org/recipes/maven/updatescmfromgitorigin"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-maven"
     org.openrewrite.maven.UpgradeDependencyVersion:
       name: "org.openrewrite.maven.UpgradeDependencyVersion"
       description: "Upgrade the version of a dependency by specifying a group and\
@@ -13055,6 +13163,14 @@ rewrite-maven:
       options: []
       isImperative: true
       artifactId: "rewrite-maven"
+    org.openrewrite.maven.search.FindScm:
+      name: "org.openrewrite.maven.search.FindScm"
+      description: "Finds any `<scm>` tag directly inside the `<project>` root of\
+        \ a Maven pom.xml file."
+      docLink: "https://docs.openrewrite.org/recipes/maven/search/findscm"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-maven"
     org.openrewrite.maven.search.ModuleHasDependency:
       name: "org.openrewrite.maven.search.ModuleHasDependency"
       description: "Searches for Maven modules that have a dependency matching the\
@@ -13139,7 +13255,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micrometer:
   artifactId: "rewrite-micrometer"
-  version: "0.23.0"
+  version: "0.23.2"
   markdownRecipeDescriptors:
     org.openrewrite.micrometer.TimerToObservation:
       name: "org.openrewrite.micrometer.TimerToObservation"
@@ -13198,7 +13314,7 @@ rewrite-micrometer:
       artifactId: "rewrite-micrometer"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "2.25.0"
+  version: "2.25.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.AddAnnotationProcessorPath:
       name: "org.openrewrite.java.micronaut.AddAnnotationProcessorPath"
@@ -13542,7 +13658,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "3.13.0"
+  version: "3.14.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.jspecify.JSpecifyBestPractices:
       name: "org.openrewrite.java.jspecify.JSpecifyBestPractices"
@@ -16866,7 +16982,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-netty:
   artifactId: "rewrite-netty"
-  version: "0.1.2"
+  version: "0.1.4"
   markdownRecipeDescriptors:
     org.openrewrite.java.netty.EventLoopGroupToMultiThreadIoEventLoopGroupRecipes:
       name: "org.openrewrite.java.netty.EventLoopGroupToMultiThreadIoEventLoopGroupRecipes"
@@ -16905,7 +17021,7 @@ rewrite-netty:
       artifactId: "rewrite-netty"
 rewrite-nodejs:
   artifactId: "rewrite-nodejs"
-  version: "0.26.0"
+  version: "0.27.1"
   markdownRecipeDescriptors:
     org.openrewrite.nodejs.DependencyVulnerabilityCheck:
       name: "org.openrewrite.nodejs.DependencyVulnerabilityCheck"
@@ -17054,7 +17170,7 @@ rewrite-nodejs:
       artifactId: "rewrite-nodejs"
 rewrite-okhttp:
   artifactId: "rewrite-okhttp"
-  version: "0.17.0"
+  version: "0.17.2"
   markdownRecipeDescriptors:
     org.openrewrite.okhttp.ReorderRequestBodyCreateArguments:
       name: "org.openrewrite.okhttp.ReorderRequestBodyCreateArguments"
@@ -17111,7 +17227,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-openapi:
   artifactId: "rewrite-openapi"
-  version: "0.22.0"
+  version: "0.23.1"
   markdownRecipeDescriptors:
     org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings:
       name: "org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings"
@@ -17222,7 +17338,7 @@ rewrite-openapi:
       artifactId: "rewrite-openapi"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.57.0"
+  version: "8.59.1"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -17347,7 +17463,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "2.22.0"
+  version: "2.23.1"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.AddQuarkusProperty:
       name: "org.openrewrite.quarkus.AddQuarkusProperty"
@@ -17615,7 +17731,7 @@ rewrite-quarkus:
       artifactId: "rewrite-quarkus"
 rewrite-reactive-streams:
   artifactId: "rewrite-reactive-streams"
-  version: "0.14.1"
+  version: "0.14.3"
   markdownRecipeDescriptors:
     org.openrewrite.reactive.reactor.ReactorBestPractices:
       name: "org.openrewrite.reactive.reactor.ReactorBestPractices"
@@ -17795,7 +17911,7 @@ rewrite-reactive-streams:
       artifactId: "rewrite-reactive-streams"
 rewrite-rewrite:
   artifactId: "rewrite-rewrite"
-  version: "0.9.0"
+  version: "0.10.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations:
       name: "org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations"
@@ -18047,7 +18163,7 @@ rewrite-rewrite:
       artifactId: "rewrite-rewrite"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "0.9.0"
+  version: "0.10.1"
   markdownRecipeDescriptors:
     io.moderne.java.spring.boot.IsLikelyNotSpringBoot:
       name: "io.moderne.java.spring.boot.IsLikelyNotSpringBoot"
@@ -20631,7 +20747,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-sql:
   artifactId: "rewrite-sql"
-  version: "2.5.0"
+  version: "2.6.1"
   markdownRecipeDescriptors:
     org.openrewrite.sql.ChangeFunctionName:
       name: "org.openrewrite.sql.ChangeFunctionName"
@@ -20688,7 +20804,7 @@ rewrite-sql:
       artifactId: "rewrite-sql"
 rewrite-static-analysis:
   artifactId: "rewrite-static-analysis"
-  version: "2.12.0"
+  version: "2.14.0"
   markdownRecipeDescriptors:
     org.openrewrite.staticanalysis.AbstractClassPublicConstructor:
       name: "org.openrewrite.staticanalysis.AbstractClassPublicConstructor"
@@ -20877,6 +20993,15 @@ rewrite-static-analysis:
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/codecleanup"
       options: []
       isImperative: false
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.CollectionToArrayShouldHaveProperType:
+      name: "org.openrewrite.staticanalysis.CollectionToArrayShouldHaveProperType"
+      description: "Using `Collection.toArray()` without parameters returns an `Object[]`,\
+        \ which requires casting. It is more efficient and clearer to use `Collection.toArray(new\
+        \ T[0])` instead."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/collectiontoarrayshouldhavepropertype"
+      options: []
+      isImperative: true
       artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.CombineSemanticallyEqualCatchBlocks:
       name: "org.openrewrite.staticanalysis.CombineSemanticallyEqualCatchBlocks"
@@ -21146,7 +21271,8 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.InlineVariable:
       name: "org.openrewrite.staticanalysis.InlineVariable"
-      description: "Inline variables when they are immediately used to return or throw."
+      description: "Inline variables when they are immediately used to return or throw.\
+        \ Supports both variable declarations and assignments to local variables."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/inlinevariable"
       options: []
       isImperative: true
@@ -21373,6 +21499,16 @@ rewrite-static-analysis:
       name: "org.openrewrite.staticanalysis.ObjectFinalizeCallsSuper"
       description: "Overrides of `Object#finalize()` should call super."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/objectfinalizecallssuper"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.OnlyCatchDeclaredExceptions:
+      name: "org.openrewrite.staticanalysis.OnlyCatchDeclaredExceptions"
+      description: "Replaces `catch(Exception e)` blocks with a multi-catch block\
+        \ (`catch (SpecificException1 | SpecificException2 e)`) containing only the\
+        \ exceptions declared thrown by method or constructor invocations within the\
+        \ `try` block that are not already caught by more specific `catch` clauses."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/onlycatchdeclaredexceptions"
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
@@ -21969,6 +22105,14 @@ rewrite-static-analysis:
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.UnwrapElseAfterReturn:
+      name: "org.openrewrite.staticanalysis.UnwrapElseAfterReturn"
+      description: "Unwraps the else block when the if block ends with a return or\
+        \ throw statement, reducing nesting and improving code readability."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/unwrapelseafterreturn"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.UnwrapRepeatableAnnotations:
       name: "org.openrewrite.staticanalysis.UnwrapRepeatableAnnotations"
       description: "Java 8 introduced the concept of `@Repeatable` annotations, making\
@@ -22133,7 +22277,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
 rewrite-struts:
   artifactId: "rewrite-struts"
-  version: "0.17.1"
+  version: "0.18.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.struts.MigrateStrutsDtd:
       name: "org.openrewrite.java.struts.MigrateStrutsDtd"
@@ -22199,7 +22343,7 @@ rewrite-struts:
       artifactId: "rewrite-struts"
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "3.5.1"
+  version: "3.6.1"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -23092,7 +23236,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "3.12.0"
+  version: "3.14.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.archunit.ArchUnit0to1Migration:
       name: "org.openrewrite.java.testing.archunit.ArchUnit0to1Migration"
@@ -23684,10 +23828,43 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.cleanup.AssertLiteralBooleanToFailRecipe:
-      name: "org.openrewrite.java.testing.cleanup.AssertLiteralBooleanToFailRecipe"
+    org.openrewrite.java.testing.cleanup.AssertLiteralBooleanRemovedRecipe:
+      name: "org.openrewrite.java.testing.cleanup.AssertLiteralBooleanRemovedRecipe"
+      description: "These assertions are redundant and do not provide any value. They\
+        \ can be safely removed."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/cleanup/assertliteralbooleanremovedrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.cleanup.AssertLiteralBooleanToFailRecipes:
+      name: "org.openrewrite.java.testing.cleanup.AssertLiteralBooleanToFailRecipes"
       description: "Using fail is more direct and clear."
-      docLink: "https://docs.openrewrite.org/recipes/java/testing/cleanup/assertliteralbooleantofailrecipe"
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/cleanup/assertliteralbooleantofailrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.cleanup.AssertLiteralBooleanToFailRecipes$WithMessageRecipe:
+      name: "org.openrewrite.java.testing.cleanup.AssertLiteralBooleanToFailRecipes$WithMessageRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static class WithMessage {\n    \n    @BeforeTemplate\n    void assertFalseBefore(String\
+        \ message) {\n        assertFalse(true, message);\n    }\n    \n    @BeforeTemplate\n\
+        \    void assertTrueBefore(String message) {\n        assertTrue(false, message);\n\
+        \    }\n    \n    @AfterTemplate\n    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n\
+        \    void after(String message) {\n        fail(message);\n    }\n}\n```\n\
+        ."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/cleanup/assertliteralbooleantofailrecipes$withmessagerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.cleanup.AssertLiteralBooleanToFailRecipes$WithoutMessageRecipe:
+      name: "org.openrewrite.java.testing.cleanup.AssertLiteralBooleanToFailRecipes$WithoutMessageRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static class WithoutMessage {\n    \n    @BeforeTemplate\n    void assertFalseBefore()\
+        \ {\n        assertFalse(true);\n    }\n    \n    @BeforeTemplate\n    void\
+        \ assertTrueBefore() {\n        assertTrue(false);\n    }\n    \n    @AfterTemplate\n\
+        \    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n    void after() {\n\
+        \        fail();\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/cleanup/assertliteralbooleantofailrecipes$withoutmessagerecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
@@ -24382,6 +24559,13 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.CleanupPowerMockImports:
+      name: "org.openrewrite.java.testing.mockito.CleanupPowerMockImports"
+      description: "Removes unused `org.powermock` import symbols."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/cleanuppowermockimports"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.CloseUnclosedStaticMocks:
       name: "org.openrewrite.java.testing.mockito.CloseUnclosedStaticMocks"
       description: "Ensures that all `mockStatic` calls are properly closed. If `mockStatic`\
@@ -24459,16 +24643,6 @@ rewrite-testing-frameworks:
         \ method stubbing, making mocking behavior more explicit and scoped to avoid\
         \ unintended side effects."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/mockitowhenonstatictomockstatic"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-testing-frameworks"
-    org.openrewrite.java.testing.mockito.NoInitializationForInjectMock:
-      name: "org.openrewrite.java.testing.mockito.NoInitializationForInjectMock"
-      description: "Remove either the `@InjectMocks` annotation from fields, or the\
-        \ initializer, based on the initializer.\n * In the case of a no-args constructor,\
-        \ remove the initializer and retain the annotation.\n * In the case of any\
-        \ other initializer, remove the annotation and retain the initializer."
-      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/noinitializationforinjectmock"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
@@ -24606,7 +24780,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-third-party:
   artifactId: "rewrite-third-party"
-  version: "0.24.0"
+  version: "0.24.3"
   markdownRecipeDescriptors:
     ai.timefold.solver.migration.ChangeVersion:
       name: "ai.timefold.solver.migration.ChangeVersion"
@@ -27710,8 +27884,7 @@ rewrite-third-party:
       description: "Recipe created for the following Refaster template:\n```java\n\
         static final class AbstractBooleanAssertIsFalse {\n    \n    @BeforeTemplate\n\
         \    AbstractBooleanAssert<?> before(AbstractBooleanAssert<?> boolAssert)\
-        \ {\n        return Refaster.anyOf(boolAssert.isEqualTo(false), boolAssert.isEqualTo(Boolean.FALSE),\
-        \ boolAssert.isNotEqualTo(true), boolAssert.isNotEqualTo(Boolean.TRUE));\n\
+        \ {\n        return Refaster.anyOf(boolAssert.isEqualTo(false), boolAssert.isNotEqualTo(true));\n\
         \    }\n    \n    @AfterTemplate\n    AbstractBooleanAssert<?> after(AbstractBooleanAssert<?>\
         \ boolAssert) {\n        return boolAssert.isFalse();\n    }\n}\n```\n."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjbooleanrulesrecipes$abstractbooleanassertisfalserecipe"
@@ -27736,8 +27909,7 @@ rewrite-third-party:
       description: "Recipe created for the following Refaster template:\n```java\n\
         static final class AbstractBooleanAssertIsTrue {\n    \n    @BeforeTemplate\n\
         \    AbstractBooleanAssert<?> before(AbstractBooleanAssert<?> boolAssert)\
-        \ {\n        return Refaster.anyOf(boolAssert.isEqualTo(true), boolAssert.isEqualTo(Boolean.TRUE),\
-        \ boolAssert.isNotEqualTo(false), boolAssert.isNotEqualTo(Boolean.FALSE));\n\
+        \ {\n        return Refaster.anyOf(boolAssert.isEqualTo(true), boolAssert.isNotEqualTo(false));\n\
         \    }\n    \n    @AfterTemplate\n    AbstractBooleanAssert<?> after(AbstractBooleanAssert<?>\
         \ boolAssert) {\n        return boolAssert.isTrue();\n    }\n}\n```\n."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjbooleanrulesrecipes$abstractbooleanassertistruerecipe"
@@ -28064,6 +28236,129 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes:
+      name: "tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes"
+      description: "These rules simplify and improve the readability of tests by using\
+        \ `Duration`-specific\n AssertJ assertion methods instead of generic assertions.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJDurationRules)."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjdurationrulesrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatHasDaysRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatHasDaysRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatHasDays {\n    \n    @BeforeTemplate\n    AbstractLongAssert<?>\
+        \ before(Duration duration, long days) {\n        return assertThat(duration.toDays()).isEqualTo(days);\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractDurationAssert<?> after(Duration\
+        \ duration, long days) {\n        return assertThat(duration).hasDays(days);\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjdurationrulesrecipes$assertthathasdaysrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatHasHoursRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatHasHoursRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatHasHours {\n    \n    @BeforeTemplate\n    AbstractLongAssert<?>\
+        \ before(Duration duration, long hours) {\n        return assertThat(duration.toHours()).isEqualTo(hours);\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractDurationAssert<?> after(Duration\
+        \ duration, long hours) {\n        return assertThat(duration).hasHours(hours);\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjdurationrulesrecipes$assertthathashoursrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatHasMillisRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatHasMillisRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatHasMillis {\n    \n    @BeforeTemplate\n    AbstractLongAssert<?>\
+        \ before(Duration duration, long millis) {\n        return assertThat(duration.toMillis()).isEqualTo(millis);\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractDurationAssert<?> after(Duration\
+        \ duration, long millis) {\n        return assertThat(duration).hasMillis(millis);\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjdurationrulesrecipes$assertthathasmillisrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatHasMinutesRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatHasMinutesRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatHasMinutes {\n    \n    @BeforeTemplate\n   \
+        \ AbstractLongAssert<?> before(Duration duration, long minutes) {\n      \
+        \  return assertThat(duration.toMinutes()).isEqualTo(minutes);\n    }\n  \
+        \  \n    @AfterTemplate\n    AbstractDurationAssert<?> after(Duration duration,\
+        \ long minutes) {\n        return assertThat(duration).hasMinutes(minutes);\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjdurationrulesrecipes$assertthathasminutesrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatHasNanosRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatHasNanosRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatHasNanos {\n    \n    @BeforeTemplate\n    AbstractLongAssert<?>\
+        \ before(Duration duration, long nanos) {\n        return assertThat(duration.toNanos()).isEqualTo(nanos);\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractDurationAssert<?> after(Duration\
+        \ duration, long nanos) {\n        return assertThat(duration).hasNanos(nanos);\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjdurationrulesrecipes$assertthathasnanosrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatHasSecondsRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatHasSecondsRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatHasSeconds {\n    \n    @BeforeTemplate\n   \
+        \ AbstractLongAssert<?> before(Duration duration, long seconds) {\n      \
+        \  return assertThat(duration.toSeconds()).isEqualTo(seconds);\n    }\n  \
+        \  \n    @AfterTemplate\n    AbstractDurationAssert<?> after(Duration duration,\
+        \ long seconds) {\n        return assertThat(duration).hasSeconds(seconds);\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjdurationrulesrecipes$assertthathassecondsrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatIsNegativeRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatIsNegativeRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsNegative {\n    \n    @BeforeTemplate\n   \
+        \ AbstractBooleanAssert<?> before(Duration duration) {\n        return assertThat(duration.isNegative()).isTrue();\n\
+        \    }\n    \n    @BeforeTemplate\n    AbstractDurationAssert<?> before2(Duration\
+        \ duration) {\n        return assertThat(duration).isLessThan(Duration.ZERO);\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractDurationAssert<?> after(Duration\
+        \ duration) {\n        return assertThat(duration).isNegative();\n    }\n\
+        }\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjdurationrulesrecipes$assertthatisnegativerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatIsPositiveRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatIsPositiveRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsPositive {\n    \n    @BeforeTemplate\n   \
+        \ AbstractDurationAssert<?> before(Duration duration) {\n        return assertThat(duration).isGreaterThan(Duration.ZERO);\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractDurationAssert<?> after(Duration\
+        \ duration) {\n        return assertThat(duration).isPositive();\n    }\n\
+        }\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjdurationrulesrecipes$assertthatispositiverecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatIsZeroRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJDurationRulesRecipes$AssertThatIsZeroRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsZero {\n    \n    @BeforeTemplate\n    AbstractBooleanAssert<?>\
+        \ before(Duration duration) {\n        return assertThat(duration.isZero()).isTrue();\n\
+        \    }\n    \n    @BeforeTemplate\n    AbstractDurationAssert<?> before2(Duration\
+        \ duration) {\n        return assertThat(duration).isEqualTo(Duration.ZERO);\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractDurationAssert<?> after(Duration\
+        \ duration) {\n        return assertThat(duration).isZero();\n    }\n}\n```\n\
+        ."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjdurationrulesrecipes$assertthatiszerorecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJEnumerableRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJEnumerableRulesRecipes"
       description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJEnumerableRules`.\n\
@@ -28184,20 +28479,6 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
-    tech.picnic.errorprone.refasterrules.AssertJEnumerableRulesRecipes$EnumerableAssertIsEmptyRecipe:
-      name: "tech.picnic.errorprone.refasterrules.AssertJEnumerableRulesRecipes$EnumerableAssertIsEmptyRecipe"
-      description: "Recipe created for the following Refaster template:\n```java\n\
-        static final class EnumerableAssertIsEmpty<E> {\n    \n    @BeforeTemplate\n\
-        \    void before(EnumerableAssert<?, E> enumAssert) {\n        Refaster.anyOf(enumAssert.hasSize(0),\
-        \ enumAssert.hasSizeLessThanOrEqualTo(0), enumAssert.hasSizeLessThan(1));\n\
-        \    }\n    \n    @BeforeTemplate\n    void before(AbstractIterableAssert<?,\
-        \ ?, E, ?> enumAssert) {\n        enumAssert.size().isNotPositive();\n   \
-        \ }\n    \n    @AfterTemplate\n    void after(EnumerableAssert<?, E> enumAssert)\
-        \ {\n        enumAssert.isEmpty();\n    }\n}\n```\n."
-      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjenumerablerulesrecipes$enumerableassertisemptyrecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJEnumerableRulesRecipes$EnumerableAssertIsNotEmptyRecipe:
       name: "tech.picnic.errorprone.refasterrules.AssertJEnumerableRulesRecipes$EnumerableAssertIsNotEmptyRecipe"
       description: "Recipe created for the following Refaster template:\n```java\n\
@@ -28298,6 +28579,92 @@ rewrite-third-party:
         \   AbstractFloatAssert<?> after(AbstractFloatAssert<?> floatAssert) {\n \
         \       return floatAssert.isEqualTo(0);\n    }\n}\n```\n."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjfloatrulesrecipes$abstractfloatassertiszerorecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJInstantRulesRecipes:
+      name: "tech.picnic.errorprone.refasterrules.AssertJInstantRulesRecipes"
+      description: "These rules simplify and improve the readability of tests by using\
+        \ `Instant`-specific\n AssertJ assertion methods instead of generic assertions.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJInstantRules)."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjinstantrulesrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJInstantRulesRecipes$AssertThatIsAfterOrEqualToRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJInstantRulesRecipes$AssertThatIsAfterOrEqualToRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsAfterOrEqualTo {\n    \n    @BeforeTemplate\n\
+        \    AbstractBooleanAssert<?> before(Instant actual, Instant other) {\n  \
+        \      return assertThat(actual.isBefore(other)).isFalse();\n    }\n    \n\
+        \    @AfterTemplate\n    AbstractInstantAssert<?> after(Instant actual, Instant\
+        \ other) {\n        return assertThat(actual).isAfterOrEqualTo(other);\n \
+        \   }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjinstantrulesrecipes$assertthatisafterorequaltorecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJInstantRulesRecipes$AssertThatIsAfterRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJInstantRulesRecipes$AssertThatIsAfterRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsAfter {\n    \n    @BeforeTemplate\n    AbstractBooleanAssert<?>\
+        \ before(Instant actual, Instant other) {\n        return assertThat(actual.isAfter(other)).isTrue();\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractInstantAssert<?> after(Instant\
+        \ actual, Instant other) {\n        return assertThat(actual).isAfter(other);\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjinstantrulesrecipes$assertthatisafterrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJInstantRulesRecipes$AssertThatIsBeforeOrEqualToRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJInstantRulesRecipes$AssertThatIsBeforeOrEqualToRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsBeforeOrEqualTo {\n    \n    @BeforeTemplate\n\
+        \    AbstractBooleanAssert<?> before(Instant actual, Instant other) {\n  \
+        \      return assertThat(actual.isAfter(other)).isFalse();\n    }\n    \n\
+        \    @AfterTemplate\n    AbstractInstantAssert<?> after(Instant actual, Instant\
+        \ other) {\n        return assertThat(actual).isBeforeOrEqualTo(other);\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjinstantrulesrecipes$assertthatisbeforeorequaltorecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJInstantRulesRecipes$AssertThatIsBeforeRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJInstantRulesRecipes$AssertThatIsBeforeRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsBefore {\n    \n    @BeforeTemplate\n    AbstractBooleanAssert<?>\
+        \ before(Instant actual, Instant other) {\n        return assertThat(actual.isBefore(other)).isTrue();\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractInstantAssert<?> after(Instant\
+        \ actual, Instant other) {\n        return assertThat(actual).isBefore(other);\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjinstantrulesrecipes$assertthatisbeforerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJInstantRulesRecipes$AssertThatIsBetweenRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJInstantRulesRecipes$AssertThatIsBetweenRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsBetween {\n    \n    @BeforeTemplate\n    AbstractInstantAssert<?>\
+        \ before(Instant actual, Instant start, Instant end) {\n        return Refaster.anyOf(assertThat(actual).isAfterOrEqualTo(start).isBeforeOrEqualTo(end),\
+        \ assertThat(actual).isBeforeOrEqualTo(end).isAfterOrEqualTo(start));\n  \
+        \  }\n    \n    @AfterTemplate\n    AbstractInstantAssert<?> after(Instant\
+        \ actual, Instant start, Instant end) {\n        return assertThat(actual).isBetween(start,\
+        \ end);\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjinstantrulesrecipes$assertthatisbetweenrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJInstantRulesRecipes$AssertThatIsStrictlyBetweenRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJInstantRulesRecipes$AssertThatIsStrictlyBetweenRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsStrictlyBetween {\n    \n    @BeforeTemplate\n\
+        \    AbstractInstantAssert<?> before(Instant actual, Instant start, Instant\
+        \ end) {\n        return Refaster.anyOf(assertThat(actual).isAfter(start).isBefore(end),\
+        \ assertThat(actual).isBefore(end).isAfter(start));\n    }\n    \n    @AfterTemplate\n\
+        \    AbstractInstantAssert<?> after(Instant actual, Instant start, Instant\
+        \ end) {\n        return assertThat(actual).isStrictlyBetween(start, end);\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjinstantrulesrecipes$assertthatisstrictlybetweenrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -28591,12 +28958,25 @@ rewrite-third-party:
       name: "tech.picnic.errorprone.refasterrules.AssertJMapRulesRecipes$AssertThatMapContainsKeyRecipe"
       description: "Recipe created for the following Refaster template:\n```java\n\
         static final class AssertThatMapContainsKey<K, V> {\n    \n    @BeforeTemplate\n\
-        \    AbstractBooleanAssert<?> before(Map<K, V> map, K key) {\n        return\
-        \ assertThat(map.containsKey(key)).isTrue();\n    }\n    \n    @AfterTemplate\n\
+        \    AbstractAssert<?, ?> before(Map<K, V> map, K key) {\n        return Refaster.anyOf(assertThat(map.containsKey(key)).isTrue(),\
+        \ assertThat(map.keySet()).contains(key));\n    }\n    \n    @AfterTemplate\n\
         \    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n    MapAssert<K, V> after(Map<K,\
         \ V> map, K key) {\n        return assertThat(map).containsKey(key);\n   \
         \ }\n}\n```\n."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjmaprulesrecipes$assertthatmapcontainskeyrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJMapRulesRecipes$AssertThatMapContainsOnlyKeyRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJMapRulesRecipes$AssertThatMapContainsOnlyKeyRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatMapContainsOnlyKey<K, V> {\n    \n    @BeforeTemplate\n\
+        \    AbstractCollectionAssert<?, Collection<? extends K>, K, ?> before(Map<K,\
+        \ V> map, K key) {\n        return assertThat(map.keySet()).containsExactly(key);\n\
+        \    }\n    \n    @AfterTemplate\n    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n\
+        \    MapAssert<K, V> after(Map<K, V> map, K key) {\n        return assertThat(map).containsOnlyKeys(key);\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjmaprulesrecipes$assertthatmapcontainsonlykeyrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -28617,8 +28997,9 @@ rewrite-third-party:
       name: "tech.picnic.errorprone.refasterrules.AssertJMapRulesRecipes$AssertThatMapContainsValueRecipe"
       description: "Recipe created for the following Refaster template:\n```java\n\
         static final class AssertThatMapContainsValue<K, V> {\n    \n    @BeforeTemplate\n\
-        \    AbstractBooleanAssert<?> before(Map<K, V> map, V value) {\n        return\
-        \ assertThat(map.containsValue(value)).isTrue();\n    }\n    \n    @AfterTemplate\n\
+        \    AbstractAssert<? extends AbstractAssert<?, ?>, ? extends Object> before(Map<K,\
+        \ V> map, V value) {\n        return Refaster.anyOf(assertThat(map.containsValue(value)).isTrue(),\
+        \ assertThat(map.values()).contains(value));\n    }\n    \n    @AfterTemplate\n\
         \    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n    MapAssert<K, V> after(Map<K,\
         \ V> map, V value) {\n        return assertThat(map).containsValue(value);\n\
         \    }\n}\n```\n."
@@ -28630,8 +29011,8 @@ rewrite-third-party:
       name: "tech.picnic.errorprone.refasterrules.AssertJMapRulesRecipes$AssertThatMapDoesNotContainKeyRecipe"
       description: "Recipe created for the following Refaster template:\n```java\n\
         static final class AssertThatMapDoesNotContainKey<K, V> {\n    \n    @BeforeTemplate\n\
-        \    AbstractBooleanAssert<?> before(Map<K, V> map, K key) {\n        return\
-        \ assertThat(map.containsKey(key)).isFalse();\n    }\n    \n    @AfterTemplate\n\
+        \    AbstractAssert<?, ?> before(Map<K, V> map, K key) {\n        return Refaster.anyOf(assertThat(map.containsKey(key)).isFalse(),\
+        \ assertThat(map.keySet()).doesNotContain(key));\n    }\n    \n    @AfterTemplate\n\
         \    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n    MapAssert<K, V> after(Map<K,\
         \ V> map, K key) {\n        return assertThat(map).doesNotContainKey(key);\n\
         \    }\n}\n```\n."
@@ -28643,10 +29024,10 @@ rewrite-third-party:
       name: "tech.picnic.errorprone.refasterrules.AssertJMapRulesRecipes$AssertThatMapDoesNotContainValueRecipe"
       description: "Recipe created for the following Refaster template:\n```java\n\
         static final class AssertThatMapDoesNotContainValue<K, V> {\n    \n    @BeforeTemplate\n\
-        \    AbstractBooleanAssert<?> before(Map<K, V> map, V value) {\n        return\
-        \ assertThat(map.containsValue(value)).isFalse();\n    }\n    \n    @AfterTemplate\n\
-        \    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n    MapAssert<K, V> after(Map<K,\
-        \ V> map, V value) {\n        return assertThat(map).doesNotContainValue(value);\n\
+        \    AbstractAssert<?, ?> before(Map<K, V> map, V value) {\n        return\
+        \ Refaster.anyOf(assertThat(map.containsValue(value)).isFalse(), assertThat(map.values()).doesNotContain(value));\n\
+        \    }\n    \n    @AfterTemplate\n    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n\
+        \    MapAssert<K, V> after(Map<K, V> map, V value) {\n        return assertThat(map).doesNotContainValue(value);\n\
         \    }\n}\n```\n."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjmaprulesrecipes$assertthatmapdoesnotcontainvaluerecipe"
       options: []
@@ -28804,6 +29185,19 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJObjectRulesRecipes$AssertThatHasSameHashCodeAsRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJObjectRulesRecipes$AssertThatHasSameHashCodeAsRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatHasSameHashCodeAs<T> {\n    \n    @BeforeTemplate\n\
+        \    AbstractIntegerAssert<?> before(T object1, T object2) {\n        return\
+        \ assertThat(object1.hashCode()).isEqualTo(object2.hashCode());\n    }\n \
+        \   \n    @AfterTemplate\n    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n\
+        \    ObjectAssert<T> after(T object1, T object2) {\n        return assertThat(object1).hasSameHashCodeAs(object2);\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjobjectrulesrecipes$assertthathassamehashcodeasrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJObjectRulesRecipes$AssertThatHasToStringRecipe:
       name: "tech.picnic.errorprone.refasterrules.AssertJObjectRulesRecipes$AssertThatHasToStringRecipe"
       description: "Recipe created for the following Refaster template:\n```java\n\
@@ -28814,6 +29208,19 @@ rewrite-third-party:
         \ object, String str) {\n        return assertThat(object).hasToString(str);\n\
         \    }\n}\n```\n."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjobjectrulesrecipes$assertthathastostringrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJObjectRulesRecipes$AssertThatIsInstanceOf2Recipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJObjectRulesRecipes$AssertThatIsInstanceOf2Recipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsInstanceOf2<S, T> {\n    \n    @BeforeTemplate\n\
+        \    AbstractBooleanAssert<?> before(T object, Class<S> clazz) {\n       \
+        \ return assertThat(clazz.isInstance(object)).isTrue();\n    }\n    \n   \
+        \ @AfterTemplate\n    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n   \
+        \ ObjectAssert<T> after(T object, Class<S> clazz) {\n        return assertThat(object).isInstanceOf(clazz);\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjobjectrulesrecipes$assertthatisinstanceof2recipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -28840,6 +29247,62 @@ rewrite-third-party:
         \ object1, T object2) {\n        return assertThat(object1).isNotEqualTo(object2);\n\
         \    }\n}\n```\n."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjobjectrulesrecipes$assertthatisisnotequaltorecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJObjectRulesRecipes$AssertThatIsNotNullRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJObjectRulesRecipes$AssertThatIsNotNullRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsNotNull<T> {\n    \n    @BeforeTemplate\n \
+        \   @SuppressWarnings(value = \"AssertThatIsNotSameAs\")\n    AbstractBooleanAssert<?\
+        \ extends AbstractBooleanAssert<?>> before(T object) {\n        return Refaster.anyOf(assertThat(object\
+        \ == null).isFalse(), assertThat(object != null).isTrue());\n    }\n    \n\
+        \    @AfterTemplate\n    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n\
+        \    ObjectAssert<T> after(T object) {\n        return assertThat(object).isNotNull();\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjobjectrulesrecipes$assertthatisnotnullrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJObjectRulesRecipes$AssertThatIsNotSameAsRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJObjectRulesRecipes$AssertThatIsNotSameAsRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsNotSameAs<T> {\n    \n    @BeforeTemplate\n\
+        \    AbstractBooleanAssert<?> before(T object1, T object2) {\n        return\
+        \ Refaster.anyOf(assertThat(object1 == object2).isFalse(), assertThat(object1\
+        \ != object2).isTrue());\n    }\n    \n    @AfterTemplate\n    @UseImportPolicy(value\
+        \ = STATIC_IMPORT_ALWAYS)\n    ObjectAssert<T> after(T object1, T object2)\
+        \ {\n        return assertThat(object1).isNotSameAs(object2);\n    }\n}\n\
+        ```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjobjectrulesrecipes$assertthatisnotsameasrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJObjectRulesRecipes$AssertThatIsNullRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJObjectRulesRecipes$AssertThatIsNullRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsNull<T> {\n    \n    @BeforeTemplate\n    @SuppressWarnings(value\
+        \ = \"AssertThatIsSameAs\")\n    void before(T object) {\n        assertThat(object\
+        \ == null).isTrue();\n    }\n    \n    @BeforeTemplate\n    @SuppressWarnings(value\
+        \ = \"AssertThatIsSameAs\")\n    void before2(T object) {\n        assertThat(object\
+        \ != null).isFalse();\n    }\n    \n    @AfterTemplate\n    @UseImportPolicy(value\
+        \ = STATIC_IMPORT_ALWAYS)\n    void after(T object) {\n        assertThat(object).isNull();\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjobjectrulesrecipes$assertthatisnullrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJObjectRulesRecipes$AssertThatIsSameAsRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJObjectRulesRecipes$AssertThatIsSameAsRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsSameAs<T> {\n    \n    @BeforeTemplate\n  \
+        \  AbstractBooleanAssert<?> before(T object1, T object2) {\n        return\
+        \ Refaster.anyOf(assertThat(object1 == object2).isTrue(), assertThat(object1\
+        \ != object2).isFalse());\n    }\n    \n    @AfterTemplate\n    @UseImportPolicy(value\
+        \ = STATIC_IMPORT_ALWAYS)\n    ObjectAssert<T> after(T object1, T object2)\
+        \ {\n        return assertThat(object1).isSameAs(object2);\n    }\n}\n```\n\
+        ."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjobjectrulesrecipes$assertthatissameasrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -28958,6 +29421,185 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes"
+      description: "These rules simplify and improve the readability of tests by using\
+        \ `Path`-specific\n AssertJ assertion methods instead of generic assertions.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/AssertJPathRules)."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatDoesNotExistRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatDoesNotExistRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatDoesNotExist {\n    \n    @BeforeTemplate\n \
+        \   AbstractBooleanAssert<?> before(Path actual) {\n        return assertThat(Files.exists(actual)).isFalse();\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractPathAssert<?> after(Path actual)\
+        \ {\n        return assertThat(actual).doesNotExist();\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes$assertthatdoesnotexistrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatEndsWithRawRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatEndsWithRawRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatEndsWithRaw {\n    \n    @BeforeTemplate\n  \
+        \  AbstractBooleanAssert<?> before(Path actual, Path other) {\n        return\
+        \ assertThat(actual.endsWith(other)).isTrue();\n    }\n    \n    @AfterTemplate\n\
+        \    AbstractPathAssert<?> after(Path actual, Path other) {\n        return\
+        \ assertThat(actual).endsWithRaw(other);\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes$assertthatendswithrawrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatExistsRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatExistsRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatExists {\n    \n    @BeforeTemplate\n    AbstractBooleanAssert<?>\
+        \ before(Path actual) {\n        return assertThat(Files.exists(actual)).isTrue();\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractPathAssert<?> after(Path actual)\
+        \ {\n        return assertThat(actual).exists();\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes$assertthatexistsrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatHasFileNameRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatHasFileNameRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatHasFileName {\n    \n    @BeforeTemplate\n  \
+        \  AbstractPathAssert<?> before(Path actual, String fileName) {\n        return\
+        \ assertThat(actual.getFileName()).hasToString(fileName);\n    }\n    \n \
+        \   @AfterTemplate\n    AbstractPathAssert<?> after(Path actual, String fileName)\
+        \ {\n        return assertThat(actual).hasFileName(fileName);\n    }\n}\n\
+        ```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes$assertthathasfilenamerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatHasNoParentRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatHasNoParentRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatHasNoParent {\n    \n    @BeforeTemplate\n  \
+        \  void before(Path actual) {\n        assertThat(actual.getParent()).isNull();\n\
+        \    }\n    \n    @AfterTemplate\n    void after(Path actual) {\n        assertThat(actual).hasNoParent();\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes$assertthathasnoparentrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatHasParentRawRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatHasParentRawRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatHasParentRaw {\n    \n    @BeforeTemplate\n \
+        \   AbstractPathAssert<?> before(Path actual, Path expected) {\n        return\
+        \ assertThat(actual.getParent()).isEqualTo(expected);\n    }\n    \n    @AfterTemplate\n\
+        \    AbstractPathAssert<?> after(Path actual, Path expected) {\n        return\
+        \ assertThat(actual).hasParentRaw(expected);\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes$assertthathasparentrawrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsAbsoluteRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsAbsoluteRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsAbsolute {\n    \n    @BeforeTemplate\n   \
+        \ AbstractBooleanAssert<?> before(Path actual) {\n        return assertThat(actual.isAbsolute()).isTrue();\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractPathAssert<?> after(Path actual)\
+        \ {\n        return assertThat(actual).isAbsolute();\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes$assertthatisabsoluterecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsDirectoryRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsDirectoryRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsDirectory {\n    \n    @BeforeTemplate\n  \
+        \  AbstractBooleanAssert<?> before(Path actual) {\n        return assertThat(Files.isDirectory(actual)).isTrue();\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractPathAssert<?> after(Path actual)\
+        \ {\n        return assertThat(actual).isDirectory();\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes$assertthatisdirectoryrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsExecutableRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsExecutableRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsExecutable {\n    \n    @BeforeTemplate\n \
+        \   AbstractBooleanAssert<?> before(Path actual) {\n        return assertThat(Files.isExecutable(actual)).isTrue();\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractPathAssert<?> after(Path actual)\
+        \ {\n        return assertThat(actual).isExecutable();\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes$assertthatisexecutablerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsReadableRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsReadableRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsReadable {\n    \n    @BeforeTemplate\n   \
+        \ AbstractBooleanAssert<?> before(Path actual) {\n        return assertThat(Files.isReadable(actual)).isTrue();\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractPathAssert<?> after(Path actual)\
+        \ {\n        return assertThat(actual).isReadable();\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes$assertthatisreadablerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsRegularFileRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsRegularFileRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsRegularFile {\n    \n    @BeforeTemplate\n\
+        \    AbstractBooleanAssert<?> before(Path actual) {\n        return assertThat(Files.isRegularFile(actual)).isTrue();\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractPathAssert<?> after(Path actual)\
+        \ {\n        return assertThat(actual).isRegularFile();\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes$assertthatisregularfilerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsRelativeRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsRelativeRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsRelative {\n    \n    @BeforeTemplate\n   \
+        \ AbstractBooleanAssert<?> before(Path actual) {\n        return assertThat(actual.isAbsolute()).isFalse();\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractPathAssert<?> after(Path actual)\
+        \ {\n        return assertThat(actual).isRelative();\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes$assertthatisrelativerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsSymbolicLinkRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsSymbolicLinkRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsSymbolicLink {\n    \n    @BeforeTemplate\n\
+        \    AbstractBooleanAssert<?> before(Path actual) {\n        return assertThat(Files.isSymbolicLink(actual)).isTrue();\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractPathAssert<?> after(Path actual)\
+        \ {\n        return assertThat(actual).isSymbolicLink();\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes$assertthatissymboliclinkrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsWritableRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatIsWritableRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatIsWritable {\n    \n    @BeforeTemplate\n   \
+        \ AbstractBooleanAssert<?> before(Path actual) {\n        return assertThat(Files.isWritable(actual)).isTrue();\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractPathAssert<?> after(Path actual)\
+        \ {\n        return assertThat(actual).isWritable();\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes$assertthatiswritablerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatStartsWithRawRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJPathRulesRecipes$AssertThatStartsWithRawRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatStartsWithRaw {\n    \n    @BeforeTemplate\n\
+        \    AbstractBooleanAssert<?> before(Path actual, Path other) {\n        return\
+        \ assertThat(actual.startsWith(other)).isTrue();\n    }\n    \n    @AfterTemplate\n\
+        \    AbstractPathAssert<?> after(Path actual, Path other) {\n        return\
+        \ assertThat(actual).startsWithRaw(other);\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjpathrulesrecipes$assertthatstartswithrawrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJPrimitiveRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJPrimitiveRulesRecipes"
       description: "Refaster template recipes for `tech.picnic.errorprone.refasterrules.AssertJPrimitiveRules`.\n\
@@ -28970,15 +29612,28 @@ rewrite-third-party:
       name: "tech.picnic.errorprone.refasterrules.AssertJPrimitiveRulesRecipes$AssertThatIsEqualToRecipe"
       description: "Recipe created for the following Refaster template:\n```java\n\
         static final class AssertThatIsEqualTo {\n    \n    @BeforeTemplate\n    AbstractBooleanAssert<?>\
-        \ before(boolean actual, boolean expected) {\n        return Refaster.anyOf(assertThat(actual\
-        \ == expected).isTrue(), assertThat(actual != expected).isFalse());\n    }\n\
-        \    \n    @BeforeTemplate\n    @SuppressWarnings(value = \"java:S1244\")\n\
-        \    AbstractBooleanAssert<?> before(double actual, double expected) {\n \
-        \       return Refaster.anyOf(assertThat(actual == expected).isTrue(), assertThat(actual\
-        \ != expected).isFalse());\n    }\n    \n    @AfterTemplate\n    @UseImportPolicy(value\
-        \ = STATIC_IMPORT_ALWAYS)\n    AbstractBooleanAssert<?> after(boolean actual,\
-        \ boolean expected) {\n        return assertThat(actual).isEqualTo(expected);\n\
-        \    }\n}\n```\n."
+        \ before(boolean actual, boolean expected) {\n        return Refaster.anyOf(assertThat(actual).isSameAs(expected),\
+        \ assertThat(actual).isSameAs(expected));\n    }\n    \n    @BeforeTemplate\n\
+        \    AbstractByteAssert<?> before(byte actual, byte expected) {\n        return\
+        \ Refaster.anyOf(assertThat(actual).isSameAs(expected), assertThat(actual).isSameAs(expected));\n\
+        \    }\n    \n    @BeforeTemplate\n    AbstractCharacterAssert<?> before(char\
+        \ actual, char expected) {\n        return Refaster.anyOf(assertThat(actual).isSameAs(expected),\
+        \ assertThat(actual).isSameAs(expected));\n    }\n    \n    @BeforeTemplate\n\
+        \    AbstractShortAssert<?> before(short actual, short expected) {\n     \
+        \   return Refaster.anyOf(assertThat(actual).isSameAs(expected), assertThat(actual).isSameAs(expected));\n\
+        \    }\n    \n    @BeforeTemplate\n    AbstractIntegerAssert<?> before(int\
+        \ actual, int expected) {\n        return Refaster.anyOf(assertThat(actual).isSameAs(expected),\
+        \ assertThat(actual).isSameAs(expected));\n    }\n    \n    @BeforeTemplate\n\
+        \    AbstractLongAssert<?> before(long actual, long expected) {\n        return\
+        \ Refaster.anyOf(assertThat(actual).isSameAs(expected), assertThat(actual).isSameAs(expected));\n\
+        \    }\n    \n    @BeforeTemplate\n    AbstractFloatAssert<?> before(float\
+        \ actual, float expected) {\n        return Refaster.anyOf(assertThat(actual).isSameAs(expected),\
+        \ assertThat(actual).isSameAs(expected));\n    }\n    \n    @BeforeTemplate\n\
+        \    AbstractDoubleAssert<?> before(double actual, double expected) {\n  \
+        \      return Refaster.anyOf(assertThat(actual).isSameAs(expected), assertThat(actual).isSameAs(expected));\n\
+        \    }\n    \n    @AfterTemplate\n    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n\
+        \    AbstractBooleanAssert<?> after(boolean actual, boolean expected) {\n\
+        \        return assertThat(actual).isEqualTo(expected);\n    }\n}\n```\n."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjprimitiverulesrecipes$assertthatisequaltorecipe"
       options: []
       isImperative: true
@@ -29044,11 +29699,25 @@ rewrite-third-party:
       description: "Recipe created for the following Refaster template:\n```java\n\
         static final class AssertThatIsNotEqualTo {\n    \n    @BeforeTemplate\n \
         \   AbstractBooleanAssert<?> before(boolean actual, boolean expected) {\n\
-        \        return Refaster.anyOf(assertThat(actual != expected).isTrue(), assertThat(actual\
-        \ == expected).isFalse());\n    }\n    \n    @BeforeTemplate\n    @SuppressWarnings(value\
-        \ = \"java:S1244\")\n    AbstractBooleanAssert<?> before(double actual, double\
-        \ expected) {\n        return Refaster.anyOf(assertThat(actual != expected).isTrue(),\
-        \ assertThat(actual == expected).isFalse());\n    }\n    \n    @AfterTemplate\n\
+        \        return Refaster.anyOf(assertThat(actual).isNotSameAs(expected), assertThat(actual).isNotSameAs(expected));\n\
+        \    }\n    \n    @BeforeTemplate\n    AbstractByteAssert<?> before(byte actual,\
+        \ byte expected) {\n        return Refaster.anyOf(assertThat(actual).isNotSameAs(expected),\
+        \ assertThat(actual).isNotSameAs(expected));\n    }\n    \n    @BeforeTemplate\n\
+        \    AbstractCharacterAssert<?> before(char actual, char expected) {\n   \
+        \     return Refaster.anyOf(assertThat(actual).isNotSameAs(expected), assertThat(actual).isNotSameAs(expected));\n\
+        \    }\n    \n    @BeforeTemplate\n    AbstractShortAssert<?> before(short\
+        \ actual, short expected) {\n        return Refaster.anyOf(assertThat(actual).isNotSameAs(expected),\
+        \ assertThat(actual).isNotSameAs(expected));\n    }\n    \n    @BeforeTemplate\n\
+        \    AbstractIntegerAssert<?> before(int actual, int expected) {\n       \
+        \ return Refaster.anyOf(assertThat(actual).isNotSameAs(expected), assertThat(actual).isNotSameAs(expected));\n\
+        \    }\n    \n    @BeforeTemplate\n    AbstractLongAssert<?> before(long actual,\
+        \ long expected) {\n        return Refaster.anyOf(assertThat(actual).isNotSameAs(expected),\
+        \ assertThat(actual).isNotSameAs(expected));\n    }\n    \n    @BeforeTemplate\n\
+        \    AbstractFloatAssert<?> before(float actual, float expected) {\n     \
+        \   return Refaster.anyOf(assertThat(actual).isNotSameAs(expected), assertThat(actual).isNotSameAs(expected));\n\
+        \    }\n    \n    @BeforeTemplate\n    AbstractDoubleAssert<? extends AbstractDoubleAssert<?>>\
+        \ before(double actual, double expected) {\n        return Refaster.anyOf(assertThat(actual).isNotSameAs(expected),\
+        \ assertThat(actual).isNotSameAs(expected));\n    }\n    \n    @AfterTemplate\n\
         \    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n    AbstractBooleanAssert<?>\
         \ after(boolean actual, boolean expected) {\n        return assertThat(actual).isNotEqualTo(expected);\n\
         \    }\n}\n```\n."
@@ -29081,7 +29750,7 @@ rewrite-third-party:
       name: "tech.picnic.errorprone.refasterrules.AssertJRulesRecipes$AssertThatMapContainsEntryRecipe"
       description: "Recipe created for the following Refaster template:\n```java\n\
         static final class AssertThatMapContainsEntry<K, V> {\n    \n    @BeforeTemplate\n\
-        \    ObjectAssert<?> before(Map<K, V> map, K key, V value) {\n        return\
+        \    ObjectAssert<V> before(Map<K, V> map, K key, V value) {\n        return\
         \ assertThat(map.get(key)).isEqualTo(value);\n    }\n    \n    @AfterTemplate\n\
         \    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n    MapAssert<K, V> after(Map<K,\
         \ V> map, K key, V value) {\n        return assertThat(map).containsEntry(key,\
@@ -29728,6 +30397,58 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJStringRulesRecipes$AssertThatStringDoesNotEndWithRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJStringRulesRecipes$AssertThatStringDoesNotEndWithRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatStringDoesNotEndWith {\n    \n    @BeforeTemplate\n\
+        \    AbstractBooleanAssert<?> before(String string, String prefix) {\n   \
+        \     return assertThat(string.endsWith(prefix)).isFalse();\n    }\n    \n\
+        \    @AfterTemplate\n    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n\
+        \    AbstractStringAssert<?> after(String string, String prefix) {\n     \
+        \   return assertThat(string).doesNotEndWith(prefix);\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjstringrulesrecipes$assertthatstringdoesnotendwithrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJStringRulesRecipes$AssertThatStringDoesNotStartWithRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJStringRulesRecipes$AssertThatStringDoesNotStartWithRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatStringDoesNotStartWith {\n    \n    @BeforeTemplate\n\
+        \    AbstractBooleanAssert<?> before(String string, String prefix) {\n   \
+        \     return assertThat(string.startsWith(prefix)).isFalse();\n    }\n   \
+        \ \n    @AfterTemplate\n    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n\
+        \    AbstractStringAssert<?> after(String string, String prefix) {\n     \
+        \   return assertThat(string).doesNotStartWith(prefix);\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjstringrulesrecipes$assertthatstringdoesnotstartwithrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJStringRulesRecipes$AssertThatStringEndsWithRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJStringRulesRecipes$AssertThatStringEndsWithRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatStringEndsWith {\n    \n    @BeforeTemplate\n\
+        \    AbstractBooleanAssert<?> before(String string, String prefix) {\n   \
+        \     return assertThat(string.endsWith(prefix)).isTrue();\n    }\n    \n\
+        \    @AfterTemplate\n    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n\
+        \    AbstractStringAssert<?> after(String string, String prefix) {\n     \
+        \   return assertThat(string).endsWith(prefix);\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjstringrulesrecipes$assertthatstringendswithrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJStringRulesRecipes$AssertThatStringStartsWithRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJStringRulesRecipes$AssertThatStringStartsWithRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AssertThatStringStartsWith {\n    \n    @BeforeTemplate\n\
+        \    AbstractBooleanAssert<?> before(String string, String prefix) {\n   \
+        \     return assertThat(string.startsWith(prefix)).isTrue();\n    }\n    \n\
+        \    @AfterTemplate\n    @UseImportPolicy(value = STATIC_IMPORT_ALWAYS)\n\
+        \    AbstractStringAssert<?> after(String string, String prefix) {\n     \
+        \   return assertThat(string).startsWith(prefix);\n    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjstringrulesrecipes$assertthatstringstartswithrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.AssertJThrowingCallableRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.AssertJThrowingCallableRulesRecipes"
       description: "For reasons of consistency we prefer `org.assertj.core.api.Assertions#assertThatThrownBy`\
@@ -29735,6 +30456,21 @@ rewrite-third-party:
         \ common assertion expressions are rewritten here; covering all\n cases would\
         \ require the implementation of an Error Prone check instead.\n[Source](https://error-prone.picnic.tech/refasterrules/AssertJThrowingCallableRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjthrowingcallablerulesrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.AssertJThrowingCallableRulesRecipes$AbstractThrowableAssertCauseIsSameAsRecipe:
+      name: "tech.picnic.errorprone.refasterrules.AssertJThrowingCallableRulesRecipes$AbstractThrowableAssertCauseIsSameAsRecipe"
+      description: "Recipe created for the following Refaster template:\n```java\n\
+        static final class AbstractThrowableAssertCauseIsSameAs {\n    \n    @BeforeTemplate\n\
+        \    @SuppressWarnings(value = \"deprecation\")\n    AbstractThrowableAssert<?,\
+        \ ? extends Throwable> before(AbstractThrowableAssert<?, ? extends Throwable>\
+        \ throwableAssert, Throwable expected) {\n        return throwableAssert.hasCauseReference(expected);\n\
+        \    }\n    \n    @AfterTemplate\n    AbstractThrowableAssert<?, ? extends\
+        \ Throwable> after(AbstractThrowableAssert<?, ? extends Throwable> throwableAssert,\
+        \ Throwable expected) {\n        return throwableAssert.cause().isSameAs(expected);\n\
+        \    }\n}\n```\n."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/assertjthrowingcallablerulesrecipes$abstractthrowableassertcauseissameasrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -30379,29 +31115,27 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.ClassRulesRecipes$ClassReferenceCastRecipe:
+      name: "tech.picnic.errorprone.refasterrules.ClassRulesRecipes$ClassReferenceCastRecipe"
+      description: "Prefer `Class#cast(Object)` method references over lambda expressions\
+        \ that require naming a variable."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/classrulesrecipes$classreferencecastrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.ClassRulesRecipes$ClassReferenceIsInstancePredicateRecipe:
+      name: "tech.picnic.errorprone.refasterrules.ClassRulesRecipes$ClassReferenceIsInstancePredicateRecipe"
+      description: "Prefer `Class#isInstance(Object)` method references over lambda\
+        \ expressions that require naming a variable."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/classrulesrecipes$classreferenceisinstancepredicaterecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.CollectionRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.CollectionRulesRecipes"
       description: "Refaster rules related to expressions dealing with (arbitrary)\
         \ collections.\n[Source](https://error-prone.picnic.tech/refasterrules/CollectionRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/collectionrulesrecipes"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    tech.picnic.errorprone.refasterrules.CollectionRulesRecipes$CollectionAddAllToCollectionBlockRecipe:
-      name: "tech.picnic.errorprone.refasterrules.CollectionRulesRecipes$CollectionAddAllToCollectionBlockRecipe"
-      description: "Recipe created for the following Refaster template:\n```java\n\
-        static final class CollectionAddAllToCollectionBlock<T, S extends T> {\n \
-        \   \n    @BeforeTemplate\n    void before(Collection<T> addTo, Collection<S>\
-        \ elementsToAdd) {\n        elementsToAdd.forEach(addTo::add);\n    }\n  \
-        \  \n    @BeforeTemplate\n    void before2(Collection<T> addTo, Collection<S>\
-        \ elementsToAdd) {\n        for (T element : elementsToAdd) {\n          \
-        \  addTo.add(element);\n        }\n    }\n    \n    @BeforeTemplate\n    void\
-        \ before3(Collection<T> addTo, Collection<S> elementsToAdd) {\n        for\
-        \ (S element : elementsToAdd) {\n            addTo.add(element);\n       \
-        \ }\n    }\n    \n    @AfterTemplate\n    void after(Collection<T> addTo,\
-        \ Collection<S> elementsToAdd) {\n        addTo.addAll(elementsToAdd);\n \
-        \   }\n}\n```\n."
-      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/collectionrulesrecipes$collectionaddalltocollectionblockrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -30440,24 +31174,6 @@ rewrite-third-party:
       description: "Prefer `Collection#iterator()` over more contrived or less efficient\
         \ alternatives."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/collectionrulesrecipes$collectioniteratorrecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    tech.picnic.errorprone.refasterrules.CollectionRulesRecipes$CollectionRemoveAllFromCollectionBlockRecipe:
-      name: "tech.picnic.errorprone.refasterrules.CollectionRulesRecipes$CollectionRemoveAllFromCollectionBlockRecipe"
-      description: "Recipe created for the following Refaster template:\n```java\n\
-        static final class CollectionRemoveAllFromCollectionBlock<T, S extends T>\
-        \ {\n    \n    @BeforeTemplate\n    void before(Collection<T> removeFrom,\
-        \ Collection<S> elementsToRemove) {\n        elementsToRemove.forEach(removeFrom::remove);\n\
-        \    }\n    \n    @BeforeTemplate\n    void before2(Collection<T> removeFrom,\
-        \ Collection<S> elementsToRemove) {\n        for (T element : elementsToRemove)\
-        \ {\n            removeFrom.remove(element);\n        }\n    }\n    \n   \
-        \ @BeforeTemplate\n    void before3(Collection<T> removeFrom, Collection<S>\
-        \ elementsToRemove) {\n        for (S element : elementsToRemove) {\n    \
-        \        removeFrom.remove(element);\n        }\n    }\n    \n    @AfterTemplate\n\
-        \    void after(Collection<T> removeFrom, Collection<S> elementsToRemove)\
-        \ {\n        removeFrom.removeAll(elementsToRemove);\n    }\n}\n```\n."
-      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/collectionrulesrecipes$collectionremoveallfromcollectionblockrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -30613,6 +31329,22 @@ rewrite-third-party:
       name: "tech.picnic.errorprone.refasterrules.ComparatorRulesRecipes$CollectionsSortRecipe"
       description: "Prefer `Collections#sort(List)` over more verbose alternatives."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/comparatorrulesrecipes$collectionssortrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.ComparatorRulesRecipes$ComparatorsMaxRecipe:
+      name: "tech.picnic.errorprone.refasterrules.ComparatorRulesRecipes$ComparatorsMaxRecipe"
+      description: "Prefer a method reference to `Comparators#max(Comparable, Comparable)`\
+        \ over calling `BinaryOperator#minBy(Comparator)` with `Comparator#naturalOrder()`."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/comparatorrulesrecipes$comparatorsmaxrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.ComparatorRulesRecipes$ComparatorsMinRecipe:
+      name: "tech.picnic.errorprone.refasterrules.ComparatorRulesRecipes$ComparatorsMinRecipe"
+      description: "Prefer a method reference to `Comparators#min(Comparable, Comparable)`\
+        \ over calling `BinaryOperator#minBy(Comparator)` with `Comparator#naturalOrder()`."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/comparatorrulesrecipes$comparatorsminrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -30839,10 +31571,24 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.EqualityRulesRecipes$EnumReferenceEqualityLambdaRecipe:
+      name: "tech.picnic.errorprone.refasterrules.EqualityRulesRecipes$EnumReferenceEqualityLambdaRecipe"
+      description: "Prefer reference-based equality for enums."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/equalityrulesrecipes$enumreferenceequalitylambdarecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.EqualityRulesRecipes$EnumReferenceEqualityRecipe:
       name: "tech.picnic.errorprone.refasterrules.EqualityRulesRecipes$EnumReferenceEqualityRecipe"
       description: "Prefer reference-based equality for enums."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/equalityrulesrecipes$enumreferenceequalityrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.EqualityRulesRecipes$EqualsPredicateRecipe:
+      name: "tech.picnic.errorprone.refasterrules.EqualityRulesRecipes$EqualsPredicateRecipe"
+      description: "Prefer `Object#equals(Object)` over the equivalent lambda function."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/equalityrulesrecipes$equalspredicaterecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -32815,6 +33561,28 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.JacksonRulesRecipes:
+      name: "tech.picnic.errorprone.refasterrules.JacksonRulesRecipes"
+      description: "Refaster rules related to Jackson expressions and statements.\n\
+        [Source](https://error-prone.picnic.tech/refasterrules/JacksonRules)."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/jacksonrulesrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.JacksonRulesRecipes$JsonNodeOptionalIntRecipe:
+      name: "tech.picnic.errorprone.refasterrules.JacksonRulesRecipes$JsonNodeOptionalIntRecipe"
+      description: "Prefer `JsonNode#optional(int)` over more contrived alternatives."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/jacksonrulesrecipes$jsonnodeoptionalintrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.JacksonRulesRecipes$JsonNodeOptionalStringRecipe:
+      name: "tech.picnic.errorprone.refasterrules.JacksonRulesRecipes$JsonNodeOptionalStringRecipe"
+      description: "Prefer `JsonNode#optional(String)` over more contrived alternatives."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/jacksonrulesrecipes$jsonnodeoptionalstringrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.LongStreamRulesRecipes:
       name: "tech.picnic.errorprone.refasterrules.LongStreamRulesRecipes"
       description: "Refaster rules related to expressions dealing with `LongStream`s.\n\
@@ -33201,11 +33969,27 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.NullRulesRecipes$IsNullFunctionRecipe:
+      name: "tech.picnic.errorprone.refasterrules.NullRulesRecipes$IsNullFunctionRecipe"
+      description: "Prefer `Objects#isNull(Object)` over the equivalent lambda function\
+        \ or more contrived alternatives."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/nullrulesrecipes$isnullfunctionrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.NullRulesRecipes$IsNullRecipe:
       name: "tech.picnic.errorprone.refasterrules.NullRulesRecipes$IsNullRecipe"
       description: "Prefer the `==` operator (with `null` as the second operand) over\
         \ `Objects#isNull(Object)`."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/nullrulesrecipes$isnullrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.NullRulesRecipes$NonNullFunctionRecipe:
+      name: "tech.picnic.errorprone.refasterrules.NullRulesRecipes$NonNullFunctionRecipe"
+      description: "Prefer `Objects#nonNull(Object)` over the equivalent lambda function\
+        \ or more contrived alternatives."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/nullrulesrecipes$nonnullfunctionrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -33306,6 +34090,13 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.OptionalRulesRecipes$OptionalOrElseThrowMethodReferenceRecipe:
+      name: "tech.picnic.errorprone.refasterrules.OptionalRulesRecipes$OptionalOrElseThrowMethodReferenceRecipe"
+      description: "Prefer `Optional#orElseThrow()` over the less explicit `Optional#get()`."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/optionalrulesrecipes$optionalorelsethrowmethodreferencerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.OptionalRulesRecipes$OptionalOrElseThrowRecipe:
       name: "tech.picnic.errorprone.refasterrules.OptionalRulesRecipes$OptionalOrElseThrowRecipe"
       description: "Prefer `Optional#orElseThrow()` over the less explicit `Optional#get()`."
@@ -33397,6 +34188,30 @@ rewrite-third-party:
       description: "Refaster rules related to expressions dealing with primitives.\n\
         [Source](https://error-prone.picnic.tech/refasterrules/PrimitiveRules)."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/primitiverulesrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.PrimitiveRulesRecipes$ArraysCompareUnsignedBytesRecipe:
+      name: "tech.picnic.errorprone.refasterrules.PrimitiveRulesRecipes$ArraysCompareUnsignedBytesRecipe"
+      description: "Prefer JDK's `Arrays#compareUnsigned(byte[], byte[])` over third-party\
+        \ alternatives."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/primitiverulesrecipes$arrayscompareunsignedbytesrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.PrimitiveRulesRecipes$ArraysCompareUnsignedIntsRecipe:
+      name: "tech.picnic.errorprone.refasterrules.PrimitiveRulesRecipes$ArraysCompareUnsignedIntsRecipe"
+      description: "Prefer JDK's `Arrays#compareUnsigned(int[], int[])` over third-party\
+        \ alternatives."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/primitiverulesrecipes$arrayscompareunsignedintsrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.PrimitiveRulesRecipes$ArraysCompareUnsignedLongsRecipe:
+      name: "tech.picnic.errorprone.refasterrules.PrimitiveRulesRecipes$ArraysCompareUnsignedLongsRecipe"
+      description: "Prefer JDK's `Arrays#compareUnsigned(long[], long[])` over third-party\
+        \ alternatives."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/primitiverulesrecipes$arrayscompareunsignedlongsrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -33690,6 +34505,38 @@ rewrite-third-party:
       name: "tech.picnic.errorprone.refasterrules.PrimitiveRulesRecipes$ShortHashCodeRecipe"
       description: "Prefer `Short#hashCode(short)` over the Guava alternative."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/primitiverulesrecipes$shorthashcoderecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.RandomGeneratorRulesRecipes:
+      name: "tech.picnic.errorprone.refasterrules.RandomGeneratorRulesRecipes"
+      description: "Refaster rules related to expressions dealing with `RandomGenerator`\
+        \ instances.\n[Source](https://error-prone.picnic.tech/refasterrules/RandomGeneratorRules)."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/randomgeneratorrulesrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.RandomGeneratorRulesRecipes$RandomGeneratorNextDoubleRecipe:
+      name: "tech.picnic.errorprone.refasterrules.RandomGeneratorRulesRecipes$RandomGeneratorNextDoubleRecipe"
+      description: "Prefer `RandomGenerator#nextDouble(double)` over alternatives\
+        \ that yield a smaller domain of values and may result in `Double#isInfinite()\
+        \ inifinity`."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/randomgeneratorrulesrecipes$randomgeneratornextdoublerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.RandomGeneratorRulesRecipes$RandomGeneratorNextIntRecipe:
+      name: "tech.picnic.errorprone.refasterrules.RandomGeneratorRulesRecipes$RandomGeneratorNextIntRecipe"
+      description: "Prefer `RandomGenerator#nextInt(int)` over more contrived alternatives."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/randomgeneratorrulesrecipes$randomgeneratornextintrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.RandomGeneratorRulesRecipes$RandomGeneratorNextLongRecipe:
+      name: "tech.picnic.errorprone.refasterrules.RandomGeneratorRulesRecipes$RandomGeneratorNextLongRecipe"
+      description: "Additionally, for large bounds, the unnecessary floating point\
+        \ arithmetic prevents some\n `long` values from being generated."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/randomgeneratorrulesrecipes$randomgeneratornextlongrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -34885,6 +35732,14 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.StringRulesRecipes$EmptyStringRecipe:
+      name: "tech.picnic.errorprone.refasterrules.StringRulesRecipes$EmptyStringRecipe"
+      description: "Avoid unnecessary creation of new empty `String` objects; use\
+        \ the empty string literal instead."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/stringrulesrecipes$emptystringrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.StringRulesRecipes$FilterEmptyStringRecipe:
       name: "tech.picnic.errorprone.refasterrules.StringRulesRecipes$FilterEmptyStringRecipe"
       description: "Recipe created for the following Refaster template:\n```java\n\
@@ -34929,6 +35784,13 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.StringRulesRecipes$StringIdentityRecipe:
+      name: "tech.picnic.errorprone.refasterrules.StringRulesRecipes$StringIdentityRecipe"
+      description: "Avoid unnecessary creation of new `String` objects."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/stringrulesrecipes$stringidentityrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.StringRulesRecipes$StringIndexOfCharRecipe:
       name: "tech.picnic.errorprone.refasterrules.StringRulesRecipes$StringIndexOfCharRecipe"
       description: "Prefer `String#indexOf(int, int)` over less efficient alternatives."
@@ -34943,11 +35805,34 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.StringRulesRecipes$StringIsBlankRecipe:
+      name: "tech.picnic.errorprone.refasterrules.StringRulesRecipes$StringIsBlankRecipe"
+      description: "Prefer `String#isBlank()` over less efficient alternatives."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/stringrulesrecipes$stringisblankrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.StringRulesRecipes$StringIsEmptyPredicateRecipe:
+      name: "tech.picnic.errorprone.refasterrules.StringRulesRecipes$StringIsEmptyPredicateRecipe"
+      description: "Prefer a method reference to `String#isEmpty()` over the equivalent\
+        \ lambda function."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/stringrulesrecipes$stringisemptypredicaterecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     tech.picnic.errorprone.refasterrules.StringRulesRecipes$StringIsEmptyRecipe:
       name: "tech.picnic.errorprone.refasterrules.StringRulesRecipes$StringIsEmptyRecipe"
       description: "Prefer `String#isEmpty()` over alternatives that consult the string's\
         \ length."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/stringrulesrecipes$stringisemptyrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.StringRulesRecipes$StringIsNotEmptyPredicateRecipe:
+      name: "tech.picnic.errorprone.refasterrules.StringRulesRecipes$StringIsNotEmptyPredicateRecipe"
+      description: "Prefer a method reference to `String#isEmpty()` over the equivalent\
+        \ lambda function."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/stringrulesrecipes$stringisnotemptypredicaterecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -34990,6 +35875,14 @@ rewrite-third-party:
       name: "tech.picnic.errorprone.refasterrules.StringRulesRecipes$StringStartsWithRecipe"
       description: "Prefer `String#startsWith(String, int)` over less efficient alternatives."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/stringrulesrecipes$stringstartswithrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.StringRulesRecipes$StringValueOfMethodReferenceRecipe:
+      name: "tech.picnic.errorprone.refasterrules.StringRulesRecipes$StringValueOfMethodReferenceRecipe"
+      description: "Prefer direct delegation to `String#valueOf(Object)` over the\
+        \ indirection introduced by `Objects#toString(Object)`."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/stringrulesrecipes$stringvalueofmethodreferencerecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -35077,6 +35970,13 @@ rewrite-third-party:
       description: "Prefer `SuggestedFix#swap(Tree, Tree, VisitorState)` over more\
         \ contrived alternatives."
       docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/suggestedfixrulesrecipes$suggestedfixswaprecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    tech.picnic.errorprone.refasterrules.SuggestedFixRulesRecipes$SuggestedFixToBuilderRecipe:
+      name: "tech.picnic.errorprone.refasterrules.SuggestedFixRulesRecipes$SuggestedFixToBuilderRecipe"
+      description: "Prefer `SuggestedFix#toBuilder()`} over more contrived alternatives."
+      docLink: "https://docs.openrewrite.org/recipes/tech/picnic/errorprone/refasterrules/suggestedfixrulesrecipes$suggestedfixtobuilderrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -36725,7 +37625,7 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
 rewrite-vulncheck:
   artifactId: "rewrite-vulncheck"
-  version: "0.4.0"
+  version: "0.4.1"
   markdownRecipeDescriptors:
     io.moderne.vulncheck.FixVulnCheckVulnerabilities:
       name: "io.moderne.vulncheck.FixVulnCheckVulnerabilities"
@@ -36759,7 +37659,7 @@ rewrite-vulncheck:
       artifactId: "rewrite-vulncheck"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.57.0"
+  version: "8.59.1"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -37090,7 +37990,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.57.0"
+  version: "8.59.1"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
