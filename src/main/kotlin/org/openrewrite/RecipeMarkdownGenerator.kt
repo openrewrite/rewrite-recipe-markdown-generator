@@ -212,6 +212,14 @@ class RecipeMarkdownGenerator : Runnable {
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
         val recipesWithDataTables = ArrayList<RecipeDescriptor>()
         val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
+        
+        // Build reverse mapping of recipe relationships (which recipes contain each recipe)
+        val recipeContainedBy = mutableMapOf<String, MutableList<RecipeDescriptor>>()
+        for (parentRecipe in allRecipeDescriptors) {
+            for (childRecipe in parentRecipe.recipeList) {
+                recipeContainedBy.computeIfAbsent(childRecipe.name) { mutableListOf() }.add(parentRecipe)
+            }
+        }
 
         // Create the recipe docs
         for (recipeDescriptor in allRecipeDescriptors) {
@@ -230,7 +238,7 @@ class RecipeMarkdownGenerator : Runnable {
                 origin = recipeOrigins[jarOnlyUri]
             }
             requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeDescriptor.source }
-            writeRecipe(recipeDescriptor, recipesPath, origin)
+            writeRecipe(recipeDescriptor, recipesPath, origin, recipeContainedBy)
 
             val filteredDataTables = recipeDescriptor.dataTables.filter { dataTable ->
                 dataTable.name !in dataTablesToIgnore
@@ -1063,7 +1071,8 @@ class RecipeMarkdownGenerator : Runnable {
     private fun writeRecipe(
         recipeDescriptor: RecipeDescriptor,
         outputPath: Path,
-        origin: RecipeOrigin
+        origin: RecipeOrigin,
+        recipeContainedBy: Map<String, MutableList<RecipeDescriptor>>
     ) {
         if (recipesToIgnore.contains(recipeDescriptor.name)) {
             return
@@ -1138,6 +1147,7 @@ import TabItem from '@theme/TabItem';
             writeSourceLinks(recipeDescriptor, origin)
             writeOptions(recipeDescriptor)
             writeDefinition(recipeDescriptor, origin)
+            writeUsedBy(recipeDescriptor, recipeContainedBy)
             writeExamples(recipeDescriptor)
             writeUsage(recipeDescriptor, origin)
             writeModerneLink(recipeDescriptor)
@@ -1678,6 +1688,46 @@ import TabItem from '@theme/TabItem';
                 </Tabs>
                 """.trimIndent()
             )
+        }
+    }
+
+    private fun BufferedWriter.writeUsedBy(
+        recipeDescriptor: RecipeDescriptor,
+        recipeContainedBy: Map<String, MutableList<RecipeDescriptor>>
+    ) {
+        val parentRecipes = recipeContainedBy[recipeDescriptor.name]
+        if (parentRecipes != null && parentRecipes.isNotEmpty()) {
+            //language=markdown
+            writeln(
+                """
+                
+                ## Used by
+                
+                This recipe is used as part of the following composite recipes:
+                
+                """.trimIndent()
+            )
+            
+            val recipeDepth = getRecipePath(recipeDescriptor).chars().filter { ch: Int -> ch == '/'.code }.count()
+            val pathToRecipesBuilder = StringBuilder()
+            for (i in 0 until recipeDepth) {
+                pathToRecipesBuilder.append("../")
+            }
+            val pathToRecipes = pathToRecipesBuilder.toString()
+            
+            for (parentRecipe in parentRecipes.sortedBy { it.displayName }) {
+                val formattedDisplayName = parentRecipe.displayName
+                    .replace("<p>", "< p >")
+                    .replace("<script>", "//<script//>")
+                    .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
+                
+                if (recipesToIgnore.contains(parentRecipe.name)) {
+                    continue
+                }
+                
+                writeln("* [" + formattedDisplayName + "](" + pathToRecipes + getRecipePath(parentRecipe) + ")")
+            }
+            newLine()
         }
     }
 
