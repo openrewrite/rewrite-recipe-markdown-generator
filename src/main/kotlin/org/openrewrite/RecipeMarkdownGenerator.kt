@@ -213,10 +213,10 @@ class RecipeMarkdownGenerator : Runnable {
         val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
 
         // Build reverse mapping of recipe relationships (which recipes contain each recipe)
-        val recipeContainedBy = mutableMapOf<String, MutableList<RecipeDescriptor>>()
+        val recipeContainedBy = mutableMapOf<String, MutableSet<RecipeDescriptor>>()
         for (parentRecipe in allRecipeDescriptors) {
             for (childRecipe in parentRecipe.recipeList) {
-                recipeContainedBy.computeIfAbsent(childRecipe.name) { mutableListOf() }.add(parentRecipe)
+                recipeContainedBy.computeIfAbsent(childRecipe.name) { mutableSetOf() }.add(parentRecipe)
             }
         }
 
@@ -1058,7 +1058,7 @@ class RecipeMarkdownGenerator : Runnable {
         recipeDescriptor: RecipeDescriptor,
         outputPath: Path,
         origin: RecipeOrigin,
-        recipeContainedBy: Map<String, MutableList<RecipeDescriptor>>
+        recipeContainedBy: Map<String, MutableSet<RecipeDescriptor>>
     ) {
         if (recipesToIgnore.contains(recipeDescriptor.name)) {
             return
@@ -1654,7 +1654,7 @@ import TabItem from '@theme/TabItem';
         }
     }
 
-    private fun BufferedWriter.writeUsedBy(recipeContainedBy: MutableList<RecipeDescriptor>?) {
+    private fun BufferedWriter.writeUsedBy(recipeContainedBy: MutableSet<RecipeDescriptor>?) {
         if (recipeContainedBy != null && recipeContainedBy.isNotEmpty()) {
             //language=markdown
             writeln(
