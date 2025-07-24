@@ -141,7 +141,7 @@ class RecipeMarkdownGenerator : Runnable {
     ): List<EnvironmentData> = runBlocking {
         println("Starting parallel recipe loading...")
         recipeOrigins.entries
-            .chunked(3) // Process in batches of jars
+            .chunked(2) // Process in batches of jars
             .flatMap { batch ->
                 batch.map { recipeOrigin ->
                     async(Dispatchers.IO) {
@@ -2328,12 +2328,10 @@ $cliSnippet
 
             for (recipe in scanningRecipes) {
                 writeln(
-                    """
-                    ### [${recipe.displayName}](../recipes/${getRecipePath(recipe.descriptor)}.md)
-                    """.trimIndent()
+                    "* [${recipe.descriptor.displayNameEscaped()}](/recipes/${getRecipePath(recipe.descriptor)}.md) - _${
+                        recipe.descriptor.descriptionEscaped()
+                    }_"
                 )
-                writeln("_${recipe.name}_\n")
-                writeln("${recipe.description}\n")
             }
         }
     }
@@ -2496,9 +2494,11 @@ $cliSnippet
                 writeln("## ${packageName}\n")
 
                 for (recipe in recipes.sortedBy { it.displayName.replace("`", "") }) {
-                    writeln("### [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md)\n")
-                    writeln("_${recipe.name}_\n")
-                    writeln("${recipe.descriptionEscaped()}\n")
+                    writeln(
+                        "* [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md) - _${
+                            recipe.descriptionEscaped()
+                        }_"
+                    )
                 }
             }
         }
