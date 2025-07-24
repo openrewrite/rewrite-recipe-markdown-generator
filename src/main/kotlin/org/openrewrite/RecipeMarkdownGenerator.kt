@@ -211,7 +211,7 @@ class RecipeMarkdownGenerator : Runnable {
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
         val recipesWithDataTables = ArrayList<RecipeDescriptor>()
         val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
-        
+
         // Build reverse mapping of recipe relationships (which recipes contain each recipe)
         val recipeContainedBy = mutableMapOf<String, MutableList<RecipeDescriptor>>()
         for (parentRecipe in allRecipeDescriptors) {
@@ -299,7 +299,11 @@ class RecipeMarkdownGenerator : Runnable {
             allRecipes.filter { it is ScanningRecipe<*> && it !is DeclarativeRecipe },
             recipeOrigins, outputPath
         )
-        createStandaloneRecipes(allRecipeDescriptors, recipeOrigins, outputPath)
+        createStandaloneRecipes(
+            allRecipeDescriptors.filterNot { recipe ->
+                recipeContainedBy.contains(recipe.name)
+            }, recipeOrigins, outputPath
+        )
 
         // Write the README.md for each category
         val categories =
@@ -1666,24 +1670,24 @@ import TabItem from '@theme/TabItem';
                 
                 """.trimIndent()
             )
-            
+
             val recipeDepth = getRecipePath(recipeDescriptor).chars().filter { ch: Int -> ch == '/'.code }.count()
             val pathToRecipesBuilder = StringBuilder()
             for (i in 0 until recipeDepth) {
                 pathToRecipesBuilder.append("../")
             }
             val pathToRecipes = pathToRecipesBuilder.toString()
-            
+
             for (parentRecipe in parentRecipes.sortedBy { it.displayName }) {
                 val formattedDisplayName = parentRecipe.displayName
                     .replace("<p>", "< p >")
                     .replace("<script>", "//<script//>")
                     .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
-                
+
                 if (recipesToIgnore.contains(parentRecipe.name)) {
                     continue
                 }
-                
+
                 writeln("* [" + formattedDisplayName + "](" + pathToRecipes + getRecipePath(parentRecipe) + ")")
             }
             newLine()
@@ -2510,32 +2514,14 @@ $cliSnippet
     }
 
     private fun createStandaloneRecipes(
-        allRecipeDescriptors: List<RecipeDescriptor>,
+        standaloneRecipes: List<RecipeDescriptor>,
         recipeOrigins: Map<URI, RecipeOrigin>,
         outputPath: Path
     ) {
         // Skip if there are no recipes to process
-        if (allRecipeDescriptors.isEmpty()) {
+        if (standaloneRecipes.isEmpty()) {
             return
         }
-
-        // Build a set of all recipes that are included in other recipes
-        val includedRecipes = mutableSetOf<String>()
-
-        for (recipe in allRecipeDescriptors) {
-            // If this recipe has more than one recipe in its list, it's a composite recipe
-            if (recipe.recipeList.size > 1) {
-                // Add all recipes in the composite's recipe list to our set of included recipes
-                for (includedRecipe in recipe.recipeList) {
-                    includedRecipes.add(includedRecipe.name)
-                }
-            }
-        }
-
-        // Find all recipes that are NOT in the includedRecipes set
-        val standaloneRecipes = allRecipeDescriptors.filterNot { recipe ->
-            includedRecipes.contains(recipe.name)
-        }.sortedBy { it.displayName.replace("`", "") }
 
         // Write the standalone recipes file
         val standaloneRecipesPath = outputPath.resolve("standalone-recipes.md")
