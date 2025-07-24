@@ -41,7 +41,9 @@ import kotlin.system.exitProcess
 // These recipes contain invalid markdown and would cause issues
 // with doc generation if left in.
 private val recipesToIgnore = listOf(
-    "org.apache.camel.upgrade.camel45.UseExtendedCamelContextGetters"
+    // https://github.com/apache/camel-upgrade-recipes/pull/45
+    "org.apache.camel.upgrade.camel45.UseExtendedCamelContextGetters",
+    "org.apache.camel.upgrade.customRecipes.MoveGetterToExtendedCamelContext"
 )
 
 @Command(
