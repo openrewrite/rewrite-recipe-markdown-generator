@@ -266,7 +266,7 @@ class RecipeMarkdownGenerator : Runnable {
             val markdownRecipeDescriptor =
                 MarkdownRecipeDescriptor(
                     recipeDescriptor.name,
-                    recipeDescriptor.descriptionEscaped(),
+                    recipeDescriptor.description,
                     docLink,
                     recipeOptions,
                     isImperative,
@@ -1061,7 +1061,7 @@ class RecipeMarkdownGenerator : Runnable {
             write(
                 """
 ---
-sidebar_label: "$formattedRecipeTitle"
+sidebar_label: "${formattedRecipeTitle.replace("&#39;", "'")}"
 ---
 
 import Tabs from '@theme/Tabs';
