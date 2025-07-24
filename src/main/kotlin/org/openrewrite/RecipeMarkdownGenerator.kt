@@ -212,6 +212,14 @@ class RecipeMarkdownGenerator : Runnable {
         val recipesWithDataTables = ArrayList<RecipeDescriptor>()
         val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
 
+        // Build reverse mapping of recipe relationships (which recipes contain each recipe)
+        val recipeContainedBy = mutableMapOf<String, MutableSet<RecipeDescriptor>>()
+        for (parentRecipe in allRecipeDescriptors) {
+            for (childRecipe in parentRecipe.recipeList) {
+                recipeContainedBy.computeIfAbsent(childRecipe.name) { mutableSetOf() }.add(parentRecipe)
+            }
+        }
+
         // Create the recipe docs
         for (recipeDescriptor in allRecipeDescriptors) {
             var origin: RecipeOrigin?
@@ -229,7 +237,7 @@ class RecipeMarkdownGenerator : Runnable {
                 origin = recipeOrigins[jarOnlyUri]
             }
             requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeDescriptor.source }
-            writeRecipe(recipeDescriptor, recipesPath, origin)
+            writeRecipe(recipeDescriptor, recipesPath, origin, recipeContainedBy)
 
             val filteredDataTables = recipeDescriptor.dataTables.filter { dataTable ->
                 dataTable.name !in dataTablesToIgnore
@@ -291,7 +299,11 @@ class RecipeMarkdownGenerator : Runnable {
             allRecipes.filter { it is ScanningRecipe<*> && it !is DeclarativeRecipe },
             recipeOrigins, outputPath
         )
-        createStandaloneRecipes(allRecipeDescriptors, recipeOrigins, outputPath)
+        createStandaloneRecipes(
+            allRecipeDescriptors.filterNot { recipe ->
+                recipeContainedBy.contains(recipe.name)
+            }, recipeOrigins, outputPath
+        )
 
         // Write the README.md for each category
         val categories =
@@ -1045,7 +1057,8 @@ class RecipeMarkdownGenerator : Runnable {
     private fun writeRecipe(
         recipeDescriptor: RecipeDescriptor,
         outputPath: Path,
-        origin: RecipeOrigin
+        origin: RecipeOrigin,
+        recipeContainedBy: Map<String, MutableSet<RecipeDescriptor>>
     ) {
         if (recipesToIgnore.contains(recipeDescriptor.name)) {
             return
@@ -1102,6 +1115,7 @@ import TabItem from '@theme/TabItem';
             writeSourceLinks(recipeDescriptor, origin)
             writeOptions(recipeDescriptor)
             writeDefinition(recipeDescriptor, origin)
+            writeUsedBy(recipeContainedBy[recipeDescriptor.name])
             writeExamples(recipeDescriptor)
             writeUsage(recipeDescriptor, origin)
             writeModerneLink(recipeDescriptor)
@@ -1637,6 +1651,27 @@ import TabItem from '@theme/TabItem';
                 </Tabs>
                 """.trimIndent()
             )
+        }
+    }
+
+    private fun BufferedWriter.writeUsedBy(recipeContainedBy: MutableSet<RecipeDescriptor>?) {
+        if (recipeContainedBy != null && recipeContainedBy.isNotEmpty()) {
+            //language=markdown
+            writeln(
+                """
+                
+                ## Used by
+                
+                This recipe is used as part of the following composite recipes:
+                
+                """.trimIndent()
+            )
+            recipeContainedBy
+                .map { "* [${it.displayNameEscaped()}](/recipes/${getRecipePath(it)}.md)" }
+                .toSet()
+                .sorted()
+                .forEach { recipe -> writeln(recipe) }
+            newLine()
         }
     }
 
@@ -2460,32 +2495,14 @@ $cliSnippet
     }
 
     private fun createStandaloneRecipes(
-        allRecipeDescriptors: List<RecipeDescriptor>,
+        standaloneRecipes: List<RecipeDescriptor>,
         recipeOrigins: Map<URI, RecipeOrigin>,
         outputPath: Path
     ) {
         // Skip if there are no recipes to process
-        if (allRecipeDescriptors.isEmpty()) {
+        if (standaloneRecipes.isEmpty()) {
             return
         }
-
-        // Build a set of all recipes that are included in other recipes
-        val includedRecipes = mutableSetOf<String>()
-
-        for (recipe in allRecipeDescriptors) {
-            // If this recipe has more than one recipe in its list, it's a composite recipe
-            if (recipe.recipeList.size > 1) {
-                // Add all recipes in the composite's recipe list to our set of included recipes
-                for (includedRecipe in recipe.recipeList) {
-                    includedRecipes.add(includedRecipe.name)
-                }
-            }
-        }
-
-        // Find all recipes that are NOT in the includedRecipes set
-        val standaloneRecipes = allRecipeDescriptors.filterNot { recipe ->
-            includedRecipes.contains(recipe.name)
-        }.sortedBy { it.displayName.replace("`", "") }
 
         // Write the standalone recipes file
         val standaloneRecipesPath = outputPath.resolve("standalone-recipes.md")
