@@ -3,20 +3,6 @@ package org.openrewrite
 import org.openrewrite.config.OptionDescriptor
 import org.openrewrite.config.RecipeDescriptor
 
-enum class EscapeContext {
-    MARKDOWN_LINK,       // For use in markdown links: [text](url)
-    MARKDOWN_CODE,       // For use with backticks: `<script>`
-    MARKDOWN_ESCAPED,    // For use with backslashes: \<script\>
-    HTML_ENTITIES,       // For use with HTML entities: &lt;script&gt;
-    SIDEBAR_LABEL,       // For sidebar formatting with spaces
-    RECIPE_PAGE,         // For recipe pages with comment style
-    PLAIN                // Just remove URLs, minimal escaping
-}
-
-/**
- * Extension function to escape special characters in recipe display names
- * consistently based on the context where they will be used.
- */
 fun RecipeDescriptor.displayNameEscaped(): String {
     return displayName
         // Always remove URLs in markdown format [text](url)
