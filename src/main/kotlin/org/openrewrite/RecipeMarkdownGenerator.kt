@@ -141,7 +141,7 @@ class RecipeMarkdownGenerator : Runnable {
     ): List<EnvironmentData> = runBlocking {
         println("Starting parallel recipe loading...")
         recipeOrigins.entries
-            .chunked(4) // Process in batches of 4 jars
+            .chunked(3) // Process in batches of jars
             .flatMap { batch ->
                 batch.map { recipeOrigin ->
                     async(Dispatchers.IO) {
