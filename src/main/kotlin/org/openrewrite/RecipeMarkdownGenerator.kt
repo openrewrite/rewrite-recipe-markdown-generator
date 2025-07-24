@@ -1666,9 +1666,11 @@ import TabItem from '@theme/TabItem';
                 
                 """.trimIndent()
             )
-            for (recipe in recipeContainedBy.sortedBy { it.displayName }) {
-                writeln("* [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md)")
-            }
+            recipeContainedBy
+                .map { "* [${it.displayNameEscaped()}](/recipes/${getRecipePath(it)}.md)" }
+                .toSet()
+                .sorted()
+                .forEach { recipe -> writeln(recipe) }
             newLine()
         }
     }
