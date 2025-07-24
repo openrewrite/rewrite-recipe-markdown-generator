@@ -16,7 +16,6 @@ import org.openrewrite.config.DeclarativeRecipe
 import org.openrewrite.config.Environment
 import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.internal.StringUtils
-import org.openrewrite.internal.StringUtils.isNullOrEmpty
 import picocli.CommandLine
 import picocli.CommandLine.*
 import picocli.CommandLine.Option
@@ -286,10 +285,13 @@ class RecipeMarkdownGenerator : Runnable {
         createRecipeDescriptorsYaml(markdownArtifacts, allRecipeDescriptors.size)
         createModerneRecipes(outputPath, moderneProprietaryRecipes)
         createRecipesWithDataTables(recipesWithDataTables, outputPath)
-        createScanningRecipes(allRecipes.filter { it is ScanningRecipe<*> && it !is DeclarativeRecipe }, outputPath)
         createRecipeAuthors(allRecipeDescriptors, outputPath)
         createRecipesByTag(allRecipeDescriptors, outputPath)
-        createStandaloneRecipes(allRecipeDescriptors, outputPath)
+        createScanningRecipes(
+            allRecipes.filter { it is ScanningRecipe<*> && it !is DeclarativeRecipe },
+            recipeOrigins, outputPath
+        )
+        createStandaloneRecipes(allRecipeDescriptors, recipeOrigins, outputPath)
 
         // Write the README.md for each category
         val categories =
@@ -2309,7 +2311,11 @@ $cliSnippet
         }
     }
 
-    private fun createScanningRecipes(scanningRecipes: List<Recipe>, outputPath: Path) {
+    private fun createScanningRecipes(
+        scanningRecipes: List<Recipe>,
+        recipeOrigins: Map<URI, RecipeOrigin>,
+        outputPath: Path
+    ) {
         val markdown = outputPath.resolve("scanning-recipes.md")
         Files.newBufferedWriter(markdown, StandardOpenOption.CREATE).useAndApply {
             writeln(
@@ -2326,12 +2332,19 @@ $cliSnippet
                 """.trimIndent()
             )
 
-            for (recipe in scanningRecipes) {
-                writeln(
-                    "* [${recipe.descriptor.displayNameEscaped()}](/recipes/${getRecipePath(recipe.descriptor)}.md) - _${
-                        recipe.descriptor.descriptionEscaped()
-                    }_"
-                )
+
+            val recipesByArtifact = scanningRecipes
+                .groupBy { recipe -> recipeOrigins[recipe.descriptor.source]?.artifactId ?: "unknown artifact" }
+                .toSortedMap()
+            for ((artifact, recipes) in recipesByArtifact) {
+                writeln("## ${artifact}\n")
+
+                for (recipe in recipes)
+                    writeln(
+                        "* [${recipe.descriptor.displayNameEscaped()}](/recipes/${getRecipePath(recipe.descriptor)}.md) - _${
+                            recipe.descriptor.descriptionEscaped()
+                        }_"
+                    )
             }
         }
     }
@@ -2442,7 +2455,11 @@ $cliSnippet
         }
     }
 
-    private fun createStandaloneRecipes(allRecipeDescriptors: List<RecipeDescriptor>, outputPath: Path) {
+    private fun createStandaloneRecipes(
+        allRecipeDescriptors: List<RecipeDescriptor>,
+        recipeOrigins: Map<URI, RecipeOrigin>,
+        outputPath: Path
+    ) {
         // Skip if there are no recipes to process
         if (allRecipeDescriptors.isEmpty()) {
             return
@@ -2486,12 +2503,11 @@ $cliSnippet
             writeln("Total standalone recipes: ${standaloneRecipes.size}\n")
 
             // Group by package for better organization
-            val recipesByPackage = standaloneRecipes.groupBy { recipe ->
-                recipe.name.substringBeforeLast('.')
-            }.toSortedMap()
-
-            for ((packageName, recipes) in recipesByPackage) {
-                writeln("## ${packageName}\n")
+            val recipesByArtifact = standaloneRecipes
+                .groupBy { recipe -> recipeOrigins[recipe.source]?.artifactId ?: "unknown artifact" }
+                .toSortedMap()
+            for ((artifact, recipes) in recipesByArtifact) {
+                writeln("## ${artifact}\n")
 
                 for (recipe in recipes.sortedBy { it.displayName.replace("`", "") }) {
                     writeln(
