@@ -37,6 +37,7 @@ import java.util.regex.Pattern
 import java.util.stream.Collectors
 import kotlin.io.path.toPath
 import kotlin.system.exitProcess
+import org.openrewrite.EscapeContext
 
 
 // These recipes contain invalid markdown and would cause issues
@@ -558,9 +559,7 @@ class RecipeMarkdownGenerator : Runnable {
                 val sortedEntries = entry.value.sortedBy { it.displayName }
 
                 for (recipe in sortedEntries) {
-                    val formattedDisplayName = recipe.displayName
-                        .replace("<script>", "`<script>`")
-                        .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
+                    val formattedDisplayName = recipe.escapeDisplayName(EscapeContext.MARKDOWN_LINK)
                     writeln("* [${formattedDisplayName}](../recipes/${getRecipePath(recipe)}.md)")
                 }
 
@@ -980,10 +979,7 @@ class RecipeMarkdownGenerator : Runnable {
                                 continue;
                             }
 
-                            val formattedDisplayName = recipe.displayName
-                                .replace("<script>", "\\<script\\>")
-                                .replace("<p>", "< p >")
-                                .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
+                            val formattedDisplayName = recipe.escapeDisplayName(EscapeContext.MARKDOWN_ESCAPED)
 
                             // Anything except a relative link ending in .md will be mangled.
                             val localPath = getRecipePath(recipe).substringAfterLast('/')
@@ -998,10 +994,7 @@ class RecipeMarkdownGenerator : Runnable {
                         appendLine()
 
                         for (recipe in normalRecipes) {
-                            val formattedDisplayName = recipe.displayName
-                                .replace("<script>", "\\<script\\>")
-                                .replace("<p>", "< p >")
-                                .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
+                            val formattedDisplayName = recipe.escapeDisplayName(EscapeContext.MARKDOWN_ESCAPED)
 
                             // Anything except a relative link ending in .md will be mangled.
                             val localPath = getRecipePath(recipe).substringAfterLast('/')
@@ -1037,10 +1030,7 @@ class RecipeMarkdownGenerator : Runnable {
                     newLine()
 
                     for (recipe in recipes) {
-                        val formattedDisplayName = recipe.displayName
-                            .replace("<", "\\<")
-                            .replace(">", "\\>")
-                            .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
+                        val formattedDisplayName = recipe.escapeDisplayName(EscapeContext.MARKDOWN_ESCAPED)
                         val relativePath = getRecipePath(recipe).substringAfterLast('/')
                         writeln("* [${formattedDisplayName}](./$relativePath.md)")
                     }
@@ -1075,19 +1065,10 @@ class RecipeMarkdownGenerator : Runnable {
             else -> ""
         }
 
-        val sidebarFormattedName = (recipeDescriptor.displayName + editionSuffix)
-            .replace("`", "")
-            .replace("\"", "\\\"")
-            .replace("<script>", "<script >")
-            .replace("<p>", "< p >")
-            .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Remove URLs from sidebar label
+        val sidebarFormattedName = (recipeDescriptor.escapeDisplayName(EscapeContext.SIDEBAR_LABEL) + editionSuffix)
             .trim()
 
-        val formattedRecipeTitle = (recipeDescriptor?.displayName + editionSuffix)
-            ?.replace("<", "&lt;")
-            ?.replace(">", "&gt;")
-            ?.replace("`&lt;", "`<")
-            ?.replace("&gt;`", ">`")
+        val formattedRecipeTitle = (recipeDescriptor?.escapeDisplayName(EscapeContext.HTML_ENTITIES) + editionSuffix)
             ?.trim()
 
         val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor)
@@ -1631,10 +1612,7 @@ import TabItem from '@theme/TabItem';
                     continue
                 }
 
-                val formattedRecipeDisplayName = recipe.displayName
-                    .replace("<p>", "< p >")
-                    .replace("<script>", "//<script//>")
-                    .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
+                val formattedRecipeDisplayName = recipe.escapeDisplayName(EscapeContext.RECIPE_PAGE)
 
                 if (recipesToIgnore.contains(recipe.name)) {
                     continue
@@ -2338,8 +2316,7 @@ $cliSnippet
             )
 
             for (recipe in recipesWithDataTables) {
-                val formattedDisplayName = recipe.displayName
-                        .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
+                val formattedDisplayName = recipe.escapeDisplayName(EscapeContext.PLAIN)
 
                 writeln("### [${formattedDisplayName}](../recipes/${getRecipePath(recipe)}.md)\n ")
                 writeln("_${recipe.name}_\n")
@@ -2482,7 +2459,7 @@ $cliSnippet
                     writeln("\n_${recipes.size} recipe${if (recipes.size != 1) "s" else ""}_\n")
 
                     for (recipe in recipes) {
-                        val displayName = recipe.displayName.replace("`", "")
+                        val displayName = recipe.escapeDisplayName(EscapeContext.PLAIN)
                         writeln(
                             "* [${displayName}](../recipes/${getRecipePath(recipe)}.md) - _${
                                 recipe.description.replace(
@@ -2550,9 +2527,7 @@ $cliSnippet
                 writeln("## ${packageName}\n")
 
                 for (recipe in recipes.sortedBy { it.displayName }) {
-                    val formattedDisplayName = recipe.displayName
-                        .replace("<script>", "`<script>`")
-                        .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
+                    val formattedDisplayName = recipe.escapeDisplayName(EscapeContext.MARKDOWN_LINK)
 
                     writeln("### [${formattedDisplayName}](../recipes/${getRecipePath(recipe)}.md)\n")
                     writeln("_${recipe.name}_\n")
