@@ -251,11 +251,6 @@ class RecipeMarkdownGenerator : Runnable {
                 recipeOptions.add(ro)
             }
 
-            var recipeDescription = recipeDescriptor.description
-            if (recipeDescriptor.description.isNullOrEmpty()) {
-                recipeDescription = ""
-            }
-
             // Changes something like org.openrewrite.circleci.InstallOrb to https://docs.openrewrite.org/recipes/circleci/installorb
             val docLink = "https://docs.openrewrite.org/recipes/" + getRecipePath(recipeDescriptor)
             val recipeSource = recipeDescriptor.source.toString()
@@ -271,7 +266,7 @@ class RecipeMarkdownGenerator : Runnable {
             val markdownRecipeDescriptor =
                 MarkdownRecipeDescriptor(
                     recipeDescriptor.name,
-                    recipeDescription,
+                    recipeDescriptor.descriptionEscaped(),
                     docLink,
                     recipeOptions,
                     isImperative,
@@ -1057,7 +1052,7 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         val formattedRecipeTitle = (recipeDescriptor.displayNameEscaped() + editionSuffix).trim()
-        val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor)
+        val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor.description)
         val formattedLongRecipeName = recipeDescriptor.name.replace("_".toRegex(), "\\\\_").trim()
 
         val recipeMarkdownPath = getRecipePath(outputPath, recipeDescriptor)
@@ -1080,10 +1075,7 @@ import TabItem from '@theme/TabItem';
             )
 
             newLine()
-
-            if (!isNullOrEmpty(recipeDescriptor.description)) {
-                writeln(formattedRecipeDescription)
-            }
+            writeln(formattedRecipeDescription)
             newLine()
             if (recipeDescriptor.tags.isNotEmpty()) {
                 writeln("### Tags")
@@ -1113,8 +1105,8 @@ import TabItem from '@theme/TabItem';
     }
 
     @Suppress("UNNECESSARY_SAFE_CALL") // Recipes from third parties may lack description
-    private fun getFormattedRecipeDescription(recipeDescriptor: RecipeDescriptor): String {
-        var formattedRecipeDescription = recipeDescriptor?.description ?: ""
+    private fun getFormattedRecipeDescription(description: String): String {
+        var formattedRecipeDescription = description
         val specialCharsOutsideBackticksRegex = Pattern.compile("[<>{}](?=(?:[^`]*`[^`]*`)*[^`]*\$)")
 
         if (formattedRecipeDescription.contains("```. [Source]")) {
@@ -2301,7 +2293,7 @@ $cliSnippet
             for (recipe in recipesWithDataTables) {
                 writeln("### [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md)\n ")
                 writeln("_${recipe.name}_\n")
-                writeln("${recipe.description}\n")
+                writeln("${recipe.descriptionEscaped()}\n")
                 writeln("#### Data tables:\n")
 
                 val filteredDataTables = recipe.dataTables.filter { dataTable ->
@@ -2442,7 +2434,7 @@ $cliSnippet
                     for (recipe in recipes) {
                         writeln(
                             "* [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md) - _${
-                                recipe.description.replace("\n", " ")
+                                recipe.descriptionEscaped()
                             }_"
                         )
                     }
@@ -2506,7 +2498,7 @@ $cliSnippet
                 for (recipe in recipes.sortedBy { it.displayName.replace("`", "") }) {
                     writeln("### [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md)\n")
                     writeln("_${recipe.name}_\n")
-                    writeln("${recipe.description}\n")
+                    writeln("${recipe.descriptionEscaped()}\n")
                 }
             }
         }
