@@ -1115,7 +1115,7 @@ import TabItem from '@theme/TabItem';
             writeSourceLinks(recipeDescriptor, origin)
             writeOptions(recipeDescriptor)
             writeDefinition(recipeDescriptor, origin)
-            writeUsedBy(recipeDescriptor, recipeContainedBy)
+            writeUsedBy(recipeContainedBy[recipeDescriptor.name])
             writeExamples(recipeDescriptor)
             writeUsage(recipeDescriptor, origin)
             writeModerneLink(recipeDescriptor)
@@ -1654,12 +1654,8 @@ import TabItem from '@theme/TabItem';
         }
     }
 
-    private fun BufferedWriter.writeUsedBy(
-        recipeDescriptor: RecipeDescriptor,
-        recipeContainedBy: Map<String, MutableList<RecipeDescriptor>>
-    ) {
-        val parentRecipes = recipeContainedBy[recipeDescriptor.name]
-        if (parentRecipes != null && parentRecipes.isNotEmpty()) {
+    private fun BufferedWriter.writeUsedBy(recipeContainedBy: MutableList<RecipeDescriptor>?) {
+        if (recipeContainedBy != null && recipeContainedBy.isNotEmpty()) {
             //language=markdown
             writeln(
                 """
@@ -1670,25 +1666,8 @@ import TabItem from '@theme/TabItem';
                 
                 """.trimIndent()
             )
-
-            val recipeDepth = getRecipePath(recipeDescriptor).chars().filter { ch: Int -> ch == '/'.code }.count()
-            val pathToRecipesBuilder = StringBuilder()
-            for (i in 0 until recipeDepth) {
-                pathToRecipesBuilder.append("../")
-            }
-            val pathToRecipes = pathToRecipesBuilder.toString()
-
-            for (parentRecipe in parentRecipes.sortedBy { it.displayName }) {
-                val formattedDisplayName = parentRecipe.displayName
-                    .replace("<p>", "< p >")
-                    .replace("<script>", "//<script//>")
-                    .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
-
-                if (recipesToIgnore.contains(parentRecipe.name)) {
-                    continue
-                }
-
-                writeln("* [" + formattedDisplayName + "](" + pathToRecipes + getRecipePath(parentRecipe) + ")")
+            for (recipe in recipeContainedBy.sortedBy { it.displayName }) {
+                writeln("* [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md)")
             }
             newLine()
         }
