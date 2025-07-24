@@ -16,7 +16,6 @@ import org.openrewrite.config.DeclarativeRecipe
 import org.openrewrite.config.Environment
 import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.internal.StringUtils
-import org.openrewrite.internal.StringUtils.isNullOrEmpty
 import picocli.CommandLine
 import picocli.CommandLine.*
 import picocli.CommandLine.Option
@@ -141,7 +140,7 @@ class RecipeMarkdownGenerator : Runnable {
     ): List<EnvironmentData> = runBlocking {
         println("Starting parallel recipe loading...")
         recipeOrigins.entries
-            .chunked(4) // Process in batches of 4 jars
+            .chunked(4) // Process in batches of jars
             .flatMap { batch ->
                 batch.map { recipeOrigin ->
                     async(Dispatchers.IO) {
@@ -196,7 +195,7 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         val dependencies = recipeClasspath.split(";").map(Paths::get).toList()
-        val environmentData : List<EnvironmentData> = loadEnvironmentDataAsync(
+        val environmentData: List<EnvironmentData> = loadEnvironmentDataAsync(
             recipeOrigins,
             dependencies,
             classloader
@@ -259,11 +258,6 @@ class RecipeMarkdownGenerator : Runnable {
                 recipeOptions.add(ro)
             }
 
-            var recipeDescription = recipeDescriptor.description
-            if (recipeDescriptor.description.isNullOrEmpty()) {
-                recipeDescription = ""
-            }
-
             // Changes something like org.openrewrite.circleci.InstallOrb to https://docs.openrewrite.org/recipes/circleci/installorb
             val docLink = "https://docs.openrewrite.org/recipes/" + getRecipePath(recipeDescriptor)
             val recipeSource = recipeDescriptor.source.toString()
@@ -279,7 +273,7 @@ class RecipeMarkdownGenerator : Runnable {
             val markdownRecipeDescriptor =
                 MarkdownRecipeDescriptor(
                     recipeDescriptor.name,
-                    recipeDescription,
+                    recipeDescriptor.description,
                     docLink,
                     recipeOptions,
                     isImperative,
@@ -299,13 +293,17 @@ class RecipeMarkdownGenerator : Runnable {
         createRecipeDescriptorsYaml(markdownArtifacts, allRecipeDescriptors.size)
         createModerneRecipes(outputPath, moderneProprietaryRecipes)
         createRecipesWithDataTables(recipesWithDataTables, outputPath)
-        createScanningRecipes(allRecipes.filter { it is ScanningRecipe<*> && it !is DeclarativeRecipe }, outputPath)
         createRecipeAuthors(allRecipeDescriptors, outputPath)
         createRecipesByTag(allRecipeDescriptors, outputPath)
-        createStandaloneRecipes(allRecipeDescriptors, outputPath)
+        createScanningRecipes(
+            allRecipes.filter { it is ScanningRecipe<*> && it !is DeclarativeRecipe },
+            recipeOrigins, outputPath
+        )
+        createStandaloneRecipes(allRecipeDescriptors, recipeOrigins, outputPath)
 
         // Write the README.md for each category
-        val categories = Category.fromDescriptors(allRecipeDescriptors, allCategoryDescriptors).sortedBy { it.simpleName }
+        val categories =
+            Category.fromDescriptors(allRecipeDescriptors, allCategoryDescriptors).sortedBy { it.simpleName }
         for (category in categories) {
             val categoryIndexPath = outputPath.resolve("recipes/")
             category.writeCategoryIndex(categoryIndexPath)
@@ -563,13 +561,12 @@ class RecipeMarkdownGenerator : Runnable {
                 // Artifact ID
                 writeln("## ${entry.key}\n")
 
-                val sortedEntries = entry.value.sortedBy { it.displayName }
-
-                for (recipe in sortedEntries) {
-                    val formattedDisplayName = recipe.displayName
-                        .replace("<script>", "`<script>`")
-                        .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
-                    writeln("* [${formattedDisplayName}](../recipes/${getRecipePath(recipe)}.md)")
+                for (recipe in entry.value.sortedBy { it.displayName }) {
+                    writeln(
+                        "* [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md) - _${
+                            recipe.descriptionEscaped()
+                        }_"
+                    )
                 }
 
                 writeln("")
@@ -987,15 +984,9 @@ class RecipeMarkdownGenerator : Runnable {
                             if (recipesToIgnore.contains(recipe.name)) {
                                 continue;
                             }
-
-                            val formattedDisplayName = recipe.displayName
-                                .replace("<script>", "\\<script\\>")
-                                .replace("<p>", "< p >")
-                                .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
-
                             // Anything except a relative link ending in .md will be mangled.
                             val localPath = getRecipePath(recipe).substringAfterLast('/')
-                            appendLine("* [${formattedDisplayName}](./$localPath.md)")
+                            appendLine("* [${recipe.displayNameEscaped()}](./$localPath.md)")
                         }
 
                         appendLine()
@@ -1006,14 +997,9 @@ class RecipeMarkdownGenerator : Runnable {
                         appendLine()
 
                         for (recipe in normalRecipes) {
-                            val formattedDisplayName = recipe.displayName
-                                .replace("<script>", "\\<script\\>")
-                                .replace("<p>", "< p >")
-                                .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
-
                             // Anything except a relative link ending in .md will be mangled.
                             val localPath = getRecipePath(recipe).substringAfterLast('/')
-                            appendLine("* [${formattedDisplayName}](./${localPath}.md)")
+                            appendLine("* [${recipe.displayNameEscaped()}](./${localPath}.md)")
                         }
 
                         appendLine()
@@ -1045,12 +1031,8 @@ class RecipeMarkdownGenerator : Runnable {
                     newLine()
 
                     for (recipe in recipes) {
-                        val formattedDisplayName = recipe.displayName
-                            .replace("<", "\\<")
-                            .replace(">", "\\>")
-                            .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
                         val relativePath = getRecipePath(recipe).substringAfterLast('/')
-                        writeln("* [${formattedDisplayName}](./$relativePath.md)")
+                        writeln("* [${recipe.displayNameEscaped()}](./$relativePath.md)")
                     }
                 }
 
@@ -1084,23 +1066,8 @@ class RecipeMarkdownGenerator : Runnable {
             else -> ""
         }
 
-        val sidebarFormattedName = (recipeDescriptor.displayName + editionSuffix)
-            .replace("`", "")
-            .replace("\"", "\\\"")
-            .replace("<script>", "<script >")
-            .replace("<p>", "< p >")
-            .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Remove URLs from sidebar label
-            .trim()
-
-        val formattedRecipeTitle = (recipeDescriptor?.displayName + editionSuffix)
-            ?.replace("<", "&lt;")
-            ?.replace(">", "&gt;")
-            ?.replace("`&lt;", "`<")
-            ?.replace("&gt;`", ">`")
-            ?.trim()
-
-        val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor)
-
+        val formattedRecipeTitle = (recipeDescriptor.displayNameEscaped() + editionSuffix).trim()
+        val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor.description)
         val formattedLongRecipeName = recipeDescriptor.name.replace("_".toRegex(), "\\\\_").trim()
 
         val recipeMarkdownPath = getRecipePath(outputPath, recipeDescriptor)
@@ -1109,7 +1076,7 @@ class RecipeMarkdownGenerator : Runnable {
             write(
                 """
 ---
-sidebar_label: "$sidebarFormattedName"
+sidebar_label: "${formattedRecipeTitle.replace("&#39;", "'")}"
 ---
 
 import Tabs from '@theme/Tabs';
@@ -1123,10 +1090,7 @@ import TabItem from '@theme/TabItem';
             )
 
             newLine()
-
-            if (!isNullOrEmpty(recipeDescriptor.description)) {
-                writeln(formattedRecipeDescription)
-            }
+            writeln(formattedRecipeDescription)
             newLine()
             if (recipeDescriptor.tags.isNotEmpty()) {
                 writeln("### Tags")
@@ -1138,7 +1102,7 @@ import TabItem from '@theme/TabItem';
                         writeln("* [$tag](https://sonarsource.github.io/rspec/#/rspec/S${tag.substring(6)})")
                     } else {
                         val tagAnchor = tag.lowercase().replace(" ", "-")
-                        writeln("* [$tag](../recipes-by-tag#${tagAnchor})")
+                        writeln("* [$tag](/reference/recipes-by-tag#${tagAnchor})")
                     }
                 }
                 newLine()
@@ -1157,8 +1121,8 @@ import TabItem from '@theme/TabItem';
     }
 
     @Suppress("UNNECESSARY_SAFE_CALL") // Recipes from third parties may lack description
-    private fun getFormattedRecipeDescription(recipeDescriptor: RecipeDescriptor): String {
-        var formattedRecipeDescription = recipeDescriptor?.description ?: ""
+    private fun getFormattedRecipeDescription(description: String): String {
+        var formattedRecipeDescription = description
         val specialCharsOutsideBackticksRegex = Pattern.compile("[<>{}](?=(?:[^`]*`[^`]*`)*[^`]*\$)")
 
         if (formattedRecipeDescription.contains("```. [Source]")) {
@@ -1511,7 +1475,7 @@ import TabItem from '@theme/TabItem';
                     ---
                     type: specs.openrewrite.org/v1beta/recipe
                     name: $exampleRecipeName
-                    displayName: ${recipeDescriptor.displayName} example
+                    displayName: ${recipeDescriptor.displayNameEscaped()} example
                     recipeList:
                       - ${recipeDescriptor.name}: 
 
@@ -1532,7 +1496,7 @@ import TabItem from '@theme/TabItem';
                 ---
                 type: specs.openrewrite.org/v1beta/recipe
                 name: $exampleRecipeName
-                displayName: ${recipeDescriptor.displayName} example
+                displayName: ${recipeDescriptor.displayNameEscaped()} example
                 recipeList:
                   - ${recipeDescriptor.name}:
                 
@@ -1641,19 +1605,14 @@ import TabItem from '@theme/TabItem';
                     continue
                 }
 
-                val formattedRecipeDisplayName = recipe.displayName
-                    .replace("<p>", "< p >")
-                    .replace("<script>", "//<script//>")
-                    .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
-
                 if (recipesToIgnore.contains(recipe.name)) {
                     continue
                 }
 
                 if (recipesThatShouldHaveLinksRemoved.contains(recipeDescriptor.name)) {
-                    writeln("* $formattedRecipeDisplayName")
+                    writeln("* ${recipe.displayNameEscaped()}")
                 } else {
-                    writeln("* [" + formattedRecipeDisplayName + "](" + pathToRecipes + getRecipePath(recipe) + ")")
+                    writeln("* [" + recipe.displayNameEscaped() + "](" + pathToRecipes + getRecipePath(recipe) + ")")
                 }
 
                 if (recipe.options.isNotEmpty()) {
@@ -2304,8 +2263,8 @@ $cliSnippet
         }
 
         private fun getRecipePath(recipe: RecipeDescriptor): String =
-            // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
-            // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
+        // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
+        // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
             // docs so that they parse correctly.
             if (recipePathToDocusaurusRenamedPath.containsKey(recipe.name)) {
                 recipePathToDocusaurusRenamedPath[recipe.name]!!
@@ -2388,12 +2347,9 @@ $cliSnippet
             )
 
             for (recipe in recipesWithDataTables) {
-                val formattedDisplayName = recipe.displayName
-                        .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
-
-                writeln("### [${formattedDisplayName}](../recipes/${getRecipePath(recipe)}.md)\n ")
+                writeln("### [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md)\n ")
                 writeln("_${recipe.name}_\n")
-                writeln("${recipe.description}\n")
+                writeln("${recipe.descriptionEscaped()}\n")
                 writeln("#### Data tables:\n")
 
                 val filteredDataTables = recipe.dataTables.filter { dataTable ->
@@ -2409,7 +2365,11 @@ $cliSnippet
         }
     }
 
-    private fun createScanningRecipes(scanningRecipes: List<Recipe>, outputPath: Path) {
+    private fun createScanningRecipes(
+        scanningRecipes: List<Recipe>,
+        recipeOrigins: Map<URI, RecipeOrigin>,
+        outputPath: Path
+    ) {
         val markdown = outputPath.resolve("scanning-recipes.md")
         Files.newBufferedWriter(markdown, StandardOpenOption.CREATE).useAndApply {
             writeln(
@@ -2426,14 +2386,19 @@ $cliSnippet
                 """.trimIndent()
             )
 
-            for (recipe in scanningRecipes) {
-                writeln(
-                    """
-                    ### [${recipe.displayName}](../recipes/${getRecipePath(recipe.descriptor)}.md)
-                    """.trimIndent()
-                )
-                writeln("_${recipe.name}_\n")
-                writeln("${recipe.description}\n")
+
+            val recipesByArtifact = scanningRecipes
+                .groupBy { recipe -> recipeOrigins[recipe.descriptor.source]?.artifactId ?: "other" }
+                .toSortedMap()
+            for ((artifact, recipes) in recipesByArtifact) {
+                writeln("## ${artifact}\n")
+
+                for (recipe in recipes.sortedBy { it.displayName })
+                    writeln(
+                        "* [${recipe.descriptor.displayNameEscaped()}](/recipes/${getRecipePath(recipe.descriptor)}.md) - _${
+                            recipe.descriptor.descriptionEscaped()
+                        }_"
+                    )
             }
         }
     }
@@ -2464,7 +2429,7 @@ $cliSnippet
             )
 
             writeln("**Total authors:** ${allContributors.size}\n")
-            
+
             // Sort authors by number of recipes (descending), then by name for ties
             val sortedAuthors = allContributors.entries.sortedWith(
                 compareByDescending<Map.Entry<String, MutableSet<RecipeDescriptor>>> { it.value.size }
@@ -2474,21 +2439,21 @@ $cliSnippet
             // Create table header
             writeln("| Rank | Author | Number of Recipes |")
             writeln("|------|--------|-------------------|")
-            
+
             // Create table rows
             var rank = 1
             var previousCount = -1
             var actualRank = 1
-            
+
             for ((author, recipes) in sortedAuthors) {
                 val recipeCount = recipes.size
-                
+
                 // Handle ties in ranking
                 if (recipeCount != previousCount) {
                     actualRank = rank
                     previousCount = recipeCount
                 }
-                
+
                 writeln("| $actualRank | $author | $recipeCount |")
                 rank++
             }
@@ -2531,14 +2496,10 @@ $cliSnippet
                     writeln("## ${tag}")
                     writeln("\n_${recipes.size} recipe${if (recipes.size != 1) "s" else ""}_\n")
 
-                    for (recipe in recipes) {
-                        val displayName = recipe.displayName.replace("`", "")
+                    for (recipe in recipes.sortedBy { it.displayName }) {
                         writeln(
-                            "* [${displayName}](../recipes/${getRecipePath(recipe)}.md) - _${
-                                recipe.description.replace(
-                                    "\n",
-                                    " "
-                                )
+                            "* [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md) - _${
+                                recipe.descriptionEscaped()
                             }_"
                         )
                     }
@@ -2548,7 +2509,11 @@ $cliSnippet
         }
     }
 
-    private fun createStandaloneRecipes(allRecipeDescriptors: List<RecipeDescriptor>, outputPath: Path) {
+    private fun createStandaloneRecipes(
+        allRecipeDescriptors: List<RecipeDescriptor>,
+        recipeOrigins: Map<URI, RecipeOrigin>,
+        outputPath: Path
+    ) {
         // Skip if there are no recipes to process
         if (allRecipeDescriptors.isEmpty()) {
             return
@@ -2570,7 +2535,7 @@ $cliSnippet
         // Find all recipes that are NOT in the includedRecipes set
         val standaloneRecipes = allRecipeDescriptors.filterNot { recipe ->
             includedRecipes.contains(recipe.name)
-        }.sortedBy { it.displayName }
+        }.sortedBy { it.displayName.replace("`", "") }
 
         // Write the standalone recipes file
         val standaloneRecipesPath = outputPath.resolve("standalone-recipes.md")
@@ -2586,27 +2551,24 @@ $cliSnippet
 
             writeln(
                 "_This doc contains recipes that are not included as part of any larger composite recipe. " +
-                "These recipes can be run independently and are not bundled with other recipes._\n"
+                        "These recipes can be run independently and are not bundled with other recipes._\n"
             )
 
             writeln("Total standalone recipes: ${standaloneRecipes.size}\n")
 
             // Group by package for better organization
-            val recipesByPackage = standaloneRecipes.groupBy { recipe ->
-                recipe.name.substringBeforeLast('.')
-            }.toSortedMap()
-
-            for ((packageName, recipes) in recipesByPackage) {
-                writeln("## ${packageName}\n")
+            val recipesByArtifact = standaloneRecipes
+                .groupBy { recipe -> recipeOrigins[recipe.source]?.artifactId ?: "other" }
+                .toSortedMap()
+            for ((artifact, recipes) in recipesByArtifact) {
+                writeln("## ${artifact}\n")
 
                 for (recipe in recipes.sortedBy { it.displayName }) {
-                    val formattedDisplayName = recipe.displayName
-                        .replace("<script>", "`<script>`")
-                        .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1") // Removes URLs from the displayName
-
-                    writeln("### [${formattedDisplayName}](../recipes/${getRecipePath(recipe)}.md)\n")
-                    writeln("_${recipe.name}_\n")
-                    writeln("${recipe.description}\n")
+                    writeln(
+                        "* [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md) - _${
+                            recipe.descriptionEscaped()
+                        }_"
+                    )
                 }
             }
         }

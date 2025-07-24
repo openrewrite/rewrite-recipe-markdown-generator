@@ -3,15 +3,35 @@ package org.openrewrite
 import org.openrewrite.config.OptionDescriptor
 import org.openrewrite.config.RecipeDescriptor
 
+fun RecipeDescriptor.displayNameEscaped(): String {
+    return escape(displayName)
+        // Always remove URLs in markdown format [text](url)
+        .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1")
+}
+fun RecipeDescriptor.descriptionEscaped(): String {
+    if (description.isNullOrBlank()) {
+        return ""
+    }
+    return escape(description)
+        .replace("\n", " ")
+        .trim()
+}
+private fun escape(string: String): String = string
+    .replace("&", "&amp;")
+    .replace("<", "&lt;")
+    .replace(">", "&gt;")
+    .replace("\"", "&quot;")
+    .replace("'", "&#39;")
+
 fun RecipeDescriptor.asYaml(): String {
     val s = StringBuilder()
     s.appendLine("""
 ---
 type: specs.openrewrite.org/v1beta/recipe
 name: $name
-displayName: $displayName
+displayName: ${displayNameEscaped()}
 description: |
-  ${description?.replace("\n", "\n  ")?.replace("```. [Source]", "```\n  [Source]") ?: ""}
+  ${descriptionEscaped()}
     """.trimIndent())
     if (tags.isNotEmpty()) {
         s.appendLine("tags:")

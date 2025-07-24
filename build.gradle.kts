@@ -62,6 +62,7 @@ dependencies {
     "recipe"(platform("io.moderne.recipe:moderne-recipe-bom:$rewriteVersion"))
 
     "recipe"("org.openrewrite:rewrite-core")
+    "recipe"("org.openrewrite:rewrite-csharp")
     "recipe"("org.openrewrite:rewrite-gradle")
     "recipe"("org.openrewrite:rewrite-groovy")
     "recipe"("org.openrewrite:rewrite-hcl")
@@ -77,7 +78,6 @@ dependencies {
 
     // Only show the versions of these modules below
 //    "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
-//    "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
@@ -167,7 +167,6 @@ tasks.named<JavaExec>("run").configure {
         // Additional modules whose versions we want to show, but not (yet) their recipes
         dependencies {
             "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
-            "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
             "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
             "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
             "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
