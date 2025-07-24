@@ -140,7 +140,7 @@ class RecipeMarkdownGenerator : Runnable {
     ): List<EnvironmentData> = runBlocking {
         println("Starting parallel recipe loading...")
         recipeOrigins.entries
-            .chunked(2) // Process in batches of jars
+            .chunked(4) // Process in batches of jars
             .flatMap { batch ->
                 batch.map { recipeOrigin ->
                     async(Dispatchers.IO) {
@@ -554,7 +554,11 @@ class RecipeMarkdownGenerator : Runnable {
                 writeln("## ${entry.key}\n")
 
                 for (recipe in entry.value.sortedBy { it.displayName }) {
-                    writeln("* [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md)")
+                    writeln(
+                        "* [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md) - _${
+                            recipe.descriptionEscaped()
+                        }_"
+                    )
                 }
 
                 writeln("")
@@ -2334,12 +2338,12 @@ $cliSnippet
 
 
             val recipesByArtifact = scanningRecipes
-                .groupBy { recipe -> recipeOrigins[recipe.descriptor.source]?.artifactId ?: "unknown artifact" }
+                .groupBy { recipe -> recipeOrigins[recipe.descriptor.source]?.artifactId ?: "other" }
                 .toSortedMap()
             for ((artifact, recipes) in recipesByArtifact) {
                 writeln("## ${artifact}\n")
 
-                for (recipe in recipes)
+                for (recipe in recipes.sortedBy { it.displayName })
                     writeln(
                         "* [${recipe.descriptor.displayNameEscaped()}](/recipes/${getRecipePath(recipe.descriptor)}.md) - _${
                             recipe.descriptor.descriptionEscaped()
@@ -2442,7 +2446,7 @@ $cliSnippet
                     writeln("## ${tag}")
                     writeln("\n_${recipes.size} recipe${if (recipes.size != 1) "s" else ""}_\n")
 
-                    for (recipe in recipes) {
+                    for (recipe in recipes.sortedBy { it.displayName }) {
                         writeln(
                             "* [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md) - _${
                                 recipe.descriptionEscaped()
@@ -2504,12 +2508,12 @@ $cliSnippet
 
             // Group by package for better organization
             val recipesByArtifact = standaloneRecipes
-                .groupBy { recipe -> recipeOrigins[recipe.source]?.artifactId ?: "unknown artifact" }
+                .groupBy { recipe -> recipeOrigins[recipe.source]?.artifactId ?: "other" }
                 .toSortedMap()
             for ((artifact, recipes) in recipesByArtifact) {
                 writeln("## ${artifact}\n")
 
-                for (recipe in recipes.sortedBy { it.displayName.replace("`", "") }) {
+                for (recipe in recipes.sortedBy { it.displayName }) {
                     writeln(
                         "* [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md) - _${
                             recipe.descriptionEscaped()

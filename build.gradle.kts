@@ -167,7 +167,6 @@ tasks.named<JavaExec>("run").configure {
         // Additional modules whose versions we want to show, but not (yet) their recipes
         dependencies {
             "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
-            "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
             "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
             "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
             "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
