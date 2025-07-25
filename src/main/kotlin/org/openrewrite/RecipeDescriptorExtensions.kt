@@ -21,7 +21,6 @@ private fun escape(string: String): String = string
     .replace("<", "&lt;")
     .replace(">", "&gt;")
     .replace("\"", "&quot;")
-    .replace("'", "&#39;")
 
 fun RecipeDescriptor.asYaml(): String {
     val s = StringBuilder()
