@@ -122,7 +122,6 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-nodejs")
     "recipe"("org.openrewrite.recipe:rewrite-okhttp")
     "recipe"("org.openrewrite.recipe:rewrite-openapi")
-    "recipe"("org.openrewrite.recipe:rewrite-program-analysis")
     "recipe"("org.openrewrite.recipe:rewrite-quarkus")
     "recipe"("org.openrewrite.recipe:rewrite-reactive-streams")
     "recipe"("org.openrewrite.recipe:rewrite-rewrite")
@@ -137,6 +136,7 @@ dependencies {
     "recipe"("io.moderne.recipe:rewrite-cryptography")
     "recipe"("io.moderne.recipe:rewrite-devcenter")
     "recipe"("io.moderne.recipe:rewrite-hibernate")
+    "recipe"("io.moderne.recipe:rewrite-program-analysis")
     "recipe"("io.moderne.recipe:rewrite-spring")
     "recipe"("io.moderne.recipe:rewrite-vulncheck")
 }
