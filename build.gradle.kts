@@ -83,6 +83,8 @@ dependencies {
 //    "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
 
+    "recipe"("org.openrewrite:rewrite-program-analysis")
+
     "recipe"("org.openrewrite.recipe:rewrite-all")
     "recipe"("org.openrewrite.meta:rewrite-analysis")
     "recipe"("org.openrewrite.recipe:rewrite-ai-search")
