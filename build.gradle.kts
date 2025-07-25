@@ -83,8 +83,6 @@ dependencies {
 //    "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
 
-    "recipe"("org.openrewrite:rewrite-program-analysis")
-
     "recipe"("org.openrewrite.recipe:rewrite-all")
     "recipe"("org.openrewrite.meta:rewrite-analysis")
     "recipe"("org.openrewrite.recipe:rewrite-ai-search")
@@ -124,6 +122,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-nodejs")
     "recipe"("org.openrewrite.recipe:rewrite-okhttp")
     "recipe"("org.openrewrite.recipe:rewrite-openapi")
+    "recipe"("org.openrewrite.recipe:rewrite-program-analysis")
     "recipe"("org.openrewrite.recipe:rewrite-quarkus")
     "recipe"("org.openrewrite.recipe:rewrite-reactive-streams")
     "recipe"("org.openrewrite.recipe:rewrite-rewrite")
