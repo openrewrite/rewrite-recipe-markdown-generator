@@ -17,8 +17,7 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
-    maven { url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/") }
+    maven { url = uri("https://central.sonatype.org/content/repositories/snapshots/") }
     maven { url = uri("https://maven.diffblue.com/snapshot") }
     gradlePluginPortal()
 }
