@@ -121,10 +121,6 @@ class RecipeMarkdownGenerator : Runnable {
     )
 
     override fun run() {
-        // Load recipe details into memory
-        val loadResult = RecipeLoader().loadRecipes(recipeSources, recipeClasspath)
-        val recipeOrigins = loadResult.recipeOrigins
-
         val outputPath = Paths.get(destinationDirectoryName)
         val recipesPath = outputPath.resolve("recipes")
         try {
@@ -132,6 +128,8 @@ class RecipeMarkdownGenerator : Runnable {
         } catch (e: IOException) {
             throw RuntimeException(e)
         }
+
+        val recipeOrigins: Map<URI, RecipeOrigin> = RecipeOrigin.parse(recipeSources)
 
         // Write latest-versions-of-every-openrewrite-module.md, for all recipes
         createLatestVersionsJs(outputPath, recipeOrigins)
@@ -141,6 +139,8 @@ class RecipeMarkdownGenerator : Runnable {
             return
         }
 
+        // Load recipe details into memory
+        val loadResult = RecipeLoader().loadRecipes(recipeOrigins, recipeClasspath)
         val allRecipeDescriptors = loadResult.allRecipeDescriptors
         val allCategoryDescriptors = loadResult.allCategoryDescriptors
         val allRecipes = loadResult.allRecipes

@@ -43,12 +43,9 @@ class RecipeLoader {
      * Load recipes from the specified sources and classpath
      */
     fun loadRecipes(
-        recipeSources: String,
+        recipeOrigins: Map<URI, RecipeOrigin>,
         recipeClasspath: String
     ): RecipeLoadResult {
-        // Parse recipe origins
-        val recipeOrigins: Map<URI, RecipeOrigin> = RecipeOrigin.parse(recipeSources)
-
         // Create classloader from classpath
         val classloader = recipeClasspath.split(";")
             .map(Paths::get)
