@@ -8,6 +8,7 @@ import org.openrewrite.config.CategoryDescriptor
 import org.openrewrite.config.Environment
 import org.openrewrite.config.RecipeDescriptor
 import java.net.URI
+import java.net.URL
 import java.net.URLClassLoader
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -17,7 +18,7 @@ import kotlin.io.path.toPath
 /**
  * Data class to hold both descriptors and recipes loaded from an environment
  */
-data class EnvironmentData(
+private data class EnvironmentData(
     val recipeDescriptors: Collection<RecipeDescriptor>,
     val categoryDescriptors: Collection<CategoryDescriptor>,
     val recipes: Collection<Recipe>
@@ -45,12 +46,17 @@ class RecipeLoader {
         recipeSources: String,
         recipeClasspath: String
     ): RecipeLoadResult {
-        // Create classloader from classpath
-        val classloader = createClassLoader(recipeClasspath)
-        
         // Parse recipe origins
         val recipeOrigins: Map<URI, RecipeOrigin> = RecipeOrigin.parse(recipeSources)
-        
+
+        // Create classloader from classpath
+        val classloader = recipeClasspath.split(";")
+            .map(Paths::get)
+            .map(Path::toUri)
+            .map(URI::toURL)
+            .toTypedArray<URL>()
+            .let { URLClassLoader(it) }
+
         // Add manifest information
         addInfosFromManifests(recipeOrigins, classloader)
         
@@ -66,19 +72,7 @@ class RecipeLoader {
             recipeOrigins = recipeOrigins
         )
     }
-    
-    /**
-     * Create a URLClassLoader from the classpath string
-     */
-    private fun createClassLoader(recipeClasspath: String): ClassLoader {
-        return recipeClasspath.split(";")
-            .map(Paths::get)
-            .map(Path::toUri)
-            .map(URI::toURL)
-            .toTypedArray()
-            .let { URLClassLoader(it) }
-    }
-    
+
     /**
      * Process recipe jars in parallel and collect both descriptors and recipes
      */

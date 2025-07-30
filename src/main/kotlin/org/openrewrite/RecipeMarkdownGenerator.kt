@@ -9,7 +9,6 @@ import com.github.difflib.DiffUtils
 import com.github.difflib.patch.Patch
 import org.openrewrite.config.CategoryDescriptor
 import org.openrewrite.config.DeclarativeRecipe
-import org.openrewrite.config.Environment
 import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.internal.StringUtils
 import picocli.CommandLine
@@ -29,7 +28,6 @@ import java.util.*
 import java.util.regex.Pattern
 import java.util.stream.Collectors.joining
 
-import kotlin.io.path.toPath
 import kotlin.system.exitProcess
 
 
@@ -122,11 +120,9 @@ class RecipeMarkdownGenerator : Runnable {
         "org.openrewrite.table.RecipeRunStats"
     )
 
-    private val recipeLoader = RecipeLoader()
-
     override fun run() {
         // Load recipe details into memory
-        val loadResult = recipeLoader.loadRecipes(recipeSources, recipeClasspath)
+        val loadResult = RecipeLoader().loadRecipes(recipeSources, recipeClasspath)
         val recipeOrigins = loadResult.recipeOrigins
 
         val outputPath = Paths.get(destinationDirectoryName)
