@@ -121,6 +121,13 @@ class RecipeMarkdownGenerator : Runnable {
     )
 
     override fun run() {
+<<<<<<< HEAD
+=======
+        // Load recipe details into memory
+        val loadResult = RecipeLoader().loadRecipes(recipeSources, recipeClasspath)
+        val recipeOrigins = loadResult.recipeOrigins
+
+>>>>>>> 09fd618 (Delete bogus tests)
         val outputPath = Paths.get(destinationDirectoryName)
         val recipesPath = outputPath.resolve("recipes")
         try {

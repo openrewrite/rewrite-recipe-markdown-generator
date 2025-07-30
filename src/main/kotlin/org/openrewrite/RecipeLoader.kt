@@ -46,6 +46,12 @@ class RecipeLoader {
         recipeOrigins: Map<URI, RecipeOrigin>,
         recipeClasspath: String
     ): RecipeLoadResult {
+<<<<<<< HEAD
+=======
+        // Parse recipe origins
+        val recipeOrigins: Map<URI, RecipeOrigin> = RecipeOrigin.parse(recipeSources)
+
+>>>>>>> 09fd618 (Delete bogus tests)
         // Create classloader from classpath
         val classloader = recipeClasspath.split(";")
             .map(Paths::get)
