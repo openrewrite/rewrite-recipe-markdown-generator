@@ -11,8 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import org.openrewrite.config.CategoryDescriptor
 import org.openrewrite.config.DeclarativeRecipe
 import org.openrewrite.config.Environment
@@ -683,59 +681,6 @@ class RecipeMarkdownGenerator : Runnable {
         return changedRecipes
     }
 
-    private fun getLatestStableVersion(): String? {
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url("https://api.github.com/repos/moderneinc/moderne-cli-releases/releases/latest")
-            .build()
-        
-        return try {
-            client.newCall(request).execute().use { response ->
-                if (response.isSuccessful) {
-                    val responseBody = response.body?.string() ?: return null
-                    val mapper = ObjectMapper()
-                    val json = mapper.readTree(responseBody)
-                    json.get("tag_name")?.asText()
-                } else {
-                    System.err.println("Failed to get latest version from GitHub: ${response.code}")
-                    null
-                }
-            }
-        } catch (e: Exception) {
-            System.err.println("Failed to get latest version from GitHub: ${e.message}")
-            null
-        }
-    }
-
-    private fun getLatestStagingVersion(): String? {
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url("https://api.github.com/repos/moderneinc/moderne-cli-releases/releases")
-            .build()
-        
-        return try {
-            client.newCall(request).execute().use { response ->
-                if (response.isSuccessful) {
-                    val responseBody = response.body?.string() ?: return null
-                    val mapper = ObjectMapper()
-                    val releases = mapper.readTree(responseBody)
-                    // These are in order from newest to oldest
-                    if (releases.isArray && releases.size() > 0) {
-                        releases[0].get("tag_name")?.asText()
-                    } else {
-                        null
-                    }
-                } else {
-                    System.err.println("Failed to fetch latest staging version: ${response.code}")
-                    null
-                }
-            }
-        } catch (e: Exception) {
-            System.err.println("Failed to fetch latest staging version: ${e.message}")
-            null
-        }
-    }
-
     private fun buildChangelog(
         newArtifacts: TreeSet<String>,
         removedArtifacts: TreeSet<String>,
@@ -747,11 +692,6 @@ class RecipeMarkdownGenerator : Runnable {
     ) {
         // Get the date to label the changelog
         val formatted = getDateFormattedYYYYMMDD()
-
-        // Get the latest staging and stable versions of the CLI
-        val stagingVersion = getLatestStagingVersion()
-        val stableVersion = getLatestStableVersion()
-
         val changelog: File = if (deployType == "release") {
             File("src/main/resources/${rewriteBomVersion.replace('.', '-')}-Release.md")
         } else {
@@ -786,10 +726,12 @@ class RecipeMarkdownGenerator : Runnable {
 
             changelog.appendText("## Corresponding CLI version\n\n")
 
+            // Get the latest staging and stable versions of the CLI
+            val stagingVersion = getLatestStagingVersion()
+            val stableVersion = getLatestStableVersion()
             if (stableVersion != null) {
                 changelog.appendText("* Stable CLI version `${stableVersion}`\n")
             }
-
             if (stagingVersion != null) {
                 changelog.appendText("* Staging CLI version: `${stagingVersion}`\n\n")
             }
