@@ -33,7 +33,8 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.jar.Manifest
 import java.util.regex.Pattern
-import java.util.stream.Collectors
+import java.util.stream.Collectors.joining
+
 import kotlin.io.path.toPath
 import kotlin.system.exitProcess
 
@@ -1718,7 +1719,7 @@ import TabItem from '@theme/TabItem';
                         } else {
                             "[" + contributor.name + "](mailto:" + contributor.email + ")"
                         }
-                    }.collect(Collectors.joining(", "))
+                    }.collect(joining(", "))
             )
         }
     }
