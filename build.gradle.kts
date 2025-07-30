@@ -53,6 +53,7 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2")
     implementation("io.github.java-diff-utils:java-diff-utils:4.11")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.+")
