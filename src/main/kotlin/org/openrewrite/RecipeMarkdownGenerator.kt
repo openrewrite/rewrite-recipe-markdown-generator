@@ -7,10 +7,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.Patch
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.runBlocking
 import org.openrewrite.config.CategoryDescriptor
 import org.openrewrite.config.DeclarativeRecipe
 import org.openrewrite.config.Environment
@@ -23,7 +19,6 @@ import java.io.BufferedWriter
 import java.io.File
 import java.io.IOException
 import java.net.URI
-import java.net.URLClassLoader
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -31,7 +26,6 @@ import java.nio.file.StandardOpenOption
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.jar.Manifest
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 import kotlin.io.path.toPath
@@ -127,58 +121,12 @@ class RecipeMarkdownGenerator : Runnable {
         "org.openrewrite.table.RecipeRunStats"
     )
 
-    /** Data class to hold both descriptors and recipes */
-    data class EnvironmentData(
-        val recipeDescriptors: Collection<RecipeDescriptor>,
-        val categoryDescriptors: Collection<CategoryDescriptor>,
-        val recipes: Collection<Recipe>
-    )
-
-    // Process recipe jars in parallel and collect both descriptors and recipes
-    fun loadEnvironmentDataAsync(
-        recipeOrigins: Map<URI, RecipeOrigin>,
-        dependencies: List<Path>,
-        classloader: ClassLoader
-    ): List<EnvironmentData> = runBlocking {
-        println("Starting parallel recipe loading...")
-        recipeOrigins.entries
-            .chunked(4) // Process in batches of jars
-            .flatMap { batch ->
-                batch.map { recipeOrigin ->
-                    async(Dispatchers.IO) {
-                        println("Processing ${recipeOrigin.key.toPath().fileName}")
-                        // Create a separate environment for each jar
-                        val batchEnvBuilder = Environment.builder()
-                        // If you are running this with an old version of Rewrite (for diff log purposes), you'll need
-                        // to update the below line to look like this instead:
-                        // batchEnvBuilder.scanJar(recipeOrigin.key.toPath(), classloader)
-                        batchEnvBuilder.scanJar(recipeOrigin.key.toPath(), dependencies, classloader)
-                        val batchEnv = batchEnvBuilder.build()
-                        EnvironmentData(
-                            batchEnv.listRecipeDescriptors(),
-                            batchEnv.listCategoryDescriptors(),
-                            batchEnv.listRecipes()
-                        ).also {
-                            println("Loaded ${it.recipeDescriptors.size} recipe descriptors from ${recipeOrigin.key.toPath().fileName}")
-                        }
-                    }
-                }.awaitAll()
-            }.also {
-                println("Finished loading all recipes.")
-            }
-    }
+    private val recipeLoader = RecipeLoader()
 
     override fun run() {
         // Load recipe details into memory
-        val classloader = recipeClasspath.split(";")
-            .map(Paths::get)
-            .map(Path::toUri)
-            .map(URI::toURL)
-            .toTypedArray()
-            .let { URLClassLoader(it) }
-
-        val recipeOrigins: Map<URI, RecipeOrigin> = RecipeOrigin.parse(recipeSources)
-        addInfosFromManifests(recipeOrigins, classloader)
+        val loadResult = recipeLoader.loadRecipes(recipeSources, recipeClasspath)
+        val recipeOrigins = loadResult.recipeOrigins
 
         val outputPath = Paths.get(destinationDirectoryName)
         val recipesPath = outputPath.resolve("recipes")
@@ -196,17 +144,9 @@ class RecipeMarkdownGenerator : Runnable {
             return
         }
 
-        val dependencies = recipeClasspath.split(";").map(Paths::get).toList()
-        val environmentData: List<EnvironmentData> = loadEnvironmentDataAsync(
-            recipeOrigins,
-            dependencies,
-            classloader
-        )
-
-        // Combine all the results
-        val allRecipeDescriptors = environmentData.flatMap { it.recipeDescriptors }
-        val allCategoryDescriptors = environmentData.flatMap { it.categoryDescriptors }
-        val allRecipes = environmentData.flatMap { it.recipes }
+        val allRecipeDescriptors = loadResult.allRecipeDescriptors
+        val allCategoryDescriptors = loadResult.allCategoryDescriptors
+        val allRecipes = loadResult.allRecipes
 
         println("Found ${allRecipeDescriptors.size} descriptor(s).")
 
@@ -372,49 +312,6 @@ class RecipeMarkdownGenerator : Runnable {
         mapper.writeValue(File(recipeDescriptorFile), markdownArtifacts)
     }
 
-    private fun addInfosFromManifests(recipeOrigins: Map<URI, RecipeOrigin>, cl: ClassLoader) {
-        val mfInfos: Map<URI, Pair<License, String>> = cl.getResources("META-INF/MANIFEST.MF").asSequence()
-            .filter { it.path != null }
-            .map {
-                Pair(
-                    URI(it.path.substringBeforeLast("!")),
-                    Manifest(it.openStream()).mainAttributes
-                )
-            }
-            .map { (p, attr) ->
-                Pair(
-                    p,
-                    Triple(
-                        Licenses.get(
-                            attr.getValue("License-Url") ?: Licenses.Unknown.uri.toString(),
-                            attr.getValue("License-Name") ?: Licenses.Unknown.name
-                        ),
-                        attr.getValue("Module-Origin")?.substringBefore(".git") ?: "",
-                        attr.getValue("Module-Source")?.removePrefix("/")
-                    )
-                )
-            }
-            .filter { it.second.second.startsWith("http") }
-            .associate { (path, mfValues) ->
-                Pair(
-                    path,
-                    Pair(
-                        mfValues.first,
-                        if (mfValues.second.isNotEmpty()) "${mfValues.second}/blob/main/${mfValues.third ?: ""}" else ""
-                    )
-                )
-            }
-
-        recipeOrigins.forEach {
-            val license: License? = mfInfos[it.key]?.first
-            if (license != null) {
-                it.value.license = license
-            } else {
-                println("Unable to determine License for ${it.value}")
-            }
-            it.value.repositoryUrl = mfInfos[it.key]?.second ?: ""
-        }
-    }
 
     private fun createLatestVersionsMarkdown(
         outputPath: Path,
