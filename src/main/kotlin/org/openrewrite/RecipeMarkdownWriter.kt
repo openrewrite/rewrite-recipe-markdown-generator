@@ -12,13 +12,12 @@ import java.nio.file.StandardOpenOption
 import java.util.regex.Pattern
 import java.util.stream.Collectors.joining
 
-class RecipeMarkdownWriter() {
+class RecipeMarkdownWriter(val recipeContainedBy: MutableMap<String, MutableSet<RecipeDescriptor>>) {
 
     fun writeRecipe(
         recipeDescriptor: RecipeDescriptor,
         outputPath: Path,
-        origin: RecipeOrigin,
-        recipeContainedBy: Map<String, MutableSet<RecipeDescriptor>>
+        origin: RecipeOrigin
     ) {
         val editionSuffix = when (recipeDescriptor.name) {
             "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4" -> " (Moderne Edition)"

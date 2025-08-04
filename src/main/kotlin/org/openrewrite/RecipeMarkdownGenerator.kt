@@ -139,7 +139,7 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         // Create the recipe docs
-        val recipeMarkdownWriter = RecipeMarkdownWriter()
+        val recipeMarkdownWriter = RecipeMarkdownWriter(recipeContainedBy)
         for (recipeDescriptor in allRecipeDescriptors) {
             var origin: RecipeOrigin?
             var rawUri = recipeDescriptor.source.toString()
@@ -156,7 +156,7 @@ class RecipeMarkdownGenerator : Runnable {
                 origin = recipeOrigins[jarOnlyUri]
             }
             requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeDescriptor.source }
-            recipeMarkdownWriter.writeRecipe(recipeDescriptor, recipesPath, origin, recipeContainedBy)
+            recipeMarkdownWriter.writeRecipe(recipeDescriptor, recipesPath, origin)
 
             val filteredDataTables = recipeDescriptor.dataTables.filter { dataTable ->
                 dataTable.name !in dataTablesToIgnore
