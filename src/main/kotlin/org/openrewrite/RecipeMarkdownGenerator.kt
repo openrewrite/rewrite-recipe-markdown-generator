@@ -188,7 +188,11 @@ class RecipeMarkdownGenerator : Runnable {
             markdownArtifact.markdownRecipeDescriptors[recipeDescriptor.name] = markdownRecipeDescriptor
         }
 
-        // Create various additional files
+        // Write the README.md for each category
+        CategoryWriter(allRecipeDescriptors, allCategoryDescriptors)
+            .writeCategories(outputPath)
+
+        // Create changelog markdown, and update tracking file
         ChangelogWriter().createRecipeDescriptorsYaml(
             markdownArtifacts,
             allRecipeDescriptors.size,
@@ -206,10 +210,6 @@ class RecipeMarkdownGenerator : Runnable {
             recipeOrigins
         )
         listWriter.createStandaloneRecipes(recipeContainedBy, recipeOrigins)
-
-        // Write the README.md for each category
-        CategoryWriter(allRecipeDescriptors, allCategoryDescriptors)
-            .writeCategories(outputPath)
     }
 
 
