@@ -9,7 +9,6 @@ import java.io.BufferedWriter
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
-import java.util.*
 import java.util.regex.Pattern
 import java.util.stream.Collectors.joining
 
@@ -31,7 +30,7 @@ class RecipeMarkdownWriter() {
         val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor.description)
         val formattedLongRecipeName = recipeDescriptor.name.replace("_".toRegex(), "\\\\_").trim()
 
-        val recipeMarkdownPath = getRecipePath(outputPath, recipeDescriptor)
+        val recipeMarkdownPath = outputPath.resolve(RecipeMarkdownGenerator.getRecipePath(recipeDescriptor) + ".md")
         Files.createDirectories(recipeMarkdownPath.parent)
         Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE).useAndApply {
             write(
@@ -545,7 +544,7 @@ import TabItem from '@theme/TabItem';
                 <TabItem value="recipe-list" label="Recipe List" >
                 """.trimIndent()
             )
-            val recipeDepth = getRecipePath(recipeDescriptor).chars().filter { ch: Int -> ch == '/'.code }.count()
+            val recipeDepth = RecipeMarkdownGenerator.getRecipePath(recipeDescriptor).chars().filter { ch: Int -> ch == '/'.code }.count()
             val pathToRecipesBuilder = StringBuilder()
             for (i in 0 until recipeDepth) {
                 pathToRecipesBuilder.append("../")
@@ -569,7 +568,11 @@ import TabItem from '@theme/TabItem';
                 if (recipesThatShouldHaveLinksRemoved.contains(recipeDescriptor.name)) {
                     writeln("* ${recipe.displayNameEscaped()}")
                 } else {
-                    writeln("* [" + recipe.displayNameEscaped() + "](" + pathToRecipes + getRecipePath(recipe) + ")")
+                    writeln(
+                        "* [" + recipe.displayNameEscaped() + "](" + pathToRecipes + RecipeMarkdownGenerator.getRecipePath(
+                            recipe
+                        ) + ")"
+                    )
                 }
 
                 if (recipe.options.isNotEmpty()) {
@@ -620,7 +623,7 @@ import TabItem from '@theme/TabItem';
                 """.trimIndent()
             )
             recipeContainedBy
-                .map { "* [${it.displayNameEscaped()}](/recipes/${getRecipePath(it)}.md)" }
+                .map { "* [${it.displayNameEscaped()}](/recipes/${RecipeMarkdownGenerator.getRecipePath(it)}.md)" }
                 .toSet()
                 .sorted()
                 .forEach { recipe -> writeln(recipe) }
@@ -1179,51 +1182,5 @@ $cliSnippet
             } else {
                 value.toString()
             }
-
-        fun getRecipePath(recipe: RecipeDescriptor): String =
-        // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
-        // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
-            // docs so that they parse correctly.
-            if (recipePathToDocusaurusRenamedPath.containsKey(recipe.name)) {
-                recipePathToDocusaurusRenamedPath[recipe.name]!!
-            } else if (recipe.name == "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4") {
-                // The spring boot recipes clashes with one another so let's make them distinct
-                "java/spring/boot3/upgradespringboot_3_4-moderne-edition"
-            } else if (recipe.name == "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4") {
-                "java/spring/boot3/upgradespringboot_3_4-community-edition"
-            } else if (recipe.name.startsWith("org.openrewrite")) {
-                // If the recipe path only has two periods, it's part of the core recipes and should be adjusted accordingly.
-                if (recipe.name.count { it == '.' } == 2) {
-                    "core/" + recipe.name
-                        .substring(16)
-                        .lowercase(Locale.getDefault())
-                } else {
-                    recipe.name.substring(16).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
-                }
-            } else if (recipe.name.startsWith("io.moderne")) {
-                recipe.name.substring(11).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
-            } else if (
-                recipe.name.startsWith("ai.timefold") ||
-                recipe.name.startsWith("com.oracle") ||
-                recipe.name.startsWith("io.quarkus") ||
-                recipe.name.startsWith("io.quakus") ||
-                recipe.name.startsWith("org.apache") ||
-                recipe.name.startsWith("org.axonframework") ||
-                recipe.name.startsWith("software.amazon.awssdk") ||
-                recipe.name.startsWith("tech.picnic")
-            ) {
-                recipe.name.replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
-            } else {
-                throw RuntimeException("Recipe package unrecognized: ${recipe.name}")
-            }
-
-        private val recipePathToDocusaurusRenamedPath: Map<String, String> = mapOf(
-            "org.openrewrite.java.testing.assertj.Assertj" to "java/testing/assertj/assertj-best-practices",
-            "org.openrewrite.java.migrate.javaee7" to "java/migrate/javaee7-recipe",
-            "org.openrewrite.java.migrate.javaee8" to "java/migrate/javaee8-recipe"
-        )
-
-        fun getRecipePath(recipesPath: Path, recipeDescriptor: RecipeDescriptor) =
-            recipesPath.resolve(getRecipePath(recipeDescriptor) + ".md")
     }
 }

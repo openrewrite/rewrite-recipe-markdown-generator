@@ -497,7 +497,7 @@ class RecipeMarkdownGenerator : Runnable {
             }
         }
 
-        private fun getRecipePath(recipe: RecipeDescriptor): String =
+        fun getRecipePath(recipe: RecipeDescriptor): String =
         // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
         // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
             // docs so that they parse correctly.
