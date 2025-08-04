@@ -10,6 +10,8 @@ import java.nio.file.StandardOpenOption
 import java.util.*
 
 class ListsOfRecipesWriter(
+    val allRecipeDescriptors: List<RecipeDescriptor>,
+    val recipeContainedBy: MutableMap<String, MutableSet<RecipeDescriptor>>,
     val dataTablesToIgnore: List<String>,
     val outputPath: Path
 ) {
@@ -100,10 +102,10 @@ class ListsOfRecipesWriter(
         }
     }
 
-    fun createRecipeAuthors(recipeDescriptors: List<RecipeDescriptor>) {
+    fun createRecipeAuthors() {
         // Collect contributors
         val allContributors = TreeMap<String, MutableSet<RecipeDescriptor>>()
-        for (recipeDescriptor in recipeDescriptors) {
+        for (recipeDescriptor in allRecipeDescriptors) {
             for (contributor in recipeDescriptor.contributors) {
                 val recipeSet = allContributors.computeIfAbsent(contributor.name) { mutableSetOf() }
                 recipeSet.add(recipeDescriptor)
@@ -157,7 +159,7 @@ class ListsOfRecipesWriter(
         }
     }
 
-    fun createRecipesByTag(allRecipeDescriptors: List<RecipeDescriptor>) {
+    fun createRecipesByTag() {
         val tagToRecipes = TreeMap<String, TreeSet<RecipeDescriptor>>(String.CASE_INSENSITIVE_ORDER)
 
         // Collect all tags and their associated recipes
@@ -211,9 +213,12 @@ class ListsOfRecipesWriter(
     }
 
     fun createStandaloneRecipes(
-        standaloneRecipes: List<RecipeDescriptor>,
         recipeOrigins: Map<URI, RecipeOrigin>
     ) {
+        val standaloneRecipes = allRecipeDescriptors.filterNot { recipe ->
+            recipeContainedBy.contains(recipe.name)
+        }
+
         // Skip if there are no recipes to process
         if (standaloneRecipes.isEmpty()) {
             return

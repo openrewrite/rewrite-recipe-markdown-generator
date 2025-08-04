@@ -212,21 +212,16 @@ class RecipeMarkdownGenerator : Runnable {
         )
 
         // Write lists of recipes into various files
-        val listWriter = ListsOfRecipesWriter(dataTablesToIgnore, outputPath)
+        val listWriter = ListsOfRecipesWriter(allRecipeDescriptors, recipeContainedBy, dataTablesToIgnore, outputPath)
         listWriter.createModerneRecipes(moderneProprietaryRecipes)
         listWriter.createRecipesWithDataTables(recipesWithDataTables)
-        listWriter.createRecipeAuthors(allRecipeDescriptors)
-        listWriter.createRecipesByTag(allRecipeDescriptors)
+        listWriter.createRecipeAuthors()
+        listWriter.createRecipesByTag()
         listWriter.createScanningRecipes(
             allRecipes.filter { it is ScanningRecipe<*> && it !is DeclarativeRecipe },
             recipeOrigins
         )
-        listWriter.createStandaloneRecipes(
-            allRecipeDescriptors.filterNot { recipe ->
-                recipeContainedBy
-                    .contains(recipe.name)
-            }, recipeOrigins
-        )
+        listWriter.createStandaloneRecipes(recipeOrigins)
 
         // Write the README.md for each category
         CategoryWriter(allRecipeDescriptors, allCategoryDescriptors)
