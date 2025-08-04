@@ -16,22 +16,13 @@ class ChangelogWriter {
     fun createRecipeDescriptorsYaml(
         markdownArtifacts: TreeMap<String, MarkdownRecipeArtifact>,
         recipeCount: Int,
-        deployType: String,
-        rewriteBomVersion: String,
-        diffFileName: String
+        rewriteBomVersion: String
     ) {
         val mapper = ObjectMapper(YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER))
         mapper.registerKotlinModule()
 
-        // Location of the recipe metadata from previous runs
-        var recipeDescriptorFile = "src/main/resources/recipeDescriptors.yml"
-        if (deployType == "snapshot") {
-            recipeDescriptorFile = "src/main/resources/snapshotRecipeDescriptors.yml"
-        } else if (deployType == "diff") {
-            recipeDescriptorFile = "src/main/resources/diffRecipeDescriptors.yml"
-        }
-
         // Read in the old saved recipes for comparison with the latest release
+        val recipeDescriptorFile = "src/main/resources/recipeDescriptors.yml"
         val oldArtifacts: TreeMap<String, MarkdownRecipeArtifact> =
             mapper.readValue(Path.of(recipeDescriptorFile).toFile())
 
@@ -45,27 +36,21 @@ class ChangelogWriter {
 
         val changedRecipes = getChangedRecipes(markdownArtifacts, oldArtifacts, newRecipes, removedRecipes)
 
-        if (deployType == "diff") {
-            buildDiffLog(newRecipes, diffFileName)
-        } else {
-            // Create the changelog itself if there are any changes
-            if (newArtifacts.isNotEmpty() ||
-                removedArtifacts.isNotEmpty() ||
-                newRecipes.isNotEmpty() ||
-                removedRecipes.isNotEmpty() ||
-                changedRecipes.isNotEmpty()
-            ) {
-                buildChangelog(
-                    newArtifacts,
-                    removedArtifacts,
-                    newRecipes,
-                    removedRecipes,
-                    changedRecipes,
-                    deployType,
-                    recipeCount,
-                    rewriteBomVersion
-                )
-            }
+        if (newArtifacts.isNotEmpty() ||
+            removedArtifacts.isNotEmpty() ||
+            newRecipes.isNotEmpty() ||
+            removedRecipes.isNotEmpty() ||
+            changedRecipes.isNotEmpty()
+        ) {
+            buildChangelog(
+                newArtifacts,
+                removedArtifacts,
+                newRecipes,
+                removedRecipes,
+                changedRecipes,
+                recipeCount,
+                rewriteBomVersion
+            )
         }
 
         // Now that we've compared the versions and built the changelog,
@@ -79,55 +64,41 @@ class ChangelogWriter {
         newRecipes: TreeSet<MarkdownRecipeDescriptor>,
         removedRecipes: TreeSet<MarkdownRecipeDescriptor>,
         changedRecipes: TreeSet<ChangedRecipe>,
-        deployType: String,
         recipeCount: Int,
         rewriteBomVersion: String
     ) {
         // Get the date to label the changelog
         val formatted = getDateFormattedYYYYMMDD()
-        val changelog: File = if (deployType == "release") {
-            File("src/main/resources/${rewriteBomVersion.replace('.', '-')}-Release.md")
-        } else {
-            File("src/main/resources/snapshot-CHANGELOG-$formatted.md")
-        }
+        val changelog: File = File("src/main/resources/${rewriteBomVersion.replace('.', '-')}-Release.md")
 
         // Clear the file in case this is being generated multiple times
         changelog.writeText("")
 
-        if (deployType == "snapshot") {
-            changelog.appendText("# Snapshot ($formatted)")
+        changelog.appendText(
+            """
+        ---
+        description: What's changed in OpenRewrite version ${rewriteBomVersion}.
+        ---
 
-            changelog.appendText("\n\n_Total recipe count: ${recipeCount}_")
-            changelog.appendText("\n\n:::info")
-            changelog.appendText("\nWant to learn how to use snapshot versions in your project? Check out our [snapshot version guide](/reference/snapshot-instructions.md).")
-            changelog.appendText("\n:::\n\n")
-        } else {
-            changelog.appendText(
-                """
-            ---
-            description: What's changed in OpenRewrite version ${rewriteBomVersion}.
-            ---
+        """.trimIndent()
+        )
+        changelog.appendText("\n# $rewriteBomVersion release ($formatted)")
 
-            """.trimIndent()
-            )
-            changelog.appendText("\n# $rewriteBomVersion release ($formatted)")
+        changelog.appendText("\n\n_Total recipe count: ${recipeCount}_")
+        changelog.appendText("\n\n:::info")
+        changelog.appendText("\nThis changelog only shows what recipes have been added, removed, or changed. OpenRewrite may do releases that do not include these types of changes. To see these changes, please go to the [releases page](https://github.com/openrewrite/rewrite/releases).")
+        changelog.appendText("\n:::\n\n")
 
-            changelog.appendText("\n\n_Total recipe count: ${recipeCount}_")
-            changelog.appendText("\n\n:::info")
-            changelog.appendText("\nThis changelog only shows what recipes have been added, removed, or changed. OpenRewrite may do releases that do not include these types of changes. To see these changes, please go to the [releases page](https://github.com/openrewrite/rewrite/releases).")
-            changelog.appendText("\n:::\n\n")
+        changelog.appendText("## Corresponding CLI version\n\n")
 
-            changelog.appendText("## Corresponding CLI version\n\n")
-
-            // Get the latest staging and stable versions of the CLI
-            val stagingVersion = getLatestStagingVersion()
-            val stableVersion = getLatestStableVersion()
-            if (stableVersion != null) {
-                changelog.appendText("* Stable CLI version `${stableVersion}`\n")
-            }
-            if (stagingVersion != null) {
-                changelog.appendText("* Staging CLI version: `${stagingVersion}`\n\n")
-            }
+        // Get the latest staging and stable versions of the CLI
+        val stagingVersion = getLatestStagingVersion()
+        val stableVersion = getLatestStableVersion()
+        if (stableVersion != null) {
+            changelog.appendText("* Stable CLI version `${stableVersion}`\n")
+        }
+        if (stagingVersion != null) {
+            changelog.appendText("* Staging CLI version: `${stagingVersion}`\n\n")
         }
 
         // An example of what the changelog could look like after the below statements can be found here:

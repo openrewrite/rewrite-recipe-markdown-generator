@@ -224,9 +224,7 @@ class RecipeMarkdownGenerator : Runnable {
         ChangelogWriter().createRecipeDescriptorsYaml(
             markdownArtifacts,
             allRecipeDescriptors.size,
-            deployType,
-            rewriteBomVersion,
-            diffFileName
+            rewriteBomVersion
         )
         createModerneRecipes(outputPath, moderneProprietaryRecipes)
         createRecipesWithDataTables(recipesWithDataTables, outputPath)
