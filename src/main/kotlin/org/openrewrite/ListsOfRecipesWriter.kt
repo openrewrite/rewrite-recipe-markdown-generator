@@ -11,8 +11,6 @@ import java.util.*
 
 class ListsOfRecipesWriter(
     val allRecipeDescriptors: List<RecipeDescriptor>,
-    val recipeContainedBy: MutableMap<String, MutableSet<RecipeDescriptor>>,
-    val dataTablesToIgnore: List<String>,
     val outputPath: Path
 ) {
     fun createModerneRecipes(moderneProprietaryRecipesMap: TreeMap<String, MutableList<RecipeDescriptor>>) {
@@ -56,9 +54,18 @@ class ListsOfRecipesWriter(
         }
     }
 
-    fun createRecipesWithDataTables(
-        recipesWithDataTables: ArrayList<RecipeDescriptor>
-    ) {
+    // These are common in every recipe - so let's not use them when generating the list of recipes with data tables.
+    private val dataTablesToIgnore = listOf(
+        "org.openrewrite.table.SourcesFileResults",
+        "org.openrewrite.table.SourcesFileErrors",
+        "org.openrewrite.table.RecipeRunStats"
+    )
+
+    fun createRecipesWithDataTables() {
+        val recipesWithDataTables = allRecipeDescriptors.filter {
+            it.dataTables.any { dataTable -> dataTable.name !in dataTablesToIgnore }
+        }
+
         val recipesWithDataTablesPath = outputPath.resolve("recipes-with-data-tables.md")
         Files.newBufferedWriter(recipesWithDataTablesPath, StandardOpenOption.CREATE).useAndApply {
             writeln(
@@ -213,6 +220,7 @@ class ListsOfRecipesWriter(
     }
 
     fun createStandaloneRecipes(
+        recipeContainedBy: MutableMap<String, MutableSet<RecipeDescriptor>>,
         recipeOrigins: Map<URI, RecipeOrigin>
     ) {
         val standaloneRecipes = allRecipeDescriptors.filterNot { recipe ->

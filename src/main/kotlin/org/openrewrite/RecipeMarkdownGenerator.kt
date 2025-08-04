@@ -73,13 +73,6 @@ class RecipeMarkdownGenerator : Runnable {
     @Option(names = ["--latest-versions-only"])
     var latestVersionsOnly: Boolean = false
 
-    // These are common in every recipe - so let's not use them when generating the list of recipes with data tables.
-    private val dataTablesToIgnore = listOf(
-        "org.openrewrite.table.SourcesFileResults",
-        "org.openrewrite.table.SourcesFileErrors",
-        "org.openrewrite.table.RecipeRunStats"
-    )
-
     override fun run() {
         val outputPath = Paths.get(destinationDirectoryName)
         val recipesPath = outputPath.resolve("recipes")
@@ -123,7 +116,6 @@ class RecipeMarkdownGenerator : Runnable {
         println("Found ${allRecipeDescriptors.size} descriptor(s).")
 
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
-        val recipesWithDataTables = ArrayList<RecipeDescriptor>()
         val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
 
         // Build reverse mapping of recipe relationships (which recipes contain each recipe)
@@ -153,14 +145,6 @@ class RecipeMarkdownGenerator : Runnable {
             }
             requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeDescriptor.source }
             recipeMarkdownWriter.writeRecipe(recipeDescriptor, recipesPath, origin)
-
-            val filteredDataTables = recipeDescriptor.dataTables.filter { dataTable ->
-                dataTable.name !in dataTablesToIgnore
-            }
-
-            if (filteredDataTables.isNotEmpty()) {
-                recipesWithDataTables.add(recipeDescriptor)
-            }
 
             if (origin.license == Licenses.Proprietary) {
                 moderneProprietaryRecipes.computeIfAbsent(origin.artifactId) { mutableListOf() }.add(recipeDescriptor)
@@ -212,16 +196,16 @@ class RecipeMarkdownGenerator : Runnable {
         )
 
         // Write lists of recipes into various files
-        val listWriter = ListsOfRecipesWriter(allRecipeDescriptors, recipeContainedBy, dataTablesToIgnore, outputPath)
+        val listWriter = ListsOfRecipesWriter(allRecipeDescriptors, outputPath)
         listWriter.createModerneRecipes(moderneProprietaryRecipes)
-        listWriter.createRecipesWithDataTables(recipesWithDataTables)
+        listWriter.createRecipesWithDataTables()
         listWriter.createRecipeAuthors()
         listWriter.createRecipesByTag()
         listWriter.createScanningRecipes(
             allRecipes.filter { it is ScanningRecipe<*> && it !is DeclarativeRecipe },
             recipeOrigins
         )
-        listWriter.createStandaloneRecipes(recipeOrigins)
+        listWriter.createStandaloneRecipes(recipeContainedBy, recipeOrigins)
 
         // Write the README.md for each category
         CategoryWriter(allRecipeDescriptors, allCategoryDescriptors)
