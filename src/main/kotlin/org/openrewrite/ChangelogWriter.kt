@@ -171,61 +171,6 @@ class ChangelogWriter {
         }
     }
 
-    private fun buildDiffLog(
-        newRecipes: TreeSet<MarkdownRecipeDescriptor>,
-        diffFileName: String
-    ) {
-        val artifactToRecipes = TreeMap<String, TreeSet<MarkdownRecipeDescriptor>>()
-        for (newRecipe in newRecipes) {
-            if (artifactToRecipes.containsKey(newRecipe.artifactId)) {
-                artifactToRecipes[newRecipe.artifactId]?.add(newRecipe)
-            } else {
-                val recipes = TreeSet<MarkdownRecipeDescriptor>()
-                recipes.add(newRecipe)
-                artifactToRecipes[newRecipe.artifactId] = recipes
-            }
-        }
-
-        val diffFile = File("src/main/resources/$diffFileName.md")
-
-        // Clear the file in case this is being generated multiple times
-        diffFile.writeText("")
-
-        if (artifactToRecipes.isNotEmpty()) {
-            diffFile.appendText("# New Recipes")
-
-            var totalTimeSaved = 0
-
-            for (artifact in artifactToRecipes.keys) {
-                diffFile.appendText("\n\n## $artifact\n")
-
-                val recipes = artifactToRecipes[artifact]
-
-                if (recipes != null) {
-                    var timeSavedPerArtifact = 0
-
-                    for (recipe in recipes) {
-                        val isImperative = recipe.isImperative
-                        var timeSaved = 4
-
-                        if (isImperative) {
-                            timeSaved = 12
-                        }
-
-                        totalTimeSaved += timeSaved
-                        timeSavedPerArtifact += timeSaved
-
-                        diffFile.appendText("\n* [${recipe.name}](${recipe.docLink}) — ${timeSaved}h")
-                    }
-
-                    diffFile.appendText("\n\nInitial recipe development time: ${timeSavedPerArtifact}h")
-                }
-            }
-
-            diffFile.appendText("\n\nTotal initial recipe development time: ${totalTimeSaved}h")
-        }
-    }
-
     private fun getNewArtifacts(
         markdownArtifacts: TreeMap<String, MarkdownRecipeArtifact>,
         oldArtifacts: TreeMap<String, MarkdownRecipeArtifact>,

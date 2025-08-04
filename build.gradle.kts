@@ -34,15 +34,6 @@ val recipeConf = configurations.create("recipe")
 // Either `latest.release` or `latest.integration`
 val rewriteVersion = "latest.release"
 
-// Used to determine what type of changelog to build up.
-//   * "release"  : When making a changelog for larger releases of OpenRewrite
-//   * "snapshot" : When making a changelog for snapshot releases on a weekly cadence.
-//   * "diff" : When making a diff-log for what recipes are made over time.
-val deployType = "release"
-
-// When you set the above to diff, this will be the name of the markdown file generated
-val diffFileName = "desjardins"
-
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation(platform("io.moderne.recipe:moderne-recipe-bom:$rewriteVersion"))
@@ -195,9 +186,7 @@ tasks.named<JavaExec>("run").configure {
         latestVersion("org.openrewrite.recipe:rewrite-recipe-bom:latest.release"),
         latestVersion("io.moderne.recipe:moderne-recipe-bom:latest.release"),
         latestVersion("org.openrewrite:plugin:latest.release"),
-        latestVersion("org.openrewrite.maven:rewrite-maven-plugin:latest.release"),
-        deployType,
-        diffFileName
+        latestVersion("org.openrewrite.maven:rewrite-maven-plugin:latest.release")
     )
     if (latestVersionsOnly) {
         arguments.add("--latest-versions-only")

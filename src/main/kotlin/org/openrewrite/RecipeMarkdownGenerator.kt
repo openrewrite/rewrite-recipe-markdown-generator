@@ -88,20 +88,6 @@ class RecipeMarkdownGenerator : Runnable {
     )
     lateinit var mavenPluginVersion: String
 
-    @Parameters(
-        index = "8",
-        defaultValue = "release",
-        description = ["The type of deploy being done (either release or snapshot)"]
-    )
-    lateinit var deployType: String
-
-    @Parameters(
-        index = "9",
-        defaultValue = "renameMe",
-        description = ["The name of the diff file to be generated when making a diff log"]
-    )
-    lateinit var diffFileName: String
-
     @Option(names = ["--latest-versions-only"])
     var latestVersionsOnly: Boolean = false
 
