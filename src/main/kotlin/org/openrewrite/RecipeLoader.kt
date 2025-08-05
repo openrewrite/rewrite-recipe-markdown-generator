@@ -38,7 +38,7 @@ data class RecipeLoadResult(
  * Responsible for loading recipes from JAR files and classpaths
  */
 class RecipeLoader {
-    
+
     /**
      * Load recipes from the specified sources and classpath
      */
@@ -56,11 +56,11 @@ class RecipeLoader {
 
         // Add manifest information
         addInfosFromManifests(recipeOrigins, classloader)
-        
+
         // Load recipes in parallel
         val dependencies = recipeClasspath.split(";").map(Paths::get).toList()
         val environmentData = loadEnvironmentDataAsync(recipeOrigins, dependencies, classloader)
-        
+
         // Combine all results
         return RecipeLoadResult(
             allRecipeDescriptors = environmentData.flatMap { it.recipeDescriptors },
@@ -105,7 +105,7 @@ class RecipeLoader {
                 println("Finished loading all recipes.")
             }
     }
-    
+
     /**
      * Add license and source information from JAR manifests
      */
