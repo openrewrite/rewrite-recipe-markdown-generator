@@ -200,7 +200,15 @@ class ListsOfRecipesWriter(
 
                 for ((tag, recipes) in tagToRecipes) {
                     writeln("## ${tag}")
-                    writeln("\n_${recipes.size} recipe${if (recipes.size != 1) "s" else ""}_\n")
+                    writeln(
+                        "\n_${recipes.size} recipe${
+                            if (recipes.size != 1) {
+                                "s"
+                            } else {
+                                ""
+                            }
+                        }_\n"
+                    )
 
                     for (recipe in recipes.sortedBy { it.displayName }) {
                         writeln(
