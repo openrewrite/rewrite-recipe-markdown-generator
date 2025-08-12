@@ -30,7 +30,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
 
       # Run generator
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Generate Markdown
         run: |
           ./gradlew ${{ env.GRADLE_SWITCHES }} run -PlatestVersionsOnly=true
