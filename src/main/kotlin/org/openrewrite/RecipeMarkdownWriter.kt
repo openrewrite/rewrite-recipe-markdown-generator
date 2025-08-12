@@ -651,17 +651,12 @@ import TabItem from '@theme/TabItem';
     private fun BufferedWriter.writeContributors(recipeDescriptor: RecipeDescriptor) {
         if (recipeDescriptor.contributors.isNotEmpty()) {
             newLine()
-            writeln("## Contributors")
-            writeln(
-                recipeDescriptor.contributors.stream()
-                    .map { contributor: Contributor ->
-                        if (contributor.email.contains("noreply")) {
-                            contributor.name
-                        } else {
-                            "[" + contributor.name + "](mailto:" + contributor.email + ")"
-                        }
-                    }.collect(joining(", "))
-            )
+            writeln("## Contributors\n")
+            // Extract unique contributor names (removing duplicates)
+            val uniqueNames = recipeDescriptor.contributors
+                .map { contributor -> contributor.name }
+                .distinct()
+            writeln(uniqueNames.joinToString(", "))
         }
     }
 
