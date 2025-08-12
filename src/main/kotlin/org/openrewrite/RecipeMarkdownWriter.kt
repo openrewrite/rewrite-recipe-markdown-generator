@@ -656,7 +656,6 @@ import TabItem from '@theme/TabItem';
             val uniqueNames = recipeDescriptor.contributors
                 .map { contributor -> contributor.name }
                 .distinct()
-                .sorted()
             writeln(uniqueNames.joinToString(", "))
         }
     }
