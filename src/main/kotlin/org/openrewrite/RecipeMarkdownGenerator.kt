@@ -84,6 +84,10 @@ class RecipeMarkdownGenerator : Runnable {
 
         val recipeOrigins: Map<URI, RecipeOrigin> = RecipeOrigin.parse(recipeSources)
 
+        // Add manifest information
+        val recipeLoader = RecipeLoader(recipeClasspath, recipeOrigins)
+        recipeLoader.addInfosFromManifests()
+
         // Write latest-versions-of-every-openrewrite-module.md, for all recipe modules
         val versionWriter = VersionWriter()
         versionWriter.createLatestVersionsJs(
@@ -108,7 +112,7 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         // Load recipe details into memory
-        val loadResult = RecipeLoader().loadRecipes(recipeOrigins, recipeClasspath)
+        val loadResult = recipeLoader.loadRecipes()
         val allRecipeDescriptors = loadResult.allRecipeDescriptors
         val allCategoryDescriptors = loadResult.allCategoryDescriptors
         val allRecipes = loadResult.allRecipes

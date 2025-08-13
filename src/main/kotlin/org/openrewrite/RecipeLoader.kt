@@ -39,27 +39,28 @@ data class RecipeLoadResult(
  */
 class RecipeLoader {
 
-    /**
-     * Load recipes from the specified sources and classpath
-     */
-    fun loadRecipes(
-        recipeOrigins: Map<URI, RecipeOrigin>,
-        recipeClasspath: String
-    ): RecipeLoadResult {
+    val classloader: ClassLoader
+    val dependencies: List<Path>
+    val recipeOrigins: Map<URI, RecipeOrigin>
+
+    constructor(recipeClasspath: String, recipeOrigins: Map<URI, RecipeOrigin>) {
         // Create classloader from classpath
-        val classloader = recipeClasspath.split(";")
+        dependencies = recipeClasspath.split(";")
             .map(Paths::get)
+        classloader = dependencies
             .map(Path::toUri)
             .map(URI::toURL)
             .toTypedArray<URL>()
             .let { URLClassLoader(it) }
+        this.recipeOrigins = recipeOrigins
+    }
 
-        // Add manifest information
-        addInfosFromManifests(recipeOrigins, classloader)
-
+    /**
+     * Load recipes from the specified sources and classpath
+     */
+    fun loadRecipes(): RecipeLoadResult {
         // Load recipes in parallel
-        val dependencies = recipeClasspath.split(";").map(Paths::get).toList()
-        val environmentData = loadEnvironmentDataAsync(recipeOrigins, dependencies, classloader)
+        val environmentData = loadEnvironmentDataAsync()
 
         // Combine all results
         return RecipeLoadResult(
@@ -73,11 +74,7 @@ class RecipeLoader {
     /**
      * Process recipe jars in parallel and collect both descriptors and recipes
      */
-    private fun loadEnvironmentDataAsync(
-        recipeOrigins: Map<URI, RecipeOrigin>,
-        dependencies: List<Path>,
-        classloader: ClassLoader
-    ): List<EnvironmentData> = runBlocking {
+    private fun loadEnvironmentDataAsync(): List<EnvironmentData> = runBlocking {
         println("Starting parallel recipe loading...")
         recipeOrigins.entries
             .chunked(4) // Process in batches of jars
@@ -109,8 +106,8 @@ class RecipeLoader {
     /**
      * Add license and source information from JAR manifests
      */
-    private fun addInfosFromManifests(recipeOrigins: Map<URI, RecipeOrigin>, cl: ClassLoader) {
-        val mfInfos: Map<URI, Pair<License, String>> = cl.getResources("META-INF/MANIFEST.MF").asSequence()
+    fun addInfosFromManifests() {
+        val mfInfos: Map<URI, Pair<License, String>> = classloader.getResources("META-INF/MANIFEST.MF").asSequence()
             .filter { it.path != null }
             .map {
                 Pair(
