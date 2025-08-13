@@ -139,32 +139,31 @@ class ListsOfRecipesWriter(
             // Sort authors by number of recipes (descending), then by name for ties
             val sortedAuthors = allContributors.entries.sortedWith(
                 compareByDescending<Map.Entry<String, MutableSet<RecipeDescriptor>>> { it.value.size }
+                    .thenByDescending { linesContributed(it.key, it.value) }
                     .thenBy { it.key }
             )
 
             // Create table header
-            writeln("| Rank | Author | Number of Recipes |")
-            writeln("|------|--------|-------------------|")
+            writeln("| Rank | Author | Number of Recipes | Number of Lines |")
+            writeln("|------|--------|-------------------|-----------------|")
 
             // Create table rows
             var rank = 1
-            var previousCount = -1
-            var actualRank = 1
-
             for ((author, recipes) in sortedAuthors) {
                 val recipeCount = recipes.size
-
-                // Handle ties in ranking
-                if (recipeCount != previousCount) {
-                    actualRank = rank
-                    previousCount = recipeCount
-                }
-
-                writeln("| $actualRank | $author | $recipeCount |")
+                val lineCount = linesContributed(author, recipes)
+                writeln("| $rank | $author | $recipeCount | $lineCount |")
                 rank++
             }
         }
     }
+
+    private fun linesContributed(name: String, recipes: MutableSet<RecipeDescriptor>): Int =
+        recipes.sumOf { recipeDescriptor ->
+            recipeDescriptor.contributors
+                .filter { contributor -> contributor.name.equals(name) }
+                .sumOf { contributor -> contributor.lineCount }
+        }
 
     fun createRecipesByTag() {
         val tagToRecipes = TreeMap<String, TreeSet<RecipeDescriptor>>(String.CASE_INSENSITIVE_ORDER)
