@@ -22,7 +22,7 @@ private fun escape(string: String): String = string
     .replace(">", "&gt;")
     .replace("\"", "&quot;")
 
-fun RecipeDescriptor.asYaml(): String {
+fun RecipeDescriptor.asYaml(hideOptions: Boolean): String {
     val s = StringBuilder()
     s.appendLine("""
 ---
@@ -52,13 +52,13 @@ description: |
             }
 
             s.append("  - ${subRecipe.name}")
-            if (subRecipe.options.isEmpty() || subRecipe.options.all { it.value == null }) {
+            if (subRecipe.options.isEmpty() || subRecipe.options.all { it.value == null } || hideOptions) {
                 s.appendLine()
             } else {
                 s.appendLine(":")
-            }
-            for (subOption in subRecipe.options) {
-                s.append(subOption.asYaml(3))
+                for (subOption in subRecipe.options) {
+                    s.append(subOption.asYaml(3))
+                }
             }
         }
     }

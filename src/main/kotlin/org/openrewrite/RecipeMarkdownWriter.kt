@@ -10,7 +10,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
 import java.util.regex.Pattern
-import java.util.stream.Collectors.joining
 
 class RecipeMarkdownWriter(val recipeContainedBy: MutableMap<String, MutableSet<RecipeDescriptor>>) {
 
@@ -69,7 +68,7 @@ import TabItem from '@theme/TabItem';
 
             writeSourceLinks(recipeDescriptor, origin)
             writeOptions(recipeDescriptor)
-            writeDefinition(recipeDescriptor, origin)
+            writeDefinition(recipeDescriptor, origin.license == Licenses.Proprietary)
             writeUsedBy(recipeContainedBy[recipeDescriptor.name])
             writeExamples(recipeDescriptor)
             writeUsage(recipeDescriptor, origin)
@@ -531,8 +530,8 @@ import TabItem from '@theme/TabItem';
         }
     }
 
-    private fun BufferedWriter.writeDefinition(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin) {
-        if (recipeDescriptor.recipeList.isNotEmpty() && origin.license != Licenses.Proprietary) {
+    private fun BufferedWriter.writeDefinition(recipeDescriptor: RecipeDescriptor, hideOptions: Boolean) {
+        if (recipeDescriptor.recipeList.isNotEmpty()) {
             //language=markdown
             writeln(
                 """
@@ -574,7 +573,7 @@ import TabItem from '@theme/TabItem';
                     )
                 }
 
-                if (recipe.options.isNotEmpty()) {
+                if (recipe.options.isNotEmpty() && !hideOptions) {
                     for (option in recipe.options) {
                         if (option.value != null) {
                             val formattedOptionString = printValue(option.value!!)
@@ -597,7 +596,7 @@ import TabItem from '@theme/TabItem';
                 ```yaml
                 """.trimIndent()
             )
-            writeln(recipeDescriptor.asYaml())
+            writeln(recipeDescriptor.asYaml(hideOptions))
             //language=markdown
             writeln(
                 """
