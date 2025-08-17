@@ -171,7 +171,11 @@ class ListsOfRecipesWriter(
         // Collect all tags and their associated recipes
         for (recipeDescriptor in allRecipeDescriptors) {
             for (tag in recipeDescriptor.tags) {
-                tagToRecipes.computeIfAbsent(tag) { TreeSet(compareBy { it.name }) }
+                tagToRecipes.computeIfAbsent(
+                    tag
+                        .substringBefore('-')
+                        .substringBefore('_')
+                ) { TreeSet(compareBy { it.name }) }
                     .add(recipeDescriptor)
             }
         }
