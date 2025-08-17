@@ -2,6 +2,7 @@ package org.openrewrite
 
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.Patch
+import org.openrewrite.RecipeMarkdownGenerator.Companion.getRecipePath
 import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.RecipeMarkdownGenerator.Companion.useAndApply
 import org.openrewrite.RecipeMarkdownGenerator.Companion.writeln
@@ -29,7 +30,7 @@ class RecipeMarkdownWriter(val recipeContainedBy: MutableMap<String, MutableSet<
         val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor.description)
         val formattedLongRecipeName = recipeDescriptor.name.replace("_".toRegex(), "\\\\_").trim()
 
-        val recipeMarkdownPath = outputPath.resolve(RecipeMarkdownGenerator.getRecipePath(recipeDescriptor) + ".md")
+        val recipeMarkdownPath = outputPath.resolve(getRecipePath(recipeDescriptor) + ".md")
         Files.createDirectories(recipeMarkdownPath.parent)
         Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE).useAndApply {
             write(
@@ -543,20 +544,12 @@ import TabItem from '@theme/TabItem';
                 <TabItem value="recipe-list" label="Recipe List" >
                 """.trimIndent()
             )
-            val recipeDepth = RecipeMarkdownGenerator.getRecipePath(recipeDescriptor).chars().filter { ch: Int -> ch == '/'.code }.count()
+            val recipeDepth = getRecipePath(recipeDescriptor).chars().filter { ch: Int -> ch == '/'.code }.count()
             val pathToRecipesBuilder = StringBuilder()
             for (i in 0 until recipeDepth) {
                 pathToRecipesBuilder.append("../")
             }
             val pathToRecipes = pathToRecipesBuilder.toString()
-
-            // These recipes contain other recipes that are not parseable.
-            // Until we support this - let's remove links for these recipes.
-            // https://github.com/openrewrite/rewrite-spring/issues/601
-            val recipesThatShouldHaveLinksRemoved = listOf(
-                "org.openrewrite.java.spring.boot2.MigrateDatabaseCredentials",
-                "org.openrewrite.java.spring.PropertiesToKebabCase"
-            )
 
             for (recipe in recipeDescriptor.recipeList) {
                 // https://github.com/openrewrite/rewrite-docs/issues/250
@@ -564,15 +557,7 @@ import TabItem from '@theme/TabItem';
                     continue
                 }
 
-                if (recipesThatShouldHaveLinksRemoved.contains(recipeDescriptor.name)) {
-                    writeln("* ${recipe.displayNameEscaped()}")
-                } else {
-                    writeln(
-                        "* [" + recipe.displayNameEscaped() + "](" + pathToRecipes + RecipeMarkdownGenerator.getRecipePath(
-                            recipe
-                        ) + ")"
-                    )
-                }
+                writeln("* [${recipe.displayNameEscaped()}]($pathToRecipes" + getRecipePath(recipe) + ")")
 
                 if (recipe.options.isNotEmpty()) {
                     for (option in recipe.options) {
@@ -622,7 +607,7 @@ import TabItem from '@theme/TabItem';
                 """.trimIndent()
             )
             recipeContainedBy
-                .map { "* [${it.displayNameEscaped()}](/recipes/${RecipeMarkdownGenerator.getRecipePath(it)}.md)" }
+                .map { "* [${it.displayNameEscaped()}](/recipes/${getRecipePath(it)}.md)" }
                 .toSet()
                 .sorted()
                 .forEach { recipe -> writeln(recipe) }
