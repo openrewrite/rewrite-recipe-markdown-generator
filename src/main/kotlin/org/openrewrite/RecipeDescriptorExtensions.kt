@@ -22,7 +22,7 @@ private fun escape(string: String): String = string
     .replace(">", "&gt;")
     .replace("\"", "&quot;")
 
-fun RecipeDescriptor.asYaml(hideOptions: Boolean): String {
+fun RecipeDescriptor.asYaml(hideOptionValues: Boolean): String {
     val s = StringBuilder()
     s.appendLine("""
 ---
@@ -52,12 +52,12 @@ description: |
             }
 
             s.append("  - ${subRecipe.name}")
-            if (subRecipe.options.isEmpty() || subRecipe.options.all { it.value == null } || hideOptions) {
+            if (subRecipe.options.isEmpty() || subRecipe.options.all { it.value == null }) {
                 s.appendLine()
             } else {
                 s.appendLine(":")
                 for (subOption in subRecipe.options) {
-                    s.append(subOption.asYaml(3))
+                    s.append(subOption.asYaml(3, hideOptionValues))
                 }
             }
         }
@@ -65,18 +65,20 @@ description: |
     return s.toString()
 }
 
-fun OptionDescriptor.asYaml(indentation: Int = 0): String {
+private fun OptionDescriptor.asYaml(indentation: Int = 0, hideOptionValues: Boolean = false): String {
     if (value == null) {
         return ""
     }
     val prefixBuilder = StringBuilder()
-    (0 until indentation).forEach { _  ->
+    (0 until indentation).forEach { _ ->
         prefixBuilder.append("  ")
     }
 
     val prefix = prefixBuilder.toString()
-    val formattedValue = if (value is Array<*>) {
-        val asArray =  value as Array<*>
+    val formattedValue = if (hideOptionValues) {
+        "redacted"
+    } else if (value is Array<*>) {
+        val asArray = value as Array<*>
         "[${asArray.joinToString(", ")}]"
     } else if (value == "*") {
         "\"*\""

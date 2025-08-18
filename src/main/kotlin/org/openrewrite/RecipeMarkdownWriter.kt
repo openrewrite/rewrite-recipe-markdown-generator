@@ -530,7 +530,7 @@ import TabItem from '@theme/TabItem';
         }
     }
 
-    private fun BufferedWriter.writeDefinition(recipeDescriptor: RecipeDescriptor, hideOptions: Boolean) {
+    private fun BufferedWriter.writeDefinition(recipeDescriptor: RecipeDescriptor, hideOptionValues: Boolean) {
         if (recipeDescriptor.recipeList.isNotEmpty()) {
             //language=markdown
             writeln(
@@ -573,13 +573,13 @@ import TabItem from '@theme/TabItem';
                     )
                 }
 
-                if (recipe.options.isNotEmpty() && !hideOptions) {
+                if (recipe.options.isNotEmpty()) {
                     for (option in recipe.options) {
                         if (option.value != null) {
-                            val formattedOptionString = printValue(option.value!!)
+                            val formattedOptionString = if (hideOptionValues) "redacted" else
+                                printValue(option.value!!)
                                 .replace("<p>", "< p >")
                                 .replace("\n", " ")
-
                             writeln("  * " + option.name + ": `" + formattedOptionString + "`")
                         }
                     }
@@ -596,7 +596,7 @@ import TabItem from '@theme/TabItem';
                 ```yaml
                 """.trimIndent()
             )
-            writeln(recipeDescriptor.asYaml(hideOptions))
+            writeln(recipeDescriptor.asYaml(hideOptionValues))
             //language=markdown
             writeln(
                 """
