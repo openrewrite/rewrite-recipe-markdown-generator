@@ -76,7 +76,6 @@ import TabItem from '@theme/TabItem';
             writeUsage(recipeDescriptor, origin)
             writeModerneLink(recipeDescriptor)
             writeDataTables(recipeDescriptor)
-            writeContributors(recipeDescriptor)
         }
     }
 
@@ -631,18 +630,6 @@ import TabItem from '@theme/TabItem';
             Please [contact Moderne](https://moderne.io/product) for more information about safely running the recipes on your own codebase in a private SaaS.
             """.trimIndent()
         )
-    }
-
-    private fun BufferedWriter.writeContributors(recipeDescriptor: RecipeDescriptor) {
-        if (recipeDescriptor.contributors.isNotEmpty()) {
-            newLine()
-            writeln("## Contributors\n")
-            // Extract unique contributor names (removing duplicates)
-            val uniqueNames = recipeDescriptor.contributors
-                .map { contributor -> contributor.name }
-                .distinct()
-            writeln(uniqueNames.joinToString(", "))
-        }
     }
 
     private fun generateDiff(path: String?, original: String, revised: String): String {
