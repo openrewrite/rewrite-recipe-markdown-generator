@@ -207,7 +207,6 @@ class RecipeMarkdownGenerator : Runnable {
         val listWriter = ListsOfRecipesWriter(allRecipeDescriptors, outputPath)
         listWriter.createModerneRecipes(moderneProprietaryRecipes)
         listWriter.createRecipesWithDataTables()
-        listWriter.createRecipeAuthors()
         listWriter.createRecipesByTag()
         listWriter.createScanningRecipes(
             allRecipes.filter { it is ScanningRecipe<*> && it !is DeclarativeRecipe },
