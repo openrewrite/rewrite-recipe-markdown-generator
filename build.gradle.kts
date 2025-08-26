@@ -103,6 +103,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-java-dependencies")
     "recipe"("org.openrewrite.recipe:rewrite-java-security")
     "recipe"("org.openrewrite.recipe:rewrite-jenkins")
+    "recipe"("org.openrewrite.recipe:rewrite-joda")
     "recipe"("org.openrewrite.recipe:rewrite-kubernetes")
     "recipe"("org.openrewrite.recipe:rewrite-liberty")
     "recipe"("org.openrewrite.recipe:rewrite-logging-frameworks")
