@@ -30,8 +30,7 @@ private data class EnvironmentData(
 data class RecipeLoadResult(
     val allRecipeDescriptors: List<RecipeDescriptor>,
     val allCategoryDescriptors: List<CategoryDescriptor>,
-    val allRecipes: List<Recipe>,
-    val recipeOrigins: Map<URI, RecipeOrigin>
+    val allRecipes: List<Recipe>
 )
 
 /**
@@ -66,8 +65,7 @@ class RecipeLoader {
         return RecipeLoadResult(
             allRecipeDescriptors = environmentData.flatMap { it.recipeDescriptors },
             allCategoryDescriptors = environmentData.flatMap { it.categoryDescriptors },
-            allRecipes = environmentData.flatMap { it.recipes },
-            recipeOrigins = recipeOrigins
+            allRecipes = environmentData.flatMap { it.recipes }
         )
     }
 
