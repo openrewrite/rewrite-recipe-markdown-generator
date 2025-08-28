@@ -52,22 +52,7 @@ import TabItem from '@theme/TabItem';
             newLine()
             writeln(formattedRecipeDescription)
             newLine()
-            if (recipeDescriptor.tags.isNotEmpty()) {
-                writeln("### Tags")
-                newLine()
-                for (tag in recipeDescriptor.tags) {
-                    if (tag.lowercase().startsWith("rspec-s")) {
-                        writeln("* [$tag](https://sonarsource.github.io/rspec/#/rspec/${tag.substring(6)})")
-                    } else if (tag.lowercase().startsWith("rspec-")) {
-                        writeln("* [$tag](https://sonarsource.github.io/rspec/#/rspec/S${tag.substring(6)})")
-                    } else {
-                        val tagAnchor = tag.lowercase().replace(" ", "-")
-                        writeln("* [$tag](/reference/recipes-by-tag#${tagAnchor})")
-                    }
-                }
-                newLine()
-            }
-
+            writeTags(recipeDescriptor)
             writeSourceLinks(recipeDescriptor, origin)
             writeOptions(recipeDescriptor)
             writeDefinition(recipeDescriptor, origin)
@@ -100,6 +85,26 @@ import TabItem from '@theme/TabItem';
 
         // Special characters may exist here - but they are already wrapped in backticks
         return "_" + formattedRecipeDescription?.replace("\n", " ")?.trim() + "_"
+    }
+
+    private fun BufferedWriter.writeTags(recipeDescriptor: RecipeDescriptor) {
+        if (recipeDescriptor.tags.isNotEmpty()) {
+            writeln("### Tags")
+            newLine()
+            for (tag in recipeDescriptor.tags) {
+                if (tag.lowercase().startsWith("rspec-s")) {
+                    writeln("* [$tag](https://sonarsource.github.io/rspec/#/rspec/${tag.substring(6)})")
+                } else if (tag.lowercase().startsWith("rspec-")) {
+                    writeln("* [$tag](https://sonarsource.github.io/rspec/#/rspec/S${tag.substring(6)})")
+                } else {
+                    val tagAnchor = tag
+                        .substringBefore('-')
+                        .substringBefore('_')
+                    writeln("* [$tag](/reference/recipes-by-tag#${tagAnchor})")
+                }
+            }
+            newLine()
+        }
     }
 
     private fun BufferedWriter.writeSourceLinks(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin) {
