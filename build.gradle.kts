@@ -127,8 +127,9 @@ dependencies {
 
     "recipe"("io.moderne.recipe:rewrite-cryptography")
     "recipe"("io.moderne.recipe:rewrite-devcenter")
+//    "recipe"("io.moderne.recipe:rewrite-elastic")
     "recipe"("io.moderne.recipe:rewrite-hibernate")
-    "recipe"("io.moderne.recipe:rewrite-kafka")
+//    "recipe"("io.moderne.recipe:rewrite-kafka")
     "recipe"("io.moderne.recipe:rewrite-program-analysis")
     "recipe"("io.moderne.recipe:rewrite-spring")
     "recipe"("io.moderne.recipe:rewrite-vulncheck")
