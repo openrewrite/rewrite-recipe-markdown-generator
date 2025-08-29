@@ -98,6 +98,7 @@ import TabItem from '@theme/TabItem';
                     writeln("* [$tag](https://sonarsource.github.io/rspec/#/rspec/S${tag.substring(6)})")
                 } else {
                     val tagAnchor = tag
+                        .lowercase()
                         .substringBefore('-')
                         .substringBefore('_')
                     writeln("* [$tag](/reference/recipes-by-tag#${tagAnchor})")
