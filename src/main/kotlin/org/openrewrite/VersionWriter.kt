@@ -76,7 +76,7 @@ class VersionWriter {
                   }"""
 
                 val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.repositoryUrl})"
-                val releaseLink = "[${origin.version}](${origin.repositoryUrl}/releases/tag/v${origin.version})"
+                val releaseLink = "[${origin.version}](${origin.releaseUrl(origin.version)})"
                 writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${origin.license.markdown()} |")
             }
             //language=markdown

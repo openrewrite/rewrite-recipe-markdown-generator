@@ -65,6 +65,7 @@ class RecipeOrigin(
         .replace('.', '_')
 
     fun issueTrackerUrl() = repositoryUrl.replace(Regex("/blob/main/.*"), "/issues")
+    fun releaseUrl(version: String) = repositoryUrl.replace(Regex("/blob/main/.*"), "/releases/tag/${version}")
 
     companion object {
         private val parsePattern = Pattern.compile("([^:]+):([^:]+):([^:]+):(.+)")
@@ -89,7 +90,11 @@ class RecipeOrigin(
         fun fromString(encoded: String): RecipeOrigin {
             val m = parsePattern.matcher(encoded)
             require(m.matches()) { "Couldn't parse as a RecipeOrigin: $encoded" }
-            return RecipeOrigin(m.group(1), m.group(2), m.group(3), Paths.get(m.group(4)).toUri())
+            return RecipeOrigin(
+                m.group(1),
+                m.group(2),
+                m.group(3),
+                Paths.get(m.group(4)).toUri())
         }
 
         fun parse(text: String): Map<URI, RecipeOrigin> {
