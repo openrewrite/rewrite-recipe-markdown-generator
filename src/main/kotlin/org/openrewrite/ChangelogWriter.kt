@@ -104,7 +104,7 @@ class ChangelogWriter {
         // An example of what the changelog could look like after the below statements can be found here:
         // https://gist.github.com/mike-solomon/16727159ec86ee0f0406ba389cbaecb1
         if (newArtifacts.isNotEmpty()) {
-            changelog.appendText("## New Artifacts")
+            changelog.appendText("## New Artifacts\n")
 
             for (newArtifact in newArtifacts) {
                 changelog.appendText("\n* $newArtifact")
@@ -114,7 +114,7 @@ class ChangelogWriter {
         }
 
         if (removedArtifacts.isNotEmpty()) {
-            changelog.appendText("## Removed Artifacts")
+            changelog.appendText("## Removed Artifacts\n")
 
             for (removedArtifact in removedArtifacts) {
                 changelog.appendText("\n* $removedArtifact")
