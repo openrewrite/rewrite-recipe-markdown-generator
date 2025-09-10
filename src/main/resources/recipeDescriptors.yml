@@ -1,6 +1,6 @@
 rewrite-ai-search:
   artifactId: "rewrite-ai-search"
-  version: "0.30.1"
+  version: "0.30.2"
   markdownRecipeDescriptors:
     io.moderne.ai.FindCommentsLanguage:
       name: "io.moderne.ai.FindCommentsLanguage"
@@ -75,7 +75,7 @@ rewrite-ai-search:
       artifactId: "rewrite-ai-search"
 rewrite-all:
   artifactId: "rewrite-all"
-  version: "1.21.0"
+  version: "1.21.1"
   markdownRecipeDescriptors:
     org.openrewrite.FindCallGraph:
       name: "org.openrewrite.FindCallGraph"
@@ -107,7 +107,7 @@ rewrite-all:
       artifactId: "rewrite-all"
 rewrite-analysis:
   artifactId: "rewrite-analysis"
-  version: "2.26.1"
+  version: "2.26.2"
   markdownRecipeDescriptors:
     org.openrewrite.analysis.controlflow.ControlFlowVisualization:
       name: "org.openrewrite.analysis.controlflow.ControlFlowVisualization"
@@ -170,7 +170,7 @@ rewrite-analysis:
       artifactId: "rewrite-analysis"
 rewrite-android:
   artifactId: "rewrite-android"
-  version: "0.12.0"
+  version: "0.12.1"
   markdownRecipeDescriptors:
     org.openrewrite.android.ChangeAndroidSdkVersion:
       name: "org.openrewrite.android.ChangeAndroidSdkVersion"
@@ -297,7 +297,7 @@ rewrite-android:
       artifactId: "rewrite-android"
 rewrite-apache:
   artifactId: "rewrite-apache"
-  version: "2.15.0"
+  version: "2.16.0"
   markdownRecipeDescriptors:
     org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64:
       name: "org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64"
@@ -697,11 +697,11 @@ rewrite-apache:
       artifactId: "rewrite-apache"
     org.openrewrite.apache.httpclient5.NewRequestLine:
       name: "org.openrewrite.apache.httpclient5.NewRequestLine"
-      description: "`HttpRequestBase::getStatusLine()` was removed in 5.x when `HttpRequestBase`\
-        \ was migrated to `HttpUriRequestBase`, so we replace it with `new RequestLine(HttpRequest)`.\
-        \ Ideally we will try to simply method chains for `getMethod`, `getUri` and\
-        \ `getProtocolVersion`, but there are some scenarios where `RequestLine` object\
-        \ is assigned or used directly, and we need to instantiate the object."
+      description: "`HttpRequestBase::getStatusLine()` was deprecated in 4.x, so we\
+        \ replace it with `new RequestLine(HttpRequest)`. Ideally we will try to simply\
+        \ method chains for `getMethod`, `getUri` and `getProtocolVersion`, but there\
+        \ are some scenarios where `RequestLine` object is assigned or used directly,\
+        \ and we need to instantiate the object."
       docLink: "https://docs.openrewrite.org/recipes/apache/httpclient5/newrequestline"
       options: []
       isImperative: true
@@ -1140,7 +1140,7 @@ rewrite-apache:
       artifactId: "rewrite-apache"
 rewrite-azul:
   artifactId: "rewrite-azul"
-  version: "0.6.0"
+  version: "0.6.1"
   markdownRecipeDescriptors:
     io.moderne.azul.EliminateUnusedClasses:
       name: "io.moderne.azul.EliminateUnusedClasses"
@@ -1181,7 +1181,7 @@ rewrite-azul:
       artifactId: "rewrite-azul"
 rewrite-circleci:
   artifactId: "rewrite-circleci"
-  version: "3.7.3"
+  version: "3.7.4"
   markdownRecipeDescriptors:
     org.openrewrite.circleci.InstallOrb:
       name: "org.openrewrite.circleci.InstallOrb"
@@ -1209,7 +1209,7 @@ rewrite-circleci:
       artifactId: "rewrite-circleci"
 rewrite-codemods:
   artifactId: "rewrite-codemods"
-  version: "0.18.0"
+  version: "0.18.1"
   markdownRecipeDescriptors:
     org.openrewrite.codemods.ApplyCodemod:
       name: "org.openrewrite.codemods.ApplyCodemod"
@@ -1572,8 +1572,8 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
     org.openrewrite.codemods.cleanup.javascript.NoLonelyIf:
       name: "org.openrewrite.codemods.cleanup.javascript.NoLonelyIf"
-      description: "Disallow `if` statements as the only statement in `if` blocks\
-        \ without `else`.\nSee [rule details](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-lonely-if.md)\n"
+      description: "Disallow if statements as the only statement in else blocks \n\
+        See [rule details](https://eslint.org/docs/latest/rules/no-lonely-if)\n"
       docLink: "https://docs.openrewrite.org/recipes/codemods/cleanup/javascript/nolonelyif"
       options: []
       isImperative: false
@@ -4708,7 +4708,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
 rewrite-codemods-ng:
   artifactId: "rewrite-codemods-ng"
-  version: "0.14.0"
+  version: "0.14.1"
   markdownRecipeDescriptors:
     org.openrewrite.codemods.migrate.angular.ApplyAngularCLI:
       name: "org.openrewrite.codemods.migrate.angular.ApplyAngularCLI"
@@ -4758,7 +4758,7 @@ rewrite-codemods-ng:
       artifactId: "rewrite-codemods-ng"
 rewrite-compiled-analysis:
   artifactId: "rewrite-compiled-analysis"
-  version: "0.8.1"
+  version: "0.8.2"
   markdownRecipeDescriptors:
     io.moderne.compiled.verification.ChangeListMethodAndVerify:
       name: "io.moderne.compiled.verification.ChangeListMethodAndVerify"
@@ -4780,7 +4780,7 @@ rewrite-compiled-analysis:
       artifactId: "rewrite-compiled-analysis"
 rewrite-comprehension:
   artifactId: "rewrite-comprehension"
-  version: "0.7.5"
+  version: "0.7.6"
   markdownRecipeDescriptors:
     io.moderne.knowledge.ComprehendCode:
       name: "io.moderne.knowledge.ComprehendCode"
@@ -4836,7 +4836,7 @@ rewrite-comprehension:
       artifactId: "rewrite-comprehension"
 rewrite-concourse:
   artifactId: "rewrite-concourse"
-  version: "3.7.1"
+  version: "3.7.2"
   markdownRecipeDescriptors:
     org.openrewrite.concourse.ChangeResourceVersion:
       name: "org.openrewrite.concourse.ChangeResourceVersion"
@@ -4916,8 +4916,23 @@ rewrite-concourse:
       artifactId: "rewrite-concourse"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.61.1"
+  version: "8.62.0"
   markdownRecipeDescriptors:
+    org.openrewrite.AddToGitignore:
+      name: "org.openrewrite.AddToGitignore"
+      description: "Adds entries to the project's `.gitignore` file. If no `.gitignore`\
+        \ file exists, one will be created. Existing entries that match will not be\
+        \ duplicated."
+      docLink: "https://docs.openrewrite.org/recipes/core/addtogitignore"
+      options:
+      - name: "entries"
+        type: "String"
+        required: true
+      - name: "filePattern"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-core"
     org.openrewrite.DeleteSourceFiles:
       name: "org.openrewrite.DeleteSourceFiles"
       description: "Delete files by source path."
@@ -5292,8 +5307,33 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-cryptography:
   artifactId: "rewrite-cryptography"
-  version: "0.7.0"
+  version: "0.8.1"
   markdownRecipeDescriptors:
+    io.moderne.cryptography.FindRSAKeyGenParameters:
+      name: "io.moderne.cryptography.FindRSAKeyGenParameters"
+      description: "Finds RSAKeyGenParameterSpec instantiations and extracts their\
+        \ parameter values into a data table."
+      docLink: "https://docs.openrewrite.org/recipes/cryptography/findrsakeygenparameters"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-cryptography"
+    io.moderne.cryptography.FindSSLSocketParameters:
+      name: "io.moderne.cryptography.FindSSLSocketParameters"
+      description: "Finds SSLSocket setter method invocations and extracts their parameter\
+        \ values into a data table."
+      docLink: "https://docs.openrewrite.org/recipes/cryptography/findsslsocketparameters"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-cryptography"
+    io.moderne.cryptography.FindSecurityModifications:
+      name: "io.moderne.cryptography.FindSecurityModifications"
+      description: "Finds invocations of java.security.Security methods that modify\
+        \ security configuration such as removeProvider, addProvider, insertProviderAt,\
+        \ setProperty, and removeProperty."
+      docLink: "https://docs.openrewrite.org/recipes/cryptography/findsecuritymodifications"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-cryptography"
     io.moderne.cryptography.FindSecuritySetProperties:
       name: "io.moderne.cryptography.FindSecuritySetProperties"
       description: "There is a defined set of properties that should not be set using\
@@ -5319,7 +5359,7 @@ rewrite-cryptography:
       artifactId: "rewrite-cryptography"
 rewrite-csharp:
   artifactId: "rewrite-csharp"
-  version: "0.27.24"
+  version: "0.27.27"
   markdownRecipeDescriptors:
     org.openrewrite.csharp.recipes.meziantou.analyzer.AbstractTypesShouldNotHaveConstructorsMA0017:
       name: "org.openrewrite.csharp.recipes.meziantou.analyzer.AbstractTypesShouldNotHaveConstructorsMA0017"
@@ -9639,7 +9679,7 @@ rewrite-csharp:
       artifactId: "rewrite-csharp"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
-  version: "2.9.1"
+  version: "2.9.2"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite"
@@ -9718,7 +9758,7 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
 rewrite-devcenter:
   artifactId: "rewrite-devcenter"
-  version: "1.7.0"
+  version: "1.8.0"
   markdownRecipeDescriptors:
     io.moderne.devcenter.ApacheDevCenter:
       name: "io.moderne.devcenter.ApacheDevCenter"
@@ -9828,6 +9868,16 @@ rewrite-devcenter:
         required: true
       isImperative: true
       artifactId: "rewrite-devcenter"
+    io.moderne.devcenter.QuarkusDevCenter:
+      name: "io.moderne.devcenter.QuarkusDevCenter"
+      description: "A DevCenter that tracks the latest Quarkus framework versions\
+        \ and applies best practices. This DevCenter includes recipes to upgrade Quarkus\
+        \ versions, migrate from deprecated APIs, and ensure compatibility with the\
+        \ latest Java versions and testing frameworks."
+      docLink: "https://docs.openrewrite.org/recipes/devcenter/quarkusdevcenter"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-devcenter"
     io.moderne.devcenter.ReportAsSecurityIssues:
       name: "io.moderne.devcenter.ReportAsSecurityIssues"
       description: "Look for results produced by recipes in the same recipe list that\
@@ -9877,9 +9927,24 @@ rewrite-devcenter:
       options: []
       isImperative: false
       artifactId: "rewrite-devcenter"
+    io.moderne.devcenter.UpgradeQuarkus3_x:
+      name: "io.moderne.devcenter.UpgradeQuarkus3_x"
+      description: "Upgrades Quarkus dependencies to version 3.26.x, including core,\
+        \ extensions, and tooling."
+      docLink: "https://docs.openrewrite.org/recipes/devcenter/upgradequarkus3_x"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-devcenter"
+    io.moderne.devcenter.UpgradeQuarkusUniverseBom:
+      name: "io.moderne.devcenter.UpgradeQuarkusUniverseBom"
+      description: "Upgrades the Quarkus Universe BOM parent to the latest version."
+      docLink: "https://docs.openrewrite.org/recipes/devcenter/upgradequarkusuniversebom"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-devcenter"
 rewrite-docker:
   artifactId: "rewrite-docker"
-  version: "2.11.0"
+  version: "2.11.1"
   markdownRecipeDescriptors:
     org.openrewrite.docker.search.FindDockerImageUses:
       name: "org.openrewrite.docker.search.FindDockerImageUses"
@@ -9891,7 +9956,7 @@ rewrite-docker:
       artifactId: "rewrite-docker"
 rewrite-dotnet:
   artifactId: "rewrite-dotnet"
-  version: "0.13.1"
+  version: "0.13.2"
   markdownRecipeDescriptors:
     org.openrewrite.dotnet.MigrateToNet6:
       name: "org.openrewrite.dotnet.MigrateToNet6"
@@ -9954,7 +10019,7 @@ rewrite-dotnet:
       artifactId: "rewrite-dotnet"
 rewrite-dropwizard:
   artifactId: "rewrite-dropwizard"
-  version: "0.6.0"
+  version: "0.6.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.dropwizard.AddActuatorConfiguration:
       name: "org.openrewrite.java.dropwizard.AddActuatorConfiguration"
@@ -10204,9 +10269,100 @@ rewrite-dropwizard:
       options: []
       isImperative: true
       artifactId: "rewrite-dropwizard"
+rewrite-elastic:
+  artifactId: "rewrite-elastic"
+  version: "0.1.0"
+  markdownRecipeDescriptors:
+    io.moderne.elastic.elastic9.BoxedApiField:
+      name: "io.moderne.elastic.elastic9.BoxedApiField"
+      description: "Adds null checks when using API fields that changed from primitive\
+        \ to boxed types. In Elasticsearch Java Client 9.0, certain fields that were\
+        \ always present and returned primitives now return boxed types to support\
+        \ null values, requiring null checks to prevent NPEs."
+      docLink: "https://docs.openrewrite.org/recipes/elastic/elastic9/boxedapifield"
+      options:
+      - name: "field"
+        type: "String"
+        required: true
+      - name: "fullyQualifiedName"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-elastic"
+    io.moderne.elastic.elastic9.BoxedApiFields:
+      name: "io.moderne.elastic.elastic9.BoxedApiFields"
+      description: "Changes primitive return types of various API response fields\
+        \ to their boxed counterparts to align with Elasticsearch 9 specifications."
+      docLink: "https://docs.openrewrite.org/recipes/elastic/elastic9/boxedapifields"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-elastic"
+    io.moderne.elastic.elastic9.MigrateMatchedQueries:
+      name: "io.moderne.elastic.elastic9.MigrateMatchedQueries"
+      description: "In Elasticsearch Java Client 9.0, `Hit.matchedQueries()` changed\
+        \ from returning `List<String>` to `Map<String, Double>`. This recipe migrates\
+        \ the usage by adding `.keySet()` for iterations and using `new ArrayList<>(result.keySet())`\
+        \ for assignments."
+      docLink: "https://docs.openrewrite.org/recipes/elastic/elastic9/migratematchedqueries"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-elastic"
+    io.moderne.elastic.elastic9.MigrateScriptSource:
+      name: "io.moderne.elastic.elastic9.MigrateScriptSource"
+      description: "Migrates `Script.source(String)` calls to use `ScriptSource.scriptString(String)`\
+        \ wrapper in Elasticsearch Java client 9.x."
+      docLink: "https://docs.openrewrite.org/recipes/elastic/elastic9/migratescriptsource"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-elastic"
+    io.moderne.elastic.elastic9.MigrateToElasticsearch9:
+      name: "io.moderne.elastic.elastic9.MigrateToElasticsearch9"
+      description: "This recipe performs a comprehensive migration from Elasticsearch\
+        \ 8 to Elasticsearch 9, addressing breaking changes, API removals, deprecations,\
+        \ and required code modifications."
+      docLink: "https://docs.openrewrite.org/recipes/elastic/elastic9/migratetoelasticsearch9"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-elastic"
+    io.moderne.elastic.elastic9.RenameApiField:
+      name: "io.moderne.elastic.elastic9.RenameApiField"
+      description: "In Elasticsearch Java Client 9.0, the generic `valueBody()` method\
+        \ and `valueBody(...)` builder methods have been replaced with specific getter\
+        \ and setter methods that better reflect the type of data being returned.\
+        \ Similarly, for `GetRepositoryResponse`, the `result` field also got altered\
+        \ to `repositories`."
+      docLink: "https://docs.openrewrite.org/recipes/elastic/elastic9/renameapifield"
+      options:
+      - name: "field"
+        type: "String"
+        required: true
+      - name: "fullyQualifiedName"
+        type: "String"
+        required: true
+      - name: "newField"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-elastic"
+    io.moderne.elastic.elastic9.RenameApiFields:
+      name: "io.moderne.elastic.elastic9.RenameApiFields"
+      description: "Renames various API response fields from `valueBody` to align\
+        \ with Elasticsearch 9 specifications."
+      docLink: "https://docs.openrewrite.org/recipes/elastic/elastic9/renameapifields"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-elastic"
+    io.moderne.elastic.elastic9.UseNamedValueParameters:
+      name: "io.moderne.elastic.elastic9.UseNamedValueParameters"
+      description: "Migrates `indicesBoost` and `dynamicTemplates` parameters from\
+        \ `Map` to `NamedValue` in Elasticsearch Java client 9.x."
+      docLink: "https://docs.openrewrite.org/recipes/elastic/elastic9/usenamedvalueparameters"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-elastic"
 rewrite-feature-flags:
   artifactId: "rewrite-feature-flags"
-  version: "1.13.0"
+  version: "1.13.1"
   markdownRecipeDescriptors:
     org.openrewrite.featureflags.RemoveBooleanFlag:
       name: "org.openrewrite.featureflags.RemoveBooleanFlag"
@@ -10408,7 +10564,7 @@ rewrite-feature-flags:
       artifactId: "rewrite-feature-flags"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "3.10.1"
+  version: "3.10.2"
   markdownRecipeDescriptors:
     org.openrewrite.github.AddCronTrigger:
       name: "org.openrewrite.github.AddCronTrigger"
@@ -10686,7 +10842,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gitlab:
   artifactId: "rewrite-gitlab"
-  version: "0.15.1"
+  version: "0.15.2"
   markdownRecipeDescriptors:
     org.openrewrite.gitlab.AddComponent:
       name: "org.openrewrite.gitlab.AddComponent"
@@ -10705,6 +10861,22 @@ rewrite-gitlab:
         required: true
       - name: "version"
         type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-gitlab"
+    org.openrewrite.gitlab.AddStages:
+      name: "org.openrewrite.gitlab.AddStages"
+      description: "Add or Update the set of stages defined in `.gitlab-ci.yml`."
+      docLink: "https://docs.openrewrite.org/recipes/gitlab/addstages"
+      options:
+      - name: "acceptTheirs"
+        type: "Boolean"
+        required: false
+      - name: "insertMode"
+        type: "InsertMode"
+        required: false
+      - name: "stages"
+        type: "List"
         required: true
       isImperative: true
       artifactId: "rewrite-gitlab"
@@ -10786,7 +10958,7 @@ rewrite-gitlab:
       artifactId: "rewrite-gitlab"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.61.1"
+  version: "8.62.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -11170,6 +11342,15 @@ rewrite-gradle:
         \ and [version 8.x to latest](https://docs.gradle.org/current/userguide/upgrading_version_8.html)\
         \ for more information."
       docLink: "https://docs.openrewrite.org/recipes/gradle/migratetogradle8"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-gradle"
+    org.openrewrite.gradle.MigrateToGradle9:
+      name: "org.openrewrite.gradle.MigrateToGradle9"
+      description: "Migrate to version 9.x. See the Gradle upgrade guide from [version\
+        \ 8.x to 9.0](https://docs.gradle.org/9.0.0/userguide/upgrading_major_version_9.html)\
+        \ for more information."
+      docLink: "https://docs.openrewrite.org/recipes/gradle/migratetogradle9"
       options: []
       isImperative: false
       artifactId: "rewrite-gradle"
@@ -11721,7 +11902,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.61.1"
+  version: "8.62.0"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.AutoFormat:
       name: "org.openrewrite.groovy.format.AutoFormat"
@@ -11757,7 +11938,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.61.1"
+  version: "8.62.0"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -11870,7 +12051,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-hibernate:
   artifactId: "rewrite-hibernate"
-  version: "0.10.0"
+  version: "0.11.0"
   markdownRecipeDescriptors:
     io.moderne.hibernate.MigrateToHibernate66:
       name: "io.moderne.hibernate.MigrateToHibernate66"
@@ -11931,6 +12112,23 @@ rewrite-hibernate:
         \ behavior will be modified by addition of explicit cascade=PERSIST to the\
         \ association fields."
       docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/addcascadepersisttoidmappedassociations"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-hibernate"
+    io.moderne.hibernate.update70.CompositeUserTypeSessionFactoryImplementor:
+      name: "io.moderne.hibernate.update70.CompositeUserTypeSessionFactoryImplementor"
+      description: "Remove leaking of SessionFactoryImplementor from `org.hibernate.usertype.CompositeUserType`\
+        \ invocations and implementations."
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/compositeusertypesessionfactoryimplementor"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-hibernate"
+    io.moderne.hibernate.update70.MigrateJdbcTypeToJdbcTypeCode:
+      name: "io.moderne.hibernate.update70.MigrateJdbcTypeToJdbcTypeCode"
+      description: "In Hibernate 7.0, various JDBC types were moved to internal packages.\
+        \ Use @JdbcTypeCode with SqlTypes constants instead of @JdbcType with specific\
+        \ classes."
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratejdbctypetojdbctypecode"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12007,6 +12205,22 @@ rewrite-hibernate:
       description: "Migrates Session.buildLockRequest(LockOptions.X) calls to use\
         \ session.lock(entity, new LockOptions(LockMode.X)) in Hibernate 7.0."
       docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/replacesessionlockrequest"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-hibernate"
+    io.moderne.hibernate.update70.UserTypeNullSafeGetSharedSessionContractImplementorRecipe:
+      name: "io.moderne.hibernate.update70.UserTypeNullSafeGetSharedSessionContractImplementorRecipe"
+      description: "Remove leaking of SharedSessionContractImplementor from `org.hibernate.usertype.UserType`\
+        \ invocations."
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/usertypenullsafegetsharedsessioncontractimplementorrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-hibernate"
+    io.moderne.hibernate.update70.UserTypeSharedSessionContractImplementor:
+      name: "io.moderne.hibernate.update70.UserTypeSharedSessionContractImplementor"
+      description: "Remove leaking of SharedSessionContractImplementor from `org.hibernate.usertype.UserType`\
+        \ implementations."
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/usertypesharedsessioncontractimplementor"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12183,7 +12397,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-jackson:
   artifactId: "rewrite-jackson"
-  version: "1.3.0"
+  version: "1.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jackson.CodehausClassesToFasterXML:
       name: "org.openrewrite.java.jackson.CodehausClassesToFasterXML"
@@ -12279,7 +12493,7 @@ rewrite-jackson:
       artifactId: "rewrite-jackson"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.61.1"
+  version: "8.62.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -13453,7 +13667,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "1.41.0"
+  version: "1.42.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.AddDependency:
       name: "org.openrewrite.java.dependencies.AddDependency"
@@ -13865,7 +14079,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "3.17.0"
+  version: "3.18.0"
   markdownRecipeDescriptors:
     org.openrewrite.csharp.dependencies.DependencyInsight:
       name: "org.openrewrite.csharp.dependencies.DependencyInsight"
@@ -13938,7 +14152,7 @@ rewrite-java-security:
         \ which aggregates vulnerability data from several public databases, including\
         \ the [National Vulnerability Database](https://nvd.nist.gov/) maintained\
         \ by the United States government. Upgrades dependencies versioned according\
-        \ to [Semantic Versioning](https://semver.org/). Last updated: 2025-08-25T1102."
+        \ to [Semantic Versioning](https://semver.org/). Last updated: 2025-09-08T1102."
       docLink: "https://docs.openrewrite.org/recipes/java/dependencies/dependencyvulnerabilitycheck"
       options:
       - name: "maximumUpgradeDelta"
@@ -14509,7 +14723,7 @@ rewrite-java-security:
       artifactId: "rewrite-java-security"
 rewrite-jenkins:
   artifactId: "rewrite-jenkins"
-  version: "0.30.1"
+  version: "0.30.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3:
       name: "org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3"
@@ -14574,7 +14788,7 @@ rewrite-jenkins:
     org.openrewrite.jenkins.IsJenkinsPlugin:
       name: "org.openrewrite.jenkins.IsJenkinsPlugin"
       description: "Checks if the project is a Jenkins plugin by the presence of a\
-        \ managed version of jenkins-core"
+        \ managed version of `jenkins-core`."
       docLink: "https://docs.openrewrite.org/recipes/jenkins/isjenkinsplugin"
       options:
       - name: "version"
@@ -14689,7 +14903,7 @@ rewrite-jenkins:
       artifactId: "rewrite-jenkins"
 rewrite-joda:
   artifactId: "rewrite-joda"
-  version: "0.1.0"
+  version: "0.1.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.joda.time.JodaTimeRecipe:
       name: "org.openrewrite.java.joda.time.JodaTimeRecipe"
@@ -14713,7 +14927,7 @@ rewrite-joda:
       artifactId: "rewrite-joda"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.61.1"
+  version: "8.62.0"
   markdownRecipeDescriptors:
     org.openrewrite.json.AddKeyValue:
       name: "org.openrewrite.json.AddKeyValue"
@@ -14803,9 +15017,183 @@ rewrite-json:
         required: true
       isImperative: true
       artifactId: "rewrite-json"
+rewrite-kafka:
+  artifactId: "rewrite-kafka"
+  version: "0.1.0"
+  markdownRecipeDescriptors:
+    io.moderne.kafka.MigrateToKafka24:
+      name: "io.moderne.kafka.MigrateToKafka24"
+      description: "Migrate applications to the latest Kafka 2.3 release."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/migratetokafka24"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.MigrateToKafka25:
+      name: "io.moderne.kafka.MigrateToKafka25"
+      description: "Migrate applications to the latest Kafka 2.5 release."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/migratetokafka25"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.MigrateToKafka26:
+      name: "io.moderne.kafka.MigrateToKafka26"
+      description: "Migrate applications to the latest Kafka 2.6 release."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/migratetokafka26"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.MigrateToKafka27:
+      name: "io.moderne.kafka.MigrateToKafka27"
+      description: "Migrate applications to the latest Kafka 2.7 release."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/migratetokafka27"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.MigrateToKafka28:
+      name: "io.moderne.kafka.MigrateToKafka28"
+      description: "Migrate applications to the latest Kafka 2.8 release."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/migratetokafka28"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.MigrateToKafka30:
+      name: "io.moderne.kafka.MigrateToKafka30"
+      description: "Migrate applications to the latest Kafka 3.0 release."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/migratetokafka30"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.MigrateToKafka31:
+      name: "io.moderne.kafka.MigrateToKafka31"
+      description: "Migrate applications to the latest Kafka 3.1 release."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/migratetokafka31"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.MigrateToKafka32:
+      name: "io.moderne.kafka.MigrateToKafka32"
+      description: "Migrate applications to the latest Kafka 3.2 release."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/migratetokafka32"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.MigrateToKafka33:
+      name: "io.moderne.kafka.MigrateToKafka33"
+      description: "Migrate applications to the latest Kafka 3.3 release."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/migratetokafka33"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.streams.MigrateJoinedNameMethod:
+      name: "io.moderne.kafka.streams.MigrateJoinedNameMethod"
+      description: "In Kafka Streams 2.3, `Joined.named()` was deprecated in favor\
+        \ of `Joined.as()`. Additionally, the `name()` method was deprecated for removal\
+        \ and should not be used."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/streams/migratejoinednamemethod"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.streams.MigrateKStreamToTable:
+      name: "io.moderne.kafka.streams.MigrateKStreamToTable"
+      description: "In Kafka Streams 2.5, a new `toTable()` method was added to simplify\
+        \ converting a KStream to a KTable. This recipe replaces the manual aggregation\
+        \ pattern `.groupByKey().reduce((oldVal, newVal) -> newVal)` with the more\
+        \ concise `.toTable()` method."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/streams/migratekstreamtotable"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.streams.MigrateKafkaStreamsStoreMethod:
+      name: "io.moderne.kafka.streams.MigrateKafkaStreamsStoreMethod"
+      description: "In Kafka Streams 2.5, the method `KafkaStreams#store(String storeName,\
+        \ QueryableStoreType<T> storeType)` was deprecated. It only allowed querying\
+        \ active stores and did not support any additional query options. Use the\
+        \ new `StoreQueryParameters` API instead."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/streams/migratekafkastreamsstoremethod"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.streams.MigrateRetryConfiguration:
+      name: "io.moderne.kafka.streams.MigrateRetryConfiguration"
+      description: "In Kafka 2.7, `RETRIES_CONFIG` and `RETRY_BACKOFF_MS_CONFIG` were\
+        \ deprecated in favor of `TASK_TIMEOUT_MS_CONFIG`. This recipe migrates the\
+        \ old retry configuration to the new task timeout configuration, attempting\
+        \ to preserve the retry budget by multiplying retries × backoff time. If only\
+        \ one config is present, it falls back to 60000ms (1 minute)."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/streams/migrateretryconfiguration"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.streams.MigrateStreamsUncaughtExceptionHandler:
+      name: "io.moderne.kafka.streams.MigrateStreamsUncaughtExceptionHandler"
+      description: "Migrates from the JVM-level Thread.UncaughtExceptionHandler to\
+        \ Kafka Streams' StreamsUncaughtExceptionHandler API introduced in version\
+        \ 2.8. This new API provides explicit control over how the Streams client\
+        \ should respond to uncaught exceptions (REPLACE_THREAD, SHUTDOWN_CLIENT,\
+        \ or SHUTDOWN_APPLICATION)."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/streams/migratestreamsuncaughtexceptionhandler"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.streams.MigrateTaskAndThreadMetadata:
+      name: "io.moderne.kafka.streams.MigrateTaskAndThreadMetadata"
+      description: "Migrates TaskMetadata and ThreadMetadata from org.apache.kafka.streams.processor\
+        \ package to org.apache.kafka.streams package, and updates TaskMetadata.taskId()\
+        \ calls to include .toString() for String compatibility."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/streams/migratetaskandthreadmetadata"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.streams.MigrateTaskMetadataTaskId:
+      name: "io.moderne.kafka.streams.MigrateTaskMetadataTaskId"
+      description: "In Kafka Streams 3.0, `TaskMetadata.taskId()` changed its return\
+        \ type from `String` to `TaskId`. This recipe adds `.toString()` calls where\
+        \ necessary to maintain String compatibility."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/streams/migratetaskmetadatataskid"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.streams.MigrateWindowStorePutMethod:
+      name: "io.moderne.kafka.streams.MigrateWindowStorePutMethod"
+      description: "In Kafka Streams 2.4, `WindowStore.put()` requires a timestamp\
+        \ parameter. This recipe adds `context.timestamp()` as the third parameter."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/streams/migratewindowstoreputmethod"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.streams.ProcessingGuaranteeExactlyOnceToBeta:
+      name: "io.moderne.kafka.streams.ProcessingGuaranteeExactlyOnceToBeta"
+      description: "Kafka Streams 2.6 introduces the exactly-once semantics v2, which\
+        \ is a more efficient implementation with improved internal handling. Though\
+        \ it is beta, it’s fully backward-compatible from the API standpoint, but\
+        \ internally it uses a different transaction/commit protocol. Starting from\
+        \ 3.0, it becomes the default \"exactly_once_v2\"."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/streams/processingguaranteeexactlyoncetobeta"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.streams.ProcessingGuaranteeExactlyOnceToV2:
+      name: "io.moderne.kafka.streams.ProcessingGuaranteeExactlyOnceToV2"
+      description: "Kafka Streams 2.6 introduces the exactly-once semantics v2, which\
+        \ is a more efficient implementation with improved internal handling. Starting\
+        \ from 3.0, it becomes the default \"exactly_once_v2\"."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/streams/processingguaranteeexactlyoncetov2"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-kafka"
+    io.moderne.kafka.streams.RemovePartitionGrouperConfiguration:
+      name: "io.moderne.kafka.streams.RemovePartitionGrouperConfiguration"
+      description: "Starting with Kafka Streams 2.4, the `PartitionGrouper` API was\
+        \ deprecated and partition grouping is now fully handled internally by the\
+        \ library. This recipe removes the deprecated `PARTITION_GROUPER_CLASS_CONFIG`\
+        \ configuration."
+      docLink: "https://docs.openrewrite.org/recipes/kafka/streams/removepartitiongrouperconfiguration"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-kafka"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "8.61.1"
+  version: "8.62.0"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -14913,7 +15301,7 @@ rewrite-kotlin:
       artifactId: "rewrite-kotlin"
 rewrite-kubernetes:
   artifactId: "rewrite-kubernetes"
-  version: "3.10.0"
+  version: "3.10.1"
   markdownRecipeDescriptors:
     org.openrewrite.kubernetes.AddConfiguration:
       name: "org.openrewrite.kubernetes.AddConfiguration"
@@ -15457,7 +15845,7 @@ rewrite-kubernetes:
       artifactId: "rewrite-kubernetes"
 rewrite-liberty:
   artifactId: "rewrite-liberty"
-  version: "1.21.1"
+  version: "1.21.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty:
       name: "org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty"
@@ -15565,7 +15953,7 @@ rewrite-liberty:
       artifactId: "rewrite-liberty"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "3.13.2"
+  version: "3.14.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.logging.ArgumentArrayToVarargs:
       name: "org.openrewrite.java.logging.ArgumentArrayToVarargs"
@@ -16667,7 +17055,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.61.1"
+  version: "8.62.0"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddAnnotationProcessor:
       name: "org.openrewrite.maven.AddAnnotationProcessor"
@@ -17122,6 +17510,9 @@ rewrite-maven:
       options:
       - name: "allowVersionDowngrades"
         type: "Boolean"
+        required: false
+      - name: "except"
+        type: "List"
         required: false
       - name: "newArtifactId"
         type: "String"
@@ -18018,7 +18409,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micrometer:
   artifactId: "rewrite-micrometer"
-  version: "0.25.0"
+  version: "0.25.1"
   markdownRecipeDescriptors:
     org.openrewrite.micrometer.TimerToObservation:
       name: "org.openrewrite.micrometer.TimerToObservation"
@@ -18077,7 +18468,7 @@ rewrite-micrometer:
       artifactId: "rewrite-micrometer"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "2.27.0"
+  version: "2.27.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.AddAnnotationProcessorPath:
       name: "org.openrewrite.java.micronaut.AddAnnotationProcessorPath"
@@ -18421,7 +18812,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "3.16.0"
+  version: "3.17.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jspecify.JSpecifyBestPractices:
       name: "org.openrewrite.java.jspecify.JSpecifyBestPractices"
@@ -18789,6 +19180,14 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.MigrateZipErrorToZipException:
+      name: "org.openrewrite.java.migrate.MigrateZipErrorToZipException"
+      description: "Use `ZipException` instead of the deprecated `ZipError` in Java\
+        \ 9 or higher."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/migrateziperrortozipexception"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.ReferenceCloneMethod:
       name: "org.openrewrite.java.migrate.ReferenceCloneMethod"
       description: "The recipe replaces any clone calls that may resolve to a `java.lang.ref.Reference.clone()`\
@@ -19112,13 +19511,6 @@ rewrite-migrate-java:
       name: "org.openrewrite.java.migrate.UpgradeBuildToJava21"
       description: "Updates build files to use Java 21 as the target/source."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/upgradebuildtojava21"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.UpgradeBuildToJava25:
-      name: "org.openrewrite.java.migrate.UpgradeBuildToJava25"
-      description: "Updates build files to use Java 25 as the target/source."
-      docLink: "https://docs.openrewrite.org/recipes/java/migrate/upgradebuildtojava25"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -21071,6 +21463,14 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.MigrateProcessWaitForDuration:
+      name: "org.openrewrite.java.migrate.lang.MigrateProcessWaitForDuration"
+      description: "Use `Process#waitFor(Duration)` instead of `Process#waitFor(long,\
+        \ TimeUnit)` in Java 25 or higher."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/lang/migrateprocesswaitforduration"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.lang.MigrateRuntimeVersionMajorToFeature:
       name: "org.openrewrite.java.migrate.lang.MigrateRuntimeVersionMajorToFeature"
       description: "Use `Runtime.Version#feature()` instead of the deprecated `Runtime.Version#major()`\
@@ -21119,6 +21519,15 @@ rewrite-migrate-java:
       description: "Use guarded switch case labels and guards if all the statements\
         \ in the switch block do if/else if/else on the guarded label."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/lang/refineswitchcases"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.ReplaceUnusedVariablesWithUnderscore:
+      name: "org.openrewrite.java.migrate.lang.ReplaceUnusedVariablesWithUnderscore"
+      description: "Replace unused variable declarations with underscore (_) for Java\
+        \ 22+. This includes unused variables in enhanced for loops, catch blocks,\
+        \ and lambda parameters where the variable is never referenced."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/lang/replaceunusedvariableswithunderscore"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
@@ -21732,6 +22141,14 @@ rewrite-migrate-java:
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.util.MigrateInflaterDeflaterToClose:
+      name: "org.openrewrite.java.migrate.util.MigrateInflaterDeflaterToClose"
+      description: "Replace `end()` method calls with `close()` method calls for `Inflater`\
+        \ and `Deflater` classes in Java 25+, as they now implement AutoCloseable."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/util/migrateinflaterdeflatertoclose"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.util.OptionalNotEmptyToIsPresent:
       name: "org.openrewrite.java.migrate.util.OptionalNotEmptyToIsPresent"
       description: "Prefer `Optional.isPresent()` instead of using `!Optional.isEmpty()`\
@@ -21832,7 +22249,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-netty:
   artifactId: "rewrite-netty"
-  version: "0.3.0"
+  version: "0.3.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.netty.EventLoopGroupToMultiThreadIoEventLoopGroupRecipes:
       name: "org.openrewrite.java.netty.EventLoopGroupToMultiThreadIoEventLoopGroupRecipes"
@@ -21871,7 +22288,7 @@ rewrite-netty:
       artifactId: "rewrite-netty"
 rewrite-nodejs:
   artifactId: "rewrite-nodejs"
-  version: "0.29.0"
+  version: "0.29.1"
   markdownRecipeDescriptors:
     org.openrewrite.nodejs.DependencyVulnerabilityCheck:
       name: "org.openrewrite.nodejs.DependencyVulnerabilityCheck"
@@ -22020,7 +22437,7 @@ rewrite-nodejs:
       artifactId: "rewrite-nodejs"
 rewrite-okhttp:
   artifactId: "rewrite-okhttp"
-  version: "0.18.1"
+  version: "0.18.2"
   markdownRecipeDescriptors:
     org.openrewrite.okhttp.ReorderRequestBodyCreateArguments:
       name: "org.openrewrite.okhttp.ReorderRequestBodyCreateArguments"
@@ -22077,7 +22494,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-openapi:
   artifactId: "rewrite-openapi"
-  version: "0.24.1"
+  version: "0.24.2"
   markdownRecipeDescriptors:
     org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings:
       name: "org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings"
@@ -22188,7 +22605,7 @@ rewrite-openapi:
       artifactId: "rewrite-openapi"
 rewrite-program-analysis:
   artifactId: "rewrite-program-analysis"
-  version: "0.4.1"
+  version: "0.5.1"
   markdownRecipeDescriptors:
     org.openrewrite.analysis.java.FindNullPointerIssues:
       name: "org.openrewrite.analysis.java.FindNullPointerIssues"
@@ -22320,7 +22737,7 @@ rewrite-program-analysis:
       artifactId: "rewrite-program-analysis"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.61.1"
+  version: "8.62.0"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -22447,7 +22864,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "2.25.0"
+  version: "2.25.1"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.AddQuarkusProperty:
       name: "org.openrewrite.quarkus.AddQuarkusProperty"
@@ -22715,7 +23132,7 @@ rewrite-quarkus:
       artifactId: "rewrite-quarkus"
 rewrite-reactive-streams:
   artifactId: "rewrite-reactive-streams"
-  version: "0.16.0"
+  version: "0.16.1"
   markdownRecipeDescriptors:
     org.openrewrite.reactive.reactor.ReactorBestPractices:
       name: "org.openrewrite.reactive.reactor.ReactorBestPractices"
@@ -22895,7 +23312,7 @@ rewrite-reactive-streams:
       artifactId: "rewrite-reactive-streams"
 rewrite-rewrite:
   artifactId: "rewrite-rewrite"
-  version: "0.12.0"
+  version: "0.12.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations:
       name: "org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations"
@@ -23093,78 +23510,6 @@ rewrite-rewrite:
       options: []
       isImperative: true
       artifactId: "rewrite-rewrite"
-    org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes:
-      name: "org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes"
-      description: "Replace the usage of static `Traits` methods with the corresponding\
-        \ constructor calls, as the `Traits` classes were an early abstraction with\
-        \ undesirable import conflicts."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/migrate/removetraitsusagerecipes"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-rewrite"
-    org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$AnnotationMatcherRecipe:
-      name: "org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$AnnotationMatcherRecipe"
-      description: "Removes the usage of static `org.openrewrite.java.trait.Traits.annotated(AnnotationMatcher)`."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/migrate/removetraitsusagerecipes$annotationmatcherrecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-rewrite"
-    org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$ClassTypeRecipe:
-      name: "org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$ClassTypeRecipe"
-      description: "Removes the usage of static `org.openrewrite.java.trait.Traits.annotated(Class<?>)`."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/migrate/removetraitsusagerecipes$classtyperecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-rewrite"
-    org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$DependencyRecipe:
-      name: "org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$DependencyRecipe"
-      description: "Removes the usage of static `org.openrewrite.gradle.trait.Traits.gradleDependency()`."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/migrate/removetraitsusagerecipes$dependencyrecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-rewrite"
-    org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$JvmTestSuiteRecipe:
-      name: "org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$JvmTestSuiteRecipe"
-      description: "Removes the usage of static `org.openrewrite.gradle.trait.Traits.jvmTestSuite()`."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/migrate/removetraitsusagerecipes$jvmtestsuiterecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-rewrite"
-    org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$LiteralRecipe:
-      name: "org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$LiteralRecipe"
-      description: "Removes the usage of static `org.openrewrite.java.trait.Traits.literal()`."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/migrate/removetraitsusagerecipes$literalrecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-rewrite"
-    org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$MethodMatcherRecipe:
-      name: "org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$MethodMatcherRecipe"
-      description: "Removes the usage of static `org.openrewrite.java.trait.Traits.methodAccess(MethodMatcher)`."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/migrate/removetraitsusagerecipes$methodmatcherrecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-rewrite"
-    org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$PluginRecipe:
-      name: "org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$PluginRecipe"
-      description: "Removes the usage of static `org.openrewrite.maven.trait.Traits.mavenPlugin()`."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/migrate/removetraitsusagerecipes$pluginrecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-rewrite"
-    org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$StringSignatureRecipe:
-      name: "org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$StringSignatureRecipe"
-      description: "Removes the usage of static `org.openrewrite.java.trait.Traits.annotated(String)`."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/migrate/removetraitsusagerecipes$stringsignaturerecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-rewrite"
-    org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$VariableAccessRecipe:
-      name: "org.openrewrite.java.recipes.migrate.RemoveTraitsUsageRecipes$VariableAccessRecipe"
-      description: "Removes the usage of static `org.openrewrite.java.trait.Traits.variableAccess()`."
-      docLink: "https://docs.openrewrite.org/recipes/java/recipes/migrate/removetraitsusagerecipes$variableaccessrecipe"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-rewrite"
     org.openrewrite.recipes.rewrite.OpenRewriteRecipeBestPractices:
       name: "org.openrewrite.recipes.rewrite.OpenRewriteRecipeBestPractices"
       description: "Best practices for OpenRewrite recipe development."
@@ -23174,7 +23519,7 @@ rewrite-rewrite:
       artifactId: "rewrite-rewrite"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "0.12.0"
+  version: "0.13.0"
   markdownRecipeDescriptors:
     io.moderne.java.spring.boot.IsLikelyNotSpringBoot:
       name: "io.moderne.java.spring.boot.IsLikelyNotSpringBoot"
@@ -23356,13 +23701,6 @@ rewrite-spring:
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
-    io.moderne.java.spring.boot3.SpringBootProperties_3_5:
-      name: "io.moderne.java.spring.boot3.SpringBootProperties_3_5"
-      description: "Migrate properties found in `application.properties` and `application.yml`."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/springbootproperties_3_5"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-spring"
     io.moderne.java.spring.boot3.UpdateOpenTelemetryResourceAttributes:
       name: "io.moderne.java.spring.boot3.UpdateOpenTelemetryResourceAttributes"
       description: "The `service.group` resource attribute has been deprecated for\
@@ -23475,32 +23813,10 @@ rewrite-spring:
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
-    io.moderne.java.spring.cloud2025.ChangeDeprecatedArtifacts:
-      name: "io.moderne.java.spring.cloud2025.ChangeDeprecatedArtifacts"
-      description: ""
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/cloud2025/changedeprecatedartifacts"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-spring"
-    io.moderne.java.spring.cloud2025.DependencyUpgrades:
-      name: "io.moderne.java.spring.cloud2025.DependencyUpgrades"
-      description: "Upgrade dependencies to Spring Cloud 2025 from prior 2024.x version."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/cloud2025/dependencyupgrades"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-spring"
     io.moderne.java.spring.cloud2025.SpringCloudProperties_2025:
       name: "io.moderne.java.spring.cloud2025.SpringCloudProperties_2025"
       description: "Migrate properties found in `application.properties` and `application.yml`."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/cloud2025/springcloudproperties_2025"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-spring"
-    io.moderne.java.spring.cloud2025.UpgradeSpringCloud_2025:
-      name: "io.moderne.java.spring.cloud2025.UpgradeSpringCloud_2025"
-      description: "Migrate applications to the latest Spring Cloud 2025 (Northfields)\
-        \ release."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/cloud2025/upgradespringcloud_2025"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -23533,12 +23849,30 @@ rewrite-spring:
         required: true
       isImperative: true
       artifactId: "rewrite-spring"
+    io.moderne.java.spring.security6.MigrateAntPathRequestMatcher:
+      name: "io.moderne.java.spring.security6.MigrateAntPathRequestMatcher"
+      description: "In Spring Security 6.5, `AntPathRequestMatcher` is deprecated\
+        \ in favor of `PathPatternRequestMatcher`. This recipe migrates static method\
+        \ calls and constructor usage to the new pattern."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/security6/migrateantpathrequestmatcher"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
     io.moderne.java.spring.security6.UpgradeSpringSecurity_6_4:
       name: "io.moderne.java.spring.security6.UpgradeSpringSecurity_6_4"
       description: "Migrate applications to the latest Spring Security 6.4 release.\
         \ This recipe will modify an application's build files, make changes to deprecated/preferred\
         \ APIs, and migrate configuration settings that have changes between versions."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/security6/upgradespringsecurity_6_4"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    io.moderne.java.spring.security6.UpgradeSpringSecurity_6_5:
+      name: "io.moderne.java.spring.security6.UpgradeSpringSecurity_6_5"
+      description: "Migrate applications to the latest Spring Security 6.5 release.\
+        \ This recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs, and migrate configuration settings that have changes between versions."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/security6/upgradespringsecurity_6_5"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -24765,6 +25099,13 @@ rewrite-spring:
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.boot3.SpringBootProperties_3_5:
+      name: "org.openrewrite.java.spring.boot3.SpringBootProperties_3_5"
+      description: "Migrate properties found in `application.properties` and `application.yml`."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/springbootproperties_3_5"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.boot3.UpgradeMyBatisToSpringBoot_2_0:
       name: "org.openrewrite.java.spring.boot3.UpgradeMyBatisToSpringBoot_2_0"
       description: "Upgrade MyBatis Spring modules to a version corresponding to Spring\
@@ -24902,6 +25243,15 @@ rewrite-spring:
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_5:
+      name: "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_5"
+      description: "Migrate applications to the latest Spring Boot 3.5 release. This\
+        \ recipe will modify an application's build files, make changes to deprecated/preferred\
+        \ APIs."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/upgradespringboot_3_5"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.cloud2022.AddLoggingPatternLevelForSleuth:
       name: "org.openrewrite.java.spring.cloud2022.AddLoggingPatternLevelForSleuth"
       description: "Add `logging.pattern.level` for traceId and spanId which was previously\
@@ -24968,6 +25318,69 @@ rewrite-spring:
       description: "Migrate applications to the latest Spring Cloud 2024 (Moorgate)\
         \ release."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/cloud2024/upgradespringcloud_2024"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.cloud2025.DependencyUpgrades:
+      name: "org.openrewrite.java.spring.cloud2025.DependencyUpgrades"
+      description: "Upgrade dependencies to Spring Cloud 2025 from prior 2024.x version."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/cloud2025/dependencyupgrades"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.cloud2025.SpringCloudGatewayDeprecatedModulesAndStarters:
+      name: "org.openrewrite.java.spring.cloud2025.SpringCloudGatewayDeprecatedModulesAndStarters"
+      description: "Migrate to new Spring Cloud Gateway modules and starters for Spring\
+        \ Cloud 2025"
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/cloud2025/springcloudgatewaydeprecatedmodulesandstarters"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.cloud2025.SpringCloudGatewayProperties:
+      name: "org.openrewrite.java.spring.cloud2025.SpringCloudGatewayProperties"
+      description: "Migrate Spring Cloud Gateway properties for Spring Cloud 2025\
+        \ release."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/cloud2025/springcloudgatewayproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.cloud2025.SpringCloudGatewayProxyWebMvcProperties:
+      name: "org.openrewrite.java.spring.cloud2025.SpringCloudGatewayProxyWebMvcProperties"
+      description: "Migrate Spring Cloud Gateway Proxy WebMvc properties for Spring\
+        \ Cloud 2025 release."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/cloud2025/springcloudgatewayproxywebmvcproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.cloud2025.SpringCloudGatewayProxyWebfluxProperties:
+      name: "org.openrewrite.java.spring.cloud2025.SpringCloudGatewayProxyWebfluxProperties"
+      description: "Migrate Spring Cloud Gateway Proxy Webflux properties for Spring\
+        \ Cloud 2025 release."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/cloud2025/springcloudgatewayproxywebfluxproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.cloud2025.SpringCloudGatewayWebMvcProperties:
+      name: "org.openrewrite.java.spring.cloud2025.SpringCloudGatewayWebMvcProperties"
+      description: "Migrate Spring Cloud Gateway WebMvc properties for Spring Cloud\
+        \ 2025 release."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/cloud2025/springcloudgatewaywebmvcproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.cloud2025.SpringCloudGatewayWebfluxProperties:
+      name: "org.openrewrite.java.spring.cloud2025.SpringCloudGatewayWebfluxProperties"
+      description: "Migrate Spring Cloud Gateway Webflux properties for Spring Cloud\
+        \ 2025 release."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/cloud2025/springcloudgatewaywebfluxproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.cloud2025.UpgradeSpringCloud_2025:
+      name: "org.openrewrite.java.spring.cloud2025.UpgradeSpringCloud_2025"
+      description: "Migrate applications to the latest Spring Cloud 2025 (Northfields)\
+        \ release."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/cloud2025/upgradespringcloud_2025"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -25153,6 +25566,15 @@ rewrite-spring:
       description: "Replaces usages of deprecated `org.springframework.util.Base64Utils`\
         \ with `java.util.Base64`."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/framework/migratebase64utils"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.framework.MigrateClientHttpResponseGetRawStatusCodeMethod:
+      name: "org.openrewrite.java.spring.framework.MigrateClientHttpResponseGetRawStatusCodeMethod"
+      description: "`ClientHttpResponse#getRawStatusCode()` was deprecated, so we\
+        \ replace it with `getStatusCode()`, though the return type has changed from\
+        \ `int` to `HttpStatusCode`, so we must account for that as well."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/framework/migrateclienthttpresponsegetrawstatuscodemethod"
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
@@ -25831,7 +26253,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-sql:
   artifactId: "rewrite-sql"
-  version: "2.6.3"
+  version: "2.6.4"
   markdownRecipeDescriptors:
     org.openrewrite.sql.ChangeFunctionName:
       name: "org.openrewrite.sql.ChangeFunctionName"
@@ -25888,7 +26310,7 @@ rewrite-sql:
       artifactId: "rewrite-sql"
 rewrite-static-analysis:
   artifactId: "rewrite-static-analysis"
-  version: "2.16.0"
+  version: "2.17.0"
   markdownRecipeDescriptors:
     org.openrewrite.staticanalysis.AbstractClassPublicConstructor:
       name: "org.openrewrite.staticanalysis.AbstractClassPublicConstructor"
@@ -27075,6 +27497,13 @@ rewrite-static-analysis:
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.SimplifyElseBranch:
+      name: "org.openrewrite.staticanalysis.SimplifyElseBranch"
+      description: "Simplify `else` branch if it only has a single `if`."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/simplifyelsebranch"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.SimplifyTernaryRecipes:
       name: "org.openrewrite.staticanalysis.SimplifyTernaryRecipes"
       description: "Simplifies various types of ternary expressions to improve code\
@@ -27348,6 +27777,14 @@ rewrite-static-analysis:
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.UsePortableNewlines:
+      name: "org.openrewrite.staticanalysis.UsePortableNewlines"
+      description: "Format strings should use %n rather than \\n to produce platform-specific\
+        \ line separators."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/useportablenewlines"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.UseStandardCharset:
       name: "org.openrewrite.staticanalysis.UseStandardCharset"
       description: "Replaces `Charset.forName(java.lang.String)` with the equivalent\
@@ -27415,7 +27852,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
 rewrite-struts:
   artifactId: "rewrite-struts"
-  version: "0.19.1"
+  version: "0.20.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.struts.MigrateStrutsDtd:
       name: "org.openrewrite.java.struts.MigrateStrutsDtd"
@@ -27429,10 +27866,20 @@ rewrite-struts:
       artifactId: "rewrite-struts"
     org.openrewrite.java.struts.migrate6.MigrateAwareInterfaces:
       name: "org.openrewrite.java.struts.migrate6.MigrateAwareInterfaces"
-      description: "These types have moved to a new package in Struts 6.0."
+      description: "These types have moved to a new package in Struts 6.0 and their\
+        \ methods have been renamed from set* to with*."
       docLink: "https://docs.openrewrite.org/recipes/java/struts/migrate6/migrateawareinterfaces"
       options: []
       isImperative: false
+      artifactId: "rewrite-struts"
+    org.openrewrite.java.struts.migrate6.MigrateDynamicMethodInvocation:
+      name: "org.openrewrite.java.struts.migrate6.MigrateDynamicMethodInvocation"
+      description: "Identifies Struts configurations using Dynamic Method Invocation\
+        \ (DMI) and marks them for migration, as DMI is disabled by default in Struts\
+        \ 6 for security reasons."
+      docLink: "https://docs.openrewrite.org/recipes/java/struts/migrate6/migratedynamicmethodinvocation"
+      options: []
+      isImperative: true
       artifactId: "rewrite-struts"
     org.openrewrite.java.struts.migrate6.MigrateOpenSymphonyClasses:
       name: "org.openrewrite.java.struts.migrate6.MigrateOpenSymphonyClasses"
@@ -27481,7 +27928,7 @@ rewrite-struts:
       artifactId: "rewrite-struts"
 rewrite-terraform:
   artifactId: "rewrite-terraform"
-  version: "3.8.0"
+  version: "3.8.1"
   markdownRecipeDescriptors:
     org.openrewrite.terraform.AddConfiguration:
       name: "org.openrewrite.terraform.AddConfiguration"
@@ -28385,7 +28832,7 @@ rewrite-terraform:
       artifactId: "rewrite-terraform"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "3.16.0"
+  version: "3.16.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.archunit.ArchUnit0to1Migration:
       name: "org.openrewrite.java.testing.archunit.ArchUnit0to1Migration"
@@ -28940,6 +29387,14 @@ rewrite-testing-frameworks:
       description: "Simplify AssertJ assertions by replacing `hasSize` with `hasSameSizeAs`\
         \ dedicated assertions."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/assertj/simplifyhassizeassertion"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.assertj.SimplifyRedundantAssertJChains:
+      name: "org.openrewrite.java.testing.assertj.SimplifyRedundantAssertJChains"
+      description: "Removes redundant AssertJ assertions when chained methods already\
+        \ provide the same or stronger guarantees."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/assertj/simplifyredundantassertjchains"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
@@ -29832,8 +30287,8 @@ rewrite-testing-frameworks:
     org.openrewrite.java.testing.mockito.MockitoWhenOnStaticToMockStatic:
       name: "org.openrewrite.java.testing.mockito.MockitoWhenOnStaticToMockStatic"
       description: "Replace `Mockito.when` on static (non mock) with try-with-resource\
-        \ with MockedStatic as Mockito4 no longer allows this. When `@Before` or `@BeforeClass`\
-        \ is used, a `close` method is added to either the `@After` or `@AfterClass`\
+        \ with MockedStatic as Mockito4 no longer allows this. For JUnit 4/5 & TestNG:\
+        \ When `@Before*` is used, a `close` call is added to the corresponding `@After*`\
         \ method. This change moves away from implicit bytecode manipulation for static\
         \ method stubbing, making mocking behavior more explicit and scoped to avoid\
         \ unintended side effects."
@@ -29975,7 +30430,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-third-party:
   artifactId: "rewrite-third-party"
-  version: "0.26.0"
+  version: "0.27.0"
   markdownRecipeDescriptors:
     ai.timefold.solver.migration.ChangeVersion:
       name: "ai.timefold.solver.migration.ChangeVersion"
@@ -32020,9 +32475,16 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.Camel410LTSMigrationRecipe:
+      name: "org.apache.camel.upgrade.Camel410LTSMigrationRecipe"
+      description: "Migrates Apache Camel application to 4.10.6."
+      docLink: "https://docs.openrewrite.org/recipes/org/apache/camel/upgrade/camel410ltsmigrationrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     org.apache.camel.upgrade.CamelMigrationRecipe:
       name: "org.apache.camel.upgrade.CamelMigrationRecipe"
-      description: "Migrates Apache Camel application to 4.13.0"
+      description: "Migrates Apache Camel application to 4.14.0."
       docLink: "https://docs.openrewrite.org/recipes/org/apache/camel/upgrade/camelmigrationrecipe"
       options: []
       isImperative: true
@@ -32243,6 +32705,13 @@ rewrite-third-party:
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.camel410_4.CamelMigrationRecipe:
+      name: "org.apache.camel.upgrade.camel410_4.CamelMigrationRecipe"
+      description: "Migrates `camel 4.10.3` application to `camel 4.10.4`."
+      docLink: "https://docs.openrewrite.org/recipes/org/apache/camel/upgrade/camel410_4/camelmigrationrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
     org.apache.camel.upgrade.camel411.CamelMigrationRecipe:
       name: "org.apache.camel.upgrade.camel411.CamelMigrationRecipe"
       description: "Migrates `camel 4.10` application to `camel 4.11`."
@@ -32359,6 +32828,22 @@ rewrite-third-party:
       name: "org.apache.camel.upgrade.camel413.furyJava"
       description: "BasicAuthenticationHttpClientConfigurer is renamed to DefaultAuthenticationHttpClientConfigurer."
       docLink: "https://docs.openrewrite.org/recipes/org/apache/camel/upgrade/camel413/furyjava"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.camel414.CamelMigrationRecipe:
+      name: "org.apache.camel.upgrade.camel414.CamelMigrationRecipe"
+      description: "Migrates `camel 4.13` application to `camel 4.14`."
+      docLink: "https://docs.openrewrite.org/recipes/org/apache/camel/upgrade/camel414/camelmigrationrecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.camel414.httpBusinessVsManagementServicesSeparationProperties:
+      name: "org.apache.camel.upgrade.camel414.httpBusinessVsManagementServicesSeparationProperties"
+      description: "The HTTP server for standalone camel-main applications has separated\
+        \ management services and business services. This means that part of configurations\
+        \ in application.properties should be changed from camel.server.xxx to camel.management.xxx."
+      docLink: "https://docs.openrewrite.org/recipes/org/apache/camel/upgrade/camel414/httpbusinessvsmanagementservicesseparationproperties"
       options: []
       isImperative: true
       artifactId: "rewrite-third-party"
@@ -42979,7 +43464,7 @@ rewrite-vulncheck:
       artifactId: "rewrite-vulncheck"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.61.1"
+  version: "8.62.0"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -43326,7 +43811,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.61.1"
+  version: "8.62.0"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AppendToSequence:
       name: "org.openrewrite.yaml.AppendToSequence"
