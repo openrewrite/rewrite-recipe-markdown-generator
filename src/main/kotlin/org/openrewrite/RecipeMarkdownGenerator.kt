@@ -235,8 +235,8 @@ class RecipeMarkdownGenerator : Runnable {
             // docs so that they parse correctly.
             if (recipePathToDocusaurusRenamedPath.containsKey(recipe.name)) {
                 recipePathToDocusaurusRenamedPath[recipe.name]!!
-            } else if (recipe.name.matches(SPRING_BOOT_UPGRADE_PATTERN)) {
-                // The spring boot recipes clashes with one another so let's make them distinct
+            } else if (isSpringBoot34OrHigher(recipe.name)) {
+                // The moderne and community spring boot recipes clashes with one another (deviating since 3.4) so let's make them distinct
                 generateSpringBootUpgradePath(recipe.name)
             } else if (recipe.name.startsWith("org.openrewrite")) {
                 // If the recipe path only has two periods, it's part of the core recipes and should be adjusted accordingly.
@@ -269,6 +269,14 @@ class RecipeMarkdownGenerator : Runnable {
             "org.openrewrite.java.migrate.javaee7" to "java/migrate/javaee7-recipe",
             "org.openrewrite.java.migrate.javaee8" to "java/migrate/javaee8-recipe"
         )
+
+        private fun isSpringBoot34OrHigher(recipeName: String): Boolean {
+            val matchResult = SPRING_BOOT_UPGRADE_PATTERN.find(recipeName) ?: return false
+            val (_, _, upgradeMajor, upgradeMinor) = matchResult.destructured
+            val upgradeMajorInt = upgradeMajor.toInt()
+            val upgradeMinorInt = upgradeMinor.toInt()
+            return upgradeMajorInt > 3 || (upgradeMajorInt == 3 && upgradeMinorInt >= 4)
+        }
 
         private fun generateSpringBootUpgradePath(recipeName: String): String {
             val matchResult = SPRING_BOOT_UPGRADE_PATTERN.find(recipeName)

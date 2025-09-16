@@ -55,10 +55,11 @@ class RecipeMarkdownGeneratorTest {
 
         // Test future Spring Boot 3.x minor versions
         val springBoot35Moderne = getRecipePath("io.moderne.java.spring.boot3.UpgradeSpringBoot_3_5")
-        val springBoot36Community = getRecipePath("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_6")
-
         assertEquals("java/spring/boot3/upgradespringboot_3_5-moderne-edition", springBoot35Moderne)
-        assertEquals("java/spring/boot3/upgradespringboot_3_6-community-edition", springBoot36Community)
+
+        // No change for recipes up to 3.3
+        val springBoot33Community = getRecipePath("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3")
+        assertEquals("java/spring/boot3/upgradespringboot_3_3", springBoot33Community)
 
         // Test future Spring Boot 5.x versions
         val springBoot5Community = getRecipePath("org.openrewrite.java.spring.boot5.UpgradeSpringBoot_5_1")
