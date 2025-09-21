@@ -10,7 +10,7 @@ import org.openrewrite.RecipeMarkdownGenerator.Companion.writeln
 class VersionWriter {
     fun createLatestVersionsMarkdown(
         outputPath: Path,
-        recipeOrigins: Map<URI, RecipeOrigin>,
+        recipeOrigins: Collection<RecipeOrigin>,
         rewriteBomVersion: String,
         rewriteRecipeBomVersion: String,
         moderneRecipeBomVersion: String,
@@ -58,7 +58,7 @@ class VersionWriter {
             )
             var cliInstallGavs = ""
             var loadRecipesAsync = ""
-            for (origin in recipeOrigins.values) {
+            for (origin in recipeOrigins) {
 
                 cliInstallGavs += "${origin.groupId}:${origin.artifactId}:{{${origin.versionPlaceholderKey()}}} "
 
@@ -114,7 +114,7 @@ class VersionWriter {
 
     fun createLatestVersionsJs(
         outputPath: Path,
-        recipeOrigins: Map<URI, RecipeOrigin>,
+        recipeOrigins: Collection<RecipeOrigin>,
         rewriteRecipeBomVersion: String,
         gradlePluginVersion: String,
         mavenPluginVersion: String
@@ -122,7 +122,7 @@ class VersionWriter {
         val versionsSnippetPath = outputPath.resolve("latest-versions.js")
         Files.newBufferedWriter(versionsSnippetPath, StandardOpenOption.CREATE).useAndApply {
             var recipeModuleVersions = ""
-            for (origin in recipeOrigins.values) {
+            for (origin in recipeOrigins) {
                 recipeModuleVersions += "                  \"{{${origin.versionPlaceholderKey()}}}\": \"${origin.version}\",\n"
             }
             writeln(

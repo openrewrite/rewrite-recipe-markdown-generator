@@ -109,7 +109,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-logging-frameworks")
     "recipe"("org.openrewrite.recipe:rewrite-micrometer")
     "recipe"("org.openrewrite.recipe:rewrite-micronaut")
-    "recipe"("org.openrewrite.recipe:rewrite-migrate-java:$rewriteVersion") // TODO use managed after next release
+    "recipe"("org.openrewrite.recipe:rewrite-migrate-java")
     "recipe"("org.openrewrite.recipe:rewrite-netty")
     "recipe"("org.openrewrite.recipe:rewrite-nodejs")
     "recipe"("org.openrewrite.recipe:rewrite-okhttp")

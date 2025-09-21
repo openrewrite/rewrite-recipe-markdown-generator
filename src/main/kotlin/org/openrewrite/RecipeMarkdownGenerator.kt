@@ -92,14 +92,14 @@ class RecipeMarkdownGenerator : Runnable {
         val versionWriter = VersionWriter()
         versionWriter.createLatestVersionsJs(
             outputPath,
-            recipeOrigins,
+            recipeOrigins.values,
             rewriteRecipeBomVersion,
             gradlePluginVersion,
             mavenPluginVersion
         )
         versionWriter.createLatestVersionsMarkdown(
             outputPath,
-            recipeOrigins,
+            recipeOrigins.values,
             rewriteBomVersion,
             rewriteRecipeBomVersion,
             moderneRecipeBomVersion,
