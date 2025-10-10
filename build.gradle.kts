@@ -103,7 +103,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-github-actions")
     "recipe"("org.openrewrite.recipe:rewrite-gitlab")
     "recipe"("org.openrewrite.recipe:rewrite-hibernate")
-    "recipe"("org.openrewrite.recipe:rewrite-jackson:$rewriteVersion") // TODO Remove override
+    "recipe"("org.openrewrite.recipe:rewrite-jackson")
     "recipe"("org.openrewrite.recipe:rewrite-java-dependencies")
     "recipe"("org.openrewrite.recipe:rewrite-java-security")
     "recipe"("org.openrewrite.recipe:rewrite-jenkins")
@@ -122,12 +122,12 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-reactive-streams")
     "recipe"("org.openrewrite.recipe:rewrite-rewrite")
     "recipe"("org.openrewrite.recipe:rewrite-spring")
-//    "recipe"("org.openrewrite.recipe:rewrite-spring-to-quarkus")
+    "recipe"("org.openrewrite.recipe:rewrite-spring-to-quarkus:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-sql")
     "recipe"("org.openrewrite.recipe:rewrite-static-analysis")
     "recipe"("org.openrewrite.recipe:rewrite-struts")
     "recipe"("org.openrewrite.recipe:rewrite-terraform")
-    "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion") // TODO Remove override
+    "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks")
     "recipe"("org.openrewrite.recipe:rewrite-third-party")
 
     "recipe"("io.moderne.recipe:rewrite-cryptography")
