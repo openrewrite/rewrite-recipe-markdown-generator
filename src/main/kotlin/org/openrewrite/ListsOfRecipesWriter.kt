@@ -255,16 +255,13 @@ class ListsOfRecipesWriter(
             for ((artifact, recipes) in recipesByArtifact) {
                 writeln("## ${artifact}\n")
 
-                for (recipe in recipes.sortedBy { it.displayName })
+                for (recipe in recipes.sortedBy { it.displayName }) {
                     writeln(
                         "* [${recipe.descriptor.displayNameEscaped()}](/recipes/${
-                            RecipeMarkdownGenerator.Companion.getRecipePath(
-                                recipe.descriptor
-                            )
-                        }.md) - _${
-                            recipe.descriptor.descriptionEscaped()
-                        }_"
+                            RecipeMarkdownGenerator.Companion.getRecipePath(recipe.descriptor)
+                        }.md) - _${recipe.descriptor.descriptionEscaped()}_"
                     )
+                }
             }
         }
     }
