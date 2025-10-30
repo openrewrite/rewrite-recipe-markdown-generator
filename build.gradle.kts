@@ -181,7 +181,7 @@ tasks.named<JavaExec>("run").configure {
         }
     }.joinToString(";")
     // recipeModules doesn't include transitive dependencies, but those are needed to load recipes and their descriptors
-    val recipeClasspath = recipeConf.resolvedConfiguration.files.asSequence()
+    val recipeClasspath = recipeConf.incoming.files.asSequence()
         .map { it.absolutePath }
         .joinToString(";")
 
