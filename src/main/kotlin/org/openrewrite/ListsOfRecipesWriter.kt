@@ -176,7 +176,8 @@ class ListsOfRecipesWriter(
 
     fun createStandaloneRecipes(
         recipeContainedBy: MutableMap<String, MutableSet<RecipeDescriptor>>,
-        recipeOrigins: Map<URI, RecipeOrigin>
+        recipeOrigins: Map<URI, RecipeOrigin>,
+        recipeToSource: Map<String, URI>
     ) {
         val standaloneRecipes = allRecipeDescriptors.filterNot { recipe ->
             recipeContainedBy.contains(recipe.name)
@@ -208,7 +209,10 @@ class ListsOfRecipesWriter(
 
             // Group by package for better organization
             val recipesByArtifact = standaloneRecipes
-                .groupBy { recipe -> recipeOrigins[recipe.source]?.artifactId ?: "other" }
+                .groupBy { recipe ->
+                    val source = recipeToSource[recipe.name]
+                    recipeOrigins[source]?.artifactId ?: "other"
+                }
                 .toSortedMap()
             for ((artifact, recipes) in recipesByArtifact) {
                 writeln("## ${artifact}\n")
@@ -230,7 +234,8 @@ class ListsOfRecipesWriter(
 
     fun createScanningRecipes(
         scanningRecipes: List<Recipe>,
-        recipeOrigins: Map<URI, RecipeOrigin>
+        recipeOrigins: Map<URI, RecipeOrigin>,
+        recipeToSource: Map<String, URI>
     ) {
         val markdown = outputPath.resolve("scanning-recipes.md")
         Files.newBufferedWriter(markdown, StandardOpenOption.CREATE).useAndApply {
@@ -250,7 +255,10 @@ class ListsOfRecipesWriter(
 
 
             val recipesByArtifact = scanningRecipes
-                .groupBy { recipe -> recipeOrigins[recipe.descriptor.source]?.artifactId ?: "other" }
+                .groupBy { recipe ->
+                    val source = recipeToSource[recipe.descriptor.name]
+                    recipeOrigins[source]?.artifactId ?: "other"
+                }
                 .toSortedMap()
             for ((artifact, recipes) in recipesByArtifact) {
                 writeln("## ${artifact}\n")

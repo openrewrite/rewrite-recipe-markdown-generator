@@ -116,11 +116,15 @@ class RecipeMarkdownGenerator : Runnable {
         val allRecipeDescriptors = loadResult.allRecipeDescriptors
         val allCategoryDescriptors = loadResult.allCategoryDescriptors
         val allRecipes = loadResult.allRecipes
+        val recipeToSource = loadResult.recipeToSource
 
         println("Found ${allRecipeDescriptors.size} descriptor(s).")
 
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
         val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
+
+        // Build mapping from recipe name to Recipe instance (for checking if declarative)
+        val recipesByName = allRecipes.associateBy { it.name }
 
         // Build reverse mapping of recipe relationships (which recipes contain each recipe)
         val recipeContainedBy = mutableMapOf<String, MutableSet<RecipeDescriptor>>()
@@ -131,13 +135,16 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         // Create the recipe docs
-        val recipeMarkdownWriter = RecipeMarkdownWriter(recipeContainedBy)
+        val recipeMarkdownWriter = RecipeMarkdownWriter(recipeContainedBy, recipeToSource)
         for (recipeDescriptor in allRecipeDescriptors) {
+            val recipeSource = recipeToSource[recipeDescriptor.name]
+            requireNotNull(recipeSource) { "Could not find source URI for recipe " + recipeDescriptor.name }
+
             var origin: RecipeOrigin?
-            var rawUri = recipeDescriptor.source.toString()
+            var rawUri = recipeSource.toString()
             val exclamationIndex = rawUri.indexOf('!')
             if (exclamationIndex == -1) {
-                origin = recipeOrigins[recipeDescriptor.source]
+                origin = recipeOrigins[recipeSource]
             } else {
                 // The recipe origin includes the path to the recipe within a jar
                 // Such URIs will look something like: jar:file:/path/to/the/recipes.jar!META-INF/rewrite/some-declarative.yml
@@ -147,7 +154,7 @@ class RecipeMarkdownGenerator : Runnable {
                 val jarOnlyUri = URI.create(rawUri)
                 origin = recipeOrigins[jarOnlyUri]
             }
-            requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeDescriptor.source }
+            requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeSource }
             recipeMarkdownWriter.writeRecipe(recipeDescriptor, recipesPath, origin)
 
             if (origin.license == Licenses.Proprietary) {
@@ -163,14 +170,11 @@ class RecipeMarkdownGenerator : Runnable {
 
             // Changes something like org.openrewrite.circleci.InstallOrb to https://docs.openrewrite.org/recipes/circleci/installorb
             val docLink = "https://docs.openrewrite.org/recipes/" + getRecipePath(recipeDescriptor)
-            val recipeSource = recipeDescriptor.source.toString()
-            var isImperative = true
 
-            // YAML recipes will have a source that ends with META-INF/rewrite/something.yml
+            // Determine if recipe is imperative (Java) or declarative (YAML)
             // Used to help with time spent calculations. Imperative = 12 hours, Declarative = 4 hours
-            if (recipeSource.substring(recipeSource.length - 3) == "yml") {
-                isImperative = false
-            }
+            val recipe = recipesByName[recipeDescriptor.name]
+            val isImperative = recipe !is DeclarativeRecipe
 
             // Used to create changelogs
             val markdownRecipeDescriptor =
@@ -210,9 +214,10 @@ class RecipeMarkdownGenerator : Runnable {
         listWriter.createRecipesByTag()
         listWriter.createScanningRecipes(
             allRecipes.filter { it is ScanningRecipe<*> && it !is DeclarativeRecipe },
-            recipeOrigins
+            recipeOrigins,
+            recipeToSource
         )
-        listWriter.createStandaloneRecipes(recipeContainedBy, recipeOrigins)
+        listWriter.createStandaloneRecipes(recipeContainedBy, recipeOrigins, recipeToSource)
     }
 
 
@@ -251,6 +256,7 @@ class RecipeMarkdownGenerator : Runnable {
                 recipe.name.substring(11).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
             } else if (
                 recipe.name.startsWith("ai.timefold") ||
+                recipe.name.startsWith("com.google") ||
                 recipe.name.startsWith("com.oracle") ||
                 recipe.name.startsWith("io.quarkus") ||
                 recipe.name.startsWith("io.quakus") ||

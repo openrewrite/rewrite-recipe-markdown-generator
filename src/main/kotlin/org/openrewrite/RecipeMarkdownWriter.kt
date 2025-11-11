@@ -7,13 +7,17 @@ import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.RecipeMarkdownGenerator.Companion.useAndApply
 import org.openrewrite.RecipeMarkdownGenerator.Companion.writeln
 import java.io.BufferedWriter
+import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
 import java.util.regex.Pattern
 import java.util.stream.Collectors.joining
 
-class RecipeMarkdownWriter(val recipeContainedBy: MutableMap<String, MutableSet<RecipeDescriptor>>) {
+class RecipeMarkdownWriter(
+    val recipeContainedBy: MutableMap<String, MutableSet<RecipeDescriptor>>,
+    val recipeToSource: Map<String, URI>
+) {
 
     fun writeRecipe(
         recipeDescriptor: RecipeDescriptor,
@@ -120,13 +124,15 @@ import TabItem from '@theme/TabItem';
                 """.trimIndent()
             )
         } else {
+            val recipeSource = recipeToSource[recipeDescriptor.name]
+            requireNotNull(recipeSource) { "Could not find source URI for recipe ${recipeDescriptor.name}" }
             //language=markdown
             writeln(
                 """
             ## Recipe source
-            
-            [GitHub](${origin.githubUrl(recipeDescriptor.name, recipeDescriptor.source)}), 
-            [Issue Tracker](${origin.issueTrackerUrl()}), 
+
+            [GitHub](${origin.githubUrl(recipeDescriptor.name, recipeSource)}),
+            [Issue Tracker](${origin.issueTrackerUrl()}),
             [Maven Central](https://central.sonatype.com/artifact/${origin.groupId}/${origin.artifactId}/)
             """.trimIndent()
             )
@@ -604,15 +610,22 @@ import TabItem from '@theme/TabItem';
             //language=markdown
             writeln(
                 """
-                
+
                 ## Used by
-                
+
                 This recipe is used as part of the following composite recipes:
-                
+
                 """.trimIndent()
             )
             recipeContainedBy
-                .map { "* [${it.displayNameEscaped()}](/recipes/${getRecipePath(it)}.md)" }
+                .mapNotNull { recipe ->
+                    try {
+                        "* [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md)"
+                    } catch (e: RuntimeException) {
+                        System.err.println("Warning: Could not generate path for recipe ${recipe.name}: ${e.message}")
+                        null
+                    }
+                }
                 .toSet()
                 .sorted()
                 .forEach { recipe -> writeln(recipe) }
