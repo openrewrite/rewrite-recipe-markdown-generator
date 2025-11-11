@@ -21,7 +21,8 @@ import kotlin.io.path.toPath
 private data class EnvironmentData(
     val recipeDescriptors: Collection<RecipeDescriptor>,
     val categoryDescriptors: Collection<CategoryDescriptor>,
-    val recipes: Collection<Recipe>
+    val recipes: Collection<Recipe>,
+    val sourceUri: URI
 )
 
 /**
@@ -30,7 +31,8 @@ private data class EnvironmentData(
 data class RecipeLoadResult(
     val allRecipeDescriptors: List<RecipeDescriptor>,
     val allCategoryDescriptors: List<CategoryDescriptor>,
-    val allRecipes: List<Recipe>
+    val allRecipes: List<Recipe>,
+    val recipeToSource: Map<String, URI>
 )
 
 /**
@@ -61,11 +63,20 @@ class RecipeLoader {
         // Load recipes in parallel
         val environmentData = loadEnvironmentDataAsync()
 
+        // Build mapping from recipe name to source URI
+        val recipeToSource = mutableMapOf<String, URI>()
+        environmentData.forEach { envData ->
+            envData.recipeDescriptors.forEach { descriptor ->
+                recipeToSource[descriptor.name] = envData.sourceUri
+            }
+        }
+
         // Combine all results
         return RecipeLoadResult(
             allRecipeDescriptors = environmentData.flatMap { it.recipeDescriptors },
             allCategoryDescriptors = environmentData.flatMap { it.categoryDescriptors },
-            allRecipes = environmentData.flatMap { it.recipes }
+            allRecipes = environmentData.flatMap { it.recipes },
+            recipeToSource = recipeToSource
         )
     }
 
@@ -90,7 +101,8 @@ class RecipeLoader {
                         EnvironmentData(
                             batchEnv.listRecipeDescriptors(),
                             batchEnv.listCategoryDescriptors(),
-                            batchEnv.listRecipes()
+                            batchEnv.listRecipes(),
+                            recipeOrigin.key
                         ).also {
                             println("Loaded ${it.recipeDescriptors.size} recipe descriptors from ${recipeOrigin.key.toPath().fileName}")
                         }

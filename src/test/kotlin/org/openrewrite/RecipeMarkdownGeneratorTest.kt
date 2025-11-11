@@ -81,7 +81,7 @@ class RecipeMarkdownGeneratorTest {
                 mutableListOf(),
                 mutableListOf(),
                 mutableListOf(),
-                java.net.URI.create("test://test")
+                null
             )
         )
     }
