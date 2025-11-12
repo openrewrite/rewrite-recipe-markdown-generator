@@ -5,11 +5,15 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import org.openrewrite.config.CategoryDescriptor
+import org.openrewrite.config.DeclarativeRecipe
 import org.openrewrite.config.Environment
 import org.openrewrite.config.RecipeDescriptor
 import java.net.URI
 import java.net.URL
 import java.net.URLClassLoader
+import java.nio.file.FileSystem
+import java.nio.file.FileSystems
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.jar.Manifest
@@ -65,9 +69,31 @@ class RecipeLoader {
 
         // Build mapping from recipe name to source URI
         val recipeToSource = mutableMapOf<String, URI>()
+
+        // Build a map of all recipes by name for quick lookup
+        val allRecipesByName = environmentData.flatMap { it.recipes }.associateBy { it.name }
+
         environmentData.forEach { envData ->
+            // Scan YAML files in this JAR to find declarative recipe sources
+            val yamlRecipeToFile = scanYamlRecipesInJar(envData.sourceUri)
+
             envData.recipeDescriptors.forEach { descriptor ->
-                recipeToSource[descriptor.name] = envData.sourceUri
+                val recipe = allRecipesByName[descriptor.name]
+
+                // Check if this is a declarative (YAML) recipe
+                if (recipe is DeclarativeRecipe) {
+                    // Use the YAML file URI if we found it
+                    val yamlFile = yamlRecipeToFile[descriptor.name]
+                    if (yamlFile != null) {
+                        recipeToSource[descriptor.name] = yamlFile
+                    } else {
+                        // Fallback to JAR URI if we couldn't find the YAML file
+                        recipeToSource[descriptor.name] = envData.sourceUri
+                    }
+                } else {
+                    // For Java recipes, use the JAR URI
+                    recipeToSource[descriptor.name] = envData.sourceUri
+                }
             }
         }
 
@@ -78,6 +104,51 @@ class RecipeLoader {
             allRecipes = environmentData.flatMap { it.recipes },
             recipeToSource = recipeToSource
         )
+    }
+
+    /**
+     * Scan YAML files in a JAR to find which recipes are defined in which YAML files
+     */
+    private fun scanYamlRecipesInJar(jarUri: URI): Map<String, URI> {
+        val recipeToYamlFile = mutableMapOf<String, URI>()
+
+        try {
+            val jarPath = Paths.get(jarUri)
+            if (!Files.exists(jarPath)) {
+                return recipeToYamlFile
+            }
+
+            FileSystems.newFileSystem(jarPath, null as ClassLoader?).use { fs ->
+                val rewriteDir = fs.getPath("/META-INF/rewrite")
+                if (Files.exists(rewriteDir)) {
+                    Files.walk(rewriteDir)
+                        .filter { Files.isRegularFile(it) && it.toString().endsWith(".yml") }
+                        .forEach { yamlPath ->
+                            try {
+                                // Parse YAML file to find recipe names
+                                val yamlContent = Files.readString(yamlPath)
+                                // Look for lines like "name: org.openrewrite.java.jackson.JacksonBestPractices"
+                                // or "  - org.openrewrite.SomeRecipe" (for recipeList entries)
+                                val namePattern = Regex("""^\s*name:\s*(.+)$""", RegexOption.MULTILINE)
+                                val matches = namePattern.findAll(yamlContent)
+
+                                matches.forEach { match ->
+                                    val recipeName = match.groupValues[1].trim()
+                                    // Construct a URI for this YAML file in the format: jar:file:/path/to/jar.jar!/META-INF/rewrite/file.yml
+                                    val yamlFileUri = URI("jar:file:${jarPath.toAbsolutePath()}!${yamlPath}")
+                                    recipeToYamlFile[recipeName] = yamlFileUri
+                                }
+                            } catch (e: Exception) {
+                                println("Warning: Could not parse YAML file ${yamlPath}: ${e.message}")
+                            }
+                        }
+                }
+            }
+        } catch (e: Exception) {
+            println("Warning: Could not scan JAR $jarUri for YAML recipes: ${e.message}")
+        }
+
+        return recipeToYamlFile
     }
 
     /**
