@@ -105,6 +105,7 @@ import TabItem from '@theme/TabItem';
                         .lowercase()
                         .substringBefore('-')
                         .substringBefore('_')
+                        .replace(' ', '-')
                     writeln("* [$tag](/reference/recipes-by-tag#${tagAnchor})")
                 }
             }
