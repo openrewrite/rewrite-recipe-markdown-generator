@@ -1,3 +1,5 @@
+@file:Suppress("SENSELESS_COMPARISON")
+
 package org.openrewrite
 
 import org.openrewrite.config.DeclarativeRecipe
@@ -129,8 +131,10 @@ class RecipeMarkdownGenerator : Runnable {
         // Build reverse mapping of recipe relationships (which recipes contain each recipe)
         val recipeContainedBy = mutableMapOf<String, MutableSet<RecipeDescriptor>>()
         for (parentRecipe in allRecipeDescriptors) {
-            for (childRecipe in parentRecipe.recipeList) {
-                recipeContainedBy.computeIfAbsent(childRecipe.name) { mutableSetOf() }.add(parentRecipe)
+            if (parentRecipe.recipeList != null) {
+                for (childRecipe in parentRecipe.recipeList) {
+                    recipeContainedBy.computeIfAbsent(childRecipe.name) { mutableSetOf() }.add(parentRecipe)
+                }
             }
         }
 
@@ -142,17 +146,25 @@ class RecipeMarkdownGenerator : Runnable {
 
             var origin: RecipeOrigin?
             var rawUri = recipeSource.toString()
-            val exclamationIndex = rawUri.indexOf('!')
-            if (exclamationIndex == -1) {
-                origin = recipeOrigins[recipeSource]
+
+            // Handle TypeScript recipes with custom URI scheme
+            if (rawUri.startsWith("typescript-search://")) {
+                // Extract artifact ID from typescript-search://rewrite-nodejs/recipe.name
+                val artifactId = rawUri.substringAfter("typescript-search://").substringBefore("/")
+                origin = recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
             } else {
-                // The recipe origin includes the path to the recipe within a jar
-                // Such URIs will look something like: jar:file:/path/to/the/recipes.jar!META-INF/rewrite/some-declarative.yml
-                // Strip the "jar:" prefix and the part of the URI pointing inside the jar
-                rawUri = rawUri.substring(0, exclamationIndex)
-                rawUri = rawUri.substring(4)
-                val jarOnlyUri = URI.create(rawUri)
-                origin = recipeOrigins[jarOnlyUri]
+                val exclamationIndex = rawUri.indexOf('!')
+                if (exclamationIndex == -1) {
+                    origin = recipeOrigins[recipeSource]
+                } else {
+                    // The recipe origin includes the path to the recipe within a jar
+                    // Such URIs will look something like: jar:file:/path/to/the/recipes.jar!META-INF/rewrite/some-declarative.yml
+                    // Strip the "jar:" prefix and the part of the URI pointing inside the jar
+                    rawUri = rawUri.substring(0, exclamationIndex)
+                    rawUri = rawUri.substring(4)
+                    val jarOnlyUri = URI.create(rawUri)
+                    origin = recipeOrigins[jarOnlyUri]
+                }
             }
             requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeSource }
             recipeMarkdownWriter.writeRecipe(recipeDescriptor, recipesPath, origin)
@@ -162,10 +174,14 @@ class RecipeMarkdownGenerator : Runnable {
             }
 
             val recipeOptions = TreeSet<RecipeOption>()
-            for (recipeOption in recipeDescriptor.options) {
-                val name = recipeOption.name as String
-                val ro = RecipeOption(name, recipeOption.type, recipeOption.isRequired)
-                recipeOptions.add(ro)
+            if (recipeDescriptor.options != null) {
+                for (recipeOption in recipeDescriptor.options) {
+                    // TypeScript recipes may have null name or type
+                    val name = recipeOption.name?.toString() ?: "unknown"
+                    val type = recipeOption.type ?: "String"
+                    val ro = RecipeOption(name, type, recipeOption.isRequired)
+                    recipeOptions.add(ro)
+                }
             }
 
             // Changes something like org.openrewrite.circleci.InstallOrb to https://docs.openrewrite.org/recipes/circleci/installorb

@@ -39,30 +39,38 @@ val recipeConf = configurations.create("recipe")
 val rewriteVersion = "latest.release"
 
 dependencies {
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
+    // Platform dependencies (BOMs)
     implementation(platform("io.moderne.recipe:moderne-recipe-bom:$rewriteVersion"))
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
 
-    implementation("info.picocli:picocli:latest.release")
-    implementation("org.openrewrite:rewrite-core")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
+    // Core implementation dependencies
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("info.picocli:picocli:latest.release")
     implementation("io.github.java-diff-utils:java-diff-utils:4.11")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("org.openrewrite:rewrite-core")
+    implementation("org.openrewrite:rewrite-javascript")
+
+    // Runtime dependencies
     runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
 
+    // Test dependencies
     testImplementation("org.junit.jupiter:junit-jupiter:5.+")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    // Do not use BOM to show the latest patch versions of individual modules
-//    "recipe"(platform("io.moderne.recipe:moderne-recipe-bom:$rewriteVersion"))
+    // Recipe configuration dependencies
+    // Note: Not using BOM to show the latest patch versions of individual modules
 
+    // Core rewrite modules (org.openrewrite)
     "recipe"("org.openrewrite:rewrite-core:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-gradle:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-groovy:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-hcl:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-java:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-json:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-kotlin:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-maven:$rewriteVersion")
@@ -72,16 +80,16 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-xml:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-yaml:$rewriteVersion")
 
-    // Only show the versions of these modules below
+    // Additional core modules (versions only, recipes not yet included)
 //    "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
-//    "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
 
-    "recipe"("org.openrewrite.recipe:rewrite-all:$rewriteVersion")
+    // Recipe modules (org.openrewrite.recipe)
     "recipe"("org.openrewrite.meta:rewrite-analysis:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-ai-search:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-all:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-android:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-apache:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-azul:$rewriteVersion")
@@ -92,7 +100,6 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-comprehension:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-concourse:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm:$rewriteVersion")
-    // Not released yet; when uncommented it pulls in snapshot versions of dependencies into the generated docs
 //    "recipe"("org.openrewrite.recipe:rewrite-diffblue:latest.integration") {
 //        exclude(group = "org.openrewrite")
 //        exclude(group = "org.openrewrite.recipe")
@@ -131,6 +138,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-third-party:$rewriteVersion")
 
+    // Moderne recipe modules (io.moderne.recipe)
     "recipe"("io.moderne.recipe:rewrite-cryptography:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-devcenter:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-elastic:$rewriteVersion")

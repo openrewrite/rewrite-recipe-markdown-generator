@@ -1,3 +1,5 @@
+@file:Suppress("SENSELESS_COMPARISON")
+
 package org.openrewrite
 
 import org.openrewrite.RecipeMarkdownGenerator.Companion.useAndApply
@@ -63,7 +65,7 @@ class ListsOfRecipesWriter(
 
     fun createRecipesWithDataTables() {
         val recipesWithDataTables = allRecipeDescriptors.filter {
-            it.dataTables.any { dataTable -> dataTable.name !in dataTablesToIgnore }
+            it.dataTables != null && it.dataTables.any { dataTable -> dataTable.name !in dataTablesToIgnore }
         }
 
         val recipesWithDataTablesPath = outputPath.resolve("recipes-with-data-tables.md")
@@ -96,9 +98,9 @@ class ListsOfRecipesWriter(
                 writeln("${recipe.descriptionEscaped()}\n")
                 writeln("#### Data tables:\n")
 
-                val filteredDataTables = recipe.dataTables.filter { dataTable ->
+                val filteredDataTables = recipe.dataTables?.filter { dataTable ->
                     dataTable.name !in dataTablesToIgnore
-                }
+                } ?: emptyList()
 
                 for (dataTable in filteredDataTables) {
                     writeln("  * **${dataTable.name}**: *${dataTable.description.replace("\n", " ")}*")
@@ -114,13 +116,15 @@ class ListsOfRecipesWriter(
 
         // Collect all tags and their associated recipes
         for (recipeDescriptor in allRecipeDescriptors) {
-            for (tag in recipeDescriptor.tags) {
-                tagToRecipes.computeIfAbsent(
-                    tag
-                        .substringBefore('-')
-                        .substringBefore('_')
-                ) { TreeSet(compareBy { it.name }) }
-                    .add(recipeDescriptor)
+            if (recipeDescriptor.tags != null) {
+                for (tag in recipeDescriptor.tags) {
+                    tagToRecipes.computeIfAbsent(
+                        tag
+                            .substringBefore('-')
+                            .substringBefore('_')
+                    ) { TreeSet(compareBy { it.name }) }
+                        .add(recipeDescriptor)
+                }
             }
         }
 
