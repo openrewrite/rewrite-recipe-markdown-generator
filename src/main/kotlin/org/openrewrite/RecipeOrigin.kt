@@ -49,13 +49,30 @@ class RecipeOrigin(
 
         val sourceString = source.toString()
 
-        // YAML recipes will have a source that ends with META-INF/rewrite/something.yml
-        return if (sourceString.substring(sourceString.length - 3) == "yml") {
-            val ymlPath = sourceString.substring(source.toString().lastIndexOf("META-INF"))
-            "${repositoryUrl.removeSuffix("/")}/src/main/resources/${ymlPath.removePrefix("/")}"
-        } else {
-            val javaPath = convertNameToJavaPath(recipeName)
-            "${repositoryUrl.removeSuffix("/")}/src/main/java/${javaPath.removePrefix("/")}"
+        // TypeScript recipes use GitHub search URLs because recipe names don't directly map to file paths
+        // typescript-search://rewrite-nodejs/org.openrewrite.node.migrate.util.use-native-type-checking-methods
+        return when {
+            sourceString.startsWith("typescript-search://") -> {
+                // Extract the recipe name and use GitHub code search
+                val searchRecipeName = sourceString.substringAfter("typescript-search://$artifactId/")
+                // Extract just the owner/repo part (e.g., "openrewrite/rewrite" from "https://github.com/openrewrite/rewrite/blob/main/")
+                val repoPath = repositoryUrl
+                    .substringAfter("github.com/")
+                    .substringBefore("/blob/")
+                    .substringBefore("/tree/")
+                    .removeSuffix("/")
+                "https://github.com/search?type=code&q=repo:${repoPath}+${searchRecipeName}"
+            }
+            // YAML recipes will have a source that ends with META-INF/rewrite/something.yml
+            sourceString.endsWith(".yml") -> {
+                val ymlPath = sourceString.substring(source.toString().lastIndexOf("META-INF"))
+                "${repositoryUrl.removeSuffix("/")}/src/main/resources/${ymlPath.removePrefix("/")}"
+            }
+            // Java recipes
+            else -> {
+                val javaPath = convertNameToJavaPath(recipeName)
+                "${repositoryUrl.removeSuffix("/")}/src/main/java/${javaPath.removePrefix("/")}"
+            }
         }
     }
 

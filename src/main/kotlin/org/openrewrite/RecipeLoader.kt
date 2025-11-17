@@ -64,7 +64,7 @@ class RecipeLoader {
      * Load recipes from the specified sources and classpath
      */
     fun loadRecipes(): RecipeLoadResult {
-        // Load recipes in parallel
+        // Load Java/YAML recipes in parallel
         val environmentData = loadEnvironmentDataAsync()
 
         // Build mapping from recipe name to source URI
@@ -97,9 +97,19 @@ class RecipeLoader {
             }
         }
 
+        // Load TypeScript recipes via RPC
+        println("\nChecking for TypeScript/JavaScript recipes...")
+        val typeScriptLoader = TypeScriptRecipeLoader(recipeOrigins)
+        val typeScriptResult = typeScriptLoader.loadTypeScriptRecipes()
+
+        // Merge TypeScript results with Java/YAML results
+        val allDescriptors = environmentData.flatMap { it.recipeDescriptors }.toMutableList()
+        allDescriptors.addAll(typeScriptResult.descriptors)
+        recipeToSource.putAll(typeScriptResult.recipeToSource)
+
         // Combine all results
         return RecipeLoadResult(
-            allRecipeDescriptors = environmentData.flatMap { it.recipeDescriptors },
+            allRecipeDescriptors = allDescriptors,
             allCategoryDescriptors = environmentData.flatMap { it.categoryDescriptors },
             allRecipes = environmentData.flatMap { it.recipes },
             recipeToSource = recipeToSource
