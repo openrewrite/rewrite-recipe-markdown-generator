@@ -66,12 +66,22 @@ class RecipeOrigin(
             // YAML recipes will have a source that ends with META-INF/rewrite/something.yml
             sourceString.endsWith(".yml") -> {
                 val ymlPath = sourceString.substring(source.toString().lastIndexOf("META-INF"))
-                "${repositoryUrl.removeSuffix("/")}/src/main/resources/${ymlPath.removePrefix("/")}"
+                // For multi-module projects (core libraries), include the module subdirectory
+                if (isFromCoreLibrary()) {
+                    "${repositoryUrl.removeSuffix("/")}/${artifactId}/src/main/resources/${ymlPath.removePrefix("/")}"
+                } else {
+                    "${repositoryUrl.removeSuffix("/")}/src/main/resources/${ymlPath.removePrefix("/")}"
+                }
             }
             // Java recipes
             else -> {
                 val javaPath = convertNameToJavaPath(recipeName)
-                "${repositoryUrl.removeSuffix("/")}/src/main/java/${javaPath.removePrefix("/")}"
+                // For multi-module projects (core libraries), include the module subdirectory
+                if (isFromCoreLibrary()) {
+                    "${repositoryUrl.removeSuffix("/")}/${artifactId}/src/main/java/${javaPath.removePrefix("/")}"
+                } else {
+                    "${repositoryUrl.removeSuffix("/")}/src/main/java/${javaPath.removePrefix("/")}"
+                }
             }
         }
     }
@@ -93,6 +103,7 @@ class RecipeOrigin(
             "rewrite-hcl",
             "rewrite-java",
             "rewrite-java-test",
+            "rewrite-javascript",
             "rewrite-json",
             "rewrite-kotlin",
             "rewrite-maven",
