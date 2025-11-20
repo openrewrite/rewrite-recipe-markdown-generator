@@ -250,10 +250,10 @@ class RecipeMarkdownGenerator : Runnable {
             newLine()
         }
 
-        fun getRecipePath(recipe: RecipeDescriptor): String =
         // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
         // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
-            // docs so that they parse correctly.
+        // docs so that they parse correctly.
+        fun getRecipePath(recipe: RecipeDescriptor): String =
             if (recipePathToDocusaurusRenamedPath.containsKey(recipe.name)) {
                 recipePathToDocusaurusRenamedPath[recipe.name]!!
             } else if (isSpringBoot34OrHigher(recipe.name)) {

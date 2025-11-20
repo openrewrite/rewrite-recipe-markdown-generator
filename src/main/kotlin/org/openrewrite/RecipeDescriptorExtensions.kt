@@ -3,11 +3,12 @@ package org.openrewrite
 import org.openrewrite.config.OptionDescriptor
 import org.openrewrite.config.RecipeDescriptor
 
-fun RecipeDescriptor.displayNameEscaped(): String {
-    return escape(displayName)
+fun RecipeDescriptor.displayNameEscaped(): String =
+    escape(displayName)
         // Always remove URLs in markdown format [text](url)
         .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1")
-}
+        .trim() + edition()
+
 fun RecipeDescriptor.descriptionEscaped(): String {
     if (description.isNullOrBlank()) {
         return ""
@@ -16,6 +17,27 @@ fun RecipeDescriptor.descriptionEscaped(): String {
         .replace("\n", " ")
         .trim()
 }
+
+private fun RecipeDescriptor.edition(): String =
+    when (name) {
+        "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4",
+        "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_5",
+            -> " (Moderne Edition)"
+
+        "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4",
+        "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_5"
+            -> " (Community Edition)"
+
+        else ->
+            if (name.startsWith("io.moderne.java.spring.boot4.UpgradeSpringBoot_")) {
+                " (Moderne Edition)"
+            } else if (name.startsWith("org.openrewrite.java.spring.boot4.UpgradeSpringBoot_")) {
+                " (Community Edition)"
+            } else {
+                ""
+            }
+    }
+
 private fun escape(string: String): String = string
     .replace("&", "&amp;")
     .replace("<", "&lt;")
@@ -70,13 +92,13 @@ fun OptionDescriptor.asYaml(indentation: Int = 0): String {
         return ""
     }
     val prefixBuilder = StringBuilder()
-    (0 until indentation).forEach { _  ->
+    (0 until indentation).forEach { _ ->
         prefixBuilder.append("  ")
     }
 
     val prefix = prefixBuilder.toString()
     val formattedValue = if (value is Array<*>) {
-        val asArray =  value as Array<*>
+        val asArray = value as Array<*>
         "[${asArray.joinToString(", ")}]"
     } else if (value == "*") {
         "\"*\""
