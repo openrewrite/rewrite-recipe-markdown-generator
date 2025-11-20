@@ -5,16 +5,15 @@ package org.openrewrite
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.Patch
 import org.openrewrite.RecipeMarkdownGenerator.Companion.getRecipePath
-import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.RecipeMarkdownGenerator.Companion.useAndApply
 import org.openrewrite.RecipeMarkdownGenerator.Companion.writeln
+import org.openrewrite.config.RecipeDescriptor
 import java.io.BufferedWriter
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
 import java.util.regex.Pattern
-import java.util.stream.Collectors.joining
 
 class RecipeMarkdownWriter(
     val recipeContainedBy: MutableMap<String, MutableSet<RecipeDescriptor>>,
@@ -34,13 +33,7 @@ class RecipeMarkdownWriter(
         outputPath: Path,
         origin: RecipeOrigin
     ) {
-        val editionSuffix = when (recipeDescriptor.name) {
-            "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4" -> " (Moderne Edition)"
-            "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4" -> " (Community Edition)"
-            else -> ""
-        }
-
-        val formattedRecipeTitle = (recipeDescriptor.displayNameEscaped() + editionSuffix).trim()
+        val formattedRecipeTitle = recipeDescriptor.displayNameEscaped()
         val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor.description)
         val formattedLongRecipeName = recipeDescriptor.name.replace("_".toRegex(), "\\\\_").trim()
 
@@ -328,7 +321,8 @@ import TabItem from '@theme/TabItem';
 
                 // Parameters
                 if (example.parameters != null && example.parameters.isNotEmpty() &&
-                    recipeDescriptor.options != null && recipeDescriptor.options.isNotEmpty()) {
+                    recipeDescriptor.options != null && recipeDescriptor.options.isNotEmpty()
+                ) {
                     writeln("###### Parameters")
                     writeln("| Parameter | Value |")
                     writeln("| --- | --- |")
