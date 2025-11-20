@@ -1,3 +1,5 @@
+@file:Suppress("SENSELESS_COMPARISON")
+
 package org.openrewrite
 
 import com.github.difflib.DiffUtils
@@ -18,6 +20,14 @@ class RecipeMarkdownWriter(
     val recipeContainedBy: MutableMap<String, MutableSet<RecipeDescriptor>>,
     val recipeToSource: Map<String, URI>
 ) {
+
+    /**
+     * Determines if a recipe is a JavaScript/TypeScript recipe based on its source URI.
+     */
+    private fun isJavaScriptRecipe(recipeDescriptor: RecipeDescriptor): Boolean {
+        val recipeSource = recipeToSource[recipeDescriptor.name] ?: return false
+        return recipeSource.toString().startsWith("typescript-search://")
+    }
 
     fun writeRecipe(
         recipeDescriptor: RecipeDescriptor,
@@ -63,7 +73,10 @@ import TabItem from '@theme/TabItem';
             writeUsedBy(recipeContainedBy[recipeDescriptor.name])
             writeExamples(recipeDescriptor)
             writeUsage(recipeDescriptor, origin)
-            writeModerneLink(recipeDescriptor)
+            // Skip Moderne link for JavaScript recipes as these don't exist there yet.
+            if (!isJavaScriptRecipe(recipeDescriptor)) {
+                writeModerneLink(recipeDescriptor)
+            }
             writeDataTables(recipeDescriptor)
         }
     }
@@ -92,7 +105,7 @@ import TabItem from '@theme/TabItem';
     }
 
     private fun BufferedWriter.writeTags(recipeDescriptor: RecipeDescriptor) {
-        if (recipeDescriptor.tags.isNotEmpty()) {
+        if (recipeDescriptor.tags != null && recipeDescriptor.tags.isNotEmpty()) {
             writeln("### Tags")
             newLine()
             for (tag in recipeDescriptor.tags) {
@@ -138,7 +151,7 @@ import TabItem from '@theme/TabItem';
             """.trimIndent()
             )
 
-            if (recipeDescriptor.recipeList.size > 1) {
+            if (recipeDescriptor.recipeList != null && recipeDescriptor.recipeList.size > 1) {
                 //language=markdown
                 writeln(
                     """
@@ -172,13 +185,13 @@ import TabItem from '@theme/TabItem';
     }
 
     private fun BufferedWriter.writeOptions(recipeDescriptor: RecipeDescriptor) {
-        if (recipeDescriptor.options.isNotEmpty()) {
+        if (recipeDescriptor.options != null && recipeDescriptor.options.isNotEmpty()) {
             writeln(
                 """
                 ## Options
-                
+
                 | Type | Name | Description | Example |
-                | -- | -- | -- | -- |
+                | --- | --- | --- | --- |
                 """.trimIndent()
             )
             for (option in recipeDescriptor.options) {
@@ -234,7 +247,7 @@ import TabItem from '@theme/TabItem';
     }
 
     private fun BufferedWriter.writeDataTables(recipeDescriptor: RecipeDescriptor) {
-        if (recipeDescriptor.dataTables.isNotEmpty()) {
+        if (recipeDescriptor.dataTables != null && recipeDescriptor.dataTables.isNotEmpty()) {
             writeln(
                 //language=markdown
                 """
@@ -289,7 +302,7 @@ import TabItem from '@theme/TabItem';
     }
 
     private fun BufferedWriter.writeExamples(recipeDescriptor: RecipeDescriptor) {
-        if (recipeDescriptor.examples.isNotEmpty()) {
+        if (recipeDescriptor.examples != null && recipeDescriptor.examples.isNotEmpty()) {
             val subject = if (recipeDescriptor.examples.size > 1) "Examples" else "Example"
             writeln("## $subject")
 
@@ -314,10 +327,11 @@ import TabItem from '@theme/TabItem';
                 newLine()
 
                 // Parameters
-                if (example.parameters.isNotEmpty() && recipeDescriptor.options.isNotEmpty()) {
+                if (example.parameters != null && example.parameters.isNotEmpty() &&
+                    recipeDescriptor.options != null && recipeDescriptor.options.isNotEmpty()) {
                     writeln("###### Parameters")
                     writeln("| Parameter | Value |")
-                    writeln("| -- | -- |")
+                    writeln("| --- | --- |")
                     for (n in 0 until recipeDescriptor.options.size) {
                         write("|")
                         write(recipeDescriptor.options[n].name)
@@ -406,6 +420,15 @@ import TabItem from '@theme/TabItem';
         }
     }
 
+    /**
+     * Gets the npm package name for a JavaScript recipe module.
+     * Uses the single source of truth from TypeScriptRecipeLoader.
+     */
+    private fun getNpmPackageName(origin: RecipeOrigin): String {
+        return TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES[origin.artifactId]
+            ?: "@openrewrite/${origin.artifactId}"
+    }
+
     private fun BufferedWriter.writeUsage(
         recipeDescriptor: RecipeDescriptor,
         origin: RecipeOrigin
@@ -415,6 +438,12 @@ import TabItem from '@theme/TabItem';
         writeln("## Usage")
         newLine()
 
+        // Handle JavaScript recipes separately
+        if (isJavaScriptRecipe(recipeDescriptor)) {
+            writeJavaScriptUsage(recipeDescriptor, origin)
+            return
+        }
+
         val suppressJava = recipeDescriptor.name.contains(".csharp.") ||
                 recipeDescriptor.name.contains(".dotnet.") ||
                 recipeDescriptor.name.contains(".nodejs.") ||
@@ -422,14 +451,14 @@ import TabItem from '@theme/TabItem';
                 origin.license == Licenses.Proprietary
         val suppressMaven = suppressJava || recipeDescriptor.name.contains(".gradle.")
         val suppressGradle = suppressJava || recipeDescriptor.name.contains(".maven.")
-        val requiresConfiguration = recipeDescriptor.options.any { it.isRequired }
+        val requiresConfiguration = recipeDescriptor.options?.any { it.isRequired } ?: false
         val requiresDependency = !origin.isFromCoreLibrary()
 
         val dataTableSnippet =
-            if (recipeDescriptor.dataTables.isEmpty()) "" else "<exportDatatables>true</exportDatatables>"
+            if (recipeDescriptor.dataTables == null || recipeDescriptor.dataTables.isEmpty()) "" else "<exportDatatables>true</exportDatatables>"
 
         val dataTableCommandLineSnippet =
-            if (recipeDescriptor.dataTables.isEmpty()) "" else "-Drewrite.exportDatatables=true"
+            if (recipeDescriptor.dataTables == null || recipeDescriptor.dataTables.isEmpty()) "" else "-Drewrite.exportDatatables=true"
 
         if (requiresConfiguration) {
             val exampleRecipeName =
@@ -1158,6 +1187,33 @@ $mavenSnippet
 $cliSnippet
 </Tabs>
 """.trimIndent()
+        )
+    }
+
+    private fun BufferedWriter.writeJavaScriptUsage(
+        recipeDescriptor: RecipeDescriptor,
+        origin: RecipeOrigin
+    ) {
+        val npmPackageName = getNpmPackageName(origin)
+
+        //language=markdown
+        writeln(
+            """
+            In order to run JavaScript recipes, you will need to use the [Moderne CLI](https://docs.moderne.io/user-documentation/moderne-cli/getting-started/cli-intro).
+            For JavaScript specific configuration instructions, please see our [configuring JavaScript guide](https://docs.moderne.io/user-documentation/moderne-cli/how-to-guides/javascript).
+
+            Once the CLI is installed, you can install this JavaScript recipe package by running the following command:
+
+            ```shell title="Install the recipe package"
+            mod config recipes npm install $npmPackageName
+            ```
+
+            Then, you can run the recipe via:
+
+            ```shell title="Run the recipe"
+            mod run . --recipe ${recipeDescriptor.name}
+            ```
+            """.trimIndent()
         )
     }
 
