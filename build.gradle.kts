@@ -146,7 +146,7 @@ dependencies {
     "recipe"("io.moderne.recipe:rewrite-hibernate:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-kafka:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-program-analysis:$rewriteVersion")
-    // "recipe"("io.moderne.recipe:rewrite-react:$rewriteVersion") // TODO add once released
+    "recipe"("io.moderne.recipe:rewrite-react:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-spring:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-vulncheck:$rewriteVersion")
 }
