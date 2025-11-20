@@ -144,6 +144,7 @@ dependencies {
     "recipe"("io.moderne.recipe:rewrite-devcenter:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-elastic:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-hibernate:$rewriteVersion")
+    "recipe"("io.moderne.recipe:rewrite-jasperreports:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-kafka:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-program-analysis:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-react:$rewriteVersion")
