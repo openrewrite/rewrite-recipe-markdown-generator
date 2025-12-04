@@ -211,8 +211,8 @@ class RecipeLoader {
                     p,
                     Triple(
                         Licenses.get(
-                            attr.getValue("License-Url") ?: Licenses.Unknown.uri.toString(),
-                            attr.getValue("License-Name") ?: Licenses.Unknown.name
+                            attr.getValue("License-Url"),
+                            attr.getValue("License-Name")
                         ),
                         attr.getValue("Module-Origin")?.substringBefore(".git") ?: "",
                         attr.getValue("Module-Source")?.removePrefix("/")
@@ -233,8 +233,10 @@ class RecipeLoader {
         // Apply manifest information to recipe origins
         recipeOrigins.forEach { (uri, origin) ->
             val license: License? = mfInfos[uri]?.first
-            if (license != null) {
+            if (license != null && license != Licenses.Unknown) {
                 origin.license = license
+            } else if (origin.artifactId == "rewrite-cobol") {
+                origin.license = Licenses.Proprietary
             } else {
                 println("Unable to determine License for ${origin}")
             }
