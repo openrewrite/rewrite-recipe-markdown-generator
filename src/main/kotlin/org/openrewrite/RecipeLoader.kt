@@ -237,7 +237,7 @@ class RecipeLoader {
                 origin.license = license
             } else if (origin.artifactId == "rewrite-cobol") {
                 origin.license = Licenses.Proprietary
-            }else {
+            } else {
                 println("Unable to determine License for ${origin}")
             }
             origin.repositoryUrl = mfInfos[uri]?.second ?: ""
