@@ -259,6 +259,16 @@ class RecipeMarkdownGenerator : Runnable {
             } else if (isSpringBoot34OrHigher(recipe.name)) {
                 // The moderne and community spring boot recipes clashes with one another (deviating since 3.4) so let's make them distinct
                 generateSpringBootUpgradePath(recipe.name)
+            } else if (recipe.name.startsWith("io.moderne.hibernate.")) {
+                recipe.name
+                    .substring(11)
+                    .replace("\\.".toRegex(), "/")
+                    .lowercase(Locale.getDefault()) + "-moderne-edition"
+            } else if (recipe.name.startsWith("org.openrewrite.hibernate.")) {
+                recipe.name
+                    .substring(16)
+                    .replace("\\.".toRegex(), "/")
+                    .lowercase(Locale.getDefault()) + "-community-edition"
             } else if (recipe.name.startsWith("org.openrewrite")) {
                 // If the recipe path only has two periods, it's part of the core recipes and should be adjusted accordingly.
                 if (recipe.name.count { it == '.' } == 2) {

@@ -203,11 +203,11 @@ tasks.named<JavaExec>("run").configure {
         targetDir.toString(),
         recipeModules,
         recipeClasspath,
-        latestVersion("org.openrewrite:rewrite-bom:latest.release"),
-        latestVersion("org.openrewrite.recipe:rewrite-recipe-bom:latest.release"),
-        latestVersion("io.moderne.recipe:moderne-recipe-bom:latest.release"),
-        latestVersion("org.openrewrite:plugin:latest.release"),
-        latestVersion("org.openrewrite.maven:rewrite-maven-plugin:latest.release")
+        latestVersion("org.openrewrite:rewrite-bom:$rewriteVersion"),
+        latestVersion("org.openrewrite.recipe:rewrite-recipe-bom:$rewriteVersion"),
+        latestVersion("io.moderne.recipe:moderne-recipe-bom:$rewriteVersion"),
+        latestVersion("org.openrewrite:plugin:$rewriteVersion"),
+        latestVersion("org.openrewrite.maven:rewrite-maven-plugin:$rewriteVersion")
     )
     if (latestVersionsOnly) {
         arguments.add("--latest-versions-only")

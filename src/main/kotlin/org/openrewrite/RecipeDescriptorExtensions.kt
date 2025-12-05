@@ -29,9 +29,13 @@ private fun RecipeDescriptor.edition(): String =
             -> " (Community Edition)"
 
         else ->
-            if (name.startsWith("io.moderne.java.spring.boot4.UpgradeSpringBoot_")) {
+            if (name.startsWith("io.moderne.hibernate") ||
+                name.startsWith("io.moderne.java.spring.boot4.UpgradeSpringBoot_")
+            ) {
                 " (Moderne Edition)"
-            } else if (name.startsWith("org.openrewrite.java.spring.boot4.UpgradeSpringBoot_")) {
+            } else if (name.startsWith("org.openrewrite.hibernate") ||
+                name.startsWith("org.openrewrite.java.spring.boot4.UpgradeSpringBoot_")
+            ) {
                 " (Community Edition)"
             } else {
                 ""
