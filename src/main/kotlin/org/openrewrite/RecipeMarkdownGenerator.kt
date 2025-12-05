@@ -261,12 +261,12 @@ class RecipeMarkdownGenerator : Runnable {
                 generateSpringBootUpgradePath(recipe.name)
             } else if (recipe.name.startsWith("io.moderne.hibernate.")) {
                 recipe.name
-                    .substring(21)
+                    .substring(11)
                     .replace("\\.".toRegex(), "/")
                     .lowercase(Locale.getDefault()) + "-moderne-edition"
             } else if (recipe.name.startsWith("org.openrewrite.hibernate.")) {
                 recipe.name
-                    .substring(26)
+                    .substring(16)
                     .replace("\\.".toRegex(), "/")
                     .lowercase(Locale.getDefault()) + "-community-edition"
             } else if (recipe.name.startsWith("org.openrewrite")) {
