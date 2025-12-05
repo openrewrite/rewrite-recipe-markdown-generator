@@ -37,7 +37,7 @@ class ListsOfRecipesWriter(
 
             for (entry in moderneProprietaryRecipesMap) {
                 // Artifact ID
-                writeln("## ${entry.key}\n")
+                writeln("\n## ${entry.key}\n")
 
                 for (recipe in entry.value.sortedBy { it.displayName }) {
                     writeln(
@@ -150,7 +150,7 @@ class ListsOfRecipesWriter(
                 writeln("Total tags: ${tagToRecipes.size}\n")
 
                 for ((tag, recipes) in tagToRecipes) {
-                    writeln("## ${tag}")
+                    writeln("\n## ${tag}")
                     writeln(
                         "\n_${recipes.size} recipe${
                             if (recipes.size != 1) {
@@ -172,7 +172,6 @@ class ListsOfRecipesWriter(
                             }_"
                         )
                     }
-                    writeln("")
                 }
             }
         }
@@ -219,7 +218,7 @@ class ListsOfRecipesWriter(
                 }
                 .toSortedMap()
             for ((artifact, recipes) in recipesByArtifact) {
-                writeln("## ${artifact}\n")
+                writeln("\n## ${artifact}\n")
 
                 for (recipe in recipes.sortedBy { it.displayName }) {
                     writeln(
@@ -265,7 +264,7 @@ class ListsOfRecipesWriter(
                 }
                 .toSortedMap()
             for ((artifact, recipes) in recipesByArtifact) {
-                writeln("## ${artifact}\n")
+                writeln("\n## ${artifact}\n")
 
                 for (recipe in recipes.sortedBy { it.displayName }) {
                     writeln(
