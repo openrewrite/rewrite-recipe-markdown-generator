@@ -88,7 +88,7 @@ import TabItem from '@theme/TabItem';
             return formattedRecipeDescription
         }
 
-        // Check for markdown formatting indicators (headers, bullet lists, numbered lists)
+        // Check for Markdown formatting indicators (headers, bullet lists, numbered lists)
         // These suggest the description is already formatted as Markdown and should preserve newlines
         val markdownIndicatorRegex = Pattern.compile("(^|\\n)#{1,6}\\s|\\n\\s*[-*+]\\s|\\n\\s*\\d+\\.\\s")
         if (markdownIndicatorRegex.matcher(formattedRecipeDescription).find()) {
