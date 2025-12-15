@@ -42,12 +42,8 @@ class ListsOfRecipesWriter(
                 for (recipe in entry.value.sortedBy { it.displayName }) {
                     writeln(
                         "* [${recipe.displayNameEscaped()}](/recipes/${
-                            RecipeMarkdownGenerator.Companion.getRecipePath(
-                                recipe
-                            )
-                        }.md) - _${
-                            recipe.descriptionEscaped()
-                        }_"
+                            RecipeMarkdownGenerator.getRecipePath(recipe)
+                        }.md) - _${recipe.descriptionEscaped()}_"
                     )
                 }
 

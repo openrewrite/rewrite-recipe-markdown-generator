@@ -126,6 +126,14 @@ data class Category(
      */
     private fun categoryIndex(): String {
         return StringBuilder().apply {
+            // Needed to prevent LLM file-length warnings when parsing all the files in the build step.
+            // This is because the docusaurus-plugin-llms plugin processes rendered HTML pages which combine
+            // all recipes into one giant page.
+            appendLine("---")
+            appendLine("description: $displayName OpenRewrite recipes.")
+            appendLine("---")
+            appendLine()
+
             // Docusaurus gets confused when parsing C# as the sidebar title. We need to surround it in backticks
             // so it displays correctly.
             if (displayName == "C#") {
@@ -216,6 +224,10 @@ data class Category(
             val corePath = outputRoot.resolve("core/README.md")
 
             Files.newBufferedWriter(corePath, StandardOpenOption.CREATE).useAndApply {
+                writeln("---")
+                writeln("description: Core OpenRewrite recipes.")
+                writeln("---")
+                newLine()
                 writeln("# Core Recipes")
                 newLine()
                 writeln("_Recipes broadly applicable to all types of source files._")

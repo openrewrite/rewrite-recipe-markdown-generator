@@ -198,19 +198,17 @@ import TabItem from '@theme/TabItem';
                 var description = if (option.description == null) {
                     ""
                 } else {
-                    option.description.replace("\n", "<br />")
-
-                    // Ensure that anything that matches ${variable} is wrapped in ``
-                    // Otherwise Docusaurus tries to parse it as a variable.
-                    val regex = Regex("(?<!`)\\$\\{[^}]+}(?!`)")
-                    option.description.replace(regex) { matchResult ->
-                        "`${matchResult.value}`"
-                    }
+                    option.description
+                        .replace("\n", "<br />")
+                        .replace("|", "\\|")
+                        // Ensure that anything that matches ${variable} is wrapped in ``
+                        // Otherwise Docusaurus tries to parse it as a variable.
+                        .replace(Regex("(?<!`)\\$\\{[^}]+}(?!`)")) { matchResult ->
+                            "`${matchResult.value}`"
+                        }
                 }
-                description = if (option.isRequired) {
-                    description
-                } else {
-                    "*Optional*. $description"
+                if (!option.isRequired) {
+                    description = "*Optional*. $description"
                 }
 
                 // Add valid options to description
