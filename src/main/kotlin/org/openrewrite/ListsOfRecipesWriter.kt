@@ -54,6 +54,7 @@ class ListsOfRecipesWriter(
 
     // These are common in every recipe - so let's not use them when generating the list of recipes with data tables.
     private val dataTablesToIgnore = listOf(
+        "org.openrewrite.table.SearchResults",
         "org.openrewrite.table.SourcesFileResults",
         "org.openrewrite.table.SourcesFileErrors",
         "org.openrewrite.table.RecipeRunStats"
