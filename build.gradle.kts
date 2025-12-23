@@ -98,7 +98,6 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-codemods:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-codemods-ng:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-compiled-analysis:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-comprehension:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-concourse:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm:$rewriteVersion")
 //    "recipe"("org.openrewrite.recipe:rewrite-diffblue:latest.integration") {
