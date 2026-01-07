@@ -15752,6 +15752,184 @@ rewrite-javascript:
   artifactId: "rewrite-javascript"
   version: "8.71.0"
   markdownRecipeDescriptors:
+    org.openrewrite.javascript.change-import:
+      name: "org.openrewrite.javascript.change-import"
+      description: "Changes an import from one module/member to another, updating\
+        \ all type attributions."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/change-import"
+      options:
+      - name: "newAlias"
+        type: "String"
+        required: false
+      - name: "newMember"
+        type: "String"
+        required: false
+      - name: "newModule"
+        type: "String"
+        required: true
+      - name: "oldMember"
+        type: "String"
+        required: true
+      - name: "oldModule"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.javascript.cleanup.add-parse-int-radix:
+      name: "org.openrewrite.javascript.cleanup.add-parse-int-radix"
+      description: "Adds the radix parameter (base 10) to `parseInt()` calls that\
+        \ are missing it, preventing potential parsing issues."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/cleanup/add-parse-int-radix"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.javascript.cleanup.async-callback-in-sync-array-method:
+      name: "org.openrewrite.javascript.cleanup.async-callback-in-sync-array-method"
+      description: "Detects async callbacks passed to array methods like .some(),\
+        \ .every(), .filter() which don't await promises. This is a common bug where\
+        \ Promise objects are always truthy."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/cleanup/async-callback-in-sync-array-method"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.javascript.cleanup.order-imports:
+      name: "org.openrewrite.javascript.cleanup.order-imports"
+      description: "Sort imports by category and module path. Categories: side-effect,\
+        \ namespace, default, named, type. Within each category, imports are sorted\
+        \ alphabetically by module path. Named specifiers within each import are also\
+        \ sorted alphabetically."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/cleanup/order-imports"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.javascript.cleanup.prefer-optional-chain:
+      name: "org.openrewrite.javascript.cleanup.prefer-optional-chain"
+      description: "Converts ternary expressions like `foo ? foo.bar : undefined`\
+        \ to use optional chaining syntax `foo?.bar`."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/cleanup/prefer-optional-chain"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.javascript.cleanup.use-object-property-shorthand:
+      name: "org.openrewrite.javascript.cleanup.use-object-property-shorthand"
+      description: "Simplifies object properties where the property name and value/variable\
+        \ name are the same (e.g., `{ x: x }` becomes `{ x }`). Applies to both destructuring\
+        \ patterns and object literals."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/cleanup/use-object-property-shorthand"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.javascript.dependencies.add-dependency:
+      name: "org.openrewrite.javascript.dependencies.add-dependency"
+      description: "Adds a new dependency to `package.json` and updates the lock file\
+        \ by running the package manager."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/dependencies/add-dependency"
+      options:
+      - name: "packageName"
+        type: "String"
+        required: true
+      - name: "scope"
+        type: "String"
+        required: false
+      - name: "version"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.javascript.dependencies.find-dependency:
+      name: "org.openrewrite.javascript.dependencies.find-dependency"
+      description: "Finds dependencies in a project's `package.json`. Can find both\
+        \ direct dependencies and dependencies that transitively include the target\
+        \ package. This recipe is commonly used as a precondition for other recipes."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/dependencies/find-dependency"
+      options:
+      - name: "onlyDirect"
+        type: "String"
+        required: false
+      - name: "packageName"
+        type: "String"
+        required: true
+      - name: "version"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.javascript.dependencies.upgrade-dependency-version:
+      name: "org.openrewrite.javascript.dependencies.upgrade-dependency-version"
+      description: "Upgrades the version of a direct dependency in `package.json`\
+        \ and updates the lock file by running the package manager."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/dependencies/upgrade-dependency-version"
+      options:
+      - name: "newVersion"
+        type: "String"
+        required: true
+      - name: "packageName"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.javascript.dependencies.upgrade-transitive-dependency-version:
+      name: "org.openrewrite.javascript.dependencies.upgrade-transitive-dependency-version"
+      description: "Upgrades the version of a transitive dependency by adding override/resolution\
+        \ entries to `package.json` and updates the lock file by running the package\
+        \ manager."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/dependencies/upgrade-transitive-dependency-version"
+      options:
+      - name: "dependencyPath"
+        type: "String"
+        required: false
+      - name: "newVersion"
+        type: "String"
+        required: true
+      - name: "packageName"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.javascript.format.auto-format:
+      name: "org.openrewrite.javascript.format.auto-format"
+      description: "Format JavaScript and TypeScript code using formatting rules auto-detected\
+        \ from the project's existing code style."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/format/auto-format"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.javascript.migrate.es6.modernize-octal-escape-sequences:
+      name: "org.openrewrite.javascript.migrate.es6.modernize-octal-escape-sequences"
+      description: "Convert old-style octal escape sequences (e.g., `\\0`, `\\123`)\
+        \ to modern hex escape sequences (e.g., `\\x00`, `\\x53`) or Unicode escape\
+        \ sequences (e.g., `\\u0000`, `\\u0053`)."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/migrate/es6/modernize-octal-escape-sequences"
+      options:
+      - name: "useUnicodeEscapes"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.javascript.migrate.es6.modernize-octal-literals:
+      name: "org.openrewrite.javascript.migrate.es6.modernize-octal-literals"
+      description: "Convert old-style octal literals (e.g., `0777`) to modern ES6\
+        \ syntax (e.g., `0o777`)."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/migrate/es6/modernize-octal-literals"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.javascript.migrate.es6.remove-duplicate-object-keys:
+      name: "org.openrewrite.javascript.migrate.es6.remove-duplicate-object-keys"
+      description: "Remove duplicate keys in object literals, keeping only the last\
+        \ occurrence (last-wins semantics)."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/migrate/es6/remove-duplicate-object-keys"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.javascript.migrate.typescript.export-assignment-to-export-default:
+      name: "org.openrewrite.javascript.migrate.typescript.export-assignment-to-export-default"
+      description: "Converts TypeScript `export =` syntax to ES module `export default`\
+        \ syntax for compatibility with ECMAScript modules."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/migrate/typescript/export-assignment-to-export-default"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
     org.openrewrite.javascript.search.DependencyInsight:
       name: "org.openrewrite.javascript.search.DependencyInsight"
       description: "Find direct and transitive npm dependencies matching a package\
@@ -15768,6 +15946,201 @@ rewrite-javascript:
       - name: "scope"
         type: "String"
         required: false
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.dependency-vulnerability-check:
+      name: "org.openrewrite.node.dependency-vulnerability-check"
+      description: "This software composition analysis (SCA) tool detects and upgrades\
+        \ dependencies with publicly disclosed vulnerabilities. This recipe both generates\
+        \ a report of vulnerable dependencies and upgrades to newer versions with\
+        \ fixes. This recipe by default only upgrades to the latest **patch** version.\
+        \ If a minor or major upgrade is required to reach the fixed version, this\
+        \ can be controlled using the `maximumUpgradeDelta` option. Vulnerability\
+        \ information comes from the GitHub Security Advisory Database."
+      docLink: "https://docs.openrewrite.org/recipes/node/dependency-vulnerability-check"
+      options:
+      - name: "cvePattern"
+        type: "String"
+        required: false
+      - name: "maximumUpgradeDelta"
+        type: "String"
+        required: false
+      - name: "minimumSeverity"
+        type: "String"
+        required: false
+      - name: "overrideTransitive"
+        type: "String"
+        required: false
+      - name: "scope"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.buffer.replace-deprecated-slice:
+      name: "org.openrewrite.node.migrate.buffer.replace-deprecated-slice"
+      description: "Replace deprecated `buffer.slice()` calls with `buffer.subarray()`\
+        \ for compatibility with Uint8Array.prototype.slice()."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/buffer/replace-deprecated-slice"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.buffer.replace-slow-buffer:
+      name: "org.openrewrite.node.migrate.buffer.replace-slow-buffer"
+      description: "Replace deprecated `new SlowBuffer(size)` calls with `Buffer.allocUnsafeSlow(size)`.\
+        \ SlowBuffer was used to create un-pooled Buffer instances, but has been removed\
+        \ in favor of the explicit Buffer.allocUnsafeSlow() method."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/buffer/replace-slow-buffer"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.crypto.replace-crypto-fips:
+      name: "org.openrewrite.node.migrate.crypto.replace-crypto-fips"
+      description: "Replace deprecated `crypto.fips` property access with `crypto.getFips()`\
+        \ for reads and `crypto.setFips(value)` for writes."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/crypto/replace-crypto-fips"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.crypto.replace-hash-constructor:
+      name: "org.openrewrite.node.migrate.crypto.replace-hash-constructor"
+      description: "Replace deprecated `new crypto.Hash(algorithm)` constructor calls\
+        \ with `crypto.createHash(algorithm)` and `new crypto.Hmac(algorithm, key)`\
+        \ with `crypto.createHmac(algorithm, key)` factory methods."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/crypto/replace-hash-constructor"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.fs.replace-dirent-path:
+      name: "org.openrewrite.node.migrate.fs.replace-dirent-path"
+      description: "Replaces deprecated `dirent.path` property access with `dirent.parentPath`\
+        \ on `fs.Dirent` instances to address DEP0178 deprecation."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/fs/replace-dirent-path"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.fs.replace-fs-access-constants:
+      name: "org.openrewrite.node.migrate.fs.replace-fs-access-constants"
+      description: "Replace deprecated file access constants (`fs.F_OK`, `fs.R_OK`,\
+        \ `fs.W_OK`, `fs.X_OK`) with their equivalents from `fs.constants`. These\
+        \ constants were removed in Node.js v24+ and should be accessed through the\
+        \ constants namespace."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/fs/replace-fs-access-constants"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.fs.replace-fs-truncate-fd:
+      name: "org.openrewrite.node.migrate.fs.replace-fs-truncate-fd"
+      description: "Replace deprecated `fs.truncate(fd, ...)` and `fs.truncateSync(fd,\
+        \ ...)` calls with `fs.ftruncate(fd, ...)` and `fs.ftruncateSync(fd, ...)`\
+        \ when the first argument is a file descriptor (number)."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/fs/replace-fs-truncate-fd"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.fs.replace-stats-constructor:
+      name: "org.openrewrite.node.migrate.fs.replace-stats-constructor"
+      description: "Replace deprecated `new fs.Stats()` constructor calls with an\
+        \ object literal containing Stats properties initialized to undefined."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/fs/replace-stats-constructor"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.http.replace-outgoing-message-headers:
+      name: "org.openrewrite.node.migrate.http.replace-outgoing-message-headers"
+      description: "Replace deprecated `OutgoingMessage.prototype._headers` with `getHeaders()`,\
+        \ `setHeader()`, `removeHeader()` and `OutgoingMessage.prototype._headerNames`\
+        \ with `getHeaderNames()` to address DEP0066 deprecation."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/http/replace-outgoing-message-headers"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.process.coerce-process-exit-code:
+      name: "org.openrewrite.node.migrate.process.coerce-process-exit-code"
+      description: "Wraps non-integer values passed to `process.exit()` or assigned\
+        \ to `process.exitCode` with `Math.trunc()` to avoid the DEP0164 deprecation\
+        \ warning about implicit coercion to integer."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/process/coerce-process-exit-code"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.process.remove-usage-of-features-tls-underscore_constants:
+      name: "org.openrewrite.node.migrate.process.remove-usage-of-features-tls-underscore_constants"
+      description: "Remove references to deprecated `process.features.tls_*` properties,\
+        \ replace with `process.features.tls`."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/process/remove-usage-of-features-tls-underscore_constants"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.tls.replace-internal-modules:
+      name: "org.openrewrite.node.migrate.tls.replace-internal-modules"
+      description: "Replace deprecated internal TLS module imports `require('node:_tls_common')`\
+        \ and `require('node:_tls_wrap')` with the public `node:tls` module."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/tls/replace-internal-modules"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.upgrade-node-22:
+      name: "org.openrewrite.node.migrate.upgrade-node-22"
+      description: "Migrate deprecated APIs for Node.js 22 compatibility. Addresses\
+        \ Node 22 runtime deprecations and deprecations from earlier versions."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/upgrade-node-22"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.upgrade-node-24:
+      name: "org.openrewrite.node.migrate.upgrade-node-24"
+      description: "Migrate deprecated APIs for Node.js 24 compatibility. Includes\
+        \ all migrations from Node.js 22, plus Node 23 and Node 24 deprecations."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/upgrade-node-24"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.util.remove-promisify-on-promise:
+      name: "org.openrewrite.node.migrate.util.remove-promisify-on-promise"
+      description: "Removes `util.promisify()` calls on functions that already return\
+        \ a Promise. Since Node.js v17.0.0, calling promisify on a function that returns\
+        \ a Promise emits a runtime deprecation warning (DEP0174)."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/util/remove-promisify-on-promise"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.util.replace-is-webassembly-compiled-module:
+      name: "org.openrewrite.node.migrate.util.replace-is-webassembly-compiled-module"
+      description: "Replace `util.types.isWebAssemblyCompiledModule(value)` with `value\
+        \ instanceof WebAssembly.Module`."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/util/replace-is-webassembly-compiled-module"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.util.replace-util-extend:
+      name: "org.openrewrite.node.migrate.util.replace-util-extend"
+      description: "Replace deprecated `util._extend(target, source)` calls with `Object.assign(target,\
+        \ source)` which preserves the mutation behavior."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/util/replace-util-extend"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.util.replace-util-log:
+      name: "org.openrewrite.node.migrate.util.replace-util-log"
+      description: "Replace deprecated `util.log()` calls with `console.log()`. Note:\
+        \ `util.log()` included timestamps, but `console.log()` does not."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/util/replace-util-log"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.util.use-native-type-checking-methods:
+      name: "org.openrewrite.node.migrate.util.use-native-type-checking-methods"
+      description: "The `util` module's type-checking methods have been removed in\
+        \ Node 22."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/util/use-native-type-checking-methods"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
+    org.openrewrite.node.migrate.zlib.replace-bytes-read:
+      name: "org.openrewrite.node.migrate.zlib.replace-bytes-read"
+      description: "Replace deprecated `bytesRead` property on zlib streams with `bytesWritten`."
+      docLink: "https://docs.openrewrite.org/recipes/node/migrate/zlib/replace-bytes-read"
+      options: []
       isImperative: true
       artifactId: "rewrite-javascript"
 rewrite-jenkins:
