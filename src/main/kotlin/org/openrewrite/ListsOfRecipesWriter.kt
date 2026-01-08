@@ -273,7 +273,7 @@ class ListsOfRecipesWriter(
             }
         }
 
-        val markdown = outputPath.resolve("all-recipes-by-module.md")
+        val markdown = outputPath.resolve("all-recipes.md")
         Files.newBufferedWriter(markdown, StandardOpenOption.CREATE).useAndApply {
             writeln(
                 //language=markdown
