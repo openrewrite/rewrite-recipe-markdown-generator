@@ -234,6 +234,7 @@ class RecipeMarkdownGenerator : Runnable {
             recipeToSource
         )
         listWriter.createStandaloneRecipes(recipeContainedBy, recipeOrigins, recipeToSource)
+        listWriter.createAllRecipesByModule(recipeOrigins, recipeToSource)
     }
 
 

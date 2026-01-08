@@ -40,7 +40,7 @@ val rewriteVersion = "latest.release"
 
 dependencies {
     // Platform dependencies (BOMs)
-    implementation(platform("io.moderne.recipe:moderne-recipe-bom:$rewriteVersion"))
+    implementation(platform("io.moderne.recipe:moderne-recipe-bom:0.25.0")) // TODO Unpin once rpc.recipes compilation issue is fixed
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
 
     // Core implementation dependencies
