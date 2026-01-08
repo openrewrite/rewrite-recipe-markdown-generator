@@ -330,8 +330,8 @@ class ListsOfRecipesWriter(
                 for (recipe in recipes.sortedBy { it.name }) {
                     val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
                     writeln("* [${recipe.name}](/recipes/${recipePath}.md)")
-                    writeln("  * **Display name**: ${recipe.displayNameEscaped()}")
-                    writeln("  * **Description**: ${recipe.descriptionEscaped()}")
+                    writeln("  * **${recipe.displayNameEscaped()}**")
+                    writeln("  * ${recipe.descriptionEscaped()}")
                 }
             }
         }
