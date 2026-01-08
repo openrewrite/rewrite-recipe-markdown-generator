@@ -39,12 +39,11 @@ class ListsOfRecipesWriter(
                 // Artifact ID
                 writeln("\n## ${entry.key}\n")
 
-                for (recipe in entry.value.sortedBy { it.displayName }) {
-                    writeln(
-                        "* [${recipe.displayNameEscaped()}](/recipes/${
-                            RecipeMarkdownGenerator.getRecipePath(recipe)
-                        }.md) - _${recipe.descriptionEscaped()}_"
-                    )
+                for (recipe in entry.value.sortedBy { it.name }) {
+                    val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
+                    writeln("* [${recipe.name}](/recipes/${recipePath}.md)")
+                    writeln("  * **${recipe.displayNameEscaped()}**")
+                    writeln("  * ${recipe.descriptionEscaped()}")
                 }
 
                 writeln("")
@@ -84,16 +83,12 @@ class ListsOfRecipesWriter(
             )
 
             for (recipe in recipesWithDataTables) {
-                writeln(
-                    "### [${recipe.displayNameEscaped()}](/recipes/${
-                        RecipeMarkdownGenerator.Companion.getRecipePath(
-                            recipe
-                        )
-                    }.md)\n "
-                )
-                writeln("_${recipe.name}_\n")
-                writeln("${recipe.descriptionEscaped()}\n")
-                writeln("#### Data tables:\n")
+                val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
+                writeln("### [${recipe.name}](/recipes/${recipePath}.md)")
+                writeln("  * **${recipe.displayNameEscaped()}**")
+                writeln("  * ${recipe.descriptionEscaped()}")
+
+                writeln("\n#### Data tables:\n")
 
                 val filteredDataTables = recipe.dataTables?.filter { dataTable ->
                     dataTable.name !in dataTablesToIgnore
@@ -158,16 +153,11 @@ class ListsOfRecipesWriter(
                         }_\n"
                     )
 
-                    for (recipe in recipes.sortedBy { it.displayName }) {
-                        writeln(
-                            "* [${recipe.displayNameEscaped()}](/recipes/${
-                                RecipeMarkdownGenerator.Companion.getRecipePath(
-                                    recipe
-                                )
-                            }.md) - _${
-                                recipe.descriptionEscaped()
-                            }_"
-                        )
+                    for (recipe in recipes.sortedBy { it.name }) {
+                        val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
+                        writeln("* [${recipe.name}](/recipes/${recipePath}.md)")
+                        writeln("  * **${recipe.displayNameEscaped()}**")
+                        writeln("  * ${recipe.descriptionEscaped()}")
                     }
                 }
             }
@@ -217,16 +207,11 @@ class ListsOfRecipesWriter(
             for ((artifact, recipes) in recipesByArtifact) {
                 writeln("\n## ${artifact}\n")
 
-                for (recipe in recipes.sortedBy { it.displayName }) {
-                    writeln(
-                        "* [${recipe.displayNameEscaped()}](/recipes/${
-                            RecipeMarkdownGenerator.Companion.getRecipePath(
-                                recipe
-                            )
-                        }.md) - _${
-                            recipe.descriptionEscaped()
-                        }_"
-                    )
+                for (recipe in recipes.sortedBy { it.name }) {
+                    val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
+                    writeln("* [${recipe.name}](/recipes/${recipePath}.md)")
+                    writeln("  * **${recipe.displayNameEscaped()}**")
+                    writeln("  * ${recipe.descriptionEscaped()}")
                 }
             }
         }
@@ -263,12 +248,11 @@ class ListsOfRecipesWriter(
             for ((artifact, recipes) in recipesByArtifact) {
                 writeln("\n## ${artifact}\n")
 
-                for (recipe in recipes.sortedBy { it.displayName }) {
-                    writeln(
-                        "* [${recipe.descriptor.displayNameEscaped()}](/recipes/${
-                            RecipeMarkdownGenerator.Companion.getRecipePath(recipe.descriptor)
-                        }.md) - _${recipe.descriptor.descriptionEscaped()}_"
-                    )
+                for (recipe in recipes.sortedBy { it.name }) {
+                    val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe.descriptor)
+                    writeln("* [${recipe.descriptor.name}](/recipes/${recipePath}.md)")
+                    writeln("  * **${recipe.descriptor.displayNameEscaped()}**")
+                    writeln("  * ${recipe.descriptor.descriptionEscaped()}")
                 }
             }
         }
