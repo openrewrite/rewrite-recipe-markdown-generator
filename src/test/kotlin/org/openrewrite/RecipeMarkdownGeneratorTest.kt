@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import org.openrewrite.config.RecipeDescriptor
 import picocli.CommandLine
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -38,51 +39,111 @@ class RecipeMarkdownGeneratorTest {
     }
 
     @Test
-    fun getRecipePathForSpringBootUpgrades() {
-        // Test existing Spring Boot 3.4 versions (both Moderne and OpenRewrite)
-        val moderneRecipe34 = getRecipePath("io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4")
-        val communityRecipe34 = getRecipePath("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4")
+    fun conflictingRecipesGetEditionSuffix() {
+        // When both moderne and openrewrite have the same recipe, they should get edition suffixes
+        val recipes = listOf(
+            "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4",
+            "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4",
+            "io.moderne.java.spring.security6.UpgradeSpringSecurity_6_5",
+            "org.openrewrite.java.spring.security6.UpgradeSpringSecurity_6_5",
+            "io.moderne.hibernate.UpgradeHibernate_6_6",
+            "org.openrewrite.hibernate.UpgradeHibernate_6_6"
+        )
+        initializeConflictDetection(recipes)
 
-        assertThat(moderneRecipe34).isEqualTo("java/spring/boot3/upgradespringboot_3_4-moderne-edition")
-        assertThat(communityRecipe34).isEqualTo("java/spring/boot3/upgradespringboot_3_4-community-edition")
+        // Spring Boot 3.4 - both exist, so both get suffixes
+        assertThat(getRecipePath("io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4"))
+            .isEqualTo("java/spring/boot3/upgradespringboot_3_4-moderne-edition")
+        assertThat(getRecipePath("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4"))
+            .isEqualTo("java/spring/boot3/upgradespringboot_3_4-community-edition")
 
-        // Test future Spring Boot 4.x versions
-        val springBoot4Moderne = getRecipePath("io.moderne.java.spring.boot4.UpgradeSpringBoot_4_0")
-        val springBoot4Community = getRecipePath("org.openrewrite.java.spring.boot4.UpgradeSpringBoot_4_2")
+        // Spring Security 6.5 - both exist, so both get suffixes
+        assertThat(getRecipePath("io.moderne.java.spring.security6.UpgradeSpringSecurity_6_5"))
+            .isEqualTo("java/spring/security6/upgradespringsecurity_6_5-moderne-edition")
+        assertThat(getRecipePath("org.openrewrite.java.spring.security6.UpgradeSpringSecurity_6_5"))
+            .isEqualTo("java/spring/security6/upgradespringsecurity_6_5-community-edition")
 
-        assertThat(springBoot4Moderne).isEqualTo("java/spring/boot4/upgradespringboot_4_0-moderne-edition")
-        assertThat(springBoot4Community).isEqualTo("java/spring/boot4/upgradespringboot_4_2-community-edition")
+        // Hibernate 6.6 - both exist, so both get suffixes
+        assertThat(getRecipePath("io.moderne.hibernate.UpgradeHibernate_6_6"))
+            .isEqualTo("hibernate/upgradehibernate_6_6-moderne-edition")
+        assertThat(getRecipePath("org.openrewrite.hibernate.UpgradeHibernate_6_6"))
+            .isEqualTo("hibernate/upgradehibernate_6_6-community-edition")
+    }
 
-        // Test future Spring Boot 3.x minor versions
-        val springBoot35Moderne = getRecipePath("io.moderne.java.spring.boot3.UpgradeSpringBoot_3_5")
-        assertThat(springBoot35Moderne).isEqualTo("java/spring/boot3/upgradespringboot_3_5-moderne-edition")
+    @Test
+    fun nonConflictingRecipesHaveNoSuffix() {
+        // When only one version exists, no suffix should be added
+        val recipes = listOf(
+            "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3",  // Only community exists
+            "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_5"       // Only moderne exists
+        )
+        initializeConflictDetection(recipes)
 
-        // No change for recipes up to 3.3
-        val springBoot33Community = getRecipePath("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3")
-        assertThat(springBoot33Community).isEqualTo("java/spring/boot3/upgradespringboot_3_3")
+        // Spring Boot 3.3 - only community exists, no suffix
+        assertThat(getRecipePath("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3"))
+            .isEqualTo("java/spring/boot3/upgradespringboot_3_3")
 
-        // Test future Spring Boot 5.x versions
-        val springBoot5Community = getRecipePath("org.openrewrite.java.spring.boot5.UpgradeSpringBoot_5_1")
-        assertThat(springBoot5Community).isEqualTo("java/spring/boot5/upgradespringboot_5_1-community-edition")
+        // Spring Boot 3.5 - only moderne exists, no suffix
+        assertThat(getRecipePath("io.moderne.java.spring.boot3.UpgradeSpringBoot_3_5"))
+            .isEqualTo("java/spring/boot3/upgradespringboot_3_5")
+    }
+
+    @Test
+    fun conflictingPathsAreDistinct() {
+        // Verify that conflicting recipes end up with different paths
+        val recipes = listOf(
+            "io.moderne.java.spring.security6.UpgradeSpringSecurity_6_5",
+            "org.openrewrite.java.spring.security6.UpgradeSpringSecurity_6_5"
+        )
+        initializeConflictDetection(recipes)
+
+        val modernePath = getRecipePath("io.moderne.java.spring.security6.UpgradeSpringSecurity_6_5")
+        val communityPath = getRecipePath("org.openrewrite.java.spring.security6.UpgradeSpringSecurity_6_5")
+
+        assertThat(modernePath).isNotEqualTo(communityPath)
+        assertThat(modernePath).endsWith("-moderne-edition")
+        assertThat(communityPath).endsWith("-community-edition")
+    }
+
+    @Test
+    fun thirdPartyRecipesUnaffected() {
+        // Third-party recipes should never get edition suffixes
+        val recipes = listOf(
+            "com.google.errorprone.SomeRecipe",
+            "org.apache.camel.SomeRecipe"
+        )
+        initializeConflictDetection(recipes)
+
+        assertThat(getRecipePath("com.google.errorprone.SomeRecipe"))
+            .isEqualTo("com/google/errorprone/somerecipe")
+        assertThat(getRecipePath("org.apache.camel.SomeRecipe"))
+            .isEqualTo("org/apache/camel/somerecipe")
+    }
+
+    private fun initializeConflictDetection(recipeNames: List<String>) {
+        val descriptors = recipeNames.map { createDescriptor(it) }
+        RecipeMarkdownGenerator.initializeConflictDetection(descriptors)
     }
 
     private fun getRecipePath(recipeName: String): String {
-        return RecipeMarkdownGenerator.getRecipePath(
-            org.openrewrite.config.RecipeDescriptor(
-                recipeName,
-                recipeName,
-                "",
-                "Test recipe",
-                mutableSetOf(),
-                java.time.Duration.ZERO,
-                mutableListOf(),
-                mutableListOf(),
-                mutableListOf(),
-                mutableListOf(),
-                mutableListOf(),
-                mutableListOf(),
-                null
-            )
+        return RecipeMarkdownGenerator.getRecipePath(createDescriptor(recipeName))
+    }
+
+    private fun createDescriptor(recipeName: String): RecipeDescriptor {
+        return RecipeDescriptor(
+            recipeName,
+            recipeName,
+            "",
+            "Test recipe",
+            mutableSetOf(),
+            java.time.Duration.ZERO,
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf(),
+            null
         )
     }
 }
