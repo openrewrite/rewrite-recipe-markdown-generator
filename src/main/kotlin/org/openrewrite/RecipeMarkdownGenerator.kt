@@ -122,6 +122,9 @@ class RecipeMarkdownGenerator : Runnable {
 
         println("Found ${allRecipeDescriptors.size} descriptor(s).")
 
+        // Detect conflicting paths between io.moderne and org.openrewrite recipes
+        initializeConflictDetection(allRecipeDescriptors)
+
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
         val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
 
@@ -239,7 +242,54 @@ class RecipeMarkdownGenerator : Runnable {
 
 
     companion object {
-        private val SPRING_BOOT_UPGRADE_PATTERN = Regex("^(io\\.moderne|org\\.openrewrite)\\.java\\.spring\\.boot(\\d+)\\.UpgradeSpringBoot_(\\d+)_(\\d+)$")
+        // Set of base paths that have both io.moderne and org.openrewrite recipes (conflicts)
+        private var conflictingBasePaths: Set<String> = emptySet()
+
+        /**
+         * Initialize conflict detection by scanning all recipe descriptors.
+         * Must be called before any getRecipePath() calls.
+         */
+        fun initializeConflictDetection(allDescriptors: Collection<RecipeDescriptor>) {
+            val moderneBasePaths = mutableSetOf<String>()
+            val openrewriteBasePaths = mutableSetOf<String>()
+
+            for (descriptor in allDescriptors) {
+                val name = descriptor.name
+                when {
+                    name.startsWith("io.moderne") -> {
+                        moderneBasePaths.add(getBasePath(name))
+                    }
+                    name.startsWith("org.openrewrite") -> {
+                        openrewriteBasePaths.add(getBasePath(name))
+                    }
+                }
+            }
+
+            // Find paths that exist in both sets
+            conflictingBasePaths = moderneBasePaths.intersect(openrewriteBasePaths)
+        }
+
+        /**
+         * Compute the base path for a recipe name (without any edition suffix).
+         * This is used for conflict detection.
+         */
+        private fun getBasePath(recipeName: String): String {
+            return when {
+                recipeName.startsWith("org.openrewrite") -> {
+                    if (recipeName.count { it == '.' } == 2) {
+                        "core/" + recipeName.substring(16).lowercase(Locale.getDefault())
+                    } else {
+                        recipeName.substring(16).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
+                    }
+                }
+                recipeName.startsWith("io.moderne") -> {
+                    recipeName.substring(11).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
+                }
+                else -> {
+                    recipeName.replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
+                }
+            }
+        }
 
         /**
          * Call Closable.use() together with apply() to avoid adding two levels of indentation
@@ -254,34 +304,24 @@ class RecipeMarkdownGenerator : Runnable {
         // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
         // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
         // docs so that they parse correctly.
-        fun getRecipePath(recipe: RecipeDescriptor): String =
+        fun getRecipePath(recipe: RecipeDescriptor): String {
+            // Check for manual overrides first
             if (recipePathToDocusaurusRenamedPath.containsKey(recipe.name)) {
-                recipePathToDocusaurusRenamedPath[recipe.name]!!
-            } else if (isSpringBoot34OrHigher(recipe.name)) {
-                // The moderne and community spring boot recipes clashes with one another (deviating since 3.4) so let's make them distinct
-                generateSpringBootUpgradePath(recipe.name)
-            } else if (recipe.name.startsWith("io.moderne.hibernate.")) {
-                recipe.name
-                    .substring(11)
-                    .replace("\\.".toRegex(), "/")
-                    .lowercase(Locale.getDefault()) + "-moderne-edition"
-            } else if (recipe.name.startsWith("org.openrewrite.hibernate.")) {
-                recipe.name
-                    .substring(16)
-                    .replace("\\.".toRegex(), "/")
-                    .lowercase(Locale.getDefault()) + "-community-edition"
-            } else if (recipe.name.startsWith("org.openrewrite")) {
-                // If the recipe path only has two periods, it's part of the core recipes and should be adjusted accordingly.
-                if (recipe.name.count { it == '.' } == 2) {
-                    "core/" + recipe.name
-                        .substring(16)
-                        .lowercase(Locale.getDefault())
-                } else {
-                    recipe.name.substring(16).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
+                return recipePathToDocusaurusRenamedPath[recipe.name]!!
+            }
+
+            val basePath = getBasePath(recipe.name)
+
+            // Add edition suffix only if there's a detected conflict
+            val needsSuffix = conflictingBasePaths.contains(basePath)
+
+            return when {
+                recipe.name.startsWith("org.openrewrite") -> {
+                    if (needsSuffix) basePath + "-community-edition" else basePath
                 }
-            } else if (recipe.name.startsWith("io.moderne")) {
-                recipe.name.substring(11).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
-            } else if (
+                recipe.name.startsWith("io.moderne") -> {
+                    if (needsSuffix) basePath + "-moderne-edition" else basePath
+                }
                 recipe.name.startsWith("ai.timefold") ||
                 recipe.name.startsWith("com.google") ||
                 recipe.name.startsWith("com.oracle") ||
@@ -290,38 +330,20 @@ class RecipeMarkdownGenerator : Runnable {
                 recipe.name.startsWith("org.apache") ||
                 recipe.name.startsWith("org.axonframework") ||
                 recipe.name.startsWith("software.amazon.awssdk") ||
-                recipe.name.startsWith("tech.picnic")
-            ) {
-                recipe.name.replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
-            } else {
-                throw RuntimeException("Recipe package unrecognized: ${recipe.name}")
+                recipe.name.startsWith("tech.picnic") -> {
+                    basePath
+                }
+                else -> {
+                    throw RuntimeException("Recipe package unrecognized: ${recipe.name}")
+                }
             }
+        }
 
         private val recipePathToDocusaurusRenamedPath: Map<String, String> = mapOf(
             "org.openrewrite.java.testing.assertj.Assertj" to "java/testing/assertj/assertj-best-practices",
             "org.openrewrite.java.migrate.javaee7" to "java/migrate/javaee7-recipe",
             "org.openrewrite.java.migrate.javaee8" to "java/migrate/javaee8-recipe"
         )
-
-        private fun isSpringBoot34OrHigher(recipeName: String): Boolean {
-            val matchResult = SPRING_BOOT_UPGRADE_PATTERN.find(recipeName) ?: return false
-            val (_, _, upgradeMajor, upgradeMinor) = matchResult.destructured
-            val upgradeMajorInt = upgradeMajor.toInt()
-            val upgradeMinorInt = upgradeMinor.toInt()
-            return upgradeMajorInt > 3 || (upgradeMajorInt == 3 && upgradeMinorInt >= 4)
-        }
-
-        private fun generateSpringBootUpgradePath(recipeName: String): String {
-            val matchResult = SPRING_BOOT_UPGRADE_PATTERN.find(recipeName)
-
-            return if (matchResult != null) {
-                val (organization, majorVersion, upgradeMajor, upgradeMinor) = matchResult.destructured
-                val edition = if (organization == "io.moderne") "moderne-edition" else "community-edition"
-                "java/spring/boot$majorVersion/upgradespringboot_${upgradeMajor}_$upgradeMinor-$edition"
-            } else {
-                throw RuntimeException("Invalid Spring Boot upgrade recipe format: $recipeName")
-            }
-        }
 
         @JvmStatic
         fun main(args: Array<String>) {

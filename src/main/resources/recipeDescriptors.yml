@@ -12692,14 +12692,14 @@ rewrite-hibernate:
       name: "io.moderne.hibernate.MigrateToHibernate72"
       description: "This recipe will apply changes commonly needed when migrating\
         \ to Hibernate 7.2.x."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernate72-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernate72"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
     io.moderne.hibernate.search.FindJPQLDefinitions:
       name: "io.moderne.hibernate.search.FindJPQLDefinitions"
       description: "Find Java Persistence Query Language definitions in the codebase."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/search/findjpqldefinitions-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/search/findjpqldefinitions"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12711,7 +12711,7 @@ rewrite-hibernate:
         \ combination of `@MappedSuperclass` or `@Embeddable` is advised to migrate\
         \ to [Single Table Inheritance](https://docs.jboss.org/hibernate/orm/6.6/userguide/html_single/Hibernate_User_Guide.html#entity-inheritance-single-table)\
         \ but still accepted and therefore stays."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update66/fixconflictingclasstypeannotations-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update66/fixconflictingclasstypeannotations"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12719,7 +12719,7 @@ rewrite-hibernate:
       name: "io.moderne.hibernate.update66.MigrateCascadeTypes"
       description: "Moving away from deprecated Hibernate CascadeType constants. CascadeType.SAVE_UPDATE\
         \ -> CascadeType.PERSIST and/or CascadeType.MERGE, CascadeType.DELETE -> CascadeType.REMOVE."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update66/migratecascadetypes-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update66/migratecascadetypes"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -12727,7 +12727,7 @@ rewrite-hibernate:
       name: "io.moderne.hibernate.update66.RemoveTableFromInheritedEntity"
       description: "For Single Table Inherited Entities Hibernate ignores the `@Table`\
         \ annotation on child entities. From Version 6.6 it is considered an error."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update66/removetablefrominheritedentity-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update66/removetablefrominheritedentity"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12738,7 +12738,7 @@ rewrite-hibernate:
         \ and no longer supported in Hibernate 7. Existing code which relies on this\
         \ behavior will be modified by addition of explicit cascade=PERSIST to the\
         \ association fields."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/addcascadepersisttoidmappedassociations-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/addcascadepersisttoidmappedassociations"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12746,7 +12746,7 @@ rewrite-hibernate:
       name: "io.moderne.hibernate.update70.CompositeUserTypeSessionFactoryImplementor"
       description: "Remove leaking of SessionFactoryImplementor from `org.hibernate.usertype.CompositeUserType`\
         \ invocations and implementations."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/compositeusertypesessionfactoryimplementor-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/compositeusertypesessionfactoryimplementor"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12755,7 +12755,7 @@ rewrite-hibernate:
       description: "In Hibernate 7.0, `Configurable.configure()` now takes a `GeneratorCreationContext`\
         \ parameter instead of `ServiceRegistry`. This recipe migrates method signatures\
         \ and call sites."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migrateconfigurabletogeneratorcreationcontext-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migrateconfigurabletogeneratorcreationcontext"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12765,7 +12765,7 @@ rewrite-hibernate:
         \ signature to Hibernate 7 compatible signature. Changes `integrate(Metadata,\
         \ SessionFactoryImplementor, SessionFactoryServiceRegistry)` to `integrate(Metadata,\
         \ BootstrapContext, SessionFactoryImplementor)`."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migrateintegratormethod-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migrateintegratormethod"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12774,7 +12774,7 @@ rewrite-hibernate:
       description: "In Hibernate 7.0, various JDBC types were moved to internal packages.\
         \ Use @JdbcTypeCode with SqlTypes constants instead of @JdbcType with specific\
         \ classes."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratejdbctypetojdbctypecode-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratejdbctypetojdbctypecode"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12784,7 +12784,7 @@ rewrite-hibernate:
         \ method calls. As of JPA 3.2 and Hibernate 7, `LockMode`, `Timeout`, and\
         \ `PessimisticLockScope` are passed directly to `find()`, `refresh()`, and\
         \ `lock()` methods instead of being wrapped in a `LockOptions` object."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratelockoptionstodirectparameters-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratelockoptionstodirectparameters"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12793,7 +12793,7 @@ rewrite-hibernate:
       description: "In Hibernate 7.0, `MetamodelImplementor` has been split into `MappingMetamodel`\
         \ for ORM-specific operations and `JpaMetamodel` for JPA-standard operations.\
         \ This recipe migrates the usage based on which methods are called."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratemetamodelimplementor-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratemetamodelimplementor"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12801,7 +12801,7 @@ rewrite-hibernate:
       name: "io.moderne.hibernate.update70.MigrateNaturalIdLoadAccess"
       description: "Migrates NaturalIdLoadAccess#using(Object...) to using(Map.of(...))\
         \ variants for Hibernate 7.0."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratenaturalidloadaccess-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratenaturalidloadaccess"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12809,7 +12809,7 @@ rewrite-hibernate:
       name: "io.moderne.hibernate.update70.MigrateNaturalIdMultiLoadAccess"
       description: "Migrates NaturalIdMultiLoadAccess#compoundValue(Object...) to\
         \ Map.of(...) variants for Hibernate 7.0."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratenaturalidmultiloadaccess-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratenaturalidmultiloadaccess"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12817,7 +12817,7 @@ rewrite-hibernate:
       name: "io.moderne.hibernate.update70.MigrateSessionInterface"
       description: "Migrates code using deprecated Session interface methods to their\
         \ Hibernate 7.0 replacements."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratesessioninterface-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratesessioninterface"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12825,7 +12825,7 @@ rewrite-hibernate:
       name: "io.moderne.hibernate.update70.MigrateSessionToDeferToJPA"
       description: "Migrates code using deprecated Session load/get/refresh/save/update/delete\
         \ methods to their Hibernate 7.0 replacements."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratesessiontodefertojpa-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratesessiontodefertojpa"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12835,7 +12835,7 @@ rewrite-hibernate:
         \ has been replaced with `setQueryFlushMode(QueryFlushMode)`. This recipe\
         \ migrates the method call and converts `FlushModeType` parameters to their\
         \ `QueryFlushMode` equivalents."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratesetflushmodetosetqueryflushmode-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratesetflushmodetosetqueryflushmode"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12844,7 +12844,7 @@ rewrite-hibernate:
       description: "Migrates deprecated JFR integration APIs to their Hibernate 7\
         \ replacements. `EventManager` becomes `EventMonitor` and `HibernateMonitoringEvent`\
         \ becomes `DiagnosticEvent`."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratetohibernate7jfr-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratetohibernate7jfr"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -12852,7 +12852,7 @@ rewrite-hibernate:
       name: "io.moderne.hibernate.update70.MigrateToTargetEmbeddable"
       description: "Migrates code using removed @Target to to Hibernate 7.0's @TargetEmbeddable\
         \ equivalent. Removes misused @Target annotations."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratetotargetembeddable-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/migratetotargetembeddable"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12860,7 +12860,7 @@ rewrite-hibernate:
       name: "io.moderne.hibernate.update70.RemoveUnnecessaryCastToSession"
       description: "In Hibernate 7.0, `SessionFactory.createEntityManager()` explicitly\
         \ returns Session, making casts to Session unnecessary."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/removeunnecessarycasttosession-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/removeunnecessarycasttosession"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12870,7 +12870,7 @@ rewrite-hibernate:
         \ 7.0 with its Jakarta equivalent, such as Table, @Where, @OrderBy, etc.\n\
         If a annotation is used with arguments that do not have a direct replacement,\
         \ the annotation is not replaced at all."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/replacehibernatewithjakartaannotations-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/replacehibernatewithjakartaannotations"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12878,7 +12878,7 @@ rewrite-hibernate:
       name: "io.moderne.hibernate.update70.ReplaceSessionLockRequest"
       description: "Migrates Session.buildLockRequest(LockOptions.X) calls to use\
         \ session.lock(entity, new LockOptions(LockMode.X)) in Hibernate 7.0."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/replacesessionlockrequest-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/replacesessionlockrequest"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12890,7 +12890,7 @@ rewrite-hibernate:
         \ on the timeout value against an in (auto unboxing). This recipe adds ternary\
         \ operators where `Transaction#getTimeout()` is used and a negative value\
         \ will be used if the `getTimeout()` resulted in a null value."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/unboxingtransactiontimeout-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/unboxingtransactiontimeout"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12898,7 +12898,7 @@ rewrite-hibernate:
       name: "io.moderne.hibernate.update70.UserTypeNullSafeGetSharedSessionContractImplementorRecipe"
       description: "Remove leaking of SharedSessionContractImplementor from `org.hibernate.usertype.UserType`\
         \ invocations."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/usertypenullsafegetsharedsessioncontractimplementorrecipe-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/usertypenullsafegetsharedsessioncontractimplementorrecipe"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12906,7 +12906,7 @@ rewrite-hibernate:
       name: "io.moderne.hibernate.update70.UserTypeSharedSessionContractImplementor"
       description: "Remove leaking of SharedSessionContractImplementor from `org.hibernate.usertype.UserType`\
         \ implementations."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/usertypesharedsessioncontractimplementor-moderne-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/update70/usertypesharedsessioncontractimplementor"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12914,7 +12914,7 @@ rewrite-hibernate:
       name: "org.openrewrite.hibernate.AddScalarPreferStandardBasicTypes"
       description: "Prefer the use of `StandardBasicTypes.*` in `NativeQuery.addScalar(...)`\
         \ invocations."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/addscalarpreferstandardbasictypes-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/addscalarpreferstandardbasictypes"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12924,14 +12924,14 @@ rewrite-hibernate:
         \ implementations therefore the NOOP implementation that could be extended\
         \ was no longer needed. This recipe migrates 5.x `Interceptor#onPrepareStatement(String)`\
         \ to 6.0 `StatementInspector#inspect()`."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/emptyinterceptortointerface-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/emptyinterceptortointerface"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
     org.openrewrite.hibernate.MigrateBooleanMappings:
       name: "org.openrewrite.hibernate.MigrateBooleanMappings"
       description: "Replaces type mapping of booleans with appropriate attribute converters."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratebooleanmappings-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratebooleanmappings"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12940,7 +12940,7 @@ rewrite-hibernate:
       description: "Will migrate the usage of `org.hibernate.annotations.ResultCheckStyle`\
         \ to `org.hibernate.jdbc.Expectation` in `@SQLInsert`, `@SqlUpdate`, `@SqlDelete`\
         \ and `@SqlDeleteAll` annotations."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/migrateresultcheckstyletoexpectation-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/migrateresultcheckstyletoexpectation"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -12950,7 +12950,7 @@ rewrite-hibernate:
         \ to Hibernate 6.0.x. The hibernate dependencies will be updated to use the\
         \ new `org.hibernate.orm` group ID and the recipe will make changes necessary\
         \ to use Hibernate with Jakarta EE 9.0."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernate60-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernate60"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -12960,7 +12960,7 @@ rewrite-hibernate:
         \ to Hibernate 6.1.x. The hibernate dependencies will   be updated to use\
         \ the new org.hibernate.orm group ID and the recipe will make changes necessary\
         \ to use Hibernate with Jakarta EE 9.0."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernate61-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernate61"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -12968,7 +12968,7 @@ rewrite-hibernate:
       name: "org.openrewrite.hibernate.MigrateToHibernate62"
       description: "This recipe will apply changes commonly needed when migrating\
         \ to Hibernate 6.2.x."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernate62-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernate62"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -12976,7 +12976,7 @@ rewrite-hibernate:
       name: "org.openrewrite.hibernate.MigrateToHibernate63"
       description: "This recipe will apply changes commonly needed when migrating\
         \ to Hibernate 6.3.x."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernate63-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernate63"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -12984,7 +12984,7 @@ rewrite-hibernate:
       name: "org.openrewrite.hibernate.MigrateToHibernate64"
       description: "This recipe will apply changes commonly needed when migrating\
         \ to Hibernate 6.4.x."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernate64-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernate64"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -12992,7 +12992,7 @@ rewrite-hibernate:
       name: "org.openrewrite.hibernate.MigrateToHibernate65"
       description: "This recipe will apply changes commonly needed when migrating\
         \ to Hibernate 6.5.x."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernate65-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernate65"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -13027,7 +13027,7 @@ rewrite-hibernate:
         \ to the new `org.hibernate.orm` group ID. It accounts for artifacts names\
         \ that both do and do not include the `jakarta` suffix and it will change\
         \ both dependencies and managed dependencies."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernatedependencies60-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohibernatedependencies60"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -13037,7 +13037,7 @@ rewrite-hibernate:
         \ to `io.hypersistence:hypersistence-utils-hibernate-60`. This migration will\
         \ include the adjustment from `com.vladmihalcea` to `io.hypersistence.utils`\
         \ package name."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohypersistenceutilshibernate60-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohypersistenceutilshibernate60"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -13045,7 +13045,7 @@ rewrite-hibernate:
       name: "org.openrewrite.hibernate.MigrateToHypersistenceUtilsHibernate62"
       description: "This recipe will migrate any existing dependencies on `io.hypersistence:hypersistence-utils-hibernate-60`\
         \ to `io.hypersistence:hypersistence-utils-hibernate-62`."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohypersistenceutilshibernate62-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohypersistenceutilshibernate62"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -13053,7 +13053,7 @@ rewrite-hibernate:
       name: "org.openrewrite.hibernate.MigrateToHypersistenceUtilsHibernate63"
       description: "This recipe will migrate any existing dependencies on `io.hypersistence:hypersistence-utils-hibernate-62`\
         \ to `io.hypersistence:hypersistence-utils-hibernate-63`."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohypersistenceutilshibernate63-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohypersistenceutilshibernate63"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -13062,7 +13062,7 @@ rewrite-hibernate:
       description: "With Hibernate 6 the `UserType` interface received a type parameter\
         \ making it more strictly typed. This recipe applies the changes required\
         \ to adhere to this change."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/migrateusertype-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/migrateusertype"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -13070,14 +13070,14 @@ rewrite-hibernate:
       name: "org.openrewrite.hibernate.RemoveInvalidHibernateGeneratedValueAnnotation"
       description: "Removes `@GeneratedValue` annotation from fields that are not\
         \ also annotated with `@Id`."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/removeinvalidhibernategeneratedvalueannotation-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/removeinvalidhibernategeneratedvalueannotation"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
     org.openrewrite.hibernate.ReplaceLazyCollectionAnnotation:
       name: "org.openrewrite.hibernate.ReplaceLazyCollectionAnnotation"
       description: "Adds the `FetchType` to jakarta annotations and deletes `@LazyCollection`."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/replacelazycollectionannotation-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/replacelazycollectionannotation"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -13085,7 +13085,7 @@ rewrite-hibernate:
       name: "org.openrewrite.hibernate.TypeAnnotationParameter"
       description: "Hibernate 6.x has 'type' parameter of type String replaced with\
         \ 'value' of type class."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/typeannotationparameter-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/typeannotationparameter"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -13094,7 +13094,7 @@ rewrite-hibernate:
       description: "Rename `JavaTypeDescriptor` and `SqlTypeDescriptor` to `JavaType`\
         \ and `SqlType` respectively. See https://github.com/hibernate/hibernate-orm/blob/6.0/migration-guide.adoc#type-system\
         \ for more details."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/typedescriptortotype-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/typedescriptortotype"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -13102,7 +13102,7 @@ rewrite-hibernate:
       name: "org.openrewrite.hibernate.validator.HibernateValidator_8_0"
       description: "This recipe will apply changes commonly needed when migrating\
         \ to Hibernate Validator 8.0.x."
-      docLink: "https://docs.openrewrite.org/recipes/hibernate/validator/hibernatevalidator_8_0-community-edition"
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/validator/hibernatevalidator_8_0"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -15076,7 +15076,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-java-security:
   artifactId: "rewrite-java-security"
-  version: "3.25.0"
+  version: "3.25.2"
   markdownRecipeDescriptors:
     org.openrewrite.csharp.dependencies.DependencyInsight:
       name: "org.openrewrite.csharp.dependencies.DependencyInsight"
@@ -15173,7 +15173,7 @@ rewrite-java-security:
         \ and override one or both methods depending on your needs. For example, override\
         \ `supplementalVulnerabilities()` to add custom CVEs while keeping the standard\
         \ vulnerability database, or override `baselineVulnerabilities()` to use an\
-        \ entirely different vulnerability data source. Last updated: 2026-01-05T1103."
+        \ entirely different vulnerability data source. Last updated: 2026-01-12T1103."
       docLink: "https://docs.openrewrite.org/recipes/java/dependencies/dependencyvulnerabilitycheck"
       options:
       - name: "cvePattern"
@@ -16367,7 +16367,7 @@ rewrite-json:
         type: "String"
         required: true
       - name: "prepend"
-        type: "Boolean"
+        type: "boolean"
         required: false
       - name: "value"
         type: "String"
@@ -25488,7 +25488,7 @@ rewrite-rewrite:
       artifactId: "rewrite-rewrite"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "0.20.0"
+  version: "0.20.1"
   markdownRecipeDescriptors:
     io.moderne.java.spring.boot.AddSpringBootApplication:
       name: "io.moderne.java.spring.boot.AddSpringBootApplication"
@@ -25550,7 +25550,7 @@ rewrite-spring:
         \ This recipe will also chain additional framework migrations (Spring Framework,\
         \ Spring Data, etc) that are required as part of the migration to Spring Boot\
         \ 2.0."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot2/upgradespringboot_2_0"
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot2/upgradespringboot_2_0-moderne-edition"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -25773,7 +25773,7 @@ rewrite-spring:
       name: "io.moderne.java.spring.boot3.SpringBootProperties_3_4"
       description: "Migrate the settings for Spring Boot Management Endpoint Security\
         \ from `true`|`false` to `read-only`|`none`."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/springbootproperties_3_4"
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/springbootproperties_3_4-moderne-edition"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -25913,7 +25913,7 @@ rewrite-spring:
       description: "Remove monolithic starters and adds the necessary Spring Boot\
         \ 4.0 starter dependencies based on package usage, where any spring-boot-starter\
         \ was used previously."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot4/migratetomodularstarters"
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot4/migratetomodularstarters-moderne-edition"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -26145,7 +26145,7 @@ rewrite-spring:
       description: "Migrate applications to the latest Spring Security 6.5 release.\
         \ This recipe will modify an application's build files, make changes to deprecated/preferred\
         \ APIs, and migrate configuration settings that have changes between versions."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/security6/upgradespringsecurity_6_5"
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/security6/upgradespringsecurity_6_5-moderne-edition"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -27039,7 +27039,7 @@ rewrite-spring:
         \ that have changes between versions. This recipe will also chain additional\
         \ framework migrations (Spring Framework, Spring Data, etc) that are required\
         \ as part of the migration to Spring Boot 2.0."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot2/upgradespringboot_2_0"
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot2/upgradespringboot_2_0-community-edition"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -27434,7 +27434,7 @@ rewrite-spring:
     org.openrewrite.java.spring.boot3.SpringBootProperties_3_4:
       name: "org.openrewrite.java.spring.boot3.SpringBootProperties_3_4"
       description: "Migrate properties found in `application.properties` and `application.yml`."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/springbootproperties_3_4"
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot3/springbootproperties_3_4-community-edition"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -27631,7 +27631,7 @@ rewrite-spring:
         \ imports and adds the appropriate starters.\nNote: Higher-level starters\
         \ (like data-jpa) include lower-level ones (like jdbc) transitively, so only\
         \ the highest-level detected starter is added for each technology."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot4/migratetomodularstarters"
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot4/migratetomodularstarters-community-edition"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -28557,7 +28557,7 @@ rewrite-spring:
       description: "Migrate applications to the latest Spring Security 6.5 release.\
         \ This recipe will modify an application's build files, make changes to deprecated/preferred\
         \ APIs, and migrate configuration settings that have changes between versions."
-      docLink: "https://docs.openrewrite.org/recipes/java/spring/security6/upgradespringsecurity_6_5"
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/security6/upgradespringsecurity_6_5-community-edition"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -47947,13 +47947,10 @@ rewrite-yaml:
       name: "org.openrewrite.yaml.CopyValue"
       description: "Copies a YAML value from one key to another. The existing key/value\
         \ pair remains unaffected by this change. Attempts to merge the copied value\
-        \ into the new key if it already exists. By default, attempts to create the\
-        \ new key if it does not exist."
+        \ into the new key if it already exists. Attempts to create the new key if\
+        \ it does not exist."
       docLink: "https://docs.openrewrite.org/recipes/yaml/copyvalue"
       options:
-      - name: "createNewKeys"
-        type: "Boolean"
-        required: false
       - name: "newFilePath"
         type: "String"
         required: false
