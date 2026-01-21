@@ -42,7 +42,7 @@ class RecipeOrigin(
     }
 
     fun githubUrl(recipeName: String, source: URI): String {
-        //todo we can remove this I think, as third party recipes can now define there very own License
+        //todo we can remove this I think, as third party recipes can now define their very own License
         if (artifactId == "rewrite-third-party") {
             return "https://github.com/search?type=code&q=$recipeName"
         }
