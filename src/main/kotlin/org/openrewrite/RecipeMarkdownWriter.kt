@@ -28,21 +28,6 @@ class RecipeMarkdownWriter(
         return recipeSource.toString().startsWith("typescript-search://")
     }
 
-    /**
-     * Determines the implementation language of a recipe based on its source URI.
-     * - TypeScript recipes have URIs starting with "typescript-search://"
-     * - YAML (declarative) recipes have URIs ending with ".yml"
-     * - All other recipes are assumed to be Java
-     */
-    private fun getRecipeLanguage(recipeDescriptor: RecipeDescriptor): String {
-        val recipeSource = recipeToSource[recipeDescriptor.name]?.toString() ?: return "Java"
-        return when {
-            recipeSource.startsWith("typescript-search://") -> "TypeScript"
-            recipeSource.endsWith(".yml") -> "YAML"
-            else -> "Java"
-        }
-    }
-
     fun writeRecipe(
         recipeDescriptor: RecipeDescriptor,
         outputPath: Path,
@@ -142,14 +127,11 @@ import TabItem from '@theme/TabItem';
     }
 
     private fun BufferedWriter.writeSourceLinks(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin) {
-        val recipeLanguage = getRecipeLanguage(recipeDescriptor)
         if (origin.license == Licenses.Proprietary) {
             //language=markdown
             writeln(
                 """
                 ## Recipe source
-
-                **Language**: $recipeLanguage
 
                 This recipe is only available to users of [Moderne](https://docs.moderne.io/).
 
@@ -158,14 +140,13 @@ import TabItem from '@theme/TabItem';
         } else {
             val recipeSource = recipeToSource[recipeDescriptor.name]
             requireNotNull(recipeSource) { "Could not find source URI for recipe ${recipeDescriptor.name}" }
+            val recipeSourceFileName = recipeSource.toString().substringAfterLast('/')
             //language=markdown
             writeln(
                 """
             ## Recipe source
 
-            **Language**: $recipeLanguage
-
-            [GitHub](${origin.githubUrl(recipeDescriptor.name, recipeSource)}),
+            [GitHub: $recipeSourceFileName](${origin.githubUrl(recipeDescriptor.name, recipeSource)}),
             [Issue Tracker](${origin.issueTrackerUrl()}),
             [Maven Central](https://central.sonatype.com/artifact/${origin.groupId}/${origin.artifactId}/)
             """.trimIndent()
