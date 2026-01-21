@@ -140,12 +140,13 @@ import TabItem from '@theme/TabItem';
         } else {
             val recipeSource = recipeToSource[recipeDescriptor.name]
             requireNotNull(recipeSource) { "Could not find source URI for recipe ${recipeDescriptor.name}" }
+            val recipeSourceFileName = recipeSource.toString().substringAfterLast('/')
             //language=markdown
             writeln(
                 """
             ## Recipe source
 
-            [GitHub](${origin.githubUrl(recipeDescriptor.name, recipeSource)}),
+            [GitHub: $recipeSourceFileName](${origin.githubUrl(recipeDescriptor.name, recipeSource)}),
             [Issue Tracker](${origin.issueTrackerUrl()}),
             [Maven Central](https://central.sonatype.com/artifact/${origin.groupId}/${origin.artifactId}/)
             """.trimIndent()
