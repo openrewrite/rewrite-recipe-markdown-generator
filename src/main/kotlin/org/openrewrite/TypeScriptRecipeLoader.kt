@@ -4,6 +4,7 @@ package org.openrewrite
 
 import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.javascript.rpc.JavaScriptRewriteRpc
+import org.openrewrite.marketplace.RecipeBundle
 import java.net.URI
 import java.nio.file.Path
 
@@ -105,6 +106,18 @@ class TypeScriptRecipeLoader(
                     val count = rpc.installRecipes(packageName, origin.version)
                     println("  Installed $count recipe(s) from $packageName")
 
+                    allDescriptors.addAll(
+                        rpc.getMarketplace(RecipeBundle("npm", packageName, null, null, null))
+                            .allRecipes
+                            .map { r ->
+                                val requiredOptions = r.options
+                                    ?.filter { it.isRequired }
+                                    ?.associate { it.name to "PlaceholderValueToFoolValidation" }
+                                    ?: emptyMap()
+                                rpc.prepareRecipe(r.name, requiredOptions).descriptor
+                            }
+                    )
+
                 } catch (e: Exception) {
                     System.err.println("Warning: Failed to install recipes from ${origin.artifactId}: ${e.message}")
                     e.printStackTrace()
@@ -112,13 +125,10 @@ class TypeScriptRecipeLoader(
             }
 
             // Get all recipe descriptors from the RPC process
-            val descriptors = rpc.recipes
-            println("Retrieved ${descriptors.size} TypeScript recipe descriptor(s) via RPC")
+            println("Retrieved ${allDescriptors.size} TypeScript recipe descriptor(s) via RPC")
 
             // Map each recipe to its source file location
-            for (descriptor in descriptors) {
-                allDescriptors.add(descriptor)
-
+            for (descriptor in allDescriptors) {
                 // Debug: Print option types for recipes with options
                 // Remove this once the type checking is fixed: https://github.com/openrewrite/rewrite/issues/6293
                 if (descriptor.options != null && descriptor.options.isNotEmpty()) {
