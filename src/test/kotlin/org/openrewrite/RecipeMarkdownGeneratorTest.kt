@@ -100,8 +100,9 @@ class RecipeMarkdownGeneratorTest {
         val modernePath = getRecipePath("io.moderne.java.spring.security6.UpgradeSpringSecurity_6_5")
         val communityPath = getRecipePath("org.openrewrite.java.spring.security6.UpgradeSpringSecurity_6_5")
 
-        assertThat(modernePath).isNotEqualTo(communityPath)
-        assertThat(modernePath).endsWith("-moderne-edition")
+        assertThat(modernePath)
+                .isNotEqualTo(communityPath)
+                .endsWith("-moderne-edition")
         assertThat(communityPath).endsWith("-community-edition")
     }
 

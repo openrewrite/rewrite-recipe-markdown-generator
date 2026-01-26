@@ -58,7 +58,7 @@ dependencies {
     runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
 
     // Test dependencies
-    testImplementation("org.junit.jupiter:junit-jupiter:5.14.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.14.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // Recipe configuration dependencies
