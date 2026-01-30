@@ -49,7 +49,6 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("info.picocli:picocli:latest.release")
     implementation("io.github.java-diff-utils:java-diff-utils:4.11")
-    implementation("org.assertj:assertj-core:3.27.6")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
     implementation("org.openrewrite:rewrite-core")
     implementation("org.openrewrite:rewrite-javascript")
@@ -58,6 +57,7 @@ dependencies {
     runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
 
     // Test dependencies
+    testImplementation("org.assertj:assertj-core:latest.release")
     testImplementation("org.junit.jupiter:junit-jupiter:5.14.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
