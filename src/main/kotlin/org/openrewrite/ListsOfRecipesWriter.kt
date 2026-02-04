@@ -30,7 +30,7 @@ class ListsOfRecipesWriter(
 
             writeln(
                 "This doc includes every recipe that is exclusive to users of Moderne. " +
-                        "For a full list of all recipes, check out our [recipe catalog](https://docs.openrewrite.org/recipes). " +
+                        "For a full list of all recipes, check out our [recipe catalog](https://docs.moderne.io/user-documentation/recipes/recipe-catalog). " +
                         "For more information about how to use Moderne for automating code refactoring and analysis at scale, " +
                         "[contact us](https://www.moderne.ai/contact-us).\n"
             )
@@ -41,7 +41,8 @@ class ListsOfRecipesWriter(
 
                 for (recipe in entry.value.sortedBy { it.name }) {
                     val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
-                    writeln("* [${recipe.name}](/recipes/${recipePath}.md)")
+                    // Link to Moderne docs since these recipes are exclusive to Moderne
+                    writeln("* [${recipe.name}](https://docs.moderne.io/user-documentation/recipes/recipe-catalog/${recipePath})")
                     writeln("  * **${recipe.displayNameEscaped()}**")
                     writeln("  * ${recipe.descriptionEscaped()}")
                 }
@@ -95,7 +96,7 @@ class ListsOfRecipesWriter(
                 } ?: emptyList()
 
                 for (dataTable in filteredDataTables) {
-                    writeln("  * **${dataTable.name}**: *${dataTable.description.replace("\n", " ")}*")
+                    writeln("  * **${dataTable.name}**: *${escapeMdx(dataTable.description).replace("\n", " ")}*")
                 }
 
                 writeln("\n")

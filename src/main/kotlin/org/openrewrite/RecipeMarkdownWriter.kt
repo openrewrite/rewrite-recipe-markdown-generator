@@ -17,8 +17,27 @@ import java.util.regex.Pattern
 
 class RecipeMarkdownWriter(
     val recipeContainedBy: MutableMap<String, MutableSet<RecipeDescriptor>>,
-    val recipeToSource: Map<String, URI>
+    val recipeToSource: Map<String, URI>,
+    val proprietaryRecipeNames: Set<String>
 ) {
+
+    /**
+     * Check if a recipe is proprietary based on its name.
+     */
+    private fun isProprietaryRecipe(recipeName: String): Boolean {
+        return proprietaryRecipeNames.contains(recipeName)
+    }
+
+    /**
+     * Get the appropriate link for a recipe - local path for open-source, Moderne docs for proprietary.
+     */
+    private fun getRecipeLink(recipe: RecipeDescriptor, pathToRecipes: String = ""): String {
+        return if (isProprietaryRecipe(recipe.name)) {
+            "https://docs.moderne.io/user-documentation/recipes/recipe-catalog/${getRecipePath(recipe)}"
+        } else {
+            "$pathToRecipes${getRecipePath(recipe)}"
+        }
+    }
 
     /**
      * Determines if a recipe is a JavaScript/TypeScript recipe based on its source URI.
@@ -33,7 +52,8 @@ class RecipeMarkdownWriter(
         outputPath: Path,
         origin: RecipeOrigin
     ) {
-        val formattedRecipeTitle = recipeDescriptor.displayNameEscaped()
+        val formattedRecipeTitle = recipeDescriptor.displayNameEscaped()  // For YAML frontmatter (no curly brace escaping)
+        val formattedRecipeTitleMdx = recipeDescriptor.displayNameEscapedMdx()  // For MDX content (with curly brace escaping)
         val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor.description)
         val formattedLongRecipeName = recipeDescriptor.name.replace("_".toRegex(), "\\\\_").trim()
 
@@ -49,7 +69,7 @@ sidebar_label: "${formattedRecipeTitle.replace("&#39;", "'")}"
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# $formattedRecipeTitle
+# $formattedRecipeTitleMdx
 
 **$formattedLongRecipeName**
 
@@ -265,7 +285,7 @@ import TabItem from '@theme/TabItem';
                     ### ${dataTable.displayName}
                     **${dataTable.name}**
 
-                    _${dataTable.description}_
+                    _${escapeMdx(dataTable.description)}_
 
                     | Column Name | Description |
                     | ----------- | ----------- |
@@ -276,7 +296,7 @@ import TabItem from '@theme/TabItem';
                     //language=markdown
                     writeln(
                         """
-                        | ${column.displayName} | ${column.description} |
+                        | ${column.displayName} | ${escapeMdx(column.description)} |
                         """.trimIndent()
                     )
                 }
@@ -598,7 +618,8 @@ import TabItem from '@theme/TabItem';
                     continue
                 }
 
-                writeln("* [${recipe.displayNameEscaped()}]($pathToRecipes" + getRecipePath(recipe) + ")")
+                val recipeLink = getRecipeLink(recipe, pathToRecipes)
+                writeln("* [${recipe.displayNameEscaped()}]($recipeLink)")
 
                 if (recipe.options.isNotEmpty()) {
                     for (option in recipe.options) {
@@ -650,7 +671,12 @@ import TabItem from '@theme/TabItem';
             recipeContainedBy
                 .mapNotNull { recipe ->
                     try {
-                        "* [${recipe.displayNameEscaped()}](/recipes/${getRecipePath(recipe)}.md)"
+                        val link = if (isProprietaryRecipe(recipe.name)) {
+                            "https://docs.moderne.io/user-documentation/recipes/recipe-catalog/${getRecipePath(recipe)}"
+                        } else {
+                            "/recipes/${getRecipePath(recipe)}.md"
+                        }
+                        "* [${recipe.displayNameEscaped()}]($link)"
                     } catch (e: RuntimeException) {
                         System.err.println("Warning: Could not generate path for recipe ${recipe.name}: ${e.message}")
                         null
