@@ -201,11 +201,16 @@ class ListsOfRecipesWriter(
             val recipesByArtifact = standaloneRecipes
                 .groupBy { recipe ->
                     val source = recipeToSource[recipe.name]
-                    recipeOrigins[source]?.artifactId ?: "other"
+                    val origin = recipeOrigins[source]
+                    if (origin != null) {
+                        "${origin.groupId}:${origin.artifactId}"
+                    } else {
+                        "other"
+                    }
                 }
                 .toSortedMap()
-            for ((artifact, recipes) in recipesByArtifact) {
-                writeln("\n## ${artifact}\n")
+            for ((module, recipes) in recipesByArtifact) {
+                writeln("\n## ${module}\n")
 
                 for (recipe in recipes.sortedBy { it.name }) {
                     val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
@@ -241,12 +246,17 @@ class ListsOfRecipesWriter(
 
             val recipesByArtifact = scanningRecipes
                 .groupBy { recipe ->
-                    val source = recipeToSource[recipe.descriptor.name]
-                    recipeOrigins[source]?.artifactId ?: "other"
+                    val source = recipeToSource[recipe.name]
+                    val origin = recipeOrigins[source]
+                    if (origin != null) {
+                        "${origin.groupId}:${origin.artifactId}"
+                    } else {
+                        "other"
+                    }
                 }
                 .toSortedMap()
-            for ((artifact, recipes) in recipesByArtifact) {
-                writeln("\n## ${artifact}\n")
+            for ((module, recipes) in recipesByArtifact) {
+                writeln("\n## ${module}\n")
 
                 for (recipe in recipes.sortedBy { it.name }) {
                     val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe.descriptor)
