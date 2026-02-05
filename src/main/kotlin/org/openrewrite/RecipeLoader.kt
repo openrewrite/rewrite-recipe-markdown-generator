@@ -107,11 +107,19 @@ class RecipeLoader {
         allDescriptors.addAll(typeScriptResult.descriptors)
         recipeToSource.putAll(typeScriptResult.recipeToSource)
 
+        // Deduplicate recipes by name (same recipe may be discovered from multiple JARs
+        // when scanJar is called with the full classpath as dependencies)
+        val deduplicatedDescriptors = allDescriptors.distinctBy { it.name }
+        val duplicateCount = allDescriptors.size - deduplicatedDescriptors.size
+        if (duplicateCount > 0) {
+            println("Removed $duplicateCount duplicate recipe descriptor(s).")
+        }
+
         // Combine all results
         return RecipeLoadResult(
-            allRecipeDescriptors = allDescriptors,
-            allCategoryDescriptors = environmentData.flatMap { it.categoryDescriptors },
-            allRecipes = environmentData.flatMap { it.recipes },
+            allRecipeDescriptors = deduplicatedDescriptors,
+            allCategoryDescriptors = environmentData.flatMap { it.categoryDescriptors }.distinctBy { it.packageName },
+            allRecipes = environmentData.flatMap { it.recipes }.distinctBy { it.name },
             recipeToSource = recipeToSource
         )
     }
