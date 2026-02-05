@@ -141,40 +141,33 @@ class RecipeMarkdownGenerator : Runnable {
             }
         }
 
+        // Build set of proprietary recipe names (for cross-reference link handling)
+        val proprietaryRecipeNames = allRecipeDescriptors
+            .filter { recipe ->
+                val source = recipeToSource[recipe.name]
+                val origin = findOrigin(source, recipeOrigins)
+                origin?.license == Licenses.Proprietary
+            }
+            .map { it.name }
+            .toSet()
+
         // Create the recipe docs
-        val recipeMarkdownWriter = RecipeMarkdownWriter(recipeContainedBy, recipeToSource)
+        val recipeMarkdownWriter = RecipeMarkdownWriter(recipeContainedBy, recipeToSource, proprietaryRecipeNames)
         for (recipeDescriptor in allRecipeDescriptors) {
             val recipeSource = recipeToSource[recipeDescriptor.name]
             requireNotNull(recipeSource) { "Could not find source URI for recipe " + recipeDescriptor.name }
 
-            var origin: RecipeOrigin?
-            var rawUri = recipeSource.toString()
-
-            // Handle TypeScript recipes with custom URI scheme
-            if (rawUri.startsWith("typescript-search://")) {
-                // Extract artifact ID from typescript-search://rewrite-nodejs/recipe.name
-                val artifactId = rawUri.substringAfter("typescript-search://").substringBefore("/")
-                origin = recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
-            } else {
-                val exclamationIndex = rawUri.indexOf('!')
-                if (exclamationIndex == -1) {
-                    origin = recipeOrigins[recipeSource]
-                } else {
-                    // The recipe origin includes the path to the recipe within a jar
-                    // Such URIs will look something like: jar:file:/path/to/the/recipes.jar!META-INF/rewrite/some-declarative.yml
-                    // Strip the "jar:" prefix and the part of the URI pointing inside the jar
-                    rawUri = rawUri.substring(0, exclamationIndex)
-                    rawUri = rawUri.substring(4)
-                    val jarOnlyUri = URI.create(rawUri)
-                    origin = recipeOrigins[jarOnlyUri]
-                }
-            }
+            val origin = findOrigin(recipeSource, recipeOrigins)
             requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeSource }
-            recipeMarkdownWriter.writeRecipe(recipeDescriptor, recipesPath, origin)
 
+            // Track proprietary recipes separately (for moderne-recipes.md list)
             if (origin.license == Licenses.Proprietary) {
                 moderneProprietaryRecipes.computeIfAbsent(origin.artifactId) { mutableListOf() }.add(recipeDescriptor)
+                // Skip writing proprietary recipes to rewrite-docs (they only go to moderne-docs)
+                continue
             }
+
+            recipeMarkdownWriter.writeRecipe(recipeDescriptor, recipesPath, origin)
 
             val recipeOptions = TreeSet<RecipeOption>()
             if (recipeDescriptor.options != null) {
@@ -215,29 +208,51 @@ class RecipeMarkdownGenerator : Runnable {
             markdownArtifact.markdownRecipeDescriptors[recipeDescriptor.name] = markdownRecipeDescriptor
         }
 
-        // Write the README.md for each category
-        CategoryWriter(allRecipeDescriptors, allCategoryDescriptors)
+        // Filter to only open-source recipes for rewrite-docs output
+        val openSourceRecipeDescriptors = allRecipeDescriptors.filter { recipe ->
+            val source = recipeToSource[recipe.name]
+            val origin = findOrigin(source, recipeOrigins)
+            origin?.license != Licenses.Proprietary
+        }
+        println("Filtered to ${openSourceRecipeDescriptors.size} open-source recipe(s) for rewrite-docs.")
+
+        // Write the README.md for each category (open-source only)
+        CategoryWriter(openSourceRecipeDescriptors, allCategoryDescriptors)
             .writeCategories(outputPath)
 
         // Create changelog markdown, and update tracking file
         ChangelogWriter().createRecipeDescriptorsYaml(
             markdownArtifacts,
-            allRecipeDescriptors.size,
+            openSourceRecipeDescriptors.size,
             rewriteBomVersion
         )
 
-        // Write lists of recipes into various files
-        val listWriter = ListsOfRecipesWriter(allRecipeDescriptors, outputPath)
+        // Write lists of recipes into various files (open-source only)
+        val listWriter = ListsOfRecipesWriter(openSourceRecipeDescriptors, outputPath)
         listWriter.createModerneRecipes(moderneProprietaryRecipes)
         listWriter.createRecipesWithDataTables()
         listWriter.createRecipesByTag()
         listWriter.createScanningRecipes(
-            allRecipes.filter { it is ScanningRecipe<*> && it !is DeclarativeRecipe },
+            allRecipes.filter { recipe ->
+                recipe is ScanningRecipe<*> && recipe !is DeclarativeRecipe &&
+                openSourceRecipeDescriptors.any { it.name == recipe.name }
+            },
             recipeOrigins,
             recipeToSource
         )
         listWriter.createStandaloneRecipes(recipeContainedBy, recipeOrigins, recipeToSource)
         listWriter.createAllRecipesByModule(recipeOrigins, recipeToSource)
+
+        // Generate redirects for proprietary recipes (from old OpenRewrite URLs to Moderne docs)
+        val allProprietaryRecipes = moderneProprietaryRecipes.values.flatten()
+        if (allProprietaryRecipes.isNotEmpty()) {
+            RedirectWriter.writeRedirectConfig(
+                outputPath,
+                allProprietaryRecipes,
+                "https://docs.moderne.io",
+                "/user-documentation/recipes/recipe-catalog"
+            )
+        }
     }
 
 
@@ -289,6 +304,32 @@ class RecipeMarkdownGenerator : Runnable {
                     recipeName.replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
                 }
             }
+        }
+
+        /**
+         * Find the RecipeOrigin for a given source URI.
+         * Handles TypeScript recipes (typescript-search:// scheme) and JAR recipes.
+         */
+        fun findOrigin(source: URI?, recipeOrigins: Map<URI, RecipeOrigin>): RecipeOrigin? {
+            if (source == null) return null
+
+            val rawUri = source.toString()
+
+            // Handle TypeScript recipes with custom URI scheme
+            if (rawUri.startsWith("typescript-search://")) {
+                val artifactId = rawUri.substringAfter("typescript-search://").substringBefore("/")
+                return recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
+            }
+
+            // Handle JAR URIs (e.g., jar:file:/path/to/recipes.jar!META-INF/rewrite/some.yml)
+            val exclamationIndex = rawUri.indexOf('!')
+            if (exclamationIndex == -1) {
+                return recipeOrigins[source]
+            }
+
+            // Strip the "jar:" prefix and the part after the "!"
+            val jarOnlyUri = URI.create(rawUri.substring(4, exclamationIndex))
+            return recipeOrigins[jarOnlyUri]
         }
 
         /**

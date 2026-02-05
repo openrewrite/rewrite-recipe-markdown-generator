@@ -245,6 +245,7 @@ data class Category(
         }
 
         val outputPath = outputRoot.resolve("$path/README.md")
+        Files.createDirectories(outputPath.parent)
         Files.newBufferedWriter(outputPath, StandardOpenOption.CREATE).useAndApply {
             writeln(categoryIndex())
         }
