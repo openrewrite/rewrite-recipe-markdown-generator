@@ -67,13 +67,24 @@ class RecipeMarkdownWriter(
         val recipeMarkdownPath = outputPath.resolve(getRecipePath(recipeDescriptor) + ".md")
         Files.createDirectories(recipeMarkdownPath.parent)
         Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE).useAndApply {
+            // For Moderne docs, add canonical link to OpenRewrite docs for open source recipes
+            val canonicalHead = if (forModerneDocs && !isProprietaryRecipe(recipeDescriptor.name)) {
+                """
+<head>
+  <link rel="canonical" href="https://docs.openrewrite.org/recipes/${getRecipePath(recipeDescriptor)}" />
+</head>
+
+"""
+            } else {
+                ""
+            }
             write(
                 """
 ---
 sidebar_label: "${formattedRecipeTitle.replace("&#39;", "'")}"
 ---
 
-import Tabs from '@theme/Tabs';
+${canonicalHead}import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # $formattedRecipeTitleMdx
