@@ -178,6 +178,7 @@ application {
 
 tasks.named<JavaExec>("run").configure {
     val targetDir = layout.buildDirectory.dir("docs").get().asFile
+    val moderneTargetDir = layout.buildDirectory.dir("moderne-docs").get().asFile
 
     val latestVersionsOnly = providers.gradleProperty("latestVersionsOnly").getOrElse("").equals("true")
     if (latestVersionsOnly) {
@@ -202,7 +203,7 @@ tasks.named<JavaExec>("run").configure {
         .map { it.absolutePath }
         .joinToString(";")
 
-    description = "Writes generated markdown docs to $targetDir"
+    description = "Writes generated markdown docs to $targetDir and $moderneTargetDir"
     val arguments = mutableListOf(
         targetDir.toString(),
         recipeModules,
@@ -211,7 +212,8 @@ tasks.named<JavaExec>("run").configure {
         latestVersion("org.openrewrite.recipe:rewrite-recipe-bom:$rewriteVersion"),
         latestVersion("io.moderne.recipe:moderne-recipe-bom:$rewriteVersion"),
         latestVersion("org.openrewrite:plugin:$rewriteVersion"),
-        latestVersion("org.openrewrite.maven:rewrite-maven-plugin:$rewriteVersion")
+        latestVersion("org.openrewrite.maven:rewrite-maven-plugin:$rewriteVersion"),
+        moderneTargetDir.toString()
     )
     if (latestVersionsOnly) {
         arguments.add("--latest-versions-only")
@@ -221,14 +223,17 @@ tasks.named<JavaExec>("run").configure {
         logger.lifecycle("Recipe modules: ")
         logger.lifecycle(recipeModules.replace(";", "\n"))
 
-        // Ensure no stale output from previous runs is in the output directory
+        // Ensure no stale output from previous runs is in the output directories
         targetDir.deleteRecursively()
         targetDir.mkdirs()
+        moderneTargetDir.deleteRecursively()
+        moderneTargetDir.mkdirs()
     }
     doLast {
         this as JavaExec
         @Suppress("UNNECESSARY_NOT_NULL_ASSERTION") // IntelliJ says this is unnecessary, kotlin compiler disagrees
-        logger.lifecycle("Wrote generated docs to: file://${args!!.first()}")
+        logger.lifecycle("Wrote OpenRewrite docs to: file://${args!!.first()}")
+        logger.lifecycle("Wrote Moderne docs to: file://$moderneTargetDir")
     }
 }
 

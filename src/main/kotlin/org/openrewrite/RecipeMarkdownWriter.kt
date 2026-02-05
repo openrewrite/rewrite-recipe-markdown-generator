@@ -18,7 +18,8 @@ import java.util.regex.Pattern
 class RecipeMarkdownWriter(
     val recipeContainedBy: MutableMap<String, MutableSet<RecipeDescriptor>>,
     val recipeToSource: Map<String, URI>,
-    val proprietaryRecipeNames: Set<String>
+    val proprietaryRecipeNames: Set<String>,
+    val forModerneDocs: Boolean = false
 ) {
 
     /**
@@ -29,10 +30,16 @@ class RecipeMarkdownWriter(
     }
 
     /**
-     * Get the appropriate link for a recipe - local path for open-source, Moderne docs for proprietary.
+     * Get the appropriate link for a recipe.
+     * For Moderne docs: all links are internal (relative paths to recipe-catalog)
+     * For OpenRewrite docs: proprietary recipes link to Moderne docs, others are local
      */
     private fun getRecipeLink(recipe: RecipeDescriptor, pathToRecipes: String = ""): String {
-        return if (isProprietaryRecipe(recipe.name)) {
+        return if (forModerneDocs) {
+            // Moderne docs: all recipes are local
+            "$pathToRecipes${getRecipePath(recipe)}"
+        } else if (isProprietaryRecipe(recipe.name)) {
+            // OpenRewrite docs: proprietary recipes link to Moderne
             "https://docs.moderne.io/user-documentation/recipes/recipe-catalog/${getRecipePath(recipe)}"
         } else {
             "$pathToRecipes${getRecipePath(recipe)}"
@@ -139,7 +146,8 @@ import TabItem from '@theme/TabItem';
                         .substringBefore('-')
                         .substringBefore('_')
                         .replace(' ', '-')
-                    writeln("* [$tag](/reference/recipes-by-tag#${tagAnchor})")
+                    val tagBasePath = if (forModerneDocs) "/user-documentation/recipes/lists/recipes-by-tag" else "/reference/recipes-by-tag"
+                    writeln("* [$tag](${tagBasePath}#${tagAnchor})")
                 }
             }
             newLine()
@@ -673,6 +681,8 @@ import TabItem from '@theme/TabItem';
                     try {
                         val link = if (isProprietaryRecipe(recipe.name)) {
                             "https://docs.moderne.io/user-documentation/recipes/recipe-catalog/${getRecipePath(recipe)}"
+                        } else if (forModerneDocs) {
+                            "/user-documentation/recipes/recipe-catalog/${getRecipePath(recipe)}.md"
                         } else {
                             "/recipes/${getRecipePath(recipe)}.md"
                         }

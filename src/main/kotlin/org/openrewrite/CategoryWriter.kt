@@ -13,16 +13,18 @@ import java.nio.file.StandardOpenOption
 
 class CategoryWriter(
     val allRecipeDescriptors: List<RecipeDescriptor>,
-    val allCategoryDescriptors: List<CategoryDescriptor>
+    val allCategoryDescriptors: List<CategoryDescriptor>,
+    val recipeLinkBasePath: String = "/recipes"
 ) {
     fun writeCategories(
-        outputPath: Path
+        outputPath: Path,
+        recipesSubdir: String = "recipes"
     ) {
         val categories =
-            Category.fromDescriptors(allRecipeDescriptors, allCategoryDescriptors)
+            Category.fromDescriptors(allRecipeDescriptors, allCategoryDescriptors, recipeLinkBasePath)
                 .sortedBy { it.simpleName }
         for (category in categories) {
-            val categoryIndexPath = outputPath.resolve("recipes/")
+            val categoryIndexPath = outputPath.resolve("$recipesSubdir/")
             category.writeCategoryIndex(categoryIndexPath)
         }
     }
@@ -33,7 +35,8 @@ data class Category(
     val path: String,
     val descriptor: CategoryDescriptor?,
     val recipes: List<RecipeDescriptor>,
-    val subcategories: List<Category>
+    val subcategories: List<Category>,
+    val recipeLinkBasePath: String = "/recipes"
 ) {
     companion object {
         private data class CategoryBuilder(
@@ -41,12 +44,12 @@ data class Category(
             val recipes: MutableList<RecipeDescriptor> = mutableListOf(),
             val subcategories: LinkedHashMap<String, CategoryBuilder> = LinkedHashMap()
         ) {
-            fun build(categoryDescriptors: List<CategoryDescriptor>): Category {
+            fun build(categoryDescriptors: List<CategoryDescriptor>, recipeLinkBasePath: String): Category {
                 val simpleName = path!!.substring(path.lastIndexOf('/') + 1)
                 val descriptor = findCategoryDescriptor(path, categoryDescriptors)
                 // Do not consider backticks while sorting, they're formatting.
                 val finalizedSubcategories = subcategories.values.asSequence()
-                    .map { it.build(categoryDescriptors) }
+                    .map { it.build(categoryDescriptors, recipeLinkBasePath) }
                     .sortedBy { it.displayName.replace("`", "") }
                     .toList()
                 return Category(
@@ -54,21 +57,23 @@ data class Category(
                     path,
                     descriptor,
                     recipes.sortedBy { it.displayName.replace("`", "") },
-                    finalizedSubcategories
+                    finalizedSubcategories,
+                    recipeLinkBasePath
                 )
             }
         }
 
         fun fromDescriptors(
             recipes: Iterable<RecipeDescriptor>,
-            descriptors: List<CategoryDescriptor>
+            descriptors: List<CategoryDescriptor>,
+            recipeLinkBasePath: String = "/recipes"
         ): List<Category> {
             val result = LinkedHashMap<String, CategoryBuilder>()
             for (recipe in recipes) {
                 result.putRecipe(getRecipeCategory(recipe), recipe)
             }
 
-            return result.mapValues { it.value.build(descriptors) }
+            return result.mapValues { it.value.build(descriptors, recipeLinkBasePath) }
                 .values
                 .toList()
         }
@@ -161,7 +166,7 @@ data class Category(
                 appendLine("## Categories")
                 appendLine()
                 for (subcategory in subcategories) {
-                    appendLine("* [${subcategory.displayName}](/recipes/${subcategory.path})")
+                    appendLine("* [${subcategory.displayName}](${recipeLinkBasePath}/${subcategory.path})")
                 }
                 appendLine()
             }

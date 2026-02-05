@@ -72,14 +72,34 @@ class RecipeMarkdownGenerator : Runnable {
     )
     lateinit var mavenPluginVersion: String
 
+    @Parameters(
+        index = "8",
+        defaultValue = "",
+        description = ["Secondary destination directory for Moderne docs (contains all recipes including proprietary)"]
+    )
+    lateinit var moderneDestinationDirectoryName: String
+
     @Option(names = ["--latest-versions-only"])
     var latestVersionsOnly: Boolean = false
 
     override fun run() {
+        // OpenRewrite docs output (open-source recipes only)
         val outputPath = Paths.get(destinationDirectoryName)
         val recipesPath = outputPath.resolve("recipes")
+
+        // Moderne docs output (ALL recipes including proprietary)
+        val moderneOutputPath = if (moderneDestinationDirectoryName.isNotEmpty()) {
+            Paths.get(moderneDestinationDirectoryName)
+        } else {
+            null
+        }
+        val moderneRecipeCatalogPath = moderneOutputPath?.resolve("recipe-catalog")
+        val moderneListsPath = moderneOutputPath?.resolve("lists")
+
         try {
             Files.createDirectories(recipesPath)
+            moderneRecipeCatalogPath?.let { Files.createDirectories(it) }
+            moderneListsPath?.let { Files.createDirectories(it) }
         } catch (e: IOException) {
             throw RuntimeException(e)
         }
@@ -92,6 +112,7 @@ class RecipeMarkdownGenerator : Runnable {
 
         // Write latest-versions-of-every-openrewrite-module.md, for all recipe modules
         val versionWriter = VersionWriter()
+        // OpenRewrite docs
         versionWriter.createLatestVersionsJs(
             outputPath,
             recipeOrigins.values,
@@ -108,6 +129,25 @@ class RecipeMarkdownGenerator : Runnable {
             gradlePluginVersion,
             mavenPluginVersion
         )
+        // Moderne docs
+        if (moderneOutputPath != null) {
+            versionWriter.createLatestVersionsJs(
+                moderneOutputPath,
+                recipeOrigins.values,
+                rewriteRecipeBomVersion,
+                gradlePluginVersion,
+                mavenPluginVersion
+            )
+            versionWriter.createLatestVersionsMarkdown(
+                moderneOutputPath,
+                recipeOrigins.values,
+                rewriteBomVersion,
+                rewriteRecipeBomVersion,
+                moderneRecipeBomVersion,
+                gradlePluginVersion,
+                mavenPluginVersion
+            )
+        }
 
         if (latestVersionsOnly) {
             return
@@ -152,13 +192,21 @@ class RecipeMarkdownGenerator : Runnable {
             .toSet()
 
         // Create the recipe docs
-        val recipeMarkdownWriter = RecipeMarkdownWriter(recipeContainedBy, recipeToSource, proprietaryRecipeNames)
+        // We use two writers: one for OpenRewrite docs (open-source only), one for Moderne docs (all recipes)
+        val recipeMarkdownWriter = RecipeMarkdownWriter(recipeContainedBy, recipeToSource, proprietaryRecipeNames, forModerneDocs = false)
+        val moderneRecipeMarkdownWriter = if (moderneRecipeCatalogPath != null) {
+            RecipeMarkdownWriter(recipeContainedBy, recipeToSource, proprietaryRecipeNames, forModerneDocs = true)
+        } else null
+
         for (recipeDescriptor in allRecipeDescriptors) {
             val recipeSource = recipeToSource[recipeDescriptor.name]
             requireNotNull(recipeSource) { "Could not find source URI for recipe " + recipeDescriptor.name }
 
             val origin = findOrigin(recipeSource, recipeOrigins)
             requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeSource }
+
+            // Always write to Moderne docs (ALL recipes)
+            moderneRecipeMarkdownWriter?.writeRecipe(recipeDescriptor, moderneRecipeCatalogPath!!, origin)
 
             // Track proprietary recipes separately (for moderne-recipes.md list)
             if (origin.license == Licenses.Proprietary) {
@@ -167,6 +215,7 @@ class RecipeMarkdownGenerator : Runnable {
                 continue
             }
 
+            // Write non-proprietary recipes to OpenRewrite docs
             recipeMarkdownWriter.writeRecipe(recipeDescriptor, recipesPath, origin)
 
             val recipeOptions = TreeSet<RecipeOption>()
@@ -216,9 +265,15 @@ class RecipeMarkdownGenerator : Runnable {
         }
         println("Filtered to ${openSourceRecipeDescriptors.size} open-source recipe(s) for rewrite-docs.")
 
-        // Write the README.md for each category (open-source only)
-        CategoryWriter(openSourceRecipeDescriptors, allCategoryDescriptors)
-            .writeCategories(outputPath)
+        // Write the README.md for each category
+        // OpenRewrite docs: open-source only (in "recipes" subdir)
+        CategoryWriter(openSourceRecipeDescriptors, allCategoryDescriptors, "/recipes")
+            .writeCategories(outputPath, "recipes")
+        // Moderne docs: ALL recipes (in "recipe-catalog" subdir to match workflow expectations)
+        if (moderneOutputPath != null) {
+            CategoryWriter(allRecipeDescriptors, allCategoryDescriptors, "/user-documentation/recipes/recipe-catalog")
+                .writeCategories(moderneOutputPath, "recipe-catalog")
+        }
 
         // Create changelog markdown, and update tracking file
         ChangelogWriter().createRecipeDescriptorsYaml(
@@ -227,8 +282,9 @@ class RecipeMarkdownGenerator : Runnable {
             rewriteBomVersion
         )
 
-        // Write lists of recipes into various files (open-source only)
-        val listWriter = ListsOfRecipesWriter(openSourceRecipeDescriptors, outputPath)
+        // Write lists of recipes into various files
+        // OpenRewrite docs: open-source recipes only (links use /recipes path)
+        val listWriter = ListsOfRecipesWriter(openSourceRecipeDescriptors, outputPath, "/recipes")
         listWriter.createModerneRecipes(moderneProprietaryRecipes)
         listWriter.createRecipesWithDataTables()
         listWriter.createRecipesByTag()
@@ -242,6 +298,22 @@ class RecipeMarkdownGenerator : Runnable {
         )
         listWriter.createStandaloneRecipes(recipeContainedBy, recipeOrigins, recipeToSource)
         listWriter.createAllRecipesByModule(recipeOrigins, recipeToSource)
+
+        // Moderne docs: ALL recipes (links use /user-documentation/recipes/recipe-catalog path)
+        if (moderneListsPath != null) {
+            val moderneListWriter = ListsOfRecipesWriter(allRecipeDescriptors, moderneListsPath, "/user-documentation/recipes/recipe-catalog")
+            moderneListWriter.createRecipesWithDataTables()
+            moderneListWriter.createRecipesByTag()
+            moderneListWriter.createScanningRecipes(
+                allRecipes.filter { recipe ->
+                    recipe is ScanningRecipe<*> && recipe !is DeclarativeRecipe
+                },
+                recipeOrigins,
+                recipeToSource
+            )
+            moderneListWriter.createStandaloneRecipes(recipeContainedBy, recipeOrigins, recipeToSource)
+            moderneListWriter.createAllRecipesByModule(recipeOrigins, recipeToSource)
+        }
 
         // Generate redirects for proprietary recipes (from old OpenRewrite URLs to Moderne docs)
         val allProprietaryRecipes = moderneProprietaryRecipes.values.flatten()

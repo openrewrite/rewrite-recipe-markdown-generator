@@ -67,6 +67,7 @@ fun escapeHtml(string: String): String = string
     .replace("\"", "&quot;")
 
 // Escapes for MDX content (includes curly brace escaping - NOT safe for YAML)
+// Escapes { and } with backslashes so MDX treats them as literal characters
 fun escapeMdx(string: String): String = escapeHtml(string)
     .replace("{", "\\{")
     .replace("}", "\\}")

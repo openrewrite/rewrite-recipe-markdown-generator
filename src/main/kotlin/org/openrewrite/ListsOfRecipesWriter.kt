@@ -13,7 +13,8 @@ import java.util.*
 
 class ListsOfRecipesWriter(
     val allRecipeDescriptors: List<RecipeDescriptor>,
-    val outputPath: Path
+    val outputPath: Path,
+    val recipeLinkBasePath: String = "/recipes"
 ) {
     fun createModerneRecipes(moderneProprietaryRecipesMap: TreeMap<String, MutableList<RecipeDescriptor>>) {
         val moderneRecipesPath = outputPath.resolve("moderne-recipes.md")
@@ -85,7 +86,7 @@ class ListsOfRecipesWriter(
 
             for (recipe in recipesWithDataTables) {
                 val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
-                writeln("### [${recipe.name}](/recipes/${recipePath}.md)")
+                writeln("### [${recipe.name}](${recipeLinkBasePath}/${recipePath}.md)")
                 writeln("  * **${recipe.displayNameEscaped()}**")
                 writeln("  * ${recipe.descriptionEscaped()}")
 
@@ -156,7 +157,7 @@ class ListsOfRecipesWriter(
 
                     for (recipe in recipes.sortedBy { it.name }) {
                         val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
-                        writeln("* [${recipe.name}](/recipes/${recipePath}.md)")
+                        writeln("* [${recipe.name}](${recipeLinkBasePath}/${recipePath}.md)")
                         writeln("  * **${recipe.displayNameEscaped()}**")
                         writeln("  * ${recipe.descriptionEscaped()}")
                     }
@@ -215,7 +216,7 @@ class ListsOfRecipesWriter(
 
                 for (recipe in recipes.sortedBy { it.name }) {
                     val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
-                    writeln("* [${recipe.name}](/recipes/${recipePath}.md)")
+                    writeln("* [${recipe.name}](${recipeLinkBasePath}/${recipePath}.md)")
                     writeln("  * **${recipe.displayNameEscaped()}**")
                     writeln("  * ${recipe.descriptionEscaped()}")
                 }
@@ -229,6 +230,12 @@ class ListsOfRecipesWriter(
         recipeToSource: Map<String, URI>
     ) {
         val markdown = outputPath.resolve("scanning-recipes.md")
+        // Use external link for Moderne docs since the concepts page is only on OpenRewrite docs
+        val scanningRecipesLink = if (recipeLinkBasePath.contains("user-documentation")) {
+            "https://docs.openrewrite.org/concepts-and-explanations/recipes#scanning-recipes"
+        } else {
+            "/concepts-and-explanations/recipes#scanning-recipes"
+        }
         Files.newBufferedWriter(markdown, StandardOpenOption.CREATE).useAndApply {
             writeln(
                 //language=markdown
@@ -239,7 +246,7 @@ class ListsOfRecipesWriter(
 
             # Scanning Recipes
 
-            _This doc contains all [scanning recipes](/concepts-and-explanations/recipes#scanning-recipes)._
+            _This doc contains all [scanning recipes]($scanningRecipesLink)._
 
             """.trimIndent()
             )
@@ -261,7 +268,7 @@ class ListsOfRecipesWriter(
 
                 for (recipe in recipes.sortedBy { it.name }) {
                     val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe.descriptor)
-                    writeln("* [${recipe.descriptor.name}](/recipes/${recipePath}.md)")
+                    writeln("* [${recipe.descriptor.name}](${recipeLinkBasePath}/${recipePath}.md)")
                     writeln("  * **${recipe.descriptor.displayNameEscaped()}**")
                     writeln("  * ${recipe.descriptor.descriptionEscaped()}")
                 }
@@ -324,7 +331,7 @@ class ListsOfRecipesWriter(
 
                 for (recipe in recipes.sortedBy { it.name }) {
                     val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
-                    writeln("* [${recipe.name}](/recipes/${recipePath}.md)")
+                    writeln("* [${recipe.name}](${recipeLinkBasePath}/${recipePath}.md)")
                     writeln("  * **${recipe.displayNameEscaped()}**")
                     writeln("  * ${recipe.descriptionEscaped()}")
                 }
