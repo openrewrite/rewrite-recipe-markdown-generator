@@ -325,6 +325,15 @@ class RecipeMarkdownGenerator : Runnable {
                 "/user-documentation/recipes/recipe-catalog"
             )
         }
+
+        // Generate redirects for categories that only exist in Moderne docs
+        RedirectWriter.writeCategoryRedirects(
+            outputPath,
+            allRecipeDescriptors,
+            openSourceRecipeDescriptors,
+            "https://docs.moderne.io",
+            "/user-documentation/recipes/recipe-catalog"
+        )
     }
 
 
