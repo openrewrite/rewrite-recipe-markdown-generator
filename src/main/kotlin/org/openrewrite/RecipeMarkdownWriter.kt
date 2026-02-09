@@ -487,7 +487,8 @@ import TabItem from '@theme/TabItem';
                 recipeDescriptor.name.contains(".dotnet.") ||
                 recipeDescriptor.name.contains(".nodejs.") ||
                 recipeDescriptor.name.contains(".python.") ||
-                origin.license == Licenses.Proprietary
+                origin.license == Licenses.Proprietary ||
+                forModerneDocs
         val suppressMaven = suppressJava || recipeDescriptor.name.contains(".gradle.")
         val suppressGradle = suppressJava || recipeDescriptor.name.contains(".maven.")
         val requiresConfiguration = recipeDescriptor.options?.any { it.isRequired } ?: false
@@ -503,12 +504,12 @@ import TabItem from '@theme/TabItem';
             val exampleRecipeName =
                 "com.yourorg." + recipeDescriptor.name.substring(recipeDescriptor.name.lastIndexOf('.') + 1) + "Example"
 
-            if (origin.license == Licenses.Proprietary) {
+            if (origin.license == Licenses.Proprietary || forModerneDocs) {
                 //language=markdown
                 write(
                     """
                     This recipe has required configuration parameters and can only be run by users of Moderne.
-                    To run this recipe, you will need to provide the Moderne CLI run command with the required options. 
+                    To run this recipe, you will need to provide the Moderne CLI run command with the required options.
                     Or, if you'd like to create a declarative recipe, please see the below example of a `rewrite.yml` file:
 
                     ```yaml title="rewrite.yml"
@@ -517,7 +518,7 @@ import TabItem from '@theme/TabItem';
                     name: $exampleRecipeName
                     displayName: ${recipeDescriptor.displayNameEscaped()} example
                     recipeList:
-                      - ${recipeDescriptor.name}: 
+                      - ${recipeDescriptor.name}:
 
                     """.trimIndent()
                 )
@@ -854,7 +855,7 @@ import TabItem from '@theme/TabItem';
             </TabItem>
             """.trimIndent()
 
-        if (origin.license == Licenses.Proprietary) {
+        if (origin.license == Licenses.Proprietary || forModerneDocs) {
             writeln(
                 """
 <Tabs groupId="projectType">
@@ -948,7 +949,7 @@ $cliSnippet
             </TabItem>
             """.trimIndent()
 
-        if (origin.license == Licenses.Proprietary) {
+        if (origin.license == Licenses.Proprietary || forModerneDocs) {
             writeln(
                 """
 <Tabs groupId="projectType">
@@ -978,10 +979,14 @@ $cliSnippet
         dataTableSnippet: String,
         dataTableCommandLineSnippet: String,
     ) {
-        writeln(
-            "This recipe has no required configuration parameters and comes from a rewrite core library. " +
-                    "It can be activated directly without adding any dependencies."
-        )
+        if (forModerneDocs) {
+            writeln("This recipe has no required configuration options. Users of Moderne can run it via the Moderne CLI.")
+        } else {
+            writeln(
+                "This recipe has no required configuration parameters and comes from a rewrite core library. " +
+                        "It can be activated directly without adding any dependencies."
+            )
+        }
 
         //language=markdown
         val gradleSnippet = if (suppressGradle) "" else """
@@ -1104,8 +1109,8 @@ $cliSnippet
         dataTableSnippet: String,
         dataTableCommandLineSnippet: String,
     ) {
-        if (origin.license == Licenses.Proprietary) {
-            writeln("This recipe has no required configuration options. Users of Moderne can run it via the Moderne CLI:")
+        if (origin.license == Licenses.Proprietary || forModerneDocs) {
+            writeln("This recipe has no required configuration options. Users of Moderne can run it via the Moderne CLI.")
         } else {
             writeln(
                 "This recipe has no required configuration options. " +
