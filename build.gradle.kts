@@ -67,6 +67,7 @@ dependencies {
     // Core rewrite modules (org.openrewrite)
     "recipe"("org.openrewrite:rewrite-core:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-docker:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-gradle:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-groovy:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-hcl:$rewriteVersion")
@@ -104,7 +105,6 @@ dependencies {
 //        exclude(group = "org.openrewrite")
 //        exclude(group = "org.openrewrite.recipe")
 //    }
-    "recipe"("org.openrewrite.recipe:rewrite-docker:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-dotnet:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-dropwizard:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-feature-flags:$rewriteVersion")
