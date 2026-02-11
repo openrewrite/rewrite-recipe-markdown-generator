@@ -175,29 +175,28 @@ class RecipeLoader {
     private fun loadEnvironmentDataAsync(): List<EnvironmentData> = runBlocking {
         println("Starting parallel recipe loading...")
         recipeOrigins.entries
-            .chunked(1) // Process in batches of jars
-            .flatMap { batch ->
-                batch.map { recipeOrigin ->
-                    async(Dispatchers.IO) {
-                        println("Processing ${recipeOrigin.key.toPath().fileName}")
-                        // Create a separate environment for each jar
-                        val batchEnvBuilder = Environment.builder()
-                        // If you are running this with an old version of Rewrite (for diff log purposes), you'll need
-                        // to update the below line to look like this instead:
-                        // batchEnvBuilder.scanJar(recipeOrigin.key.toPath(), classloader)
-                        batchEnvBuilder.scanJar(recipeOrigin.key.toPath(), dependencies, classloader)
-                        val batchEnv = batchEnvBuilder.build()
-                        EnvironmentData(
-                            batchEnv.listRecipeDescriptors(),
-                            batchEnv.listCategoryDescriptors(),
-                            batchEnv.listRecipes(),
-                            recipeOrigin.key
-                        ).also {
-                            println("Loaded ${it.recipeDescriptors.size} recipe descriptors from ${recipeOrigin.key.toPath().fileName}")
-                        }
+            .chunked(8)
+            .flatMap { batch -> batch.map { recipeOrigin ->
+                async(Dispatchers.IO) {
+                    println("Processing ${recipeOrigin.key.toPath().fileName}")
+                    // Create a separate environment for each jar
+                    val batchEnvBuilder = Environment.builder()
+                    // If you are running this with an old version of Rewrite (for diff log purposes), you'll need
+                    // to update the below line to look like this instead:
+                    // batchEnvBuilder.scanJar(recipeOrigin.key.toPath(), classloader)
+                    batchEnvBuilder.scanJar(recipeOrigin.key.toPath(), dependencies, classloader)
+                    val batchEnv = batchEnvBuilder.build()
+                    EnvironmentData(
+                        batchEnv.listRecipeDescriptors(),
+                        batchEnv.listCategoryDescriptors(),
+                        batchEnv.listRecipes(),
+                        recipeOrigin.key
+                    ).also {
+                        println("Loaded ${it.recipeDescriptors.size} recipe descriptors from ${recipeOrigin.key.toPath().fileName}")
                     }
-                }.awaitAll()
-            }.also {
+                }
+            }.awaitAll() }
+            .also {
                 println("Finished loading all recipes.")
             }
     }
