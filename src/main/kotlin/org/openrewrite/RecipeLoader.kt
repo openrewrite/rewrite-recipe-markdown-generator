@@ -175,7 +175,7 @@ class RecipeLoader {
     private fun loadEnvironmentDataAsync(): List<EnvironmentData> = runBlocking {
         println("Starting parallel recipe loading...")
         recipeOrigins.entries
-            .chunked(4) // Process in batches of jars
+            .chunked(1) // Process in batches of jars
             .flatMap { batch ->
                 batch.map { recipeOrigin ->
                     async(Dispatchers.IO) {
@@ -243,8 +243,6 @@ class RecipeLoader {
             val license: License? = mfInfos[uri]?.first
             if (license != null && license != Licenses.Unknown) {
                 origin.license = license
-            } else if (origin.artifactId == "rewrite-cobol") {
-                origin.license = Licenses.Proprietary
             } else {
                 println("Unable to determine License for ${origin}")
             }
