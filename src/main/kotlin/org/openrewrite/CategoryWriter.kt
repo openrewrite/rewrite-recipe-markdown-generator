@@ -192,7 +192,7 @@ data class Category(
                     for (recipe in compositeRecipes) {
                         // Anything except a relative link ending in .md will be mangled.
                         val localPath = getRecipePath(recipe).substringAfterLast('/')
-                        appendLine("* [${recipe.displayNameEscaped()}](./$localPath.md)")
+                        appendLine("* [${recipe.displayNameEscapedMdx()}](./$localPath.md)")
                     }
 
                     appendLine()
@@ -205,7 +205,7 @@ data class Category(
                     for (recipe in normalRecipes) {
                         // Anything except a relative link ending in .md will be mangled.
                         val localPath = getRecipePath(recipe).substringAfterLast('/')
-                        appendLine("* [${recipe.displayNameEscaped()}](./${localPath}.md)")
+                        appendLine("* [${recipe.displayNameEscapedMdx()}](./${localPath}.md)")
                     }
 
                     appendLine()
@@ -242,7 +242,7 @@ data class Category(
 
                 for (recipe in recipes) {
                     val relativePath = getRecipePath(recipe).substringAfterLast('/')
-                    writeln("* [${recipe.displayNameEscaped()}](./$relativePath.md)")
+                    writeln("* [${recipe.displayNameEscapedMdx()}](./$relativePath.md)")
                 }
             }
 

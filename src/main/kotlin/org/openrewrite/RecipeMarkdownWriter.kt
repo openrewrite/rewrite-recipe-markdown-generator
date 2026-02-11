@@ -639,7 +639,7 @@ import TabItem from '@theme/TabItem';
                 }
 
                 val recipeLink = getRecipeLink(recipe, pathToRecipes)
-                writeln("* [${recipe.displayNameEscaped()}]($recipeLink)")
+                writeln("* [${recipe.displayNameEscapedMdx()}]($recipeLink)")
 
                 if (recipe.options.isNotEmpty()) {
                     for (option in recipe.options) {
@@ -698,7 +698,7 @@ import TabItem from '@theme/TabItem';
                         } else {
                             "/recipes/${getRecipePath(recipe)}.md"
                         }
-                        "* [${recipe.displayNameEscaped()}]($link)"
+                        "* [${recipe.displayNameEscapedMdx()}]($link)"
                     } catch (e: RuntimeException) {
                         System.err.println("Warning: Could not generate path for recipe ${recipe.name}: ${e.message}")
                         null
