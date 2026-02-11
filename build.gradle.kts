@@ -177,7 +177,7 @@ application {
 }
 
 tasks.named<JavaExec>("run").configure {
-    maxHeapSize = "2g"
+    maxHeapSize = "4g"
     val targetDir = layout.buildDirectory.dir("docs").get().asFile
     val moderneTargetDir = layout.buildDirectory.dir("moderne-docs").get().asFile
 
