@@ -93,7 +93,7 @@ class VersionWriter {
                 
                 ## Moderne Installation
                 
-                Install the latest versions of all the OpenRewrite [recipe modules into Moderne](https://docs.moderne.io/administrator-documentation/moderne-dx/how-to-guides/deploying-recipe-artifacts-in-moderne-dx) using the GraphQL endpoint.
+                Install the latest versions of all the OpenRewrite [recipe modules into Moderne](https://docs.moderne.io/administrator-documentation/moderne-platform/how-to-guides/importing-external-recipes#importing-recipes-via-a-graphql-api-call) using the GraphQL endpoint.
                 
                 <details>
                 <summary>
