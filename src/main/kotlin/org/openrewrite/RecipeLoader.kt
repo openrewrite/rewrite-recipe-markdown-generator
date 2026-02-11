@@ -175,7 +175,7 @@ class RecipeLoader {
     private fun loadEnvironmentDataAsync(): List<EnvironmentData> = runBlocking {
         println("Starting parallel recipe loading...")
         recipeOrigins.entries
-            .chunked(8)
+            .chunked(4)
             .flatMap { batch -> batch.map { recipeOrigin ->
                 async(Dispatchers.IO) {
                     println("Processing ${recipeOrigin.key.toPath().fileName}")
