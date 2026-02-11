@@ -186,7 +186,8 @@ class RecipeMarkdownGenerator : Runnable {
             .filter { recipe ->
                 val source = recipeToSource[recipe.name]
                 val origin = findOrigin(source, recipeOrigins)
-                origin?.license == Licenses.Proprietary
+                origin?.license == Licenses.Proprietary ||
+                    source?.toString()?.startsWith("typescript-search://") == true
             }
             .map { it.name }
             .toSet()

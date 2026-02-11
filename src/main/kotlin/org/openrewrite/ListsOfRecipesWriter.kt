@@ -44,7 +44,7 @@ class ListsOfRecipesWriter(
                     val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
                     // Link to Moderne docs since these recipes are exclusive to Moderne
                     writeln("* [${recipe.name}](https://docs.moderne.io/user-documentation/recipes/recipe-catalog/${recipePath})")
-                    writeln("  * **${recipe.displayNameEscaped()}**")
+                    writeln("  * **${recipe.displayNameEscapedMdx()}**")
                     writeln("  * ${recipe.descriptionEscaped()}")
                 }
 
@@ -87,7 +87,7 @@ class ListsOfRecipesWriter(
             for (recipe in recipesWithDataTables) {
                 val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
                 writeln("### [${recipe.name}](${recipeLinkBasePath}/${recipePath}.md)")
-                writeln("  * **${recipe.displayNameEscaped()}**")
+                writeln("  * **${recipe.displayNameEscapedMdx()}**")
                 writeln("  * ${recipe.descriptionEscaped()}")
 
                 writeln("\n#### Data tables:\n")
@@ -158,7 +158,7 @@ class ListsOfRecipesWriter(
                     for (recipe in recipes.sortedBy { it.name }) {
                         val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
                         writeln("* [${recipe.name}](${recipeLinkBasePath}/${recipePath}.md)")
-                        writeln("  * **${recipe.displayNameEscaped()}**")
+                        writeln("  * **${recipe.displayNameEscapedMdx()}**")
                         writeln("  * ${recipe.descriptionEscaped()}")
                     }
                 }
@@ -217,7 +217,7 @@ class ListsOfRecipesWriter(
                 for (recipe in recipes.sortedBy { it.name }) {
                     val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
                     writeln("* [${recipe.name}](${recipeLinkBasePath}/${recipePath}.md)")
-                    writeln("  * **${recipe.displayNameEscaped()}**")
+                    writeln("  * **${recipe.displayNameEscapedMdx()}**")
                     writeln("  * ${recipe.descriptionEscaped()}")
                 }
             }
@@ -269,7 +269,7 @@ class ListsOfRecipesWriter(
                 for (recipe in recipes.sortedBy { it.name }) {
                     val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe.descriptor)
                     writeln("* [${recipe.descriptor.name}](${recipeLinkBasePath}/${recipePath}.md)")
-                    writeln("  * **${recipe.descriptor.displayNameEscaped()}**")
+                    writeln("  * **${recipe.descriptor.displayNameEscapedMdx()}**")
                     writeln("  * ${recipe.descriptor.descriptionEscaped()}")
                 }
             }
@@ -332,7 +332,7 @@ class ListsOfRecipesWriter(
                 for (recipe in recipes.sortedBy { it.name }) {
                     val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
                     writeln("* [${recipe.name}](${recipeLinkBasePath}/${recipePath}.md)")
-                    writeln("  * **${recipe.displayNameEscaped()}**")
+                    writeln("  * **${recipe.displayNameEscapedMdx()}**")
                     writeln("  * ${recipe.descriptionEscaped()}")
                 }
             }
