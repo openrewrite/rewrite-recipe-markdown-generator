@@ -102,10 +102,17 @@ class RecipeLoader {
         val typeScriptLoader = TypeScriptRecipeLoader(recipeOrigins)
         val typeScriptResult = typeScriptLoader.loadTypeScriptRecipes()
 
-        // Merge TypeScript results with Java/YAML results
+        // Load Python recipes via RPC
+        println("\nChecking for Python recipes...")
+        val pythonLoader = PythonRecipeLoader(recipeOrigins)
+        val pythonResult = pythonLoader.loadPythonRecipes()
+
+        // Merge TypeScript and Python results with Java/YAML results
         val allDescriptors = environmentData.flatMap { it.recipeDescriptors }.toMutableList()
         allDescriptors.addAll(typeScriptResult.descriptors)
         recipeToSource.putAll(typeScriptResult.recipeToSource)
+        allDescriptors.addAll(pythonResult.descriptors)
+        recipeToSource.putAll(pythonResult.recipeToSource)
 
         // Deduplicate recipes by name (same recipe may be discovered from multiple JARs
         // when scanJar is called with the full classpath as dependencies)

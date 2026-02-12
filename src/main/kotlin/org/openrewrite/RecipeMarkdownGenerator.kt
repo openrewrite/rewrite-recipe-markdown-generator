@@ -187,7 +187,8 @@ class RecipeMarkdownGenerator : Runnable {
                 val source = recipeToSource[recipe.name]
                 val origin = findOrigin(source, recipeOrigins)
                 origin?.license == Licenses.Proprietary ||
-                    source?.toString()?.startsWith("typescript-search://") == true
+                    source?.toString()?.startsWith("typescript-search://") == true ||
+                    source?.toString()?.startsWith("python-search://") == true
             }
             .map { it.name }
             .toSet()
@@ -400,6 +401,12 @@ class RecipeMarkdownGenerator : Runnable {
             // Handle TypeScript recipes with custom URI scheme
             if (rawUri.startsWith("typescript-search://")) {
                 val artifactId = rawUri.substringAfter("typescript-search://").substringBefore("/")
+                return recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
+            }
+
+            // Handle Python recipes with custom URI scheme
+            if (rawUri.startsWith("python-search://")) {
+                val artifactId = rawUri.substringAfter("python-search://").substringBefore("/")
                 return recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
             }
 

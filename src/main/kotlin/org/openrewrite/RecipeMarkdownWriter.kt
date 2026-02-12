@@ -54,6 +54,14 @@ class RecipeMarkdownWriter(
         return recipeSource.toString().startsWith("typescript-search://")
     }
 
+    /**
+     * Determines if a recipe is a Python recipe based on its source URI.
+     */
+    private fun isPythonRecipe(recipeDescriptor: RecipeDescriptor): Boolean {
+        val recipeSource = recipeToSource[recipeDescriptor.name] ?: return false
+        return recipeSource.toString().startsWith("python-search://")
+    }
+
     fun writeRecipe(
         recipeDescriptor: RecipeDescriptor,
         outputPath: Path,
@@ -104,8 +112,8 @@ import TabItem from '@theme/TabItem';
             writeUsedBy(recipeContainedBy[recipeDescriptor.name])
             writeExamples(recipeDescriptor)
             writeUsage(recipeDescriptor, origin)
-            // Skip Moderne link for JavaScript recipes as these don't exist there yet.
-            if (!isJavaScriptRecipe(recipeDescriptor)) {
+            // Skip Moderne link for JavaScript and Python recipes as these don't exist there yet.
+            if (!isJavaScriptRecipe(recipeDescriptor) && !isPythonRecipe(recipeDescriptor)) {
                 writeModerneLink(recipeDescriptor)
             }
             writeDataTables(recipeDescriptor)
@@ -468,6 +476,15 @@ import TabItem from '@theme/TabItem';
             ?: "@openrewrite/${origin.artifactId}"
     }
 
+    /**
+     * Gets the pip package name for a Python recipe module.
+     * Uses the single source of truth from PythonRecipeLoader.
+     */
+    private fun getPipPackageName(origin: RecipeOrigin): String {
+        return PythonRecipeLoader.PYTHON_RECIPE_MODULES[origin.artifactId]
+            ?: origin.artifactId
+    }
+
     private fun BufferedWriter.writeUsage(
         recipeDescriptor: RecipeDescriptor,
         origin: RecipeOrigin
@@ -480,6 +497,12 @@ import TabItem from '@theme/TabItem';
         // Handle JavaScript recipes separately
         if (isJavaScriptRecipe(recipeDescriptor)) {
             writeJavaScriptUsage(recipeDescriptor, origin)
+            return
+        }
+
+        // Handle Python recipes separately
+        if (isPythonRecipe(recipeDescriptor)) {
+            writePythonUsage(recipeDescriptor, origin)
             return
         }
 
@@ -1258,6 +1281,32 @@ $cliSnippet
 
             ```shell title="Install the recipe package"
             mod config recipes npm install $npmPackageName
+            ```
+
+            Then, you can run the recipe via:
+
+            ```shell title="Run the recipe"
+            mod run . --recipe ${recipeDescriptor.name}
+            ```
+            """.trimIndent()
+        )
+    }
+
+    private fun BufferedWriter.writePythonUsage(
+        recipeDescriptor: RecipeDescriptor,
+        origin: RecipeOrigin
+    ) {
+        val pipPackageName = getPipPackageName(origin)
+
+        //language=markdown
+        writeln(
+            """
+            In order to run Python recipes, you will need to use the [Moderne CLI](https://docs.moderne.io/user-documentation/moderne-cli/getting-started/cli-intro).
+
+            Once the CLI is installed, you can install this Python recipe package by running the following command:
+
+            ```shell title="Install the recipe package"
+            mod config recipes pip install $pipPackageName
             ```
 
             Then, you can run the recipe via:
