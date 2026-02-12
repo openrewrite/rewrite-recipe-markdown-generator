@@ -79,6 +79,7 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-maven:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-properties:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-protobuf:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-toml:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-xml:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-yaml:$rewriteVersion")
@@ -86,7 +87,6 @@ dependencies {
     // Additional core modules (versions only, recipes not yet included)
 //    "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
 
     // Recipe modules (org.openrewrite.recipe)
@@ -123,7 +123,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-micrometer:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-micronaut:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-migrate-java:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-migrate-python:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-migrate-python:latest.integration")
     "recipe"("org.openrewrite.recipe:rewrite-netty:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-nodejs:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-okhttp:$rewriteVersion")
@@ -188,9 +188,7 @@ tasks.named<JavaExec>("run").configure {
         // Additional modules whose versions we want to show, but not (yet) their recipes
         dependencies {
             "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
-            "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
             "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
-            "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
             "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
         }
     }
