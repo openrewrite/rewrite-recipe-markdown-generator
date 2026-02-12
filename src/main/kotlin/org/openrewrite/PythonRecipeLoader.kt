@@ -3,8 +3,8 @@
 package org.openrewrite
 
 import org.openrewrite.config.RecipeDescriptor
-import org.openrewrite.python.rpc.PythonRewriteRpc
 import org.openrewrite.marketplace.RecipeBundle
+import org.openrewrite.python.rpc.PythonRewriteRpc
 import java.net.URI
 import java.nio.file.Path
 
@@ -31,56 +31,66 @@ class PythonRecipeLoader(
             "rewrite-python" to "openrewrite",
             "rewrite-migrate-python" to "openrewrite-migrate-python"
         )
+
+        /**
+         * Group IDs for Python recipe modules, used when creating synthetic origins.
+         */
+        private val PYTHON_GROUP_IDS = mapOf(
+            "rewrite-python" to "org.openrewrite",
+            "rewrite-migrate-python" to "org.openrewrite.recipe"
+        )
+
+        /**
+         * Repository URLs for Python recipe modules, used when creating synthetic origins.
+         */
+        private val PYTHON_REPO_URLS = mapOf(
+            "rewrite-python" to "https://github.com/openrewrite/rewrite/blob/main/",
+            "rewrite-migrate-python" to "https://github.com/moderneinc/rewrite-migrate-python/blob/main/"
+        )
     }
 
     data class PythonRecipeResult(
         val descriptors: List<RecipeDescriptor>,
-        val recipeToSource: Map<String, URI>
+        val recipeToSource: Map<String, URI>,
+        val syntheticOrigins: Map<URI, RecipeOrigin> = emptyMap()
     )
 
     /**
-     * Detects which recipe modules contain Python recipes by checking if they're
-     * registered in the PYTHON_RECIPE_MODULES map.
+     * Gets the pip package name for a given artifact ID.
      */
-    private fun hasPythonRecipes(origin: RecipeOrigin): Boolean {
-        return origin.artifactId in PYTHON_RECIPE_MODULES
+    private fun getPipPackageName(artifactId: String): String {
+        return PYTHON_RECIPE_MODULES[artifactId]
+            ?: throw IllegalArgumentException("No pip package configured for artifact: $artifactId")
     }
 
-    /**
-     * Gets the pip package name for a given recipe origin.
-     */
-    private fun getPipPackageName(origin: RecipeOrigin): String {
-        return PYTHON_RECIPE_MODULES[origin.artifactId]
-            ?: throw IllegalArgumentException("No pip package configured for artifact: ${origin.artifactId}")
-    }
-
-    /**
-     * Attempts to map a recipe name to its Python source file location.
-     * This is used to generate GitHub links to the recipe source.
-     *
-     * Note: The exact file path mapping is complex because recipe names don't directly
-     * correspond to file names. For now, we link to the GitHub search for the recipe name.
-     */
-    private fun mapRecipeToSourceUri(recipeName: String, origin: RecipeOrigin): URI {
-        // For now, use a search-based URI that will be converted to a GitHub code search link
-        // This ensures users can find the recipe even if our file path mapping is imperfect
-        return URI.create("python-search://${origin.artifactId}/$recipeName")
+    private fun mapRecipeToSourceUri(recipeName: String, artifactId: String): URI {
+        return URI.create("python-search://$artifactId/$recipeName")
     }
 
     /**
      * Loads Python recipes from pip packages via RPC.
      *
+     * Discovers pip packages from PYTHON_RECIPE_MODULES, using version info from
+     * recipeOrigins when available. Packages without a Maven artifact are still
+     * loaded (with the latest pip version).
+     *
      * @return A result containing the recipe descriptors and a mapping of recipe names to source URIs
      */
     fun loadPythonRecipes(): PythonRecipeResult {
-        val pythonOrigins = recipeOrigins.values.filter { hasPythonRecipes(it) }
-
-        if (pythonOrigins.isEmpty()) {
-            println("No Python recipe modules detected.")
+        if (PYTHON_RECIPE_MODULES.isEmpty()) {
+            println("No Python recipe modules configured.")
             return PythonRecipeResult(emptyList(), emptyMap())
         }
 
-        println("Found ${pythonOrigins.size} module(s) with Python recipes: ${pythonOrigins.joinToString { it.artifactId }}")
+        // Build list of packages to load, using version from recipeOrigins when available
+        data class PipPackageInfo(val artifactId: String, val pipPackageName: String, val version: String?)
+
+        val packagesToLoad = PYTHON_RECIPE_MODULES.map { (artifactId, pipPackage) ->
+            val origin = recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
+            PipPackageInfo(artifactId, pipPackage, origin?.version)
+        }
+
+        println("Found ${packagesToLoad.size} Python recipe module(s): ${packagesToLoad.joinToString { it.artifactId }}")
 
         var rpc: PythonRewriteRpc? = null
         try {
@@ -97,16 +107,16 @@ class PythonRecipeLoader(
             val recipeToSource = mutableMapOf<String, URI>()
 
             // Install recipes from each pip package
-            for (origin in pythonOrigins) {
+            for (pkg in packagesToLoad) {
                 try {
-                    val packageName = getPipPackageName(origin)
-                    println("Installing Python recipes from pip package: $packageName@${origin.version}")
+                    val versionLabel = pkg.version ?: "latest"
+                    println("Installing Python recipes from pip package: ${pkg.pipPackageName}@$versionLabel")
 
-                    val response = rpc.installRecipes(packageName, origin.version)
-                    println("  Installed ${response.recipesInstalled} recipe(s) from $packageName")
+                    val response = rpc.installRecipes(pkg.pipPackageName, pkg.version ?: "")
+                    println("  Installed ${response.recipesInstalled} recipe(s) from ${pkg.pipPackageName}")
 
                     allDescriptors.addAll(
-                        rpc.getMarketplace(RecipeBundle("pip", packageName, null, null, null))
+                        rpc.getMarketplace(RecipeBundle("pip", pkg.pipPackageName, null, null, null))
                             .allRecipes
                             .mapNotNull { r ->
                                 try {
@@ -123,7 +133,7 @@ class PythonRecipeLoader(
                     )
 
                 } catch (e: Exception) {
-                    System.err.println("Warning: Failed to install recipes from ${origin.artifactId}: ${e.message}")
+                    System.err.println("Warning: Failed to install recipes from ${pkg.artifactId}: ${e.message}")
                     e.printStackTrace()
                 }
             }
@@ -144,16 +154,30 @@ class PythonRecipeLoader(
                     }
                 }
 
-                // Find the origin this recipe belongs to
-                val origin = pythonOrigins.firstOrNull { origin ->
-                    descriptor.name.startsWith("org.openrewrite.${origin.artifactId.removePrefix("rewrite-")}")
-                } ?: pythonOrigins.first()
+                // Find the artifact this recipe belongs to
+                val artifactId = packagesToLoad.firstOrNull { pkg ->
+                    descriptor.name.startsWith("org.openrewrite.${pkg.artifactId.removePrefix("rewrite-")}")
+                }?.artifactId ?: packagesToLoad.first().artifactId
 
-                val sourceUri = mapRecipeToSourceUri(descriptor.name, origin)
+                val sourceUri = mapRecipeToSourceUri(descriptor.name, artifactId)
                 recipeToSource[descriptor.name] = sourceUri
             }
 
-            return PythonRecipeResult(allDescriptors, recipeToSource)
+            // Create synthetic origins for modules not already in recipeOrigins
+            val syntheticOrigins = mutableMapOf<URI, RecipeOrigin>()
+            for (pkg in packagesToLoad) {
+                if (recipeOrigins.values.none { it.artifactId == pkg.artifactId }) {
+                    val syntheticUri = URI.create("python-search://${pkg.artifactId}")
+                    val groupId = PYTHON_GROUP_IDS[pkg.artifactId] ?: "org.openrewrite.recipe"
+                    val origin = RecipeOrigin(groupId, pkg.artifactId, pkg.version ?: "latest", syntheticUri)
+                    origin.repositoryUrl = PYTHON_REPO_URLS[pkg.artifactId] ?: ""
+                    origin.license = Licenses.Proprietary
+                    syntheticOrigins[syntheticUri] = origin
+                    println("Created synthetic origin for ${pkg.artifactId} (not available as Maven artifact)")
+                }
+            }
+
+            return PythonRecipeResult(allDescriptors, recipeToSource, syntheticOrigins)
 
         } catch (e: Exception) {
             System.err.println("Error loading Python recipes: ${e.message}")

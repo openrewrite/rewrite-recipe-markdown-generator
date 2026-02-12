@@ -36,7 +36,8 @@ data class RecipeLoadResult(
     val allRecipeDescriptors: List<RecipeDescriptor>,
     val allCategoryDescriptors: List<CategoryDescriptor>,
     val allRecipes: List<Recipe>,
-    val recipeToSource: Map<String, URI>
+    val recipeToSource: Map<String, URI>,
+    val additionalOrigins: Map<URI, RecipeOrigin> = emptyMap()
 )
 
 /**
@@ -127,7 +128,8 @@ class RecipeLoader {
             allRecipeDescriptors = deduplicatedDescriptors,
             allCategoryDescriptors = environmentData.flatMap { it.categoryDescriptors }.distinctBy { it.packageName },
             allRecipes = environmentData.flatMap { it.recipes }.distinctBy { it.name },
-            recipeToSource = recipeToSource
+            recipeToSource = recipeToSource,
+            additionalOrigins = pythonResult.syntheticOrigins
         )
     }
 

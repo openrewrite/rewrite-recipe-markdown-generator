@@ -104,7 +104,7 @@ class RecipeMarkdownGenerator : Runnable {
             throw RuntimeException(e)
         }
 
-        val recipeOrigins: Map<URI, RecipeOrigin> = RecipeOrigin.parse(recipeSources)
+        var recipeOrigins: Map<URI, RecipeOrigin> = RecipeOrigin.parse(recipeSources)
 
         // Add manifest information
         val recipeLoader = RecipeLoader(recipeClasspath, recipeOrigins)
@@ -159,6 +159,16 @@ class RecipeMarkdownGenerator : Runnable {
         val allCategoryDescriptors = loadResult.allCategoryDescriptors
         val allRecipes = loadResult.allRecipes
         val recipeToSource = loadResult.recipeToSource
+
+        // Merge synthetic origins from Python/TypeScript recipe loaders
+        if (loadResult.additionalOrigins.isNotEmpty()) {
+            recipeOrigins = recipeOrigins + loadResult.additionalOrigins
+        }
+
+        // Python recipes are always proprietary
+        recipeOrigins.values
+            .filter { it.artifactId in PythonRecipeLoader.PYTHON_RECIPE_MODULES }
+            .forEach { it.license = Licenses.Proprietary }
 
         println("Found ${allRecipeDescriptors.size} descriptor(s).")
 
