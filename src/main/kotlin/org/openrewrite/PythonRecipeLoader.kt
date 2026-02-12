@@ -108,12 +108,17 @@ class PythonRecipeLoader(
                     allDescriptors.addAll(
                         rpc.getMarketplace(RecipeBundle("pip", packageName, null, null, null))
                             .allRecipes
-                            .map { r ->
-                                val requiredOptions = r.options
-                                    ?.filter { it.isRequired }
-                                    ?.associate { it.name to "PlaceholderValueToFoolValidation" }
-                                    ?: emptyMap()
-                                rpc.prepareRecipe(r.name, requiredOptions).descriptor
+                            .mapNotNull { r ->
+                                try {
+                                    val requiredOptions = r.options
+                                        ?.filter { it.isRequired }
+                                        ?.associate { it.name to "PlaceholderValueToFoolValidation" }
+                                        ?: emptyMap()
+                                    rpc.prepareRecipe(r.name, requiredOptions).descriptor
+                                } catch (e: Exception) {
+                                    System.err.println("Warning: Failed to prepare recipe ${r.name}: ${e.message}")
+                                    null
+                                }
                             }
                     )
 
