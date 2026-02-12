@@ -123,7 +123,6 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-micrometer:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-micronaut:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-migrate-java:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-migrate-python:latest.integration")
     "recipe"("org.openrewrite.recipe:rewrite-netty:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-nodejs:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-okhttp:$rewriteVersion")
