@@ -46,10 +46,10 @@ Assumes you have `rewrite-docs` checked out in the same directory as `rewrite-re
 ```shell
 ./gradlew run
 rm -rf ../rewrite-docs/docs/recipes/
+mv build/docs/*-Release.md ../rewrite-docs/docs/changelog/
 cp -r build/docs/recipes ../rewrite-docs/docs/recipes
 cp -r build/docs/*.md ../rewrite-docs/docs/reference/
 cp -r build/docs/*.js ../rewrite-docs/src/plugins/
-cp build/docs/*-Release.md ../rewrite-docs/docs/changelog/
 ```
 
 #### Manual step
