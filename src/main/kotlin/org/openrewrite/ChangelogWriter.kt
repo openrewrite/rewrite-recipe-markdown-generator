@@ -16,7 +16,8 @@ class ChangelogWriter {
     fun createRecipeDescriptorsYaml(
         markdownArtifacts: TreeMap<String, MarkdownRecipeArtifact>,
         recipeCount: Int,
-        rewriteBomVersion: String
+        rewriteBomVersion: String,
+        outputPath: Path
     ) {
         val mapper = ObjectMapper(YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER))
         mapper.registerKotlinModule()
@@ -49,7 +50,8 @@ class ChangelogWriter {
                 removedRecipes,
                 changedRecipes,
                 recipeCount,
-                rewriteBomVersion
+                rewriteBomVersion,
+                outputPath
             )
         }
 
@@ -65,11 +67,12 @@ class ChangelogWriter {
         removedRecipes: TreeSet<MarkdownRecipeDescriptor>,
         changedRecipes: TreeSet<ChangedRecipe>,
         recipeCount: Int,
-        rewriteBomVersion: String
+        rewriteBomVersion: String,
+        outputPath: Path
     ) {
         // Get the date to label the changelog
         val formatted = getDateFormattedYYYYMMDD()
-        val changelog: File = File("src/main/resources/${rewriteBomVersion.replace('.', '-')}-Release.md")
+        val changelog: File = outputPath.resolve("${rewriteBomVersion.replace('.', '-')}-Release.md").toFile()
 
         // Clear the file in case this is being generated multiple times
         changelog.writeText("")
