@@ -36,7 +36,8 @@ data class RecipeLoadResult(
     val allRecipeDescriptors: List<RecipeDescriptor>,
     val allCategoryDescriptors: List<CategoryDescriptor>,
     val allRecipes: List<Recipe>,
-    val recipeToSource: Map<String, URI>
+    val recipeToSource: Map<String, URI>,
+    val additionalOrigins: Map<URI, RecipeOrigin> = emptyMap()
 )
 
 /**
@@ -102,10 +103,17 @@ class RecipeLoader {
         val typeScriptLoader = TypeScriptRecipeLoader(recipeOrigins)
         val typeScriptResult = typeScriptLoader.loadTypeScriptRecipes()
 
-        // Merge TypeScript results with Java/YAML results
+        // Load Python recipes via RPC
+        println("\nChecking for Python recipes...")
+        val pythonLoader = PythonRecipeLoader(recipeOrigins)
+        val pythonResult = pythonLoader.loadPythonRecipes()
+
+        // Merge TypeScript and Python results with Java/YAML results
         val allDescriptors = environmentData.flatMap { it.recipeDescriptors }.toMutableList()
         allDescriptors.addAll(typeScriptResult.descriptors)
         recipeToSource.putAll(typeScriptResult.recipeToSource)
+        allDescriptors.addAll(pythonResult.descriptors)
+        recipeToSource.putAll(pythonResult.recipeToSource)
 
         // Deduplicate recipes by name (same recipe may be discovered from multiple JARs
         // when scanJar is called with the full classpath as dependencies)
@@ -120,7 +128,8 @@ class RecipeLoader {
             allRecipeDescriptors = deduplicatedDescriptors,
             allCategoryDescriptors = environmentData.flatMap { it.categoryDescriptors }.distinctBy { it.packageName },
             allRecipes = environmentData.flatMap { it.recipes }.distinctBy { it.name },
-            recipeToSource = recipeToSource
+            recipeToSource = recipeToSource,
+            additionalOrigins = pythonResult.syntheticOrigins
         )
     }
 

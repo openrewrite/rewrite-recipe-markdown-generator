@@ -52,6 +52,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
     implementation("org.openrewrite:rewrite-core")
     implementation("org.openrewrite:rewrite-javascript")
+    implementation("org.openrewrite:rewrite-python")
 
     // Runtime dependencies
     runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
@@ -78,6 +79,7 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-maven:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-properties:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-protobuf:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-toml:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-xml:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-yaml:$rewriteVersion")
@@ -85,7 +87,6 @@ dependencies {
     // Additional core modules (versions only, recipes not yet included)
 //    "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
-//    "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
 
     // Recipe modules (org.openrewrite.recipe)
@@ -122,6 +123,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-micrometer:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-micronaut:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-migrate-java:$rewriteVersion")
+    // "recipe"("org.openrewrite.recipe:rewrite-migrate-python:$rewriteVersion") // TODO uncomment after first release
     "recipe"("org.openrewrite.recipe:rewrite-netty:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-nodejs:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-okhttp:$rewriteVersion")
@@ -186,9 +188,7 @@ tasks.named<JavaExec>("run").configure {
         // Additional modules whose versions we want to show, but not (yet) their recipes
         dependencies {
             "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
-            "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
             "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
-            "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
             "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
         }
     }

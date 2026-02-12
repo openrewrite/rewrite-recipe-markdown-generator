@@ -104,7 +104,7 @@ class RecipeMarkdownGenerator : Runnable {
             throw RuntimeException(e)
         }
 
-        val recipeOrigins: Map<URI, RecipeOrigin> = RecipeOrigin.parse(recipeSources)
+        var recipeOrigins: Map<URI, RecipeOrigin> = RecipeOrigin.parse(recipeSources)
 
         // Add manifest information
         val recipeLoader = RecipeLoader(recipeClasspath, recipeOrigins)
@@ -160,6 +160,16 @@ class RecipeMarkdownGenerator : Runnable {
         val allRecipes = loadResult.allRecipes
         val recipeToSource = loadResult.recipeToSource
 
+        // Merge synthetic origins from Python/TypeScript recipe loaders
+        if (loadResult.additionalOrigins.isNotEmpty()) {
+            recipeOrigins = recipeOrigins + loadResult.additionalOrigins
+        }
+
+        // Python recipes are always proprietary
+        recipeOrigins.values
+            .filter { it.artifactId in PythonRecipeLoader.PYTHON_RECIPE_MODULES }
+            .forEach { it.license = Licenses.Proprietary }
+
         println("Found ${allRecipeDescriptors.size} descriptor(s).")
 
         // Detect conflicting paths between io.moderne and org.openrewrite recipes
@@ -187,7 +197,8 @@ class RecipeMarkdownGenerator : Runnable {
                 val source = recipeToSource[recipe.name]
                 val origin = findOrigin(source, recipeOrigins)
                 origin?.license == Licenses.Proprietary ||
-                    source?.toString()?.startsWith("typescript-search://") == true
+                    source?.toString()?.startsWith("typescript-search://") == true ||
+                    source?.toString()?.startsWith("python-search://") == true
             }
             .map { it.name }
             .toSet()
@@ -401,6 +412,12 @@ class RecipeMarkdownGenerator : Runnable {
             // Handle TypeScript recipes with custom URI scheme
             if (rawUri.startsWith("typescript-search://")) {
                 val artifactId = rawUri.substringAfter("typescript-search://").substringBefore("/")
+                return recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
+            }
+
+            // Handle Python recipes with custom URI scheme
+            if (rawUri.startsWith("python-search://")) {
+                val artifactId = rawUri.substringAfter("python-search://").substringBefore("/")
                 return recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
             }
 
