@@ -8,7 +8,7 @@ This project implements a utility that generates OpenRewrite recipe documentatio
 This project also builds up a CHANGELOG to track what has changed over time. The way this works is that, every time
 this project is run, it looks in the `/src/main/resources` directory for a `recipeDescriptors.yml` file.
 It will then parse that file and compare it to the latest information obtained. If there are differences,
-they will be outlined in a CHANGELOG that will be created in the resources directory. After the CHANGELOG is built,
+they will be outlined in a CHANGELOG that will be created in `build/docs`. After the CHANGELOG is built,
 the latest information will be stored in the descriptors file for future use.
 
 Once you have the CHANGELOG created, you can copy it over to the [changelog section](https://docs.openrewrite.org/changelog/)
@@ -49,7 +49,7 @@ rm -rf ../rewrite-docs/docs/recipes/
 cp -r build/docs/recipes ../rewrite-docs/docs/recipes
 cp -r build/docs/*.md ../rewrite-docs/docs/reference/
 cp -r build/docs/*.js ../rewrite-docs/src/plugins/
-cp src/main/resources/8-*-Release.md ../rewrite-docs/docs/changelog/
+cp build/docs/*-Release.md ../rewrite-docs/docs/changelog/
 ```
 
 #### Manual step

@@ -280,7 +280,8 @@ class RecipeMarkdownGenerator : Runnable {
         ChangelogWriter().createRecipeDescriptorsYaml(
             markdownArtifacts,
             openSourceRecipeDescriptors.size,
-            rewriteBomVersion
+            rewriteBomVersion,
+            outputPath
         )
 
         // Write lists of recipes into various files
