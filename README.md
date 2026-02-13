@@ -1,7 +1,12 @@
 ![Logo](https://github.com/openrewrite/rewrite/raw/main/doc/logo-oss.png)
 ## What is this?
 
-This project implements a utility that generates OpenRewrite recipe documentation in markdown format for all recipes on the classpath.
+This project generates recipe documentation in markdown format for all recipes on the classpath. It produces two separate sets of output:
+
+- **OpenRewrite docs** (`build/docs/`) - Open-source recipes only, for [docs.openrewrite.org](https://docs.openrewrite.org)
+- **Moderne docs** (`build/moderne-docs/`) - All recipes including proprietary, for [docs.moderne.io](https://docs.moderne.io)
+
+Proprietary recipes (those with a `Proprietary` license or loaded via TypeScript/Python) are written only to the Moderne docs output. Open-source recipes are written to both.
 
 ### Changelog
 
@@ -18,16 +23,20 @@ in the OpenRewrite docs.
 
 Quickstart:
 
-### Create Markdown files in `build/docs`
+### Generate all docs
 ```shell
 ./gradlew run
 ```
 
-### Create only latest versions files in `build/docs`
+This writes OpenRewrite docs to `build/docs/` and Moderne docs to `build/moderne-docs/`.
+
+### Create only latest versions files
 ```shell
 ./gradlew run -PlatestVersionsOnly=true
 cp -r build/docs/*.md ../rewrite-docs/docs/reference/
 cp -r build/docs/*.js ../rewrite-docs/src/plugins/
+cp -r build/moderne-docs/*.md ../moderne-docs/docs/user-documentation/recipes/
+cp -r build/moderne-docs/*.js ../moderne-docs/src/plugins/
 ```
 
 ### Create Markdown files in a specific directory
@@ -55,3 +64,13 @@ cp -r build/docs/*.js ../rewrite-docs/src/plugins/
 #### Manual step
 
 Update `../rewrite-docs/sidebars.ts` to include a link to the new changelog.
+
+### Update moderne-docs
+Assumes you have `moderne-docs` checked out in the same directory as `rewrite-recipe-markdown-generator`.
+
+```shell
+./gradlew run
+rm -rf ../moderne-docs/docs/user-documentation/recipes/recipe-catalog/
+cp -r build/moderne-docs/recipe-catalog ../moderne-docs/docs/user-documentation/recipes/recipe-catalog
+cp -r build/moderne-docs/lists/* ../moderne-docs/docs/user-documentation/recipes/
+```
