@@ -195,7 +195,7 @@ class RecipeMarkdownGenerator : Runnable {
         val proprietaryRecipeNames = allRecipeDescriptors
             .filter { recipe ->
                 val source = recipeToSource[recipe.name]
-                val origin = findOrigin(source, recipeOrigins)
+                val origin = findOrigin(source, recipe.name, recipeOrigins)
                 origin?.license == Licenses.Proprietary ||
                     source?.toString()?.startsWith("typescript-search://") == true ||
                     source?.toString()?.startsWith("python-search://") == true
@@ -214,7 +214,7 @@ class RecipeMarkdownGenerator : Runnable {
             val recipeSource = recipeToSource[recipeDescriptor.name]
             requireNotNull(recipeSource) { "Could not find source URI for recipe " + recipeDescriptor.name }
 
-            val origin = findOrigin(recipeSource, recipeOrigins)
+            val origin = findOrigin(recipeSource, recipeDescriptor.name, recipeOrigins)
             requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeSource }
 
             // Always write to Moderne docs (ALL recipes)
@@ -272,7 +272,7 @@ class RecipeMarkdownGenerator : Runnable {
         // Filter to only open-source recipes for rewrite-docs output
         val openSourceRecipeDescriptors = allRecipeDescriptors.filter { recipe ->
             val source = recipeToSource[recipe.name]
-            val origin = findOrigin(source, recipeOrigins)
+            val origin = findOrigin(source, recipe.name, recipeOrigins)
             origin?.license != Licenses.Proprietary
         }
         println("Filtered to ${openSourceRecipeDescriptors.size} open-source recipe(s) for rewrite-docs.")
@@ -404,7 +404,7 @@ class RecipeMarkdownGenerator : Runnable {
          * Find the RecipeOrigin for a given source URI.
          * Handles TypeScript recipes (typescript-search:// scheme) and JAR recipes.
          */
-        fun findOrigin(source: URI?, recipeOrigins: Map<URI, RecipeOrigin>): RecipeOrigin? {
+        fun findOrigin(source: URI?, recipeName: String, recipeOrigins: Map<URI, RecipeOrigin>): RecipeOrigin? {
             if (source == null) return null
 
             val rawUri = source.toString()
@@ -423,13 +423,31 @@ class RecipeMarkdownGenerator : Runnable {
 
             // Handle JAR URIs (e.g., jar:file:/path/to/recipes.jar!META-INF/rewrite/some.yml)
             val exclamationIndex = rawUri.indexOf('!')
-            if (exclamationIndex == -1) {
-                return recipeOrigins[source]
+            val origin = if (exclamationIndex == -1) {
+                recipeOrigins[source]
+            } else {
+                // Strip the "jar:" prefix and the part after the "!"
+                val jarOnlyUri = URI.create(rawUri.substring(4, exclamationIndex))
+                recipeOrigins[jarOnlyUri]
             }
 
-            // Strip the "jar:" prefix and the part after the "!"
-            val jarOnlyUri = URI.create(rawUri.substring(4, exclamationIndex))
-            return recipeOrigins[jarOnlyUri]
+            if (origin == null) return null
+
+            // When multiple JARs share the same artifactId (e.g. org.openrewrite.recipe:rewrite-prethink and
+            // io.moderne.recipe:rewrite-prethink), the recipe may have been loaded from the wrong JAR due to
+            // classloader ordering. Prefer the origin whose groupId prefix matches the recipe name's package prefix.
+            val recipePrefix = recipeName.substringBeforeLast('.')
+            val originGroupPrefix = origin.groupId.substringBeforeLast('.')
+            if (!recipePrefix.startsWith(originGroupPrefix)) {
+                val betterOrigin = recipeOrigins.values.firstOrNull {
+                    it.artifactId == origin.artifactId && recipePrefix.startsWith(it.groupId.substringBeforeLast('.'))
+                }
+                if (betterOrigin != null) {
+                    return betterOrigin
+                }
+            }
+
+            return origin
         }
 
         /**
