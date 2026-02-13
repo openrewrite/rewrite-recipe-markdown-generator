@@ -128,7 +128,7 @@ class PythonRecipeLoader(
             val allDescriptors = mutableListOf<RecipeDescriptor>()
             val recipeToSource = mutableMapOf<String, URI>()
 
-            // Install recipes from each pip package
+            // Install and collect recipes from each pip package, tracking which package each recipe came from
             for (pkg in packagesToLoad) {
                 try {
                     val versionLabel = pkg.version ?: "latest"
@@ -137,22 +137,28 @@ class PythonRecipeLoader(
                     val response = rpc.installRecipes(pkg.pipPackageName, pkg.version ?: "")
                     println("  Installed ${response.recipesInstalled} recipe(s) from ${pkg.pipPackageName}")
 
-                    allDescriptors.addAll(
-                        rpc.getMarketplace(RecipeBundle("pip", pkg.pipPackageName, null, null, null))
-                            .allRecipes
-                            .mapNotNull { r ->
-                                try {
-                                    val requiredOptions = r.options
-                                        ?.filter { it.isRequired }
-                                        ?.associate { it.name to "PlaceholderValueToFoolValidation" }
-                                        ?: emptyMap()
-                                    rpc.prepareRecipe(r.name, requiredOptions).descriptor
-                                } catch (e: Exception) {
-                                    System.err.println("Warning: Failed to prepare recipe ${r.name}: ${e.message}")
-                                    null
-                                }
+                    val descriptors = rpc.getMarketplace(RecipeBundle("pip", pkg.pipPackageName, null, null, null))
+                        .allRecipes
+                        .mapNotNull { r ->
+                            try {
+                                val requiredOptions = r.options
+                                    ?.filter { it.isRequired }
+                                    ?.associate { it.name to "PlaceholderValueToFoolValidation" }
+                                    ?: emptyMap()
+                                rpc.prepareRecipe(r.name, requiredOptions).descriptor
+                            } catch (e: Exception) {
+                                System.err.println("Warning: Failed to prepare recipe ${r.name}: ${e.message}")
+                                null
                             }
-                    )
+                        }
+
+                    // getMarketplace is accumulative, so only take recipes not already seen
+                    val newDescriptors = descriptors.filter { it.name !in recipeToSource }
+                    for (descriptor in newDescriptors) {
+                        val sourceUri = mapRecipeToSourceUri(descriptor.name, pkg.artifactId)
+                        recipeToSource[descriptor.name] = sourceUri
+                    }
+                    allDescriptors.addAll(newDescriptors)
 
                 } catch (e: Exception) {
                     System.err.println("Warning: Failed to install recipes from ${pkg.artifactId}: ${e.message}")
@@ -162,28 +168,6 @@ class PythonRecipeLoader(
 
             // Get all recipe descriptors from the RPC process
             println("Retrieved ${allDescriptors.size} Python recipe descriptor(s) via RPC")
-
-            // Map each recipe to its source file location
-            for (descriptor in allDescriptors) {
-                if (descriptor.options != null && descriptor.options.isNotEmpty()) {
-                    println("  Recipe: ${descriptor.name}")
-                    for (option in descriptor.options) {
-                        println("    Option name: ${option.name}")
-                        println("      type: ${option.type}")
-                        println("      description: ${option.description}")
-                        println("      example: ${option.example}")
-                        println("      required: ${option.isRequired}")
-                    }
-                }
-
-                // Find the artifact this recipe belongs to
-                val artifactId = packagesToLoad.firstOrNull { pkg ->
-                    descriptor.name.startsWith("org.openrewrite.${pkg.artifactId.removePrefix("rewrite-")}")
-                }?.artifactId ?: packagesToLoad.first().artifactId
-
-                val sourceUri = mapRecipeToSourceUri(descriptor.name, artifactId)
-                recipeToSource[descriptor.name] = sourceUri
-            }
 
             // Create synthetic origins for modules not already in recipeOrigins
             val syntheticOrigins = mutableMapOf<URI, RecipeOrigin>()
