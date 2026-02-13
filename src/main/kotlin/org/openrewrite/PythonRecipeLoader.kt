@@ -8,6 +8,7 @@ import org.openrewrite.python.rpc.PythonRewriteRpc
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.concurrent.TimeUnit
 
 /**
  * Loads Python recipes via RPC by communicating with a Python process.
@@ -99,6 +100,27 @@ class PythonRecipeLoader(
             val builder = PythonRewriteRpc.builder()
             val effectivePipPath = pipPackagesPath ?: Files.createTempDirectory("rewrite-python-packages")
             builder.pipPackagesPath(effectivePipPath)
+
+            // Pre-install recipe pip packages to the target directory. bootstrapOpenrewrite() only
+            // installs the core 'openrewrite' package; additional recipe packages must be installed
+            // separately so the RPC server can discover their entry points.
+            for (pkg in packagesToLoad) {
+                if (pkg.pipPackageName == "openrewrite") continue
+                val targetDir = effectivePipPath.toAbsolutePath().normalize().toString()
+                val versionSpec = if (pkg.version != null) "${pkg.pipPackageName}==${pkg.version}" else pkg.pipPackageName
+                println("Pre-installing pip package: $versionSpec")
+                val proc = ProcessBuilder("python3", "-m", "pip", "install", "--target=$targetDir", versionSpec)
+                    .redirectErrorStream(true)
+                    .start()
+                val output = proc.inputStream.bufferedReader().readText()
+                if (!proc.waitFor(2, TimeUnit.MINUTES)) {
+                    proc.destroyForcibly()
+                    System.err.println("Warning: Timed out installing $versionSpec")
+                } else if (proc.exitValue() != 0) {
+                    System.err.println("Warning: Failed to pip install $versionSpec (exit code ${proc.exitValue()})")
+                    System.err.println(output)
+                }
+            }
 
             rpc = builder.get()
             println("Started Python RPC process for Python recipe loading")

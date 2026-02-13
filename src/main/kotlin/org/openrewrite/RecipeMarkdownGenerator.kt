@@ -488,6 +488,7 @@ class RecipeMarkdownGenerator : Runnable {
                 recipe.name.startsWith("io.quakus") ||
                 recipe.name.startsWith("org.apache") ||
                 recipe.name.startsWith("org.axonframework") ||
+                recipe.name.startsWith("org.jetbrains") ||
                 recipe.name.startsWith("software.amazon.awssdk") ||
                 recipe.name.startsWith("tech.picnic") -> {
                     basePath
