@@ -6,6 +6,7 @@ import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.marketplace.RecipeBundle
 import org.openrewrite.python.rpc.PythonRewriteRpc
 import java.net.URI
+import java.nio.file.Files
 import java.nio.file.Path
 
 /**
@@ -96,9 +97,8 @@ class PythonRecipeLoader(
         try {
             // Build and start the RPC client
             val builder = PythonRewriteRpc.builder()
-            if (pipPackagesPath != null) {
-                builder.pipPackagesPath(pipPackagesPath)
-            }
+            val effectivePipPath = pipPackagesPath ?: Files.createTempDirectory("rewrite-python-packages")
+            builder.pipPackagesPath(effectivePipPath)
 
             rpc = builder.get()
             println("Started Python RPC process for Python recipe loading")
