@@ -165,6 +165,7 @@ import TabItem from '@theme/TabItem';
                         .substringBefore('-')
                         .substringBefore('_')
                         .replace(' ', '-')
+                        .replace(".", "")
                     val tagBasePath = if (forModerneDocs) "/user-documentation/recipes/lists/recipes-by-tag" else "/reference/recipes-by-tag"
                     writeln("* [$tag](${tagBasePath}#${tagAnchor})")
                 }
