@@ -64,6 +64,7 @@ class RecipeMarkdownWriter(
 
     /**
      * Write a recipe to a custom path (for cross-category duplicates).
+     * The target language is derived from the first segment of the custom path (e.g., "python" from "python/changemethodname").
      */
     fun writeRecipeTo(
         recipeDescriptor: RecipeDescriptor,
@@ -71,8 +72,10 @@ class RecipeMarkdownWriter(
         origin: RecipeOrigin,
         customRelativePath: String
     ) {
+        val targetLanguage = customRelativePath.substringBefore('/').replaceFirstChar { it.uppercase() }
+        val crossCategoryNote = ":::info\nThis recipe also works on $targetLanguage code.\n:::"
         val recipeMarkdownPath = outputPath.resolve("$customRelativePath.md")
-        writeRecipeToPath(recipeDescriptor, recipeMarkdownPath, origin)
+        writeRecipeToPath(recipeDescriptor, recipeMarkdownPath, origin, crossCategoryNote)
     }
 
     fun writeRecipe(
@@ -81,13 +84,14 @@ class RecipeMarkdownWriter(
         origin: RecipeOrigin
     ) {
         val recipeMarkdownPath = outputPath.resolve(getRecipePath(recipeDescriptor) + ".md")
-        writeRecipeToPath(recipeDescriptor, recipeMarkdownPath, origin)
+        writeRecipeToPath(recipeDescriptor, recipeMarkdownPath, origin, null)
     }
 
     private fun writeRecipeToPath(
         recipeDescriptor: RecipeDescriptor,
         recipeMarkdownPath: Path,
-        origin: RecipeOrigin
+        origin: RecipeOrigin,
+        crossCategoryNote: String?
     ) {
         val formattedRecipeTitle = recipeDescriptor.displayNameEscaped()  // For YAML frontmatter (no curly brace escaping)
         val formattedRecipeTitleMdx = recipeDescriptor.displayNameEscapedMdx()  // For MDX content (with curly brace escaping)
@@ -125,6 +129,10 @@ import TabItem from '@theme/TabItem';
             newLine()
             writeln(formattedRecipeDescription)
             newLine()
+            if (crossCategoryNote != null) {
+                writeln(crossCategoryNote)
+                newLine()
+            }
             writeTags(recipeDescriptor)
             writeSourceLinks(recipeDescriptor, origin)
             writeOptions(recipeDescriptor)
