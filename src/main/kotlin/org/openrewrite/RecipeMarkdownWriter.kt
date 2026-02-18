@@ -73,9 +73,29 @@ class RecipeMarkdownWriter(
         customRelativePath: String
     ) {
         val targetLanguage = customRelativePath.substringBefore('/').replaceFirstChar { it.uppercase() }
-        val crossCategoryNote = ":::info\nThis recipe also works on $targetLanguage code.\n:::"
+        val sourceLanguage = getSourceLanguage(recipeDescriptor.name)
+        val crossCategoryNote = ":::info\nThis $sourceLanguage recipe works on $targetLanguage code.\n:::"
         val recipeMarkdownPath = outputPath.resolve("$customRelativePath.md")
         writeRecipeToPath(recipeDescriptor, recipeMarkdownPath, origin, crossCategoryNote)
+    }
+
+    /**
+     * Derive the source language from a recipe's fully qualified name.
+     */
+    private fun getSourceLanguage(recipeName: String): String {
+        return when {
+            recipeName.startsWith("org.openrewrite.java.") -> "Java"
+            recipeName.startsWith("org.openrewrite.kotlin.") -> "Kotlin"
+            recipeName.startsWith("org.openrewrite.python.") -> "Python"
+            recipeName.startsWith("org.openrewrite.javascript.") -> "JavaScript"
+            recipeName.startsWith("org.openrewrite.typescript.") -> "TypeScript"
+            recipeName.startsWith("org.openrewrite.xml.") -> "XML"
+            recipeName.startsWith("org.openrewrite.json.") -> "JSON"
+            recipeName.startsWith("org.openrewrite.yaml.") -> "YAML"
+            recipeName.startsWith("org.openrewrite.groovy.") -> "Groovy"
+            recipeName.startsWith("org.openrewrite.csharp.") -> "C#"
+            else -> "OpenRewrite"
+        }
     }
 
     fun writeRecipe(
