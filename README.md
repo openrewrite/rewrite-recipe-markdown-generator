@@ -35,8 +35,10 @@ This writes OpenRewrite docs to `build/docs/` and Moderne docs to `build/moderne
 ./gradlew run -PlatestVersionsOnly=true
 cp -r build/docs/*.md ../rewrite-docs/docs/reference/
 cp -r build/docs/*.js ../rewrite-docs/src/plugins/
+cp build/docs/recipes-v5.csv ../rewrite-docs/static/
 cp -r build/moderne-docs/*.md ../moderne-docs/docs/user-documentation/recipes/
 cp -r build/moderne-docs/*.js ../moderne-docs/src/plugins/
+cp build/moderne-docs/recipes-v5.csv ../moderne-docs/static/
 ```
 
 ### Create Markdown files in a specific directory
@@ -59,6 +61,7 @@ mv build/docs/*-Release.md ../rewrite-docs/docs/changelog/
 cp -r build/docs/recipes ../rewrite-docs/docs/recipes
 cp -r build/docs/*.md ../rewrite-docs/docs/reference/
 cp -r build/docs/*.js ../rewrite-docs/src/plugins/
+cp build/docs/recipes-v5.csv ../rewrite-docs/static/
 ```
 
 #### Manual step
@@ -73,4 +76,5 @@ Assumes you have `moderne-docs` checked out in the same directory as `rewrite-re
 rm -rf ../moderne-docs/docs/user-documentation/recipes/recipe-catalog/
 cp -r build/moderne-docs/recipe-catalog ../moderne-docs/docs/user-documentation/recipes/recipe-catalog
 cp -r build/moderne-docs/lists/* ../moderne-docs/docs/user-documentation/recipes/
+cp build/moderne-docs/recipes-v5.csv ../moderne-docs/static/
 ```

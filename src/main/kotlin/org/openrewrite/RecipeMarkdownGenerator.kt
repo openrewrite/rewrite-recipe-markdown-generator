@@ -344,6 +344,14 @@ class RecipeMarkdownGenerator : Runnable {
             moderneListWriter.createAllRecipesByModule(recipeOrigins, recipeToSource)
         }
 
+        // Write recipes-v5.csv for Moderne CLI
+        RecipesCsvWriter(allRecipeDescriptors, allCategoryDescriptors, recipeOrigins, recipeToSource)
+            .writeCsv(outputPath)
+        if (moderneOutputPath != null) {
+            RecipesCsvWriter(allRecipeDescriptors, allCategoryDescriptors, recipeOrigins, recipeToSource)
+                .writeCsv(moderneOutputPath)
+        }
+
         // Generate redirects for proprietary recipes (from old OpenRewrite URLs to Moderne docs)
         val allProprietaryRecipes = moderneProprietaryRecipes.values.flatten()
         if (allProprietaryRecipes.isNotEmpty()) {
