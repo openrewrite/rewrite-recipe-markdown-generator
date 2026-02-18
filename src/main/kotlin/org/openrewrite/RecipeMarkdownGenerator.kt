@@ -159,6 +159,7 @@ class RecipeMarkdownGenerator : Runnable {
         val allCategoryDescriptors = loadResult.allCategoryDescriptors
         val allRecipes = loadResult.allRecipes
         val recipeToSource = loadResult.recipeToSource
+        val crossCategoryPaths = loadResult.crossCategoryPaths
 
         // Merge synthetic origins from Python/TypeScript recipe loaders
         if (loadResult.additionalOrigins.isNotEmpty()) {
@@ -220,6 +221,14 @@ class RecipeMarkdownGenerator : Runnable {
             // Always write to Moderne docs (ALL recipes)
             moderneRecipeMarkdownWriter?.writeRecipe(recipeDescriptor, moderneRecipeCatalogPath!!, origin)
 
+            // Write cross-category duplicates to Moderne docs
+            val extraPaths = crossCategoryPaths[recipeDescriptor.name]
+            if (extraPaths != null && moderneRecipeMarkdownWriter != null) {
+                for (extraPath in extraPaths) {
+                    moderneRecipeMarkdownWriter.writeRecipeTo(recipeDescriptor, moderneRecipeCatalogPath!!, origin, extraPath)
+                }
+            }
+
             // Track proprietary recipes separately (for moderne-recipes.md list)
             if (origin.license == Licenses.Proprietary) {
                 moderneProprietaryRecipes.computeIfAbsent(origin.artifactId) { mutableListOf() }.add(recipeDescriptor)
@@ -229,6 +238,13 @@ class RecipeMarkdownGenerator : Runnable {
 
             // Write non-proprietary recipes to OpenRewrite docs
             recipeMarkdownWriter.writeRecipe(recipeDescriptor, recipesPath, origin)
+
+            // Write cross-category duplicates to OpenRewrite docs
+            if (extraPaths != null) {
+                for (extraPath in extraPaths) {
+                    recipeMarkdownWriter.writeRecipeTo(recipeDescriptor, recipesPath, origin, extraPath)
+                }
+            }
 
             val recipeOptions = TreeSet<RecipeOption>()
             if (recipeDescriptor.options != null) {
@@ -279,11 +295,11 @@ class RecipeMarkdownGenerator : Runnable {
 
         // Write the README.md for each category
         // OpenRewrite docs: open-source only (in "recipes" subdir)
-        CategoryWriter(openSourceRecipeDescriptors, allCategoryDescriptors, "/recipes")
+        CategoryWriter(openSourceRecipeDescriptors, allCategoryDescriptors, "/recipes", crossCategoryPaths)
             .writeCategories(outputPath, "recipes")
         // Moderne docs: ALL recipes (in "recipe-catalog" subdir to match workflow expectations)
         if (moderneOutputPath != null) {
-            CategoryWriter(allRecipeDescriptors, allCategoryDescriptors, "/user-documentation/recipes/recipe-catalog")
+            CategoryWriter(allRecipeDescriptors, allCategoryDescriptors, "/user-documentation/recipes/recipe-catalog", crossCategoryPaths)
                 .writeCategories(moderneOutputPath, "recipe-catalog")
         }
 

@@ -62,17 +62,61 @@ class RecipeMarkdownWriter(
         return recipeSource.toString().startsWith("python-search://")
     }
 
+    /**
+     * Write a recipe to a custom path (for cross-category duplicates).
+     * The target language is derived from the first segment of the custom path (e.g., "python" from "python/changemethodname").
+     */
+    fun writeRecipeTo(
+        recipeDescriptor: RecipeDescriptor,
+        outputPath: Path,
+        origin: RecipeOrigin,
+        customRelativePath: String
+    ) {
+        val targetLanguage = customRelativePath.substringBefore('/').replaceFirstChar { it.uppercase() }
+        val sourceLanguage = getSourceLanguage(recipeDescriptor.name)
+        val crossCategoryNote = ":::info\nThis $sourceLanguage recipe works on $targetLanguage code.\n:::"
+        val recipeMarkdownPath = outputPath.resolve("$customRelativePath.md")
+        writeRecipeToPath(recipeDescriptor, recipeMarkdownPath, origin, crossCategoryNote)
+    }
+
+    /**
+     * Derive the source language from a recipe's fully qualified name.
+     */
+    private fun getSourceLanguage(recipeName: String): String {
+        return when {
+            recipeName.startsWith("org.openrewrite.java.") -> "Java"
+            recipeName.startsWith("org.openrewrite.kotlin.") -> "Kotlin"
+            recipeName.startsWith("org.openrewrite.python.") -> "Python"
+            recipeName.startsWith("org.openrewrite.javascript.") -> "JavaScript"
+            recipeName.startsWith("org.openrewrite.typescript.") -> "TypeScript"
+            recipeName.startsWith("org.openrewrite.xml.") -> "XML"
+            recipeName.startsWith("org.openrewrite.json.") -> "JSON"
+            recipeName.startsWith("org.openrewrite.yaml.") -> "YAML"
+            recipeName.startsWith("org.openrewrite.groovy.") -> "Groovy"
+            recipeName.startsWith("org.openrewrite.csharp.") -> "C#"
+            else -> "OpenRewrite"
+        }
+    }
+
     fun writeRecipe(
         recipeDescriptor: RecipeDescriptor,
         outputPath: Path,
         origin: RecipeOrigin
     ) {
+        val recipeMarkdownPath = outputPath.resolve(getRecipePath(recipeDescriptor) + ".md")
+        writeRecipeToPath(recipeDescriptor, recipeMarkdownPath, origin, null)
+    }
+
+    private fun writeRecipeToPath(
+        recipeDescriptor: RecipeDescriptor,
+        recipeMarkdownPath: Path,
+        origin: RecipeOrigin,
+        crossCategoryNote: String?
+    ) {
         val formattedRecipeTitle = recipeDescriptor.displayNameEscaped()  // For YAML frontmatter (no curly brace escaping)
         val formattedRecipeTitleMdx = recipeDescriptor.displayNameEscapedMdx()  // For MDX content (with curly brace escaping)
         val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor.description)
         val formattedLongRecipeName = recipeDescriptor.name.replace("_".toRegex(), "\\\\_").trim()
-
-        val recipeMarkdownPath = outputPath.resolve(getRecipePath(recipeDescriptor) + ".md")
         Files.createDirectories(recipeMarkdownPath.parent)
         Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE).useAndApply {
             // For Moderne docs, add canonical link to OpenRewrite docs for open source recipes
@@ -105,6 +149,10 @@ import TabItem from '@theme/TabItem';
             newLine()
             writeln(formattedRecipeDescription)
             newLine()
+            if (crossCategoryNote != null) {
+                writeln(crossCategoryNote)
+                newLine()
+            }
             writeTags(recipeDescriptor)
             writeSourceLinks(recipeDescriptor, origin)
             writeOptions(recipeDescriptor)
