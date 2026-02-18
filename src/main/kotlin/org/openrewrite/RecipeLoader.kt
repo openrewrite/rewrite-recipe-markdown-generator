@@ -37,7 +37,9 @@ data class RecipeLoadResult(
     val allCategoryDescriptors: List<CategoryDescriptor>,
     val allRecipes: List<Recipe>,
     val recipeToSource: Map<String, URI>,
-    val additionalOrigins: Map<URI, RecipeOrigin> = emptyMap()
+    val additionalOrigins: Map<URI, RecipeOrigin> = emptyMap(),
+    /** Maps recipe name → list of additional doc paths for cross-category placement (e.g., "python/changemethodname") */
+    val crossCategoryPaths: Map<String, List<String>> = emptyMap()
 )
 
 /**
@@ -74,9 +76,11 @@ class RecipeLoader {
         // Build a map of all recipes by name for quick lookup
         val allRecipesByName = environmentData.flatMap { it.recipes }.associateBy { it.name }
 
+        val allCrossCategoryPaths = mutableMapOf<String, MutableList<String>>()
+
         environmentData.forEach { envData ->
-            // Scan YAML files in this JAR to find declarative recipe sources
-            val yamlRecipeToFile = scanYamlRecipesInJar(envData.sourceUri)
+            // Scan YAML files and CSV files in this JAR
+            val jarMetadata = scanJarMetadata(envData.sourceUri)
 
             envData.recipeDescriptors.forEach { descriptor ->
                 val recipe = allRecipesByName[descriptor.name]
@@ -84,7 +88,7 @@ class RecipeLoader {
                 // Check if this is a declarative (YAML) recipe
                 if (recipe is DeclarativeRecipe) {
                     // Use the YAML file URI if we found it
-                    val yamlFile = yamlRecipeToFile[descriptor.name]
+                    val yamlFile = jarMetadata.yamlRecipeToFile[descriptor.name]
                     if (yamlFile != null) {
                         recipeToSource[descriptor.name] = yamlFile
                     } else {
@@ -95,6 +99,11 @@ class RecipeLoader {
                     // For Java recipes, use the JAR URI
                     recipeToSource[descriptor.name] = envData.sourceUri
                 }
+            }
+
+            // Accumulate cross-category paths from CSV
+            jarMetadata.crossCategoryPaths.forEach { (recipeName, paths) ->
+                allCrossCategoryPaths.computeIfAbsent(recipeName) { mutableListOf() }.addAll(paths)
             }
         }
 
@@ -123,59 +132,197 @@ class RecipeLoader {
             println("Removed $duplicateCount duplicate recipe descriptor(s).")
         }
 
+        if (allCrossCategoryPaths.isNotEmpty()) {
+            println("Found cross-category placements for ${allCrossCategoryPaths.size} recipe(s).")
+        }
+
         // Combine all results
         return RecipeLoadResult(
             allRecipeDescriptors = deduplicatedDescriptors,
             allCategoryDescriptors = environmentData.flatMap { it.categoryDescriptors }.distinctBy { it.packageName },
             allRecipes = environmentData.flatMap { it.recipes }.distinctBy { it.name },
             recipeToSource = recipeToSource,
-            additionalOrigins = pythonResult.syntheticOrigins
+            additionalOrigins = pythonResult.syntheticOrigins,
+            crossCategoryPaths = allCrossCategoryPaths
         )
     }
 
     /**
-     * Scan YAML files in a JAR to find which recipes are defined in which YAML files
+     * Result of scanning a JAR's META-INF/rewrite directory for YAML recipes and CSV cross-category data
      */
-    private fun scanYamlRecipesInJar(jarUri: URI): Map<String, URI> {
+    private data class JarMetadata(
+        val yamlRecipeToFile: Map<String, URI>,
+        val crossCategoryPaths: Map<String, List<String>>
+    )
+
+    /**
+     * Scan a JAR's META-INF/rewrite directory for YAML recipe definitions and CSV cross-category data.
+     * Opens the JAR filesystem once and processes both .yml and recipes.csv files.
+     */
+    private fun scanJarMetadata(jarUri: URI): JarMetadata {
         val recipeToYamlFile = mutableMapOf<String, URI>()
+        val crossCategoryPaths = mutableMapOf<String, MutableList<String>>()
 
         try {
             val jarPath = Paths.get(jarUri)
             if (!Files.exists(jarPath)) {
-                return recipeToYamlFile
+                return JarMetadata(recipeToYamlFile, crossCategoryPaths)
             }
 
             FileSystems.newFileSystem(jarPath, null as ClassLoader?).use { fs ->
                 val rewriteDir = fs.getPath("/META-INF/rewrite")
                 if (Files.exists(rewriteDir)) {
                     Files.walk(rewriteDir)
-                        .filter { Files.isRegularFile(it) && it.toString().endsWith(".yml") }
-                        .forEach { yamlPath ->
-                            try {
-                                // Parse YAML file to find recipe names
-                                val yamlContent = Files.readString(yamlPath)
-                                // Look for lines like "name: org.openrewrite.java.jackson.JacksonBestPractices"
-                                // or "  - org.openrewrite.SomeRecipe" (for recipeList entries)
-                                val namePattern = Regex("""^\s*name:\s*(.+)$""", RegexOption.MULTILINE)
-                                val matches = namePattern.findAll(yamlContent)
-
-                                matches.forEach { match ->
-                                    val recipeName = match.groupValues[1].trim()
-                                    // Construct a URI for this YAML file in the format: jar:file:/path/to/jar.jar!/META-INF/rewrite/file.yml
-                                    val yamlFileUri = URI("jar:file:${jarPath.toAbsolutePath()}!${yamlPath}")
-                                    recipeToYamlFile[recipeName] = yamlFileUri
+                        .filter { Files.isRegularFile(it) }
+                        .forEach { filePath ->
+                            val fileName = filePath.toString()
+                            when {
+                                fileName.endsWith(".yml") -> {
+                                    try {
+                                        val yamlContent = Files.readString(filePath)
+                                        val namePattern = Regex("""^\s*name:\s*(.+)$""", RegexOption.MULTILINE)
+                                        namePattern.findAll(yamlContent).forEach { match ->
+                                            val recipeName = match.groupValues[1].trim()
+                                            val yamlFileUri = URI("jar:file:${jarPath.toAbsolutePath()}!${filePath}")
+                                            recipeToYamlFile[recipeName] = yamlFileUri
+                                        }
+                                    } catch (e: Exception) {
+                                        println("Warning: Could not parse YAML file ${filePath}: ${e.message}")
+                                    }
                                 }
-                            } catch (e: Exception) {
-                                println("Warning: Could not parse YAML file ${yamlPath}: ${e.message}")
+                                fileName.endsWith("recipes.csv") -> {
+                                    try {
+                                        parseCsvForCrossCategories(filePath, crossCategoryPaths)
+                                    } catch (e: Exception) {
+                                        println("Warning: Could not parse CSV file ${filePath}: ${e.message}")
+                                    }
+                                }
                             }
                         }
                 }
             }
         } catch (e: Exception) {
-            println("Warning: Could not scan JAR $jarUri for YAML recipes: ${e.message}")
+            println("Warning: Could not scan JAR $jarUri: ${e.message}")
         }
 
-        return recipeToYamlFile
+        return JarMetadata(recipeToYamlFile, crossCategoryPaths)
+    }
+
+    /**
+     * Parse a recipes.csv file to find recipes with cross-category placements.
+     * Recipes that appear multiple times with different category2 values get additional doc paths.
+     */
+    private fun parseCsvForCrossCategories(csvPath: Path, result: MutableMap<String, MutableList<String>>) {
+        val lines = Files.readAllLines(csvPath)
+        if (lines.size < 2) return
+
+        val header = parseCsvLine(lines[0])
+        val nameIdx = header.indexOf("name")
+        val cat1Idx = header.indexOf("category1")
+        val cat2Idx = header.indexOf("category2")
+
+        if (nameIdx == -1 || cat2Idx == -1) return
+
+        // Collect all (recipeName → set of category paths) from CSV rows
+        val recipeCategoryPaths = mutableMapOf<String, MutableSet<String>>()
+
+        for (i in 1 until lines.size) {
+            val columns = parseCsvLine(lines[i])
+            if (columns.size <= maxOf(nameIdx, cat2Idx)) continue
+
+            val recipeName = columns[nameIdx].trim()
+            val cat1 = if (cat1Idx != -1) columns[cat1Idx].trim() else ""
+            val cat2 = columns[cat2Idx].trim()
+
+            if (recipeName.isBlank() || cat2.isBlank()) continue
+
+            // Build the category doc path from category2 (top-level) and category1 (sub-category)
+            val recipeFileName = recipeName.substringAfterLast('.').lowercase()
+            val categoryPath = buildCategoryPath(cat1, cat2, recipeFileName)
+
+            recipeCategoryPaths.computeIfAbsent(recipeName) { mutableSetOf() }.add(categoryPath)
+        }
+
+        // For each recipe, determine the primary path (matches package-derived path) and collect additional ones
+        for ((recipeName, paths) in recipeCategoryPaths) {
+            if (paths.size <= 1) continue // Only one category = no cross-category placement
+
+            val primaryPath = getPrimaryPathFromPackage(recipeName)
+            val additionalPaths = paths.filter { it != primaryPath }
+
+            if (additionalPaths.isNotEmpty()) {
+                result.computeIfAbsent(recipeName) { mutableListOf() }.addAll(additionalPaths)
+            }
+        }
+    }
+
+    /**
+     * Build a doc path from CSV category columns and recipe filename.
+     * E.g., cat2="Python", cat1="Search", filename="findmethods" → "python/search/findmethods"
+     */
+    private fun buildCategoryPath(cat1: String, cat2: String, recipeFileName: String): String {
+        val parts = mutableListOf<String>()
+        if (cat2.isNotBlank()) parts.add(cat2.lowercase())
+        if (cat1.isNotBlank()) parts.add(cat1.lowercase())
+        parts.add(recipeFileName)
+        return parts.joinToString("/")
+    }
+
+    /**
+     * Derive the primary doc path from a recipe's package name
+     * (mirrors the logic in RecipeMarkdownGenerator.getBasePath)
+     */
+    private fun getPrimaryPathFromPackage(recipeName: String): String {
+        return when {
+            recipeName.startsWith("org.openrewrite") -> {
+                if (recipeName.count { it == '.' } == 2) {
+                    "core/" + recipeName.substring(16).lowercase()
+                } else {
+                    recipeName.substring(16).replace(".", "/").lowercase()
+                }
+            }
+            recipeName.startsWith("io.moderne") -> {
+                recipeName.substring(11).replace(".", "/").lowercase()
+            }
+            else -> {
+                recipeName.replace(".", "/").lowercase()
+            }
+        }
+    }
+
+    /**
+     * Parse a single CSV line, handling double-quoted fields that may contain commas.
+     */
+    private fun parseCsvLine(line: String): List<String> {
+        val fields = mutableListOf<String>()
+        val current = StringBuilder()
+        var inQuotes = false
+        var i = 0
+
+        while (i < line.length) {
+            val c = line[i]
+            when {
+                c == '"' && inQuotes && i + 1 < line.length && line[i + 1] == '"' -> {
+                    // Escaped double quote inside quoted field
+                    current.append('"')
+                    i += 2
+                    continue
+                }
+                c == '"' -> {
+                    inQuotes = !inQuotes
+                }
+                c == ',' && !inQuotes -> {
+                    fields.add(current.toString())
+                    current.clear()
+                }
+                else -> {
+                    current.append(c)
+                }
+            }
+            i++
+        }
+        fields.add(current.toString())
+        return fields
     }
 
     /**

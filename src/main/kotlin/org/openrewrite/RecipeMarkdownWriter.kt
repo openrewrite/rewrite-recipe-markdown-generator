@@ -62,17 +62,37 @@ class RecipeMarkdownWriter(
         return recipeSource.toString().startsWith("python-search://")
     }
 
+    /**
+     * Write a recipe to a custom path (for cross-category duplicates).
+     */
+    fun writeRecipeTo(
+        recipeDescriptor: RecipeDescriptor,
+        outputPath: Path,
+        origin: RecipeOrigin,
+        customRelativePath: String
+    ) {
+        val recipeMarkdownPath = outputPath.resolve("$customRelativePath.md")
+        writeRecipeToPath(recipeDescriptor, recipeMarkdownPath, origin)
+    }
+
     fun writeRecipe(
         recipeDescriptor: RecipeDescriptor,
         outputPath: Path,
+        origin: RecipeOrigin
+    ) {
+        val recipeMarkdownPath = outputPath.resolve(getRecipePath(recipeDescriptor) + ".md")
+        writeRecipeToPath(recipeDescriptor, recipeMarkdownPath, origin)
+    }
+
+    private fun writeRecipeToPath(
+        recipeDescriptor: RecipeDescriptor,
+        recipeMarkdownPath: Path,
         origin: RecipeOrigin
     ) {
         val formattedRecipeTitle = recipeDescriptor.displayNameEscaped()  // For YAML frontmatter (no curly brace escaping)
         val formattedRecipeTitleMdx = recipeDescriptor.displayNameEscapedMdx()  // For MDX content (with curly brace escaping)
         val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor.description)
         val formattedLongRecipeName = recipeDescriptor.name.replace("_".toRegex(), "\\\\_").trim()
-
-        val recipeMarkdownPath = outputPath.resolve(getRecipePath(recipeDescriptor) + ".md")
         Files.createDirectories(recipeMarkdownPath.parent)
         Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE).useAndApply {
             // For Moderne docs, add canonical link to OpenRewrite docs for open source recipes
