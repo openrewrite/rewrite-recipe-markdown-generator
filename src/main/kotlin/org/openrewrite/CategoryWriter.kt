@@ -14,14 +14,15 @@ import java.nio.file.StandardOpenOption
 class CategoryWriter(
     val allRecipeDescriptors: List<RecipeDescriptor>,
     val allCategoryDescriptors: List<CategoryDescriptor>,
-    val recipeLinkBasePath: String = "/recipes"
+    val recipeLinkBasePath: String = "/recipes",
+    val crossCategoryPaths: Map<String, List<String>> = emptyMap()
 ) {
     fun writeCategories(
         outputPath: Path,
         recipesSubdir: String = "recipes"
     ) {
         val categories =
-            Category.fromDescriptors(allRecipeDescriptors, allCategoryDescriptors, recipeLinkBasePath)
+            Category.fromDescriptors(allRecipeDescriptors, allCategoryDescriptors, recipeLinkBasePath, crossCategoryPaths)
                 .sortedBy { it.simpleName }
         for (category in categories) {
             val categoryIndexPath = outputPath.resolve("$recipesSubdir/")
@@ -36,13 +37,17 @@ data class Category(
     val descriptor: CategoryDescriptor?,
     val recipes: List<RecipeDescriptor>,
     val subcategories: List<Category>,
-    val recipeLinkBasePath: String = "/recipes"
+    val recipeLinkBasePath: String = "/recipes",
+    /** Maps recipe name → local filename for cross-category recipes in this category */
+    val crossCategoryLocalPaths: Map<String, String> = emptyMap()
 ) {
     companion object {
         private data class CategoryBuilder(
             val path: String? = null,
             val recipes: MutableList<RecipeDescriptor> = mutableListOf(),
-            val subcategories: LinkedHashMap<String, CategoryBuilder> = LinkedHashMap()
+            val subcategories: LinkedHashMap<String, CategoryBuilder> = LinkedHashMap(),
+            /** Maps recipe name → local filename for cross-category recipes */
+            val crossCategoryLocalPaths: MutableMap<String, String> = mutableMapOf()
         ) {
             fun build(categoryDescriptors: List<CategoryDescriptor>, recipeLinkBasePath: String): Category {
                 val simpleName = path!!.substring(path.lastIndexOf('/') + 1)
@@ -58,7 +63,8 @@ data class Category(
                     descriptor,
                     recipes.sortedBy { it.displayName.replace("`", "") },
                     finalizedSubcategories,
-                    recipeLinkBasePath
+                    recipeLinkBasePath,
+                    crossCategoryLocalPaths.toMap()
                 )
             }
         }
@@ -66,11 +72,25 @@ data class Category(
         fun fromDescriptors(
             recipes: Iterable<RecipeDescriptor>,
             descriptors: List<CategoryDescriptor>,
-            recipeLinkBasePath: String = "/recipes"
+            recipeLinkBasePath: String = "/recipes",
+            crossCategoryPaths: Map<String, List<String>> = emptyMap()
         ): List<Category> {
             val result = LinkedHashMap<String, CategoryBuilder>()
             for (recipe in recipes) {
                 result.putRecipe(getRecipeCategory(recipe), recipe)
+            }
+
+            // Add cross-category placements
+            val recipesByName = recipes.associateBy { it.name }
+            for ((recipeName, extraPaths) in crossCategoryPaths) {
+                val recipe = recipesByName[recipeName] ?: continue
+                for (extraPath in extraPaths) {
+                    val slashIndex = extraPath.lastIndexOf("/")
+                    if (slashIndex == -1) continue
+                    val categoryPath = extraPath.substring(0, slashIndex)
+                    val localFileName = extraPath.substringAfterLast('/')
+                    result.putCrossCategoryRecipe(categoryPath, recipe, localFileName)
+                }
             }
 
             return result.mapValues { it.value.build(descriptors, recipeLinkBasePath) }
@@ -95,6 +115,35 @@ data class Category(
                 }
                 if (i == pathSegments.size - 1) {
                     category[pathSegment]!!.recipes.add(recipe)
+                }
+                category = category[pathSegment]!!.subcategories
+            }
+        }
+
+        /**
+         * Add a recipe to a cross-category location, tracking its local filename
+         * so the category index can link to the correct file.
+         */
+        private fun MutableMap<String, CategoryBuilder>.putCrossCategoryRecipe(
+            categoryPath: String,
+            recipe: RecipeDescriptor,
+            localFileName: String
+        ) {
+            val pathSegments = categoryPath.split("/")
+            var category = this
+            for (i in pathSegments.indices) {
+                val pathSegment = pathSegments[i]
+                val pathToCurrent = pathSegments.subList(0, i + 1).joinToString("/")
+                if (!category.containsKey(pathSegment)) {
+                    category[pathSegment] = CategoryBuilder(path = pathToCurrent)
+                }
+                if (i == pathSegments.size - 1) {
+                    val builder = category[pathSegment]!!
+                    // Avoid adding the same recipe twice to the same category
+                    if (builder.recipes.none { it.name == recipe.name }) {
+                        builder.recipes.add(recipe)
+                        builder.crossCategoryLocalPaths[recipe.name] = localFileName
+                    }
                 }
                 category = category[pathSegment]!!.subcategories
             }
@@ -190,8 +239,9 @@ data class Category(
                     appendLine()
 
                     for (recipe in compositeRecipes) {
-                        // Anything except a relative link ending in .md will be mangled.
-                        val localPath = getRecipePath(recipe).substringAfterLast('/')
+                        // Use cross-category local filename if available, otherwise derive from recipe path
+                        val localPath = crossCategoryLocalPaths[recipe.name]
+                            ?: getRecipePath(recipe).substringAfterLast('/')
                         appendLine("* [${recipe.displayNameEscapedMdx()}](./$localPath.md)")
                     }
 
@@ -203,8 +253,9 @@ data class Category(
                     appendLine()
 
                     for (recipe in normalRecipes) {
-                        // Anything except a relative link ending in .md will be mangled.
-                        val localPath = getRecipePath(recipe).substringAfterLast('/')
+                        // Use cross-category local filename if available, otherwise derive from recipe path
+                        val localPath = crossCategoryLocalPaths[recipe.name]
+                            ?: getRecipePath(recipe).substringAfterLast('/')
                         appendLine("* [${recipe.displayNameEscapedMdx()}](./${localPath}.md)")
                     }
 
@@ -241,7 +292,8 @@ data class Category(
                 newLine()
 
                 for (recipe in recipes) {
-                    val relativePath = getRecipePath(recipe).substringAfterLast('/')
+                    val relativePath = crossCategoryLocalPaths[recipe.name]
+                        ?: getRecipePath(recipe).substringAfterLast('/')
                     writeln("* [${recipe.displayNameEscapedMdx()}](./$relativePath.md)")
                 }
             }
