@@ -97,7 +97,7 @@ class ListsOfRecipesWriter(
                 }
 
                 for (dataTable in filteredDataTables) {
-                    writeln("  * **${dataTable.name}**: *${escapeMdx(dataTable.description)?.replace("\n", " ")}*")
+                    writeln("  * **${dataTable.name}**: *${escapeMdx(dataTable.description).replace("\n", " ")}*")
                 }
 
                 writeln("\n")
