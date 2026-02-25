@@ -142,9 +142,8 @@ class PythonRecipeLoader(
                         .mapNotNull { r ->
                             try {
                                 val requiredOptions = r.options
-                                    ?.filter { it.isRequired }
-                                    ?.associate { it.name to "PlaceholderValueToFoolValidation" }
-                                    ?: emptyMap()
+                                    .filter { it.isRequired }
+                                    .associate { it.name to "PlaceholderValueToFoolValidation" }
                                 rpc.prepareRecipe(r.name, requiredOptions).descriptor
                             } catch (e: Exception) {
                                 System.err.println("Warning: Failed to prepare recipe ${r.name}: ${e.message}")

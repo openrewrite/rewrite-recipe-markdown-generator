@@ -17,20 +17,22 @@ fun RecipeDescriptor.displayNameEscapedMdx(): String =
 
 // For MDX content (escapes curly braces)
 fun RecipeDescriptor.descriptionEscaped(): String {
-    if (description.isNullOrBlank()) {
+    val desc = description
+    if (desc.isNullOrBlank()) {
         return ""
     }
-    return escapeMdx(description)
+    return escapeMdx(desc)
         .replace("\n", " ")
         .trim()
 }
 
 // For YAML/code blocks (no curly brace escaping)
 private fun RecipeDescriptor.descriptionEscapedHtml(): String {
-    if (description.isNullOrBlank()) {
+    val desc = description
+    if (desc.isNullOrBlank()) {
         return ""
     }
-    return escapeHtml(description)
+    return escapeHtml(desc)
         .replace("\n", " ")
         .trim()
 }

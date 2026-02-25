@@ -8,6 +8,7 @@ import org.openrewrite.config.RecipeDescriptor
 import picocli.CommandLine
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -144,7 +145,7 @@ class RecipeMarkdownGeneratorTest {
             mutableListOf(),
             mutableListOf(),
             mutableListOf(),
-            null
+            URI.create("https://example.com/recipe")
         )
     }
 }

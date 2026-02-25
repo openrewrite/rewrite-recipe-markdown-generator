@@ -322,11 +322,12 @@ import TabItem from '@theme/TabItem';
                     description += " Valid options: $combinedOptions"
                 }
                 // Preserve table cell formatting for multiline examples
-                val example = if (option.example != null) {
-                    if (option.example.contains("\n")) {
-                        "<pre>${option.example.replace("<", "\\<")}</pre>".replace("\n", "<br />")
+                val optionExample = option.example
+                val example = if (optionExample != null) {
+                    if (optionExample.contains("\n")) {
+                        "<pre>${optionExample.replace("<", "\\<")}</pre>".replace("\n", "<br />")
                     } else {
-                        "`${option.example}`"
+                        "`${optionExample}`"
                     }
                 } else {
                     ""
@@ -372,7 +373,7 @@ import TabItem from '@theme/TabItem';
                     //language=markdown
                     writeln(
                         """
-                        | ${column.displayName} | ${escapeMdx(column.description)} |
+                        | ${column.displayName} | ${escapeMdx(column.description ?: "")} |
                         """.trimIndent()
                     )
                 }
@@ -444,7 +445,8 @@ import TabItem from '@theme/TabItem';
                 // Example files
                 for (sourceIndex in 0 until example.sources.size) {
                     val source = example.sources[sourceIndex]
-                    val hasChange = source.after != null && source.after.isNotEmpty()
+                    val after = source.after
+                    val hasChange = after != null && after.isNotEmpty()
                     val beforeTitle = if (hasChange) "Before" else "Unchanged"
                     val isNewFile = source.before == null && source.after != null
                     val afterTile = if (isNewFile) "New file" else "After"
@@ -452,7 +454,7 @@ import TabItem from '@theme/TabItem';
 
                     if (hasChange && source.before != null) {
                         newLine()
-                        val tabName = source.path ?: (source.language ?: "Before / After")
+                        val tabName = source.path ?: source.language
                         writeln("<Tabs groupId=\"beforeAfter\">")
                         writeln("<TabItem value=\"${tabName}\" label=\"${tabName}\">\n")
                     }
@@ -485,8 +487,8 @@ import TabItem from '@theme/TabItem';
                             writeln("```${source.language}")
                         }
 
-                        write(source.after)
-                        if (source.after != null && !source.after.endsWith("\n")) {
+                        write(after)
+                        if (after != null && !after.endsWith("\n")) {
                             newLine()
                         }
                         writeln("```")
@@ -498,7 +500,7 @@ import TabItem from '@theme/TabItem';
                             writeln("</TabItem>")
                             writeln("<TabItem value=\"diff\" label=\"Diff\" >\n")
 
-                            val diff = generateDiff(source.path, source.before, source.after)
+                            val diff = generateDiff(source.path, source.before, after)
 
                             writeln(
                                 """
@@ -563,7 +565,7 @@ import TabItem from '@theme/TabItem';
                 forModerneDocs
         val suppressMaven = suppressJava || recipeDescriptor.name.contains(".gradle.")
         val suppressGradle = suppressJava || recipeDescriptor.name.contains(".maven.")
-        val requiresConfiguration = recipeDescriptor.options?.any { it.isRequired } ?: false
+        val requiresConfiguration = recipeDescriptor.options.any { it.isRequired }
         val requiresDependency = !origin.isFromCoreLibrary()
 
         val dataTableSnippet =
@@ -622,13 +624,14 @@ import TabItem from '@theme/TabItem';
                 if (!option.isRequired && option.example == null) {
                     continue
                 }
-                val ex = if (option.example != null && option.type == "String" &&
-                    (option.example.matches("^[{}\\[\\],`|=%@*!?-].*".toRegex()) ||
-                            option.example.matches(".*:\\s.*".toRegex()))
+                val optionExample = option.example
+                val ex = if (optionExample != null && option.type == "String" &&
+                    (optionExample.matches("^[{}\\[\\],`|=%@*!?-].*".toRegex()) ||
+                            optionExample.matches(".*:\\s.*".toRegex()))
                 ) {
-                    "'" + option.example + "'"
-                } else if (option.example != null && option.type == "String" && option.example.contains('\n')) {
-                    ">\n        " + option.example.replace("\n", "\n        ")
+                    "'" + optionExample + "'"
+                } else if (optionExample != null && option.type == "String" && optionExample.contains('\n')) {
+                    ">\n        " + optionExample.replace("\n", "\n        ")
                 } else if (option.type == "boolean") {
                     "false"
                 } else {
