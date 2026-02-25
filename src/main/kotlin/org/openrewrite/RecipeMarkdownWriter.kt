@@ -454,7 +454,7 @@ import TabItem from '@theme/TabItem';
 
                     if (hasChange && source.before != null) {
                         newLine()
-                        val tabName = source.path ?: source.language
+                        val tabName = source.path ?: (source.language ?: "Before / After")
                         writeln("<Tabs groupId=\"beforeAfter\">")
                         writeln("<TabItem value=\"${tabName}\" label=\"${tabName}\">\n")
                     }
