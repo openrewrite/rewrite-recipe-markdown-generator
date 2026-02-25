@@ -124,8 +124,8 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-micronaut:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-migrate-java:$rewriteVersion")
     // TODO uncomment after first release
-    //"recipe"("org.openrewrite.recipe:rewrite-migrate-kotlin:$rewriteVersion")
-    // "recipe"("org.openrewrite.recipe:rewrite-migrate-python:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-migrate-kotlin:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-migrate-python:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-netty:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-nodejs:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-okhttp:$rewriteVersion")
