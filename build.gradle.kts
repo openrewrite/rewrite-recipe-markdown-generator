@@ -66,6 +66,7 @@ dependencies {
     // Note: Not using BOM to show the latest patch versions of individual modules
 
     // Core rewrite modules (org.openrewrite)
+    "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-core:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-docker:$rewriteVersion")
@@ -85,7 +86,6 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-yaml:$rewriteVersion")
 
     // Additional core modules (versions only, recipes not yet included)
-//    "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
 
@@ -189,7 +189,6 @@ tasks.named<JavaExec>("run").configure {
     if (latestVersionsOnly) {
         // Additional modules whose versions we want to show, but not (yet) their recipes
         dependencies {
-            "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
             "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
             "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
         }
