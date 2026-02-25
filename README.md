@@ -72,5 +72,5 @@ Assumes you have `moderne-docs` checked out in the same directory as `rewrite-re
 ./gradlew run
 rm -rf ../moderne-docs/docs/user-documentation/recipes/recipe-catalog/
 cp -r build/moderne-docs/recipe-catalog ../moderne-docs/docs/user-documentation/recipes/recipe-catalog
-cp -r build/moderne-docs/lists/* ../moderne-docs/docs/user-documentation/recipes/
+cp -r build/moderne-docs/lists/* ../moderne-docs/docs/user-documentation/recipes/lists
 ```
