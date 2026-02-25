@@ -250,8 +250,8 @@ class RecipeMarkdownGenerator : Runnable {
             if (recipeDescriptor.options != null) {
                 for (recipeOption in recipeDescriptor.options) {
                     // TypeScript recipes may have null name or type
-                    val name = recipeOption.name?.toString() ?: "unknown"
-                    val type = recipeOption.type ?: "String"
+                    val name = recipeOption.name
+                    val type = recipeOption.type
                     val ro = RecipeOption(name, type, recipeOption.isRequired)
                     recipeOptions.add(ro)
                 }

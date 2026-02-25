@@ -454,7 +454,7 @@ import TabItem from '@theme/TabItem';
 
                     if (hasChange && source.before != null) {
                         newLine()
-                        val tabName = source.path ?: (source.language ?: "Before / After")
+                        val tabName = source.path ?: source.language
                         writeln("<Tabs groupId=\"beforeAfter\">")
                         writeln("<TabItem value=\"${tabName}\" label=\"${tabName}\">\n")
                     }
@@ -500,7 +500,7 @@ import TabItem from '@theme/TabItem';
                             writeln("</TabItem>")
                             writeln("<TabItem value=\"diff\" label=\"Diff\" >\n")
 
-                            val diff = generateDiff(source.path, source.before, after!!)
+                            val diff = generateDiff(source.path, source.before, after)
 
                             writeln(
                                 """
@@ -565,7 +565,7 @@ import TabItem from '@theme/TabItem';
                 forModerneDocs
         val suppressMaven = suppressJava || recipeDescriptor.name.contains(".gradle.")
         val suppressGradle = suppressJava || recipeDescriptor.name.contains(".maven.")
-        val requiresConfiguration = recipeDescriptor.options?.any { it.isRequired } ?: false
+        val requiresConfiguration = recipeDescriptor.options.any { it.isRequired }
         val requiresDependency = !origin.isFromCoreLibrary()
 
         val dataTableSnippet =

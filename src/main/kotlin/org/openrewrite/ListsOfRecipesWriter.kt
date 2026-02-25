@@ -92,9 +92,9 @@ class ListsOfRecipesWriter(
 
                 writeln("\n#### Data tables:\n")
 
-                val filteredDataTables = recipe.dataTables?.filter { dataTable ->
+                val filteredDataTables = recipe.dataTables.filter { dataTable ->
                     dataTable.name !in dataTablesToIgnore
-                } ?: emptyList()
+                }
 
                 for (dataTable in filteredDataTables) {
                     writeln("  * **${dataTable.name}**: *${escapeMdx(dataTable.description)?.replace("\n", " ")}*")
