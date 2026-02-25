@@ -498,6 +498,7 @@ class RecipeMarkdownGenerator : Runnable {
                     if (needsSuffix) basePath + "-moderne-edition" else basePath
                 }
                 recipe.name.startsWith("ai.timefold") ||
+                recipe.name.startsWith("androidx") ||
                 recipe.name.startsWith("com.google") ||
                 recipe.name.startsWith("com.oracle") ||
                 recipe.name.startsWith("io.quarkus") ||
