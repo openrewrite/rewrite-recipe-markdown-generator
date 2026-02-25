@@ -107,6 +107,16 @@ class VersionWriter {
                 ```
                 
                 </details>
+
+                ## CSV Installation
+
+                Alternatively, you can install all recipe modules using a [recipes CSV file](https://docs.moderne.io/user-documentation/moderne-cli/references/recipes-csv/):
+
+                ```bash
+                mod config recipes csv install /path/to/recipes-v5.csv
+                ```
+
+                Download the latest [recipes-v5.csv](pathname:///recipes-v5.csv) to get started.
                 """.trimIndent()
             )
         }
