@@ -1,6 +1,6 @@
 plugins {
     application
-    id("org.jetbrains.kotlin.jvm").version("1.9.25")
+    id("org.jetbrains.kotlin.jvm").version("2.1.20")
     id("org.owasp.dependencycheck") version "latest.release"
 }
 
@@ -49,7 +49,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("info.picocli:picocli:latest.release")
     implementation("io.github.java-diff-utils:java-diff-utils:4.11")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.openrewrite:rewrite-core")
     implementation("org.openrewrite:rewrite-javascript")
     implementation("org.openrewrite:rewrite-python")

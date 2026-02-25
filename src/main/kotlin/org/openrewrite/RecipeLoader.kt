@@ -11,7 +11,6 @@ import org.openrewrite.config.RecipeDescriptor
 import java.net.URI
 import java.net.URL
 import java.net.URLClassLoader
-import java.nio.file.FileSystem
 import java.nio.file.FileSystems
 import java.nio.file.Files
 import java.nio.file.Path
@@ -331,7 +330,7 @@ class RecipeLoader {
     private fun loadEnvironmentDataAsync(): List<EnvironmentData> = runBlocking {
         println("Starting parallel recipe loading...")
         recipeOrigins.entries
-            .chunked(2)
+            .chunked(1)
             .flatMap { batch -> batch.map { recipeOrigin ->
                 async(Dispatchers.IO) {
                     println("Processing ${recipeOrigin.key.toPath().fileName}")

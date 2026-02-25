@@ -6,33 +6,33 @@ import org.openrewrite.config.RecipeDescriptor
 fun RecipeDescriptor.displayNameEscaped(): String =
     escapeHtml(displayName)
         // Always remove URLs in markdown format [text](url)
-        .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1")
-        .trim() + edition()
+        ?.replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1")
+        ?.trim() + edition()
 
 fun RecipeDescriptor.displayNameEscapedMdx(): String =
     escapeMdx(displayName)
         // Always remove URLs in markdown format [text](url)
-        .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1")
-        .trim() + edition()
+        ?.replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1")
+        ?.trim() + edition()
 
 // For MDX content (escapes curly braces)
-fun RecipeDescriptor.descriptionEscaped(): String {
+fun RecipeDescriptor.descriptionEscaped(): String? {
     if (description.isNullOrBlank()) {
         return ""
     }
     return escapeMdx(description)
-        .replace("\n", " ")
-        .trim()
+        ?.replace("\n", " ")
+        ?.trim()
 }
 
 // For YAML/code blocks (no curly brace escaping)
-private fun RecipeDescriptor.descriptionEscapedHtml(): String {
+private fun RecipeDescriptor.descriptionEscapedHtml(): String? {
     if (description.isNullOrBlank()) {
         return ""
     }
     return escapeHtml(description)
-        .replace("\n", " ")
-        .trim()
+        ?.replace("\n", " ")
+        ?.trim()
 }
 
 private fun RecipeDescriptor.edition(): String =
@@ -60,17 +60,17 @@ private fun RecipeDescriptor.edition(): String =
     }
 
 // Escapes for HTML/basic markdown (no curly brace escaping - safe for YAML frontmatter)
-fun escapeHtml(string: String): String = string
-    .replace("&", "&amp;")
-    .replace("<", "&lt;")
-    .replace(">", "&gt;")
-    .replace("\"", "&quot;")
+fun escapeHtml(string: String?): String? = string
+    ?.replace("&", "&amp;")
+    ?.replace("<", "&lt;")
+    ?.replace(">", "&gt;")
+    ?.replace("\"", "&quot;")
 
 // Escapes for MDX content (includes curly brace escaping - NOT safe for YAML)
 // Escapes { and } with backslashes so MDX treats them as literal characters
-fun escapeMdx(string: String): String = escapeHtml(string)
-    .replace("{", "\\{")
-    .replace("}", "\\}")
+fun escapeMdx(string: String?): String? = escapeHtml(string)
+    ?.replace("{", "\\{")
+    ?.replace("}", "\\}")
 
 fun RecipeDescriptor.asYaml(): String {
     val s = StringBuilder()
