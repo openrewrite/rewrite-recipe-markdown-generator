@@ -5,6 +5,7 @@ package org.openrewrite
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.Patch
 import org.openrewrite.RecipeMarkdownGenerator.Companion.getRecipePath
+import org.openrewrite.RecipeMarkdownGenerator.Companion.hasConflict
 import org.openrewrite.RecipeMarkdownGenerator.Companion.useAndApply
 import org.openrewrite.RecipeMarkdownGenerator.Companion.writeln
 import org.openrewrite.config.RecipeDescriptor
@@ -643,7 +644,8 @@ import TabItem from '@theme/TabItem';
             writeln("```")
             newLine()
 
-            val cliSnippet = getCliSnippet(recipeDescriptor.name, cliOptions, origin)
+            val hasConflict = hasConflict(recipeDescriptor.name)
+            val cliSnippet = getCliSnippet(recipeDescriptor.name, cliOptions, origin, hasConflict)
             if (requiresDependency) {
                 writeSnippetsWithConfigurationWithDependency(
                     exampleRecipeName,
@@ -664,7 +666,8 @@ import TabItem from '@theme/TabItem';
                 )
             }
         } else {
-            val cliSnippet = getCliSnippet(recipeDescriptor.name, "", origin)
+            val hasConflict = hasConflict(recipeDescriptor.name)
+            val cliSnippet = getCliSnippet(recipeDescriptor.name, "", origin, hasConflict)
             if (origin.isFromCoreLibrary()) {
                 writeSnippetsFromCoreLibrary(
                     recipeDescriptor,
@@ -850,8 +853,8 @@ import TabItem from '@theme/TabItem';
         return diffContent.toString()
     }
 
-    private fun getCliSnippet(name: String, cliOptions: String, origin: RecipeOrigin): String {
-        val trimmedRecipeName = name.substring(name.lastIndexOf('.') + 1)
+    private fun getCliSnippet(name: String, cliOptions: String, origin: RecipeOrigin, hasConflict: Boolean = false): String {
+        val trimmedRecipeName = if (hasConflict) name else name.substring(name.lastIndexOf('.') + 1)
         //language=markdown
         return """
             <TabItem value="moderne-cli" label="Moderne CLI">
