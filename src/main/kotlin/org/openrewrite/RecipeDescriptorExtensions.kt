@@ -1,5 +1,6 @@
 package org.openrewrite
 
+import org.openrewrite.RecipeMarkdownGenerator.Companion.hasConflict
 import org.openrewrite.config.OptionDescriptor
 import org.openrewrite.config.RecipeDescriptor
 
@@ -7,13 +8,13 @@ fun RecipeDescriptor.displayNameEscaped(): String =
     escapeHtml(displayName)
         // Always remove URLs in markdown format [text](url)
         .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1")
-        .trim() + RecipeMarkdownGenerator.editionLabel(this.name)
+        .trim() + edition()
 
 fun RecipeDescriptor.displayNameEscapedMdx(): String =
     escapeMdx(displayName)
         // Always remove URLs in markdown format [text](url)
         .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1")
-        .trim() + RecipeMarkdownGenerator.editionLabel(this.name)
+        .trim() + edition()
 
 // For MDX content (escapes curly braces)
 fun RecipeDescriptor.descriptionEscaped(): String {
@@ -35,6 +36,15 @@ private fun RecipeDescriptor.descriptionEscapedHtml(): String {
     return escapeHtml(desc)
         .replace("\n", " ")
         .trim()
+}
+
+private fun RecipeDescriptor.edition(): String {
+    if (!hasConflict(this.name)) return ""
+    return when {
+        this.name.startsWith("io.moderne") -> " (Moderne Edition)"
+        this.name.startsWith("org.openrewrite") -> " (Community Edition)"
+        else -> ""
+    }
 }
 
 // Escapes for HTML/basic markdown (no curly brace escaping - safe for YAML frontmatter)

@@ -397,15 +397,6 @@ class RecipeMarkdownGenerator : Runnable {
         fun hasConflict(recipeName: String): Boolean =
             conflictingBasePaths.contains(getBasePath(recipeName))
 
-        fun editionLabel(recipeName: String): String {
-            if (!hasConflict(recipeName)) return ""
-            return when {
-                recipeName.startsWith("io.moderne") -> " (Moderne Edition)"
-                recipeName.startsWith("org.openrewrite") -> " (Community Edition)"
-                else -> ""
-            }
-        }
-
         /**
          * Compute the base path for a recipe name (without any edition suffix).
          * This is used for conflict detection.
