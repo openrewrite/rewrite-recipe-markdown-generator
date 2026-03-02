@@ -666,7 +666,8 @@ import TabItem from '@theme/TabItem';
                 )
             }
         } else {
-            val cliSnippet = getCliSnippet(recipeDescriptor.name, "", origin, hasConflict(recipeDescriptor.name))
+            val hasConflict = hasConflict(recipeDescriptor.name)
+            val cliSnippet = getCliSnippet(recipeDescriptor.name, "", origin, hasConflict)
             if (origin.isFromCoreLibrary()) {
                 writeSnippetsFromCoreLibrary(
                     recipeDescriptor,
