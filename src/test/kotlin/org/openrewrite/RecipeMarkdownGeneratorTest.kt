@@ -108,6 +108,52 @@ class RecipeMarkdownGeneratorTest {
     }
 
     @Test
+    fun hasConflictReturnsTrueForConflictingRecipes() {
+        val recipes = listOf(
+            "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4",
+            "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4",
+            "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3"
+        )
+        initializeConflictDetection(recipes)
+
+        assertThat(RecipeMarkdownGenerator.hasConflict("io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4")).isTrue()
+        assertThat(RecipeMarkdownGenerator.hasConflict("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4")).isTrue()
+        assertThat(RecipeMarkdownGenerator.hasConflict("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3")).isFalse()
+    }
+
+    @Test
+    fun editionLabelReturnsCorrectLabelsForConflictingRecipes() {
+        val recipes = listOf(
+            "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4",
+            "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4",
+            "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3"
+        )
+        initializeConflictDetection(recipes)
+
+        assertThat(RecipeMarkdownGenerator.editionLabel("io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4"))
+            .isEqualTo(" (Moderne Edition)")
+        assertThat(RecipeMarkdownGenerator.editionLabel("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4"))
+            .isEqualTo(" (Community Edition)")
+        assertThat(RecipeMarkdownGenerator.editionLabel("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3"))
+            .isEqualTo("")
+    }
+
+    @Test
+    fun editionLabelDynamicallyDetectsNewConflictingPairs() {
+        // A pair that was NOT in the old hardcoded list — dynamic detection should still catch it
+        val recipes = listOf(
+            "io.moderne.java.spring.security6.UpgradeSpringSecurity_6_5",
+            "org.openrewrite.java.spring.security6.UpgradeSpringSecurity_6_5"
+        )
+        initializeConflictDetection(recipes)
+
+        assertThat(RecipeMarkdownGenerator.editionLabel("io.moderne.java.spring.security6.UpgradeSpringSecurity_6_5"))
+            .isEqualTo(" (Moderne Edition)")
+        assertThat(RecipeMarkdownGenerator.editionLabel("org.openrewrite.java.spring.security6.UpgradeSpringSecurity_6_5"))
+            .isEqualTo(" (Community Edition)")
+    }
+
+    @Test
     fun thirdPartyRecipesUnaffected() {
         // Third-party recipes should never get edition suffixes
         val recipes = listOf(

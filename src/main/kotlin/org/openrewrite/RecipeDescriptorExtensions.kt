@@ -38,28 +38,7 @@ private fun RecipeDescriptor.descriptionEscapedHtml(): String {
 }
 
 internal fun RecipeDescriptor.edition(): String =
-    when (name) {
-        "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4",
-        "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_5",
-            -> " (Moderne Edition)"
-
-        "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4",
-        "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_5"
-            -> " (Community Edition)"
-
-        else ->
-            if (name.startsWith("io.moderne.hibernate") ||
-                name.startsWith("io.moderne.java.spring.boot4.UpgradeSpringBoot_")
-            ) {
-                " (Moderne Edition)"
-            } else if (name.startsWith("org.openrewrite.hibernate") ||
-                name.startsWith("org.openrewrite.java.spring.boot4.UpgradeSpringBoot_")
-            ) {
-                " (Community Edition)"
-            } else {
-                ""
-            }
-    }
+    RecipeMarkdownGenerator.editionLabel(name)
 
 // Escapes for HTML/basic markdown (no curly brace escaping - safe for YAML frontmatter)
 fun escapeHtml(string: String): String = string

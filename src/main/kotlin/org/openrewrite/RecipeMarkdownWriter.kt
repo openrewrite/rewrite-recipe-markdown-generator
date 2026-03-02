@@ -5,6 +5,7 @@ package org.openrewrite
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.Patch
 import org.openrewrite.RecipeMarkdownGenerator.Companion.getRecipePath
+import org.openrewrite.RecipeMarkdownGenerator.Companion.hasConflict
 import org.openrewrite.RecipeMarkdownGenerator.Companion.useAndApply
 import org.openrewrite.RecipeMarkdownGenerator.Companion.writeln
 import org.openrewrite.config.RecipeDescriptor
@@ -643,7 +644,7 @@ import TabItem from '@theme/TabItem';
             writeln("```")
             newLine()
 
-            val hasConflict = recipeDescriptor.edition().isNotEmpty()
+            val hasConflict = hasConflict(recipeDescriptor.name)
             val cliSnippet = getCliSnippet(recipeDescriptor.name, cliOptions, origin, hasConflict)
             if (requiresDependency) {
                 writeSnippetsWithConfigurationWithDependency(
@@ -665,7 +666,7 @@ import TabItem from '@theme/TabItem';
                 )
             }
         } else {
-            val cliSnippet = getCliSnippet(recipeDescriptor.name, "", origin, recipeDescriptor.edition().isNotEmpty())
+            val cliSnippet = getCliSnippet(recipeDescriptor.name, "", origin, hasConflict(recipeDescriptor.name))
             if (origin.isFromCoreLibrary()) {
                 writeSnippetsFromCoreLibrary(
                     recipeDescriptor,

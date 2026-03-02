@@ -394,6 +394,18 @@ class RecipeMarkdownGenerator : Runnable {
             conflictingBasePaths = moderneBasePaths.intersect(openrewriteBasePaths)
         }
 
+        fun hasConflict(recipeName: String): Boolean =
+            conflictingBasePaths.contains(getBasePath(recipeName))
+
+        fun editionLabel(recipeName: String): String {
+            if (!hasConflict(recipeName)) return ""
+            return when {
+                recipeName.startsWith("io.moderne") -> " (Moderne Edition)"
+                recipeName.startsWith("org.openrewrite") -> " (Community Edition)"
+                else -> ""
+            }
+        }
+
         /**
          * Compute the base path for a recipe name (without any edition suffix).
          * This is used for conflict detection.
@@ -404,14 +416,14 @@ class RecipeMarkdownGenerator : Runnable {
                     if (recipeName.count { it == '.' } == 2) {
                         "core/" + recipeName.substring(16).lowercase(Locale.getDefault())
                     } else {
-                        recipeName.substring(16).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
+                        recipeName.substring(16).replace('.', '/').lowercase(Locale.getDefault())
                     }
                 }
                 recipeName.startsWith("io.moderne") -> {
-                    recipeName.substring(11).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
+                    recipeName.substring(11).replace('.', '/').lowercase(Locale.getDefault())
                 }
                 else -> {
-                    recipeName.replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
+                    recipeName.replace('.', '/').lowercase(Locale.getDefault())
                 }
             }
         }
