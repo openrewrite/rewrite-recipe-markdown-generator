@@ -716,8 +716,12 @@ import TabItem from '@theme/TabItem';
                     continue
                 }
 
-                val recipeLink = getRecipeLink(recipe, pathToRecipes)
-                writeln("* [${recipe.displayNameEscapedMdx()}]($recipeLink)")
+                if (recipeToSource.containsKey(recipe.name)) {
+                    val recipeLink = getRecipeLink(recipe, pathToRecipes)
+                    writeln("* [${recipe.displayNameEscapedMdx()}]($recipeLink)")
+                } else {
+                    writeln("* ${recipe.displayNameEscapedMdx()}")
+                }
 
                 if (recipe.options.isNotEmpty()) {
                     for (option in recipe.options) {
