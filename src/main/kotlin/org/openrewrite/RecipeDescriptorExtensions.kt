@@ -7,13 +7,13 @@ fun RecipeDescriptor.displayNameEscaped(): String =
     escapeHtml(displayName)
         // Always remove URLs in markdown format [text](url)
         .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1")
-        .trim() + edition()
+        .trim() + RecipeMarkdownGenerator.editionLabel(this.name)
 
 fun RecipeDescriptor.displayNameEscapedMdx(): String =
     escapeMdx(displayName)
         // Always remove URLs in markdown format [text](url)
         .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1")
-        .trim() + edition()
+        .trim() + RecipeMarkdownGenerator.editionLabel(this.name)
 
 // For MDX content (escapes curly braces)
 fun RecipeDescriptor.descriptionEscaped(): String {
@@ -36,9 +36,6 @@ private fun RecipeDescriptor.descriptionEscapedHtml(): String {
         .replace("\n", " ")
         .trim()
 }
-
-internal fun RecipeDescriptor.edition(): String =
-    RecipeMarkdownGenerator.editionLabel(name)
 
 // Escapes for HTML/basic markdown (no curly brace escaping - safe for YAML frontmatter)
 fun escapeHtml(string: String): String = string
