@@ -643,7 +643,8 @@ import TabItem from '@theme/TabItem';
             writeln("```")
             newLine()
 
-            val cliSnippet = getCliSnippet(recipeDescriptor.name, cliOptions, origin)
+            val hasConflict = recipeDescriptor.edition().isNotEmpty()
+            val cliSnippet = getCliSnippet(recipeDescriptor.name, cliOptions, origin, hasConflict)
             if (requiresDependency) {
                 writeSnippetsWithConfigurationWithDependency(
                     exampleRecipeName,
@@ -664,7 +665,7 @@ import TabItem from '@theme/TabItem';
                 )
             }
         } else {
-            val cliSnippet = getCliSnippet(recipeDescriptor.name, "", origin)
+            val cliSnippet = getCliSnippet(recipeDescriptor.name, "", origin, recipeDescriptor.edition().isNotEmpty())
             if (origin.isFromCoreLibrary()) {
                 writeSnippetsFromCoreLibrary(
                     recipeDescriptor,
@@ -850,8 +851,8 @@ import TabItem from '@theme/TabItem';
         return diffContent.toString()
     }
 
-    private fun getCliSnippet(name: String, cliOptions: String, origin: RecipeOrigin): String {
-        val trimmedRecipeName = name.substring(name.lastIndexOf('.') + 1)
+    private fun getCliSnippet(name: String, cliOptions: String, origin: RecipeOrigin, hasConflict: Boolean = false): String {
+        val trimmedRecipeName = if (hasConflict) name else name.substring(name.lastIndexOf('.') + 1)
         //language=markdown
         return """
             <TabItem value="moderne-cli" label="Moderne CLI">

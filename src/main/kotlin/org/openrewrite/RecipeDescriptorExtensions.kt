@@ -37,7 +37,7 @@ private fun RecipeDescriptor.descriptionEscapedHtml(): String {
         .trim()
 }
 
-private fun RecipeDescriptor.edition(): String =
+internal fun RecipeDescriptor.edition(): String =
     when (name) {
         "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4",
         "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_5",
