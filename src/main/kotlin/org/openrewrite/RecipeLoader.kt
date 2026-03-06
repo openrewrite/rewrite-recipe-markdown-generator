@@ -261,10 +261,21 @@ class RecipeLoader {
      */
     private fun buildCategoryPath(cat1: String, cat2: String, recipeFileName: String): String {
         val parts = mutableListOf<String>()
-        if (cat2.isNotBlank()) parts.add(cat2.lowercase())
-        if (cat1.isNotBlank()) parts.add(cat1.lowercase())
+        if (cat2.isNotBlank()) parts.add(sanitizePathSegment(cat2))
+        if (cat1.isNotBlank()) parts.add(sanitizePathSegment(cat1))
         parts.add(recipeFileName)
         return parts.joinToString("/")
+    }
+
+    companion object {
+        /**
+         * Sanitize a category name for use as a URL-safe directory path segment.
+         * Replaces special characters that are invalid in URLs/directory names.
+         * E.g., "C#" → "csharp", "F#" → "fsharp"
+         */
+        fun sanitizePathSegment(segment: String): String {
+            return segment.lowercase().replace("#", "sharp")
+        }
     }
 
     /**
