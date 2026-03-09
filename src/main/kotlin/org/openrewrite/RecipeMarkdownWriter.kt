@@ -205,9 +205,9 @@ import TabItem from '@theme/TabItem';
             newLine()
             for (tag in recipeDescriptor.tags) {
                 if (tag.lowercase().startsWith("rspec-s")) {
-                    writeln("* [$tag](https://sonarsource.github.io/rspec/#/rspec/${tag.substring(6)})")
+                    writeln("* [$tag](https://next.sonarqube.com/sonarqube/coding_rules?languages=java&open=java%3A${tag.substring(6)})")
                 } else if (tag.lowercase().startsWith("rspec-")) {
-                    writeln("* [$tag](https://sonarsource.github.io/rspec/#/rspec/S${tag.substring(6)})")
+                    writeln("* [$tag](https://next.sonarqube.com/sonarqube/coding_rules?languages=java&open=java%3AS${tag.substring(6)})")
                 } else {
                     val tagAnchor = tag
                         .lowercase()
