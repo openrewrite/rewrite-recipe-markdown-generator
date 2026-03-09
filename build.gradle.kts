@@ -95,7 +95,6 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-all:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-android:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-apache:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-azul:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-circleci:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-codemods:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-codemods-ng:$rewriteVersion")
