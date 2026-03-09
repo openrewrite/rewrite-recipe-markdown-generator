@@ -101,24 +101,41 @@ class PythonRecipeLoader(
             val effectivePipPath = pipPackagesPath ?: Files.createTempDirectory("rewrite-python-packages")
             builder.pipPackagesPath(effectivePipPath)
 
-            // Pre-install recipe pip packages to the target directory. bootstrapOpenrewrite() only
-            // installs the core 'openrewrite' package; additional recipe packages must be installed
-            // separately so the RPC server can discover their entry points.
+            // Pre-install recipe pip packages so the RPC server can discover their entry points.
+            // bootstrapOpenrewrite() only installs the core 'openrewrite' package; additional recipe
+            // packages must be installed separately.
+            // We install both to the target directory (--target) AND to the system Python so that
+            // entry points are properly registered via importlib.metadata.
             for (pkg in packagesToLoad) {
                 if (pkg.pipPackageName == "openrewrite") continue
                 val targetDir = effectivePipPath.toAbsolutePath().normalize().toString()
                 val versionSpec = if (pkg.version != null) "${pkg.pipPackageName}==${pkg.version}" else pkg.pipPackageName
                 println("Pre-installing pip package: $versionSpec")
-                val proc = ProcessBuilder("python3", "-m", "pip", "install", "--target=$targetDir", versionSpec)
+
+                // Install to the target directory for the RPC server's package path
+                val targetProc = ProcessBuilder("python3", "-m", "pip", "install", "--target=$targetDir", versionSpec)
                     .redirectErrorStream(true)
                     .start()
-                val output = proc.inputStream.bufferedReader().readText()
-                if (!proc.waitFor(2, TimeUnit.MINUTES)) {
-                    proc.destroyForcibly()
-                    System.err.println("Warning: Timed out installing $versionSpec")
-                } else if (proc.exitValue() != 0) {
-                    System.err.println("Warning: Failed to pip install $versionSpec (exit code ${proc.exitValue()})")
-                    System.err.println(output)
+                val targetOutput = targetProc.inputStream.bufferedReader().readText()
+                if (!targetProc.waitFor(2, TimeUnit.MINUTES)) {
+                    targetProc.destroyForcibly()
+                    System.err.println("Warning: Timed out installing $versionSpec to target dir")
+                } else if (targetProc.exitValue() != 0) {
+                    System.err.println("Warning: Failed to pip install $versionSpec to target dir (exit code ${targetProc.exitValue()})")
+                    System.err.println(targetOutput)
+                }
+
+                // Also install normally so entry points are registered for importlib.metadata discovery
+                val globalProc = ProcessBuilder("python3", "-m", "pip", "install", versionSpec)
+                    .redirectErrorStream(true)
+                    .start()
+                val globalOutput = globalProc.inputStream.bufferedReader().readText()
+                if (!globalProc.waitFor(2, TimeUnit.MINUTES)) {
+                    globalProc.destroyForcibly()
+                    System.err.println("Warning: Timed out installing $versionSpec globally")
+                } else if (globalProc.exitValue() != 0) {
+                    System.err.println("Warning: Failed to pip install $versionSpec globally (exit code ${globalProc.exitValue()})")
+                    System.err.println(globalOutput)
                 }
             }
 
@@ -185,9 +202,9 @@ class PythonRecipeLoader(
             return PythonRecipeResult(allDescriptors, recipeToSource, syntheticOrigins)
 
         } catch (e: Exception) {
-            System.err.println("Error loading Python recipes: ${e.message}")
-            e.printStackTrace()
-            return PythonRecipeResult(emptyList(), emptyMap())
+            throw RuntimeException(
+                "Failed to load Python recipes. Ensure Python 3.10+ and pip are installed and available on PATH.", e
+            )
         } finally {
             // Cleanup: shutdown the RPC process
             rpc?.shutdown()

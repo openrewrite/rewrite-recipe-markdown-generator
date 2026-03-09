@@ -154,9 +154,9 @@ class TypeScriptRecipeLoader(
             return TypeScriptRecipeResult(allDescriptors, recipeToSource)
 
         } catch (e: Exception) {
-            System.err.println("Error loading TypeScript recipes: ${e.message}")
-            e.printStackTrace()
-            return TypeScriptRecipeResult(emptyList(), emptyMap())
+            throw RuntimeException(
+                "Failed to load TypeScript recipes. Ensure Node.js is installed and available on PATH.", e
+            )
         } finally {
             // Cleanup: shutdown the RPC process
             rpc?.shutdown()
