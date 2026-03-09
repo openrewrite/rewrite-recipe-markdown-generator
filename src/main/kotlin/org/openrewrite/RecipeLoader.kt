@@ -110,11 +110,17 @@ class RecipeLoader {
         println("\nChecking for TypeScript/JavaScript recipes...")
         val typeScriptLoader = TypeScriptRecipeLoader(recipeOrigins)
         val typeScriptResult = typeScriptLoader.loadTypeScriptRecipes()
+        if (typeScriptResult.descriptors.isEmpty() && TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES.isNotEmpty()) {
+            System.err.println("WARNING: 0 TypeScript recipes loaded despite ${TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES.size} module(s) configured. Check that Node.js is installed.")
+        }
 
         // Load Python recipes via RPC
         println("\nChecking for Python recipes...")
         val pythonLoader = PythonRecipeLoader(recipeOrigins)
         val pythonResult = pythonLoader.loadPythonRecipes()
+        if (pythonResult.descriptors.isEmpty() && PythonRecipeLoader.PYTHON_RECIPE_MODULES.isNotEmpty()) {
+            System.err.println("WARNING: 0 Python recipes loaded despite ${PythonRecipeLoader.PYTHON_RECIPE_MODULES.size} module(s) configured. Check that Python 3.10+ and pip are installed.")
+        }
 
         // Merge TypeScript and Python results with Java/YAML results
         val allDescriptors = environmentData.flatMap { it.recipeDescriptors }.toMutableList()
