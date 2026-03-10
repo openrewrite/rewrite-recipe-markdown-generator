@@ -107,17 +107,23 @@ class ListsOfRecipesWriter(
 
     fun createRecipesByTag() {
         val tagToRecipes = TreeMap<String, TreeSet<RecipeDescriptor>>(String.CASE_INSENSITIVE_ORDER)
+        val recipeToFullTags = HashMap<String, TreeMap<String, TreeSet<String>>>() // prefix -> (recipeName -> fullTags)
 
         // Collect all tags and their associated recipes
         for (recipeDescriptor in allRecipeDescriptors) {
             if (recipeDescriptor.tags != null) {
                 for (tag in recipeDescriptor.tags) {
-                    tagToRecipes.computeIfAbsent(
-                        tag
-                            .substringBefore('-')
-                            .substringBefore('_')
-                    ) { TreeSet(compareBy { it.name }) }
+                    val prefix = tag
+                        .substringBefore('-')
+                        .substringBefore('_')
+                    tagToRecipes.computeIfAbsent(prefix) { TreeSet(compareBy { it.name }) }
                         .add(recipeDescriptor)
+                    if (prefix != tag) {
+                        recipeToFullTags
+                            .computeIfAbsent(prefix) { TreeMap(String.CASE_INSENSITIVE_ORDER) }
+                            .computeIfAbsent(recipeDescriptor.name) { TreeSet(String.CASE_INSENSITIVE_ORDER) }
+                            .add(tag)
+                    }
                 }
             }
         }
@@ -160,6 +166,10 @@ class ListsOfRecipesWriter(
                         writeln("* [${recipe.name}](${recipeLinkBasePath}/${recipePath}.md)")
                         writeln("  * **${recipe.displayNameEscapedMdx()}**")
                         writeln("  * ${recipe.descriptionEscaped()}")
+                        val fullTags = recipeToFullTags[tag]?.get(recipe.name)
+                        if (fullTags != null) {
+                            writeln("  * Tags: ${fullTags.joinToString(", ")}")
+                        }
                     }
                 }
             }
