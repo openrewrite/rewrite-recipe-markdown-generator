@@ -1,6 +1,6 @@
 rewrite-all:
   artifactId: "rewrite-all"
-  version: "1.23.9"
+  version: "1.23.10"
   markdownRecipeDescriptors:
     org.openrewrite.FindCallGraph:
       name: "org.openrewrite.FindCallGraph"
@@ -32,7 +32,7 @@ rewrite-all:
       artifactId: "rewrite-all"
 rewrite-analysis:
   artifactId: "rewrite-analysis"
-  version: "2.31.4"
+  version: "2.31.5"
   markdownRecipeDescriptors:
     org.openrewrite.analysis.controlflow.ControlFlowVisualization:
       name: "org.openrewrite.analysis.controlflow.ControlFlowVisualization"
@@ -95,7 +95,7 @@ rewrite-analysis:
       artifactId: "rewrite-analysis"
 rewrite-apache:
   artifactId: "rewrite-apache"
-  version: "2.23.0"
+  version: "2.23.1"
   markdownRecipeDescriptors:
     org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64:
       name: "org.openrewrite.apache.commons.codec.ApacheBase64ToJavaBase64"
@@ -1005,7 +1005,7 @@ rewrite-apache:
       artifactId: "rewrite-apache"
 rewrite-cobol:
   artifactId: "rewrite-cobol"
-  version: "2.15.0"
+  version: "2.15.1"
   markdownRecipeDescriptors:
     org.openrewrite.cobol.cleanup.RemoveWithDebuggingMode:
       name: "org.openrewrite.cobol.cleanup.RemoveWithDebuggingMode"
@@ -1077,7 +1077,7 @@ rewrite-cobol:
       artifactId: "rewrite-cobol"
 rewrite-codemods:
   artifactId: "rewrite-codemods"
-  version: "0.24.3"
+  version: "0.24.4"
   markdownRecipeDescriptors:
     org.openrewrite.codemods.ApplyCodemod:
       name: "org.openrewrite.codemods.ApplyCodemod"
@@ -4601,7 +4601,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.74.1"
+  version: "8.75.2"
   markdownRecipeDescriptors:
     org.openrewrite.AddToGitignore:
       name: "org.openrewrite.AddToGitignore"
@@ -9354,7 +9354,7 @@ rewrite-csharp:
       artifactId: "rewrite-csharp"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
-  version: "2.11.7"
+  version: "2.11.8"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite"
@@ -9433,7 +9433,7 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
 rewrite-devcenter:
   artifactId: "rewrite-devcenter"
-  version: "1.17.0"
+  version: "1.18.0"
   markdownRecipeDescriptors:
     io.moderne.devcenter.ApacheDevCenter:
       name: "io.moderne.devcenter.ApacheDevCenter"
@@ -9676,7 +9676,7 @@ rewrite-devcenter:
       artifactId: "rewrite-devcenter"
 rewrite-docker:
   artifactId: "rewrite-docker"
-  version: "8.74.1"
+  version: "8.75.2"
   markdownRecipeDescriptors:
     org.openrewrite.docker.AddAptGetCleanup:
       name: "org.openrewrite.docker.AddAptGetCleanup"
@@ -9950,7 +9950,7 @@ rewrite-docker:
       artifactId: "rewrite-docker"
 rewrite-dropwizard:
   artifactId: "rewrite-dropwizard"
-  version: "0.10.0"
+  version: "0.10.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.dropwizard.AddActuatorConfiguration:
       name: "org.openrewrite.java.dropwizard.AddActuatorConfiguration"
@@ -10262,7 +10262,7 @@ rewrite-dropwizard:
       artifactId: "rewrite-dropwizard"
 rewrite-feature-flags:
   artifactId: "rewrite-feature-flags"
-  version: "1.19.1"
+  version: "1.19.2"
   markdownRecipeDescriptors:
     org.openrewrite.featureflags.RemoveBooleanFlag:
       name: "org.openrewrite.featureflags.RemoveBooleanFlag"
@@ -10422,7 +10422,7 @@ rewrite-feature-flags:
       artifactId: "rewrite-feature-flags"
     org.openrewrite.featureflags.launchdarkly.RemoveStringVariation:
       name: "org.openrewrite.featureflags.launchdarkly.RemoveStringVariation"
-      description: "Replace `boolVariation` invocations for feature key with value,\
+      description: "Replace `stringVariation` invocations for feature key with value,\
         \ and simplify constant if branch execution."
       docLink: "https://docs.openrewrite.org/recipes/featureflags/launchdarkly/removestringvariation"
       options:
@@ -10620,7 +10620,7 @@ rewrite-feature-flags:
       artifactId: "rewrite-feature-flags"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "3.18.2"
+  version: "3.18.3"
   markdownRecipeDescriptors:
     org.openrewrite.github.AddCronTrigger:
       name: "org.openrewrite.github.AddCronTrigger"
@@ -11200,8 +11200,47 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gitlab:
   artifactId: "rewrite-gitlab"
-  version: "0.18.0"
+  version: "0.19.0"
   markdownRecipeDescriptors:
+    org.openrewrite.gitlab.AddArtifactsExpireIn:
+      name: "org.openrewrite.gitlab.AddArtifactsExpireIn"
+      description: "Set `artifacts:expire_in` in `.gitlab-ci.yml` to prevent storage\
+        \ bloat from indefinitely stored artifacts."
+      docLink: "https://docs.openrewrite.org/recipes/gitlab/addartifactsexpirein"
+      options:
+      - name: "acceptTheirs"
+        type: "Boolean"
+        required: false
+      - name: "expireIn"
+        type: "String"
+        required: true
+      - name: "jobName"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-gitlab"
+    org.openrewrite.gitlab.AddCache:
+      name: "org.openrewrite.gitlab.AddCache"
+      description: "Add `cache` configuration to `.gitlab-ci.yml` for faster builds."
+      docLink: "https://docs.openrewrite.org/recipes/gitlab/addcache"
+      options:
+      - name: "acceptTheirs"
+        type: "Boolean"
+        required: false
+      - name: "jobName"
+        type: "String"
+        required: false
+      - name: "key"
+        type: "String"
+        required: true
+      - name: "paths"
+        type: "List"
+        required: true
+      - name: "policy"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-gitlab"
     org.openrewrite.gitlab.AddComponent:
       name: "org.openrewrite.gitlab.AddComponent"
       description: "Add a GitLab component to an existing list, or add a new list\
@@ -11220,6 +11259,56 @@ rewrite-gitlab:
       - name: "version"
         type: "String"
         required: true
+      isImperative: true
+      artifactId: "rewrite-gitlab"
+    org.openrewrite.gitlab.AddDefaultKeyword:
+      name: "org.openrewrite.gitlab.AddDefaultKeyword"
+      description: "Add or update a keyword in the `default` section of `.gitlab-ci.yml`."
+      docLink: "https://docs.openrewrite.org/recipes/gitlab/adddefaultkeyword"
+      options:
+      - name: "acceptTheirs"
+        type: "Boolean"
+        required: false
+      - name: "keyword"
+        type: "String"
+        required: true
+      - name: "value"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-gitlab"
+    org.openrewrite.gitlab.AddInterruptible:
+      name: "org.openrewrite.gitlab.AddInterruptible"
+      description: "Set `interruptible: true` in `.gitlab-ci.yml` to allow pipelines\
+        \ to be cancelled when superseded."
+      docLink: "https://docs.openrewrite.org/recipes/gitlab/addinterruptible"
+      options:
+      - name: "acceptTheirs"
+        type: "Boolean"
+        required: false
+      - name: "jobName"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-gitlab"
+    org.openrewrite.gitlab.AddRetry:
+      name: "org.openrewrite.gitlab.AddRetry"
+      description: "Add `retry` configuration to `.gitlab-ci.yml` for resilience against\
+        \ infrastructure failures."
+      docLink: "https://docs.openrewrite.org/recipes/gitlab/addretry"
+      options:
+      - name: "acceptTheirs"
+        type: "Boolean"
+        required: false
+      - name: "jobName"
+        type: "String"
+        required: false
+      - name: "max"
+        type: "int"
+        required: true
+      - name: "when"
+        type: "List"
+        required: false
       isImperative: true
       artifactId: "rewrite-gitlab"
     org.openrewrite.gitlab.AddStages:
@@ -11251,6 +11340,46 @@ rewrite-gitlab:
         type: "String"
         required: true
       isImperative: true
+      artifactId: "rewrite-gitlab"
+    org.openrewrite.gitlab.AddTimeout:
+      name: "org.openrewrite.gitlab.AddTimeout"
+      description: "Set `timeout` in `.gitlab-ci.yml` to prevent jobs from hanging\
+        \ indefinitely."
+      docLink: "https://docs.openrewrite.org/recipes/gitlab/addtimeout"
+      options:
+      - name: "acceptTheirs"
+        type: "Boolean"
+        required: false
+      - name: "jobName"
+        type: "String"
+        required: false
+      - name: "timeout"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-gitlab"
+    org.openrewrite.gitlab.AddWorkflowRules:
+      name: "org.openrewrite.gitlab.AddWorkflowRules"
+      description: "Add `workflow:rules` to `.gitlab-ci.yml` to control pipeline creation."
+      docLink: "https://docs.openrewrite.org/recipes/gitlab/addworkflowrules"
+      options:
+      - name: "acceptTheirs"
+        type: "Boolean"
+        required: false
+      - name: "rules"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-gitlab"
+    org.openrewrite.gitlab.BestPractices:
+      name: "org.openrewrite.gitlab.BestPractices"
+      description: "Apply GitLab CI/CD best practices to `.gitlab-ci.yml`. This includes\
+        \ adding `workflow:rules` to prevent duplicate pipelines, setting `interruptible:\
+        \ true` and `retry` in the `default` section, configuring `artifacts:expire_in`,\
+        \ and setting a job `timeout`."
+      docLink: "https://docs.openrewrite.org/recipes/gitlab/bestpractices"
+      options: []
+      isImperative: false
       artifactId: "rewrite-gitlab"
     org.openrewrite.gitlab.ChangeComponent:
       name: "org.openrewrite.gitlab.ChangeComponent"
@@ -11340,7 +11469,7 @@ rewrite-gitlab:
       artifactId: "rewrite-gitlab"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.74.1"
+  version: "8.75.2"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -11837,11 +11966,11 @@ rewrite-gradle:
     org.openrewrite.gradle.UpdateGradleWrapper:
       name: "org.openrewrite.gradle.UpdateGradleWrapper"
       description: "Update the version of Gradle used in an existing Gradle wrapper.\
-        \ Queries services.gradle.org to determine the available releases, but prefers\
-        \ the artifact repository URL which already exists within the wrapper properties\
-        \ file. If your artifact repository does not contain the same Gradle distributions\
-        \ as services.gradle.org, then the recipe may suggest a version which is not\
-        \ available in your artifact repository."
+        \ Queries `downloads.gradle.org` to determine the available releases, but\
+        \ prefers the artifact repository URL which already exists within the wrapper\
+        \ properties file. If your artifact repository does not contain the same Gradle\
+        \ distributions as `downloads.gradle.org`, then the recipe may suggest a version\
+        \ which is not available in your artifact repository."
       docLink: "https://docs.openrewrite.org/recipes/gradle/updategradlewrapper"
       options:
       - name: "addIfMissing"
@@ -12359,7 +12488,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.74.1"
+  version: "8.75.2"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.AutoFormat:
       name: "org.openrewrite.groovy.format.AutoFormat"
@@ -12395,7 +12524,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.74.1"
+  version: "8.75.2"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -12508,7 +12637,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-hibernate:
   artifactId: "rewrite-hibernate"
-  version: "2.18.0"
+  version: "2.18.1"
   markdownRecipeDescriptors:
     org.openrewrite.hibernate.AddScalarPreferStandardBasicTypes:
       name: "org.openrewrite.hibernate.AddScalarPreferStandardBasicTypes"
@@ -12708,7 +12837,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-jackson:
   artifactId: "rewrite-jackson"
-  version: "1.17.0"
+  version: "1.18.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jackson.CodehausClassesToFasterXML:
       name: "org.openrewrite.java.jackson.CodehausClassesToFasterXML"
@@ -12968,7 +13097,7 @@ rewrite-jackson:
       artifactId: "rewrite-jackson"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.74.1"
+  version: "8.75.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -14263,7 +14392,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "1.51.1"
+  version: "1.51.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.AddDependency:
       name: "org.openrewrite.java.dependencies.AddDependency"
@@ -14713,7 +14842,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-javascript:
   artifactId: "rewrite-javascript"
-  version: "8.74.1"
+  version: "8.75.2"
   markdownRecipeDescriptors:
     org.openrewrite.javascript.change-import:
       name: "org.openrewrite.javascript.change-import"
@@ -15145,7 +15274,7 @@ rewrite-javascript:
       artifactId: "rewrite-javascript"
 rewrite-jenkins:
   artifactId: "rewrite-jenkins"
-  version: "0.34.2"
+  version: "0.34.3"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3:
       name: "org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3"
@@ -15328,7 +15457,7 @@ rewrite-jenkins:
       artifactId: "rewrite-jenkins"
 rewrite-joda:
   artifactId: "rewrite-joda"
-  version: "0.7.0"
+  version: "0.7.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.joda.time.JodaAbstractInstantToJavaTime:
       name: "org.openrewrite.java.joda.time.JodaAbstractInstantToJavaTime"
@@ -15431,7 +15560,7 @@ rewrite-joda:
       artifactId: "rewrite-joda"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.74.1"
+  version: "8.75.2"
   markdownRecipeDescriptors:
     org.openrewrite.json.AddKeyValue:
       name: "org.openrewrite.json.AddKeyValue"
@@ -15566,7 +15695,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "8.74.1"
+  version: "8.75.2"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -15684,7 +15813,7 @@ rewrite-kotlin:
       artifactId: "rewrite-kotlin"
 rewrite-liberty:
   artifactId: "rewrite-liberty"
-  version: "1.23.7"
+  version: "1.23.8"
   markdownRecipeDescriptors:
     org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty:
       name: "org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty"
@@ -15792,7 +15921,7 @@ rewrite-liberty:
       artifactId: "rewrite-liberty"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "3.24.0"
+  version: "3.25.0"
   markdownRecipeDescriptors:
     org.apache.logging.log4j.InlineLog4jApiMethods:
       name: "org.apache.logging.log4j.InlineLog4jApiMethods"
@@ -16839,6 +16968,14 @@ rewrite-logging-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.MessageFormatToParameterizedLogging:
+      name: "org.openrewrite.java.logging.slf4j.MessageFormatToParameterizedLogging"
+      description: "Replace `MessageFormat.format()` calls in SLF4J logging statements\
+        \ with parameterized placeholders for improved performance."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/messageformattoparameterizedlogging"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
     org.openrewrite.java.logging.slf4j.ParameterizedLogging:
       name: "org.openrewrite.java.logging.slf4j.ParameterizedLogging"
       description: "Use SLF4J's parameterized logging, which can significantly boost\
@@ -16848,6 +16985,14 @@ rewrite-logging-frameworks:
       docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/parameterizedlogging"
       options: []
       isImperative: false
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.RemoveUnnecessaryLogLevelGuards:
+      name: "org.openrewrite.java.logging.slf4j.RemoveUnnecessaryLogLevelGuards"
+      description: "Remove `if` statement guards around SLF4J logging calls when parameterized\
+        \ logging makes them unnecessary."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/removeunnecessaryloglevelguards"
+      options: []
+      isImperative: true
       artifactId: "rewrite-logging-frameworks"
     org.openrewrite.java.logging.slf4j.Slf4jBestPractices:
       name: "org.openrewrite.java.logging.slf4j.Slf4jBestPractices"
@@ -16861,6 +17006,14 @@ rewrite-logging-frameworks:
       description: "Logging statements shouldn't begin with `String#format`, calls\
         \ to `toString()`, etc."
       docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/slf4jlogshouldbeconstant"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-logging-frameworks"
+    org.openrewrite.java.logging.slf4j.StringFormatToParameterizedLogging:
+      name: "org.openrewrite.java.logging.slf4j.StringFormatToParameterizedLogging"
+      description: "Replace `String.format()` calls in SLF4J logging statements with\
+        \ parameterized placeholders for improved performance."
+      docLink: "https://docs.openrewrite.org/recipes/java/logging/slf4j/stringformattoparameterizedlogging"
       options: []
       isImperative: true
       artifactId: "rewrite-logging-frameworks"
@@ -16886,7 +17039,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.74.1"
+  version: "8.75.2"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddAnnotationProcessor:
       name: "org.openrewrite.maven.AddAnnotationProcessor"
@@ -18402,7 +18555,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micrometer:
   artifactId: "rewrite-micrometer"
-  version: "0.28.4"
+  version: "0.28.5"
   markdownRecipeDescriptors:
     org.openrewrite.micrometer.MicrometerBestPractices:
       name: "org.openrewrite.micrometer.MicrometerBestPractices"
@@ -18462,7 +18615,7 @@ rewrite-micrometer:
       artifactId: "rewrite-micrometer"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "2.31.3"
+  version: "2.32.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.AddAnnotationProcessorPath:
       name: "org.openrewrite.java.micronaut.AddAnnotationProcessorPath"
@@ -18806,7 +18959,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "3.28.0"
+  version: "3.29.0"
   markdownRecipeDescriptors:
     com.google.guava.InlineGuavaMethods:
       name: "com.google.guava.InlineGuavaMethods"
@@ -22015,6 +22168,14 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lombok.UseAllArgsConstructor:
+      name: "org.openrewrite.java.migrate.lombok.UseAllArgsConstructor"
+      description: "Prefer the Lombok `@AllArgsConstructor` annotation over explicitly\
+        \ written out constructors that assign all non-static fields."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/lombok/useallargsconstructor"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.lombok.UseLombokGetter:
       name: "org.openrewrite.java.migrate.lombok.UseLombokGetter"
       description: "Convert trivial getter methods to `@Getter` annotations on their\
@@ -22036,6 +22197,14 @@ rewrite-migrate-java:
       description: "Prefer the Lombok `@NoArgsConstructor` annotation over explicitly\
         \ written out constructors."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/lombok/usenoargsconstructor"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lombok.UseRequiredArgsConstructor:
+      name: "org.openrewrite.java.migrate.lombok.UseRequiredArgsConstructor"
+      description: "Prefer the Lombok `@RequiredArgsConstructor` annotation over explicitly\
+        \ written out constructors that only assign final fields."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/lombok/userequiredargsconstructor"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
@@ -22502,7 +22671,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-netty:
   artifactId: "rewrite-netty"
-  version: "0.6.7"
+  version: "0.6.8"
   markdownRecipeDescriptors:
     org.openrewrite.java.netty.EventLoopGroupToMultiThreadIoEventLoopGroupRecipes:
       name: "org.openrewrite.java.netty.EventLoopGroupToMultiThreadIoEventLoopGroupRecipes"
@@ -22541,7 +22710,7 @@ rewrite-netty:
       artifactId: "rewrite-netty"
 rewrite-okhttp:
   artifactId: "rewrite-okhttp"
-  version: "0.21.4"
+  version: "0.22.0"
   markdownRecipeDescriptors:
     org.openrewrite.okhttp.ReorderRequestBodyCreateArguments:
       name: "org.openrewrite.okhttp.ReorderRequestBodyCreateArguments"
@@ -22622,7 +22791,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-openapi:
   artifactId: "rewrite-openapi"
-  version: "0.30.1"
+  version: "0.31.0"
   markdownRecipeDescriptors:
     org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings:
       name: "org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings"
@@ -22748,7 +22917,7 @@ rewrite-openapi:
       artifactId: "rewrite-openapi"
 rewrite-prethink:
   artifactId: "rewrite-prethink"
-  version: "0.3.2"
+  version: "0.3.4"
   markdownRecipeDescriptors:
     org.openrewrite.prethink.ExportContext:
       name: "org.openrewrite.prethink.ExportContext"
@@ -22815,7 +22984,7 @@ rewrite-prethink:
       artifactId: "rewrite-prethink"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.74.1"
+  version: "8.75.2"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -22945,7 +23114,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "2.29.1"
+  version: "2.29.2"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.AddQuarkusProperty:
       name: "org.openrewrite.quarkus.AddQuarkusProperty"
@@ -23213,7 +23382,7 @@ rewrite-quarkus:
       artifactId: "rewrite-quarkus"
 rewrite-rewrite:
   artifactId: "rewrite-rewrite"
-  version: "0.21.0"
+  version: "0.21.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations:
       name: "org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations"
@@ -23533,7 +23702,7 @@ rewrite-rewrite:
       artifactId: "rewrite-rewrite"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "6.25.0"
+  version: "6.26.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin:
       name: "org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin"
@@ -25059,6 +25228,15 @@ rewrite-spring:
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.boot4.RenameDeprecatedStartersManagedVersions:
+      name: "org.openrewrite.java.spring.boot4.RenameDeprecatedStartersManagedVersions"
+      description: "Renames deprecated Spring Boot starters to their new names without\
+        \ adding explicit versions, for use in projects where the `io.spring.dependency-management`\
+        \ plugin manages versions via BOM."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot4/renamedeprecatedstartersmanagedversions"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.boot4.ReplaceMockBeanAndSpyBean:
       name: "org.openrewrite.java.spring.boot4.ReplaceMockBeanAndSpyBean"
       description: "Replaces `@MockBean` and `@SpyBean` annotations with `@MockitoBean`\
@@ -26276,7 +26454,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-spring-to-quarkus:
   artifactId: "rewrite-spring-to-quarkus"
-  version: "0.5.0"
+  version: "0.6.0"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.spring.AddQuarkusMavenPlugin:
       name: "org.openrewrite.quarkus.spring.AddQuarkusMavenPlugin"
@@ -26785,7 +26963,7 @@ rewrite-spring-to-quarkus:
       artifactId: "rewrite-spring-to-quarkus"
 rewrite-static-analysis:
   artifactId: "rewrite-static-analysis"
-  version: "2.28.0"
+  version: "2.29.0"
   markdownRecipeDescriptors:
     org.openrewrite.recipe.rewrite-static-analysis.InlineDeprecatedMethods:
       name: "org.openrewrite.recipe.rewrite-static-analysis.InlineDeprecatedMethods"
@@ -28385,7 +28563,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "3.28.0"
+  version: "3.29.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.archunit.ArchUnit0to1Migration:
       name: "org.openrewrite.java.testing.archunit.ArchUnit0to1Migration"
@@ -29900,8 +30078,9 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.AddMockitoExtensionIfAnnotationsUsed:
       name: "org.openrewrite.java.testing.mockito.AddMockitoExtensionIfAnnotationsUsed"
-      description: "Adds `@ExtendWith(MockitoExtension.class)` to tests using `@Mock`\
-        \ or `@Captor`."
+      description: "Adds `@ExtendWith(MockitoExtension.class)` to JUnit 5 tests or\
+        \ `@RunWith(MockitoJUnitRunner.class)` to JUnit 4 tests using Mockito annotations\
+        \ like `@Mock` or `@Captor`."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/addmockitoextensionifannotationsused"
       options: []
       isImperative: true
@@ -30066,6 +30245,27 @@ rewrite-testing-frameworks:
       description: "Replace `MockitoAnnotations.initMocks(this)` to `MockitoAnnotations.openMocks(this)`\
         \ and generate `AutoCloseable` mocks."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/replaceinitmocktoopenmock"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.ReplaceMockitoTestExecutionListener:
+      name: "org.openrewrite.java.testing.mockito.ReplaceMockitoTestExecutionListener"
+      description: "Replace `@TestExecutionListeners(MockitoTestExecutionListener.class)`\
+        \ with the appropriate Mockito initialization for the test framework in use:\
+        \ `@ExtendWith(MockitoExtension.class)` for JUnit 5, `@RunWith(MockitoJUnitRunner.class)`\
+        \ for JUnit 4, or `MockitoAnnotations.openMocks(this)` for TestNG."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/replacemockitotestexecutionlistener"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.ReplacePowerMockDependencies:
+      name: "org.openrewrite.java.testing.mockito.ReplacePowerMockDependencies"
+      description: "Replaces PowerMock API dependencies with `mockito-inline` when\
+        \ `mockStatic()`, `whenNew()`, or `@PrepareForTest` usage is detected, or\
+        \ `mockito-core` otherwise. PowerMock features like static mocking, constructor\
+        \ mocking, and final class mocking require the inline mock maker which is\
+        \ bundled in `mockito-inline` for Mockito 3.x/4.x."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/replacepowermockdependencies"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
@@ -30238,7 +30438,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-third-party:
   artifactId: "rewrite-third-party"
-  version: "0.36.0"
+  version: "0.36.1"
   markdownRecipeDescriptors:
     ai.timefold.solver.migration.ChangeVersion:
       name: "ai.timefold.solver.migration.ChangeVersion"
@@ -44306,7 +44506,7 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
 rewrite-toml:
   artifactId: "rewrite-toml"
-  version: "8.74.1"
+  version: "8.75.2"
   markdownRecipeDescriptors:
     org.openrewrite.toml.ChangeKey:
       name: "org.openrewrite.toml.ChangeKey"
@@ -44465,7 +44665,7 @@ rewrite-toml:
       artifactId: "rewrite-toml"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.74.1"
+  version: "8.75.2"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -44825,7 +45025,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.74.1"
+  version: "8.75.2"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AddCommentToProperty:
       name: "org.openrewrite.yaml.AddCommentToProperty"
