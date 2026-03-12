@@ -113,10 +113,12 @@ fun OptionDescriptor.asYaml(indentation: Int = 0): String {
     }
 
     val prefix = prefixBuilder.toString()
-    val formattedValue = if (value is Array<*>) {
+    if (value is Array<*>) {
         val asArray = value as Array<*>
-        "[${asArray.joinToString(", ")}]"
-    } else if (value == "*") {
+        val itemPrefix = prefix + "  "
+        return "$prefix$name:\n" + asArray.joinToString("") { "${itemPrefix}- $it\n" }
+    }
+    val formattedValue = if (value == "*") {
         "\"*\""
     } else {
         value
