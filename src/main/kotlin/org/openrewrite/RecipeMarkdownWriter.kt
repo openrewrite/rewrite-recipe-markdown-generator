@@ -626,6 +626,7 @@ import TabItem from '@theme/TabItem';
                     continue
                 }
                 val optionExample = option.example
+                val isList = option.type == "List" || option.type.startsWith("List<")
                 val ex = if (optionExample != null && option.type == "String" &&
                     (optionExample.matches("^[{}\\[\\],`|=%@*!?-].*".toRegex()) ||
                             optionExample.matches(".*:\\s.*".toRegex()))
@@ -639,7 +640,12 @@ import TabItem from '@theme/TabItem';
                     option.example
                 }
                 cliOptions += " --recipe-option \"${option.name}=$ex\""
-                writeln("      ${option.name}: $ex")
+                if (isList) {
+                    writeln("      ${option.name}:")
+                    writeln("        - ${ex ?: "TODO"}")
+                } else {
+                    writeln("      ${option.name}: $ex")
+                }
             }
             writeln("```")
             newLine()
