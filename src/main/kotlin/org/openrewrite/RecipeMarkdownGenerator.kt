@@ -177,7 +177,7 @@ class RecipeMarkdownGenerator : Runnable {
         initializeConflictDetection(allRecipeDescriptors)
 
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
-        val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
+        val moderneOnlyRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
 
         // Build mapping from recipe name to Recipe instance (for checking if declarative)
         val recipesByName = allRecipes.associateBy { it.name }
@@ -197,7 +197,7 @@ class RecipeMarkdownGenerator : Runnable {
             .filter { recipe ->
                 val source = recipeToSource[recipe.name]
                 val origin = findOrigin(source, recipe.name, recipeOrigins)
-                origin?.license == Licenses.Proprietary ||
+                (origin != null && isModerneDocsOnly(origin)) ||
                     source?.toString()?.startsWith("typescript-search://") == true ||
                     source?.toString()?.startsWith("python-search://") == true
             }
@@ -229,10 +229,10 @@ class RecipeMarkdownGenerator : Runnable {
                 }
             }
 
-            // Track proprietary recipes separately (for moderne-recipes.md list)
-            if (origin.license == Licenses.Proprietary) {
-                moderneProprietaryRecipes.computeIfAbsent(origin.artifactId) { mutableListOf() }.add(recipeDescriptor)
-                // Skip writing proprietary recipes to rewrite-docs (they only go to moderne-docs)
+            // Track moderne-docs-only recipes separately (for moderne-recipes.md list and redirects)
+            if (isModerneDocsOnly(origin)) {
+                moderneOnlyRecipes.computeIfAbsent(origin.artifactId) { mutableListOf() }.add(recipeDescriptor)
+                // Skip writing moderne-docs-only recipes to rewrite-docs
                 continue
             }
 
@@ -285,11 +285,11 @@ class RecipeMarkdownGenerator : Runnable {
             markdownArtifact.markdownRecipeDescriptors[recipeDescriptor.name] = markdownRecipeDescriptor
         }
 
-        // Filter to only open-source recipes for rewrite-docs output
+        // Filter to only rewrite-docs recipes (exclude moderne-docs-only modules and proprietary)
         val openSourceRecipeDescriptors = allRecipeDescriptors.filter { recipe ->
             val source = recipeToSource[recipe.name]
             val origin = findOrigin(source, recipe.name, recipeOrigins)
-            origin?.license != Licenses.Proprietary
+            origin != null && !isModerneDocsOnly(origin)
         }
         println("Filtered to ${openSourceRecipeDescriptors.size} open-source recipe(s) for rewrite-docs.")
 
@@ -314,7 +314,7 @@ class RecipeMarkdownGenerator : Runnable {
         // Write lists of recipes into various files
         // OpenRewrite docs: open-source recipes only (links use /recipes path)
         val listWriter = ListsOfRecipesWriter(openSourceRecipeDescriptors, outputPath, "/recipes")
-        listWriter.createModerneRecipes(moderneProprietaryRecipes)
+        listWriter.createModerneRecipes(moderneOnlyRecipes)
         listWriter.createRecipesWithDataTables()
         listWriter.createRecipesByTag()
         listWriter.createScanningRecipes(
@@ -345,11 +345,11 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         // Generate redirects for proprietary recipes (from old OpenRewrite URLs to Moderne docs)
-        val allProprietaryRecipes = moderneProprietaryRecipes.values.flatten()
-        if (allProprietaryRecipes.isNotEmpty()) {
+        val allModerneOnlyRecipes = moderneOnlyRecipes.values.flatten()
+        if (allModerneOnlyRecipes.isNotEmpty()) {
             RedirectWriter.writeRedirectConfig(
                 outputPath,
-                allProprietaryRecipes,
+                allModerneOnlyRecipes,
                 "https://docs.moderne.io",
                 "/user-documentation/recipes/recipe-catalog"
             )
@@ -367,6 +367,12 @@ class RecipeMarkdownGenerator : Runnable {
 
 
     companion object {
+        /** Modules whose docs should only appear in Moderne docs, regardless of license. */
+        private val MODERNE_DOCS_ONLY_MODULES = setOf("rewrite-devcenter")
+
+        private fun isModerneDocsOnly(origin: RecipeOrigin): Boolean =
+            origin.license == Licenses.Proprietary || origin.artifactId in MODERNE_DOCS_ONLY_MODULES
+
         // Set of base paths that have both io.moderne and org.openrewrite recipes (conflicts)
         private var conflictingBasePaths: Set<String> = emptySet()
 
