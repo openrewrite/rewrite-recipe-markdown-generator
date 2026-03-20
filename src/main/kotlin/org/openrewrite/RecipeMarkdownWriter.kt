@@ -573,7 +573,7 @@ import TabItem from '@theme/TabItem';
             if (recipeDescriptor.dataTables == null || recipeDescriptor.dataTables.isEmpty()) "" else "<exportDatatables>true</exportDatatables>"
 
         val dataTableCommandLineSnippet =
-            if (recipeDescriptor.dataTables == null || recipeDescriptor.dataTables.isEmpty()) "" else "-Drewrite.exportDatatables=true"
+            if (recipeDescriptor.dataTables == null || recipeDescriptor.dataTables.isEmpty()) "" else "--define rewrite.exportDatatables=true"
 
         if (requiresConfiguration) {
             val exampleRecipeName =
@@ -1172,7 +1172,7 @@ $cliSnippet
             You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
 
             ```shell title="shell"
-            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.activeRecipes=${recipeDescriptor.name} $dataTableCommandLineSnippet
+            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run --define rewrite.activeRecipes=${recipeDescriptor.name} $dataTableCommandLineSnippet
             ```
 
             </TabItem>
@@ -1314,7 +1314,7 @@ $cliSnippet
             You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
 
             ```shell title="shell"
-            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:RELEASE -Drewrite.activeRecipes=${recipeDescriptor.name} $dataTableCommandLineSnippet
+            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run --define rewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:RELEASE --define rewrite.activeRecipes=${recipeDescriptor.name} $dataTableCommandLineSnippet
             ```
             </TabItem>
             """.trimIndent()
