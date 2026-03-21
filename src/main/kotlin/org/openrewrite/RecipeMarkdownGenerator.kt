@@ -314,8 +314,8 @@ class RecipeMarkdownGenerator : Runnable {
         // Write lists of recipes into various files
         // OpenRewrite docs: open-source recipes only (links use /recipes path)
         val listWriter = ListsOfRecipesWriter(openSourceRecipeDescriptors, outputPath, "/recipes")
-        listWriter.createModerneRecipes(moderneOnlyRecipes)
-        listWriter.createRecipesWithDataTables()
+        listWriter.createModerneRecipes(moderneOnlyRecipes.values.flatten(), recipeOrigins, recipeToSource)
+        listWriter.createRecipesWithDataTables(recipeOrigins, recipeToSource)
         listWriter.createRecipesByTag()
         listWriter.createScanningRecipes(
             allRecipes.filter { recipe ->
@@ -331,7 +331,7 @@ class RecipeMarkdownGenerator : Runnable {
         // Moderne docs: ALL recipes (links use /user-documentation/recipes/recipe-catalog path)
         if (moderneListsPath != null) {
             val moderneListWriter = ListsOfRecipesWriter(allRecipeDescriptors, moderneListsPath, "/user-documentation/recipes/recipe-catalog")
-            moderneListWriter.createRecipesWithDataTables()
+            moderneListWriter.createRecipesWithDataTables(recipeOrigins, recipeToSource)
             moderneListWriter.createRecipesByTag()
             moderneListWriter.createScanningRecipes(
                 allRecipes.filter { recipe ->
