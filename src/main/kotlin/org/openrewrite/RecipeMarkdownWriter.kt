@@ -682,8 +682,10 @@ import RunRecipe from '@site/src/components/RunRecipe';
         }
 
         if (cliOptions.isNotEmpty()) {
-            // Use single quotes for JSX to avoid issues with double quotes in option values
-            props.appendLine("  cliOptions={'$cliOptions'}")
+            // Use single quotes for JSX to avoid issues with double quotes in option values.
+            // Escape backslashes, single quotes, and newlines so the JS string literal is valid.
+            val escaped = cliOptions.replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n")
+            props.appendLine("  cliOptions={'$escaped'}")
         }
 
         if (suppressGradle) {
