@@ -29,7 +29,8 @@ class ListsOfRecipesWriter(
         data class WithOrigin(val item: T, val groupId: String, val artifactId: String)
 
         val enriched = items.map { item ->
-            val origin = recipeOrigins[recipeToSource[nameOf(item)]]
+            val name = nameOf(item)
+            val origin = RecipeMarkdownGenerator.findOrigin(recipeToSource[name], name, recipeOrigins)
             WithOrigin(item, origin?.groupId ?: "other", origin?.artifactId ?: "unknown")
         }
 
