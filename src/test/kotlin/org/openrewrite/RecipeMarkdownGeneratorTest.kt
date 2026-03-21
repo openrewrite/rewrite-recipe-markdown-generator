@@ -30,6 +30,7 @@ class RecipeMarkdownGeneratorTest {
             "1.x", // Moderne Recipe BOM
             "6.x", // Gradle plugin
             "5.x", // Maven plugin
+            "--latest-versions-only",
         )
         assertThat(exitCode).isEqualTo(0)
 
