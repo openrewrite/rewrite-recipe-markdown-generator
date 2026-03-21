@@ -16,6 +16,33 @@ class ListsOfRecipesWriter(
     val outputPath: Path,
     val recipeLinkBasePath: String = "/recipes"
 ) {
+    /**
+     * Groups items into a two-level hierarchy: groupId -> artifactId -> items.
+     * Resolves each item's origin exactly once.
+     */
+    private fun <T> groupByOrigin(
+        items: List<T>,
+        nameOf: (T) -> String,
+        recipeOrigins: Map<URI, RecipeOrigin>,
+        recipeToSource: Map<String, URI>
+    ): SortedMap<String, SortedMap<String, List<T>>> {
+        data class WithOrigin(val item: T, val groupId: String, val artifactId: String)
+
+        val enriched = items.map { item ->
+            val origin = recipeOrigins[recipeToSource[nameOf(item)]]
+            WithOrigin(item, origin?.groupId ?: "other", origin?.artifactId ?: "unknown")
+        }
+
+        return enriched
+            .groupBy { it.groupId }.toSortedMap()
+            .mapValues { (_, group) ->
+                group.groupBy { it.artifactId }
+                    .mapValues { (_, entries) -> entries.map { it.item } }
+                    .toSortedMap()
+            }
+            .toSortedMap()
+    }
+
     fun createModerneRecipes(moderneProprietaryRecipesMap: TreeMap<String, MutableList<RecipeDescriptor>>) {
         val moderneRecipesPath = outputPath.resolve("moderne-recipes.md")
 
@@ -209,27 +236,10 @@ class ListsOfRecipesWriter(
 
             writeln("Total standalone recipes: ${standaloneRecipes.size}\n")
 
-            // Group by groupId first, then artifactId for two-level hierarchy
-            val recipesByGroup = standaloneRecipes
-                .groupBy { recipe ->
-                    val source = recipeToSource[recipe.name]
-                    val origin = recipeOrigins[source]
-                    origin?.groupId ?: "other"
-                }
-                .toSortedMap()
-
-            for ((groupId, groupRecipes) in recipesByGroup) {
+            for ((groupId, artifactMap) in groupByOrigin(standaloneRecipes, { it.name }, recipeOrigins, recipeToSource)) {
                 writeln("\n## ${groupId}\n")
 
-                val recipesByArtifact = groupRecipes
-                    .groupBy { recipe ->
-                        val source = recipeToSource[recipe.name]
-                        val origin = recipeOrigins[source]
-                        origin?.artifactId ?: "unknown"
-                    }
-                    .toSortedMap()
-
-                for ((artifactId, recipes) in recipesByArtifact) {
+                for ((artifactId, recipes) in artifactMap) {
                     writeln("\n### ${artifactId}\n")
 
                     for (recipe in recipes.sortedBy { it.name }) {
@@ -271,27 +281,10 @@ class ListsOfRecipesWriter(
             )
 
 
-            // Group by groupId first, then artifactId for two-level hierarchy
-            val recipesByGroup = scanningRecipes
-                .groupBy { recipe ->
-                    val source = recipeToSource[recipe.name]
-                    val origin = recipeOrigins[source]
-                    origin?.groupId ?: "other"
-                }
-                .toSortedMap()
-
-            for ((groupId, groupRecipes) in recipesByGroup) {
+            for ((groupId, artifactMap) in groupByOrigin(scanningRecipes, { it.name }, recipeOrigins, recipeToSource)) {
                 writeln("\n## ${groupId}\n")
 
-                val recipesByArtifact = groupRecipes
-                    .groupBy { recipe ->
-                        val source = recipeToSource[recipe.name]
-                        val origin = recipeOrigins[source]
-                        origin?.artifactId ?: "unknown"
-                    }
-                    .toSortedMap()
-
-                for ((artifactId, recipes) in recipesByArtifact) {
+                for ((artifactId, recipes) in artifactMap) {
                     writeln("\n### ${artifactId}\n")
 
                     for (recipe in recipes.sortedBy { it.name }) {
@@ -327,27 +320,10 @@ class ListsOfRecipesWriter(
 
             writeln("Total recipes: ${allRecipeDescriptors.size}\n")
 
-            // Group by groupId first, then artifactId for two-level hierarchy
-            val recipesByGroup = allRecipeDescriptors
-                .groupBy { recipe ->
-                    val source = recipeToSource[recipe.name]
-                    val origin = recipeOrigins[source]
-                    origin?.groupId ?: "other"
-                }
-                .toSortedMap()
-
-            for ((groupId, groupRecipes) in recipesByGroup) {
+            for ((groupId, artifactMap) in groupByOrigin(allRecipeDescriptors, { it.name }, recipeOrigins, recipeToSource)) {
                 writeln("\n## ${groupId}\n")
 
-                val recipesByArtifact = groupRecipes
-                    .groupBy { recipe ->
-                        val source = recipeToSource[recipe.name]
-                        val origin = recipeOrigins[source]
-                        origin?.artifactId ?: "unknown"
-                    }
-                    .toSortedMap()
-
-                for ((artifactId, recipes) in recipesByArtifact) {
+                for ((artifactId, recipes) in artifactMap) {
                     writeln("\n### ${artifactId}\n")
                     val origin = recipeOrigins[recipeToSource[recipes.first().name]]
                     val licenseInfo = origin?.license?.name ?: "Unknown"
