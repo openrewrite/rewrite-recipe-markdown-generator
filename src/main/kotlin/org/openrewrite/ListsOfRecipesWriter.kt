@@ -44,7 +44,11 @@ class ListsOfRecipesWriter(
             .toSortedMap()
     }
 
-    fun createModerneRecipes(moderneProprietaryRecipesMap: TreeMap<String, MutableList<RecipeDescriptor>>) {
+    fun createModerneRecipes(
+        moderneProprietaryRecipes: List<RecipeDescriptor>,
+        recipeOrigins: Map<URI, RecipeOrigin>,
+        recipeToSource: Map<String, URI>
+    ) {
         val moderneRecipesPath = outputPath.resolve("moderne-recipes.md")
 
         Files.newBufferedWriter(moderneRecipesPath, StandardOpenOption.CREATE).useAndApply {
@@ -64,32 +68,36 @@ class ListsOfRecipesWriter(
                         "[contact us](https://www.moderne.ai/contact-us).\n"
             )
 
-            for (entry in moderneProprietaryRecipesMap) {
-                // Artifact ID
-                writeln("\n## ${entry.key}\n")
+            for ((groupId, artifactMap) in groupByOrigin(moderneProprietaryRecipes, { it.name }, recipeOrigins, recipeToSource)) {
+                writeln("\n## ${groupId}\n")
 
-                for (recipe in entry.value.sortedBy { it.name }) {
-                    val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
-                    // Link to Moderne docs since these recipes are exclusive to Moderne
-                    writeln("* [${recipe.name}](https://docs.moderne.io/user-documentation/recipes/recipe-catalog/${recipePath})")
-                    writeln("  * **${recipe.displayNameEscapedMdx()}**")
-                    writeln("  * ${recipe.descriptionEscaped()}")
+                for ((artifactId, recipes) in artifactMap) {
+                    writeln("\n### ${artifactId}\n")
+
+                    for (recipe in recipes.sortedBy { it.name }) {
+                        val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
+                        // Link to Moderne docs since these recipes are exclusive to Moderne
+                        writeln("* [${recipe.name}](https://docs.moderne.io/user-documentation/recipes/recipe-catalog/${recipePath})")
+                        writeln("  * **${recipe.displayNameEscapedMdx()}**")
+                        writeln("  * ${recipe.descriptionEscaped()}")
+                    }
                 }
-
-                writeln("")
             }
         }
     }
 
     // These are common in every recipe - so let's not use them when generating the list of recipes with data tables.
-    private val dataTablesToIgnore = listOf(
+    private val dataTablesToIgnore = setOf(
         "org.openrewrite.table.SearchResults",
         "org.openrewrite.table.SourcesFileResults",
         "org.openrewrite.table.SourcesFileErrors",
         "org.openrewrite.table.RecipeRunStats"
     )
 
-    fun createRecipesWithDataTables() {
+    fun createRecipesWithDataTables(
+        recipeOrigins: Map<URI, RecipeOrigin>,
+        recipeToSource: Map<String, URI>
+    ) {
         val recipesWithDataTables = allRecipeDescriptors.filter {
             it.dataTables != null && it.dataTables.any { dataTable -> dataTable.name !in dataTablesToIgnore }
         }
@@ -112,23 +120,31 @@ class ListsOfRecipesWriter(
                         "it won't be included in this list._\n"
             )
 
-            for (recipe in recipesWithDataTables) {
-                val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
-                writeln("### [${recipe.name}](${recipeLinkBasePath}/${recipePath}.md)")
-                writeln("  * **${recipe.displayNameEscapedMdx()}**")
-                writeln("  * ${recipe.descriptionEscaped()}")
+            for ((groupId, artifactMap) in groupByOrigin(recipesWithDataTables, { it.name }, recipeOrigins, recipeToSource)) {
+                writeln("\n## ${groupId}\n")
 
-                writeln("\n#### Data tables:\n")
+                for ((artifactId, recipes) in artifactMap) {
+                    writeln("\n### ${artifactId}\n")
 
-                val filteredDataTables = recipe.dataTables.filter { dataTable ->
-                    dataTable.name !in dataTablesToIgnore
+                    for (recipe in recipes.sortedBy { it.name }) {
+                        val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
+                        writeln("#### [${recipe.name}](${recipeLinkBasePath}/${recipePath}.md)")
+                        writeln("  * **${recipe.displayNameEscapedMdx()}**")
+                        writeln("  * ${recipe.descriptionEscaped()}")
+
+                        writeln("\n##### Data tables:\n")
+
+                        val filteredDataTables = recipe.dataTables.filter { dataTable ->
+                            dataTable.name !in dataTablesToIgnore
+                        }
+
+                        for (dataTable in filteredDataTables) {
+                            writeln("  * **${dataTable.name}**: *${escapeMdx(dataTable.description).replace("\n", " ")}*")
+                        }
+
+                        writeln("\n")
+                    }
                 }
-
-                for (dataTable in filteredDataTables) {
-                    writeln("  * **${dataTable.name}**: *${escapeMdx(dataTable.description).replace("\n", " ")}*")
-                }
-
-                writeln("\n")
             }
         }
     }
