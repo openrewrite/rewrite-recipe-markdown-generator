@@ -107,6 +107,7 @@ class RecipeOrigin(
         private val parsePattern = Pattern.compile("([^:]+):([^:]+):([^:]+):(.+)")
         private val coreLibs = setOf(
             "rewrite-core",
+            "rewrite-csharp",
             "rewrite-docker",
             "rewrite-gradle",
             "rewrite-groovy",
@@ -119,6 +120,7 @@ class RecipeOrigin(
             "rewrite-maven",
             "rewrite-properties",
             "rewrite-protobuf",
+            "rewrite-python",
             "rewrite-test",
             "rewrite-toml",
             "rewrite-xml",
