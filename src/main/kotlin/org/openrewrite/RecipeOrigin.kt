@@ -17,7 +17,8 @@ class RecipeOrigin(
      * It isn't necessary to explicitly take dependencies on the core libraries to access their recipes.
      * So explicit dependencies are only necessary when this returns "false"
      */
-    fun isFromCoreLibrary() = groupId == "org.openrewrite" && coreLibs.contains(artifactId)
+    fun isFromCoreLibrary() = repositoryUrl.startsWith("https://github.com/openrewrite/rewrite/")
+
 
     private fun convertNameToJavaPath(recipeName: String): String {
         // These recipes are not Refaster recipes and should keep
@@ -105,24 +106,6 @@ class RecipeOrigin(
 
     companion object {
         private val parsePattern = Pattern.compile("([^:]+):([^:]+):([^:]+):(.+)")
-        private val coreLibs = setOf(
-            "rewrite-core",
-            "rewrite-gradle",
-            "rewrite-groovy",
-            "rewrite-hcl",
-            "rewrite-java",
-            "rewrite-java-test",
-            "rewrite-javascript",
-            "rewrite-json",
-            "rewrite-kotlin",
-            "rewrite-maven",
-            "rewrite-properties",
-            "rewrite-protobuf",
-            "rewrite-test",
-            "rewrite-toml",
-            "rewrite-xml",
-            "rewrite-yaml"
-        )
 
         fun fromString(encoded: String): RecipeOrigin {
             val m = parsePattern.matcher(encoded)
