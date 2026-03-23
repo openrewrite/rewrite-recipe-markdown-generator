@@ -17,14 +17,8 @@ class RecipeOrigin(
      * It isn't necessary to explicitly take dependencies on the core libraries to access their recipes.
      * So explicit dependencies are only necessary when this returns "false"
      */
-    fun isFromCoreLibrary(): Boolean {
-        if (repositoryUrl.isBlank()) return false
-        val repoName = repositoryUrl
-            .substringAfter("github.com/")
-            .split("/")
-            .getOrNull(1) ?: return false
-        return groupId == "org.openrewrite" && repoName != artifactId
-    }
+    fun isFromCoreLibrary() = repositoryUrl.startsWith("https://github.com/openrewrite/rewrite/")
+
 
     private fun convertNameToJavaPath(recipeName: String): String {
         // These recipes are not Refaster recipes and should keep
