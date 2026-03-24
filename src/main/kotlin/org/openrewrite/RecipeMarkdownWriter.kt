@@ -671,10 +671,11 @@ import RunRecipe from '@site/src/components/RunRecipe';
         props.appendLine("  recipeName=\"${recipeDescriptor.name}\"")
         props.appendLine("  displayName=\"${recipeDescriptor.displayNameEscapedMdx()}\"")
 
-        if (requiresDependency) {
-            props.appendLine("  groupId=\"${origin.groupId}\"")
-            props.appendLine("  artifactId=\"${origin.artifactId}\"")
-            props.appendLine("  versionKey=\"${origin.versionPlaceholderKey()}\"")
+        props.appendLine("  groupId=\"${origin.groupId}\"")
+        props.appendLine("  artifactId=\"${origin.artifactId}\"")
+        props.appendLine("  versionKey=\"${origin.versionPlaceholderKey()}\"")
+        if (!requiresDependency) {
+            props.appendLine("  isCoreLibrary")
         }
 
         if (requiresConfiguration) {
