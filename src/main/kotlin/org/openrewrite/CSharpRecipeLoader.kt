@@ -142,8 +142,16 @@ class CSharpRecipeLoader(
                 .get()
             println("Started .NET RPC process for C# recipe loading")
 
+            // Collect names of recipes already loaded from the Java classpath.
+            // prepareRecipe can return descriptors with Java recipe names when C# recipes
+            // delegate to them, so we filter those out to avoid overwriting Java source metadata.
+            val javaRecipeNames = javaDescriptors.map { it.name }.toSet()
+
             // Phase 1: Install all NuGet packages before preparing any recipes.
             // This ensures cross-package delegatesTo (e.g. TUnit → org.openrewrite.csharp.*) can resolve.
+            // After each install, record which recipe names belong to that package
+            // (before the next package is installed and pollutes the marketplace query).
+            val packageRecipeNames = mutableMapOf<String, Set<String>>()
             for (pkg in packagesToLoad) {
                 try {
                     val versionLabel = pkg.version ?: "latest"
@@ -155,38 +163,82 @@ class CSharpRecipeLoader(
                         rpc.installRecipes(pkg.nugetPackageName)
                     }
                     println("  Installed ${response.recipesInstalled} recipe(s) from ${pkg.nugetPackageName}")
+
+                    // Query immediately after install to capture this package's recipes
+                    // before the next package is installed
+                    val recipeNames = rpc.getMarketplace(RecipeBundle("nuget", pkg.nugetPackageName, null, null, null))
+                        .allRecipes
+                        .map { it.name }
+                        .toSet()
+                    packageRecipeNames[pkg.artifactId] = recipeNames
+                    println("  Recorded ${recipeNames.size} recipe name(s) for ${pkg.artifactId}")
                 } catch (e: Exception) {
                     System.err.println("Warning: Failed to install recipes from ${pkg.artifactId}: ${e.message}")
                     e.printStackTrace()
                 }
             }
 
-            // Phase 2: Now prepare recipes from each package.
+            // Phase 2: Prepare recipes from each package, using the Phase 1 mapping
+            // to correctly attribute recipes to the package that owns them.
             val allDescriptors = mutableListOf<RecipeDescriptor>()
             val recipeToSource = mutableMapOf<String, URI>()
 
             for (pkg in packagesToLoad) {
                 try {
-                    val descriptors = rpc.getMarketplace(RecipeBundle("nuget", pkg.nugetPackageName, null, null, null))
-                        .allRecipes
-                        .mapNotNull { r ->
-                            try {
-                                val requiredOptions = r.options
-                                    .filter { it.isRequired }
-                                    .associate { it.name to placeholderForType(it.type) }
-                                rpc.prepareRecipe(r.name, requiredOptions).descriptor
-                            } catch (e: Exception) {
-                                System.err.println("Warning: Failed to prepare recipe ${r.name}: ${e.message}")
-                                null
-                            }
-                        }
+                    val ownedRecipeNames = packageRecipeNames[pkg.artifactId] ?: continue
+                    // Remove recipes that were already attributed to a previous package
+                    val newRecipeNames = ownedRecipeNames.filter { it !in recipeToSource }
 
-                    val newDescriptors = descriptors.filter { it.name !in recipeToSource }
-                    for (descriptor in newDescriptors) {
+                    val allListings = rpc.getMarketplace(RecipeBundle("nuget", pkg.nugetPackageName, null, null, null))
+                        .allRecipes
+                    val descriptors = newRecipeNames.mapNotNull { recipeName ->
+                        try {
+                            val listing = allListings.firstOrNull { it.name == recipeName }
+                                ?: return@mapNotNull null
+
+                            val requiredOptions = listing.options
+                                .filter { it.isRequired }
+                                .associate { it.name to placeholderForType(it.type) }
+                            val descriptor = rpc.prepareRecipe(recipeName, requiredOptions).descriptor
+
+                            // When prepareRecipe resolves a delegatesTo chain, the returned
+                            // descriptor may have the delegate's name (e.g. the Java recipe)
+                            // instead of the C# wrapper's name. Build a descriptor with the
+                            // C# name so the wrapper gets its own doc page.
+                            if (descriptor.name != recipeName && descriptor.name in javaRecipeNames) {
+                                RecipeDescriptor(
+                                    recipeName,
+                                    listing.displayName,
+                                    listing.displayName,
+                                    listing.description,
+                                    emptySet(),
+                                    null,
+                                    listing.options,
+                                    listOf(descriptor),
+                                    emptyList(),
+                                    emptyList(),
+                                    emptyList(),
+                                    emptyList(),
+                                    emptyList(),
+                                    URI.create("csharp-search://${pkg.artifactId}/$recipeName")
+                                )
+                            } else {
+                                descriptor
+                            }
+                        } catch (e: Exception) {
+                            System.err.println("Warning: Failed to prepare recipe $recipeName: ${e.message}")
+                            null
+                        }
+                    }
+
+                    // Filter out any descriptors that still resolve to Java classpath names
+                    // (shouldn't happen after the remap above, but guard against it).
+                    for (descriptor in descriptors) {
+                        if (descriptor.name in javaRecipeNames) continue
                         val sourceUri = mapRecipeToSourceUri(descriptor.name, pkg.artifactId)
                         recipeToSource[descriptor.name] = sourceUri
                     }
-                    allDescriptors.addAll(newDescriptors)
+                    allDescriptors.addAll(descriptors.filter { it.name !in javaRecipeNames })
 
                 } catch (e: Exception) {
                     System.err.println("Warning: Failed to load recipes from ${pkg.artifactId}: ${e.message}")
