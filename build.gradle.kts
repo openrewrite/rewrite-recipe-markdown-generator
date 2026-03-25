@@ -52,6 +52,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.openrewrite:rewrite-core")
     implementation("org.openrewrite:rewrite-javascript")
+    implementation("org.openrewrite:rewrite-csharp")
     implementation("org.openrewrite:rewrite-python")
 
     // Runtime dependencies

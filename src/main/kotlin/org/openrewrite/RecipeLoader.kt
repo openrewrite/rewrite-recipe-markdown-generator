@@ -122,12 +122,22 @@ class RecipeLoader {
             System.err.println("WARNING: 0 Python recipes loaded despite ${PythonRecipeLoader.PYTHON_RECIPE_MODULES.size} module(s) configured. Check that Python 3.10+ and pip are installed.")
         }
 
-        // Merge TypeScript and Python results with Java/YAML results
+        // Load C# recipes via RPC
+        println("\nChecking for C# recipes...")
+        val csharpLoader = CSharpRecipeLoader(recipeOrigins)
+        val csharpResult = csharpLoader.loadCSharpRecipes()
+        if (csharpResult.descriptors.isEmpty() && CSharpRecipeLoader.CSHARP_RECIPE_MODULES.isNotEmpty()) {
+            System.err.println("WARNING: 0 C# recipes loaded despite ${CSharpRecipeLoader.CSHARP_RECIPE_MODULES.size} module(s) configured. Check that .NET SDK is installed.")
+        }
+
+        // Merge TypeScript, Python, and C# results with Java/YAML results
         val allDescriptors = environmentData.flatMap { it.recipeDescriptors }.toMutableList()
         allDescriptors.addAll(typeScriptResult.descriptors)
         recipeToSource.putAll(typeScriptResult.recipeToSource)
         allDescriptors.addAll(pythonResult.descriptors)
         recipeToSource.putAll(pythonResult.recipeToSource)
+        allDescriptors.addAll(csharpResult.descriptors)
+        recipeToSource.putAll(csharpResult.recipeToSource)
 
         // Deduplicate recipes by name (same recipe may be discovered from multiple JARs
         // when scanJar is called with the full classpath as dependencies)
@@ -147,7 +157,7 @@ class RecipeLoader {
             allCategoryDescriptors = environmentData.flatMap { it.categoryDescriptors }.distinctBy { it.packageName },
             allRecipes = environmentData.flatMap { it.recipes }.distinctBy { it.name },
             recipeToSource = recipeToSource,
-            additionalOrigins = pythonResult.syntheticOrigins,
+            additionalOrigins = pythonResult.syntheticOrigins + csharpResult.syntheticOrigins,
             crossCategoryPaths = allCrossCategoryPaths
         )
     }

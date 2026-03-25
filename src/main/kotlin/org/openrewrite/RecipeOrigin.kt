@@ -73,6 +73,15 @@ class RecipeOrigin(
                     .removeSuffix("/")
                 "https://github.com/search?type=code&q=repo:${repoPath}+${searchRecipeName}"
             }
+            sourceString.startsWith("csharp-search://") -> {
+                val searchRecipeName = sourceString.substringAfter("csharp-search://$artifactId/")
+                val repoPath = repositoryUrl
+                    .substringAfter("github.com/")
+                    .substringBefore("/blob/")
+                    .substringBefore("/tree/")
+                    .removeSuffix("/")
+                "https://github.com/search?type=code&q=repo:${repoPath}+${searchRecipeName}"
+            }
             // YAML recipes will have a source that ends with META-INF/rewrite/something.yml
             sourceString.endsWith(".yml") -> {
                 val ymlPath = sourceString.substring(source.toString().lastIndexOf("META-INF"))
