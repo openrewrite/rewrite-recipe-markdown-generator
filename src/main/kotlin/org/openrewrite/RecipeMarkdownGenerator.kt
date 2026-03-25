@@ -171,6 +171,11 @@ class RecipeMarkdownGenerator : Runnable {
             .filter { it.artifactId in PythonRecipeLoader.PYTHON_RECIPE_MODULES }
             .forEach { it.license = Licenses.Proprietary }
 
+        // C# recipes are always proprietary
+        recipeOrigins.values
+            .filter { it.artifactId in CSharpRecipeLoader.CSHARP_RECIPE_MODULES }
+            .forEach { it.license = Licenses.Proprietary }
+
         println("Found ${allRecipeDescriptors.size} descriptor(s).")
 
         // Detect conflicting paths between io.moderne and org.openrewrite recipes
@@ -199,7 +204,8 @@ class RecipeMarkdownGenerator : Runnable {
                 val origin = findOrigin(source, recipe.name, recipeOrigins)
                 (origin != null && isModerneDocsOnly(origin)) ||
                     source?.toString()?.startsWith("typescript-search://") == true ||
-                    source?.toString()?.startsWith("python-search://") == true
+                    source?.toString()?.startsWith("python-search://") == true ||
+                    source?.toString()?.startsWith("csharp-search://") == true
             }
             .map { it.name }
             .toSet()
@@ -419,6 +425,9 @@ class RecipeMarkdownGenerator : Runnable {
                 recipeName.startsWith("io.moderne") -> {
                     recipeName.substring(11).replace('.', '/').lowercase(Locale.getDefault())
                 }
+                recipeName.startsWith("OpenRewrite.") -> {
+                    "csharp/" + recipeName.substring(12).replace('.', '/').lowercase(Locale.getDefault())
+                }
                 else -> {
                     recipeName.replace('.', '/').lowercase(Locale.getDefault())
                 }
@@ -443,6 +452,12 @@ class RecipeMarkdownGenerator : Runnable {
             // Handle Python recipes with custom URI scheme
             if (rawUri.startsWith("python-search://")) {
                 val artifactId = rawUri.substringAfter("python-search://").substringBefore("/")
+                return recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
+            }
+
+            // Handle C# recipes with custom URI scheme
+            if (rawUri.startsWith("csharp-search://")) {
+                val artifactId = rawUri.substringAfter("csharp-search://").substringBefore("/")
                 return recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
             }
 
@@ -505,6 +520,9 @@ class RecipeMarkdownGenerator : Runnable {
                 }
                 recipe.name.startsWith("io.moderne") -> {
                     if (needsSuffix) basePath + "-moderne-edition" else basePath
+                }
+                recipe.name.startsWith("OpenRewrite.") -> {
+                    basePath
                 }
                 recipe.name.startsWith("ai.timefold") ||
                 recipe.name.startsWith("androidx") ||

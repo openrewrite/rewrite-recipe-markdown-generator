@@ -137,6 +137,20 @@ class RecipeMarkdownGeneratorTest {
             .isEqualTo("org/apache/camel/somerecipe")
     }
 
+    @Test
+    fun findOriginHandlesCSharpSearchScheme() {
+        val syntheticUri = URI.create("csharp-search://recipes-code-quality")
+        val origin = RecipeOrigin("io.moderne.recipe", "recipes-code-quality", "0.1.0", syntheticUri)
+        origin.license = Licenses.Proprietary
+        val origins = mapOf(syntheticUri to origin)
+
+        val source = URI.create("csharp-search://recipes-code-quality/org.openrewrite.csharp.cleanup.SomeRecipe")
+        val found = RecipeMarkdownGenerator.findOrigin(source, "org.openrewrite.csharp.cleanup.SomeRecipe", origins)
+
+        assertThat(found).isNotNull
+        assertThat(found!!.artifactId).isEqualTo("recipes-code-quality")
+    }
+
     private fun initializeConflictDetection(recipeNames: List<String>) {
         val descriptors = recipeNames.map { createDescriptor(it) }
         RecipeMarkdownGenerator.initializeConflictDetection(descriptors)

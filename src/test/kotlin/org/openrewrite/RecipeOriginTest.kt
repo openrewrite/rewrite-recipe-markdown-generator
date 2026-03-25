@@ -40,6 +40,18 @@ class RecipeOriginTest {
     }
 
     @Test
+    fun csharpRecipeGithubUrl() {
+        val origin = RecipeOrigin("io.moderne.recipe", "recipes-code-quality", "0.1.0", URI.create("csharp-search://recipes-code-quality"))
+        origin.repositoryUrl = "https://github.com/moderneinc/recipes-csharp/blob/main/"
+
+        val githubUrl = origin.githubUrl(
+            "org.openrewrite.csharp.cleanup.SomeRecipe",
+            URI.create("csharp-search://recipes-code-quality/org.openrewrite.csharp.cleanup.SomeRecipe")
+        )
+        assertThat(githubUrl).isEqualTo("https://github.com/search?type=code&q=repo:moderneinc/recipes-csharp+org.openrewrite.csharp.cleanup.SomeRecipe")
+    }
+
+    @Test
     fun blankRepositoryUrlIsNotCoreLibrary() {
         val origin = RecipeOrigin("org.openrewrite", "rewrite-java", "8.0.0", URI.create("file:///tmp/foo"))
 

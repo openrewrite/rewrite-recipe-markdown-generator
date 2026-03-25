@@ -64,6 +64,14 @@ class RecipeMarkdownWriter(
     }
 
     /**
+     * Determines if a recipe is a C# recipe based on its source URI.
+     */
+    private fun isCSharpRecipe(recipeDescriptor: RecipeDescriptor): Boolean {
+        val recipeSource = recipeToSource[recipeDescriptor.name] ?: return false
+        return recipeSource.toString().startsWith("csharp-search://")
+    }
+
+    /**
      * Write a recipe to a custom path (for cross-category duplicates).
      * The target language is derived from the first segment of the custom path (e.g., "python" from "python/changemethodname").
      */
@@ -163,7 +171,7 @@ import RunRecipe from '@site/src/components/RunRecipe';
             writeExamples(recipeDescriptor)
             writeUsage(recipeDescriptor, origin)
             // Skip Moderne link for JavaScript and Python recipes as these don't exist there yet.
-            if (!isJavaScriptRecipe(recipeDescriptor) && !isPythonRecipe(recipeDescriptor)) {
+            if (!isJavaScriptRecipe(recipeDescriptor) && !isPythonRecipe(recipeDescriptor) && !isCSharpRecipe(recipeDescriptor)) {
                 writeModerneLink(recipeDescriptor)
             }
             writeDataTables(recipeDescriptor)
@@ -538,6 +546,15 @@ import RunRecipe from '@site/src/components/RunRecipe';
             ?: origin.artifactId
     }
 
+    /**
+     * Gets the NuGet package name for a C# recipe module.
+     * Uses the single source of truth from CSharpRecipeLoader.
+     */
+    private fun getNuGetPackageName(origin: RecipeOrigin): String {
+        return CSharpRecipeLoader.CSHARP_RECIPE_MODULES[origin.artifactId]
+            ?: origin.artifactId
+    }
+
     private fun BufferedWriter.writeUsage(
         recipeDescriptor: RecipeDescriptor,
         origin: RecipeOrigin
@@ -571,6 +588,21 @@ import RunRecipe from '@site/src/components/RunRecipe';
                   recipeName="${recipeDescriptor.name}"
                   displayName="${recipeDescriptor.displayNameEscapedMdx()}"
                   pipPackage="$pipPackageName"
+                />
+                """.trimIndent()
+            )
+            return
+        }
+
+        // Handle C# recipes
+        if (isCSharpRecipe(recipeDescriptor)) {
+            val nugetPackageName = getNuGetPackageName(origin)
+            writeln(
+                """
+                <RunRecipe
+                  recipeName="${recipeDescriptor.name}"
+                  displayName="${recipeDescriptor.displayNameEscapedMdx()}"
+                  nugetPackage="$nugetPackageName"
                 />
                 """.trimIndent()
             )
