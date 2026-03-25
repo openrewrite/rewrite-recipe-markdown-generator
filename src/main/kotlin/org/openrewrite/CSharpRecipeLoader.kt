@@ -5,6 +5,10 @@ package org.openrewrite
 import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.csharp.rpc.CSharpRewriteRpc
 import org.openrewrite.marketplace.RecipeBundle
+import org.openrewrite.marketplace.RecipeBundleReader
+import org.openrewrite.marketplace.RecipeBundleResolver
+import org.openrewrite.marketplace.RecipeListing
+import org.openrewrite.marketplace.RecipeMarketplace
 import java.net.URI
 
 /**
@@ -13,7 +17,9 @@ import java.net.URI
  * needing to parse C# source files directly.
  */
 class CSharpRecipeLoader(
-    private val recipeOrigins: Map<URI, RecipeOrigin>
+    private val recipeOrigins: Map<URI, RecipeOrigin>,
+    private val javaDescriptors: Collection<RecipeDescriptor> = emptyList(),
+    private val classloader: ClassLoader = CSharpRecipeLoader::class.java.classLoader
 ) {
 
     companion object {
@@ -43,6 +49,21 @@ class CSharpRecipeLoader(
             "recipes-migrate-dotnet" to "https://github.com/moderneinc/recipes-csharp/blob/main/",
             "recipes-tunit" to "https://github.com/moderneinc/recipes-csharp/blob/main/"
         )
+
+        private val CLASSPATH_BUNDLE = RecipeBundle("classpath", "java-recipes", null, null, null)
+
+        /**
+         * Build a [RecipeMarketplace] populated with Java recipe descriptors so that
+         * C# recipes that delegate to Java recipes can be resolved during [CSharpRewriteRpc.prepareRecipe].
+         */
+        @JvmStatic
+        fun buildMarketplace(descriptors: Collection<RecipeDescriptor>): RecipeMarketplace {
+            val marketplace = RecipeMarketplace()
+            for (descriptor in descriptors) {
+                marketplace.install(RecipeListing.fromDescriptor(descriptor, CLASSPATH_BUNDLE), emptyList())
+            }
+            return marketplace
+        }
     }
 
     data class CSharpRecipeResult(
@@ -70,6 +91,27 @@ class CSharpRecipeLoader(
     }
 
     /**
+     * Creates a [RecipeBundleResolver] that can prepare Java recipes from the classpath.
+     * Used when C# recipes delegate to Java recipes via [org.openrewrite.rpc.request.PrepareRecipeResponse.DelegatesTo].
+     */
+    private fun classpathResolver(): RecipeBundleResolver {
+        return object : RecipeBundleResolver {
+            override fun getEcosystem() = CLASSPATH_BUNDLE.packageEcosystem
+
+            override fun resolve(bundle: RecipeBundle): RecipeBundleReader {
+                val loader = org.openrewrite.internal.RecipeLoader(classloader)
+                return object : RecipeBundleReader {
+                    override fun getBundle() = bundle
+                    override fun read() = RecipeMarketplace()
+                    override fun describe(listing: RecipeListing) = loader.load(listing.name, emptyMap()).descriptor
+                    override fun prepare(listing: RecipeListing, options: MutableMap<String, Any>) =
+                        loader.load(listing.name, options)
+                }
+            }
+        }
+    }
+
+    /**
      * Loads C# recipes from NuGet packages via RPC.
      */
     fun loadCSharpRecipes(): CSharpRecipeResult {
@@ -87,14 +129,21 @@ class CSharpRecipeLoader(
 
         println("Found ${packagesToLoad.size} C# recipe module(s): ${packagesToLoad.joinToString { it.artifactId }}")
 
+        val marketplace = buildMarketplace(javaDescriptors)
+        if (javaDescriptors.isNotEmpty()) {
+            println("Registered ${javaDescriptors.size} Java recipe(s) in marketplace for delegatesTo resolution")
+        }
+
         var rpc: CSharpRewriteRpc? = null
         try {
-            rpc = CSharpRewriteRpc.builder().get()
+            rpc = CSharpRewriteRpc.builder()
+                .marketplace(marketplace)
+                .resolvers(listOf(classpathResolver()))
+                .get()
             println("Started .NET RPC process for C# recipe loading")
 
-            val allDescriptors = mutableListOf<RecipeDescriptor>()
-            val recipeToSource = mutableMapOf<String, URI>()
-
+            // Phase 1: Install all NuGet packages before preparing any recipes.
+            // This ensures cross-package delegatesTo (e.g. TUnit → org.openrewrite.csharp.*) can resolve.
             for (pkg in packagesToLoad) {
                 try {
                     val versionLabel = pkg.version ?: "latest"
@@ -106,7 +155,18 @@ class CSharpRecipeLoader(
                         rpc.installRecipes(pkg.nugetPackageName)
                     }
                     println("  Installed ${response.recipesInstalled} recipe(s) from ${pkg.nugetPackageName}")
+                } catch (e: Exception) {
+                    System.err.println("Warning: Failed to install recipes from ${pkg.artifactId}: ${e.message}")
+                    e.printStackTrace()
+                }
+            }
 
+            // Phase 2: Now prepare recipes from each package.
+            val allDescriptors = mutableListOf<RecipeDescriptor>()
+            val recipeToSource = mutableMapOf<String, URI>()
+
+            for (pkg in packagesToLoad) {
+                try {
                     val descriptors = rpc.getMarketplace(RecipeBundle("nuget", pkg.nugetPackageName, null, null, null))
                         .allRecipes
                         .mapNotNull { r ->
@@ -129,7 +189,7 @@ class CSharpRecipeLoader(
                     allDescriptors.addAll(newDescriptors)
 
                 } catch (e: Exception) {
-                    System.err.println("Warning: Failed to install recipes from ${pkg.artifactId}: ${e.message}")
+                    System.err.println("Warning: Failed to load recipes from ${pkg.artifactId}: ${e.message}")
                     e.printStackTrace()
                 }
             }

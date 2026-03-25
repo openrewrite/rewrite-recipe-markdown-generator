@@ -122,9 +122,10 @@ class RecipeLoader {
             System.err.println("WARNING: 0 Python recipes loaded despite ${PythonRecipeLoader.PYTHON_RECIPE_MODULES.size} module(s) configured. Check that Python 3.10+ and pip are installed.")
         }
 
-        // Load C# recipes via RPC
+        // Load C# recipes via RPC, passing Java descriptors so delegatesTo can resolve
         println("\nChecking for C# recipes...")
-        val csharpLoader = CSharpRecipeLoader(recipeOrigins)
+        val javaDescriptors = environmentData.flatMap { it.recipeDescriptors }
+        val csharpLoader = CSharpRecipeLoader(recipeOrigins, javaDescriptors, classloader)
         val csharpResult = csharpLoader.loadCSharpRecipes()
         if (csharpResult.descriptors.isEmpty() && CSharpRecipeLoader.CSHARP_RECIPE_MODULES.isNotEmpty()) {
             System.err.println("WARNING: 0 C# recipes loaded despite ${CSharpRecipeLoader.CSHARP_RECIPE_MODULES.size} module(s) configured. Check that .NET SDK is installed.")
