@@ -145,6 +145,7 @@ dependencies {
     "recipe"("io.moderne.recipe:rewrite-angular:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-cryptography:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-devcenter:$rewriteVersion")
+    "recipe"("io.moderne.recipe:rewrite-dropwizard:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-elastic:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-hibernate:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-java-application-server:$rewriteVersion")
@@ -156,7 +157,7 @@ dependencies {
     "recipe"("io.moderne.recipe:rewrite-spring:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-tapestry:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-vulncheck:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-dropwizard:$rewriteVersion")
+    
 }
 
 java {
