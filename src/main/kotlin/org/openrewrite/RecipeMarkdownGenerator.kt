@@ -511,6 +511,18 @@ class RecipeMarkdownGenerator : Runnable {
 
             val basePath = getBasePath(recipe.name)
 
+            // Docusaurus treats a file with the same name as its parent directory as the
+            // directory index (e.g., codequality/codequality.md -> /codequality/ route),
+            // which collides with the category README.md. Rename such recipes.
+            val lastSlash = basePath.lastIndexOf('/')
+            if (lastSlash > 0) {
+                val parentDir = basePath.substring(basePath.lastIndexOf('/', lastSlash - 1) + 1, lastSlash)
+                val leaf = basePath.substring(lastSlash + 1)
+                if (parentDir == leaf) {
+                    return basePath + "-recipe"
+                }
+            }
+
             // Add edition suffix only if there's a detected conflict
             val needsSuffix = conflictingBasePaths.contains(basePath)
 
