@@ -4614,7 +4614,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.77.0"
+  version: "8.77.1"
   markdownRecipeDescriptors:
     org.openrewrite.AddToGitignore:
       name: "org.openrewrite.AddToGitignore"
@@ -5047,7 +5047,7 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-csharp:
   artifactId: "rewrite-csharp"
-  version: "8.77.0"
+  version: "8.77.1"
   markdownRecipeDescriptors:
     org.openrewrite.csharp.AddNuGetPackageReference:
       name: "org.openrewrite.csharp.AddNuGetPackageReference"
@@ -5074,6 +5074,17 @@ rewrite-csharp:
         type: "String"
         required: true
       - name: "oldTargetFramework"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-csharp"
+    org.openrewrite.csharp.FindNuGetPackageReference:
+      name: "org.openrewrite.csharp.FindNuGetPackageReference"
+      description: "Searches for .csproj files that reference a specific NuGet package.\
+        \ Intended for use as a precondition to scope other recipes."
+      docLink: "https://docs.openrewrite.org/recipes/csharp/findnugetpackagereference"
+      options:
+      - name: "packageName"
         type: "String"
         required: true
       isImperative: true
@@ -5188,7 +5199,7 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
 rewrite-docker:
   artifactId: "rewrite-docker"
-  version: "8.77.0"
+  version: "8.77.1"
   markdownRecipeDescriptors:
     org.openrewrite.docker.AddAptGetCleanup:
       name: "org.openrewrite.docker.AddAptGetCleanup"
@@ -6995,7 +7006,7 @@ rewrite-gitlab:
       artifactId: "rewrite-gitlab"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.77.0"
+  version: "8.77.1"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -8024,7 +8035,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.77.0"
+  version: "8.77.1"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.AutoFormat:
       name: "org.openrewrite.groovy.format.AutoFormat"
@@ -8060,7 +8071,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.77.0"
+  version: "8.77.1"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -8690,7 +8701,7 @@ rewrite-jackson:
       artifactId: "rewrite-jackson"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.77.0"
+  version: "8.77.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -10435,7 +10446,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-javascript:
   artifactId: "rewrite-javascript"
-  version: "8.77.0"
+  version: "8.77.1"
   markdownRecipeDescriptors:
     org.openrewrite.javascript.change-import:
       name: "org.openrewrite.javascript.change-import"
@@ -10921,7 +10932,7 @@ rewrite-joda:
       artifactId: "rewrite-joda"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.77.0"
+  version: "8.77.1"
   markdownRecipeDescriptors:
     org.openrewrite.json.AddKeyValue:
       name: "org.openrewrite.json.AddKeyValue"
@@ -11056,7 +11067,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "8.77.0"
+  version: "8.77.1"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -12400,7 +12411,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.77.0"
+  version: "8.77.1"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddAnnotationProcessor:
       name: "org.openrewrite.maven.AddAnnotationProcessor"
@@ -14337,7 +14348,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "3.31.0"
+  version: "3.31.1"
   markdownRecipeDescriptors:
     com.google.guava.InlineGuavaMethods:
       name: "com.google.guava.InlineGuavaMethods"
@@ -18493,7 +18504,7 @@ rewrite-prethink:
       artifactId: "rewrite-prethink"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.77.0"
+  version: "8.77.1"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -19258,7 +19269,7 @@ rewrite-rewrite:
       artifactId: "rewrite-rewrite"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "6.28.0"
+  version: "6.28.1"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin:
       name: "org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin"
@@ -20913,6 +20924,15 @@ rewrite-spring:
       description: "Migrate applications to the latest Spring Cloud 2024 (Moorgate)\
         \ release."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/cloud2024/upgradespringcloud_2024"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.cloud2025.AddSpringCloudDependenciesBom:
+      name: "org.openrewrite.java.spring.cloud2025.AddSpringCloudDependenciesBom"
+      description: "Adds the Spring Cloud dependencies BOM as a managed import, but\
+        \ only when the project already uses a Spring Cloud dependency. Prevents accidentally\
+        \ introducing the BOM into unrelated projects."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/cloud2025/addspringclouddependenciesbom"
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
@@ -40198,7 +40218,7 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
 rewrite-toml:
   artifactId: "rewrite-toml"
-  version: "8.77.0"
+  version: "8.77.1"
   markdownRecipeDescriptors:
     org.openrewrite.toml.ChangeKey:
       name: "org.openrewrite.toml.ChangeKey"
@@ -40357,7 +40377,7 @@ rewrite-toml:
       artifactId: "rewrite-toml"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.77.0"
+  version: "8.77.1"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -40717,7 +40737,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.77.0"
+  version: "8.77.1"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AddCommentToProperty:
       name: "org.openrewrite.yaml.AddCommentToProperty"
