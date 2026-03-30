@@ -107,7 +107,6 @@ dependencies {
 //        exclude(group = "org.openrewrite.recipe")
 //    }
     "recipe"("org.openrewrite.recipe:rewrite-dotnet:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-dropwizard:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-feature-flags:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-github-actions:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-gitlab:$rewriteVersion")
@@ -147,6 +146,7 @@ dependencies {
     "recipe"("io.moderne.recipe:rewrite-angular:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-cryptography:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-devcenter:$rewriteVersion")
+    "recipe"("io.moderne.recipe:rewrite-dropwizard:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-elastic:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-hibernate:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-java-application-server:$rewriteVersion")
@@ -158,6 +158,7 @@ dependencies {
     "recipe"("io.moderne.recipe:rewrite-spring:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-tapestry:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-vulncheck:$rewriteVersion")
+    
 }
 
 java {
