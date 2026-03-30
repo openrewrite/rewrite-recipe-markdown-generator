@@ -137,6 +137,55 @@ class RecipeMarkdownGeneratorTest {
             .isEqualTo("org/apache/camel/somerecipe")
     }
 
+    @Test
+    fun leafMatchingParentDirGetsRecipeSuffix() {
+        // Docusaurus treats codequality/codequality.md as the directory index,
+        // colliding with codequality/README.md. The recipe should get a "-recipe" suffix.
+        val recipes = listOf(
+            "OpenRewrite.Recipes.CodeQuality.CodeQuality",
+            "OpenRewrite.Recipes.CodeQuality.SomeRecipe",
+            "OpenRewrite.Recipes.Search.FindSomething"  // Leaf != parent, no suffix
+        )
+        initializeConflictDetection(recipes)
+
+        // CodeQuality.CodeQuality -> codequality/codequality collides, gets suffix
+        assertThat(getRecipePath("OpenRewrite.Recipes.CodeQuality.CodeQuality"))
+            .isEqualTo("csharp/recipes/codequality/codequality-recipe")
+
+        // Child recipes where leaf != parent are unaffected
+        assertThat(getRecipePath("OpenRewrite.Recipes.CodeQuality.SomeRecipe"))
+            .isEqualTo("csharp/recipes/codequality/somerecipe")
+        assertThat(getRecipePath("OpenRewrite.Recipes.Search.FindSomething"))
+            .isEqualTo("csharp/recipes/search/findsomething")
+    }
+
+    @Test
+    fun leafMatchingParentAlsoAppliesToJavaRecipes() {
+        // The existing assertj.Assertj case is handled by manual override,
+        // but the generic detection should also catch it
+        val recipes = listOf(
+            "org.openrewrite.java.testing.cleanup.Cleanup"
+        )
+        initializeConflictDetection(recipes)
+
+        assertThat(getRecipePath("org.openrewrite.java.testing.cleanup.Cleanup"))
+            .isEqualTo("java/testing/cleanup/cleanup-recipe")
+    }
+
+    @Test
+    fun findOriginHandlesCSharpSearchScheme() {
+        val syntheticUri = URI.create("csharp-search://recipes-code-quality")
+        val origin = RecipeOrigin("io.moderne.recipe", "recipes-code-quality", "0.1.0", syntheticUri)
+        origin.license = Licenses.Proprietary
+        val origins = mapOf(syntheticUri to origin)
+
+        val source = URI.create("csharp-search://recipes-code-quality/org.openrewrite.csharp.cleanup.SomeRecipe")
+        val found = RecipeMarkdownGenerator.findOrigin(source, "org.openrewrite.csharp.cleanup.SomeRecipe", origins)
+
+        assertThat(found).isNotNull
+        assertThat(found!!.artifactId).isEqualTo("recipes-code-quality")
+    }
+
     private fun initializeConflictDetection(recipeNames: List<String>) {
         val descriptors = recipeNames.map { createDescriptor(it) }
         RecipeMarkdownGenerator.initializeConflictDetection(descriptors)

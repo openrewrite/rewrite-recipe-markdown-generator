@@ -342,7 +342,8 @@ class ListsOfRecipesWriter(
 
                 for ((artifactId, recipes) in artifactMap) {
                     writeln("\n### ${artifactId}\n")
-                    val origin = recipeOrigins[recipeToSource[recipes.first().name]]
+                    val firstRecipeName = recipes.first().name
+                    val origin = RecipeMarkdownGenerator.findOrigin(recipeToSource[firstRecipeName], firstRecipeName, recipeOrigins)
                     val licenseInfo = origin?.license?.name ?: "Unknown"
                     writeln("_License: ${licenseInfo}_\n")
                     writeln("_${recipes.size} recipe${if (recipes.size != 1) "s" else ""}_\n")
