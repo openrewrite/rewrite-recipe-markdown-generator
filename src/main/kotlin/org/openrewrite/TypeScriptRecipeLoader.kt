@@ -29,7 +29,8 @@ class TypeScriptRecipeLoader(
          */
         val TYPESCRIPT_RECIPE_MODULES = mapOf(
             "rewrite-javascript" to "@openrewrite/rewrite",
-            "rewrite-nodejs" to "@openrewrite/recipes-nodejs"
+            "rewrite-nodejs" to "@openrewrite/recipes-nodejs",
+            "rewrite-angular" to "@openrewrite/recipes-angular"
             // "rewrite-react" to "@openrewrite/recipes-react"  // Not yet published - uncomment when available
         )
     }
