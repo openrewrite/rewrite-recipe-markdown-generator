@@ -1,5 +1,6 @@
 package org.openrewrite
 
+import org.openrewrite.RecipeMarkdownGenerator.Companion.hasConflict
 import org.openrewrite.config.OptionDescriptor
 import org.openrewrite.config.RecipeDescriptor
 
@@ -17,47 +18,34 @@ fun RecipeDescriptor.displayNameEscapedMdx(): String =
 
 // For MDX content (escapes curly braces)
 fun RecipeDescriptor.descriptionEscaped(): String {
-    if (description.isNullOrBlank()) {
+    val desc = description
+    if (desc.isNullOrBlank()) {
         return ""
     }
-    return escapeMdx(description)
+    return escapeMdx(desc)
         .replace("\n", " ")
         .trim()
 }
 
 // For YAML/code blocks (no curly brace escaping)
 private fun RecipeDescriptor.descriptionEscapedHtml(): String {
-    if (description.isNullOrBlank()) {
+    val desc = description
+    if (desc.isNullOrBlank()) {
         return ""
     }
-    return escapeHtml(description)
+    return escapeHtml(desc)
         .replace("\n", " ")
         .trim()
 }
 
-private fun RecipeDescriptor.edition(): String =
-    when (name) {
-        "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4",
-        "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_5",
-            -> " (Moderne Edition)"
-
-        "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4",
-        "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_5"
-            -> " (Community Edition)"
-
-        else ->
-            if (name.startsWith("io.moderne.hibernate") ||
-                name.startsWith("io.moderne.java.spring.boot4.UpgradeSpringBoot_")
-            ) {
-                " (Moderne Edition)"
-            } else if (name.startsWith("org.openrewrite.hibernate") ||
-                name.startsWith("org.openrewrite.java.spring.boot4.UpgradeSpringBoot_")
-            ) {
-                " (Community Edition)"
-            } else {
-                ""
-            }
+private fun RecipeDescriptor.edition(): String {
+    if (!hasConflict(this.name)) return ""
+    return when {
+        this.name.startsWith("io.moderne") -> " (Moderne Edition)"
+        this.name.startsWith("org.openrewrite") -> " (Community Edition)"
+        else -> ""
     }
+}
 
 // Escapes for HTML/basic markdown (no curly brace escaping - safe for YAML frontmatter)
 fun escapeHtml(string: String): String = string
@@ -125,10 +113,12 @@ fun OptionDescriptor.asYaml(indentation: Int = 0): String {
     }
 
     val prefix = prefixBuilder.toString()
-    val formattedValue = if (value is Array<*>) {
+    if (value is Array<*>) {
         val asArray = value as Array<*>
-        "[${asArray.joinToString(", ")}]"
-    } else if (value == "*") {
+        val itemPrefix = prefix + "  "
+        return "$prefix$name:\n" + asArray.joinToString("") { "${itemPrefix}- $it\n" }
+    }
+    val formattedValue = if (value == "*") {
         "\"*\""
     } else {
         value

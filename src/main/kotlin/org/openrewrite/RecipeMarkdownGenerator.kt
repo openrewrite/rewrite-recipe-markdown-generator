@@ -171,13 +171,18 @@ class RecipeMarkdownGenerator : Runnable {
             .filter { it.artifactId in PythonRecipeLoader.PYTHON_RECIPE_MODULES }
             .forEach { it.license = Licenses.Proprietary }
 
+        // C# recipes are always proprietary
+        recipeOrigins.values
+            .filter { it.artifactId in CSharpRecipeLoader.CSHARP_RECIPE_MODULES }
+            .forEach { it.license = Licenses.Proprietary }
+
         println("Found ${allRecipeDescriptors.size} descriptor(s).")
 
         // Detect conflicting paths between io.moderne and org.openrewrite recipes
         initializeConflictDetection(allRecipeDescriptors)
 
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
-        val moderneProprietaryRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
+        val moderneOnlyRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
 
         // Build mapping from recipe name to Recipe instance (for checking if declarative)
         val recipesByName = allRecipes.associateBy { it.name }
@@ -197,9 +202,10 @@ class RecipeMarkdownGenerator : Runnable {
             .filter { recipe ->
                 val source = recipeToSource[recipe.name]
                 val origin = findOrigin(source, recipe.name, recipeOrigins)
-                origin?.license == Licenses.Proprietary ||
+                (origin != null && isModerneDocsOnly(origin)) ||
                     source?.toString()?.startsWith("typescript-search://") == true ||
-                    source?.toString()?.startsWith("python-search://") == true
+                    source?.toString()?.startsWith("python-search://") == true ||
+                    source?.toString()?.startsWith("csharp-search://") == true
             }
             .map { it.name }
             .toSet()
@@ -229,10 +235,10 @@ class RecipeMarkdownGenerator : Runnable {
                 }
             }
 
-            // Track proprietary recipes separately (for moderne-recipes.md list)
-            if (origin.license == Licenses.Proprietary) {
-                moderneProprietaryRecipes.computeIfAbsent(origin.artifactId) { mutableListOf() }.add(recipeDescriptor)
-                // Skip writing proprietary recipes to rewrite-docs (they only go to moderne-docs)
+            // Track moderne-docs-only recipes separately (for moderne-recipes.md list and redirects)
+            if (isModerneDocsOnly(origin)) {
+                moderneOnlyRecipes.computeIfAbsent(origin.artifactId) { mutableListOf() }.add(recipeDescriptor)
+                // Skip writing moderne-docs-only recipes to rewrite-docs
                 continue
             }
 
@@ -250,7 +256,7 @@ class RecipeMarkdownGenerator : Runnable {
             if (recipeDescriptor.options != null) {
                 for (recipeOption in recipeDescriptor.options) {
                     // TypeScript recipes may have null name or type
-                    val name = recipeOption.name?.toString() ?: "unknown"
+                    val name = recipeOption.name ?: "unknown"
                     val type = recipeOption.type ?: "String"
                     val ro = RecipeOption(name, type, recipeOption.isRequired)
                     recipeOptions.add(ro)
@@ -285,11 +291,11 @@ class RecipeMarkdownGenerator : Runnable {
             markdownArtifact.markdownRecipeDescriptors[recipeDescriptor.name] = markdownRecipeDescriptor
         }
 
-        // Filter to only open-source recipes for rewrite-docs output
+        // Filter to only rewrite-docs recipes (exclude moderne-docs-only modules and proprietary)
         val openSourceRecipeDescriptors = allRecipeDescriptors.filter { recipe ->
             val source = recipeToSource[recipe.name]
             val origin = findOrigin(source, recipe.name, recipeOrigins)
-            origin?.license != Licenses.Proprietary
+            origin != null && !isModerneDocsOnly(origin)
         }
         println("Filtered to ${openSourceRecipeDescriptors.size} open-source recipe(s) for rewrite-docs.")
 
@@ -314,8 +320,8 @@ class RecipeMarkdownGenerator : Runnable {
         // Write lists of recipes into various files
         // OpenRewrite docs: open-source recipes only (links use /recipes path)
         val listWriter = ListsOfRecipesWriter(openSourceRecipeDescriptors, outputPath, "/recipes")
-        listWriter.createModerneRecipes(moderneProprietaryRecipes)
-        listWriter.createRecipesWithDataTables()
+        listWriter.createModerneRecipes(moderneOnlyRecipes.values.flatten(), recipeOrigins, recipeToSource)
+        listWriter.createRecipesWithDataTables(recipeOrigins, recipeToSource)
         listWriter.createRecipesByTag()
         listWriter.createScanningRecipes(
             allRecipes.filter { recipe ->
@@ -331,7 +337,7 @@ class RecipeMarkdownGenerator : Runnable {
         // Moderne docs: ALL recipes (links use /user-documentation/recipes/recipe-catalog path)
         if (moderneListsPath != null) {
             val moderneListWriter = ListsOfRecipesWriter(allRecipeDescriptors, moderneListsPath, "/user-documentation/recipes/recipe-catalog")
-            moderneListWriter.createRecipesWithDataTables()
+            moderneListWriter.createRecipesWithDataTables(recipeOrigins, recipeToSource)
             moderneListWriter.createRecipesByTag()
             moderneListWriter.createScanningRecipes(
                 allRecipes.filter { recipe ->
@@ -345,11 +351,11 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         // Generate redirects for proprietary recipes (from old OpenRewrite URLs to Moderne docs)
-        val allProprietaryRecipes = moderneProprietaryRecipes.values.flatten()
-        if (allProprietaryRecipes.isNotEmpty()) {
+        val allModerneOnlyRecipes = moderneOnlyRecipes.values.flatten()
+        if (allModerneOnlyRecipes.isNotEmpty()) {
             RedirectWriter.writeRedirectConfig(
                 outputPath,
-                allProprietaryRecipes,
+                allModerneOnlyRecipes,
                 "https://docs.moderne.io",
                 "/user-documentation/recipes/recipe-catalog"
             )
@@ -367,6 +373,12 @@ class RecipeMarkdownGenerator : Runnable {
 
 
     companion object {
+        /** Modules whose docs should only appear in Moderne docs, regardless of license. */
+        private val MODERNE_DOCS_ONLY_MODULES = setOf("rewrite-devcenter")
+
+        private fun isModerneDocsOnly(origin: RecipeOrigin): Boolean =
+            origin.license == Licenses.Proprietary || origin.artifactId in MODERNE_DOCS_ONLY_MODULES
+
         // Set of base paths that have both io.moderne and org.openrewrite recipes (conflicts)
         private var conflictingBasePaths: Set<String> = emptySet()
 
@@ -394,6 +406,9 @@ class RecipeMarkdownGenerator : Runnable {
             conflictingBasePaths = moderneBasePaths.intersect(openrewriteBasePaths)
         }
 
+        fun hasConflict(recipeName: String): Boolean =
+            conflictingBasePaths.contains(getBasePath(recipeName))
+
         /**
          * Compute the base path for a recipe name (without any edition suffix).
          * This is used for conflict detection.
@@ -404,14 +419,17 @@ class RecipeMarkdownGenerator : Runnable {
                     if (recipeName.count { it == '.' } == 2) {
                         "core/" + recipeName.substring(16).lowercase(Locale.getDefault())
                     } else {
-                        recipeName.substring(16).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
+                        recipeName.substring(16).replace('.', '/').lowercase(Locale.getDefault())
                     }
                 }
                 recipeName.startsWith("io.moderne") -> {
-                    recipeName.substring(11).replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
+                    recipeName.substring(11).replace('.', '/').lowercase(Locale.getDefault())
+                }
+                recipeName.startsWith("OpenRewrite.") -> {
+                    "csharp/" + recipeName.substring(12).replace('.', '/').lowercase(Locale.getDefault())
                 }
                 else -> {
-                    recipeName.replace("\\.".toRegex(), "/").lowercase(Locale.getDefault())
+                    recipeName.replace('.', '/').lowercase(Locale.getDefault())
                 }
             }
         }
@@ -434,6 +452,12 @@ class RecipeMarkdownGenerator : Runnable {
             // Handle Python recipes with custom URI scheme
             if (rawUri.startsWith("python-search://")) {
                 val artifactId = rawUri.substringAfter("python-search://").substringBefore("/")
+                return recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
+            }
+
+            // Handle C# recipes with custom URI scheme
+            if (rawUri.startsWith("csharp-search://")) {
+                val artifactId = rawUri.substringAfter("csharp-search://").substringBefore("/")
                 return recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
             }
 
@@ -487,6 +511,18 @@ class RecipeMarkdownGenerator : Runnable {
 
             val basePath = getBasePath(recipe.name)
 
+            // Docusaurus treats a file with the same name as its parent directory as the
+            // directory index (e.g., codequality/codequality.md -> /codequality/ route),
+            // which collides with the category README.md. Rename such recipes.
+            val lastSlash = basePath.lastIndexOf('/')
+            if (lastSlash > 0) {
+                val parentDir = basePath.substring(basePath.lastIndexOf('/', lastSlash - 1) + 1, lastSlash)
+                val leaf = basePath.substring(lastSlash + 1)
+                if (parentDir == leaf) {
+                    return basePath + "-recipe"
+                }
+            }
+
             // Add edition suffix only if there's a detected conflict
             val needsSuffix = conflictingBasePaths.contains(basePath)
 
@@ -497,7 +533,11 @@ class RecipeMarkdownGenerator : Runnable {
                 recipe.name.startsWith("io.moderne") -> {
                     if (needsSuffix) basePath + "-moderne-edition" else basePath
                 }
+                recipe.name.startsWith("OpenRewrite.") -> {
+                    basePath
+                }
                 recipe.name.startsWith("ai.timefold") ||
+                recipe.name.startsWith("androidx") ||
                 recipe.name.startsWith("com.google") ||
                 recipe.name.startsWith("com.oracle") ||
                 recipe.name.startsWith("io.quarkus") ||

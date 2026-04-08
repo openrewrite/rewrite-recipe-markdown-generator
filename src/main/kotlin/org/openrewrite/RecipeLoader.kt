@@ -11,7 +11,6 @@ import org.openrewrite.config.RecipeDescriptor
 import java.net.URI
 import java.net.URL
 import java.net.URLClassLoader
-import java.nio.file.FileSystem
 import java.nio.file.FileSystems
 import java.nio.file.Files
 import java.nio.file.Path
@@ -111,18 +110,35 @@ class RecipeLoader {
         println("\nChecking for TypeScript/JavaScript recipes...")
         val typeScriptLoader = TypeScriptRecipeLoader(recipeOrigins)
         val typeScriptResult = typeScriptLoader.loadTypeScriptRecipes()
+        if (typeScriptResult.descriptors.isEmpty() && TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES.isNotEmpty()) {
+            System.err.println("WARNING: 0 TypeScript recipes loaded despite ${TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES.size} module(s) configured. Check that Node.js is installed.")
+        }
 
         // Load Python recipes via RPC
         println("\nChecking for Python recipes...")
         val pythonLoader = PythonRecipeLoader(recipeOrigins)
         val pythonResult = pythonLoader.loadPythonRecipes()
+        if (pythonResult.descriptors.isEmpty() && PythonRecipeLoader.PYTHON_RECIPE_MODULES.isNotEmpty()) {
+            System.err.println("WARNING: 0 Python recipes loaded despite ${PythonRecipeLoader.PYTHON_RECIPE_MODULES.size} module(s) configured. Check that Python 3.10+ and pip are installed.")
+        }
 
-        // Merge TypeScript and Python results with Java/YAML results
+        // Load C# recipes via RPC, passing Java descriptors so delegatesTo can resolve
+        println("\nChecking for C# recipes...")
+        val javaDescriptors = environmentData.flatMap { it.recipeDescriptors }
+        val csharpLoader = CSharpRecipeLoader(recipeOrigins, javaDescriptors, classloader)
+        val csharpResult = csharpLoader.loadCSharpRecipes()
+        if (csharpResult.descriptors.isEmpty() && CSharpRecipeLoader.CSHARP_RECIPE_MODULES.isNotEmpty()) {
+            System.err.println("WARNING: 0 C# recipes loaded despite ${CSharpRecipeLoader.CSHARP_RECIPE_MODULES.size} module(s) configured. Check that .NET SDK is installed.")
+        }
+
+        // Merge TypeScript, Python, and C# results with Java/YAML results
         val allDescriptors = environmentData.flatMap { it.recipeDescriptors }.toMutableList()
         allDescriptors.addAll(typeScriptResult.descriptors)
         recipeToSource.putAll(typeScriptResult.recipeToSource)
         allDescriptors.addAll(pythonResult.descriptors)
         recipeToSource.putAll(pythonResult.recipeToSource)
+        allDescriptors.addAll(csharpResult.descriptors)
+        recipeToSource.putAll(csharpResult.recipeToSource)
 
         // Deduplicate recipes by name (same recipe may be discovered from multiple JARs
         // when scanJar is called with the full classpath as dependencies)
@@ -142,7 +158,7 @@ class RecipeLoader {
             allCategoryDescriptors = environmentData.flatMap { it.categoryDescriptors }.distinctBy { it.packageName },
             allRecipes = environmentData.flatMap { it.recipes }.distinctBy { it.name },
             recipeToSource = recipeToSource,
-            additionalOrigins = pythonResult.syntheticOrigins,
+            additionalOrigins = pythonResult.syntheticOrigins + csharpResult.syntheticOrigins,
             crossCategoryPaths = allCrossCategoryPaths
         )
     }
@@ -262,10 +278,21 @@ class RecipeLoader {
      */
     private fun buildCategoryPath(cat1: String, cat2: String, recipeFileName: String): String {
         val parts = mutableListOf<String>()
-        if (cat2.isNotBlank()) parts.add(cat2.lowercase())
-        if (cat1.isNotBlank()) parts.add(cat1.lowercase())
+        if (cat2.isNotBlank()) parts.add(sanitizePathSegment(cat2))
+        if (cat1.isNotBlank()) parts.add(sanitizePathSegment(cat1))
         parts.add(recipeFileName)
         return parts.joinToString("/")
+    }
+
+    companion object {
+        /**
+         * Sanitize a category name for use as a URL-safe directory path segment.
+         * Replaces special characters that are invalid in URLs/directory names.
+         * E.g., "C#" → "csharp", "F#" → "fsharp"
+         */
+        fun sanitizePathSegment(segment: String): String {
+            return segment.lowercase().replace("#", "sharp")
+        }
     }
 
     /**
@@ -331,7 +358,7 @@ class RecipeLoader {
     private fun loadEnvironmentDataAsync(): List<EnvironmentData> = runBlocking {
         println("Starting parallel recipe loading...")
         recipeOrigins.entries
-            .chunked(2)
+            .chunked(3)
             .flatMap { batch -> batch.map { recipeOrigin ->
                 async(Dispatchers.IO) {
                     println("Processing ${recipeOrigin.key.toPath().fileName}")

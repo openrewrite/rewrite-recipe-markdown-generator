@@ -29,7 +29,8 @@ class TypeScriptRecipeLoader(
          */
         val TYPESCRIPT_RECIPE_MODULES = mapOf(
             "rewrite-javascript" to "@openrewrite/rewrite",
-            "rewrite-nodejs" to "@openrewrite/recipes-nodejs"
+            "rewrite-nodejs" to "@openrewrite/recipes-nodejs",
+            "rewrite-angular" to "@openrewrite/recipes-angular"
             // "rewrite-react" to "@openrewrite/recipes-react"  // Not yet published - uncomment when available
         )
     }
@@ -97,7 +98,7 @@ class TypeScriptRecipeLoader(
             val allDescriptors = mutableListOf<RecipeDescriptor>()
             val recipeToSource = mutableMapOf<String, URI>()
 
-            // Install recipes from each npm package
+            // Install recipes from each npm package, tracking which origin each recipe came from
             for (origin in typeScriptOrigins) {
                 try {
                     val packageName = getNpmPackageName(origin)
@@ -106,22 +107,41 @@ class TypeScriptRecipeLoader(
                     val count = rpc.installRecipes(packageName, origin.version)
                     println("  Installed $count recipe(s) from $packageName")
 
-                    allDescriptors.addAll(
-                        rpc.getMarketplace(RecipeBundle("npm", packageName, null, null, null))
-                            .allRecipes
-                            .mapNotNull { r ->
-                                try {
-                                    val requiredOptions = r.options
-                                        ?.filter { it.isRequired }
-                                        ?.associate { it.name to "PlaceholderValueToFoolValidation" }
-                                        ?: emptyMap()
-                                    rpc.prepareRecipe(r.name, requiredOptions).descriptor
-                                } catch (e: Exception) {
-                                    System.err.println("Warning: Failed to prepare recipe ${r.name}: ${e.message}")
-                                    null
-                                }
+                    val descriptors = rpc.getMarketplace(RecipeBundle("npm", packageName, null, null, null))
+                        .allRecipes
+                        .mapNotNull { r ->
+                            try {
+                                val requiredOptions = r.options
+                                    .filter { it.isRequired }
+                                    .associate { it.name to "PlaceholderValueToFoolValidation" }
+                                rpc.prepareRecipe(r.name, requiredOptions).descriptor
+                            } catch (e: Exception) {
+                                System.err.println("Warning: Failed to prepare recipe ${r.name}: ${e.message}")
+                                null
                             }
-                    )
+                        }
+
+                    // getMarketplace is accumulative, so only take recipes not already seen
+                    val newDescriptors = descriptors.filter { it.name !in recipeToSource }
+                    for (descriptor in newDescriptors) {
+                        // Debug: Print option types for recipes with options
+                        // Remove this once the type checking is fixed: https://github.com/openrewrite/rewrite/issues/6293
+                        if (descriptor.options != null && descriptor.options.isNotEmpty()) {
+                            println("  Recipe: ${descriptor.name}")
+                            for (option in descriptor.options) {
+                                println("    Option name: ${option.name}")
+                                println("      type: ${option.type}")
+                                println("      description: ${option.description}")
+                                println("      example: ${option.example}")
+                                println("      required: ${option.isRequired}")
+                            }
+                        }
+
+                        val sourceUri = mapRecipeToSourceUri(descriptor.name, origin)
+                        recipeToSource[descriptor.name] = sourceUri
+                    }
+
+                    allDescriptors.addAll(newDescriptors)
 
                 } catch (e: Exception) {
                     System.err.println("Warning: Failed to install recipes from ${origin.artifactId}: ${e.message}")
@@ -132,36 +152,12 @@ class TypeScriptRecipeLoader(
             // Get all recipe descriptors from the RPC process
             println("Retrieved ${allDescriptors.size} TypeScript recipe descriptor(s) via RPC")
 
-            // Map each recipe to its source file location
-            for (descriptor in allDescriptors) {
-                // Debug: Print option types for recipes with options
-                // Remove this once the type checking is fixed: https://github.com/openrewrite/rewrite/issues/6293
-                if (descriptor.options != null && descriptor.options.isNotEmpty()) {
-                    println("  Recipe: ${descriptor.name}")
-                    for (option in descriptor.options) {
-                        println("    Option name: ${option.name}")
-                        println("      type: ${option.type}")
-                        println("      description: ${option.description}")
-                        println("      example: ${option.example}")
-                        println("      required: ${option.isRequired}")
-                    }
-                }
-
-                // Find the origin this recipe belongs to
-                val origin = typeScriptOrigins.firstOrNull { origin ->
-                    descriptor.name.startsWith("org.openrewrite.${origin.artifactId.removePrefix("rewrite-")}")
-                } ?: typeScriptOrigins.first()
-
-                val sourceUri = mapRecipeToSourceUri(descriptor.name, origin)
-                recipeToSource[descriptor.name] = sourceUri
-            }
-
             return TypeScriptRecipeResult(allDescriptors, recipeToSource)
 
         } catch (e: Exception) {
-            System.err.println("Error loading TypeScript recipes: ${e.message}")
-            e.printStackTrace()
-            return TypeScriptRecipeResult(emptyList(), emptyMap())
+            throw RuntimeException(
+                "Failed to load TypeScript recipes. Ensure Node.js is installed and available on PATH.", e
+            )
         } finally {
             // Cleanup: shutdown the RPC process
             rpc?.shutdown()

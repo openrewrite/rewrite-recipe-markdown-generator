@@ -28,6 +28,7 @@ mod config recipes delete
 
 echo "==> Installing Maven recipe modules..."
 mod config recipes jar install \
+  org.openrewrite:rewrite-cobol:LATEST \
   org.openrewrite:rewrite-core:LATEST \
   org.openrewrite:rewrite-csharp:LATEST \
   org.openrewrite:rewrite-docker:LATEST \
@@ -50,7 +51,6 @@ mod config recipes jar install \
   org.openrewrite.recipe:rewrite-all:LATEST \
   org.openrewrite.recipe:rewrite-android:LATEST \
   org.openrewrite.recipe:rewrite-apache:LATEST \
-  org.openrewrite.recipe:rewrite-azul:LATEST \
   org.openrewrite.recipe:rewrite-circleci:LATEST \
   org.openrewrite.recipe:rewrite-codemods:LATEST \
   org.openrewrite.recipe:rewrite-codemods-ng:LATEST \
@@ -58,7 +58,6 @@ mod config recipes jar install \
   org.openrewrite.recipe:rewrite-concourse:LATEST \
   org.openrewrite.recipe:rewrite-cucumber-jvm:LATEST \
   org.openrewrite.recipe:rewrite-dotnet:LATEST \
-  org.openrewrite.recipe:rewrite-dropwizard:LATEST \
   org.openrewrite.recipe:rewrite-feature-flags:LATEST \
   org.openrewrite.recipe:rewrite-github-actions:LATEST \
   org.openrewrite.recipe:rewrite-gitlab:LATEST \
@@ -74,6 +73,8 @@ mod config recipes jar install \
   org.openrewrite.recipe:rewrite-micrometer:LATEST \
   org.openrewrite.recipe:rewrite-micronaut:LATEST \
   org.openrewrite.recipe:rewrite-migrate-java:LATEST \
+  org.openrewrite.recipe:rewrite-migrate-kotlin:LATEST \
+  org.openrewrite.recipe:rewrite-migrate-python:LATEST \
   org.openrewrite.recipe:rewrite-netty:LATEST \
   org.openrewrite.recipe:rewrite-nodejs:LATEST \
   org.openrewrite.recipe:rewrite-okhttp:LATEST \
@@ -94,6 +95,7 @@ mod config recipes jar install \
   io.moderne.recipe:rewrite-angular:LATEST \
   io.moderne.recipe:rewrite-cryptography:LATEST \
   io.moderne.recipe:rewrite-devcenter:LATEST \
+  io.moderne.recipe:rewrite-dropwizard:LATEST \
   io.moderne.recipe:rewrite-elastic:LATEST \
   io.moderne.recipe:rewrite-hibernate:LATEST \
   io.moderne.recipe:rewrite-java-application-server:LATEST \

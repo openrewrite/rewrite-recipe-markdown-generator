@@ -8,6 +8,7 @@ import org.openrewrite.config.RecipeDescriptor
 import picocli.CommandLine
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -29,6 +30,7 @@ class RecipeMarkdownGeneratorTest {
             "1.x", // Moderne Recipe BOM
             "6.x", // Gradle plugin
             "5.x", // Maven plugin
+            "--latest-versions-only",
         )
         assertThat(exitCode).isEqualTo(0)
 
@@ -107,6 +109,20 @@ class RecipeMarkdownGeneratorTest {
     }
 
     @Test
+    fun hasConflictReturnsTrueForConflictingRecipes() {
+        val recipes = listOf(
+            "io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4",
+            "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4",
+            "org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3"
+        )
+        initializeConflictDetection(recipes)
+
+        assertThat(RecipeMarkdownGenerator.hasConflict("io.moderne.java.spring.boot3.UpgradeSpringBoot_3_4")).isTrue()
+        assertThat(RecipeMarkdownGenerator.hasConflict("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_4")).isTrue()
+        assertThat(RecipeMarkdownGenerator.hasConflict("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3")).isFalse()
+    }
+
+    @Test
     fun thirdPartyRecipesUnaffected() {
         // Third-party recipes should never get edition suffixes
         val recipes = listOf(
@@ -119,6 +135,55 @@ class RecipeMarkdownGeneratorTest {
             .isEqualTo("com/google/errorprone/somerecipe")
         assertThat(getRecipePath("org.apache.camel.SomeRecipe"))
             .isEqualTo("org/apache/camel/somerecipe")
+    }
+
+    @Test
+    fun leafMatchingParentDirGetsRecipeSuffix() {
+        // Docusaurus treats codequality/codequality.md as the directory index,
+        // colliding with codequality/README.md. The recipe should get a "-recipe" suffix.
+        val recipes = listOf(
+            "OpenRewrite.Recipes.CodeQuality.CodeQuality",
+            "OpenRewrite.Recipes.CodeQuality.SomeRecipe",
+            "OpenRewrite.Recipes.Search.FindSomething"  // Leaf != parent, no suffix
+        )
+        initializeConflictDetection(recipes)
+
+        // CodeQuality.CodeQuality -> codequality/codequality collides, gets suffix
+        assertThat(getRecipePath("OpenRewrite.Recipes.CodeQuality.CodeQuality"))
+            .isEqualTo("csharp/recipes/codequality/codequality-recipe")
+
+        // Child recipes where leaf != parent are unaffected
+        assertThat(getRecipePath("OpenRewrite.Recipes.CodeQuality.SomeRecipe"))
+            .isEqualTo("csharp/recipes/codequality/somerecipe")
+        assertThat(getRecipePath("OpenRewrite.Recipes.Search.FindSomething"))
+            .isEqualTo("csharp/recipes/search/findsomething")
+    }
+
+    @Test
+    fun leafMatchingParentAlsoAppliesToJavaRecipes() {
+        // The existing assertj.Assertj case is handled by manual override,
+        // but the generic detection should also catch it
+        val recipes = listOf(
+            "org.openrewrite.java.testing.cleanup.Cleanup"
+        )
+        initializeConflictDetection(recipes)
+
+        assertThat(getRecipePath("org.openrewrite.java.testing.cleanup.Cleanup"))
+            .isEqualTo("java/testing/cleanup/cleanup-recipe")
+    }
+
+    @Test
+    fun findOriginHandlesCSharpSearchScheme() {
+        val syntheticUri = URI.create("csharp-search://recipes-code-quality")
+        val origin = RecipeOrigin("io.moderne.recipe", "recipes-code-quality", "0.1.0", syntheticUri)
+        origin.license = Licenses.Proprietary
+        val origins = mapOf(syntheticUri to origin)
+
+        val source = URI.create("csharp-search://recipes-code-quality/org.openrewrite.csharp.cleanup.SomeRecipe")
+        val found = RecipeMarkdownGenerator.findOrigin(source, "org.openrewrite.csharp.cleanup.SomeRecipe", origins)
+
+        assertThat(found).isNotNull
+        assertThat(found!!.artifactId).isEqualTo("recipes-code-quality")
     }
 
     private fun initializeConflictDetection(recipeNames: List<String>) {
@@ -144,7 +209,7 @@ class RecipeMarkdownGeneratorTest {
             mutableListOf(),
             mutableListOf(),
             mutableListOf(),
-            null
+            URI.create("https://example.com/recipe")
         )
     }
 }

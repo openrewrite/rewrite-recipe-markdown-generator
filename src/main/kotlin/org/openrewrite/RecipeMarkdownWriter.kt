@@ -5,6 +5,7 @@ package org.openrewrite
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.Patch
 import org.openrewrite.RecipeMarkdownGenerator.Companion.getRecipePath
+import org.openrewrite.RecipeMarkdownGenerator.Companion.hasConflict
 import org.openrewrite.RecipeMarkdownGenerator.Companion.useAndApply
 import org.openrewrite.RecipeMarkdownGenerator.Companion.writeln
 import org.openrewrite.config.RecipeDescriptor
@@ -60,6 +61,14 @@ class RecipeMarkdownWriter(
     private fun isPythonRecipe(recipeDescriptor: RecipeDescriptor): Boolean {
         val recipeSource = recipeToSource[recipeDescriptor.name] ?: return false
         return recipeSource.toString().startsWith("python-search://")
+    }
+
+    /**
+     * Determines if a recipe is a C# recipe based on its source URI.
+     */
+    private fun isCSharpRecipe(recipeDescriptor: RecipeDescriptor): Boolean {
+        val recipeSource = recipeToSource[recipeDescriptor.name] ?: return false
+        return recipeSource.toString().startsWith("csharp-search://")
     }
 
     /**
@@ -138,6 +147,7 @@ sidebar_label: "${formattedRecipeTitle.replace("&#39;", "'")}"
 
 ${canonicalHead}import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import RunRecipe from '@site/src/components/RunRecipe';
 
 # $formattedRecipeTitleMdx
 
@@ -161,7 +171,7 @@ import TabItem from '@theme/TabItem';
             writeExamples(recipeDescriptor)
             writeUsage(recipeDescriptor, origin)
             // Skip Moderne link for JavaScript and Python recipes as these don't exist there yet.
-            if (!isJavaScriptRecipe(recipeDescriptor) && !isPythonRecipe(recipeDescriptor)) {
+            if (!isJavaScriptRecipe(recipeDescriptor) && !isPythonRecipe(recipeDescriptor) && !isCSharpRecipe(recipeDescriptor)) {
                 writeModerneLink(recipeDescriptor)
             }
             writeDataTables(recipeDescriptor)
@@ -204,9 +214,9 @@ import TabItem from '@theme/TabItem';
             newLine()
             for (tag in recipeDescriptor.tags) {
                 if (tag.lowercase().startsWith("rspec-s")) {
-                    writeln("* [$tag](https://sonarsource.github.io/rspec/#/rspec/${tag.substring(6)})")
+                    writeln("* [$tag](https://next.sonarqube.com/sonarqube/coding_rules?languages=java&q=${tag.substring(6)}&open=java%3A${tag.substring(6)})")
                 } else if (tag.lowercase().startsWith("rspec-")) {
-                    writeln("* [$tag](https://sonarsource.github.io/rspec/#/rspec/S${tag.substring(6)})")
+                    writeln("* [$tag](https://next.sonarqube.com/sonarqube/coding_rules?languages=java&q=S${tag.substring(6)}&open=java%3AS${tag.substring(6)})")
                 } else {
                     val tagAnchor = tag
                         .lowercase()
@@ -322,11 +332,12 @@ import TabItem from '@theme/TabItem';
                     description += " Valid options: $combinedOptions"
                 }
                 // Preserve table cell formatting for multiline examples
-                val example = if (option.example != null) {
-                    if (option.example.contains("\n")) {
-                        "<pre>${option.example.replace("<", "\\<")}</pre>".replace("\n", "<br />")
+                val optionExample = option.example
+                val example = if (optionExample != null) {
+                    if (optionExample.contains("\n")) {
+                        "<pre>${optionExample.replace("<", "\\<")}</pre>".replace("\n", "<br />")
                     } else {
-                        "`${option.example}`"
+                        "`${optionExample}`"
                     }
                 } else {
                     ""
@@ -372,7 +383,7 @@ import TabItem from '@theme/TabItem';
                     //language=markdown
                     writeln(
                         """
-                        | ${column.displayName} | ${escapeMdx(column.description)} |
+                        | ${column.displayName} | ${escapeMdx(column.description ?: "")} |
                         """.trimIndent()
                     )
                 }
@@ -444,7 +455,8 @@ import TabItem from '@theme/TabItem';
                 // Example files
                 for (sourceIndex in 0 until example.sources.size) {
                     val source = example.sources[sourceIndex]
-                    val hasChange = source.after != null && source.after.isNotEmpty()
+                    val after = source.after
+                    val hasChange = after != null && after.isNotEmpty()
                     val beforeTitle = if (hasChange) "Before" else "Unchanged"
                     val isNewFile = source.before == null && source.after != null
                     val afterTile = if (isNewFile) "New file" else "After"
@@ -485,8 +497,8 @@ import TabItem from '@theme/TabItem';
                             writeln("```${source.language}")
                         }
 
-                        write(source.after)
-                        if (source.after != null && !source.after.endsWith("\n")) {
+                        write(after)
+                        if (after != null && !after.endsWith("\n")) {
                             newLine()
                         }
                         writeln("```")
@@ -498,7 +510,7 @@ import TabItem from '@theme/TabItem';
                             writeln("</TabItem>")
                             writeln("<TabItem value=\"diff\" label=\"Diff\" >\n")
 
-                            val diff = generateDiff(source.path, source.before, source.after)
+                            val diff = generateDiff(source.path, source.before, after)
 
                             writeln(
                                 """
@@ -534,6 +546,15 @@ import TabItem from '@theme/TabItem';
             ?: origin.artifactId
     }
 
+    /**
+     * Gets the NuGet package name for a C# recipe module.
+     * Uses the single source of truth from CSharpRecipeLoader.
+     */
+    private fun getNuGetPackageName(origin: RecipeOrigin): String {
+        return CSharpRecipeLoader.CSHARP_RECIPE_MODULES[origin.artifactId]
+            ?: origin.artifactId
+    }
+
     private fun BufferedWriter.writeUsage(
         recipeDescriptor: RecipeDescriptor,
         origin: RecipeOrigin
@@ -543,15 +564,48 @@ import TabItem from '@theme/TabItem';
         writeln("## Usage")
         newLine()
 
-        // Handle JavaScript recipes separately
+        // Handle JavaScript recipes
         if (isJavaScriptRecipe(recipeDescriptor)) {
-            writeJavaScriptUsage(recipeDescriptor, origin)
+            val npmPackageName = getNpmPackageName(origin)
+            writeln(
+                """
+                <RunRecipe
+                  recipeName="${recipeDescriptor.name}"
+                  displayName="${recipeDescriptor.displayNameEscapedMdx()}"
+                  npmPackage="$npmPackageName"
+                />
+                """.trimIndent()
+            )
             return
         }
 
-        // Handle Python recipes separately
+        // Handle Python recipes
         if (isPythonRecipe(recipeDescriptor)) {
-            writePythonUsage(recipeDescriptor, origin)
+            val pipPackageName = getPipPackageName(origin)
+            writeln(
+                """
+                <RunRecipe
+                  recipeName="${recipeDescriptor.name}"
+                  displayName="${recipeDescriptor.displayNameEscapedMdx()}"
+                  pipPackage="$pipPackageName"
+                />
+                """.trimIndent()
+            )
+            return
+        }
+
+        // Handle C# recipes
+        if (isCSharpRecipe(recipeDescriptor)) {
+            val nugetPackageName = getNuGetPackageName(origin)
+            writeln(
+                """
+                <RunRecipe
+                  recipeName="${recipeDescriptor.name}"
+                  displayName="${recipeDescriptor.displayNameEscapedMdx()}"
+                  nugetPackage="$nugetPackageName"
+                />
+                """.trimIndent()
+            )
             return
         }
 
@@ -563,14 +617,11 @@ import TabItem from '@theme/TabItem';
                 forModerneDocs
         val suppressMaven = suppressJava || recipeDescriptor.name.contains(".gradle.")
         val suppressGradle = suppressJava || recipeDescriptor.name.contains(".maven.")
-        val requiresConfiguration = recipeDescriptor.options?.any { it.isRequired } ?: false
+        val requiresConfiguration = recipeDescriptor.options.any { it.isRequired }
         val requiresDependency = !origin.isFromCoreLibrary()
+        val hasDataTables = recipeDescriptor.dataTables != null && recipeDescriptor.dataTables.isNotEmpty()
 
-        val dataTableSnippet =
-            if (recipeDescriptor.dataTables == null || recipeDescriptor.dataTables.isEmpty()) "" else "<exportDatatables>true</exportDatatables>"
-
-        val dataTableCommandLineSnippet =
-            if (recipeDescriptor.dataTables == null || recipeDescriptor.dataTables.isEmpty()) "" else "-Drewrite.exportDatatables=true"
+        var cliOptions = ""
 
         if (requiresConfiguration) {
             val exampleRecipeName =
@@ -612,77 +663,86 @@ import TabItem from '@theme/TabItem';
                 displayName: ${recipeDescriptor.displayNameEscaped()} example
                 recipeList:
                   - ${recipeDescriptor.name}:
-                
+
                 """.trimIndent()
                 )
             }
 
-            var cliOptions = ""
             for (option in recipeDescriptor.options) {
                 if (!option.isRequired && option.example == null) {
                     continue
                 }
-                val ex = if (option.example != null && option.type == "String" &&
-                    (option.example.matches("^[{}\\[\\],`|=%@*!?-].*".toRegex()) ||
-                            option.example.matches(".*:\\s.*".toRegex()))
+                val optionExample = option.example
+                val isList = option.type == "List" || option.type.startsWith("List<")
+                val ex = if (optionExample != null && option.type == "String" &&
+                    (optionExample.matches("^[{}\\[\\],`|=%@*!?-].*".toRegex()) ||
+                            optionExample.matches(".*:\\s.*".toRegex()))
                 ) {
-                    "'" + option.example + "'"
-                } else if (option.example != null && option.type == "String" && option.example.contains('\n')) {
-                    ">\n        " + option.example.replace("\n", "\n        ")
+                    "'" + optionExample + "'"
+                } else if (optionExample != null && option.type == "String" && optionExample.contains('\n')) {
+                    ">\n        " + optionExample.replace("\n", "\n        ")
                 } else if (option.type == "boolean") {
                     "false"
                 } else {
                     option.example
                 }
                 cliOptions += " --recipe-option \"${option.name}=$ex\""
-                writeln("      ${option.name}: $ex")
+                if (isList) {
+                    writeln("      ${option.name}:")
+                    writeln("        - ${ex ?: "TODO"}")
+                } else {
+                    writeln("      ${option.name}: $ex")
+                }
             }
             writeln("```")
             newLine()
-
-            val cliSnippet = getCliSnippet(recipeDescriptor.name, cliOptions, origin)
-            if (requiresDependency) {
-                writeSnippetsWithConfigurationWithDependency(
-                    exampleRecipeName,
-                    origin,
-                    suppressMaven,
-                    suppressGradle,
-                    cliSnippet,
-                    dataTableSnippet,
-                )
-            } else {
-                writeSnippetsWithConfigurationWithoutDependency(
-                    exampleRecipeName,
-                    suppressMaven,
-                    suppressGradle,
-                    cliSnippet,
-                    dataTableSnippet,
-                    origin,
-                )
-            }
-        } else {
-            val cliSnippet = getCliSnippet(recipeDescriptor.name, "", origin)
-            if (origin.isFromCoreLibrary()) {
-                writeSnippetsFromCoreLibrary(
-                    recipeDescriptor,
-                    suppressMaven,
-                    suppressGradle,
-                    cliSnippet,
-                    dataTableSnippet,
-                    dataTableCommandLineSnippet,
-                )
-            } else {
-                writeSnippetForOtherLibrary(
-                    origin,
-                    recipeDescriptor,
-                    suppressMaven,
-                    suppressGradle,
-                    cliSnippet,
-                    dataTableSnippet,
-                    dataTableCommandLineSnippet,
-                )
-            }
         }
+
+        // Build the <RunRecipe> props
+        val props = StringBuilder()
+        props.appendLine("  recipeName=\"${recipeDescriptor.name}\"")
+        props.appendLine("  displayName=\"${recipeDescriptor.displayNameEscapedMdx()}\"")
+
+        props.appendLine("  groupId=\"${origin.groupId}\"")
+        props.appendLine("  artifactId=\"${origin.artifactId}\"")
+        props.appendLine("  versionKey=\"${origin.versionPlaceholderKey()}\"")
+        if (!requiresDependency) {
+            props.appendLine("  isCoreLibrary")
+        }
+
+        if (requiresConfiguration) {
+            props.appendLine("  requiresConfiguration")
+        }
+
+        if (cliOptions.isNotEmpty()) {
+            // Use single quotes for JSX to avoid issues with double quotes in option values.
+            // Escape backslashes, single quotes, and newlines so the JS string literal is valid.
+            val escaped = cliOptions.replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n")
+            props.appendLine("  cliOptions={'$escaped'}")
+        }
+
+        if (suppressGradle) {
+            props.appendLine("  showGradle={false}")
+        }
+
+        if (suppressMaven) {
+            props.appendLine("  showMaven={false}")
+        }
+
+        if (hasDataTables) {
+            props.appendLine("  hasDataTables")
+        }
+
+        if (hasConflict(recipeDescriptor.name)) {
+            props.appendLine("  useFullyQualifiedCliName")
+        }
+
+        writeln(
+            """
+<RunRecipe
+${props.toString().trimEnd()}
+/>""".trimIndent()
+        )
     }
 
     private fun BufferedWriter.writeDefinition(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin) {
@@ -710,8 +770,12 @@ import TabItem from '@theme/TabItem';
                     continue
                 }
 
-                val recipeLink = getRecipeLink(recipe, pathToRecipes)
-                writeln("* [${recipe.displayNameEscapedMdx()}]($recipeLink)")
+                if (recipeToSource.containsKey(recipe.name)) {
+                    val recipeLink = getRecipeLink(recipe, pathToRecipes)
+                    writeln("* [${recipe.displayNameEscapedMdx()}]($recipeLink)")
+                } else {
+                    writeln("* ${recipe.displayNameEscapedMdx()}")
+                }
 
                 if (recipe.options.isNotEmpty()) {
                     for (option in recipe.options) {
@@ -845,526 +909,6 @@ import TabItem from '@theme/TabItem';
         }
 
         return diffContent.toString()
-    }
-
-    private fun getCliSnippet(name: String, cliOptions: String, origin: RecipeOrigin): String {
-        val trimmedRecipeName = name.substring(name.lastIndexOf('.') + 1)
-        //language=markdown
-        return """
-            <TabItem value="moderne-cli" label="Moderne CLI">
-
-            You will need to have configured the [Moderne CLI](https://docs.moderne.io/user-documentation/moderne-cli/getting-started/cli-intro) on your machine before you can run the following command.
-
-            ```shell title="shell"
-            mod run . --recipe ${trimmedRecipeName}${cliOptions}
-            ```
-
-            If the recipe is not available locally, then you can install it using:
-            ```shell
-            mod config recipes jar install ${origin.groupId}:${origin.artifactId}:${"{{${origin.versionPlaceholderKey()}}}"}
-            ```
-            </TabItem>
-            """.trimIndent()
-    }
-
-    private fun BufferedWriter.writeSnippetsWithConfigurationWithoutDependency(
-        exampleRecipeName: String,
-        suppressMaven: Boolean,
-        suppressGradle: Boolean,
-        cliSnippet: String,
-        dataTableSnippet: String,
-        origin: RecipeOrigin,
-    ) {
-        //language=markdown
-        val gradleSnippet = if (suppressGradle) "" else """
-            <TabItem value="gradle" label="Gradle">
-
-            1. Add the following to your `build.gradle` file:
-            ```groovy title="build.gradle"
-            plugins {
-                id("org.openrewrite.rewrite") version("latest.release")
-            }
-            
-            rewrite {
-                activeRecipe("$exampleRecipeName")
-                setExportDatatables(true)
-            }
-            
-            repositories {
-                mavenCentral()
-            }
-            ```
-            2. Run `gradle rewriteRun` to run the recipe.
-            </TabItem>
-            """.trimIndent()
-
-        //language=markdown
-        val mavenSnippet = if (suppressMaven) "" else """
-            <TabItem value="maven" label="Maven">
-
-            1. Add the following to your `pom.xml` file:
-
-            ```xml title="pom.xml"
-            <project>
-              <build>
-                <plugins>
-                  <plugin>
-                    <groupId>org.openrewrite.maven</groupId>
-                    <artifactId>rewrite-maven-plugin</artifactId>
-                    <version>{{VERSION_REWRITE_MAVEN_PLUGIN}}</version>
-                    <configuration>
-                      $dataTableSnippet
-                      <activeRecipes>
-                        <recipe>$exampleRecipeName</recipe>
-                      </activeRecipes>
-                    </configuration>
-                  </plugin>
-                </plugins>
-              </build>
-            </project>
-            ```
-            2. Run `mvn rewrite:run` to run the recipe.
-            </TabItem>
-            """.trimIndent()
-
-        if (origin.license == Licenses.Proprietary || forModerneDocs) {
-            writeln(
-                """
-<Tabs groupId="projectType">
-$cliSnippet
-</Tabs>
-""".trimIndent()
-            )
-        } else {
-            writeln(
-                """
-Now that `$exampleRecipeName` has been defined, activate it in your build file:
-<Tabs groupId="projectType">
-$gradleSnippet
-$mavenSnippet
-$cliSnippet
-</Tabs>
-""".trimIndent()
-            )
-        }
-    }
-
-    private fun BufferedWriter.writeSnippetsWithConfigurationWithDependency(
-        exampleRecipeName: String,
-        origin: RecipeOrigin,
-        suppressMaven: Boolean,
-        suppressGradle: Boolean,
-        cliSnippet: String,
-        dataTableSnippet: String,
-    ) {
-        //language=markdown
-        val gradleSnippet = if (suppressGradle) "" else """
-            <TabItem value="gradle" label="Gradle">
-
-            1. Add the following to your `build.gradle` file:
-
-            ```groovy title="build.gradle"
-            plugins {
-                id("org.openrewrite.rewrite") version("latest.release")
-            }
-            
-            rewrite {
-                activeRecipe("$exampleRecipeName")
-                setExportDatatables(true)
-            }
-            
-            repositories {
-                mavenCentral()
-            }
-            
-            dependencies {
-                rewrite("${origin.groupId}:${origin.artifactId}:${"{{${origin.versionPlaceholderKey()}}}"}")
-            }
-            ```
-            2. Run `gradle rewriteRun` to run the recipe.
-            </TabItem>
-            """.trimIndent()
-
-        //language=markdown
-        val mavenSnippet = if (suppressMaven) "" else """
-            <TabItem value="maven" label="Maven">
-
-            1. Add the following to your `pom.xml` file:
-
-            ```xml title="pom.xml"
-            <project>
-              <build>
-                <plugins>
-                  <plugin>
-                    <groupId>org.openrewrite.maven</groupId>
-                    <artifactId>rewrite-maven-plugin</artifactId>
-                    <version>{{VERSION_REWRITE_MAVEN_PLUGIN}}</version>
-                    <configuration>
-                      $dataTableSnippet
-                      <activeRecipes>
-                        <recipe>$exampleRecipeName</recipe>
-                      </activeRecipes>
-                    </configuration>
-                    <dependencies>
-                      <dependency>
-                        <groupId>${origin.groupId}</groupId>
-                        <artifactId>${origin.artifactId}</artifactId>
-                        <version>${"{{${origin.versionPlaceholderKey()}}}"}</version>
-                      </dependency>
-                    </dependencies>
-                  </plugin>
-                </plugins>
-              </build>
-            </project>
-            ```
-            2. Run `mvn rewrite:run` to run the recipe.
-            </TabItem>
-            """.trimIndent()
-
-        if (origin.license == Licenses.Proprietary || forModerneDocs) {
-            writeln(
-                """
-<Tabs groupId="projectType">
-$cliSnippet
-</Tabs>
-""".trimIndent()
-            )
-        } else {
-            writeln(
-                """
-Now that `$exampleRecipeName` has been defined, activate it and take a dependency on `${origin.groupId}:${origin.artifactId}:${"{{${origin.versionPlaceholderKey()}}}"}` in your build file:
-<Tabs groupId="projectType">
-$gradleSnippet
-$mavenSnippet
-$cliSnippet
-</Tabs>
-""".trimIndent()
-            )
-        }
-    }
-
-    private fun BufferedWriter.writeSnippetsFromCoreLibrary(
-        recipeDescriptor: RecipeDescriptor,
-        suppressMaven: Boolean,
-        suppressGradle: Boolean,
-        cliSnippet: String,
-        dataTableSnippet: String,
-        dataTableCommandLineSnippet: String,
-    ) {
-        if (forModerneDocs) {
-            writeln("This recipe has no required configuration options. Users of Moderne can run it via the Moderne CLI.")
-        } else {
-            writeln(
-                "This recipe has no required configuration parameters and comes from a rewrite core library. " +
-                        "It can be activated directly without adding any dependencies."
-            )
-        }
-
-        //language=markdown
-        val gradleSnippet = if (suppressGradle) "" else """
-            <TabItem value="gradle" label="Gradle">
-
-            1. Add the following to your `build.gradle` file:
-
-            ```groovy title="build.gradle"
-            plugins {
-                id("org.openrewrite.rewrite") version("latest.release")
-            }
-            
-            rewrite {
-                activeRecipe("${recipeDescriptor.name}")
-                setExportDatatables(true)
-            }
-            
-            repositories {
-                mavenCentral()
-            }
-            
-            ```
-            2. Run `gradle rewriteRun` to run the recipe.
-            </TabItem>
-            
-            <TabItem value="gradle-init-script" label="Gradle init script">
-
-            1. Create a file named `init.gradle` in the root of your project.
-
-            ```groovy title="init.gradle"
-            initscript {
-                repositories {
-                    maven { url "https://plugins.gradle.org/m2" }
-                }
-                dependencies { classpath("org.openrewrite:plugin:latest.release") }
-            }
-            rootProject {
-                plugins.apply(org.openrewrite.gradle.RewritePlugin)
-                dependencies {
-                    rewrite("org.openrewrite:rewrite-java")
-                }
-                rewrite {
-                    activeRecipe("${recipeDescriptor.name}")
-                    setExportDatatables(true)
-                }
-                afterEvaluate {
-                    if (repositories.isEmpty()) {
-                        repositories {
-                            mavenCentral()
-                        }
-                    }
-                }
-            }
-            ```
-
-            2. Run the recipe.
-
-            ```shell title="shell"
-            gradle --init-script init.gradle rewriteRun
-            ```
-            </TabItem>
-            """.trimIndent()
-
-        //language=markdown
-        val mavenSnippet = if (suppressMaven) "" else """
-            <TabItem value="maven" label="Maven POM">
-
-            1. Add the following to your `pom.xml` file:
-
-            ```xml title="pom.xml"
-            <project>
-              <build>
-                <plugins>
-                  <plugin>
-                    <groupId>org.openrewrite.maven</groupId>
-                    <artifactId>rewrite-maven-plugin</artifactId>
-                    <version>{{VERSION_REWRITE_MAVEN_PLUGIN}}</version>
-                    <configuration>
-                      $dataTableSnippet
-                      <activeRecipes>
-                        <recipe>${recipeDescriptor.name}</recipe>
-                      </activeRecipes>
-                    </configuration>
-                  </plugin>
-                </plugins>
-              </build>
-            </project>
-            ```
-
-            2. Run `mvn rewrite:run` to run the recipe.
-            </TabItem>
-            
-            <TabItem value="maven-command-line" label="Maven Command Line">
-
-            You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
-
-            ```shell title="shell"
-            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.activeRecipes=${recipeDescriptor.name} $dataTableCommandLineSnippet
-            ```
-
-            </TabItem>
-            """.trimIndent()
-        writeln(
-            """
-<Tabs groupId="projectType">
-$gradleSnippet
-$mavenSnippet
-$cliSnippet
-</Tabs>
-""".trimIndent()
-        )
-    }
-
-    private fun BufferedWriter.writeSnippetForOtherLibrary(
-        origin: RecipeOrigin,
-        recipeDescriptor: RecipeDescriptor,
-        suppressMaven: Boolean,
-        suppressGradle: Boolean,
-        cliSnippet: String,
-        dataTableSnippet: String,
-        dataTableCommandLineSnippet: String,
-    ) {
-        if (origin.license == Licenses.Proprietary || forModerneDocs) {
-            writeln("This recipe has no required configuration options. Users of Moderne can run it via the Moderne CLI.")
-        } else {
-            writeln(
-                "This recipe has no required configuration options. " +
-                        "It can be activated by adding a dependency on `${origin.groupId}:${origin.artifactId}` " +
-                        "in your build file or by running a shell command (in which case no build changes are needed):"
-            )
-        }
-
-        //language=markdown
-        val gradleSnippet = if (suppressGradle) "" else """
-            <TabItem value="gradle" label="Gradle">
-
-            1. Add the following to your `build.gradle` file:
-
-            ```groovy title="build.gradle"
-            plugins {
-                id("org.openrewrite.rewrite") version("latest.release")
-            }
-            
-            rewrite {
-                activeRecipe("${recipeDescriptor.name}")
-                setExportDatatables(true)
-            }
-            
-            repositories {
-                mavenCentral()
-            }
-            
-            dependencies {
-                rewrite("${origin.groupId}:${origin.artifactId}:${"{{${origin.versionPlaceholderKey()}}}"}")
-            }
-            ```
-
-            2. Run `gradle rewriteRun` to run the recipe.
-            </TabItem>
-            
-            <TabItem value="gradle-init-script" label="Gradle init script">
-
-            1. Create a file named `init.gradle` in the root of your project.
-
-            ```groovy title="init.gradle"
-            initscript {
-                repositories {
-                    maven { url "https://plugins.gradle.org/m2" }
-                }
-                dependencies { classpath("org.openrewrite:plugin:{{VERSION_REWRITE_GRADLE_PLUGIN}}") }
-            }
-            rootProject {
-                plugins.apply(org.openrewrite.gradle.RewritePlugin)
-                dependencies {
-                    rewrite("${origin.groupId}:${origin.artifactId}:${"{{${origin.versionPlaceholderKey()}}}"}")
-                }
-                rewrite {
-                    activeRecipe("${recipeDescriptor.name}")
-                    setExportDatatables(true)
-                }
-                afterEvaluate {
-                    if (repositories.isEmpty()) {
-                        repositories {
-                            mavenCentral()
-                        }
-                    }
-                }
-            }
-            ```
-
-            2. Run the recipe.
-
-            ```shell title="shell"
-            gradle --init-script init.gradle rewriteRun
-            ```
-
-            </TabItem>
-            """.trimIndent()
-
-        //language=markdown
-        val mavenSnippet = if (suppressMaven) "" else """
-            <TabItem value="maven" label="Maven POM">
-
-            1. Add the following to your `pom.xml` file:
-
-            ```xml title="pom.xml"
-            <project>
-              <build>
-                <plugins>
-                  <plugin>
-                    <groupId>org.openrewrite.maven</groupId>
-                    <artifactId>rewrite-maven-plugin</artifactId>
-                    <version>{{VERSION_REWRITE_MAVEN_PLUGIN}}</version>
-                    <configuration>
-                      $dataTableSnippet
-                      <activeRecipes>
-                        <recipe>${recipeDescriptor.name}</recipe>
-                      </activeRecipes>
-                    </configuration>
-                    <dependencies>
-                      <dependency>
-                        <groupId>${origin.groupId}</groupId>
-                        <artifactId>${origin.artifactId}</artifactId>
-                        <version>${"{{${origin.versionPlaceholderKey()}}}"}</version>
-                      </dependency>
-                    </dependencies>
-                  </plugin>
-                </plugins>
-              </build>
-            </project>
-            ```
-
-            2. Run `mvn rewrite:run` to run the recipe.
-            </TabItem>
-            
-            <TabItem value="maven-command-line" label="Maven Command Line">
-            You will need to have [Maven](https://maven.apache.org/download.cgi) installed on your machine before you can run the following command.
-
-            ```shell title="shell"
-            mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=${origin.groupId}:${origin.artifactId}:RELEASE -Drewrite.activeRecipes=${recipeDescriptor.name} $dataTableCommandLineSnippet
-            ```
-            </TabItem>
-            """.trimIndent()
-
-        writeln(
-            """
-<Tabs groupId="projectType">
-$gradleSnippet
-$mavenSnippet
-$cliSnippet
-</Tabs>
-""".trimIndent()
-        )
-    }
-
-    private fun BufferedWriter.writeJavaScriptUsage(
-        recipeDescriptor: RecipeDescriptor,
-        origin: RecipeOrigin
-    ) {
-        val npmPackageName = getNpmPackageName(origin)
-
-        //language=markdown
-        writeln(
-            """
-            In order to run JavaScript recipes, you will need to use the [Moderne CLI](https://docs.moderne.io/user-documentation/moderne-cli/getting-started/cli-intro).
-            For JavaScript specific configuration instructions, please see our [configuring JavaScript guide](https://docs.moderne.io/user-documentation/moderne-cli/how-to-guides/javascript).
-
-            Once the CLI is installed, you can install this JavaScript recipe package by running the following command:
-
-            ```shell title="Install the recipe package"
-            mod config recipes npm install $npmPackageName
-            ```
-
-            Then, you can run the recipe via:
-
-            ```shell title="Run the recipe"
-            mod run . --recipe ${recipeDescriptor.name}
-            ```
-            """.trimIndent()
-        )
-    }
-
-    private fun BufferedWriter.writePythonUsage(
-        recipeDescriptor: RecipeDescriptor,
-        origin: RecipeOrigin
-    ) {
-        val pipPackageName = getPipPackageName(origin)
-
-        //language=markdown
-        writeln(
-            """
-            In order to run Python recipes, you will need to use the [Moderne CLI](https://docs.moderne.io/user-documentation/moderne-cli/getting-started/cli-intro).
-
-            Once the CLI is installed, you can install this Python recipe package by running the following command:
-
-            ```shell title="Install the recipe package"
-            mod config recipes pip install $pipPackageName
-            ```
-
-            Then, you can run the recipe via:
-
-            ```shell title="Run the recipe"
-            mod run . --recipe ${recipeDescriptor.name}
-            ```
-            """.trimIndent()
-        )
     }
 
     companion object {

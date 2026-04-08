@@ -1,6 +1,6 @@
 plugins {
     application
-    id("org.jetbrains.kotlin.jvm").version("1.9.25")
+    id("org.jetbrains.kotlin.jvm").version("2.3.0")
     id("org.owasp.dependencycheck") version "latest.release"
 }
 
@@ -49,9 +49,10 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("info.picocli:picocli:latest.release")
     implementation("io.github.java-diff-utils:java-diff-utils:4.11")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.openrewrite:rewrite-core")
     implementation("org.openrewrite:rewrite-javascript")
+    implementation("org.openrewrite:rewrite-csharp")
     implementation("org.openrewrite:rewrite-python")
 
     // Runtime dependencies
@@ -66,6 +67,7 @@ dependencies {
     // Note: Not using BOM to show the latest patch versions of individual modules
 
     // Core rewrite modules (org.openrewrite)
+    "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-core:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-docker:$rewriteVersion")
@@ -85,7 +87,6 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-yaml:$rewriteVersion")
 
     // Additional core modules (versions only, recipes not yet included)
-//    "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
 //    "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
 
@@ -95,7 +96,6 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-all:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-android:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-apache:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-azul:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-circleci:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-codemods:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-codemods-ng:$rewriteVersion")
@@ -107,7 +107,6 @@ dependencies {
 //        exclude(group = "org.openrewrite.recipe")
 //    }
     "recipe"("org.openrewrite.recipe:rewrite-dotnet:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-dropwizard:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-feature-flags:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-github-actions:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-gitlab:$rewriteVersion")
@@ -123,7 +122,8 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-micrometer:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-micronaut:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-migrate-java:$rewriteVersion")
-    // "recipe"("org.openrewrite.recipe:rewrite-migrate-python:$rewriteVersion") // TODO uncomment after first release
+    "recipe"("org.openrewrite.recipe:rewrite-migrate-kotlin:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-migrate-python:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-netty:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-nodejs:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-okhttp:$rewriteVersion")
@@ -146,6 +146,7 @@ dependencies {
     "recipe"("io.moderne.recipe:rewrite-angular:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-cryptography:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-devcenter:$rewriteVersion")
+    "recipe"("io.moderne.recipe:rewrite-dropwizard:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-elastic:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-hibernate:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-java-application-server:$rewriteVersion")
@@ -157,17 +158,18 @@ dependencies {
     "recipe"("io.moderne.recipe:rewrite-spring:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-tapestry:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-vulncheck:$rewriteVersion")
+    
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
 tasks.named<JavaCompile>("compileJava") {
-    sourceCompatibility = JavaVersion.VERSION_17.toString()
-    targetCompatibility = JavaVersion.VERSION_17.toString()
+    sourceCompatibility = JavaVersion.VERSION_21.toString()
+    targetCompatibility = JavaVersion.VERSION_21.toString()
 }
 
 tasks.withType<Test> {
@@ -187,7 +189,6 @@ tasks.named<JavaExec>("run").configure {
     if (latestVersionsOnly) {
         // Additional modules whose versions we want to show, but not (yet) their recipes
         dependencies {
-            "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
             "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
             "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
         }
