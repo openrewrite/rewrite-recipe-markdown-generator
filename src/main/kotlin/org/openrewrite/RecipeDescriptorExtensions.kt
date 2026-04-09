@@ -81,6 +81,20 @@ description: |
             s.appendLine(option.asYaml())
         }
     }
+    if (preconditions.isNotEmpty()) {
+        s.appendLine("preconditions:")
+        for (precondition in preconditions) {
+            s.append("  - ${precondition.name}")
+            if (precondition.options.isEmpty() || precondition.options.all { it.value == null }) {
+                s.appendLine()
+            } else {
+                s.appendLine(":")
+            }
+            for (option in precondition.options) {
+                s.append(option.asYaml(3))
+            }
+        }
+    }
     if (recipeList.isNotEmpty()) {
         s.appendLine("recipeList:")
         for (subRecipe in recipeList) {

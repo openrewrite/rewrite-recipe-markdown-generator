@@ -764,6 +764,34 @@ ${props.toString().trimEnd()}
             }
             val pathToRecipes = pathToRecipesBuilder.toString()
 
+            if (recipeDescriptor.preconditions.isNotEmpty()) {
+                writeln("**Preconditions**")
+                newLine()
+                for (precondition in recipeDescriptor.preconditions) {
+                    if (recipeToSource.containsKey(precondition.name)) {
+                        val recipeLink = getRecipeLink(precondition, pathToRecipes)
+                        writeln("* [${precondition.displayNameEscapedMdx()}]($recipeLink)")
+                    } else {
+                        writeln("* ${precondition.displayNameEscapedMdx()}")
+                    }
+
+                    if (precondition.options.isNotEmpty()) {
+                        for (option in precondition.options) {
+                            if (option.value != null) {
+                                val formattedOptionString = printValue(option.value!!)
+                                    .replace("<p>", "< p >")
+                                    .replace("\n", " ")
+
+                                writeln("  * " + option.name + ": `" + formattedOptionString + "`")
+                            }
+                        }
+                    }
+                }
+                newLine()
+                writeln("**Recipes**")
+                newLine()
+            }
+
             for (recipe in recipeDescriptor.recipeList) {
                 // https://github.com/openrewrite/rewrite-docs/issues/250
                 if (recipe.displayName == "Precondition bellwether") {

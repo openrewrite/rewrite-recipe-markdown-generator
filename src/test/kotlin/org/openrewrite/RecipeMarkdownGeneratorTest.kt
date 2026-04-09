@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import org.openrewrite.config.OptionDescriptor
 import org.openrewrite.config.RecipeDescriptor
 import picocli.CommandLine
 import java.io.PrintWriter
@@ -193,6 +194,85 @@ class RecipeMarkdownGeneratorTest {
 
     private fun getRecipePath(recipeName: String): String {
         return RecipeMarkdownGenerator.getRecipePath(createDescriptor(recipeName))
+    }
+
+    @Test
+    fun asYamlIncludesPreconditions() {
+        initializeConflictDetection(emptyList())
+
+        val precondition = RecipeDescriptor(
+            "org.openrewrite.java.search.HasJavaVersion",
+            "Has Java version",
+            "",
+            "Check Java version",
+            mutableSetOf(),
+            java.time.Duration.ZERO,
+            mutableListOf(OptionDescriptor("version", "String", "Version", "The version", null, null, false, "21.X")),
+            mutableListOf(),  // preconditions
+            mutableListOf(),  // recipeList
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf(),
+            URI.create("https://example.com/recipe")
+        )
+
+        val subRecipe = RecipeDescriptor(
+            "org.openrewrite.java.spring.AddSpringProperty",
+            "Add Spring property",
+            "",
+            "Add a property",
+            mutableSetOf(),
+            java.time.Duration.ZERO,
+            mutableListOf(
+                OptionDescriptor("property", "String", "Property", "The property", null, null, true, "spring.threads.virtual.enabled"),
+                OptionDescriptor("value", "String", "Value", "The value", null, null, true, "true")
+            ),
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf(),
+            URI.create("https://example.com/recipe")
+        )
+
+        val descriptor = RecipeDescriptor(
+            "org.openrewrite.java.spring.boot3.EnableVirtualThreads",
+            "Enable Virtual Threads on Java 21",
+            "",
+            "Set spring.threads.virtual.enabled to true.",
+            mutableSetOf(),
+            java.time.Duration.ZERO,
+            mutableListOf(),
+            mutableListOf(precondition),  // preconditions
+            mutableListOf(subRecipe),     // recipeList
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf(),
+            URI.create("https://example.com/recipe")
+        )
+
+        val yaml = descriptor.asYaml()
+        assertThat(yaml).contains("preconditions:")
+        assertThat(yaml).contains("  - org.openrewrite.java.search.HasJavaVersion:")
+        assertThat(yaml).contains("      version: 21.X")
+        assertThat(yaml).contains("recipeList:")
+        assertThat(yaml).contains("  - org.openrewrite.java.spring.AddSpringProperty:")
+        assertThat(yaml).contains("      property: spring.threads.virtual.enabled")
+
+        // preconditions should appear before recipeList
+        assertThat(yaml.indexOf("preconditions:")).isLessThan(yaml.indexOf("recipeList:"))
+    }
+
+    @Test
+    fun asYamlOmitsPreconditionsWhenEmpty() {
+        initializeConflictDetection(emptyList())
+
+        val descriptor = createDescriptor("org.openrewrite.test.SomeRecipe")
+        val yaml = descriptor.asYaml()
+        assertThat(yaml).doesNotContain("preconditions:")
     }
 
     private fun createDescriptor(recipeName: String): RecipeDescriptor {
