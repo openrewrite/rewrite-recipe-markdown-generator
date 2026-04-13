@@ -152,6 +152,7 @@ dependencies {
     "recipe"("io.moderne.recipe:rewrite-java-application-server:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-jasperreports:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-kafka:$rewriteVersion")
+    "recipe"("io.moderne.recipe:rewrite-release-metromap:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-program-analysis:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-prethink:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-react:$rewriteVersion")
