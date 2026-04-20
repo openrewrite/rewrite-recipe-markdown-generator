@@ -31,7 +31,8 @@ class PythonRecipeLoader(
          */
         val PYTHON_RECIPE_MODULES = mapOf(
             "rewrite-python" to "openrewrite",
-            "rewrite-migrate-python" to "openrewrite-migrate-python"
+            "rewrite-migrate-python" to "openrewrite-migrate-python",
+            "rewrite-static-analysis-python" to "openrewrite-static-analysis"
         )
 
         /**
@@ -39,7 +40,8 @@ class PythonRecipeLoader(
          */
         private val PYTHON_GROUP_IDS = mapOf(
             "rewrite-python" to "org.openrewrite",
-            "rewrite-migrate-python" to "org.openrewrite.recipe"
+            "rewrite-migrate-python" to "org.openrewrite.recipe",
+            "rewrite-static-analysis-python" to "org.openrewrite.recipe"
         )
 
         /**
@@ -47,7 +49,16 @@ class PythonRecipeLoader(
          */
         private val PYTHON_REPO_URLS = mapOf(
             "rewrite-python" to "https://github.com/openrewrite/rewrite/blob/main/",
-            "rewrite-migrate-python" to "https://github.com/moderneinc/rewrite-migrate-python/blob/main/"
+            "rewrite-migrate-python" to "https://github.com/moderneinc/rewrite-migrate-python/blob/main/",
+            "rewrite-static-analysis-python" to "https://github.com/moderneinc/rewrite-static-analysis/blob/main/"
+        )
+
+        /**
+         * Modules whose pip package uses independent versioning from the Maven artifact.
+         * For these, we always install the latest pip version rather than trying to match the Maven version.
+         */
+        private val INDEPENDENT_PIP_VERSIONING = setOf(
+            "rewrite-static-analysis-python"
         )
     }
 
@@ -89,7 +100,8 @@ class PythonRecipeLoader(
 
         val packagesToLoad = PYTHON_RECIPE_MODULES.map { (artifactId, pipPackage) ->
             val origin = recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
-            PipPackageInfo(artifactId, pipPackage, origin?.version)
+            val version = if (artifactId in INDEPENDENT_PIP_VERSIONING) null else origin?.version
+            PipPackageInfo(artifactId, pipPackage, version)
         }
 
         println("Found ${packagesToLoad.size} Python recipe module(s): ${packagesToLoad.joinToString { it.artifactId }}")
