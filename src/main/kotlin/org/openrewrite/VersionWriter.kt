@@ -107,6 +107,16 @@ class VersionWriter {
                 ```
                 
                 </details>
+
+                ## CSV Installation
+
+                Alternatively, you can install all recipe modules using the [recipes CSV file](https://docs.moderne.io/user-documentation/moderne-cli/references/recipes-csv/) produced by the [`install-marketplace.sh`](https://github.com/openrewrite/rewrite-recipe-markdown-generator/blob/main/install-marketplace.sh) script:
+
+                ```bash
+                mod config recipes import csv /path/to/recipes-v5.csv
+                ```
+
+                Download the latest [recipes-v5.csv](pathname:///recipes-v5.csv) to get started.
                 """.trimIndent()
             )
         }
