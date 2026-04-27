@@ -50,7 +50,7 @@ cp -r build/moderne-docs/*.js ../moderne-docs/src/plugins/
 ```
 
 ### Update rewrite-docs
-Assumes you have `rewrite-docs` checked out in the same directory as `rewrite-recipe-markdown-generator`.
+Assumes you have `rewrite-docs` checked out in the same parent directory as `rewrite-recipe-markdown-generator`.
 
 ```shell
 ./gradlew run
@@ -66,7 +66,7 @@ cp -r build/docs/*.js ../rewrite-docs/src/plugins/
 Update `../rewrite-docs/sidebars.ts` to include a link to the new changelog.
 
 ### Update moderne-docs
-Assumes you have `moderne-docs` checked out in the same directory as `rewrite-recipe-markdown-generator`.
+Assumes you have `moderne-docs` checked out in the same parent directory as `rewrite-recipe-markdown-generator`.
 
 ```shell
 ./gradlew run
