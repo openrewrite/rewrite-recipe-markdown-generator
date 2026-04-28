@@ -42,6 +42,33 @@ class RecipeMarkdownGeneratorTest {
     }
 
     @Test
+    fun latestVersionsMultiEcosystemInstall(@TempDir tempDir: Path) {
+        fun mk(g: String, a: String, v: String): RecipeOrigin {
+            val o = RecipeOrigin(g, a, v, URI.create("file:///$a.jar"))
+            o.repositoryUrl = "https://github.com/openrewrite/$a/blob/main/"
+            o.license = Licenses.Apache2
+            return o
+        }
+        val origins = listOf(
+            mk("org.openrewrite.recipe", "rewrite-spring", "5.0.0"),
+            mk("org.openrewrite", "rewrite-python", "1.2.3"),
+            mk("org.openrewrite.recipe", "rewrite-migrate-python", "0.5.0"),
+            mk("org.openrewrite", "rewrite-javascript", "0.9.0"),
+            mk("io.moderne.recipe", "recipes-code-quality", "0.1.0"),
+        )
+        VersionWriter().createLatestVersionsMarkdown(tempDir, origins, "8.x", "2.x", "1.x", "6.x", "5.x")
+        val out = Files.readString(tempDir.resolve("latest-versions-of-every-openrewrite-module.md"))
+        assertThat(out).contains("mod config recipes jar install org.openrewrite.recipe:rewrite-spring:{{VERSION_ORG_OPENREWRITE_RECIPE_REWRITE_SPRING}}")
+        assertThat(out).contains("mod config recipes jar install org.openrewrite.recipe:rewrite-spring:LATEST")
+        assertThat(out).contains("mod config recipes pip install openrewrite=={{VERSION_ORG_OPENREWRITE_REWRITE_PYTHON}} openrewrite-migrate-python=={{VERSION_ORG_OPENREWRITE_RECIPE_REWRITE_MIGRATE_PYTHON}}")
+        assertThat(out).contains("mod config recipes pip install openrewrite openrewrite-migrate-python")
+        assertThat(out).contains("mod config recipes npm install @openrewrite/rewrite@{{VERSION_ORG_OPENREWRITE_REWRITE_JAVASCRIPT}}")
+        assertThat(out).contains("mod config recipes npm install @openrewrite/rewrite")
+        assertThat(out).contains("mod config recipes nuget install OpenRewrite.CodeQuality@{{VERSION_IO_MODERNE_RECIPE_RECIPES_CODE_QUALITY}}")
+        assertThat(out).contains("mod config recipes nuget install OpenRewrite.CodeQuality")
+    }
+
+    @Test
     fun conflictingRecipesGetEditionSuffix() {
         // When both moderne and openrewrite have the same recipe, they should get edition suffixes
         val recipes = listOf(
