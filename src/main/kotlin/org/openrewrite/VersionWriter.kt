@@ -59,13 +59,39 @@ class VersionWriter {
                 | [**io.moderne.recipe:moderne-recipe-bom**](https://github.com/moderneinc/moderne-recipe-bom)                          | **${moderneBomLink}** | ${Licenses.Proprietary.markdown()} |
                 """.trimIndent()
             )
-            var cliInstallGavs = ""
-            var cliInstallGavsLatest = ""
+            var cliInstallJarPinned = ""
+            var cliInstallJarLatest = ""
+            var cliInstallPipPinned = ""
+            var cliInstallPipLatest = ""
+            var cliInstallNpmPinned = ""
+            var cliInstallNpmLatest = ""
+            var cliInstallNugetPinned = ""
+            var cliInstallNugetLatest = ""
             var loadRecipesAsync = ""
             for (origin in recipeOrigins) {
 
-                cliInstallGavs += "${origin.groupId}:${origin.artifactId}:{{${origin.versionPlaceholderKey()}}} "
-                cliInstallGavsLatest += "${origin.groupId}:${origin.artifactId}:LATEST "
+                val versionPlaceholder = "{{${origin.versionPlaceholderKey()}}}"
+                when (origin.artifactId) {
+                    in PythonRecipeLoader.PYTHON_RECIPE_MODULES -> {
+                        val pipPackage = PythonRecipeLoader.PYTHON_RECIPE_MODULES.getValue(origin.artifactId)
+                        cliInstallPipPinned += "$pipPackage==$versionPlaceholder "
+                        cliInstallPipLatest += "$pipPackage "
+                    }
+                    in TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES -> {
+                        val npmPackage = TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES.getValue(origin.artifactId)
+                        cliInstallNpmPinned += "$npmPackage@$versionPlaceholder "
+                        cliInstallNpmLatest += "$npmPackage "
+                    }
+                    in CSharpRecipeLoader.CSHARP_RECIPE_MODULES -> {
+                        val nugetPackage = CSharpRecipeLoader.CSHARP_RECIPE_MODULES.getValue(origin.artifactId)
+                        cliInstallNugetPinned += "$nugetPackage@$versionPlaceholder "
+                        cliInstallNugetLatest += "$nugetPackage "
+                    }
+                    else -> {
+                        cliInstallJarPinned += "${origin.groupId}:${origin.artifactId}:$versionPlaceholder "
+                        cliInstallJarLatest += "${origin.groupId}:${origin.artifactId}:LATEST "
+                    }
+                }
 
                 val loadCommand = "load_" + (origin.groupId + '_' + origin.artifactId)
                     .replace('-', '_')
@@ -84,10 +110,24 @@ class VersionWriter {
                 val releaseLink = "[${origin.version}](${origin.releaseUrl(origin.version)})"
                 writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${origin.license.markdown()} |")
             }
+
+            val pinnedInstalls = listOf(
+                "jar" to cliInstallJarPinned,
+                "pip" to cliInstallPipPinned,
+                "npm" to cliInstallNpmPinned,
+                "nuget" to cliInstallNugetPinned,
+            )
+            val latestInstalls = listOf(
+                "jar" to cliInstallJarLatest,
+                "pip" to cliInstallPipLatest,
+                "npm" to cliInstallNpmLatest,
+                "nuget" to cliInstallNugetLatest,
+            )
+
             //language=markdown
             writeln(
                 """
-                
+
                 ## CLI Installation
 
                 Install the latest versions of all the OpenRewrite recipe modules into the Moderne CLI:
@@ -96,16 +136,29 @@ class VersionWriter {
                 <TabItem value="pinned" label="Pinned versions">
 
                 ```bash
-                mod config recipes jar install ${cliInstallGavs}
+                """.trimIndent()
+            )
+            for ((type, packages) in pinnedInstalls) {
+                if (packages.isNotBlank()) writeln("mod config recipes $type install ${packages.trim()}")
+            }
+            writeln(
+                """
                 ```
 
                 </TabItem>
                 <TabItem value="latest" label="Latest versions">
 
-                Install with `:LATEST` so you can later run `mod config recipes upgrade` to pull the newest versions without editing this command.
+                Install without a pinned version so you can later run `mod config recipes upgrade` to pull the newest versions without editing this command.
 
                 ```bash
-                mod config recipes jar install ${cliInstallGavsLatest}
+                """.trimIndent()
+            )
+            for ((type, packages) in latestInstalls) {
+                if (packages.isNotBlank()) writeln("mod config recipes $type install ${packages.trim()}")
+            }
+            //language=markdown
+            writeln(
+                """
                 ```
 
                 </TabItem>
