@@ -124,19 +124,6 @@ class TypeScriptRecipeLoader(
                     // getMarketplace is accumulative, so only take recipes not already seen
                     val newDescriptors = descriptors.filter { it.name !in recipeToSource }
                     for (descriptor in newDescriptors) {
-                        // Debug: Print option types for recipes with options
-                        // Remove this once the type checking is fixed: https://github.com/openrewrite/rewrite/issues/6293
-                        if (descriptor.options != null && descriptor.options.isNotEmpty()) {
-                            println("  Recipe: ${descriptor.name}")
-                            for (option in descriptor.options) {
-                                println("    Option name: ${option.name}")
-                                println("      type: ${option.type}")
-                                println("      description: ${option.description}")
-                                println("      example: ${option.example}")
-                                println("      required: ${option.isRequired}")
-                            }
-                        }
-
                         val sourceUri = mapRecipeToSourceUri(descriptor.name, origin)
                         recipeToSource[descriptor.name] = sourceUri
                     }

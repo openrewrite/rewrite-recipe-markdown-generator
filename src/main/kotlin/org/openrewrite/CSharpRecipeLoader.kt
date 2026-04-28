@@ -227,6 +227,10 @@ class CSharpRecipeLoader(
                             }
                         } catch (e: Exception) {
                             System.err.println("Warning: Failed to prepare recipe $recipeName: ${e.message}")
+                            if (e.message?.contains("no recipe found in marketplace") == true) {
+                                System.err.println("  Hint: the missing delegate is expected to be supplied by an installed Java or C# recipe package. " +
+                                        "This usually indicates version skew between rewrite-csharp and the C# NuGet packages (e.g. ${pkg.nugetPackageName}).")
+                            }
                             null
                         }
                     }
