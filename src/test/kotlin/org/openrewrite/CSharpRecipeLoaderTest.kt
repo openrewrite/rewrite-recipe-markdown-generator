@@ -18,7 +18,7 @@ class CSharpRecipeLoaderTest {
         assertThat(CSharpRecipeLoader.CSHARP_RECIPE_MODULES["recipes-code-quality"])
             .isEqualTo("OpenRewrite.CodeQuality")
         assertThat(CSharpRecipeLoader.CSHARP_RECIPE_MODULES["recipes-migrate-dotnet"])
-            .isEqualTo("OpenRewrite.MigrateDotNet")
+            .isEqualTo("OpenRewrite.Recipes.CSharp.Migration.Dotnet")
         assertThat(CSharpRecipeLoader.CSHARP_RECIPE_MODULES["recipes-tunit"])
             .isEqualTo("OpenRewrite.TUnit")
     }

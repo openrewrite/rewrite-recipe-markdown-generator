@@ -28,7 +28,7 @@ class CSharpRecipeLoader(
          */
         val CSHARP_RECIPE_MODULES = mapOf(
             "recipes-code-quality" to "OpenRewrite.CodeQuality",
-            "recipes-migrate-dotnet" to "OpenRewrite.MigrateDotNet",
+            "recipes-migrate-dotnet" to "OpenRewrite.Recipes.CSharp.Migration.Dotnet",
             "recipes-tunit" to "OpenRewrite.TUnit"
         )
 
