@@ -39,6 +39,16 @@ cp -r build/moderne-docs/*.md ../moderne-docs/docs/user-documentation/recipes/
 cp -r build/moderne-docs/*.js ../moderne-docs/src/plugins/
 ```
 
+### Generate recipes-v5.csv
+
+Uses the Moderne CLI to install all recipe modules into a local marketplace and export the CSV:
+
+```shell
+./install-marketplace.sh build/docs
+cp build/docs/recipes-v5.csv ../rewrite-docs/static/
+cp build/docs/recipes-v5.csv ../moderne-docs/static/
+```
+
 ### Create Markdown files in a specific directory
 ```shell
 ./gradlew run --args="desired/output/path"
@@ -54,11 +64,13 @@ Assumes you have `rewrite-docs` checked out in the same parent directory as `rew
 
 ```shell
 ./gradlew run
+./install-marketplace.sh build/docs
 rm -rf ../rewrite-docs/docs/recipes/
 mv build/docs/*-Release.md ../rewrite-docs/docs/changelog/
 cp -r build/docs/recipes ../rewrite-docs/docs/recipes
 cp -r build/docs/*.md ../rewrite-docs/docs/reference/
 cp -r build/docs/*.js ../rewrite-docs/src/plugins/
+cp build/docs/recipes-v5.csv ../rewrite-docs/static/
 ```
 
 #### Manual step
@@ -70,7 +82,9 @@ Assumes you have `moderne-docs` checked out in the same parent directory as `rew
 
 ```shell
 ./gradlew run
+./install-marketplace.sh build/moderne-docs
 rm -rf ../moderne-docs/docs/user-documentation/recipes/recipe-catalog/
 cp -r build/moderne-docs/recipe-catalog ../moderne-docs/docs/user-documentation/recipes/recipe-catalog
 cp -r build/moderne-docs/lists/* ../moderne-docs/docs/user-documentation/recipes/lists
+cp build/moderne-docs/recipes-v5.csv ../moderne-docs/static/
 ```
