@@ -165,21 +165,67 @@ class VersionWriter {
                 </Tabs>
 
                 ## Moderne Installation
-                
+
                 Install the latest versions of all the OpenRewrite [recipe modules into Moderne](https://docs.moderne.io/administrator-documentation/moderne-platform/how-to-guides/importing-external-recipes#importing-recipes-via-a-graphql-api-call) using the GraphQL endpoint.
-                
+
                 <details>
                 <summary>
                 Show GraphQL mutation.
                 </summary>
-                
+
                 ```graphql
                 mutation seedOpenRewriteArtifacts {
                 ${loadRecipesAsync}
                 }
                 ```
-                
+
                 </details>
+
+                ## Marketplace Sync
+
+                As an alternative to installing modules one by one, the Moderne CLI can mirror an entire recipe marketplace into your local CLI with a single command:
+
+                ```bash
+                mod config recipes moderne sync
+                ```
+
+                Under the hood, `sync` picks one of two paths against the configured Moderne tenant:
+
+                1. **Preferred — REST CSV (SaaS v2):** the CLI first tries `GET <apiHost>/api/recipes`. If the endpoint responds, the body is written to `~/.moderne/cli/recipes-v5.csv` and sync is done. The CSV has one row per recipe, with columns: `ecosystem`, `packageName`, `requestedVersion`, `version`, `name`, `displayName`, `description`, `recipeCount`, `category1`–`category6`, `category1Description`–`category6Description`, `options`, and `dataTables`. The CLI uses this catalog for search, tab completion, and MCP tooling.
+                2. **Fallback — GraphQL + per-artifact install (SaaS v1):** if the REST endpoint is unavailable, the CLI issues a GraphQL query for every finished recipe deployment and installs each artifact from Maven, the same way `mod config recipes jar install` would:
+                   ```graphql
+                   query {
+                     recipeDeployments(state: FINISHED) {
+                       artifact {
+                         groupId
+                         artifactId
+                         version
+                         requestedVersion
+                         datedSnapshotVersion
+                       }
+                     }
+                   }
+                   ```
+
+                ### Option 1: Sync from app.moderne.io
+
+                The default tenant is the free public Moderne instance at [app.moderne.io](https://app.moderne.io), which already publishes every OpenRewrite recipe artifact listed in the table above. Point the CLI at it (or any other Moderne tenant you have access to), log in, and sync:
+
+                ```bash
+                mod config moderne edit https://app.moderne.io
+                mod config moderne login
+                mod config recipes moderne sync
+                ```
+
+                ### Option 2: Import a self-hosted CSV
+
+                If you cannot reach a Moderne tenant — for example in an air-gapped environment — you can supply your own CSV in the same [recipes-v5.csv format](https://docs.moderne.io/user-documentation/moderne-cli/references/recipes-csv/#csv-format) and import it directly:
+
+                ```bash
+                mod config recipes import csv path/to/recipes.csv
+                ```
+
+                Recipes with the same name are replaced by the imported version, so this can be re-run to refresh the marketplace. Pair it with the matching JAR/pip/npm/NuGet installs from [CLI Installation](#cli-installation) above so the recipes resolve when run.
                 """.trimIndent()
             )
         }
