@@ -142,6 +142,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-third-party:$rewriteVersion")
 
     // Moderne recipe modules (io.moderne.recipe)
+    "recipe"("io.moderne.recipe:recipes-kotlin:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-ai:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-angular:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-cryptography:$rewriteVersion")
