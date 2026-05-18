@@ -183,29 +183,7 @@ class VersionWriter {
 
                 ## Marketplace Sync
 
-                As an alternative to installing modules one by one, the Moderne CLI can mirror an entire recipe marketplace into your local CLI with a single command:
-
-                ```bash
-                mod config recipes moderne sync
-                ```
-
-                Under the hood, `sync` picks one of two paths against the configured Moderne tenant:
-
-                1. **Preferred — REST CSV (SaaS v2):** the CLI first tries `GET <apiHost>/api/recipes`. If the endpoint responds, the body is written to `~/.moderne/cli/recipes-v5.csv` and sync is done. The CSV has one row per recipe, with columns: `ecosystem`, `packageName`, `requestedVersion`, `version`, `name`, `displayName`, `description`, `recipeCount`, `category1`–`category6`, `category1Description`–`category6Description`, `options`, and `dataTables`. The CLI uses this catalog for search, tab completion, and MCP tooling.
-                2. **Fallback — GraphQL + per-artifact install (SaaS v1):** if the REST endpoint is unavailable, the CLI issues a GraphQL query for every finished recipe deployment and installs each artifact from Maven, the same way `mod config recipes jar install` would:
-                   ```graphql
-                   query {
-                     recipeDeployments(state: FINISHED) {
-                       artifact {
-                         groupId
-                         artifactId
-                         version
-                         requestedVersion
-                         datedSnapshotVersion
-                       }
-                     }
-                   }
-                   ```
+                As an alternative to installing modules one by one, the Moderne CLI can mirror an entire recipe marketplace into your local CLI.
 
                 ### Option 1: Sync from app.moderne.io
 
@@ -226,6 +204,26 @@ class VersionWriter {
                 ```
 
                 Recipes with the same name are replaced by the imported version, so this can be re-run to refresh the marketplace. Pair it with the matching JAR/pip/npm/NuGet installs from [CLI Installation](#cli-installation) above so the recipes resolve when run.
+
+                ### Additional sync details
+
+                Under the hood, `mod config recipes moderne sync` picks one of two paths against the configured Moderne tenant:
+
+                1. **Preferred — REST CSV (SaaS v2):** the CLI first tries `GET <apiHost>/api/recipes`. If the endpoint responds, the body is written to `~/.moderne/cli/recipes-v5.csv` and sync is done. The CSV has one row per recipe, with columns: `ecosystem`, `packageName`, `requestedVersion`, `version`, `name`, `displayName`, `description`, `recipeCount`, `category1`–`category6`, `category1Description`–`category6Description`, `options`, and `dataTables`. The CLI uses this catalog for search, tab completion, and MCP tooling.
+                2. **Fallback — GraphQL + per-artifact install (SaaS v1):** if the REST endpoint is unavailable, the CLI issues a GraphQL query for every finished recipe deployment and installs each artifact from Maven, the same way `mod config recipes jar install` would:
+                   ```graphql
+                   query {
+                     recipeDeployments(state: FINISHED) {
+                       artifact {
+                         groupId
+                         artifactId
+                         version
+                         requestedVersion
+                         datedSnapshotVersion
+                       }
+                     }
+                   }
+                   ```
                 """.trimIndent()
             )
         }
