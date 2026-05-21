@@ -21,7 +21,7 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url = uri("https://central.sonatype.org/content/repositories/snapshots/") }
+    maven { url = uri("https://central.sonatype.com/repository/maven-snapshots/") }
     maven { url = uri("https://maven.diffblue.com/snapshot") }
     gradlePluginPortal()
 }
@@ -143,6 +143,7 @@ dependencies {
 
     // Moderne recipe modules (io.moderne.recipe)
     "recipe"("io.moderne.recipe:recipes-kotlin:$rewriteVersion")
+    "recipe"("io.moderne.recipe:recipes-scala:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-ai:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-angular:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-cryptography:$rewriteVersion")
