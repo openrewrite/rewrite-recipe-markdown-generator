@@ -1,49 +1,109 @@
 name: Benchmark full generation
 
-# Workflow-dispatch-only so a maintainer can trigger it on a branch and
-# on main and compare wall-clock times. The full `gradlew run` resolves
-# many recipe dependencies and emits the full Moderne + OpenRewrite docs
-# output — substantially heavier than the latestVersionsOnly path the
-# regular CI runs.
+# Times a full `gradlew run` on both main and the current branch in a
+# single job. Gradle's local cache + the GitHub-hosted setup-gradle
+# cache make the second run cheaper than the first, so the workflow
+# warms the cache on the baseline run, then re-runs with the second
+# checkout where the actual benchmark numbers come from.
 
 on:
   workflow_dispatch:
+  push:
+    branches-ignore:
+      - main
 
 jobs:
   benchmark:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 21
       - uses: gradle/actions/setup-gradle@v5
 
-      - name: Generate markdown (timed)
+      - name: Set up worktrees for main + current branch
+        run: |
+          git config --global user.email "ci@example.com"
+          git config --global user.name "ci"
+          mkdir -p /tmp/bench
+          # Snapshot the current ref so we can reach it from a worktree
+          CURRENT_SHA=$(git rev-parse HEAD)
+          # Add a worktree at origin/main for the baseline
+          git worktree add /tmp/bench/main origin/main
+          # Add a worktree at the current ref for the PR build
+          git worktree add /tmp/bench/pr "$CURRENT_SHA"
+          echo "CURRENT_SHA=$CURRENT_SHA" >> "$GITHUB_ENV"
+
+      - name: Baseline (main) — warm + timed
         run: |
           set -o pipefail
+          cd /tmp/bench/main
+          # First run warms the Gradle dependency cache. Time it too —
+          # both runs share the same warm-cache condition because the
+          # Gradle local cache persists across worktrees on the same
+          # runner.
           start_ns=$(date +%s%N)
-          ./gradlew run --no-daemon | tee /tmp/run.log
+          ./gradlew run --no-daemon 2>&1 | tee /tmp/main.log
           end_ns=$(date +%s%N)
-          elapsed_ms=$(( (end_ns - start_ns) / 1000000 ))
-          descriptors=$(grep -E '^Found [0-9]+ descriptor' /tmp/run.log | head -1 || true)
-          generated_md=$(find build/docs build/moderne-docs -name '*.md' 2>/dev/null | wc -l || echo 0)
+          main_ms=$(( (end_ns - start_ns) / 1000000 ))
+          echo "MAIN_MS=$main_ms" >> "$GITHUB_ENV"
+          # Drop the build output between runs so neither benefits from
+          # incremental Kotlin compilation of leftover classes.
+          ./gradlew clean --no-daemon 2>&1 | tail -3 || true
+
+      - name: PR branch — timed
+        run: |
+          set -o pipefail
+          cd /tmp/bench/pr
+          start_ns=$(date +%s%N)
+          ./gradlew run --no-daemon 2>&1 | tee /tmp/pr.log
+          end_ns=$(date +%s%N)
+          pr_ms=$(( (end_ns - start_ns) / 1000000 ))
+          echo "PR_MS=$pr_ms" >> "$GITHUB_ENV"
+
+      - name: Summarize
+        if: always()
+        run: |
+          main_s=$(( ${MAIN_MS:-0} / 1000 ))
+          pr_s=$(( ${PR_MS:-0} / 1000 ))
+          delta_ms=$(( ${MAIN_MS:-0} - ${PR_MS:-0} ))
+          delta_s=$(( delta_ms / 1000 ))
+          if [ "${MAIN_MS:-0}" -gt 0 ]; then
+            pct=$(awk "BEGIN { printf \"%.1f\", ($delta_ms / ${MAIN_MS}) * 100 }")
+          else
+            pct="?"
+          fi
+          main_md=$(find /tmp/bench/main/build/docs /tmp/bench/main/build/moderne-docs -name '*.md' 2>/dev/null | wc -l || echo 0)
+          pr_md=$(find /tmp/bench/pr/build/docs /tmp/bench/pr/build/moderne-docs -name '*.md' 2>/dev/null | wc -l || echo 0)
+          main_descriptors=$(grep -E '^Found [0-9]+ descriptor' /tmp/main.log | head -1 || echo "unknown")
+          pr_descriptors=$(grep -E '^Found [0-9]+ descriptor' /tmp/pr.log | head -1 || echo "unknown")
           {
             echo "## Benchmark"
             echo
-            echo "- Branch: \`${GITHUB_REF_NAME}\`"
-            echo "- Commit: \`${GITHUB_SHA}\`"
-            echo "- Wall time: ${elapsed_ms} ms ($((elapsed_ms / 1000))s)"
-            echo "- Descriptors: ${descriptors:-unknown}"
-            echo "- Markdown files generated: ${generated_md}"
+            echo "| | main | PR (\`${GITHUB_REF_NAME}\`) |"
+            echo "|---|---|---|"
+            echo "| Wall time | ${main_s}s (${MAIN_MS:-?} ms) | ${pr_s}s (${PR_MS:-?} ms) |"
+            echo "| Descriptors | ${main_descriptors} | ${pr_descriptors} |"
+            echo "| Markdown files | ${main_md} | ${pr_md} |"
+            echo
+            echo "**Delta**: ${delta_s}s (${pct}% faster on the PR)"
+            echo
+            echo "Commits compared:"
+            echo "- main: \`$(git -C /tmp/bench/main rev-parse HEAD)\`"
+            echo "- pr:   \`${CURRENT_SHA}\`"
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Upload generator log
+      - name: Upload logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: run-log-${{ github.ref_name }}-${{ github.run_attempt }}
-          path: /tmp/run.log
+          name: bench-logs-${{ github.run_attempt }}
+          path: |
+            /tmp/main.log
+            /tmp/pr.log
           retention-days: 7
