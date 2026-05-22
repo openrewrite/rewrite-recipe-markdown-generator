@@ -335,7 +335,7 @@ import RunRecipe from '@site/src/components/RunRecipe';
                 val optionExample = option.example
                 val example = if (optionExample != null) {
                     if (optionExample.contains("\n")) {
-                        "<pre>${optionExample.replace("<", "\\<")}</pre>".replace("\n", "<br />")
+                        "<pre>${optionExample.replace("<", "\\<").replace("{", "\\{").replace("}", "\\}")}</pre>".replace("\n", "<br />")
                     } else {
                         "`${optionExample}`"
                     }
