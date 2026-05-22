@@ -74,3 +74,13 @@ rm -rf ../moderne-docs/docs/user-documentation/recipes/recipe-catalog/
 cp -r build/moderne-docs/recipe-catalog ../moderne-docs/docs/user-documentation/recipes/recipe-catalog
 cp -r build/moderne-docs/lists/* ../moderne-docs/docs/user-documentation/recipes/lists
 ```
+
+### Commit the updated descriptors
+
+`./gradlew run` rewrites `src/main/resources/recipeDescriptors.yml` with the latest recipe information. Commit and push that change so the next run can diff against it to produce an accurate added/changed/removed list in the CHANGELOG.
+
+```shell
+git add src/main/resources/recipeDescriptors.yml
+git commit -m "Update recipeDescriptors.yml"
+git push
+```
