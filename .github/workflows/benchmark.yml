@@ -11,6 +11,10 @@ on:
     branches-ignore:
       - main
 
+concurrency:
+  group: benchmark-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   benchmark:
     runs-on: ubuntu-latest

@@ -115,43 +115,54 @@ class RecipeMarkdownGenerator : Runnable {
         val recipeLoader = RecipeLoader(recipeClasspath, recipeOrigins)
         recipeLoader.addInfosFromManifests()
 
-        // Write latest-versions-of-every-openrewrite-module.md, for all recipe modules
+        // Write latest-versions-of-every-openrewrite-module.md, for all recipe modules.
+        // The four version writes target distinct files; run them concurrently.
         val versionWriter = VersionWriter()
-        // OpenRewrite docs
-        versionWriter.createLatestVersionsJs(
-            outputPath,
-            recipeOrigins.values,
-            rewriteRecipeBomVersion,
-            gradlePluginVersion,
-            mavenPluginVersion
-        )
-        versionWriter.createLatestVersionsMarkdown(
-            outputPath,
-            recipeOrigins.values,
-            rewriteBomVersion,
-            rewriteRecipeBomVersion,
-            moderneRecipeBomVersion,
-            gradlePluginVersion,
-            mavenPluginVersion
-        )
-        // Moderne docs
-        if (moderneOutputPath != null) {
-            versionWriter.createLatestVersionsJs(
-                moderneOutputPath,
-                recipeOrigins.values,
-                rewriteRecipeBomVersion,
-                gradlePluginVersion,
-                mavenPluginVersion
-            )
-            versionWriter.createLatestVersionsMarkdown(
-                moderneOutputPath,
-                recipeOrigins.values,
-                rewriteBomVersion,
-                rewriteRecipeBomVersion,
-                moderneRecipeBomVersion,
-                gradlePluginVersion,
-                mavenPluginVersion
-            )
+        runBlocking {
+            val jobs = mutableListOf<kotlinx.coroutines.Deferred<Unit>>()
+            jobs += async(Dispatchers.IO) {
+                versionWriter.createLatestVersionsJs(
+                    outputPath,
+                    recipeOrigins.values,
+                    rewriteRecipeBomVersion,
+                    gradlePluginVersion,
+                    mavenPluginVersion
+                )
+            }
+            jobs += async(Dispatchers.IO) {
+                versionWriter.createLatestVersionsMarkdown(
+                    outputPath,
+                    recipeOrigins.values,
+                    rewriteBomVersion,
+                    rewriteRecipeBomVersion,
+                    moderneRecipeBomVersion,
+                    gradlePluginVersion,
+                    mavenPluginVersion
+                )
+            }
+            if (moderneOutputPath != null) {
+                jobs += async(Dispatchers.IO) {
+                    versionWriter.createLatestVersionsJs(
+                        moderneOutputPath,
+                        recipeOrigins.values,
+                        rewriteRecipeBomVersion,
+                        gradlePluginVersion,
+                        mavenPluginVersion
+                    )
+                }
+                jobs += async(Dispatchers.IO) {
+                    versionWriter.createLatestVersionsMarkdown(
+                        moderneOutputPath,
+                        recipeOrigins.values,
+                        rewriteBomVersion,
+                        rewriteRecipeBomVersion,
+                        moderneRecipeBomVersion,
+                        gradlePluginVersion,
+                        mavenPluginVersion
+                    )
+                }
+            }
+            jobs.awaitAll()
         }
 
         if (latestVersionsOnly) {
@@ -328,14 +339,23 @@ class RecipeMarkdownGenerator : Runnable {
         }
         println("Filtered to ${openSourceRecipeDescriptors.size} open-source recipe(s) for rewrite-docs.")
 
-        // Write the README.md for each category
-        // OpenRewrite docs: open-source only (in "recipes" subdir)
-        CategoryWriter(openSourceRecipeDescriptors, allCategoryDescriptors, "/recipes", crossCategoryPaths)
-            .writeCategories(outputPath, "recipes")
-        // Moderne docs: ALL recipes (in "recipe-catalog" subdir to match workflow expectations)
-        if (moderneOutputPath != null) {
-            CategoryWriter(allRecipeDescriptors, allCategoryDescriptors, "/user-documentation/recipes/recipe-catalog", crossCategoryPaths)
-                .writeCategories(moderneOutputPath, "recipe-catalog")
+        // Write the README.md for each category. The two CategoryWriter
+        // invocations target different output trees and don't share mutable
+        // state — run them concurrently. The internal top-level loop in
+        // writeCategories is itself parallelized.
+        runBlocking {
+            val jobs = mutableListOf<kotlinx.coroutines.Deferred<Unit>>()
+            jobs += async(Dispatchers.IO) {
+                CategoryWriter(openSourceRecipeDescriptors, allCategoryDescriptors, "/recipes", crossCategoryPaths)
+                    .writeCategories(outputPath, "recipes")
+            }
+            if (moderneOutputPath != null) {
+                jobs += async(Dispatchers.IO) {
+                    CategoryWriter(allRecipeDescriptors, allCategoryDescriptors, "/user-documentation/recipes/recipe-catalog", crossCategoryPaths)
+                        .writeCategories(moderneOutputPath, "recipe-catalog")
+                }
+            }
+            jobs.awaitAll()
         }
 
         // Create changelog markdown, and update tracking file
@@ -346,37 +366,64 @@ class RecipeMarkdownGenerator : Runnable {
             outputPath
         )
 
-        // Write lists of recipes into various files
-        // OpenRewrite docs: open-source recipes only (links use /recipes path)
+        // Write lists of recipes into various files. Each create* call writes
+        // a distinct file and the writer's own state is constructor-immutable,
+        // so the calls fan out concurrently. OpenRewrite docs (open-source)
+        // and Moderne docs (all recipes) target different output paths and
+        // also run concurrently with each other.
         val listWriter = ListsOfRecipesWriter(openSourceRecipeDescriptors, outputPath, "/recipes")
-        listWriter.createModerneRecipes(moderneOnlyRecipes.values.flatten(), recipeOrigins, recipeToSource)
-        listWriter.createRecipesWithDataTables(recipeOrigins, recipeToSource)
-        listWriter.createRecipesByTag()
-        listWriter.createScanningRecipes(
-            allRecipes.filter { recipe ->
-                recipe is ScanningRecipe<*> && recipe !is DeclarativeRecipe &&
-                openSourceRecipeDescriptors.any { it.name == recipe.name }
-            },
-            recipeOrigins,
-            recipeToSource
-        )
-        listWriter.createStandaloneRecipes(recipeContainedBy, recipeOrigins, recipeToSource)
-        listWriter.createAllRecipesByModule(recipeOrigins, recipeToSource)
-
-        // Moderne docs: ALL recipes (links use /user-documentation/recipes/recipe-catalog path)
-        if (moderneListsPath != null) {
-            val moderneListWriter = ListsOfRecipesWriter(allRecipeDescriptors, moderneListsPath, "/user-documentation/recipes/recipe-catalog")
-            moderneListWriter.createRecipesWithDataTables(recipeOrigins, recipeToSource)
-            moderneListWriter.createRecipesByTag()
-            moderneListWriter.createScanningRecipes(
-                allRecipes.filter { recipe ->
-                    recipe is ScanningRecipe<*> && recipe !is DeclarativeRecipe
-                },
-                recipeOrigins,
-                recipeToSource
-            )
-            moderneListWriter.createStandaloneRecipes(recipeContainedBy, recipeOrigins, recipeToSource)
-            moderneListWriter.createAllRecipesByModule(recipeOrigins, recipeToSource)
+        runBlocking {
+            val jobs = mutableListOf<kotlinx.coroutines.Deferred<Unit>>()
+            jobs += async(Dispatchers.IO) {
+                listWriter.createModerneRecipes(moderneOnlyRecipes.values.flatten(), recipeOrigins, recipeToSource)
+            }
+            jobs += async(Dispatchers.IO) {
+                listWriter.createRecipesWithDataTables(recipeOrigins, recipeToSource)
+            }
+            jobs += async(Dispatchers.IO) {
+                listWriter.createRecipesByTag()
+            }
+            jobs += async(Dispatchers.IO) {
+                listWriter.createScanningRecipes(
+                    allRecipes.filter { recipe ->
+                        recipe is ScanningRecipe<*> && recipe !is DeclarativeRecipe &&
+                            openSourceRecipeDescriptors.any { it.name == recipe.name }
+                    },
+                    recipeOrigins,
+                    recipeToSource
+                )
+            }
+            jobs += async(Dispatchers.IO) {
+                listWriter.createStandaloneRecipes(recipeContainedBy, recipeOrigins, recipeToSource)
+            }
+            jobs += async(Dispatchers.IO) {
+                listWriter.createAllRecipesByModule(recipeOrigins, recipeToSource)
+            }
+            if (moderneListsPath != null) {
+                val moderneListWriter = ListsOfRecipesWriter(allRecipeDescriptors, moderneListsPath, "/user-documentation/recipes/recipe-catalog")
+                jobs += async(Dispatchers.IO) {
+                    moderneListWriter.createRecipesWithDataTables(recipeOrigins, recipeToSource)
+                }
+                jobs += async(Dispatchers.IO) {
+                    moderneListWriter.createRecipesByTag()
+                }
+                jobs += async(Dispatchers.IO) {
+                    moderneListWriter.createScanningRecipes(
+                        allRecipes.filter { recipe ->
+                            recipe is ScanningRecipe<*> && recipe !is DeclarativeRecipe
+                        },
+                        recipeOrigins,
+                        recipeToSource
+                    )
+                }
+                jobs += async(Dispatchers.IO) {
+                    moderneListWriter.createStandaloneRecipes(recipeContainedBy, recipeOrigins, recipeToSource)
+                }
+                jobs += async(Dispatchers.IO) {
+                    moderneListWriter.createAllRecipesByModule(recipeOrigins, recipeToSource)
+                }
+            }
+            jobs.awaitAll()
         }
 
         // Generate redirects for proprietary recipes (from old OpenRewrite URLs to Moderne docs)

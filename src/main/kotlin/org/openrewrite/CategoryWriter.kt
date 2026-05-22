@@ -1,5 +1,9 @@
 package org.openrewrite
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 import org.openrewrite.RecipeMarkdownGenerator.Companion.getRecipePath
 import org.openrewrite.RecipeMarkdownGenerator.Companion.useAndApply
 import org.openrewrite.RecipeMarkdownGenerator.Companion.writeln
@@ -24,9 +28,17 @@ class CategoryWriter(
         val categories =
             Category.fromDescriptors(allRecipeDescriptors, allCategoryDescriptors, recipeLinkBasePath, crossCategoryPaths)
                 .sortedBy { it.simpleName }
-        for (category in categories) {
-            val categoryIndexPath = outputPath.resolve("$recipesSubdir/")
-            category.writeCategoryIndex(categoryIndexPath)
+        val categoryIndexPath = outputPath.resolve("$recipesSubdir/")
+        // Each top-level category writes its own README.md under a distinct
+        // path; the recursive walk into subcategories stays sequential
+        // within a tree. Parallelizing the top-level fan-out keeps the
+        // recursive code simple.
+        runBlocking {
+            categories.map { category ->
+                async(Dispatchers.IO) {
+                    category.writeCategoryIndex(categoryIndexPath)
+                }
+            }.awaitAll()
         }
     }
 }
