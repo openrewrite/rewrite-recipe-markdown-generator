@@ -2,6 +2,10 @@
 
 package org.openrewrite
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 import org.openrewrite.config.DeclarativeRecipe
 import org.openrewrite.config.RecipeDescriptor
 import picocli.CommandLine
@@ -13,6 +17,7 @@ import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
+import java.util.concurrent.ConcurrentSkipListMap
 import kotlin.system.exitProcess
 
 @Command(
@@ -181,8 +186,11 @@ class RecipeMarkdownGenerator : Runnable {
         // Detect conflicting paths between io.moderne and org.openrewrite recipes
         initializeConflictDetection(allRecipeDescriptors)
 
-        val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
-        val moderneOnlyRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
+        // Concurrent variants so the parallel loop below can populate them
+        // without coordination. ConcurrentSkipListMap keeps iteration order
+        // sorted, matching the TreeMap semantics downstream code relies on.
+        val markdownArtifacts = ConcurrentSkipListMap<String, MarkdownRecipeArtifact>()
+        val moderneOnlyRecipes = ConcurrentSkipListMap<String, MutableList<RecipeDescriptor>>()
 
         // Build mapping from recipe name to Recipe instance (for checking if declarative)
         val recipesByName = allRecipes.associateBy { it.name }
@@ -217,78 +225,99 @@ class RecipeMarkdownGenerator : Runnable {
             RecipeMarkdownWriter(recipeContainedBy, recipeToSource, proprietaryRecipeNames, forModerneDocs = true)
         } else null
 
-        for (recipeDescriptor in allRecipeDescriptors) {
-            val recipeSource = recipeToSource[recipeDescriptor.name]
-            requireNotNull(recipeSource) { "Could not find source URI for recipe " + recipeDescriptor.name }
+        // Per-recipe writes are independent (each touches a distinct output
+        // file under recipes/ or recipe-catalog/) and the shared state
+        // populated below is in concurrent collections, so the loop runs in
+        // parallel on Dispatchers.IO. Most of the work is filesystem write
+        // plus light string formatting, so IO scheduling fits.
+        runBlocking {
+            allRecipeDescriptors.map { recipeDescriptor ->
+                async(Dispatchers.IO) {
+                    val recipeSource = recipeToSource[recipeDescriptor.name]
+                    requireNotNull(recipeSource) { "Could not find source URI for recipe " + recipeDescriptor.name }
 
-            val origin = findOrigin(recipeSource, recipeDescriptor.name, recipeOrigins)
-            requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeSource }
+                    val origin = findOrigin(recipeSource, recipeDescriptor.name, recipeOrigins)
+                    requireNotNull(origin) { "Could not find GAV coordinates of recipe " + recipeDescriptor.name + " from " + recipeSource }
 
-            // Always write to Moderne docs (ALL recipes)
-            moderneRecipeMarkdownWriter?.writeRecipe(recipeDescriptor, moderneRecipeCatalogPath!!, origin)
+                    // Always write to Moderne docs (ALL recipes)
+                    moderneRecipeMarkdownWriter?.writeRecipe(recipeDescriptor, moderneRecipeCatalogPath!!, origin)
 
-            // Write cross-category duplicates to Moderne docs
-            val extraPaths = crossCategoryPaths[recipeDescriptor.name]
-            if (extraPaths != null && moderneRecipeMarkdownWriter != null) {
-                for (extraPath in extraPaths) {
-                    moderneRecipeMarkdownWriter.writeRecipeTo(recipeDescriptor, moderneRecipeCatalogPath!!, origin, extraPath)
+                    // Write cross-category duplicates to Moderne docs
+                    val extraPaths = crossCategoryPaths[recipeDescriptor.name]
+                    if (extraPaths != null && moderneRecipeMarkdownWriter != null) {
+                        for (extraPath in extraPaths) {
+                            moderneRecipeMarkdownWriter.writeRecipeTo(recipeDescriptor, moderneRecipeCatalogPath!!, origin, extraPath)
+                        }
+                    }
+
+                    // Track moderne-docs-only recipes separately (for moderne-recipes.md list and redirects)
+                    if (isModerneDocsOnly(origin)) {
+                        // Lists need synchronized append because two recipes
+                        // sharing an artifactId can run concurrently.
+                        val list = moderneOnlyRecipes.computeIfAbsent(origin.artifactId) {
+                            Collections.synchronizedList(mutableListOf())
+                        }
+                        list.add(recipeDescriptor)
+                        // Skip writing moderne-docs-only recipes to rewrite-docs
+                        return@async
+                    }
+
+                    // Write non-proprietary recipes to OpenRewrite docs
+                    recipeMarkdownWriter.writeRecipe(recipeDescriptor, recipesPath, origin)
+
+                    // Write cross-category duplicates to OpenRewrite docs
+                    if (extraPaths != null) {
+                        for (extraPath in extraPaths) {
+                            recipeMarkdownWriter.writeRecipeTo(recipeDescriptor, recipesPath, origin, extraPath)
+                        }
+                    }
+
+                    val recipeOptions = TreeSet<RecipeOption>()
+                    if (recipeDescriptor.options != null) {
+                        for (recipeOption in recipeDescriptor.options) {
+                            // TypeScript recipes may have null name or type
+                            val name = recipeOption.name ?: "unknown"
+                            val type = recipeOption.type ?: "String"
+                            val ro = RecipeOption(name, type, recipeOption.isRequired)
+                            recipeOptions.add(ro)
+                        }
+                    }
+
+                    // Changes something like org.openrewrite.circleci.InstallOrb to https://docs.openrewrite.org/recipes/circleci/installorb
+                    val docLink = "https://docs.openrewrite.org/recipes/" + getRecipePath(recipeDescriptor)
+
+                    // Determine if recipe is imperative (Java) or declarative (YAML)
+                    // Used to help with time spent calculations. Imperative = 12 hours, Declarative = 4 hours
+                    val recipe = recipesByName[recipeDescriptor.name]
+                    val isImperative = recipe !is DeclarativeRecipe
+
+                    // Used to create changelogs
+                    val markdownRecipeDescriptor =
+                        MarkdownRecipeDescriptor(
+                            recipeDescriptor.name,
+                            recipeDescriptor.description,
+                            docLink,
+                            recipeOptions,
+                            isImperative,
+                            origin.artifactId
+                        )
+                    // MarkdownRecipeArtifact.markdownRecipeDescriptors is a
+                    // TreeMap; multiple coroutines populating the same
+                    // artifact must synchronize. Synchronizing on the artifact
+                    // itself is cheap because contention is bounded by the
+                    // number of recipes per artifact, not total recipes.
+                    val markdownArtifact = markdownArtifacts.computeIfAbsent(origin.artifactId) {
+                        MarkdownRecipeArtifact(
+                            origin.artifactId,
+                            origin.version,
+                            TreeMap<String, MarkdownRecipeDescriptor>(),
+                        )
+                    }
+                    synchronized(markdownArtifact) {
+                        markdownArtifact.markdownRecipeDescriptors[recipeDescriptor.name] = markdownRecipeDescriptor
+                    }
                 }
-            }
-
-            // Track moderne-docs-only recipes separately (for moderne-recipes.md list and redirects)
-            if (isModerneDocsOnly(origin)) {
-                moderneOnlyRecipes.computeIfAbsent(origin.artifactId) { mutableListOf() }.add(recipeDescriptor)
-                // Skip writing moderne-docs-only recipes to rewrite-docs
-                continue
-            }
-
-            // Write non-proprietary recipes to OpenRewrite docs
-            recipeMarkdownWriter.writeRecipe(recipeDescriptor, recipesPath, origin)
-
-            // Write cross-category duplicates to OpenRewrite docs
-            if (extraPaths != null) {
-                for (extraPath in extraPaths) {
-                    recipeMarkdownWriter.writeRecipeTo(recipeDescriptor, recipesPath, origin, extraPath)
-                }
-            }
-
-            val recipeOptions = TreeSet<RecipeOption>()
-            if (recipeDescriptor.options != null) {
-                for (recipeOption in recipeDescriptor.options) {
-                    // TypeScript recipes may have null name or type
-                    val name = recipeOption.name ?: "unknown"
-                    val type = recipeOption.type ?: "String"
-                    val ro = RecipeOption(name, type, recipeOption.isRequired)
-                    recipeOptions.add(ro)
-                }
-            }
-
-            // Changes something like org.openrewrite.circleci.InstallOrb to https://docs.openrewrite.org/recipes/circleci/installorb
-            val docLink = "https://docs.openrewrite.org/recipes/" + getRecipePath(recipeDescriptor)
-
-            // Determine if recipe is imperative (Java) or declarative (YAML)
-            // Used to help with time spent calculations. Imperative = 12 hours, Declarative = 4 hours
-            val recipe = recipesByName[recipeDescriptor.name]
-            val isImperative = recipe !is DeclarativeRecipe
-
-            // Used to create changelogs
-            val markdownRecipeDescriptor =
-                MarkdownRecipeDescriptor(
-                    recipeDescriptor.name,
-                    recipeDescriptor.description,
-                    docLink,
-                    recipeOptions,
-                    isImperative,
-                    origin.artifactId
-                )
-            val markdownArtifact = markdownArtifacts.computeIfAbsent(origin.artifactId) {
-                MarkdownRecipeArtifact(
-                    origin.artifactId,
-                    origin.version,
-                    TreeMap<String, MarkdownRecipeDescriptor>(),
-                )
-            }
-            markdownArtifact.markdownRecipeDescriptors[recipeDescriptor.name] = markdownRecipeDescriptor
+            }.awaitAll()
         }
 
         // Filter to only rewrite-docs recipes (exclude moderne-docs-only modules and proprietary)
@@ -311,7 +340,7 @@ class RecipeMarkdownGenerator : Runnable {
 
         // Create changelog markdown, and update tracking file
         ChangelogWriter().createRecipeDescriptorsYaml(
-            markdownArtifacts,
+            TreeMap(markdownArtifacts),
             openSourceRecipeDescriptors.size,
             rewriteBomVersion,
             outputPath
