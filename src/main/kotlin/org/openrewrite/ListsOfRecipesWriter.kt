@@ -44,6 +44,9 @@ class ListsOfRecipesWriter(
             .toSortedMap()
     }
 
+    private fun slugifyGroupId(groupId: String): String =
+        groupId.lowercase().replace('.', '-')
+
     fun createModerneRecipes(
         moderneProprietaryRecipes: List<RecipeDescriptor>,
         recipeOrigins: Map<URI, RecipeOrigin>,
@@ -315,47 +318,85 @@ class ListsOfRecipesWriter(
         }
     }
 
-    fun createAllRecipesByModule(
+    private fun writeGroupIdPage(
+        groupId: String,
+        artifactMap: SortedMap<String, List<RecipeDescriptor>>,
         recipeOrigins: Map<URI, RecipeOrigin>,
         recipeToSource: Map<String, URI>
+    ) {
+        val pagePath = outputPath.resolve("all-recipes-${slugifyGroupId(groupId)}.md")
+        Files.newBufferedWriter(pagePath, StandardOpenOption.CREATE).useAndApply {
+            writeln(
+                //language=markdown
+                """
+                ---
+                description: Recipes in the ${groupId} module.
+                ---
+
+                # ${groupId}
+
+                """.trimIndent()
+            )
+
+            for ((artifactId, recipes) in artifactMap) {
+                writeln("\n## ${artifactId}\n")
+                val firstRecipeName = recipes.first().name
+                val origin = RecipeMarkdownGenerator.findOrigin(recipeToSource[firstRecipeName], firstRecipeName, recipeOrigins)
+                val licenseInfo = origin?.license?.name ?: "Unknown"
+                writeln("_License: ${licenseInfo}_\n")
+                writeln("_${recipes.size} recipe${if (recipes.size != 1) "s" else ""}_\n")
+
+                for (recipe in recipes.sortedBy { it.name }) {
+                    val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
+                    writeln("* [${recipe.name}](${recipeLinkBasePath}/${recipePath}.md)")
+                    writeln("  * **${recipe.displayNameEscapedMdx()}**")
+                    writeln("  * ${recipe.descriptionEscaped()}")
+                }
+            }
+        }
+    }
+
+    private fun writeAllRecipesIndex(
+        grouped: SortedMap<String, SortedMap<String, List<RecipeDescriptor>>>
     ) {
         val markdown = outputPath.resolve("all-recipes.md")
         Files.newBufferedWriter(markdown, StandardOpenOption.CREATE).useAndApply {
             writeln(
                 //language=markdown
                 """
-            ---
-            description: A comprehensive list of all recipes organized by module.
-            ---
+                ---
+                description: A comprehensive list of all recipes organized by module.
+                ---
 
-            # All Recipes by Module
+                # All Recipes by Module
 
-            _This doc contains all recipes grouped by their module._
+                _This doc indexes per-module recipe lists. Click a groupId to see its recipes._
 
-            """.trimIndent()
+                """.trimIndent()
             )
 
             writeln("Total recipes: ${allRecipeDescriptors.size}\n")
 
-            for ((groupId, artifactMap) in groupByOrigin(allRecipeDescriptors, { it.name }, recipeOrigins, recipeToSource)) {
+            for ((groupId, artifactMap) in grouped) {
                 writeln("\n## ${groupId}\n")
-
-                for ((artifactId, recipes) in artifactMap) {
-                    writeln("\n### ${artifactId}\n")
-                    val firstRecipeName = recipes.first().name
-                    val origin = RecipeMarkdownGenerator.findOrigin(recipeToSource[firstRecipeName], firstRecipeName, recipeOrigins)
-                    val licenseInfo = origin?.license?.name ?: "Unknown"
-                    writeln("_License: ${licenseInfo}_\n")
-                    writeln("_${recipes.size} recipe${if (recipes.size != 1) "s" else ""}_\n")
-
-                    for (recipe in recipes.sortedBy { it.name }) {
-                        val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
-                        writeln("* [${recipe.name}](${recipeLinkBasePath}/${recipePath}.md)")
-                        writeln("  * **${recipe.displayNameEscapedMdx()}**")
-                        writeln("  * ${recipe.descriptionEscaped()}")
-                    }
+                val slug = slugifyGroupId(groupId)
+                for (artifactId in artifactMap.keys) {
+                    writeln("* [${artifactId}](all-recipes-${slug}.md#${artifactId})")
                 }
             }
         }
+    }
+
+    fun createAllRecipesByModule(
+        recipeOrigins: Map<URI, RecipeOrigin>,
+        recipeToSource: Map<String, URI>
+    ) {
+        val grouped = groupByOrigin(allRecipeDescriptors, { it.name }, recipeOrigins, recipeToSource)
+
+        for ((groupId, artifactMap) in grouped) {
+            writeGroupIdPage(groupId, artifactMap, recipeOrigins, recipeToSource)
+        }
+
+        writeAllRecipesIndex(grouped)
     }
 }
