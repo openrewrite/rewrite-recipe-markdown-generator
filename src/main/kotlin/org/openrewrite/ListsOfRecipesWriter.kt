@@ -375,10 +375,7 @@ class ListsOfRecipesWriter(
                 """.trimIndent()
             )
 
-            val totalRecipes = grouped.values.sumOf { artifactMap ->
-                artifactMap.values.sumOf { it.size }
-            }
-            writeln("Total recipes: ${totalRecipes}\n")
+            writeln("Total recipes: ${allRecipeDescriptors.size}\n")
 
             for ((groupId, artifactMap) in grouped) {
                 writeln("\n## ${groupId}\n")
