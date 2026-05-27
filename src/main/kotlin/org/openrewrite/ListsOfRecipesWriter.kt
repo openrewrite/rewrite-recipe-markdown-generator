@@ -356,6 +356,40 @@ class ListsOfRecipesWriter(
         }
     }
 
+    private fun writeAllRecipesIndex(
+        grouped: SortedMap<String, SortedMap<String, List<RecipeDescriptor>>>
+    ) {
+        val markdown = outputPath.resolve("all-recipes.md")
+        Files.newBufferedWriter(markdown, StandardOpenOption.CREATE).useAndApply {
+            writeln(
+                //language=markdown
+                """
+                ---
+                description: A comprehensive list of all recipes organized by module.
+                ---
+
+                # All Recipes by Module
+
+                _This doc indexes per-module recipe lists. Click a groupId to see its recipes._
+
+                """.trimIndent()
+            )
+
+            val totalRecipes = grouped.values.sumOf { artifactMap ->
+                artifactMap.values.sumOf { it.size }
+            }
+            writeln("Total recipes: ${totalRecipes}\n")
+
+            for ((groupId, artifactMap) in grouped) {
+                writeln("\n## ${groupId}\n")
+                val slug = slugifyGroupId(groupId)
+                for (artifactId in artifactMap.keys) {
+                    writeln("* [${artifactId}](all-recipes-${slug}.md#${artifactId})")
+                }
+            }
+        }
+    }
+
     fun createAllRecipesByModule(
         recipeOrigins: Map<URI, RecipeOrigin>,
         recipeToSource: Map<String, URI>
