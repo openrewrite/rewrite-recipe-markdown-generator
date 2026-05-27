@@ -44,6 +44,9 @@ class ListsOfRecipesWriter(
             .toSortedMap()
     }
 
+    private fun slugifyGroupId(groupId: String): String =
+        groupId.lowercase().replace('.', '-')
+
     fun createModerneRecipes(
         moderneProprietaryRecipes: List<RecipeDescriptor>,
         recipeOrigins: Map<URI, RecipeOrigin>,
