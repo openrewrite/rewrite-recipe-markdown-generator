@@ -394,43 +394,12 @@ class ListsOfRecipesWriter(
         recipeOrigins: Map<URI, RecipeOrigin>,
         recipeToSource: Map<String, URI>
     ) {
-        val markdown = outputPath.resolve("all-recipes.md")
-        Files.newBufferedWriter(markdown, StandardOpenOption.CREATE).useAndApply {
-            writeln(
-                //language=markdown
-                """
-            ---
-            description: A comprehensive list of all recipes organized by module.
-            ---
+        val grouped = groupByOrigin(allRecipeDescriptors, { it.name }, recipeOrigins, recipeToSource)
 
-            # All Recipes by Module
-
-            _This doc contains all recipes grouped by their module._
-
-            """.trimIndent()
-            )
-
-            writeln("Total recipes: ${allRecipeDescriptors.size}\n")
-
-            for ((groupId, artifactMap) in groupByOrigin(allRecipeDescriptors, { it.name }, recipeOrigins, recipeToSource)) {
-                writeln("\n## ${groupId}\n")
-
-                for ((artifactId, recipes) in artifactMap) {
-                    writeln("\n### ${artifactId}\n")
-                    val firstRecipeName = recipes.first().name
-                    val origin = RecipeMarkdownGenerator.findOrigin(recipeToSource[firstRecipeName], firstRecipeName, recipeOrigins)
-                    val licenseInfo = origin?.license?.name ?: "Unknown"
-                    writeln("_License: ${licenseInfo}_\n")
-                    writeln("_${recipes.size} recipe${if (recipes.size != 1) "s" else ""}_\n")
-
-                    for (recipe in recipes.sortedBy { it.name }) {
-                        val recipePath = RecipeMarkdownGenerator.getRecipePath(recipe)
-                        writeln("* [${recipe.name}](${recipeLinkBasePath}/${recipePath}.md)")
-                        writeln("  * **${recipe.displayNameEscapedMdx()}**")
-                        writeln("  * ${recipe.descriptionEscaped()}")
-                    }
-                }
-            }
+        for ((groupId, artifactMap) in grouped) {
+            writeGroupIdPage(groupId, artifactMap, recipeOrigins, recipeToSource)
         }
+
+        writeAllRecipesIndex(grouped)
     }
 }
