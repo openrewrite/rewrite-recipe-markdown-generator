@@ -155,7 +155,8 @@ class RecipeMarkdownGeneratorTest {
         // Third-party recipes should never get edition suffixes
         val recipes = listOf(
             "com.google.errorprone.SomeRecipe",
-            "org.apache.camel.SomeRecipe"
+            "org.apache.camel.SomeRecipe",
+            "io.axoniq.framework.migration.UpgradeAxon4ToAxoniq5"
         )
         initializeConflictDetection(recipes)
 
@@ -163,6 +164,8 @@ class RecipeMarkdownGeneratorTest {
             .isEqualTo("com/google/errorprone/somerecipe")
         assertThat(getRecipePath("org.apache.camel.SomeRecipe"))
             .isEqualTo("org/apache/camel/somerecipe")
+        assertThat(getRecipePath("io.axoniq.framework.migration.UpgradeAxon4ToAxoniq5"))
+            .isEqualTo("io/axoniq/framework/migration/upgradeaxon4toaxoniq5")
     }
 
     @Test

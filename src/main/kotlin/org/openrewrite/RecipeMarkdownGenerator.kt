@@ -540,6 +540,7 @@ class RecipeMarkdownGenerator : Runnable {
                 recipe.name.startsWith("androidx") ||
                 recipe.name.startsWith("com.google") ||
                 recipe.name.startsWith("com.oracle") ||
+                recipe.name.startsWith("io.axoniq") ||
                 recipe.name.startsWith("io.quarkus") ||
                 recipe.name.startsWith("io.quakus") ||
                 recipe.name.startsWith("org.apache") ||
