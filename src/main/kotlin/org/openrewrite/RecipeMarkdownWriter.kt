@@ -142,6 +142,7 @@ class RecipeMarkdownWriter(
             write(
                 """
 ---
+title: "${formattedRecipeTitle.replace("&#39;", "'")}"
 sidebar_label: "${formattedRecipeTitle.replace("&#39;", "'")}"
 ---
 
