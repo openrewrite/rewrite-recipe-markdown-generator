@@ -16,11 +16,11 @@ class CSharpRecipeLoaderTest {
             "recipes-tunit"
         )
         assertThat(CSharpRecipeLoader.CSHARP_RECIPE_MODULES["recipes-code-quality"])
-            .isEqualTo("OpenRewrite.CodeQuality")
+            .isEqualTo("OpenRewrite.Recipes.CSharp.CodeQuality")
         assertThat(CSharpRecipeLoader.CSHARP_RECIPE_MODULES["recipes-migrate-dotnet"])
             .isEqualTo("OpenRewrite.Recipes.CSharp.Migration.Dotnet")
         assertThat(CSharpRecipeLoader.CSHARP_RECIPE_MODULES["recipes-tunit"])
-            .isEqualTo("OpenRewrite.TUnit")
+            .isEqualTo("OpenRewrite.Recipes.CSharp.Migration.TUnit")
     }
 
     private fun descriptor(name: String, displayName: String, description: String,

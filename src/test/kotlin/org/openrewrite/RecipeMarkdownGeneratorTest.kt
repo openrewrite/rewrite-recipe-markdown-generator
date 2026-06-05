@@ -64,8 +64,8 @@ class RecipeMarkdownGeneratorTest {
         assertThat(out).contains("mod config recipes pip install openrewrite openrewrite-migrate-python")
         assertThat(out).contains("mod config recipes npm install @openrewrite/rewrite@{{VERSION_ORG_OPENREWRITE_REWRITE_JAVASCRIPT}}")
         assertThat(out).contains("mod config recipes npm install @openrewrite/rewrite")
-        assertThat(out).contains("mod config recipes nuget install OpenRewrite.CodeQuality@{{VERSION_IO_MODERNE_RECIPE_RECIPES_CODE_QUALITY}}")
-        assertThat(out).contains("mod config recipes nuget install OpenRewrite.CodeQuality")
+        assertThat(out).contains("mod config recipes nuget install OpenRewrite.Recipes.CSharp.CodeQuality@{{VERSION_IO_MODERNE_RECIPE_RECIPES_CODE_QUALITY}}")
+        assertThat(out).contains("mod config recipes nuget install OpenRewrite.Recipes.CSharp.CodeQuality")
     }
 
     @Test

@@ -27,9 +27,9 @@ class CSharpRecipeLoader(
          * Registry mapping artifact IDs to their corresponding NuGet package names.
          */
         val CSHARP_RECIPE_MODULES = mapOf(
-            "recipes-code-quality" to "OpenRewrite.CodeQuality",
+            "recipes-code-quality" to "OpenRewrite.Recipes.CSharp.CodeQuality",
             "recipes-migrate-dotnet" to "OpenRewrite.Recipes.CSharp.Migration.Dotnet",
-            "recipes-tunit" to "OpenRewrite.TUnit"
+            "recipes-tunit" to "OpenRewrite.Recipes.CSharp.Migration.TUnit"
         )
 
         /**
