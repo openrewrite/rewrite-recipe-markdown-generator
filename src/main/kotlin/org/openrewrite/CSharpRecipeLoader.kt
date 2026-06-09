@@ -29,7 +29,8 @@ class CSharpRecipeLoader(
         val CSHARP_RECIPE_MODULES = mapOf(
             "recipes-code-quality" to "OpenRewrite.Recipes.CSharp.CodeQuality",
             "recipes-migrate-dotnet" to "OpenRewrite.Recipes.CSharp.Migration.Dotnet",
-            "recipes-tunit" to "OpenRewrite.Recipes.CSharp.Migration.TUnit"
+            "recipes-tunit" to "OpenRewrite.Recipes.CSharp.Migration.TUnit",
+            "recipes-csharp-core" to "OpenRewrite.Recipes.CSharp.Core"
         )
 
         /**
@@ -38,7 +39,8 @@ class CSharpRecipeLoader(
         private val CSHARP_GROUP_IDS = mapOf(
             "recipes-code-quality" to "io.moderne.recipe",
             "recipes-migrate-dotnet" to "io.moderne.recipe",
-            "recipes-tunit" to "io.moderne.recipe"
+            "recipes-tunit" to "io.moderne.recipe",
+            "recipes-csharp-core" to "io.moderne.recipe"
         )
 
         /**
@@ -47,7 +49,8 @@ class CSharpRecipeLoader(
         private val CSHARP_REPO_URLS = mapOf(
             "recipes-code-quality" to "https://github.com/moderneinc/recipes-csharp/blob/main/",
             "recipes-migrate-dotnet" to "https://github.com/moderneinc/recipes-csharp/blob/main/",
-            "recipes-tunit" to "https://github.com/moderneinc/recipes-csharp/blob/main/"
+            "recipes-tunit" to "https://github.com/moderneinc/recipes-csharp/blob/main/",
+            "recipes-csharp-core" to "https://github.com/moderneinc/recipes-csharp/blob/main/"
         )
 
         private val CLASSPATH_BUNDLE = RecipeBundle("classpath", "java-recipes", null, null, null)
