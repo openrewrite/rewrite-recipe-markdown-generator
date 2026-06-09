@@ -57,6 +57,13 @@ dependencies {
 
     // Runtime dependencies
     runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
+    // Java parser implementation matching the build toolchain (JDK 21, see `java.toolchain` below).
+    // rewrite-java is on this (app) classpath transitively via rewrite-csharp/javascript/python, so
+    // org.openrewrite.java.JavaParser is loaded here. Some recipes construct a JavaParser when their
+    // class is initialized (e.g. ai.timefold.solver.migration.AbstractRecipe in rewrite-third-party);
+    // without a rewrite-java-NN parser on JavaParser's own classpath, loading those recipes throws and
+    // aborts full doc generation. Version is managed by the moderne-recipe-bom platform above.
+    runtimeOnly("org.openrewrite:rewrite-java-21")
 
     // Test dependencies
     testImplementation("org.assertj:assertj-core:latest.release")
