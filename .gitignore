@@ -10,3 +10,5 @@ bin/
 .classpath
 .settings/
 .DS_Store
+
+.context/
