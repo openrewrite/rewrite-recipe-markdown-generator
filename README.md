@@ -40,7 +40,7 @@ The generator loads TypeScript, Python, and C# recipes by spawning external RPC 
 * **Java 21** — JVM-based recipes
 * **Node.js** — TypeScript recipes (`rewrite-javascript`, `rewrite-nodejs`, `rewrite-angular`, `rewrite-react`)
 * **Python 3.10+ and `pip`** — Python recipes (`rewrite-python`, `rewrite-migrate-python`, `openrewrite-static-analysis`)
-* **.NET SDK** — C# recipes (`recipes-code-quality`, `recipes-migrate-dotnet`, `recipes-tunit`)
+* **.NET SDK** — C# recipes (`recipes-code-quality`, `recipes-migrate-dotnet`, `recipes-tunit`, `recipes-csharp-core`)
 
 If a toolchain is missing, the corresponding loader prints a warning and skips those recipes. The build still succeeds, so a local `./gradlew run` without all four toolchains silently produces incomplete docs. Most contributors don't have all four installed — if you need a complete regeneration, trigger the scheduled workflows above rather than running locally.
 

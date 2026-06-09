@@ -13,7 +13,8 @@ class CSharpRecipeLoaderTest {
         assertThat(CSharpRecipeLoader.CSHARP_RECIPE_MODULES).containsKeys(
             "recipes-code-quality",
             "recipes-migrate-dotnet",
-            "recipes-tunit"
+            "recipes-tunit",
+            "recipes-csharp-core"
         )
         assertThat(CSharpRecipeLoader.CSHARP_RECIPE_MODULES["recipes-code-quality"])
             .isEqualTo("OpenRewrite.Recipes.CSharp.CodeQuality")
@@ -21,6 +22,8 @@ class CSharpRecipeLoaderTest {
             .isEqualTo("OpenRewrite.Recipes.CSharp.Migration.Dotnet")
         assertThat(CSharpRecipeLoader.CSHARP_RECIPE_MODULES["recipes-tunit"])
             .isEqualTo("OpenRewrite.Recipes.CSharp.Migration.TUnit")
+        assertThat(CSharpRecipeLoader.CSHARP_RECIPE_MODULES["recipes-csharp-core"])
+            .isEqualTo("OpenRewrite.Recipes.CSharp.Core")
     }
 
     private fun descriptor(name: String, displayName: String, description: String,
