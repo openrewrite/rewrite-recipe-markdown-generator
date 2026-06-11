@@ -99,7 +99,6 @@ dependencies {
 
     // Recipe modules (org.openrewrite.recipe)
     "recipe"("org.openrewrite.meta:rewrite-analysis:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-ai-search:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-all:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-android:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-apache:$rewriteVersion")
