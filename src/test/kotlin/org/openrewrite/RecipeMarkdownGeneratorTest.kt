@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import org.openrewrite.config.Environment
 import org.openrewrite.config.OptionDescriptor
 import org.openrewrite.config.RecipeDescriptor
 import picocli.CommandLine
@@ -159,13 +160,20 @@ class RecipeMarkdownGeneratorTest {
             "io.axoniq.framework.migration.UpgradeAxon4ToAxoniq5"
         )
         initializeConflictDetection(recipes)
+        // Drive the hidden-category stripping off the real `root: true` metadata
+        // (rewrite-core's core-categories.yml flags com, io, org, ... as root).
+        RecipeMarkdownGenerator.initializeRootCategories(
+            Environment.builder().scanRuntimeClasspath().build().listCategoryDescriptors()
+        )
 
+        // Leading root-category segments (com, io, org, ...) are stripped so these don't
+        // surface as hidden top-level categories in the recipe catalog.
         assertThat(getRecipePath("com.google.errorprone.SomeRecipe"))
-            .isEqualTo("com/google/errorprone/somerecipe")
+            .isEqualTo("google/errorprone/somerecipe")
         assertThat(getRecipePath("org.apache.camel.SomeRecipe"))
-            .isEqualTo("org/apache/camel/somerecipe")
+            .isEqualTo("apache/camel/somerecipe")
         assertThat(getRecipePath("io.axoniq.framework.migration.UpgradeAxon4ToAxoniq5"))
-            .isEqualTo("io/axoniq/framework/migration/upgradeaxon4toaxoniq5")
+            .isEqualTo("axoniq/framework/migration/upgradeaxon4toaxoniq5")
     }
 
     @Test
