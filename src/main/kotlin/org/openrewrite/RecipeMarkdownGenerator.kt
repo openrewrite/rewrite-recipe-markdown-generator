@@ -2,6 +2,7 @@
 
 package org.openrewrite
 
+import org.openrewrite.config.CategoryDescriptor
 import org.openrewrite.config.DeclarativeRecipe
 import org.openrewrite.config.RecipeDescriptor
 import picocli.CommandLine
@@ -180,6 +181,9 @@ class RecipeMarkdownGenerator : Runnable {
 
         // Detect conflicting paths between io.moderne and org.openrewrite recipes
         initializeConflictDetection(allRecipeDescriptors)
+
+        // Determine which root categories (e.g. com, io, org) to hide from the recipe catalog
+        initializeRootCategories(allCategoryDescriptors)
 
         val markdownArtifacts = TreeMap<String, MarkdownRecipeArtifact>()
         val moderneOnlyRecipes = TreeMap<String, MutableList<RecipeDescriptor>>()
@@ -382,6 +386,23 @@ class RecipeMarkdownGenerator : Runnable {
         // Set of base paths that have both io.moderne and org.openrewrite recipes (conflicts)
         private var conflictingBasePaths: Set<String> = emptySet()
 
+        // Package names of categories flagged `root: true` in the loaded category metadata
+        // (e.g. rewrite-core's META-INF/rewrite/core-categories.yml: com, io, org, ai, tech,
+        // software). These are "hidden" container categories that should not surface in the recipe
+        // catalog sidebar; their leading segment is stripped so their children become top-level
+        // categories (e.g. com.google.* -> google/*). Populated by initializeRootCategories.
+        private var rootCategoryPackages: Set<String> = emptySet()
+
+        /**
+         * Collect the package names of categories flagged `root: true` so that their leading
+         * path segment can be stripped from recipe paths. Only single-segment roots affect path
+         * computation, but multi-segment roots (org.openrewrite, io.moderne) are handled by their
+         * own dedicated branches in [getBasePath]. Must be called before any getRecipePath() calls.
+         */
+        fun initializeRootCategories(categoryDescriptors: Collection<CategoryDescriptor>) {
+            rootCategoryPackages = categoryDescriptors.filter { it.isRoot }.map { it.packageName }.toSet()
+        }
+
         /**
          * Initialize conflict detection by scanning all recipe descriptors.
          * Must be called before any getRecipePath() calls.
@@ -429,7 +450,16 @@ class RecipeMarkdownGenerator : Runnable {
                     "csharp/" + recipeName.substring(12).replace('.', '/').lowercase(Locale.getDefault())
                 }
                 else -> {
-                    recipeName.replace('.', '/').lowercase(Locale.getDefault())
+                    // Strip a leading root-category segment (e.g. com, io, org) so that hidden
+                    // container categories don't surface in the recipe catalog sidebar; their
+                    // children become top-level categories (com.google.* -> google/*).
+                    val firstSegment = recipeName.substringBefore('.')
+                    val stripped = if (recipeName.contains('.') && firstSegment in rootCategoryPackages) {
+                        recipeName.substring(firstSegment.length + 1)
+                    } else {
+                        recipeName
+                    }
+                    stripped.replace('.', '/').lowercase(Locale.getDefault())
                 }
             }
         }
