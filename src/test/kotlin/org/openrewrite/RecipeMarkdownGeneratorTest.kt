@@ -67,6 +67,13 @@ class RecipeMarkdownGeneratorTest {
         assertThat(out).contains("mod config recipes npm install @openrewrite/rewrite")
         assertThat(out).contains("mod config recipes nuget install OpenRewrite.Recipes.CSharp.CodeQuality@{{VERSION_IO_MODERNE_RECIPE_RECIPES_CODE_QUALITY}}")
         assertThat(out).contains("mod config recipes nuget install OpenRewrite.Recipes.CSharp.CodeQuality")
+
+        // The Moderne Installation GraphQL mutation must use installRecipesUniversal with a
+        // RecipeBundleInput; loadRecipesAsync was removed from the Moderne API.
+        assertThat(out).doesNotContain("loadRecipesAsync")
+        assertThat(out).contains("mutation seedOpenRewriteArtifacts {")
+        assertThat(out).contains("load_org_openrewrite_recipe_rewrite_spring: installRecipesUniversal(")
+        assertThat(out).contains("bundle: { maven: { groupId: \"org.openrewrite.recipe\", artifactId: \"rewrite-spring\", version: \"LATEST\" } }")
     }
 
     @Test

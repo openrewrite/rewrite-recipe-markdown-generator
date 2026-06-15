@@ -67,7 +67,7 @@ class VersionWriter {
             var cliInstallNpmLatest = ""
             var cliInstallNugetPinned = ""
             var cliInstallNugetLatest = ""
-            var loadRecipesAsync = ""
+            var installRecipes = ""
             for (origin in recipeOrigins) {
 
                 val versionPlaceholder = "{{${origin.versionPlaceholderKey()}}}"
@@ -97,11 +97,9 @@ class VersionWriter {
                     .replace('-', '_')
                     .replace('.', '_')
                 //language=graphql
-                loadRecipesAsync += """
-                  $loadCommand: loadRecipesAsync(
-                    groupId: "${origin.groupId}"
-                    artifactId: "${origin.artifactId}"
-                    version: "LATEST"
+                installRecipes += """
+                  $loadCommand: installRecipesUniversal(
+                    bundle: { maven: { groupId: "${origin.groupId}", artifactId: "${origin.artifactId}", version: "LATEST" } }
                   ) {
                     id
                   }"""
@@ -168,6 +166,8 @@ class VersionWriter {
 
                 Install the latest versions of all the OpenRewrite [recipe modules into Moderne](https://docs.moderne.io/administrator-documentation/moderne-platform/how-to-guides/importing-external-recipes#importing-recipes-via-a-graphql-api-call) using the GraphQL endpoint.
 
+                The mutation below uses `installRecipesUniversal`, which installs into the universal marketplace (visible to everyone) and requires the `admin` role.
+
                 <details>
                 <summary>
                 Show GraphQL mutation.
@@ -175,7 +175,7 @@ class VersionWriter {
 
                 ```graphql
                 mutation seedOpenRewriteArtifacts {
-                ${loadRecipesAsync}
+                ${installRecipes}
                 }
                 ```
 
