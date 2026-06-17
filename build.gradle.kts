@@ -161,6 +161,8 @@ dependencies {
     "recipe"("io.moderne.recipe:rewrite-java-application-server:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-jasperreports:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-kafka:$rewriteVersion")
+    // No release yet, so resolve the latest integration build
+    "recipe"("io.moderne.recipe:rewrite-nullability:latest.integration")
     "recipe"("io.moderne.recipe:rewrite-release-metromap:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-program-analysis:$rewriteVersion")
     "recipe"("io.moderne.recipe:rewrite-prethink:$rewriteVersion")
