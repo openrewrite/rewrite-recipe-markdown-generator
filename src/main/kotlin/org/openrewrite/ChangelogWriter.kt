@@ -94,14 +94,10 @@ class ChangelogWriter {
 
         changelog.appendText("## Corresponding CLI version\n\n")
 
-        // Get the latest staging and stable versions of the CLI
-        val stagingVersion = getLatestStagingVersion()
+        // Get the latest version of the CLI
         val stableVersion = getLatestStableVersion()
         if (stableVersion != null) {
-            changelog.appendText("* Stable CLI version `${stableVersion}`\n")
-        }
-        if (stagingVersion != null) {
-            changelog.appendText("* Staging CLI version: `${stagingVersion}`\n\n")
+            changelog.appendText("* CLI version `${stableVersion}`\n\n")
         }
 
         // An example of what the changelog could look like after the below statements can be found here:

@@ -1,40 +1,38 @@
 package org.openrewrite
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
+// The Moderne CLI is published as `io.moderne:moderne-cli`, with stable releases landing in Maven
+// Central. The older `moderne-cli-releases` GitHub repository is no longer updated (it stopped at the
+// 3.x line), so the version is sourced from the Maven metadata instead.
+private const val STABLE_METADATA_URL =
+    "https://repo1.maven.org/maven2/io/moderne/moderne-cli/maven-metadata.xml"
+
+private val RELEASE_TAG = Regex("<release>([^<]+)</release>")
+private val LATEST_TAG = Regex("<latest>([^<]+)</latest>")
+
 fun getLatestStableVersion(): String? {
-    val releases = getCliVersion("https://api.github.com/repos/moderneinc/moderne-cli-releases/releases/latest")
-    return releases?.get("tag_name")?.asText()
+    val metadata = getMavenMetadata(STABLE_METADATA_URL) ?: return null
+    // Prefer the explicit <release> (latest non-snapshot), falling back to <latest>.
+    return (RELEASE_TAG.find(metadata) ?: LATEST_TAG.find(metadata))?.groupValues?.get(1)
 }
 
-fun getLatestStagingVersion(): String? {
-    val releases = getCliVersion("https://api.github.com/repos/moderneinc/moderne-cli-releases/releases")
-    if (releases != null && releases.isArray && releases.size() > 0) {
-        return releases[0].get("tag_name")?.asText()
-    }
-    return null
-}
-
-private fun getCliVersion(url: String): JsonNode? {
+private fun getMavenMetadata(url: String): String? {
     return try {
         OkHttpClient()
             .newCall(Request.Builder().url(url).build())
             .execute()
             .use { response ->
                 if (response.isSuccessful) {
-                    val responseBody = response.body?.string() ?: return null
-                    val mapper = ObjectMapper()
-                    mapper.readTree(responseBody)
+                    response.body?.string()
                 } else {
-                    System.err.println("Failed to get latest version from GitHub: ${response.code}")
+                    System.err.println("Failed to get latest version from $url: ${response.code}")
                     null
                 }
             }
     } catch (e: Exception) {
-        System.err.println("Failed to get latest version from GitHub: ${e.message}")
+        System.err.println("Failed to get latest version from $url: ${e.message}")
         null
     }
 }
