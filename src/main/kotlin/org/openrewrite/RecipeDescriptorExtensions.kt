@@ -60,6 +60,29 @@ fun escapeMdx(string: String): String = escapeHtml(string)
     .replace("{", "\\{")
     .replace("}", "\\}")
 
+// Escapes MDX-significant characters (`<`, `{`, `}`) that would otherwise be parsed as JSX
+// when a description is rendered inline (e.g. in the changelog), while leaving content inside
+// backtick code spans untouched. Inside a code span MDX treats these characters literally, and
+// escaping them there would surface the raw entities/backslashes in the rendered page.
+fun escapeMdxOutsideCodeSpans(string: String): String {
+    val sb = StringBuilder(string.length)
+    var inCodeSpan = false
+    for (c in string) {
+        when {
+            c == '`' -> {
+                inCodeSpan = !inCodeSpan
+                sb.append(c)
+            }
+            inCodeSpan -> sb.append(c)
+            c == '<' -> sb.append("&lt;")
+            c == '{' -> sb.append("\\{")
+            c == '}' -> sb.append("\\}")
+            else -> sb.append(c)
+        }
+    }
+    return sb.toString()
+}
+
 fun RecipeDescriptor.asYaml(): String {
     val s = StringBuilder()
     s.appendLine("""
