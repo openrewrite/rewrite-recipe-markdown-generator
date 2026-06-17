@@ -232,6 +232,35 @@ class RecipeMarkdownGeneratorTest {
         assertThat(found!!.artifactId).isEqualTo("recipes-code-quality")
     }
 
+    @Test
+    fun escapeMdxOutsideCodeSpansEscapesUnbalancedTagsInProse() {
+        // The literal `<EntitySimpleName>` would be parsed by MDX as an unclosed JSX tag and
+        // break the docs build (https://github.com/openrewrite/rewrite-docs changelog build).
+        assertThat(escapeMdxOutsideCodeSpans("annotates the field with @EventTag(key = \"<EntitySimpleName>\")."))
+            .isEqualTo("annotates the field with @EventTag(key = \"&lt;EntitySimpleName>\").")
+    }
+
+    @Test
+    fun escapeMdxOutsideCodeSpansEscapesCurlyBracesInProse() {
+        assertThat(escapeMdxOutsideCodeSpans("rewrite the configurations { } block"))
+            .isEqualTo("rewrite the configurations \\{ \\} block")
+    }
+
+    @Test
+    fun escapeMdxOutsideCodeSpansLeavesCodeSpansUntouched() {
+        // Generics inside backticks are valid and must render verbatim, not as escaped entities.
+        assertThat(escapeMdxOutsideCodeSpans("Replace `Predicate<T>` with `Predicate.not(x)`"))
+            .isEqualTo("Replace `Predicate<T>` with `Predicate.not(x)`")
+        assertThat(escapeMdxOutsideCodeSpans("the `java { }` extension block"))
+            .isEqualTo("the `java { }` extension block")
+    }
+
+    @Test
+    fun escapeMdxOutsideCodeSpansHandlesMixedContent() {
+        assertThat(escapeMdxOutsideCodeSpans("set idType = <ResolvedType>.class via `autodetected(<IdType>.class)`"))
+            .isEqualTo("set idType = &lt;ResolvedType>.class via `autodetected(<IdType>.class)`")
+    }
+
     private fun initializeConflictDetection(recipeNames: List<String>) {
         val descriptors = recipeNames.map { createDescriptor(it) }
         RecipeMarkdownGenerator.initializeConflictDetection(descriptors)

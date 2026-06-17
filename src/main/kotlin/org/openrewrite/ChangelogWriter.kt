@@ -130,7 +130,7 @@ class ChangelogWriter {
             changelog.appendText("## New Recipes\n")
 
             for (newRecipe in newRecipes) {
-                changelog.appendText("\n* [${newRecipe.name}](${newRecipe.docLink}): ${newRecipe.description.trim()} ")
+                changelog.appendText("\n* [${newRecipe.name}](${newRecipe.docLink}): ${escapeMdxOutsideCodeSpans(newRecipe.description.trim())} ")
             }
 
             changelog.appendText("\n\n")
@@ -140,7 +140,7 @@ class ChangelogWriter {
             changelog.appendText("## Removed Recipes\n")
 
             for (removedRecipe in removedRecipes) {
-                changelog.appendText("\n* **${removedRecipe.name}**: ${removedRecipe.description.trim()} ")
+                changelog.appendText("\n* **${removedRecipe.name}**: ${escapeMdxOutsideCodeSpans(removedRecipe.description.trim())} ")
             }
 
             changelog.appendText("\n\n")
