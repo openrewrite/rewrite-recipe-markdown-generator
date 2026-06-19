@@ -94,14 +94,10 @@ class ChangelogWriter {
 
         changelog.appendText("## Corresponding CLI version\n\n")
 
-        // Get the latest staging and stable versions of the CLI
-        val stagingVersion = getLatestStagingVersion()
+        // Get the latest version of the CLI
         val stableVersion = getLatestStableVersion()
         if (stableVersion != null) {
-            changelog.appendText("* Stable CLI version `${stableVersion}`\n")
-        }
-        if (stagingVersion != null) {
-            changelog.appendText("* Staging CLI version: `${stagingVersion}`\n\n")
+            changelog.appendText("* CLI version `${stableVersion}`\n\n")
         }
 
         // An example of what the changelog could look like after the below statements can be found here:
@@ -130,7 +126,7 @@ class ChangelogWriter {
             changelog.appendText("## New Recipes\n")
 
             for (newRecipe in newRecipes) {
-                changelog.appendText("\n* [${newRecipe.name}](${newRecipe.docLink}): ${newRecipe.description.trim()} ")
+                changelog.appendText("\n* [${newRecipe.name}](${newRecipe.docLink}): ${escapeMdxOutsideCodeSpans(newRecipe.description.trim())} ")
             }
 
             changelog.appendText("\n\n")
@@ -140,7 +136,7 @@ class ChangelogWriter {
             changelog.appendText("## Removed Recipes\n")
 
             for (removedRecipe in removedRecipes) {
-                changelog.appendText("\n* **${removedRecipe.name}**: ${removedRecipe.description.trim()} ")
+                changelog.appendText("\n* **${removedRecipe.name}**: ${escapeMdxOutsideCodeSpans(removedRecipe.description.trim())} ")
             }
 
             changelog.appendText("\n\n")
