@@ -131,7 +131,6 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-migrate-kotlin:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-migrate-python:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-netty:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-nodejs:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-okhttp:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-openapi:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-prethink:$rewriteVersion")

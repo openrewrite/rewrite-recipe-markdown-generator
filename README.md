@@ -38,7 +38,7 @@ The CI workflow in *this* repo also only runs with `-PlatestVersionsOnly=true`, 
 The generator loads TypeScript, Python, and C# recipes by spawning external RPC processes. To produce complete docs locally you need all of these on `PATH`:
 
 * **Java 21** — JVM-based recipes
-* **Node.js** — TypeScript recipes (`rewrite-javascript`, `rewrite-nodejs`, `rewrite-angular`, `rewrite-react`)
+* **Node.js** — TypeScript recipes (`rewrite-javascript`, `rewrite-angular`, `rewrite-react`)
 * **Python 3.10+ and `pip`** — Python recipes (`rewrite-python`, `rewrite-migrate-python`, `openrewrite-static-analysis`)
 * **.NET SDK** — C# recipes (`recipes-code-quality`, `recipes-migrate-dotnet`, `recipes-tunit`, `recipes-csharp-core`)
 
