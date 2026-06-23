@@ -9,6 +9,7 @@ import org.openrewrite.RecipeMarkdownGenerator.Companion.getRecipePath
 import org.openrewrite.RecipeMarkdownGenerator.Companion.hasConflict
 import org.openrewrite.RecipeMarkdownGenerator.Companion.useAndApply
 import org.openrewrite.RecipeMarkdownGenerator.Companion.writeln
+import org.openrewrite.config.OptionDescriptor
 import org.openrewrite.config.RecipeDescriptor
 import java.io.BufferedWriter
 import java.net.URI
@@ -678,20 +679,8 @@ import RunRecipe from '@site/src/components/RunRecipe';
                 if (!option.isRequired && option.example == null) {
                     continue
                 }
-                val optionExample = option.example
                 val isList = option.type == "List" || option.type.startsWith("List<")
-                val ex = if (optionExample != null && option.type == "String" &&
-                    (optionExample.matches("^[{}\\[\\],`|=%@*!?-].*".toRegex()) ||
-                            optionExample.matches(".*:\\s.*".toRegex()))
-                ) {
-                    "'" + optionExample + "'"
-                } else if (optionExample != null && option.type == "String" && optionExample.contains('\n')) {
-                    ">\n        " + optionExample.replace("\n", "\n        ")
-                } else if (option.type == "boolean") {
-                    "false"
-                } else {
-                    option.example
-                }
+                val ex = cliOptionExample(option)
                 cliOptions += " --recipe-option \"${option.name}=$ex\""
                 if (isList) {
                     writeln("      ${option.name}:")
@@ -962,12 +951,13 @@ ${props.toString().trimEnd()}
         val name = recipeDescriptor.name
         val title = recipeDescriptor.displayNameEscaped().replace("&#39;", "'")
         val isProprietary = isProprietaryRecipe(name)
+        val recipePath = getRecipePath(recipeDescriptor)
 
         // Canonical <head> block for open-source recipes
         val canonicalHead = if (!isProprietary) {
             """
 <head>
-  <link rel="canonical" href="https://docs.openrewrite.org/recipes/${getRecipePath(recipeDescriptor)}" />
+  <link rel="canonical" href="https://docs.openrewrite.org/recipes/$recipePath" />
 </head>
 
 """
@@ -976,12 +966,12 @@ ${props.toString().trimEnd()}
         }
 
         val recipeType = if (recipeDescriptor.recipeList.isNullOrEmpty()) "Single recipe" else "Composite recipe"
-        val language = getSourceLanguage(name)
-        val licenseText = resolveLicensePlainText(origin)
-        val fqName = name
+        val languages = listOf(getSourceLanguage(name))
+        // License as plain text (not the markdown-link form the OpenRewrite docs path uses).
+        val licenseText = origin.license.name
         val artifact = "${origin.groupId}:${origin.artifactId}"
         val appLink = "https://app.moderne.io/recipes/$name"
-        val markdownUrl = MODERNE_DOCS_MARKDOWN_BASE_URL + getRecipePath(recipeDescriptor) + ".md"
+        val markdownUrl = MODERNE_DOCS_MARKDOWN_BASE_URL + recipePath + ".md"
 
         // Source URL — omit for proprietary or when no source URI available
         val sourceUrl: String? = if (!isProprietary) {
@@ -989,16 +979,8 @@ ${props.toString().trimEnd()}
             if (recipeSource != null) origin.githubUrl(name, recipeSource) else null
         } else null
 
-        // JSON props
         val description = recipeDescriptor.description ?: ""
         val tags = recipeDescriptor.tags?.toList() ?: emptyList<String>()
-        val languages = listOf(language)
-
-        val recipesJson = buildRecipeListJson(recipeDescriptor)
-        val optionsJson = buildOptionsJson(recipeDescriptor)
-        val examplesJson = buildExamplesJson(recipeDescriptor)
-        val usageJson = buildUsageJson(recipeDescriptor, origin)
-        val dataTablesJson = buildDataTablesJson(recipeDescriptor)
 
         Files.createDirectories(recipeMarkdownPath.parent)
         Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE).useAndApply {
@@ -1010,9 +992,7 @@ ${props.toString().trimEnd()}
             writeln("---")
             newLine()
 
-            if (canonicalHead.isNotEmpty()) {
-                write(canonicalHead)
-            }
+            write(canonicalHead)   // "" for proprietary recipes — a no-op
 
             writeln("import { RecipeHeader, RecipeMeta, RecipeList, OptionsTable, ExampleList, UsageList, DataTableList } from '@site/src/components/recipe';")
             newLine()
@@ -1021,7 +1001,7 @@ ${props.toString().trimEnd()}
             writeln("<RecipeMeta")
             writeln("  displayName={${mapper.writeValueAsString(recipeDescriptor.displayName)}}")
             writeln("  description={${mapper.writeValueAsString(description)}}")
-            writeln("  fqName={${mapper.writeValueAsString(fqName)}}")
+            writeln("  fqName={${mapper.writeValueAsString(name)}}")
             writeln("  languages={${mapper.writeValueAsString(languages)}}")
             writeln("  license={${mapper.writeValueAsString(licenseText)}}")
             if (sourceUrl != null) {
@@ -1038,7 +1018,7 @@ ${props.toString().trimEnd()}
             writeln("  languages={${mapper.writeValueAsString(languages)}}")
             writeln("  tags={${mapper.writeValueAsString(tags)}}")
             writeln("  license={${mapper.writeValueAsString(licenseText)}}")
-            writeln("  fqName={${mapper.writeValueAsString(fqName)}}")
+            writeln("  fqName={${mapper.writeValueAsString(name)}}")
             writeln("  artifact={${mapper.writeValueAsString(artifact)}}")
             writeln("  appLink={${mapper.writeValueAsString(appLink)}}")
             writeln("  markdownUrl={${mapper.writeValueAsString(markdownUrl)}}")
@@ -1048,66 +1028,36 @@ ${props.toString().trimEnd()}
             writeln("/>")
             newLine()
 
-            // RecipeList — only for composite recipes
-            if (!recipeDescriptor.recipeList.isNullOrEmpty()) {
-                writeln("<RecipeList recipes={$recipesJson}>")
-                newLine()
-                writeln("## Definition")
-                newLine()
-                writeln("</RecipeList>")
-                newLine()
+            // Sections: the `## ` heading is the component's children, blank-line-wrapped (below) so MDX
+            // parses it as a real heading node and the native Docusaurus TOC picks it up. JSON props are
+            // built lazily, only for sections that are actually emitted.
+            if (!recipeDescriptor.recipeList.isNullOrEmpty()) {  // composite recipes only
+                emitSection("<RecipeList recipes={${buildRecipeListJson(recipeDescriptor)}}>", "## Definition", "</RecipeList>")
             }
-
-            // OptionsTable — only when options exist
             if (!recipeDescriptor.options.isNullOrEmpty()) {
-                writeln("<OptionsTable options={$optionsJson}>")
-                newLine()
-                writeln("## Options")
-                newLine()
-                writeln("</OptionsTable>")
-                newLine()
+                emitSection("<OptionsTable options={${buildOptionsJson(recipeDescriptor)}}>", "## Options", "</OptionsTable>")
             }
-
-            // ExampleList — only when examples exist
             if (!recipeDescriptor.examples.isNullOrEmpty()) {
-                writeln("<ExampleList examples={$examplesJson}>")
-                newLine()
-                writeln("## Examples")
-                newLine()
-                writeln("</ExampleList>")
-                newLine()
+                emitSection("<ExampleList examples={${buildExamplesJson(recipeDescriptor)}}>", "## Examples", "</ExampleList>")
             }
-
-            // UsageList — always emitted (mirrors writeUsage skip conditions for JS/Python/C#)
-            val skipUsage = isJavaScriptRecipe(recipeDescriptor) ||
-                isPythonRecipe(recipeDescriptor) ||
-                isCSharpRecipe(recipeDescriptor)
-            if (!skipUsage) {
-                writeln("<UsageList usage={$usageJson}>")
-                newLine()
-                writeln("## Usage")
-                newLine()
-                writeln("</UsageList>")
-                newLine()
+            // Usage mirrors writeUsage's skip for JS/Python/C# recipes (no UsageList contract yet).
+            if (!(isJavaScriptRecipe(recipeDescriptor) || isPythonRecipe(recipeDescriptor) || isCSharpRecipe(recipeDescriptor))) {
+                emitSection("<UsageList usage={${buildUsageJson(recipeDescriptor, origin)}}>", "## Usage", "</UsageList>")
             }
-
-            // DataTableList — only when dataTables exist
             if (!recipeDescriptor.dataTables.isNullOrEmpty()) {
-                writeln("<DataTableList tables={$dataTablesJson}>")
-                newLine()
-                writeln("## Data tables")
-                newLine()
-                writeln("</DataTableList>")
-                newLine()
+                emitSection("<DataTableList tables={${buildDataTablesJson(recipeDescriptor)}}>", "## Data tables", "</DataTableList>")
             }
         }
     }
 
-    /**
-     * Resolve the license as plain text (no markdown link syntax).
-     */
-    private fun resolveLicensePlainText(origin: RecipeOrigin): String {
-        return origin.license.name
+    /** Emit a recipe-section component with its `## ` heading as a blank-line-wrapped children slot. */
+    private fun BufferedWriter.emitSection(openTag: String, heading: String, closeTag: String) {
+        writeln(openTag)
+        newLine()
+        writeln(heading)
+        newLine()
+        writeln(closeTag)
+        newLine()
     }
 
     /**
@@ -1236,27 +1186,14 @@ ${props.toString().trimEnd()}
             "requiresConfiguration" to requiresConfiguration
         )
 
-        // Build cliOptions string (mirrors writeUsage logic)
+        // Build cliOptions string (shares the per-option example formatting with writeUsage).
         var cliOptions = ""
         if (requiresConfiguration) {
             for (option in options) {
                 if (!option.isRequired && option.example == null) {
                     continue
                 }
-                val optionExample = option.example
-                val ex = if (optionExample != null && option.type == "String" &&
-                    (optionExample.matches("^[{}\\[\\],`|=%@*!?-].*".toRegex()) ||
-                            optionExample.matches(".*:\\s.*".toRegex()))
-                ) {
-                    "'" + optionExample + "'"
-                } else if (optionExample != null && option.type == "String" && optionExample.contains('\n')) {
-                    ">\n        " + optionExample.replace("\n", "\n        ")
-                } else if (option.type == "boolean") {
-                    "false"
-                } else {
-                    option.example
-                }
-                cliOptions += " --recipe-option \"${option.name}=$ex\""
+                cliOptions += " --recipe-option \"${option.name}=${cliOptionExample(option)}\""
             }
         }
         if (cliOptions.isNotEmpty()) {
@@ -1292,9 +1229,32 @@ ${props.toString().trimEnd()}
         return mapper.writeValueAsString(items)
     }
 
+    /**
+     * The example value for an option as it appears in the Moderne CLI run command / rewrite.yml.
+     * Shared by [writeUsage] (markdown) and [buildUsageJson] (component prop) so the two stay in sync.
+     */
+    private fun cliOptionExample(option: OptionDescriptor): String? {
+        val optionExample = option.example
+        return if (optionExample != null && option.type == "String" &&
+            (optionExample.matches(YAML_SPECIAL_START_REGEX) || optionExample.matches(YAML_COLON_SPACE_REGEX))
+        ) {
+            "'" + optionExample + "'"
+        } else if (optionExample != null && option.type == "String" && optionExample.contains('\n')) {
+            ">\n        " + optionExample.replace("\n", "\n        ")
+        } else if (option.type == "boolean") {
+            "false"
+        } else {
+            option.example
+        }
+    }
+
     companion object {
         private const val MODERNE_DOCS_MARKDOWN_BASE_URL =
             "https://raw.githubusercontent.com/moderneinc/moderne-docs/refs/heads/main/docs/user-documentation/recipes/recipe-catalog/"
+
+        // CLI/YAML option-example formatting (compiled once instead of per option per recipe).
+        private val YAML_SPECIAL_START_REGEX = Regex("^[{}\\[\\],`|=%@*!?-].*")
+        private val YAML_COLON_SPACE_REGEX = Regex(".*:\\s.*")
 
         private fun printValue(value: Any): String =
             if (value is Array<*>) {
