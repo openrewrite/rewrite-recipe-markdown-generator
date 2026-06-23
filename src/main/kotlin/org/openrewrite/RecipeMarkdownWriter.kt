@@ -2,6 +2,7 @@
 
 package org.openrewrite
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.Patch
 import org.openrewrite.RecipeMarkdownGenerator.Companion.getRecipePath
@@ -22,6 +23,8 @@ class RecipeMarkdownWriter(
     val proprietaryRecipeNames: Set<String>,
     val forModerneDocs: Boolean = false
 ) {
+
+    private val mapper = jacksonObjectMapper()
 
     /**
      * Check if a recipe is proprietary based on its name.
@@ -122,6 +125,8 @@ class RecipeMarkdownWriter(
         origin: RecipeOrigin,
         crossCategoryNote: String?
     ) {
+        if (forModerneDocs) { writeModerneComponentRecipe(recipeDescriptor, recipeMarkdownPath, origin, crossCategoryNote); return }
+
         val formattedRecipeTitle = recipeDescriptor.displayNameEscaped()  // For YAML frontmatter (no curly brace escaping)
         val formattedRecipeTitleMdx = recipeDescriptor.displayNameEscapedMdx()  // For MDX content (with curly brace escaping)
         val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor.description)
@@ -940,7 +945,357 @@ ${props.toString().trimEnd()}
         return diffContent.toString()
     }
 
+    // -------------------------------------------------------------------------
+    // Moderne docs MDX component output
+    // -------------------------------------------------------------------------
+
+    /**
+     * Emits an MDX file that delegates all rendering to React components.
+     * Only called when forModerneDocs == true.
+     */
+    private fun writeModerneComponentRecipe(
+        recipeDescriptor: RecipeDescriptor,
+        recipeMarkdownPath: Path,
+        origin: RecipeOrigin,
+        @Suppress("UNUSED_PARAMETER") crossCategoryNote: String?
+    ) {
+        val name = recipeDescriptor.name
+        val title = recipeDescriptor.displayNameEscaped().replace("&#39;", "'")
+        val isProprietary = isProprietaryRecipe(name)
+
+        // Canonical <head> block for open-source recipes
+        val canonicalHead = if (!isProprietary) {
+            """
+<head>
+  <link rel="canonical" href="https://docs.openrewrite.org/recipes/${getRecipePath(recipeDescriptor)}" />
+</head>
+
+"""
+        } else {
+            ""
+        }
+
+        val recipeType = if (recipeDescriptor.recipeList.isNullOrEmpty()) "Single recipe" else "Composite recipe"
+        val language = getSourceLanguage(name)
+        val licenseText = resolveLicensePlainText(origin)
+        val fqName = name
+        val artifact = "${origin.groupId}:${origin.artifactId}"
+        val appLink = "https://app.moderne.io/recipes/$name"
+        val markdownUrl = MODERNE_DOCS_MARKDOWN_BASE_URL + getRecipePath(recipeDescriptor) + ".md"
+
+        // Source URL — omit for proprietary or when no source URI available
+        val sourceUrl: String? = if (!isProprietary) {
+            val recipeSource = recipeToSource[name]
+            if (recipeSource != null) origin.githubUrl(name, recipeSource) else null
+        } else null
+
+        // JSON props
+        val description = recipeDescriptor.description ?: ""
+        val tags = recipeDescriptor.tags?.toList() ?: emptyList<String>()
+        val languages = listOf(language)
+
+        val recipesJson = buildRecipeListJson(recipeDescriptor)
+        val optionsJson = buildOptionsJson(recipeDescriptor)
+        val examplesJson = buildExamplesJson(recipeDescriptor)
+        val usageJson = buildUsageJson(recipeDescriptor, origin)
+        val dataTablesJson = buildDataTablesJson(recipeDescriptor)
+
+        Files.createDirectories(recipeMarkdownPath.parent)
+        Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE).useAndApply {
+            //language=markdown
+            writeln("---")
+            writeln("title: \"$title\"")
+            writeln("sidebar_label: \"$title\"")
+            writeln("hide_title: true")
+            writeln("---")
+            newLine()
+
+            if (canonicalHead.isNotEmpty()) {
+                write(canonicalHead)
+            }
+
+            writeln("import { RecipeHeader, RecipeMeta, RecipeList, OptionsTable, ExampleList, UsageList, DataTableList } from '@site/src/components/recipe';")
+            newLine()
+
+            // RecipeMeta — always emitted
+            writeln("<RecipeMeta")
+            writeln("  displayName={${mapper.writeValueAsString(recipeDescriptor.displayName)}}")
+            writeln("  description={${mapper.writeValueAsString(description)}}")
+            writeln("  fqName={${mapper.writeValueAsString(fqName)}}")
+            writeln("  languages={${mapper.writeValueAsString(languages)}}")
+            writeln("  license={${mapper.writeValueAsString(licenseText)}}")
+            if (sourceUrl != null) {
+                writeln("  sourceUrl={${mapper.writeValueAsString(sourceUrl)}}")
+            }
+            writeln("/>")
+            newLine()
+
+            // RecipeHeader — always emitted
+            writeln("<RecipeHeader")
+            writeln("  displayName={${mapper.writeValueAsString(recipeDescriptor.displayName)}}")
+            writeln("  description={${mapper.writeValueAsString(description)}}")
+            writeln("  type={${mapper.writeValueAsString(recipeType)}}")
+            writeln("  languages={${mapper.writeValueAsString(languages)}}")
+            writeln("  tags={${mapper.writeValueAsString(tags)}}")
+            writeln("  license={${mapper.writeValueAsString(licenseText)}}")
+            writeln("  fqName={${mapper.writeValueAsString(fqName)}}")
+            writeln("  artifact={${mapper.writeValueAsString(artifact)}}")
+            writeln("  appLink={${mapper.writeValueAsString(appLink)}}")
+            writeln("  markdownUrl={${mapper.writeValueAsString(markdownUrl)}}")
+            if (isProprietary) {
+                writeln("  moderneOnly")
+            }
+            writeln("/>")
+            newLine()
+
+            // RecipeList — only for composite recipes
+            if (!recipeDescriptor.recipeList.isNullOrEmpty()) {
+                writeln("<RecipeList recipes={$recipesJson}>")
+                newLine()
+                writeln("## Definition")
+                newLine()
+                writeln("</RecipeList>")
+                newLine()
+            }
+
+            // OptionsTable — only when options exist
+            if (!recipeDescriptor.options.isNullOrEmpty()) {
+                writeln("<OptionsTable options={$optionsJson}>")
+                newLine()
+                writeln("## Options")
+                newLine()
+                writeln("</OptionsTable>")
+                newLine()
+            }
+
+            // ExampleList — only when examples exist
+            if (!recipeDescriptor.examples.isNullOrEmpty()) {
+                writeln("<ExampleList examples={$examplesJson}>")
+                newLine()
+                writeln("## Examples")
+                newLine()
+                writeln("</ExampleList>")
+                newLine()
+            }
+
+            // UsageList — always emitted (mirrors writeUsage skip conditions for JS/Python/C#)
+            val skipUsage = isJavaScriptRecipe(recipeDescriptor) ||
+                isPythonRecipe(recipeDescriptor) ||
+                isCSharpRecipe(recipeDescriptor)
+            if (!skipUsage) {
+                writeln("<UsageList usage={$usageJson}>")
+                newLine()
+                writeln("## Usage")
+                newLine()
+                writeln("</UsageList>")
+                newLine()
+            }
+
+            // DataTableList — only when dataTables exist
+            if (!recipeDescriptor.dataTables.isNullOrEmpty()) {
+                writeln("<DataTableList tables={$dataTablesJson}>")
+                newLine()
+                writeln("## Data tables")
+                newLine()
+                writeln("</DataTableList>")
+                newLine()
+            }
+        }
+    }
+
+    /**
+     * Resolve the license as plain text (no markdown link syntax).
+     */
+    private fun resolveLicensePlainText(origin: RecipeOrigin): String {
+        return origin.license.name
+    }
+
+    /**
+     * Build the JSON array for RecipeList.
+     * Shape: { name: string; href: string }[]
+     */
+    private fun buildRecipeListJson(recipeDescriptor: RecipeDescriptor): String {
+        val items = (recipeDescriptor.recipeList ?: emptyList<RecipeDescriptor>()).map { sub ->
+            val href = if (recipeToSource.containsKey(sub.name)) {
+                getRecipeLink(sub)
+            } else {
+                ""
+            }
+            mapOf("name" to sub.displayName, "href" to href)
+        }
+        return mapper.writeValueAsString(items)
+    }
+
+    /**
+     * Build the JSON array for OptionsTable.
+     * Shape: { type: string; name: string; required: boolean; description: string; example?: string }[]
+     */
+    private fun buildOptionsJson(recipeDescriptor: RecipeDescriptor): String {
+        val items = (recipeDescriptor.options ?: emptyList()).map { option ->
+            val entry = mutableMapOf<String, Any?>(
+                "type" to (option.type ?: "String"),
+                "name" to (option.name ?: "unknown"),
+                "required" to option.isRequired,
+                "description" to (option.description ?: "")
+            )
+            if (option.example != null) {
+                entry["example"] = option.example
+            }
+            entry
+        }
+        return mapper.writeValueAsString(items)
+    }
+
+    /**
+     * Build the JSON array for ExampleList.
+     * Shape per the spec (variants, unchanged, parameters).
+     */
+    private fun buildExamplesJson(recipeDescriptor: RecipeDescriptor): String {
+        val examples = recipeDescriptor.examples ?: emptyList()
+        val options = recipeDescriptor.options ?: emptyList()
+
+        val items = examples.map { example ->
+            val exMap = mutableMapOf<String, Any?>()
+
+            // parameters — zip option names with example parameter values
+            if (example.parameters != null && example.parameters.isNotEmpty() && options.isNotEmpty()) {
+                val params = options.zip(example.parameters).map { (opt, value) ->
+                    mapOf("parameter" to (opt.name ?: "unknown"), "value" to value)
+                }
+                exMap["parameters"] = params
+            }
+
+            val variants = mutableListOf<Map<String, Any?>>()
+            var unchangedSet = false
+
+            for (source in example.sources) {
+                val after = source.after
+                val hasChange = after != null && after.isNotEmpty()
+                val lang = source.language ?: "text"
+
+                when {
+                    !hasChange -> {
+                        // no change — set unchanged (first such source only)
+                        if (!unchangedSet) {
+                            exMap["unchanged"] = mapOf(
+                                "language" to lang,
+                                "code" to (source.before ?: "")
+                            )
+                            unchangedSet = true
+                        }
+                    }
+                    source.before == null -> {
+                        // new file
+                        variants.add(
+                            mapOf(
+                                "language" to lang,
+                                "before" to "",
+                                "after" to after!!,
+                                "newFile" to true
+                            )
+                        )
+                    }
+                    else -> {
+                        // before → after with diff
+                        val diff = generateDiff(source.path, source.before, after!!)
+                        variants.add(
+                            mapOf(
+                                "language" to lang,
+                                "before" to source.before,
+                                "after" to after,
+                                "diff" to diff,
+                                "newFile" to false
+                            )
+                        )
+                    }
+                }
+            }
+
+            exMap["variants"] = variants
+            exMap
+        }
+
+        return mapper.writeValueAsString(items)
+    }
+
+    /**
+     * Build the JSON object for UsageList.
+     * Mirrors writeUsage's logic for determining which props to include.
+     */
+    private fun buildUsageJson(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin): String {
+        val name = recipeDescriptor.name
+        val options = recipeDescriptor.options ?: emptyList()
+        val requiresConfiguration = options.any { it.isRequired }
+
+        val usageMap = mutableMapOf<String, Any?>(
+            "recipeName" to name,
+            "displayName" to recipeDescriptor.displayName,
+            "groupId" to origin.groupId,
+            "artifactId" to origin.artifactId,
+            "versionKey" to origin.versionPlaceholderKey(),
+            "requiresConfiguration" to requiresConfiguration
+        )
+
+        // Build cliOptions string (mirrors writeUsage logic)
+        var cliOptions = ""
+        if (requiresConfiguration) {
+            for (option in options) {
+                if (!option.isRequired && option.example == null) {
+                    continue
+                }
+                val optionExample = option.example
+                val ex = if (optionExample != null && option.type == "String" &&
+                    (optionExample.matches("^[{}\\[\\],`|=%@*!?-].*".toRegex()) ||
+                            optionExample.matches(".*:\\s.*".toRegex()))
+                ) {
+                    "'" + optionExample + "'"
+                } else if (optionExample != null && option.type == "String" && optionExample.contains('\n')) {
+                    ">\n        " + optionExample.replace("\n", "\n        ")
+                } else if (option.type == "boolean") {
+                    "false"
+                } else {
+                    option.example
+                }
+                cliOptions += " --recipe-option \"${option.name}=$ex\""
+            }
+        }
+        if (cliOptions.isNotEmpty()) {
+            usageMap["cliOptions"] = cliOptions
+        }
+
+        if (hasConflict(name)) {
+            usageMap["useFullyQualifiedCliName"] = true
+        }
+
+        return mapper.writeValueAsString(usageMap)
+    }
+
+    /**
+     * Build the JSON array for DataTableList.
+     * Shape: { name: string; displayName: string; description: string; columns: { name: string; description: string }[] }[]
+     */
+    private fun buildDataTablesJson(recipeDescriptor: RecipeDescriptor): String {
+        val dataTables = recipeDescriptor.dataTables ?: emptyList()
+        val items = dataTables.map { dt ->
+            mapOf(
+                "name" to dt.name,
+                "displayName" to dt.displayName,
+                "description" to (dt.description ?: ""),
+                "columns" to (dt.columns ?: emptyList()).map { col ->
+                    mapOf(
+                        "name" to col.displayName,
+                        "description" to (col.description ?: "")
+                    )
+                }
+            )
+        }
+        return mapper.writeValueAsString(items)
+    }
+
     companion object {
+        private const val MODERNE_DOCS_MARKDOWN_BASE_URL =
+            "https://raw.githubusercontent.com/moderneinc/moderne-docs/refs/heads/main/docs/user-documentation/recipes/recipe-catalog/"
+
         private fun printValue(value: Any): String =
             if (value is Array<*>) {
                 value.contentDeepToString()
