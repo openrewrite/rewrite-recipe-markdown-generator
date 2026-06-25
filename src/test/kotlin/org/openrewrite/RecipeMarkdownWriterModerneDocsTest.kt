@@ -53,6 +53,8 @@ class RecipeMarkdownWriterModerneDocsTest {
     private fun compositeRecipe() = descriptor(
         "org.openrewrite.java.CompositeFoo", "Composite foo", "Runs several foo recipes.",
         recipeList = listOf(singleRecipe())
+    ).withPreconditions(
+        listOf(descriptor("org.openrewrite.java.search.FindFoo", "Find foo", "Finds foo."))
     )
 
     private fun writer(forModerneDocs: Boolean, proprietary: Set<String> = emptySet()) =
@@ -112,6 +114,9 @@ class RecipeMarkdownWriterModerneDocsTest {
         assertThat(out).doesNotContain("moderneOnly")     // open source
         assertThat(out).contains("<RecipeList recipes={")
         assertThat(out).contains("\n\n## Definition\n\n</RecipeList>")
+        // Preconditions are fed through to RecipeList's `preconditions` prop (Jayd's #798 change).
+        assertThat(out).contains("preconditions={")
+        assertThat(out).contains("\"name\":\"Find foo\"")
         // Open-source recipe keeps the canonical link to OpenRewrite docs.
         assertThat(out).contains("rel=\"canonical\"")
         assertThat(out).contains("docs.openrewrite.org")

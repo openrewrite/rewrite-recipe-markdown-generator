@@ -1031,8 +1031,14 @@ ${props.toString().trimEnd()}
             // Sections: the `## ` heading is the component's children, blank-line-wrapped (below) so MDX
             // parses it as a real heading node and the native Docusaurus TOC picks it up. JSON props are
             // built lazily, only for sections that are actually emitted.
-            if (!recipeDescriptor.recipeList.isNullOrEmpty()) {  // composite recipes only
-                emitSection("<RecipeList recipes={${buildRecipeListJson(recipeDescriptor)}}>", "## Definition", "</RecipeList>")
+            // Definition = preconditions + sub-recipe list. Emit when either is present (a single recipe
+            // can have preconditions without a recipe list).
+            val hasPreconditions = !recipeDescriptor.preconditions.isNullOrEmpty()
+            if (!recipeDescriptor.recipeList.isNullOrEmpty() || hasPreconditions) {
+                val recipesJson = subRecipeJson(recipeDescriptor.recipeList)
+                val preconditionsAttr =
+                    if (hasPreconditions) " preconditions={${subRecipeJson(recipeDescriptor.preconditions)}}" else ""
+                emitSection("<RecipeList recipes={$recipesJson}$preconditionsAttr>", "## Definition", "</RecipeList>")
             }
             if (!recipeDescriptor.options.isNullOrEmpty()) {
                 emitSection("<OptionsTable options={${buildOptionsJson(recipeDescriptor)}}>", "## Options", "</OptionsTable>")
@@ -1061,16 +1067,12 @@ ${props.toString().trimEnd()}
     }
 
     /**
-     * Build the JSON array for RecipeList.
-     * Shape: { name: string; href: string }[]
+     * Build the JSON array of `{ name, href }` for RecipeList's `recipes` and `preconditions` props.
+     * Unlinkable recipes (not in recipeToSource) get an empty href.
      */
-    private fun buildRecipeListJson(recipeDescriptor: RecipeDescriptor): String {
-        val items = (recipeDescriptor.recipeList ?: emptyList<RecipeDescriptor>()).map { sub ->
-            val href = if (recipeToSource.containsKey(sub.name)) {
-                getRecipeLink(sub)
-            } else {
-                ""
-            }
+    private fun subRecipeJson(recipes: List<RecipeDescriptor>?): String {
+        val items = (recipes ?: emptyList<RecipeDescriptor>()).map { sub ->
+            val href = if (recipeToSource.containsKey(sub.name)) getRecipeLink(sub) else ""
             mapOf("name" to sub.displayName, "href" to href)
         }
         return mapper.writeValueAsString(items)
