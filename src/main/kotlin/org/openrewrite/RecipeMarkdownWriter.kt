@@ -25,8 +25,6 @@ class RecipeMarkdownWriter(
     val forModerneDocs: Boolean = false
 ) {
 
-    private val mapper = jacksonObjectMapper()
-
     /**
      * Check if a recipe is proprietary based on its name.
      */
@@ -134,17 +132,8 @@ class RecipeMarkdownWriter(
         val formattedLongRecipeName = recipeDescriptor.name.replace("_".toRegex(), "\\\\_").trim()
         Files.createDirectories(recipeMarkdownPath.parent)
         Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE).useAndApply {
-            // For Moderne docs, add canonical link to OpenRewrite docs for open source recipes
-            val canonicalHead = if (forModerneDocs && !isProprietaryRecipe(recipeDescriptor.name)) {
-                """
-<head>
-  <link rel="canonical" href="https://docs.openrewrite.org/recipes/${getRecipePath(recipeDescriptor)}" />
-</head>
-
-"""
-            } else {
-                ""
-            }
+            // Note: the Moderne-docs canonical-link <head> is emitted by writeModerneComponentRecipe;
+            // this path only runs for OpenRewrite docs (forModerneDocs is always false here).
             write(
                 """
 ---
@@ -152,7 +141,7 @@ title: "${formattedRecipeTitle.replace("&#39;", "'")}"
 sidebar_label: "${formattedRecipeTitle.replace("&#39;", "'")}"
 ---
 
-${canonicalHead}import Tabs from '@theme/Tabs';
+import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import RunRecipe from '@site/src/components/RunRecipe';
 
@@ -1032,12 +1021,15 @@ ${props.toString().trimEnd()}
             // parses it as a real heading node and the native Docusaurus TOC picks it up. JSON props are
             // built lazily, only for sections that are actually emitted.
             // Definition = preconditions + sub-recipe list. Emit when either is present (a single recipe
-            // can have preconditions without a recipe list).
+            // can have preconditions without a recipe list). Unlike the OpenRewrite markdown path this is
+            // not suppressed for proprietary recipes — Moderne docs shows their definitions too.
             val hasPreconditions = !recipeDescriptor.preconditions.isNullOrEmpty()
             if (!recipeDescriptor.recipeList.isNullOrEmpty() || hasPreconditions) {
                 val recipesJson = subRecipeJson(recipeDescriptor.recipeList)
-                val preconditionsAttr =
-                    if (hasPreconditions) " preconditions={${subRecipeJson(recipeDescriptor.preconditions)}}" else ""
+                val preconditionsAttr = recipeDescriptor.preconditions
+                    ?.takeIf { it.isNotEmpty() }
+                    ?.let { " preconditions={${subRecipeJson(it)}}" }
+                    ?: ""
                 emitSection("<RecipeList recipes={$recipesJson}$preconditionsAttr>", "## Definition", "</RecipeList>")
             }
             if (!recipeDescriptor.options.isNullOrEmpty()) {
@@ -1072,7 +1064,7 @@ ${props.toString().trimEnd()}
      */
     private fun subRecipeJson(recipes: List<RecipeDescriptor>?): String {
         val items = (recipes ?: emptyList<RecipeDescriptor>()).map { sub ->
-            val href = if (recipeToSource.containsKey(sub.name)) getRecipeLink(sub) else ""
+            val href = recipeToSource[sub.name]?.let { getRecipeLink(sub) } ?: ""
             mapOf("name" to sub.displayName, "href" to href)
         }
         return mapper.writeValueAsString(items)
@@ -1189,14 +1181,11 @@ ${props.toString().trimEnd()}
         )
 
         // Build cliOptions string (shares the per-option example formatting with writeUsage).
-        var cliOptions = ""
-        if (requiresConfiguration) {
-            for (option in options) {
-                if (!option.isRequired && option.example == null) {
-                    continue
-                }
-                cliOptions += " --recipe-option \"${option.name}=${cliOptionExample(option)}\""
-            }
+        val cliOptions = if (requiresConfiguration) {
+            options.filter { it.isRequired || it.example != null }
+                .joinToString("") { " --recipe-option \"${it.name}=${cliOptionExample(it)}\"" }
+        } else {
+            ""
         }
         if (cliOptions.isNotEmpty()) {
             usageMap["cliOptions"] = cliOptions
@@ -1251,6 +1240,9 @@ ${props.toString().trimEnd()}
     }
 
     companion object {
+        // Stateless + thread-safe; one instance for the whole run rather than per writer.
+        private val mapper = jacksonObjectMapper()
+
         private const val MODERNE_DOCS_MARKDOWN_BASE_URL =
             "https://raw.githubusercontent.com/moderneinc/moderne-docs/refs/heads/main/docs/user-documentation/recipes/recipe-catalog/"
 

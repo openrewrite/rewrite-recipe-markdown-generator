@@ -57,9 +57,6 @@ class RecipeMarkdownWriterModerneDocsTest {
         listOf(descriptor("org.openrewrite.java.search.FindFoo", "Find foo", "Finds foo."))
     )
 
-    private fun writer(forModerneDocs: Boolean, proprietary: Set<String> = emptySet()) =
-        RecipeMarkdownWriter(mutableMapOf(), emptyMap(), proprietary, forModerneDocs)
-
     private fun generate(
         recipe: RecipeDescriptor,
         dir: Path,
@@ -67,7 +64,8 @@ class RecipeMarkdownWriterModerneDocsTest {
         license: License = Licenses.Apache2,
         proprietary: Set<String> = emptySet(),
     ): String {
-        writer(forModerneDocs, proprietary).writeRecipe(recipe, dir, origin(license))
+        RecipeMarkdownWriter(mutableMapOf(), emptyMap(), proprietary, forModerneDocs)
+            .writeRecipe(recipe, dir, origin(license))
         val md = Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow()
         return Files.readString(md)
     }
