@@ -221,6 +221,13 @@ class RecipeMarkdownGenerator : Runnable {
             RecipeMarkdownWriter(recipeContainedBy, recipeToSource, proprietaryRecipeNames, forModerneDocs = true)
         } else null
 
+        // Every recipe's natural output path in the Moderne catalog (which lists ALL recipes). A
+        // cross-category duplicate — e.g. java.ChangeType surfaced under python/ because it works on
+        // Python code — must not overwrite a recipe that natively owns that path (python.ChangeType),
+        // otherwise the two clobber each other into one file. OpenRewrite docs avoid this because the
+        // native recipe is often proprietary and skipped there; the Moderne catalog writes both.
+        val moderneNativeRecipePaths = allRecipeDescriptors.mapTo(HashSet()) { getRecipePath(it) }
+
         for (recipeDescriptor in allRecipeDescriptors) {
             val recipeSource = recipeToSource[recipeDescriptor.name]
             requireNotNull(recipeSource) { "Could not find source URI for recipe " + recipeDescriptor.name }
@@ -235,6 +242,8 @@ class RecipeMarkdownGenerator : Runnable {
             val extraPaths = crossCategoryPaths[recipeDescriptor.name]
             if (extraPaths != null && moderneRecipeMarkdownWriter != null) {
                 for (extraPath in extraPaths) {
+                    // Don't let this duplicate clobber a recipe that natively owns the path.
+                    if (extraPath in moderneNativeRecipePaths) continue
                     moderneRecipeMarkdownWriter.writeRecipeTo(recipeDescriptor, moderneRecipeCatalogPath!!, origin, extraPath)
                 }
             }
@@ -249,7 +258,10 @@ class RecipeMarkdownGenerator : Runnable {
             // Write non-proprietary recipes to OpenRewrite docs
             recipeMarkdownWriter.writeRecipe(recipeDescriptor, recipesPath, origin)
 
-            // Write cross-category duplicates to OpenRewrite docs
+            // Write cross-category duplicates to OpenRewrite docs. No native-path skip here (unlike the
+            // Moderne loop above): proprietary recipes are excluded from OpenRewrite docs, so a duplicate
+            // legitimately fills a slot whose native owner isn't written here. TRUNCATE_EXISTING still
+            // guards against stale-tail corruption if two open-source recipes ever claim the same path.
             if (extraPaths != null) {
                 for (extraPath in extraPaths) {
                     recipeMarkdownWriter.writeRecipeTo(recipeDescriptor, recipesPath, origin, extraPath)

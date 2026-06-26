@@ -142,6 +142,32 @@ class RecipeMarkdownWriterModerneDocsTest {
     }
 
     @Test
+    fun moderneDocsTruncatesStaleContentWhenSamePathWrittenTwice(@TempDir dir: Path) {
+        // A recipe's native page and a cross-category duplicate of a different recipe can resolve to the
+        // same path. The second (shorter) write must fully replace the first, not leave a stale tail that
+        // produces unparseable MDX.
+        val writer = RecipeMarkdownWriter(mutableMapOf(), emptyMap(), emptySet(), forModerneDocs = true)
+
+        // First: a content-heavy recipe (definition + examples + usage) at a shared relative path.
+        writer.writeRecipeTo(compositeRecipe(), dir, origin(), "shared/page")
+        val longText = Files.readString(dir.resolve("shared/page.md"))
+        assertThat(longText).contains("## Examples", "Composite foo")
+
+        // Then: a minimal recipe (no definition/options/examples — only header + usage) to the SAME path.
+        val minimal = RecipeDescriptor(
+            "org.openrewrite.java.Tiny", "Tiny", "Tiny", "A tiny recipe.", emptySet(), Duration.ofMinutes(1),
+            emptyList(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList(), jar
+        )
+        writer.writeRecipeTo(minimal, dir, origin(), "shared/page")
+        val shortText = Files.readString(dir.resolve("shared/page.md"))
+
+        assertThat(shortText.length).isLessThan(longText.length)
+        assertThat(shortText.trimEnd()).endsWith("</UsageList>")
+        // No stale tail bleeding through from the first, longer write.
+        assertThat(shortText).doesNotContain("## Examples", "## Definition", "Composite foo")
+    }
+
+    @Test
     fun openRewriteDocsOutputUnchangedForSingleRecipe(@TempDir dir: Path) {
         // Proprietary license so writeSourceLinks takes its Moderne-only branch and doesn't require a
         // source URI lookup (this test only guards that the OpenRewrite path is untouched).
