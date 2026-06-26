@@ -118,6 +118,17 @@ class RecipeMarkdownWriter(
         writeRecipeToPath(recipeDescriptor, recipeMarkdownPath, origin, null)
     }
 
+    /**
+     * Open a recipe markdown file for (over)writing. TRUNCATE_EXISTING is essential: the same path can be
+     * written more than once in a run (a recipe's native page and a cross-category duplicate of a different
+     * recipe can resolve to it). Without truncation a shorter second write leaves a stale tail from the
+     * first, which silently corrupts plain markdown and produces unparseable MDX in the component output.
+     */
+    private fun newRecipeWriter(recipeMarkdownPath: Path): BufferedWriter {
+        Files.createDirectories(recipeMarkdownPath.parent)
+        return Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)
+    }
+
     private fun writeRecipeToPath(
         recipeDescriptor: RecipeDescriptor,
         recipeMarkdownPath: Path,
@@ -130,8 +141,7 @@ class RecipeMarkdownWriter(
         val formattedRecipeTitleMdx = recipeDescriptor.displayNameEscapedMdx()  // For MDX content (with curly brace escaping)
         val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor.description)
         val formattedLongRecipeName = recipeDescriptor.name.replace("_".toRegex(), "\\\\_").trim()
-        Files.createDirectories(recipeMarkdownPath.parent)
-        Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE).useAndApply {
+        newRecipeWriter(recipeMarkdownPath).useAndApply {
             // Note: the Moderne-docs canonical-link <head> is emitted by writeModerneComponentRecipe;
             // this path only runs for OpenRewrite docs (forModerneDocs is always false here).
             write(
@@ -971,8 +981,7 @@ ${props.toString().trimEnd()}
         val description = recipeDescriptor.description ?: ""
         val tags = recipeDescriptor.tags?.toList() ?: emptyList<String>()
 
-        Files.createDirectories(recipeMarkdownPath.parent)
-        Files.newBufferedWriter(recipeMarkdownPath, StandardOpenOption.CREATE).useAndApply {
+        newRecipeWriter(recipeMarkdownPath).useAndApply {
             //language=markdown
             writeln("---")
             writeln("title: \"$title\"")
