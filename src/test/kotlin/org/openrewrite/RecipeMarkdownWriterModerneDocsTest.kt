@@ -52,7 +52,11 @@ class RecipeMarkdownWriterModerneDocsTest {
 
     private fun compositeRecipe() = descriptor(
         "org.openrewrite.java.CompositeFoo", "Composite foo", "Runs several foo recipes.",
-        recipeList = listOf(singleRecipe())
+        // Includes a "Precondition bellwether" that must be filtered out of the rendered list.
+        recipeList = listOf(
+            singleRecipe(),
+            descriptor("org.openrewrite.java.BellwetherFoo", "Precondition bellwether", "internal"),
+        )
     ).withPreconditions(
         listOf(descriptor("org.openrewrite.java.search.FindFoo", "Find foo", "Finds foo."))
     )
@@ -115,9 +119,26 @@ class RecipeMarkdownWriterModerneDocsTest {
         // Preconditions are fed through to RecipeList's `preconditions` prop (Jayd's #798 change).
         assertThat(out).contains("preconditions={")
         assertThat(out).contains("\"name\":\"Find foo\"")
+        // Internal "Precondition bellwether" recipes are filtered out (rewrite-docs#250).
+        assertThat(out).doesNotContain("Precondition bellwether")
         // Open-source recipe keeps the canonical link to OpenRewrite docs.
         assertThat(out).contains("rel=\"canonical\"")
         assertThat(out).contains("docs.openrewrite.org")
+    }
+
+    @Test
+    fun moderneDocsEmitsNpmUsageForJavaScriptRecipe(@TempDir dir: Path) {
+        val recipe = descriptor("org.openrewrite.javascript.FormatFoo", "Format foo", "Formats foo.")
+        // isJavaScriptRecipe keys off a `typescript-search://` source URI.
+        val recipeToSource = mapOf(recipe.name to URI.create("typescript-search://rewrite-static-analysis/format"))
+        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, emptySet(), forModerneDocs = true)
+            .writeRecipe(recipe, dir, origin())
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        // JS recipes get a UsageList with an npm package, not Maven/Gradle coordinates.
+        assertThat(out).contains("<UsageList usage={")
+        assertThat(out).contains("\"npmPackage\":")
+        assertThat(out).doesNotContain("\"groupId\":")
     }
 
     @Test

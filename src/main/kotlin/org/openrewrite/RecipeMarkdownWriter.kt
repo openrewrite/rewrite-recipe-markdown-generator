@@ -1038,10 +1038,9 @@ ${props.toString().trimEnd()}
             if (!recipeDescriptor.examples.isNullOrEmpty()) {
                 emitSection("<ExampleList examples={${buildExamplesJson(recipeDescriptor)}}>", "## Examples", "</ExampleList>")
             }
-            // Usage mirrors writeUsage's skip for JS/Python/C# recipes (no UsageList contract yet).
-            if (!(isJavaScriptRecipe(recipeDescriptor) || isPythonRecipe(recipeDescriptor) || isCSharpRecipe(recipeDescriptor))) {
-                emitSection("<UsageList usage={${buildUsageJson(recipeDescriptor, origin)}}>", "## Usage", "</UsageList>")
-            }
+            // Usage: every recipe gets one. buildUsageJson sets the right install coordinates —
+            // npm/pip/nuget for JS/Python/C#, Maven/Gradle coordinates otherwise.
+            emitSection("<UsageList usage={${buildUsageJson(recipeDescriptor, origin)}}>", "## Usage", "</UsageList>")
             if (!recipeDescriptor.dataTables.isNullOrEmpty()) {
                 emitSection("<DataTableList tables={${buildDataTablesJson(recipeDescriptor)}}>", "## Data tables", "</DataTableList>")
             }
@@ -1063,10 +1062,13 @@ ${props.toString().trimEnd()}
      * Unlinkable recipes (not in recipeToSource) get an empty href.
      */
     private fun subRecipeJson(recipes: List<RecipeDescriptor>?): String {
-        val items = (recipes ?: emptyList<RecipeDescriptor>()).map { sub ->
-            val href = recipeToSource[sub.name]?.let { getRecipeLink(sub) } ?: ""
-            mapOf("name" to sub.displayName, "href" to href)
-        }
+        val items = (recipes ?: emptyList<RecipeDescriptor>())
+            // Skip internal "Precondition bellwether" recipes (rewrite-docs#250), like the markdown path.
+            .filter { it.displayName != "Precondition bellwether" }
+            .map { sub ->
+                val href = recipeToSource[sub.name]?.let { getRecipeLink(sub) } ?: ""
+                mapOf("name" to sub.displayName, "href" to href)
+            }
         return mapper.writeValueAsString(items)
     }
 
@@ -1091,8 +1093,10 @@ ${props.toString().trimEnd()}
     }
 
     /**
-     * Build the JSON array for ExampleList.
-     * Shape per the spec (variants, unchanged, parameters).
+     * Build the JSON array for ExampleList: one object per example with `parameters`, an optional
+     * `unchanged` source, and `variants` (before/after/diff per source). The example's prose
+     * `description` is intentionally not emitted — the redesigned ExampleList renders examples by
+     * source language and has no per-example description field.
      */
     private fun buildExamplesJson(recipeDescriptor: RecipeDescriptor): String {
         val examples = recipeDescriptor.examples ?: emptyList()
@@ -1168,31 +1172,39 @@ ${props.toString().trimEnd()}
      */
     private fun buildUsageJson(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin): String {
         val name = recipeDescriptor.name
-        val options = recipeDescriptor.options ?: emptyList()
-        val requiresConfiguration = options.any { it.isRequired }
-
         val usageMap = mutableMapOf<String, Any?>(
             "recipeName" to name,
             "displayName" to recipeDescriptor.displayName,
-            "groupId" to origin.groupId,
-            "artifactId" to origin.artifactId,
-            "versionKey" to origin.versionPlaceholderKey(),
-            "requiresConfiguration" to requiresConfiguration
         )
 
-        // Build cliOptions string (shares the per-option example formatting with writeUsage).
-        val cliOptions = if (requiresConfiguration) {
-            options.filter { it.isRequired || it.example != null }
-                .joinToString("") { " --recipe-option \"${it.name}=${cliOptionExample(it)}\"" }
-        } else {
-            ""
-        }
-        if (cliOptions.isNotEmpty()) {
-            usageMap["cliOptions"] = cliOptions
-        }
+        // JS/Python/C# recipes install from their own package managers (matching the markdown path's
+        // per-ecosystem <RunRecipe>); everything else uses the Maven/Gradle coordinates + CLI options.
+        when {
+            isJavaScriptRecipe(recipeDescriptor) -> usageMap["npmPackage"] = getNpmPackageName(origin)
+            isPythonRecipe(recipeDescriptor) -> usageMap["pipPackage"] = getPipPackageName(origin)
+            isCSharpRecipe(recipeDescriptor) -> usageMap["nugetPackage"] = getNuGetPackageName(origin)
+            else -> {
+                val options = recipeDescriptor.options ?: emptyList()
+                val requiresConfiguration = options.any { it.isRequired }
+                usageMap["groupId"] = origin.groupId
+                usageMap["artifactId"] = origin.artifactId
+                usageMap["versionKey"] = origin.versionPlaceholderKey()
+                usageMap["requiresConfiguration"] = requiresConfiguration
 
-        if (hasConflict(name)) {
-            usageMap["useFullyQualifiedCliName"] = true
+                // cliOptions shares the per-option example formatting with writeUsage.
+                val cliOptions = if (requiresConfiguration) {
+                    options.filter { it.isRequired || it.example != null }
+                        .joinToString("") { " --recipe-option \"${it.name}=${cliOptionExample(it)}\"" }
+                } else {
+                    ""
+                }
+                if (cliOptions.isNotEmpty()) {
+                    usageMap["cliOptions"] = cliOptions
+                }
+                if (hasConflict(name)) {
+                    usageMap["useFullyQualifiedCliName"] = true
+                }
+            }
         }
 
         return mapper.writeValueAsString(usageMap)
