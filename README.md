@@ -35,12 +35,13 @@ The CI workflow in *this* repo also only runs with `-PlatestVersionsOnly=true`, 
 
 ### Prerequisites
 
-The generator loads TypeScript, Python, and C# recipes by spawning external RPC processes. To produce complete docs locally you need all of these on `PATH`:
+The generator loads TypeScript, Python, C#, and Go recipes by spawning external RPC processes. To produce complete docs locally you need all of these on `PATH`:
 
 * **Java 21** — JVM-based recipes
 * **Node.js** — TypeScript recipes (`rewrite-javascript`, `rewrite-nodejs`, `rewrite-angular`, `rewrite-react`)
 * **Python 3.10+ and `pip`** — Python recipes (`rewrite-python`, `rewrite-migrate-python`, `openrewrite-static-analysis`)
 * **.NET SDK** — C# recipes (`recipes-code-quality`, `recipes-migrate-dotnet`, `recipes-tunit`, `recipes-csharp-core`)
+* **Go 1.23+ and the `rewrite-go-rpc` server** — Go recipes (`recipes-go`). Build the server with `go install github.com/openrewrite/rewrite/rewrite-go/cmd/rpc@latest` (ideally pinned to the Go-module tag matching the `rewrite-go` release), then make it discoverable as `rewrite-go-rpc` on `PATH` — the `go install` binary is named `rpc`, so symlink or copy it (e.g. `ln -s "$(go env GOPATH)/bin/rpc" "$(go env GOPATH)/bin/rewrite-go-rpc"`). Installing recipes also requires network access so the server can `go get` the Go recipe module.
 
 If a toolchain is missing, the corresponding loader prints a warning and skips those recipes. The build still succeeds, so a local `./gradlew run` without all four toolchains silently produces incomplete docs. Most contributors don't have all four installed — if you need a complete regeneration, trigger the scheduled workflows above rather than running locally.
 

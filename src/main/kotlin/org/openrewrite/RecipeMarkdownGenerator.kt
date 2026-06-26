@@ -177,6 +177,11 @@ class RecipeMarkdownGenerator : Runnable {
             .filter { it.artifactId in CSharpRecipeLoader.CSHARP_RECIPE_MODULES }
             .forEach { it.license = Licenses.Proprietary }
 
+        // Go recipe modules are always proprietary
+        recipeOrigins.values
+            .filter { it.artifactId in GoRecipeLoader.GO_RECIPE_MODULES }
+            .forEach { it.license = Licenses.Proprietary }
+
         println("Found ${allRecipeDescriptors.size} descriptor(s).")
 
         // Detect conflicting paths between io.moderne and org.openrewrite recipes
@@ -209,7 +214,8 @@ class RecipeMarkdownGenerator : Runnable {
                 (origin != null && isModerneDocsOnly(origin)) ||
                     source?.toString()?.startsWith("typescript-search://") == true ||
                     source?.toString()?.startsWith("python-search://") == true ||
-                    source?.toString()?.startsWith("csharp-search://") == true
+                    source?.toString()?.startsWith("csharp-search://") == true ||
+                    source?.toString()?.startsWith("go-search://") == true
             }
             .map { it.name }
             .toSet()
@@ -488,6 +494,12 @@ class RecipeMarkdownGenerator : Runnable {
             // Handle C# recipes with custom URI scheme
             if (rawUri.startsWith("csharp-search://")) {
                 val artifactId = rawUri.substringAfter("csharp-search://").substringBefore("/")
+                return recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
+            }
+
+            // Handle Go recipes with custom URI scheme
+            if (rawUri.startsWith("go-search://")) {
+                val artifactId = rawUri.substringAfter("go-search://").substringBefore("/")
                 return recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
             }
 

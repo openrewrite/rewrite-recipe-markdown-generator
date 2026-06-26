@@ -56,6 +56,7 @@ class RecipeMarkdownGeneratorTest {
             mk("org.openrewrite.recipe", "rewrite-migrate-python", "0.5.0"),
             mk("org.openrewrite", "rewrite-javascript", "0.9.0"),
             mk("io.moderne.recipe", "recipes-code-quality", "0.1.0"),
+            mk("org.openrewrite.recipe", "recipes-go", "0.4.1"),
         )
         VersionWriter().createLatestVersionsMarkdown(tempDir, origins, "8.x", "2.x", "1.x", "6.x", "5.x")
         val out = Files.readString(tempDir.resolve("latest-versions-of-every-openrewrite-module.md"))
@@ -67,6 +68,8 @@ class RecipeMarkdownGeneratorTest {
         assertThat(out).contains("mod config recipes npm install @openrewrite/rewrite")
         assertThat(out).contains("mod config recipes nuget install OpenRewrite.Recipes.CSharp.CodeQuality@{{VERSION_IO_MODERNE_RECIPE_RECIPES_CODE_QUALITY}}")
         assertThat(out).contains("mod config recipes nuget install OpenRewrite.Recipes.CSharp.CodeQuality")
+        assertThat(out).contains("mod config recipes go install github.com/moderneinc/recipes-go@v{{VERSION_ORG_OPENREWRITE_RECIPE_RECIPES_GO}}")
+        assertThat(out).contains("mod config recipes go install github.com/moderneinc/recipes-go")
 
         // The Moderne Installation GraphQL mutation must use installRecipesUniversal with a
         // RecipeBundleInput; loadRecipesAsync was removed from the Moderne API.
@@ -230,6 +233,28 @@ class RecipeMarkdownGeneratorTest {
 
         assertThat(found).isNotNull
         assertThat(found!!.artifactId).isEqualTo("recipes-code-quality")
+    }
+
+    @Test
+    fun findOriginHandlesGoSearchScheme() {
+        val mavenUri = URI.create("file:///recipes-go.jar")
+        val origin = RecipeOrigin("org.openrewrite.recipe", "recipes-go", "0.4.1", mavenUri)
+        origin.license = Licenses.Proprietary
+        val origins = mapOf(mavenUri to origin)
+
+        val source = URI.create("go-search://recipes-go/org.openrewrite.golang.codequality.SimplifyBooleanExpression")
+        val found = RecipeMarkdownGenerator.findOrigin(source, "org.openrewrite.golang.codequality.SimplifyBooleanExpression", origins)
+
+        assertThat(found).isNotNull
+        assertThat(found!!.artifactId).isEqualTo("recipes-go")
+    }
+
+    @Test
+    fun golangRecipesMapToGolangDirectory() {
+        // org.openrewrite.golang.* maps to golang/... via the existing org.openrewrite path logic.
+        initializeConflictDetection(emptyList())
+        assertThat(getRecipePath("org.openrewrite.golang.codequality.SimplifyBooleanExpression"))
+            .isEqualTo("golang/codequality/simplifybooleanexpression")
     }
 
     @Test

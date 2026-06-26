@@ -54,6 +54,7 @@ dependencies {
     implementation("org.openrewrite:rewrite-javascript")
     implementation("org.openrewrite:rewrite-csharp")
     implementation("org.openrewrite:rewrite-python")
+    implementation("org.openrewrite:rewrite-go")
 
     // Runtime dependencies
     runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
@@ -78,6 +79,7 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-core:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-docker:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-go:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-gradle:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-groovy:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-hcl:$rewriteVersion")
@@ -146,6 +148,10 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-terraform:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-third-party:$rewriteVersion")
+
+    // Go recipes load via the Go RPC at doc-gen time (see GoRecipeLoader); this empty Maven artifact
+    // only anchors the version-table row and the RecipeOrigin the Go recipes are attributed to.
+    "recipe"("org.openrewrite.recipe:recipes-go:$rewriteVersion")
 
     // Moderne recipe modules (io.moderne.recipe)
     "recipe"("io.moderne.recipe:recipes-kotlin:$rewriteVersion")

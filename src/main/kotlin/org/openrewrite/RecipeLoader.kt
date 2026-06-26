@@ -131,7 +131,15 @@ class RecipeLoader {
             System.err.println("WARNING: 0 C# recipes loaded despite ${CSharpRecipeLoader.CSHARP_RECIPE_MODULES.size} module(s) configured. Check that .NET SDK is installed.")
         }
 
-        // Merge TypeScript, Python, and C# results with Java/YAML results
+        // Load Go recipes via RPC, passing Java descriptors so delegatesTo can resolve
+        println("\nChecking for Go recipes...")
+        val goLoader = GoRecipeLoader(recipeOrigins, javaDescriptors, classloader)
+        val goResult = goLoader.loadGoRecipes()
+        if (goResult.descriptors.isEmpty() && GoRecipeLoader.GO_RECIPE_MODULES.isNotEmpty()) {
+            System.err.println("WARNING: 0 Go recipes loaded despite ${GoRecipeLoader.GO_RECIPE_MODULES.size} module(s) configured. Check that Go 1.23+ and the rewrite-go-rpc server are installed.")
+        }
+
+        // Merge TypeScript, Python, C#, and Go results with Java/YAML results
         val allDescriptors = environmentData.flatMap { it.recipeDescriptors }.toMutableList()
         allDescriptors.addAll(typeScriptResult.descriptors)
         recipeToSource.putAll(typeScriptResult.recipeToSource)
@@ -139,6 +147,8 @@ class RecipeLoader {
         recipeToSource.putAll(pythonResult.recipeToSource)
         allDescriptors.addAll(csharpResult.descriptors)
         recipeToSource.putAll(csharpResult.recipeToSource)
+        allDescriptors.addAll(goResult.descriptors)
+        recipeToSource.putAll(goResult.recipeToSource)
 
         // Deduplicate recipes by name (same recipe may be discovered from multiple JARs
         // when scanJar is called with the full classpath as dependencies)
@@ -158,7 +168,7 @@ class RecipeLoader {
             allCategoryDescriptors = environmentData.flatMap { it.categoryDescriptors }.distinctBy { it.packageName },
             allRecipes = environmentData.flatMap { it.recipes }.distinctBy { it.name },
             recipeToSource = recipeToSource,
-            additionalOrigins = pythonResult.syntheticOrigins + csharpResult.syntheticOrigins,
+            additionalOrigins = pythonResult.syntheticOrigins + csharpResult.syntheticOrigins + goResult.syntheticOrigins,
             crossCategoryPaths = allCrossCategoryPaths
         )
     }
