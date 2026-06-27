@@ -83,6 +83,15 @@ class RecipeMarkdownGenerator : Runnable {
     @Option(names = ["--latest-versions-only"])
     var latestVersionsOnly: Boolean = false
 
+    @Option(
+        names = ["--only-artifacts"],
+        split = ",",
+        description = ["Restrict recipe loading to these artifactIds (e.g. rewrite-circleci). Greatly " +
+            "speeds up local testing; the full classpath is still resolved for transitive/delegatesTo lookups. " +
+            "Sub-recipes from artifacts not in the list will have empty links."]
+    )
+    var onlyArtifacts: List<String> = emptyList()
+
     override fun run() {
         // OpenRewrite docs output (open-source recipes only)
         val outputPath = Paths.get(destinationDirectoryName)
@@ -106,6 +115,11 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         var recipeOrigins: Map<URI, RecipeOrigin> = RecipeOrigin.parse(recipeSources)
+        if (onlyArtifacts.isNotEmpty()) {
+            val keep = onlyArtifacts.toSet()
+            recipeOrigins = recipeOrigins.filterValues { it.artifactId in keep }
+            println("Restricting recipe loading to ${recipeOrigins.size} artifact(s) matching $keep")
+        }
 
         // Add manifest information
         val recipeLoader = RecipeLoader(recipeClasspath, recipeOrigins)

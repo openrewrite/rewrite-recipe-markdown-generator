@@ -92,6 +92,11 @@ class RecipeMarkdownWriterModerneDocsTest {
         assertThat(out).contains("type={\"Single recipe\"}")
         assertThat(out).contains("moderneOnly")          // proprietary
 
+        // Title + description are emitted as markdown children (not string props) so MDX renders the
+        // inline code in the title and any links in the description natively.
+        assertThat(out).contains("<RecipeHeader.Title>Replace `foo`</RecipeHeader.Title>")
+        assertThat(out).contains("<RecipeHeader.Description>Replaces foo with bar.</RecipeHeader.Description>")
+
         // Options + Examples + Usage, each with the heading passed as a blank-line-wrapped child.
         assertThat(out).contains("<OptionsTable options={")
         assertThat(out).contains("\n\n## Options\n\n</OptionsTable>")
@@ -139,6 +144,39 @@ class RecipeMarkdownWriterModerneDocsTest {
         assertThat(out).contains("<UsageList usage={")
         assertThat(out).contains("\"npmPackage\":")
         assertThat(out).doesNotContain("\"groupId\":")
+    }
+
+    @Test
+    fun moderneDocsEmitsAbsoluteHrefForSubRecipes(@TempDir dir: Path) {
+        val sub = singleRecipe() // org.openrewrite.java.ReplaceFoo
+        val composite = descriptor(
+            "org.openrewrite.java.CompositeFoo", "Composite foo", "Runs foo.", recipeList = listOf(sub),
+        )
+        val recipeToSource = mapOf(sub.name to URI.create("file:///tmp/recipes.jar"))
+        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, emptySet(), forModerneDocs = true)
+            .writeRecipe(composite, dir, origin())
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        // Sub-recipe links are absolute from the catalog root with a trailing slash (a relative path would
+        // double up against the current recipe URL in a raw <a href>; the slashless form 301-redirects).
+        assertThat(out).contains("\"href\":\"/user-documentation/recipes/recipe-catalog/java/replacefoo/\"")
+    }
+
+    @Test
+    fun moderneDocsRendersDescriptionMarkdownAndEscapesJsxOpeners(@TempDir dir: Path) {
+        val recipe = descriptor(
+            "org.openrewrite.java.LinkFoo", "Link foo",
+            "Use `Map<String>` and see [docs](https://example.com/x). Compare a < b.",
+        )
+        RecipeMarkdownWriter(mutableMapOf(), emptyMap(), emptySet(), forModerneDocs = true)
+            .writeRecipe(recipe, dir, origin())
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        // The markdown link is preserved verbatim; the `<` inside the code span stays literal; the bare
+        // `<` outside code is escaped so MDX doesn't read it as a JSX tag.
+        assertThat(out).contains(
+            "<RecipeHeader.Description>Use `Map<String>` and see [docs](https://example.com/x). Compare a &lt; b.</RecipeHeader.Description>",
+        )
     }
 
     @Test
