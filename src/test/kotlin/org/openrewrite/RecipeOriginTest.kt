@@ -52,6 +52,18 @@ class RecipeOriginTest {
     }
 
     @Test
+    fun goRecipeGithubUrl() {
+        val origin = RecipeOrigin("org.openrewrite.recipe", "recipes-go", "0.4.1", URI.create("go-search://recipes-go"))
+        origin.repositoryUrl = "https://github.com/moderneinc/recipes-go/blob/main/"
+
+        val githubUrl = origin.githubUrl(
+            "org.openrewrite.golang.codequality.SimplifyBooleanExpression",
+            URI.create("go-search://recipes-go/org.openrewrite.golang.codequality.SimplifyBooleanExpression")
+        )
+        assertThat(githubUrl).isEqualTo("https://github.com/search?type=code&q=repo:moderneinc/recipes-go+org.openrewrite.golang.codequality.SimplifyBooleanExpression")
+    }
+
+    @Test
     fun blankRepositoryUrlIsNotCoreLibrary() {
         val origin = RecipeOrigin("org.openrewrite", "rewrite-java", "8.0.0", URI.create("file:///tmp/foo"))
 
