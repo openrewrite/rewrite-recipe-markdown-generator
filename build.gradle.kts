@@ -231,6 +231,12 @@ tasks.named<JavaExec>("run").configure {
     if (latestVersionsOnly) {
         arguments.add("--latest-versions-only")
     }
+    // -PrecipeArtifacts=rewrite-circleci,rewrite-static-analysis restricts loading to those artifacts for
+    // fast local iteration (the full classpath is still resolved for transitive/delegatesTo lookups).
+    val recipeArtifacts = providers.gradleProperty("recipeArtifacts").getOrElse("")
+    if (recipeArtifacts.isNotEmpty()) {
+        arguments.add("--only-artifacts=$recipeArtifacts")
+    }
     args = arguments
     doFirst {
         logger.lifecycle("Recipe modules: ")

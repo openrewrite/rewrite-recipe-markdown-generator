@@ -1008,10 +1008,10 @@ ${props.toString().trimEnd()}
             writeln("/>")
             newLine()
 
-            // RecipeHeader — always emitted
+            // RecipeHeader — always emitted. Title and description are passed as markdown children
+            // (RecipeHeader.Title / RecipeHeader.Description) so Docusaurus renders their inline code and
+            // links natively, instead of as pre-flattened string props.
             writeln("<RecipeHeader")
-            writeln("  displayName={${mapper.writeValueAsString(recipeDescriptor.displayName)}}")
-            writeln("  description={${mapper.writeValueAsString(description)}}")
             writeln("  type={${mapper.writeValueAsString(recipeType)}}")
             writeln("  languages={${mapper.writeValueAsString(languages)}}")
             writeln("  tags={${mapper.writeValueAsString(tags)}}")
@@ -1023,7 +1023,11 @@ ${props.toString().trimEnd()}
             if (isProprietary) {
                 writeln("  moderneOnly")
             }
-            writeln("/>")
+            writeln(">")
+            newLine()
+            emitHeaderSlot("RecipeHeader.Title", recipeDescriptor.displayName ?: name)
+            emitHeaderSlot("RecipeHeader.Description", description)
+            writeln("</RecipeHeader>")
             newLine()
 
             // Sections: the `## ` heading is the component's children, blank-line-wrapped (below) so MDX
@@ -1067,6 +1071,27 @@ ${props.toString().trimEnd()}
     }
 
     /**
+     * Emit a `<RecipeHeader.Title>` / `<RecipeHeader.Description>` slot with its content as markdown
+     * children, blank-line-wrapped so MDX parses it. Already-block markdown (fenced code, lists,
+     * headings) is emitted verbatim; inline prose is collapsed to one line with the JSX-significant
+     * characters escaped. Empty content emits nothing (the component falls back gracefully).
+     */
+    private fun BufferedWriter.emitHeaderSlot(tag: String, text: String) {
+        val trimmed = text.trim()
+        if (trimmed.isEmpty()) return
+        if (HEADER_BLOCK_MARKDOWN_REGEX.containsMatchIn(trimmed)) {
+            writeln("<$tag>")
+            newLine()
+            writeln(trimmed)
+            newLine()
+            writeln("</$tag>")
+        } else {
+            writeln("<$tag>${mdxSafeInline(trimmed.replace("\n", " "))}</$tag>")
+        }
+        newLine()
+    }
+
+    /**
      * Build the JSON array of `{ name, href }` for RecipeList's `recipes` and `preconditions` props.
      * Unlinkable recipes (not in recipeToSource) get an empty href.
      */
@@ -1075,7 +1100,10 @@ ${props.toString().trimEnd()}
             // Skip internal "Precondition bellwether" recipes (rewrite-docs#250), like the markdown path.
             .filter { it.displayName != "Precondition bellwether" }
             .map { sub ->
-                val href = recipeToSource[sub.name]?.let { getRecipeLink(sub) } ?: ""
+                // Absolute site path (see MODERNE_DOCS_CATALOG_PATH) with a trailing slash — the component
+                // renders this in a raw <a href> with no Docusaurus relative-link rewriting, and the site
+                // (default trailingSlash) 301-redirects the slashless form, so emit the canonical 200 URL.
+                val href = recipeToSource[sub.name]?.let { getRecipeLink(sub, MODERNE_DOCS_CATALOG_PATH) + "/" } ?: ""
                 mapOf("name" to sub.displayName, "href" to href)
             }
         return mapper.writeValueAsString(items)
@@ -1266,6 +1294,34 @@ ${props.toString().trimEnd()}
 
         private const val MODERNE_DOCS_MARKDOWN_BASE_URL =
             "https://raw.githubusercontent.com/moderneinc/moderne-docs/refs/heads/main/docs/user-documentation/recipes/recipe-catalog/"
+
+        // Site-root path of the recipe catalog. Sub-recipe links in the component output must be absolute
+        // from this base: rendered in a raw <a href>, a relative path would resolve against the current
+        // recipe URL (e.g. .../commonstaticanalysis/staticanalysis/foo) instead of the catalog root.
+        private const val MODERNE_DOCS_CATALOG_PATH = "/user-documentation/recipes/recipe-catalog/"
+
+        // A recipe title/description is "already" block markdown (emit verbatim) when it has a fenced code
+        // block, a heading, or a list; otherwise it is treated as inline prose.
+        private val HEADER_BLOCK_MARKDOWN_REGEX = Regex("```|(^|\\n)#{1,6}\\s|\\n\\s*[-*+]\\s|\\n\\s*\\d+\\.\\s")
+
+        /**
+         * Escape the JSX-significant characters (`<` opens a tag, `{` opens an expression) that fall
+         * OUTSIDE inline-code spans, so a plain-prose title/description is safe to embed as inline MDX.
+         * Inside `code` spans MDX leaves them literal, so they are passed through unescaped.
+         */
+        private fun mdxSafeInline(text: String): String {
+            val sb = StringBuilder(text.length)
+            var inCode = false
+            for (ch in text) {
+                when {
+                    ch == '`' -> { inCode = !inCode; sb.append(ch) }
+                    !inCode && ch == '<' -> sb.append("&lt;")
+                    !inCode && ch == '{' -> sb.append("&#123;")
+                    else -> sb.append(ch)
+                }
+            }
+            return sb.toString()
+        }
 
         // CLI/YAML option-example formatting (compiled once instead of per option per recipe).
         private val YAML_SPECIAL_START_REGEX = Regex("^[{}\\[\\],`|=%@*!?-].*")
