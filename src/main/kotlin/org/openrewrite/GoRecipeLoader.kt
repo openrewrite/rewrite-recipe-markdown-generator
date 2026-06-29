@@ -209,7 +209,7 @@ class GoRecipeLoader(
             return GoRecipeResult(allDescriptors, recipeToSource, syntheticOrigins)
 
         } catch (e: Exception) {
-            System.err.println("WARNING: Failed to load Go recipes. Ensure Go 1.23+ and the rewrite-go-rpc server are installed and available on PATH.")
+            System.err.println("WARNING: Failed to load Go recipes. Ensure Go 1.25+ and the rewrite-go-rpc server are installed and available on PATH.")
             System.err.println("  ${e.message}")
             return GoRecipeResult(emptyList(), emptyMap())
         } finally {
