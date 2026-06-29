@@ -67,6 +67,8 @@ class VersionWriter {
             var cliInstallNpmLatest = ""
             var cliInstallNugetPinned = ""
             var cliInstallNugetLatest = ""
+            var cliInstallGoPinned = ""
+            var cliInstallGoLatest = ""
             var installRecipes = ""
             for (origin in recipeOrigins) {
 
@@ -86,6 +88,12 @@ class VersionWriter {
                         val nugetPackage = CSharpRecipeLoader.CSHARP_RECIPE_MODULES.getValue(origin.artifactId)
                         cliInstallNugetPinned += "$nugetPackage@$versionPlaceholder "
                         cliInstallNugetLatest += "$nugetPackage "
+                    }
+                    in GoRecipeLoader.GO_RECIPE_MODULES -> {
+                        // Go modules are installed from source by module path, pinned with a vX.Y.Z tag.
+                        val goModule = GoRecipeLoader.GO_RECIPE_MODULES.getValue(origin.artifactId)
+                        cliInstallGoPinned += "$goModule@v$versionPlaceholder "
+                        cliInstallGoLatest += "$goModule "
                     }
                     else -> {
                         cliInstallJarPinned += "${origin.groupId}:${origin.artifactId}:$versionPlaceholder "
@@ -114,12 +122,14 @@ class VersionWriter {
                 "pip" to cliInstallPipPinned,
                 "npm" to cliInstallNpmPinned,
                 "nuget" to cliInstallNugetPinned,
+                "go" to cliInstallGoPinned,
             )
             val latestInstalls = listOf(
                 "jar" to cliInstallJarLatest,
                 "pip" to cliInstallPipLatest,
                 "npm" to cliInstallNpmLatest,
                 "nuget" to cliInstallNugetLatest,
+                "go" to cliInstallGoLatest,
             )
 
             //language=markdown
