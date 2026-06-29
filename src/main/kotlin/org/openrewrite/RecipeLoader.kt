@@ -136,7 +136,7 @@ class RecipeLoader {
         val goLoader = GoRecipeLoader(recipeOrigins, javaDescriptors, classloader)
         val goResult = goLoader.loadGoRecipes()
         if (goResult.descriptors.isEmpty() && GoRecipeLoader.GO_RECIPE_MODULES.isNotEmpty()) {
-            System.err.println("WARNING: 0 Go recipes loaded despite ${GoRecipeLoader.GO_RECIPE_MODULES.size} module(s) configured. Check that Go 1.23+ and the rewrite-go-rpc server are installed.")
+            System.err.println("WARNING: 0 Go recipes loaded despite ${GoRecipeLoader.GO_RECIPE_MODULES.size} module(s) configured. Check that Go 1.25+ and the rewrite-go-rpc server are installed.")
         }
 
         // Merge TypeScript, Python, C#, and Go results with Java/YAML results
