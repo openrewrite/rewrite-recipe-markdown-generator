@@ -1,6 +1,6 @@
 rewrite-all:
   artifactId: "rewrite-all"
-  version: "1.26.2"
+  version: "1.27.0"
   markdownRecipeDescriptors:
     org.openrewrite.FindCallGraph:
       name: "org.openrewrite.FindCallGraph"
@@ -32,7 +32,7 @@ rewrite-all:
       artifactId: "rewrite-all"
 rewrite-analysis:
   artifactId: "rewrite-analysis"
-  version: "2.35.0"
+  version: "2.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.analysis.controlflow.ControlFlowVisualization:
       name: "org.openrewrite.analysis.controlflow.ControlFlowVisualization"
@@ -95,7 +95,7 @@ rewrite-analysis:
       artifactId: "rewrite-analysis"
 rewrite-apache:
   artifactId: "rewrite-apache"
-  version: "2.27.1"
+  version: "2.27.2"
   markdownRecipeDescriptors:
     org.openrewrite.apache.commons.PreferJavaStandardLibrary:
       name: "org.openrewrite.apache.commons.PreferJavaStandardLibrary"
@@ -1091,7 +1091,7 @@ rewrite-apache:
       artifactId: "rewrite-apache"
 rewrite-cobol:
   artifactId: "rewrite-cobol"
-  version: "2.19.0"
+  version: "2.20.0"
   markdownRecipeDescriptors:
     org.openrewrite.cobol.cleanup.RemoveWithDebuggingMode:
       name: "org.openrewrite.cobol.cleanup.RemoveWithDebuggingMode"
@@ -1176,7 +1176,7 @@ rewrite-cobol:
       artifactId: "rewrite-cobol"
 rewrite-codemods:
   artifactId: "rewrite-codemods"
-  version: "0.26.1"
+  version: "0.27.0"
   markdownRecipeDescriptors:
     org.openrewrite.codemods.ApplyCodemod:
       name: "org.openrewrite.codemods.ApplyCodemod"
@@ -4700,7 +4700,7 @@ rewrite-codemods:
       artifactId: "rewrite-codemods"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.85.0"
+  version: "8.86.0"
   markdownRecipeDescriptors:
     org.openrewrite.AddToGitignore:
       name: "org.openrewrite.AddToGitignore"
@@ -5142,7 +5142,7 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
-  version: "2.12.1"
+  version: "2.12.3"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberAnnotationToSuite"
@@ -5221,7 +5221,7 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
 rewrite-docker:
   artifactId: "rewrite-docker"
-  version: "8.85.0"
+  version: "8.86.0"
   markdownRecipeDescriptors:
     org.openrewrite.docker.AddAptGetCleanup:
       name: "org.openrewrite.docker.AddAptGetCleanup"
@@ -5498,7 +5498,7 @@ rewrite-docker:
       artifactId: "rewrite-docker"
 rewrite-feature-flags:
   artifactId: "rewrite-feature-flags"
-  version: "1.21.1"
+  version: "1.22.0"
   markdownRecipeDescriptors:
     org.openrewrite.featureflags.RemoveBooleanFlag:
       name: "org.openrewrite.featureflags.RemoveBooleanFlag"
@@ -5605,6 +5605,75 @@ rewrite-feature-flags:
         type: "String"
         required: true
       isImperative: true
+      artifactId: "rewrite-feature-flags"
+    org.openrewrite.featureflags.launchdarkly.MarkIncompatibleEvaluationDetailAccessors:
+      name: "org.openrewrite.featureflags.launchdarkly.MarkIncompatibleEvaluationDetailAccessors"
+      description: "OpenFeature's `FlagEvaluationDetails` does not offer a direct\
+        \ replacement for every `EvaluationDetail` accessor. Add a `TODO` comment\
+        \ on `getVariationIndex()`, `isDefaultValue()` and `getReason()` calls so\
+        \ they are migrated by hand, since `getVariationIndex()` and `isDefaultValue()`\
+        \ have no equivalent and `getReason()` returns a `String` rather than an `EvaluationReason`."
+      docLink: "https://docs.openrewrite.org/recipes/featureflags/launchdarkly/markincompatibleevaluationdetailaccessors"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-feature-flags"
+    org.openrewrite.featureflags.launchdarkly.MigrateLDClientLifecycle:
+      name: "org.openrewrite.featureflags.launchdarkly.MigrateLDClientLifecycle"
+      description: "Migrate `LDClient` lifecycle calls: `close()` becomes `OpenFeatureAPI.getInstance().shutdown()`\
+        \ and `isInitialized()` becomes `OpenFeatureAPI.getInstance().getClient().getProviderState()\
+        \ == ProviderState.READY`. OpenFeature manages provider state globally rather\
+        \ than per client instance, so the original receiver is dropped."
+      docLink: "https://docs.openrewrite.org/recipes/featureflags/launchdarkly/migrateldclientlifecycle"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-feature-flags"
+    org.openrewrite.featureflags.launchdarkly.MigrateLDClientToOpenFeature:
+      name: "org.openrewrite.featureflags.launchdarkly.MigrateLDClientToOpenFeature"
+      description: "Replace `new LDClient(...)` with `OpenFeatureAPI.getInstance().getClient()`.\
+        \ When the client is assigned to a local variable, the one-time provider bootstrap\
+        \ `OpenFeatureAPI.getInstance().setProviderAndWait(new Provider(...))` is\
+        \ generated from the original SDK key and configuration. In other positions\
+        \ (such as fields) the original configuration is preserved in a `TODO` comment\
+        \ instead, as a statement cannot be inserted there."
+      docLink: "https://docs.openrewrite.org/recipes/featureflags/launchdarkly/migrateldclienttoopenfeature"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-feature-flags"
+    org.openrewrite.featureflags.launchdarkly.MigrateLDContextToEvaluationContext:
+      name: "org.openrewrite.featureflags.launchdarkly.MigrateLDContextToEvaluationContext"
+      description: "Convert `LDContext.create(...)` and `LDContext.builder(...)` construction\
+        \ to OpenFeature's `MutableContext`, mapping `name(...)` and `set(...)` attributes\
+        \ to `add(...)` and dropping the terminal `build()` call. Targeting `kind`,\
+        \ multi-context and private attributes are left untouched for manual review."
+      docLink: "https://docs.openrewrite.org/recipes/featureflags/launchdarkly/migrateldcontexttoevaluationcontext"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-feature-flags"
+    org.openrewrite.featureflags.launchdarkly.MigrateLDValueToValue:
+      name: "org.openrewrite.featureflags.launchdarkly.MigrateLDValueToValue"
+      description: "Migrate `jsonValueVariation`/`jsonValueVariationDetail` to OpenFeature's\
+        \ `getObjectValue`/`getObjectDetails` (reordering the context argument to\
+        \ last) and convert scalar `LDValue.of(...)` and `LDValue.ofNull()` defaults\
+        \ to `dev.openfeature.sdk.Value`. To keep the result compilable, this recipe\
+        \ is skipped for files that use the structured builders `LDValue.buildObject()`,\
+        \ `LDValue.buildArray()`, `LDValue.parse(...)` or `LDValue.of(long)`, which\
+        \ require manual migration to `Structure`/`List<Value>`."
+      docLink: "https://docs.openrewrite.org/recipes/featureflags/launchdarkly/migrateldvaluetovalue"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-feature-flags"
+    org.openrewrite.featureflags.launchdarkly.MigrateLaunchDarklyToOpenFeature:
+      name: "org.openrewrite.featureflags.launchdarkly.MigrateLaunchDarklyToOpenFeature"
+      description: "Migrate call sites from the LaunchDarkly server SDK to the vendor-neutral\
+        \ [OpenFeature](https://openfeature.dev/) API, backed by the LaunchDarkly\
+        \ OpenFeature provider. Flag evaluations are renamed and their arguments reordered\
+        \ (LaunchDarkly takes the context as the second argument; OpenFeature takes\
+        \ it last), `LDContext` construction becomes `MutableContext`, and `LDClient`\
+        \ becomes `dev.openfeature.sdk.Client`. The one-time provider bootstrap (`OpenFeatureAPI.setProviderAndWait(...)`)\
+        \ is intentionally left for manual configuration."
+      docLink: "https://docs.openrewrite.org/recipes/featureflags/launchdarkly/migratelaunchdarklytoopenfeature"
+      options: []
+      isImperative: false
       artifactId: "rewrite-feature-flags"
     org.openrewrite.featureflags.launchdarkly.MigrateUserToContext:
       name: "org.openrewrite.featureflags.launchdarkly.MigrateUserToContext"
@@ -5856,7 +5925,7 @@ rewrite-feature-flags:
       artifactId: "rewrite-feature-flags"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "3.25.0"
+  version: "3.26.0"
   markdownRecipeDescriptors:
     org.openrewrite.github.AddCronTrigger:
       name: "org.openrewrite.github.AddCronTrigger"
@@ -5941,6 +6010,9 @@ rewrite-github-actions:
       - name: "oldAction"
         type: "String"
         required: true
+      - name: "oldSha"
+        type: "String"
+        required: false
       isImperative: true
       artifactId: "rewrite-github-actions"
     org.openrewrite.github.ChangeActionVersion:
@@ -5951,6 +6023,9 @@ rewrite-github-actions:
       - name: "action"
         type: "String"
         required: true
+      - name: "oldSha"
+        type: "String"
+        required: false
       - name: "version"
         type: "String"
         required: true
@@ -6004,7 +6079,8 @@ rewrite-github-actions:
       name: "org.openrewrite.github.GitHubActionsBestPractices"
       description: "Applies best practices to GitHub Actions workflows, including\
         \ enabling dependency caching, using cached distributions, finding missing\
-        \ timeouts, removing unused inputs, and preferring block-style job dependencies."
+        \ timeouts, removing unused inputs, preferring block-style job dependencies,\
+        \ and upgrading official actions to their latest versions."
       docLink: "https://docs.openrewrite.org/recipes/github/githubactionsbestpractices"
       options: []
       isImperative: false
@@ -6222,6 +6298,18 @@ rewrite-github-actions:
       - name: "uvVersion"
         type: "String"
         required: false
+      isImperative: true
+      artifactId: "rewrite-github-actions"
+    org.openrewrite.github.UpgradeOfficialGitHubActions:
+      name: "org.openrewrite.github.UpgradeOfficialGitHubActions"
+      description: "Upgrades actions from the official `actions` and `github` organizations\
+        \ to the newest known version, working entirely offline. Each reference is\
+        \ upgraded while preserving its existing precision: a major version (`v4`)\
+        \ moves to the newest major, a full version (`v4.1.2`) to the newest full\
+        \ version, and a commit SHA to the latest known commit. Actions that are not\
+        \ official, not known, or already up to date are left untouched."
+      docLink: "https://docs.openrewrite.org/recipes/github/upgradeofficialgithubactions"
+      options: []
       isImperative: true
       artifactId: "rewrite-github-actions"
     org.openrewrite.github.UpgradeSlackNotificationVersion2:
@@ -6476,7 +6564,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gitlab:
   artifactId: "rewrite-gitlab"
-  version: "0.23.1"
+  version: "0.23.2"
   markdownRecipeDescriptors:
     org.openrewrite.gitlab.AddArtifactsExpireIn:
       name: "org.openrewrite.gitlab.AddArtifactsExpireIn"
@@ -6785,7 +6873,7 @@ rewrite-gitlab:
       artifactId: "rewrite-gitlab"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.85.0"
+  version: "8.86.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -7972,7 +8060,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.85.0"
+  version: "8.86.0"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.AutoFormat:
       name: "org.openrewrite.groovy.format.AutoFormat"
@@ -8008,7 +8096,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.85.0"
+  version: "8.86.0"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -8121,7 +8209,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-hibernate:
   artifactId: "rewrite-hibernate"
-  version: "2.22.0"
+  version: "2.23.0"
   markdownRecipeDescriptors:
     org.openrewrite.hibernate.AddScalarPreferStandardBasicTypes:
       name: "org.openrewrite.hibernate.AddScalarPreferStandardBasicTypes"
@@ -8346,7 +8434,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-jackson:
   artifactId: "rewrite-jackson"
-  version: "1.25.0"
+  version: "1.26.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jackson.AddJsonCreatorToPrivateConstructors:
       name: "org.openrewrite.java.jackson.AddJsonCreatorToPrivateConstructors"
@@ -8423,6 +8511,17 @@ rewrite-jackson:
       options: []
       isImperative: false
       artifactId: "rewrite-jackson"
+    org.openrewrite.java.jackson.JsonSerializeIncludeToJsonInclude:
+      name: "org.openrewrite.java.jackson.JsonSerializeIncludeToJsonInclude"
+      description: "Move the deprecated `include` attribute of FasterXML's `@JsonSerialize`\
+        \ to a separate `@JsonInclude` annotation. The `include` attribute was deprecated\
+        \ in Jackson 2.x and removed in Jackson 3.x; running this recipe before the\
+        \ Jackson 2 → 3 package rename produces a correct `tools.jackson.annotation.JsonInclude`\
+        \ on the Jackson 3 side."
+      docLink: "https://docs.openrewrite.org/recipes/java/jackson/jsonserializeincludetojsoninclude"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-jackson"
     org.openrewrite.java.jackson.LombokJacksonizedConfig:
       name: "org.openrewrite.java.jackson.LombokJacksonizedConfig"
       description: "When `@Jacksonized` is used, Lombok generates Jackson annotations.\
@@ -8453,6 +8552,18 @@ rewrite-jackson:
         \ setter calls to the builder pattern when safe, or adds TODO comments when\
         \ automatic migration is not possible."
       docLink: "https://docs.openrewrite.org/recipes/java/jackson/migratemappersetterstobuilder"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-jackson"
+    org.openrewrite.java.jackson.ReadValueUrlToOpenStream:
+      name: "org.openrewrite.java.jackson.ReadValueUrlToOpenStream"
+      description: "Jackson 3.x removed every `URL`-accepting `readValue` overload\
+        \ from `ObjectMapper`. Rewrite call sites to feed `URL.openStream()` into\
+        \ the surviving `readValue(InputStream, ...)` overload, which is what `readValue(URL,\
+        \ ...)` did internally in Jackson 2.x. The caller's checked-exception story\
+        \ is unchanged: `URL.openStream()` declares `IOException`, the same checked\
+        \ exception the removed `readValue(URL, ...)` declared."
+      docLink: "https://docs.openrewrite.org/recipes/java/jackson/readvalueurltoopenstream"
       options: []
       isImperative: true
       artifactId: "rewrite-jackson"
@@ -8748,7 +8859,7 @@ rewrite-jackson:
       artifactId: "rewrite-jackson"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.85.0"
+  version: "8.86.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -10043,7 +10154,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "1.56.0"
+  version: "1.57.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.AddDependency:
       name: "org.openrewrite.java.dependencies.AddDependency"
@@ -10493,7 +10604,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-javascript:
   artifactId: "rewrite-javascript"
-  version: "8.85.0"
+  version: "8.86.0"
   markdownRecipeDescriptors:
     org.openrewrite.javascript.AddDependency:
       name: "org.openrewrite.javascript.AddDependency"
@@ -10746,7 +10857,7 @@ rewrite-javascript:
       artifactId: "rewrite-javascript"
 rewrite-jenkins:
   artifactId: "rewrite-jenkins"
-  version: "0.36.1"
+  version: "0.36.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3:
       name: "org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3"
@@ -10940,7 +11051,7 @@ rewrite-jenkins:
       artifactId: "rewrite-jenkins"
 rewrite-joda:
   artifactId: "rewrite-joda"
-  version: "0.9.1"
+  version: "0.9.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.joda.time.JodaAbstractInstantToJavaTime:
       name: "org.openrewrite.java.joda.time.JodaAbstractInstantToJavaTime"
@@ -11043,7 +11154,7 @@ rewrite-joda:
       artifactId: "rewrite-joda"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.85.0"
+  version: "8.86.0"
   markdownRecipeDescriptors:
     org.openrewrite.json.AddKeyValue:
       name: "org.openrewrite.json.AddKeyValue"
@@ -11178,7 +11289,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "8.85.0"
+  version: "8.86.0"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -11296,7 +11407,7 @@ rewrite-kotlin:
       artifactId: "rewrite-kotlin"
 rewrite-liberty:
   artifactId: "rewrite-liberty"
-  version: "1.24.1"
+  version: "1.24.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty:
       name: "org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty"
@@ -11404,7 +11515,7 @@ rewrite-liberty:
       artifactId: "rewrite-liberty"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "3.29.1"
+  version: "3.29.2"
   markdownRecipeDescriptors:
     org.apache.logging.log4j.InlineLog4jApiMethods:
       name: "org.apache.logging.log4j.InlineLog4jApiMethods"
@@ -12574,7 +12685,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.85.0"
+  version: "8.86.0"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddAnnotationProcessor:
       name: "org.openrewrite.maven.AddAnnotationProcessor"
@@ -14136,7 +14247,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micrometer:
   artifactId: "rewrite-micrometer"
-  version: "0.29.1"
+  version: "0.29.2"
   markdownRecipeDescriptors:
     org.openrewrite.micrometer.MicrometerBestPractices:
       name: "org.openrewrite.micrometer.MicrometerBestPractices"
@@ -14196,7 +14307,7 @@ rewrite-micrometer:
       artifactId: "rewrite-micrometer"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "2.34.2"
+  version: "2.34.3"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.AddAnnotationProcessorPath:
       name: "org.openrewrite.java.micronaut.AddAnnotationProcessorPath"
@@ -14567,7 +14678,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "3.37.0"
+  version: "3.39.0"
   markdownRecipeDescriptors:
     com.google.guava.InlineGuavaMethods:
       name: "com.google.guava.InlineGuavaMethods"
@@ -14720,7 +14831,11 @@ rewrite-migrate-java:
       name: "org.openrewrite.java.migrate.AddSurefireFailsafeArgLine"
       description: "Adds the specified arguments to the `argLine` configuration of\
         \ the Maven Surefire and Failsafe plugins, merging with any existing argLine\
-        \ value without duplicating arguments."
+        \ value without duplicating arguments. The `@{argLine}` [late property reference](https://maven.apache.org/surefire/maven-surefire-plugin/faq.html)\
+        \ is prepended so that an agent injected by another plugin during the build,\
+        \ such as the JaCoCo coverage agent from `jacoco-maven-plugin:prepare-agent`,\
+        \ is preserved rather than overwritten. It is not added when the existing\
+        \ `argLine` already references the `argLine` property."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/addsurefirefailsafeargline"
       options:
       - name: "argLine"
@@ -14808,6 +14923,35 @@ rewrite-migrate-java:
       description: "This recipe will upgrade old dependency of com.intellij:annotations\
         \ to the newer org.jetbrains:annotations."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/comintellijannotationstoorgjetbrainsannotations"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.CommentJava24KotlinCap:
+      name: "org.openrewrite.java.migrate.CommentJava24KotlinCap"
+      description: "Adds an explanatory comment to Maven `pom.xml` files in modules\
+        \ that were held at Java 24 because they compile Kotlin and depend on `kotlin-stdlib`\
+        \ older than 2.3, which cannot target Java 25 bytecode. The comment names\
+        \ the `kotlin-stdlib` version found and the next step needed to reach Java\
+        \ 25. Self-healing: the comment is added while the module is at Java 24 and\
+        \ removed again once the module reaches a higher Java version (for instance\
+        \ after its Kotlin was upgraded to 2.3), so it only ever remains on modules\
+        \ that truly stay at Java 24 — whether a Kotlin 1.x cap or a 2.0-2.2 module\
+        \ whose Kotlin upgrade could not be applied. Intended to run last, scoped\
+        \ to modules that compile Kotlin."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/commentjava24kotlincap"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.CommentKotlinModulesCappedAtJava24:
+      name: "org.openrewrite.java.migrate.CommentKotlinModulesCappedAtJava24"
+      description: "Adds an explanatory comment to Kotlin modules that remain at Java\
+        \ 24 after the Java 25 migration, because Kotlin before 2.3 cannot target\
+        \ Java 25 bytecode. This covers both a Kotlin 1.x cap (which cannot be upgraded\
+        \ automatically) and a Kotlin 2.0-2.2 module whose upgrade to 2.3 could not\
+        \ be applied. Scoped to modules that actually compile Kotlin (i.e. contain\
+        \ `.kt` source files); the comment is self-healing, so a module that does\
+        \ reach Java 25 has it removed."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/commentkotlinmodulescappedatjava24"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -15335,12 +15479,17 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
-    org.openrewrite.java.migrate.UpgradeBuildToJava24:
-      name: "org.openrewrite.java.migrate.UpgradeBuildToJava24"
-      description: "Kotlin versions before 2.3 only support up to Java 24. Applies\
-        \ only to modules that actually compile Kotlin (i.e. contain `.kt` source\
-        \ files), so transitive `kotlin-stdlib` dependencies do not trigger the cap."
-      docLink: "https://docs.openrewrite.org/recipes/java/migrate/upgradebuildtojava24"
+    org.openrewrite.java.migrate.UpgradeBuildToJava24ForKotlin1x:
+      name: "org.openrewrite.java.migrate.UpgradeBuildToJava24ForKotlin1x"
+      description: "Kotlin versions before 2.3 only support up to Java 24, and Kotlin\
+        \ 1.x cannot be safely upgraded automatically because crossing the K2 compiler\
+        \ default introduced in Kotlin 2.0 is a source-breaking change. Such modules\
+        \ are therefore capped at Java 24 and annotated with an explanation. Modules\
+        \ already on Kotlin 2.0-2.2 are instead bumped to Kotlin 2.3 by `UpgradeKotlinForJava25`\
+        \ so they can reach Java 25. Applies only to modules that actually compile\
+        \ Kotlin (i.e. contain `.kt` source files), so transitive `kotlin-stdlib`\
+        \ dependencies do not trigger the cap."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/upgradebuildtojava24forkotlin1x"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -15388,6 +15537,23 @@ rewrite-migrate-java:
         type: "Integer"
         required: true
       isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.UpgradeKotlinForJava25:
+      name: "org.openrewrite.java.migrate.UpgradeKotlinForJava25"
+      description: "Only Kotlin 2.3 and later can target Java 25 bytecode, so modules\
+        \ on an older Kotlin are otherwise capped at Java 24. This recipe upgrades\
+        \ modules that compile Kotlin (i.e. contain `.kt` source files) and are already\
+        \ on Kotlin 2.0, 2.1, or 2.2 up to the latest Kotlin 2.3, so they can subsequently\
+        \ be migrated to Java 25. Modules on Kotlin 1.x are left untouched, as crossing\
+        \ the K2 compiler default introduced in Kotlin 2.0 is a source-breaking change\
+        \ that should not be applied automatically. As a safety net the module is\
+        \ also floored at Java 24: if the Kotlin upgrade cannot be applied (for instance\
+        \ because the version is managed externally by a parent or BOM), the module\
+        \ still lands on Java 24 rather than being left behind, and is raised the\
+        \ rest of the way to Java 25 only once it actually reaches Kotlin 2.3."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/upgradekotlinforjava25"
+      options: []
+      isImperative: false
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.UpgradeKotlinJvmTargetVersion:
       name: "org.openrewrite.java.migrate.UpgradeKotlinJvmTargetVersion"
@@ -16792,6 +16958,20 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.MigratePluginsForJakarta11:
+      name: "org.openrewrite.java.migrate.jakarta.MigratePluginsForJakarta11"
+      description: "Update plugins to be compatible with Jakarta EE 11."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/migratepluginsforjakarta11"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.MigratePluginsForJakarta9:
+      name: "org.openrewrite.java.migrate.jakarta.MigratePluginsForJakarta9"
+      description: "Update plugins to be compatible with Jakarta EE 9."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/migratepluginsforjakarta9"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.MigrationToJakarta10Apis:
       name: "org.openrewrite.java.migrate.jakarta.MigrationToJakarta10Apis"
       description: "Jakarta EE 10 updates some apis compared to Jakarta EE 9."
@@ -16881,6 +17061,17 @@ rewrite-migrate-java:
         \ and `CURRENT_COMPOSITE_COMPONENT` constants with `jakarta.faces.component.UIComponent.getCurrentComponent()`\
         \ and `getCurrentCompositeComponent()`. that were added in JSF 2.0."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/removeduicomponentconstant"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.ReplaceJakartaJwsWithJakartaXmlWs:
+      name: "org.openrewrite.java.migrate.jakarta.ReplaceJakartaJwsWithJakartaXmlWs"
+      description: "Starting with Jakarta EE 10, the standalone `jakarta.jws-api`\
+        \ artifact was retired and its content was merged into `jakarta.xml.ws-api`.\
+        \ This recipe replaces a declared `jakarta.jws:jakarta.jws-api` dependency\
+        \ in place with `jakarta.xml.ws:jakarta.xml.ws-api`, and adds `jakarta.xml.ws:jakarta.xml.ws-api`\
+        \ directly when `jakarta.jws` was only available transitively."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/replacejakartajwswithjakartaxmlws"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -17089,6 +17280,17 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/upgradefaces4opensourcelibraries"
       options: []
       isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.UpgradeMavenEjbPluginConfiguration:
+      name: "org.openrewrite.java.migrate.jakarta.UpgradeMavenEjbPluginConfiguration"
+      description: "Updates the `<ejbVersion>` configuration of `maven-ejb-plugin`\
+        \ to `4.0` when the current value (or its resolved Maven property) indicates\
+        \ EJB 3.x. Handles the common pattern where `<ejbVersion>` is coupled to the\
+        \ `javax.ejb-api` dependency version via a shared property, decoupling them\
+        \ after migration."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/upgrademavenejbpluginconfiguration"
+      options: []
+      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.WsWsocServerContainerDeprecation:
       name: "org.openrewrite.java.migrate.jakarta.WsWsocServerContainerDeprecation"
@@ -17545,6 +17747,26 @@ rewrite-migrate-java:
       description: "Add explicit import for `Record` classes when upgrading past Java\
         \ 14+, to avoid conflicts with `java.lang.Record`."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/lang/explicitrecordimport"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.lang.ExtractExplicitConstructorInvocationArguments:
+      name: "org.openrewrite.java.migrate.lang.ExtractExplicitConstructorInvocationArguments"
+      description: "[JEP 513](https://openjdk.org/jeps/513) allows statements before\
+        \ an explicit `super(..)` or `this(..)` constructor invocation. When such\
+        \ a call computes one of its arguments through a method invocation or object\
+        \ creation, this recipe extracts the non-trivial arguments into local variables\
+        \ declared right before the call, surfacing the work done before construction.\n\
+        \nThis is a strictly behavior-preserving transformation: argument expressions\
+        \ are already evaluated before the delegate constructor body runs, and such\
+        \ an argument can never reference the instance under construction, so hoisting\
+        \ them into preceding statements changes neither the order of side effects\
+        \ nor the set of legal references. Arguments are extracted in their original\
+        \ left-to-right order, and trivial arguments (literals and local variable\
+        \ references, which have no side effects) are left in place. Statements that\
+        \ follow the constructor invocation are deliberately *not* moved, as reordering\
+        \ them relative to the delegate constructor's side effects could change behavior."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/lang/extractexplicitconstructorinvocationarguments"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
@@ -18523,10 +18745,13 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.util.UseListOf:
       name: "org.openrewrite.java.migrate.util.UseListOf"
-      description: "Prefer `List.of(..)` instead of using `java.util.List#add(..)`\
-        \ in anonymous ArrayList initializers in Java 10 or higher. This recipe will\
-        \ not modify code where the List is later mutated since `List.of` returns\
-        \ an immutable list."
+      description: "Prefer `List.of(..)` in Java 10 or higher. Two input shapes are\
+        \ recognised:\n\n- Anonymous-class initialization (`new ArrayList<>() {{ add(\"\
+        a\"); add(\"b\"); }}`), which is replaced wholesale with `List.of(\"a\", \"\
+        b\")` (immutable result, matching the anonymous-class idiom's typical intent).\n\
+        - A `new ArrayList<>()` declaration followed by a chain of `target.add(..)`\
+        \ statements, which is collapsed to `new ArrayList<>(List.of(..))` (preserving\
+        \ the mutable `ArrayList`)."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/util/uselistof"
       options: []
       isImperative: true
@@ -18541,7 +18766,12 @@ rewrite-migrate-java:
     org.openrewrite.java.migrate.util.UseMapOf:
       name: "org.openrewrite.java.migrate.util.UseMapOf"
       description: "Prefer `Map.of(..)` instead of using `java.util.Map#put(..)` in\
-        \ Java 10 or higher."
+        \ Java 10 or higher. Two input shapes are recognised:\n\n- Anonymous-class\
+        \ initialization (`new HashMap<>() {{ put(k, v); ... }}`), which is replaced\
+        \ wholesale with `Map.of(k, v, ...)` (or `Map.ofEntries(...)` past ten entries)\
+        \ — immutable result.\n- A `new HashMap<>()` declaration followed by a chain\
+        \ of `target.put(k, v)` statements, which is collapsed to `new HashMap<>(Map.of(..))`\
+        \ (or `new HashMap<>(Map.ofEntries(..))`) — preserving the mutable `HashMap`."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/util/usemapof"
       options: []
       isImperative: true
@@ -18556,10 +18786,13 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.util.UseSetOf:
       name: "org.openrewrite.java.migrate.util.UseSetOf"
-      description: "Prefer `Set.of(..)` instead of using `java.util.Set#add(..)` in\
-        \ anonymous HashSet initializers in Java 10 or higher. This recipe will not\
-        \ modify code where the Set is later mutated since `Set.of` returns an immutable\
-        \ set."
+      description: "Prefer `Set.of(..)` in Java 10 or higher. Two input shapes are\
+        \ recognised:\n\n- Anonymous-class initialization (`new HashSet<>() {{ add(\"\
+        a\"); add(\"b\"); }}`), which is replaced wholesale with `Set.of(\"a\", \"\
+        b\")` (immutable result, matching the anonymous-class idiom's typical intent).\n\
+        - A `new HashSet<>()` declaration followed by a chain of `target.add(..)`\
+        \ statements, which is collapsed to `new HashSet<>(Set.of(..))` (preserving\
+        \ the mutable `HashSet`)."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/util/usesetof"
       options: []
       isImperative: true
@@ -18573,7 +18806,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-netty:
   artifactId: "rewrite-netty"
-  version: "0.10.1"
+  version: "0.10.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.netty.EventLoopGroupToMultiThreadIoEventLoopGroupRecipes:
       name: "org.openrewrite.java.netty.EventLoopGroupToMultiThreadIoEventLoopGroupRecipes"
@@ -18651,7 +18884,7 @@ rewrite-netty:
       artifactId: "rewrite-netty"
 rewrite-okhttp:
   artifactId: "rewrite-okhttp"
-  version: "0.23.1"
+  version: "0.23.2"
   markdownRecipeDescriptors:
     org.openrewrite.okhttp.ReorderRequestBodyCreateArguments:
       name: "org.openrewrite.okhttp.ReorderRequestBodyCreateArguments"
@@ -18732,7 +18965,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-openapi:
   artifactId: "rewrite-openapi"
-  version: "0.32.1"
+  version: "0.32.2"
   markdownRecipeDescriptors:
     org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings:
       name: "org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings"
@@ -18871,7 +19104,7 @@ rewrite-openapi:
       artifactId: "rewrite-openapi"
 rewrite-prethink:
   artifactId: "rewrite-prethink"
-  version: "0.7.0"
+  version: "1.0.2"
   markdownRecipeDescriptors:
     org.openrewrite.prethink.ExportContext:
       name: "org.openrewrite.prethink.ExportContext"
@@ -18942,7 +19175,7 @@ rewrite-prethink:
       artifactId: "rewrite-prethink"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.85.0"
+  version: "8.86.0"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -19106,7 +19339,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "2.33.1"
+  version: "2.33.2"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.AddQuarkusProperty:
       name: "org.openrewrite.quarkus.AddQuarkusProperty"
@@ -19374,7 +19607,7 @@ rewrite-quarkus:
       artifactId: "rewrite-quarkus"
 rewrite-rewrite:
   artifactId: "rewrite-rewrite"
-  version: "0.26.1"
+  version: "0.27.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations:
       name: "org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations"
@@ -19722,7 +19955,7 @@ rewrite-rewrite:
       artifactId: "rewrite-rewrite"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "6.33.0"
+  version: "6.34.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin:
       name: "org.openrewrite.gradle.spring.AddSpringDependencyManagementPlugin"
@@ -22598,7 +22831,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-spring-to-quarkus:
   artifactId: "rewrite-spring-to-quarkus"
-  version: "0.10.1"
+  version: "0.10.2"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.spring.AddQuarkusMavenPlugin:
       name: "org.openrewrite.quarkus.spring.AddQuarkusMavenPlugin"
@@ -23125,7 +23358,7 @@ rewrite-spring-to-quarkus:
       artifactId: "rewrite-spring-to-quarkus"
 rewrite-static-analysis:
   artifactId: "rewrite-static-analysis"
-  version: "2.37.0"
+  version: "2.38.0"
   markdownRecipeDescriptors:
     org.openrewrite.recipe.rewrite-static-analysis.InlineDeprecatedMethods:
       name: "org.openrewrite.recipe.rewrite-static-analysis.InlineDeprecatedMethods"
@@ -23166,6 +23399,14 @@ rewrite-static-analysis:
       - name: "uid"
         type: "String"
         required: false
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.AllBranchesIdentical:
+      name: "org.openrewrite.staticanalysis.AllBranchesIdentical"
+      description: "When every branch of an `if`/`else` chain executes the same code,\
+        \ the condition serves no purpose and the code block can be used directly."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/allbranchesidentical"
+      options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.AnnotateNullableMethods:
@@ -23362,6 +23603,15 @@ rewrite-static-analysis:
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/codecleanup"
       options: []
       isImperative: false
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.CollapsibleIfStatements:
+      name: "org.openrewrite.staticanalysis.CollapsibleIfStatements"
+      description: "When an `if` statement body contains only another `if` with no\
+        \ `else`, the two conditions can be combined with `&&`. Merging the conditions\
+        \ reduces nesting and makes the code easier to read."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/collapsibleifstatements"
+      options: []
+      isImperative: true
       artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.CollectionToArrayShouldHaveProperType:
       name: "org.openrewrite.staticanalysis.CollectionToArrayShouldHaveProperType"
@@ -23764,6 +24014,15 @@ rewrite-static-analysis:
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.MergeIdenticalBranches:
+      name: "org.openrewrite.staticanalysis.MergeIdenticalBranches"
+      description: "When two consecutive branches of an `if`/`else if` chain execute\
+        \ the same code, they can be merged by combining their conditions with `||`.\
+        \ This removes duplication and makes the intent clearer."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/mergeidenticalbranches"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.MethodNameCasing:
       name: "org.openrewrite.staticanalysis.MethodNameCasing"
       description: "Fixes method names that do not follow standard naming conventions.\
@@ -24070,6 +24329,15 @@ rewrite-static-analysis:
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.RemoveDuplicateConditions:
+      name: "org.openrewrite.staticanalysis.RemoveDuplicateConditions"
+      description: "When an `if`/`else if` chain contains the same condition more\
+        \ than once, the second branch can never execute because the first matching\
+        \ branch always wins. The duplicate branch is dead code and should be removed."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/removeduplicateconditions"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.RemoveEmptyJavaDocParameters:
       name: "org.openrewrite.staticanalysis.RemoveEmptyJavaDocParameters"
       description: "Removes `@param`, `@return`, and `@throws` with no description\
@@ -24152,6 +24420,15 @@ rewrite-static-analysis:
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.RemoveSelfAssignment:
+      name: "org.openrewrite.staticanalysis.RemoveSelfAssignment"
+      description: "Self-assignments such as `x = x` have no effect and indicate a\
+        \ copy-paste error or typo where the left-hand or right-hand side should reference\
+        \ a different variable."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/removeselfassignment"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.RemoveSystemOutPrintln:
       name: "org.openrewrite.staticanalysis.RemoveSystemOutPrintln"
       description: "Print statements are often left accidentally after debugging an\
@@ -24174,6 +24451,15 @@ rewrite-static-analysis:
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.RemoveUnconditionalValueOverwrite:
+      name: "org.openrewrite.staticanalysis.RemoveUnconditionalValueOverwrite"
+      description: "When `map.put(key, value)` is called twice in a row with the same\
+        \ key, the first call is dead code because its value is immediately overwritten.\
+        \ Remove the first call to make the intent clear."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/removeunconditionalvalueoverwrite"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.RemoveUnneededAssertion:
       name: "org.openrewrite.staticanalysis.RemoveUnneededAssertion"
       description: "Remove unneeded assertions like `assert true`, `assertTrue(true)`,\
@@ -24188,6 +24474,20 @@ rewrite-static-analysis:
         \ nested blocks add indentation and scope boundaries that obscure the control\
         \ flow, often indicating code that should be extracted into its own method."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/removeunneededblock"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.RemoveUnreachableMultiCatchAlternative:
+      name: "org.openrewrite.staticanalysis.RemoveUnreachableMultiCatchAlternative"
+      description: "When an earlier `catch` clause already covers a type, any later\
+        \ `catch` (including a multi-catch alternative) for the same type or a subtype\
+        \ is unreachable and is a Java compile error. This commonly appears after\
+        \ type-substitution migrations (for example, renaming an exception so that\
+        \ two `catch` clauses end up overlapping). This recipe drops the unreachable\
+        \ alternatives from later multi-catches, collapses a multi-catch to a regular\
+        \ `catch` when only one alternative remains, and removes the entire `catch`\
+        \ clause when all of its declared types are already covered."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/removeunreachablemulticatchalternative"
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
@@ -24568,6 +24868,16 @@ rewrite-static-analysis:
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.SimplifyRedundantLogicalExpression:
+      name: "org.openrewrite.staticanalysis.SimplifyRedundantLogicalExpression"
+      description: "When the same expression appears on both sides of `&&`, `||`,\
+        \ `&`, or `|`, the result is always equal to that expression. For example,\
+        \ `x && x` is always just `x`. This is typically a copy-paste error where\
+        \ one side should have been different."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/simplifyredundantlogicalexpression"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.SimplifyTernaryRecipes:
       name: "org.openrewrite.staticanalysis.SimplifyTernaryRecipes"
       description: "Simplifies various types of ternary expressions to improve code\
@@ -24906,6 +25216,31 @@ rewrite-static-analysis:
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.UseStringCaseInsensitiveOrderRecipes:
+      name: "org.openrewrite.staticanalysis.UseStringCaseInsensitiveOrderRecipes"
+      description: "Replaces case-insensitive string comparator lambdas and method\
+        \ references with the JDK constant `String.CASE_INSENSITIVE_ORDER`. Improves\
+        \ readability and removes one closure allocation per call site."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/usestringcaseinsensitiveorderrecipes"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.UseStringCaseInsensitiveOrderRecipes$FromLambdaRecipe:
+      name: "org.openrewrite.staticanalysis.UseStringCaseInsensitiveOrderRecipes$FromLambdaRecipe"
+      description: "Replace `(a, b) -> a.compareToIgnoreCase(b)` with `String.CASE_INSENSITIVE_ORDER`\
+        \ when used as a `Comparator<String>`."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/usestringcaseinsensitiveorderrecipes$fromlambdarecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.UseStringCaseInsensitiveOrderRecipes$FromMethodReferenceRecipe:
+      name: "org.openrewrite.staticanalysis.UseStringCaseInsensitiveOrderRecipes$FromMethodReferenceRecipe"
+      description: "Replace the method reference `String::compareToIgnoreCase` with\
+        \ `String.CASE_INSENSITIVE_ORDER` when used as a `Comparator<String>`."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/usestringcaseinsensitiveorderrecipes$frommethodreferencerecipe"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
     org.openrewrite.staticanalysis.UseStringReplace:
       name: "org.openrewrite.staticanalysis.UseStringReplace"
       description: "When `String::replaceAll` is used, the first argument should be\
@@ -24980,7 +25315,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "3.38.0"
+  version: "3.41.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.archunit.ArchUnit0to1Migration:
       name: "org.openrewrite.java.testing.archunit.ArchUnit0to1Migration"
@@ -25360,6 +25695,19 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.assertj.DecomposeConjunctionAssertion:
+      name: "org.openrewrite.java.testing.assertj.DecomposeConjunctionAssertion"
+      description: "Split `assertThat(a && b).isTrue()` into separate `assertThat(a).isTrue()`\
+        \ and `assertThat(b).isTrue()` statements, so each condition is asserted (and\
+        \ reported) on its own. This lets the dedicated assertion recipes simplify\
+        \ each conjunct, and `CollapseConsecutiveAssertThatStatements` fuse them back\
+        \ into a single chain when the actual is a plain expression. Only the direct\
+        \ `assertThat(...).isTrue()` form is decomposed; `isFalse()` is left alone,\
+        \ as negating a conjunction is not equivalent to negating each conjunct."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/assertj/decomposeconjunctionassertion"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.assertj.FestToAssertj:
       name: "org.openrewrite.java.testing.assertj.FestToAssertj"
       description: "AssertJ provides a rich set of assertions, truly helpful error\
@@ -25506,6 +25854,16 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.assertj.SimplifyArrayLengthAssertion:
+      name: "org.openrewrite.java.testing.assertj.SimplifyArrayLengthAssertion"
+      description: "Replace `assertThat(array.length)` size assertions with the dedicated\
+        \ array assertions, such as `assertThat(array).hasSize(n)`, `assertThat(array).isEmpty()`\
+        \ and `assertThat(array).hasSameSizeAs(other)`. Works for both object and\
+        \ primitive arrays."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/assertj/simplifyarraylengthassertion"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.assertj.SimplifyAssertJAssertion:
       name: "org.openrewrite.java.testing.assertj.SimplifyAssertJAssertion"
       description: "Simplify AssertJ assertions by replacing them with more expressive\
@@ -25533,6 +25891,27 @@ rewrite-testing-frameworks:
       docLink: "https://docs.openrewrite.org/recipes/java/testing/assertj/simplifyassertjassertions"
       options: []
       isImperative: false
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.assertj.SimplifyAssertJInstanceOfAssertion:
+      name: "org.openrewrite.java.testing.assertj.SimplifyAssertJInstanceOfAssertion"
+      description: "Replace `assertThat(x instanceof Type).isTrue()` with the dedicated\
+        \ `assertThat(x).isInstanceOf(Type.class)`, and the negated and `isFalse()`\
+        \ variants with `isNotInstanceOf`, so failures describe the actual type rather\
+        \ than just `expected true but was false`."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/assertj/simplifyassertjinstanceofassertion"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.assertj.SimplifyAssertJNullRelatedAssertion:
+      name: "org.openrewrite.java.testing.assertj.SimplifyAssertJNullRelatedAssertion"
+      description: "Replace `assertThat(x == null).isTrue()` and its variants with\
+        \ the dedicated `assertThat(x).isNull()` / `assertThat(x).isNotNull()`. Beyond\
+        \ being more expressive, this avoids the compilation error that results when\
+        \ the `null` literal ends up as the `assertThat` argument (e.g. `assertThat(null\
+        \ == x).isTrue()` becoming `assertThat(null).isSameAs(x)`)."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/assertj/simplifyassertjnullrelatedassertion"
+      options: []
+      isImperative: true
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertion:
       name: "org.openrewrite.java.testing.assertj.SimplifyChainedAssertJAssertion"
@@ -25567,6 +25946,17 @@ rewrite-testing-frameworks:
       description: "Simplify AssertJ assertions by replacing `hasSize` with `hasSameSizeAs`\
         \ dedicated assertions."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/assertj/simplifyhassizeassertion"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.assertj.SimplifyHasSizeFromIsEqualToAssertion:
+      name: "org.openrewrite.java.testing.assertj.SimplifyHasSizeFromIsEqualToAssertion"
+      description: "Replace `assertThat(<int literal>).isEqualTo(collection.size())`\
+        \ style assertions with the dedicated `assertThat(collection).hasSize(<int\
+        \ literal>)`. Only the structural size form is rewritten, where the comparison\
+        \ is on a primitive `int` and reversing the assertion is behavior-preserving\
+        \ (unlike arbitrary `isEqualTo` object comparisons, which rely on `equals`)."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/assertj/simplifyhassizefromisequaltoassertion"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
@@ -26226,6 +26616,22 @@ rewrite-testing-frameworks:
       options: []
       isImperative: false
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.ImplausibleTimeoutToMinutes:
+      name: "org.openrewrite.java.testing.junit5.ImplausibleTimeoutToMinutes"
+      description: "JUnit Jupiter's `@Timeout` defaults to `TimeUnit.SECONDS`, so\
+        \ a value such as `@Timeout(10000)` is interpreted as almost three hours,\
+        \ which is most likely a mistake where milliseconds were intended. This recipe\
+        \ rewrites such implausibly large second-based timeouts to the equivalent\
+        \ number of minutes, for instance `@Timeout(value = 167, unit = TimeUnit.MINUTES)`,\
+        \ preserving the original (likely erroneous) semantics while making the mistake\
+        \ far more visible for review."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/junit5/implausibletimeouttominutes"
+      options:
+      - name: "thresholdSeconds"
+        type: "Integer"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.JUnit4to5Migration:
       name: "org.openrewrite.java.testing.junit5.JUnit4to5Migration"
       description: "Migrates JUnit 4.x tests to JUnit Jupiter."
@@ -26750,6 +27156,15 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.PowerMockWhiteboxGetFieldToJavaReflection:
+      name: "org.openrewrite.java.testing.mockito.PowerMockWhiteboxGetFieldToJavaReflection"
+      description: "Replace `Whitebox.getField(Class, String)` with `Class.getDeclaredField(String)`\
+        \ plus `setAccessible(true)`. Unlike PowerMock, `getDeclaredField` does not\
+        \ traverse the class hierarchy for fields inherited from a superclass."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/powermockwhiteboxgetfieldtojavareflection"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.PowerMockWhiteboxGetInternalStateToJavaReflection:
       name: "org.openrewrite.java.testing.mockito.PowerMockWhiteboxGetInternalStateToJavaReflection"
       description: "Replace `Whitebox.getInternalState(Object, String)` with `java.lang.reflect.Field`\
@@ -26757,6 +27172,27 @@ rewrite-testing-frameworks:
         \ uses `getDeclaredField` on the target object's class, which differs from\
         \ PowerMock's class-hierarchy traversal for fields inherited from a superclass."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/powermockwhiteboxgetinternalstatetojavareflection"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.PowerMockWhiteboxGetMethodToJavaReflection:
+      name: "org.openrewrite.java.testing.mockito.PowerMockWhiteboxGetMethodToJavaReflection"
+      description: "Replace `Whitebox.getMethod(Class, String, Class...)` with `Class.getDeclaredMethod(String,\
+        \ Class...)` plus `setAccessible(true)`. Unlike PowerMock, `getDeclaredMethod`\
+        \ does not traverse the class hierarchy; calls passing an explicit `Class[]`\
+        \ array are left unchanged for manual migration."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/powermockwhiteboxgetmethodtojavareflection"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.PowerMockWhiteboxInvokeConstructorToJavaReflection:
+      name: "org.openrewrite.java.testing.mockito.PowerMockWhiteboxInvokeConstructorToJavaReflection"
+      description: "Replace `Whitebox.invokeConstructor(..)` with `java.lang.reflect.Constructor`\
+        \ lookup and `newInstance()` on the named class. Constructor parameter types\
+        \ are taken from the unambiguously resolved constructor, falling back to each\
+        \ argument's compile-time class; arrays passed to the `Object...` varargs\
+        \ overload are left unchanged for manual migration."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/powermockwhiteboxinvokeconstructortojavareflection"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
@@ -26783,8 +27219,9 @@ rewrite-testing-frameworks:
     org.openrewrite.java.testing.mockito.PowerMockWhiteboxToJavaReflection:
       name: "org.openrewrite.java.testing.mockito.PowerMockWhiteboxToJavaReflection"
       description: "Replace `org.powermock.reflect.Whitebox` calls (`setInternalState`,\
-        \ `getInternalState`, `invokeMethod`) with plain Java reflection using `java.lang.reflect.Field`\
-        \ and `java.lang.reflect.Method`."
+        \ `getInternalState`, `invokeMethod`, `getField`, `getMethod`, `invokeConstructor`)\
+        \ with plain Java reflection using `java.lang.reflect.Field`, `java.lang.reflect.Method`,\
+        \ and `java.lang.reflect.Constructor`."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/powermockwhiteboxtojavareflection"
       options: []
       isImperative: false
@@ -27076,10 +27513,38 @@ rewrite-testing-frameworks:
       options: []
       isImperative: false
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.testng.TestNgAssertEqualsDeepToAssertThat:
+      name: "org.openrewrite.java.testing.testng.TestNgAssertEqualsDeepToAssertThat"
+      description: "Convert TestNG-style `assertEqualsDeep()` and `assertNotEqualsDeep()`\
+        \ to AssertJ's `assertThat().usingRecursiveComparison().isEqualTo()` / `.isNotEqualTo()`,\
+        \ which performs a deep, recursive comparison of the `Map`/`Set` contents."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/testng/testngassertequalsdeeptoassertthat"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.testng.TestNgAssertEqualsNoOrderToAssertThat:
+      name: "org.openrewrite.java.testing.testng.TestNgAssertEqualsNoOrderToAssertThat"
+      description: "Convert TestNG-style `assertEqualsNoOrder()` to AssertJ's `assertThat().containsExactlyInAnyOrder()`\
+        \ (arrays) or `assertThat().containsExactlyInAnyOrderElementsOf()` (collections)."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/testng/testngassertequalsnoordertoassertthat"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.testng.TestNgAssertEqualsToAssertThat:
       name: "org.openrewrite.java.testing.testng.TestNgAssertEqualsToAssertThat"
-      description: "Convert TestNG-style `assertEquals()` to AssertJ's `assertThat().isEqualTo()`."
+      description: "Convert TestNG-style `assertEquals()` to AssertJ's `assertThat().isEqualTo()`,\
+        \ using element-wise assertions (`containsExactly`/`containsExactlyElementsOf`)\
+        \ for arrays and collections."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/testng/testngassertequalstoassertthat"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.testng.TestNgAssertListToAssertThat:
+      name: "org.openrewrite.java.testing.testng.TestNgAssertListToAssertThat"
+      description: "Convert TestNG-style `assertListContainsObject`/`assertListNotContainsObject`\
+        \ to AssertJ's `assertThat().contains()`/`.doesNotContain()`, and `assertListContains`/`assertListNotContains`\
+        \ (predicate-based) to `.anyMatch()`/`.noneMatch()`."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/testng/testngassertlisttoassertthat"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
@@ -27087,6 +27552,30 @@ rewrite-testing-frameworks:
       name: "org.openrewrite.java.testing.testng.TestNgAssertNotEqualsToAssertThat"
       description: "Convert TestNG-style `assertNotEquals()` to AssertJ's `assertThat().isNotEqualTo()`."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/testng/testngassertnotequalstoassertthat"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.testng.TestNgAssertNotSameToAssertThat:
+      name: "org.openrewrite.java.testing.testng.TestNgAssertNotSameToAssertThat"
+      description: "Convert TestNG-style `assertNotSame()` to AssertJ's `assertThat().isNotSameAs()`."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/testng/testngassertnotsametoassertthat"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.testng.TestNgAssertSameToAssertThat:
+      name: "org.openrewrite.java.testing.testng.TestNgAssertSameToAssertThat"
+      description: "Convert TestNG-style `assertSame()` to AssertJ's `assertThat().isSameAs()`."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/testng/testngassertsametoassertthat"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.testng.TestNgAssertThrowsToAssertThat:
+      name: "org.openrewrite.java.testing.testng.TestNgAssertThrowsToAssertThat"
+      description: "Convert TestNG-style `assertThrows()` and `expectThrows()` to\
+        \ AssertJ's `assertThatExceptionOfType().isThrownBy()` (or `assertThatThrownBy()`\
+        \ when no exception type is given) to allow for chained assertions on the\
+        \ thrown exception."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/testng/testngassertthrowstoassertthat"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
@@ -27148,7 +27637,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-third-party:
   artifactId: "rewrite-third-party"
-  version: "0.41.1"
+  version: "0.42.0"
   markdownRecipeDescriptors:
     ai.timefold.solver.migration.ChangeVersion:
       name: "ai.timefold.solver.migration.ChangeVersion"
@@ -28212,97 +28701,6 @@ rewrite-third-party:
       description: "Migrate applications to the Spring Framework 6.2 release and compatibility\
         \ with WebLogic 15.1.1."
       docLink: "https://docs.openrewrite.org/recipes/oracle/weblogic/rewrite/spring/framework/upgradetospringframework_6_2"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    io.axoniq.framework.migration.Axon4ToAxoniq5AxonServerConnector:
-      name: "io.axoniq.framework.migration.Axon4ToAxoniq5AxonServerConnector"
-      description: "Relocates the Axon Server connector from `org.axonframework.axonserver.connector`\
-        \ to `io.axoniq.framework.axonserver.connector`. The connector now lives in\
-        \ the Axoniq commercial offering (`io.axoniq.framework:axon-server-connector`).\
-        \ Class names are mostly preserved."
-      docLink: "https://docs.openrewrite.org/recipes/axoniq/framework/migration/axon4toaxoniq5axonserverconnector"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    io.axoniq.framework.migration.Axon4ToAxoniq5Bom:
-      name: "io.axoniq.framework.migration.Axon4ToAxoniq5Bom"
-      description: "Replaces the imported `org.axonframework:axon-bom` (AF4) or `org.axonframework:axon-framework-bom`\
-        \ (free AF5) in `<dependencyManagement>` with the Axoniq Framework 5 commercial\
-        \ BOM `io.axoniq.framework:axoniq-framework-bom`."
-      docLink: "https://docs.openrewrite.org/recipes/axoniq/framework/migration/axon4toaxoniq5bom"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    io.axoniq.framework.migration.Axon4ToAxoniq5DeadLetter:
-      name: "io.axoniq.framework.migration.Axon4ToAxoniq5DeadLetter"
-      description: "Relocates the Sequenced Dead-Letter Queue (DLQ) types from the\
-        \ open-source `axon-messaging` module to the Axoniq commercial `axoniq-dead-letter`\
-        \ module (`io.axoniq.framework:axoniq-dead-letter`). Class names — including\
-        \ `SequencedDeadLetterQueue`, `JpaSequencedDeadLetterQueue`, `JdbcSequencedDeadLetterQueue`,\
-        \ `DeadLetteredEventProcessingTask`, `EnqueuePolicy`, `Decisions`, `ThrowableCause`\
-        \ — are preserved."
-      docLink: "https://docs.openrewrite.org/recipes/axoniq/framework/migration/axon4toaxoniq5deadletter"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    io.axoniq.framework.migration.Axon4ToAxoniq5DistributedMessaging:
-      name: "io.axoniq.framework.migration.Axon4ToAxoniq5DistributedMessaging"
-      description: "Relocates the distributed command-bus components (DistributedCommandBus,\
-        \ CommandBusConnector) from the AF4 open-source `axon-messaging` module into\
-        \ the Axoniq commercial `axoniq-distributed-messaging` module (`io.axoniq.framework.messaging.commandhandling.distributed`).\
-        \ Each AF4 fully-qualified name is mapped directly to its final Axoniq location,\
-        \ so this recipe is order-independent relative to the open-source messaging\
-        \ package rename."
-      docLink: "https://docs.openrewrite.org/recipes/axoniq/framework/migration/axon4toaxoniq5distributedmessaging"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    io.axoniq.framework.migration.Axon4ToAxoniq5EventStreaming:
-      name: "io.axoniq.framework.migration.Axon4ToAxoniq5EventStreaming"
-      description: "Placeholder. The Axoniq event streaming module (`io.axoniq.framework:axoniq-event-streaming`)\
-        \ consolidates multi-stream event consumption that lived in `MultiStreamableMessageSource`\
-        \ (available since Axon Framework 4.2) into a dedicated module in Axoniq Framework\
-        \ 5. AF4 applications using `MultiStreamableMessageSource` should migrate\
-        \ to `axoniq-event-streaming` once they adopt Axoniq Framework 5; this recipe\
-        \ will gain class-level mappings as that migration becomes deterministic."
-      docLink: "https://docs.openrewrite.org/recipes/axoniq/framework/migration/axon4toaxoniq5eventstreaming"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    io.axoniq.framework.migration.Axon4ToAxoniq5SpringBoot:
-      name: "io.axoniq.framework.migration.Axon4ToAxoniq5SpringBoot"
-      description: "Swaps the Spring Boot starter dependency to the Axoniq commercial\
-        \ variant (`io.axoniq.framework:axoniq-spring-boot-starter`). Accepts both\
-        \ the AF4 raw coordinate (`org.axonframework:axon-spring-boot-starter`) and\
-        \ the post-`Axon4ToAxon5SpringBootExtension` coordinate (`org.axonframework.extensions.spring:axon-spring-boot-starter`).\
-        \ Class-level mappings for the Axoniq autoconfig package `io.axoniq.framework.springboot.*`\
-        \ are not yet implemented."
-      docLink: "https://docs.openrewrite.org/recipes/axoniq/framework/migration/axon4toaxoniq5springboot"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    io.axoniq.framework.migration.Axon4ToAxoniq5Testcontainer:
-      name: "io.axoniq.framework.migration.Axon4ToAxoniq5Testcontainer"
-      description: "Relocates the Axon Server Testcontainer types from the AF4 `axon-test`\
-        \ package `org.axonframework.test.server` to the dedicated Axoniq commercial\
-        \ artifact `io.axoniq.framework:axoniq-testcontainer` under `io.axoniq.framework.testcontainer`.\
-        \ The Enterprise (`AxonServerEEContainer`) and Standard (`AxonServerSEContainer`)\
-        \ edition variants both collapse into the unified `AxonServerContainer` in\
-        \ Axoniq 5."
-      docLink: "https://docs.openrewrite.org/recipes/axoniq/framework/migration/axon4toaxoniq5testcontainer"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    io.axoniq.framework.migration.UpgradeAxon4ToAxoniq5:
-      name: "io.axoniq.framework.migration.UpgradeAxon4ToAxoniq5"
-      description: "Migrates an Axon Framework 4.x application to Axoniq Framework\
-        \ 5 (commercial). Composes `UpgradeAxon4ToAxon5` (the free leg) and then layers\
-        \ commercial-only migrations: BOM swap to `io.axoniq.framework:axoniq-framework-bom`,\
-        \ Spring Boot starter swap to `io.axoniq.framework:axoniq-spring-boot-starter`,\
-        \ source rewrites and Maven adds for Axon Server connector, sequenced dead-letter\
-        \ queue, and distributed messaging."
-      docLink: "https://docs.openrewrite.org/recipes/axoniq/framework/migration/upgradeaxon4toaxoniq5"
       options: []
       isImperative: false
       artifactId: "rewrite-third-party"
@@ -30484,541 +30882,21 @@ rewrite-third-party:
       options: []
       isImperative: false
       artifactId: "rewrite-third-party"
-    org.axonframework.migration.AddAxonTestFixtureTearDown:
-      name: "org.axonframework.migration.AddAxonTestFixtureTearDown"
-      description: "Adds an `@AfterEach tearDown()` method calling `stop()` on the\
-        \ `AxonTestFixture` field, when the test class has such a field but no existing\
-        \ `@AfterEach` method (and no method named `tearDown`). Pairs with `MigrateAggregateTestFixtureSetup`\
-        \ which produces the field; the tear-down step was previously left for manual\
-        \ migration. Java sources only."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/addaxontestfixtureteardown"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.AddCommandAnnotation:
-      name: "org.axonframework.migration.AddCommandAnnotation"
-      description: "Scans @CommandHandler methods and annotates their command parameter\
-        \ types with @Command. Also migrates @RoutingKey on a field to @Command(routingKey\
-        \ = \"fieldName\") on the class, removing the @RoutingKey field annotation."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/addcommandannotation"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.AddEntityCreatorAnnotation:
-      name: "org.axonframework.migration.AddEntityCreatorAnnotation"
-      description: "Annotates existing no-arg constructors with `@EntityCreator` for\
-        \ any class annotated with `@EventSourcedEntity` or the Spring `@EventSourced`\
-        \ stereotype. Required by AF5 — the framework uses this annotation to instantiate\
-        \ the entity before applying events. Idempotent: skips constructors that are\
-        \ already annotated."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/addentitycreatorannotation"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.AddEventAnnotation:
-      name: "org.axonframework.migration.AddEventAnnotation"
-      description: "Scans @EventSourcingHandler methods and annotates their event\
-        \ parameter types with @Event. Migrates @Revision(\"x\") on the class to @Event(version\
-        \ = \"x\"), removing the now-obsolete @Revision annotation."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/addeventannotation"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.AddEventTagAnnotation:
-      name: "org.axonframework.migration.AddEventTagAnnotation"
-      description: "Scans event-sourced entity classes for their @AggregateIdentifier\
-        \ field and the event types used in @EventSourcingHandler methods, then annotates\
-        \ the corresponding field in each event class with @EventTag(key = \"<EntitySimpleName>\"\
-        )."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/addeventtagannotation"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.AnnotateObsoleteSequencingPolicyProperty:
-      name: "org.axonframework.migration.AnnotateObsoleteSequencingPolicyProperty"
-      description: "Inserts a one-line `# TODO(axon4to5): ...` comment above any `axon.eventhandling.processors.<group>.sequencing-policy`\
-        \ entry in `application.properties` / `application.yml`. AF5 moves the decision\
-        \ onto the handler class via `@SequencingPolicy`; deleting the property here\
-        \ would race the per-construct skill that drives the source-side annotation,\
-        \ so this recipe only annotates. Idempotent."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/annotateobsoletesequencingpolicyproperty"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5AmqpExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5AmqpExtension"
-      description: "Placeholder for the AMQP extension migration. The AMQP extension\
-        \ lives at `org.axonframework.extensions.amqp` in AF4 and does not yet have\
-        \ a finalized Axon Framework 5 equivalent. Update this recipe once the AF5\
-        \ AMQP integration ships."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5amqpextension"
+    org.axonframework.migration.UpgradeAxonFramework_4_Jakarta:
+      name: "org.axonframework.migration.UpgradeAxonFramework_4_Jakarta"
+      description: "Migration file to upgrade from an Axon Framework Javax-specific\
+        \ project to Jakarta."
+      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/upgradeaxonframework_4_jakarta"
       options: []
       isImperative: false
       artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5Bom:
-      name: "org.axonframework.migration.Axon4ToAxon5Bom"
-      description: "Renames the imported `org.axonframework:axon-bom` BOM in `<dependencyManagement>`\
-        \ to `org.axonframework:axon-framework-bom` and pins the imported version\
-        \ to the current Axon Framework 5 release. The BOM artifactId changed between\
-        \ Axon Framework 4 and Axon Framework 5; the groupId is unchanged."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5bom"
+    org.axonframework.migration.UpgradeAxonFramework_4_Javax:
+      name: "org.axonframework.migration.UpgradeAxonFramework_4_Javax"
+      description: "Migration file to upgrade an Axon Framework Javax-specific project\
+        \ and remain on Javax."
+      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/upgradeaxonframework_4_javax"
       options: []
       isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5CdiExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5CdiExtension"
-      description: "Placeholder for the CDI extension migration. The extension lives\
-        \ at `org.axonframework.extensions.cdi` in AF4 and does not yet have a finalized\
-        \ Axon Framework 5 equivalent. Update this recipe once the AF5 CDI integration\
-        \ ships."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5cdiextension"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5Common:
-      name: "org.axonframework.migration.Axon4ToAxon5Common"
-      description: "Migrates `org.axonframework.config` to `org.axonframework.common.configuration`,\
-        \ renames `ConfigurerModule` to `ConfigurationEnhancer`, `ModuleConfiguration`\
-        \ to `Module`, `LifecycleOperations` to `LifecycleRegistry`, relocates `EventProcessingConfigurer`\
-        \ under the messaging.eventhandling namespace, and swaps `@ProcessingGroup`\
-        \ for the AF5 `@Namespace` annotation."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5common"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5Conversion:
-      name: "org.axonframework.migration.Axon4ToAxon5Conversion"
-      description: "Migrates the Serializer-based `org.axonframework.serialization`\
-        \ namespace to the new Converter-based `org.axonframework.conversion` namespace.\
-        \ Note: this is a package rename; concrete renames such as `JacksonSerializer`\
-        \ to `JacksonConverter` are NOT applied here and must be handled separately."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5conversion"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5EventSourcing:
-      name: "org.axonframework.migration.Axon4ToAxon5EventSourcing"
-      description: "Relocates the `@EventSourcingHandler` annotation into `eventsourcing.annotation`,\
-        \ relocates `Snapshotter` into the new `eventsourcing.snapshot.api` API package,\
-        \ ensures the `org.axonframework:axon-eventsourcing` dependency is present\
-        \ when the app uses event-sourcing types (the AF5 Spring Boot starter no longer\
-        \ pulls it transitively, so apps not using the BOM need it added explicitly\
-        \ — it transitively brings `axon-modelling` and `axon-messaging`), and applies\
-        \ the source-level aggregate→entity rewrites — annotating no-arg constructors\
-        \ with the now-mandatory `@EntityCreator` and replacing `AggregateLifecycle.apply(...)`\
-        \ with an injected `EventAppender#append(...)`."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5eventsourcing"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5JGroupsExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5JGroupsExtension"
-      description: "Placeholder for the JGroups extension migration. The JGroups extension\
-        \ at `org.axonframework.extensions.jgroups` provided distributed command bus\
-        \ routing in AF4. In Axon Framework 5 the distributed command bus has moved\
-        \ into the AxonIQ commercial offering (`io.axoniq.framework:axoniq-distributed-messaging`).\
-        \ Code using `JGroupsConnector` must be replaced with the AxonIQ commercial\
-        \ distributed messaging APIs."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5jgroupsextension"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5KafkaExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5KafkaExtension"
-      description: "Placeholder for the Kafka extension migration. The Kafka extension\
-        \ lives at `org.axonframework.extensions.kafka` in AF4 and does not yet have\
-        \ a finalized Axon Framework 5 equivalent. Update this recipe once the AF5\
-        \ Kafka integration ships."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5kafkaextension"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5Messaging:
-      name: "org.axonframework.migration.Axon4ToAxon5Messaging"
-      description: "Migrates the messaging core (command, event, query handling) from\
-        \ `org.axonframework.{command,event,query}handling` into the `org.axonframework.messaging.*`\
-        \ namespace, relocates handler & interceptor annotations into their `.annotation.*`\
-        \ subpackages, renames `EventBus` to `EventSink`, fixes `MetaData` casing\
-        \ to `Metadata`, relocates the top-level messaging API (`Message`, `Metadata`,\
-        \ `UnitOfWork`, `MessageHandlerInterceptor`, `MessageHandlerInterceptorChain`,\
-        \ `correlation.*`) into `messaging.core.*`, moves the sequencing policy package\
-        \ out of `eventhandling.async` into `messaging.core.sequencing`, relocates\
-        \ `tokenstore` and the replay/reset annotations under their AF5 subpackages,\
-        \ and moves `QueryGateway` into its own gateway subpackage."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5messaging"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5MetricsDropwizardExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5MetricsDropwizardExtension"
-      description: "Relocates `org.axonframework.metrics` to `org.axonframework.extension.metrics.dropwizard`,\
-        \ reflecting the move from a flat `metrics` namespace to a per-provider layout\
-        \ under `extension.metrics.*`."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5metricsdropwizardextension"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5MetricsMicrometerExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5MetricsMicrometerExtension"
-      description: "Relocates `org.axonframework.micrometer` to `org.axonframework.extension.metrics.micrometer`,\
-        \ reflecting the move into the per-provider `extension.metrics.*` layout."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5metricsmicrometerextension"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5Modelling:
-      name: "org.axonframework.migration.Axon4ToAxon5Modelling"
-      description: "Migrates the modelling layer from the `aggregate` vocabulary to\
-        \ the `entity` vocabulary: relocates `org.axonframework.modelling.command`\
-        \ to `org.axonframework.modelling.entity`, renames `TargetAggregateIdentifier`\
-        \ to `TargetEntityId`, `AggregateMember` to `EntityMember`, `Repository` into\
-        \ `modelling.repository`, and `CommandTargetResolver` to `EntityIdResolver`.\
-        \ Strips AF4-only modelling annotations (`@AggregateIdentifier`, `@CreationPolicy`)\
-        \ that have no AF5 successor — id resolution moved onto commands via `@TargetEntityId`,\
-        \ and the AF4 creation-policy semantics map onto static command handlers in\
-        \ AF5 (a manual rewrite the recipe cannot infer beyond removing the annotation\
-        \ itself)."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5modelling"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5MongoExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5MongoExtension"
-      description: "Placeholder for the Mongo extension migration. The Mongo extension\
-        \ lives at `org.axonframework.extensions.mongo` in AF4 and does not yet have\
-        \ a finalized Axon Framework 5 equivalent. Update this recipe once the AF5\
-        \ Mongo integration ships."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5mongoextension"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5MultitenancyExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5MultitenancyExtension"
-      description: "Placeholder for the Multitenancy extension migration. The extension\
-        \ lives at `org.axonframework.extensions.multitenancy` in AF4 and does not\
-        \ yet have a finalized Axon Framework 5 equivalent. Update this recipe once\
-        \ the AF5 multitenancy story ships."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5multitenancyextension"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5QueryResponseTypes:
-      name: "org.axonframework.migration.Axon4ToAxon5QueryResponseTypes"
-      description: "On two-argument `queryGateway.query(payload, ResponseType)` calls,\
-        \ unwraps the AF4 `ResponseTypes.instanceOf(...)` / `optionalInstanceOf(...)`\
-        \ / `multipleInstancesOf(...)` wrapper to the plain `Class<R>` form AF5 expects,\
-        \ and renames `query(payload, multipleInstancesOf(R.class))` to `queryMany(payload,\
-        \ R.class)`. Three-argument `query(String, Object, ...)` forms, `subscriptionQuery(...)`,\
-        \ and `streamingQuery(...)` are left untouched so the per-construct migration\
-        \ skill keeps the AF4 fingerprints it needs for design decisions. Removes\
-        \ `ResponseType` / `ResponseTypes` imports only when no references remain."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5queryresponsetypes"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5ReactorExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5ReactorExtension"
-      description: "Relocates `org.axonframework.extensions.reactor.*` to `org.axonframework.extension.reactor.*`\
-        \ (singular `extension`) and inserts the `messaging.` segment in front of\
-        \ the `commandhandling`, `eventhandling`, and `queryhandling` subpackages.\
-        \ The bare `extensions.reactor.messaging.*` package (which holds `ReactorMessageDispatchInterceptor`\
-        \ and the interceptor chain) is moved under `extension.reactor.messaging.core.*`."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5reactorextension"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5SpringAotExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5SpringAotExtension"
-      description: "The `org.axonframework.extensions.spring-aot:axon-spring-aot`\
-        \ extension has no Axon Framework 5 port. Removes the dependency so the project\
-        \ compiles against AF5. Projects that need Spring AOT / native-image support\
-        \ against AF5 must reintroduce equivalent functionality manually — there is\
-        \ no drop-in replacement."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5springaotextension"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5SpringBootActuatorExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5SpringBootActuatorExtension"
-      description: "Relocates `org.axonframework.actuator` to `org.axonframework.extension.springboot.actuator`.\
-        \ The Actuator support is now nested under the Spring Boot extension namespace."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5springbootactuatorextension"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5SpringBootExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5SpringBootExtension"
-      description: "Relocates `org.axonframework.springboot` to `org.axonframework.extension.springboot`,\
-        \ matching the Maven groupId move to `org.axonframework.extensions.spring`.\
-        \ Covers both the autoconfigure and starter artifacts (apps depend on the\
-        \ starter, which transitively pulls autoconfigure). Also rewrites Spring Boot\
-        \ configuration property keys whose binding class moved or was renamed in\
-        \ AF5."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5springbootextension"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5SpringCloudExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5SpringCloudExtension"
-      description: "Placeholder for the Spring Cloud extension migration. The Spring\
-        \ Cloud extension at `org.axonframework.extensions.springcloud` provided distributed\
-        \ command bus routing in AF4. In Axon Framework 5 the distributed command\
-        \ bus has moved into the AxonIQ commercial offering (`io.axoniq.framework:axoniq-distributed-messaging`).\
-        \ Code using `SpringCloudCommandRouter` must be replaced with the AxonIQ commercial\
-        \ distributed messaging APIs."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5springcloudextension"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5SpringExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5SpringExtension"
-      description: "Relocates `org.axonframework.spring` to `org.axonframework.extension.spring`\
-        \ and renames the Spring stereotype `@Aggregate` to `@EventSourced`. The stereotype\
-        \ rename is mapped from both the AF4 location and the post-package- move location,\
-        \ so the recipe is order-independent."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5springextension"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5Test:
-      name: "org.axonframework.migration.Axon4ToAxon5Test"
-      description: "Renames `AggregateTestFixture` and `SagaTestFixture` to the unified\
-        \ `AxonTestFixture` introduced in Axon Framework 5, and rewrites AF4-style\
-        \ flat fixture call chains (`fixture.given(...).when(...).expectEvents(...)`)\
-        \ to the AF5 fluent given/when/then API (`fixture.given().events(...).when().command(...).then().events(...)`).\
-        \ Also generates an `@AfterEach tearDown()` calling `fixture.stop()` on test\
-        \ classes that declare an `AxonTestFixture` field but have no existing `@AfterEach`.\
-        \ Targets the `axon-test` Maven artifact. Hamcrest matcher conversions and\
-        \ Kotlin `@AfterEach` insertion remain manual."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5test"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5TracingOpenTelemetryExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5TracingOpenTelemetryExtension"
-      description: "Placeholder for the OpenTelemetry tracing extension migration.\
-        \ Revisioning of the distributed tracing extension for Axon Framework 5 is\
-        \ slated for a later release (see issue #3594). Update this recipe once the\
-        \ AF5 OpenTelemetry tracing integration ships."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5tracingopentelemetryextension"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.Axon4ToAxon5TracingOpenTracingExtension:
-      name: "org.axonframework.migration.Axon4ToAxon5TracingOpenTracingExtension"
-      description: "Placeholder. The OpenTracing tracing extension at `org.axonframework.extensions.tracing`\
-        \ is superseded by the OpenTelemetry tracing extension in Axon Framework 5\
-        \ (see `Axon4ToAxon5TracingOpenTelemetryExtension`). Code using OpenTracing\
-        \ must be migrated to OpenTelemetry manually."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/axon4toaxon5tracingopentracingextension"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.ConfigureEventSourcedAnnotation:
-      name: "org.axonframework.migration.ConfigureEventSourcedAnnotation"
-      description: "Adds explicit tagKey = \"<EntitySimpleName>\" and idType = <ResolvedType>.class\
-        \ to @EventSourced annotations that have no tagKey set. The tagKey is derived\
-        \ from the class simple name (matching the AF5 default). The idType is deduced\
-        \ from the type of the field annotated with @AggregateIdentifier in AF4. When\
-        \ that field is absent (e.g. POJO aggregate without an explicit identifier\
-        \ field) the idType falls back to Object.class and is flagged with a TODO(axon4to5):\
-        \ comment."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/configureeventsourcedannotation"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.ConvertCommandHandlerConstructorToCompanionObject:
-      name: "org.axonframework.migration.ConvertCommandHandlerConstructorToCompanionObject"
-      description: "Rewrites Kotlin `@CommandHandler constructor(...)` declarations\
-        \ into `companion object { @JvmStatic @CommandHandler fun handle(...) }` on\
-        \ the same class, matching the AF5 contract where `@CommandHandler` no longer\
-        \ targets constructors. Parameter list and method body are preserved."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/convertcommandhandlerconstructortocompanionobject"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.ConvertCommandHandlerConstructorToStaticMethod:
-      name: "org.axonframework.migration.ConvertCommandHandlerConstructorToStaticMethod"
-      description: "Rewrites Axon Framework 4 `@CommandHandler` constructors into\
-        \ `public static void handle(...)` methods, matching the AF5 contract where\
-        \ `@CommandHandler` no longer targets constructors. Parameter list and method\
-        \ body are preserved."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/convertcommandhandlerconstructortostaticmethod"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.MigrateAggregateTestFixtureSetup:
-      name: "org.axonframework.migration.MigrateAggregateTestFixtureSetup"
-      description: "Rewrites `new AggregateTestFixture<X>(X.class)` (the AF4 aggregate-fixture\
-        \ constructor) to AF5's `AxonTestFixture.with(EventSourcingConfigurer.create().registerEntity(EventSourcedEntityModule.autodetected(<IdType>.class,\
-        \ X.class)))`. The aggregate type X is read from the class-literal constructor\
-        \ argument; the id type is looked up via the cross-recipe map populated by\
-        \ AddEventTagAnnotation (while @AggregateIdentifier is still on the source).\
-        \ Only matches the AF4 AggregateTestFixture FQN — SagaTestFixture setups are\
-        \ left for manual migration."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/migrateaggregatetestfixturesetup"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.MigrateAxonTestFixtureFluentApi:
-      name: "org.axonframework.migration.MigrateAxonTestFixtureFluentApi"
-      description: "Rewrites the flat AF4 `fixture.given(...).when(...).expectEvents(...)`\
-        \ call shape to the AF5 fluent `fixture.given().events(...).when().command(...).then().events(...)`\
-        \ shape, including the leaf-method renames (`expectNoEvents` → `noEvents`,\
-        \ `expectSuccessfulHandlerExecution` → `success`, `expectException` + `expectExceptionMessage`\
-        \ → single `exception(cls, msg)`, etc.). The fixture setup migration (constructor\
-        \ → `AxonTestFixture.with(configurer)`, `@AfterEach stop()`) and Hamcrest\
-        \ matcher conversions stay manual."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/migrateaxontestfixturefluentapi"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.MigrateCommandGatewayInEventHandler:
-      name: "org.axonframework.migration.MigrateCommandGatewayInEventHandler"
-      description: "Inside every `@EventHandler` method in the class, rewrites calls\
-        \ of the form `commandGateway.send(...)` / `commandGateway.sendAndWait(...)`\
-        \ (where `commandGateway` is a class-level `CommandGateway` field) to `commandDispatcher.send(...)`\
-        \ on a method-level `CommandDispatcher` parameter — adding the parameter when\
-        \ missing. For `void` handlers whose body is a single dispatch expression\
-        \ or a single try/catch with one dispatch per branch, the return type is widened\
-        \ to `CompletableFuture<?>` and the dispatch is converted to `return ... .getResultMessage();`.\
-        \ Once no other references to the gateway field remain, the field, its constructor\
-        \ parameter, and the matching assignment are removed."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/migratecommandgatewayineventhandler"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.MigrateKotlinDslBomImport:
-      name: "org.axonframework.migration.MigrateKotlinDslBomImport"
-      description: "Swaps the `groupId:artifactId` prefix of a Spring Dependency Management\
-        \ `mavenBom(\"g:a:${property(\"...\")}\")` call in a `build.gradle.kts` script,\
-        \ leaving the `${property(...)}` indirection in place. Optionally updates\
-        \ the literal value of the matching `extra[\"...\"]` declaration so the version\
-        \ follows the new BOM. Targets a gap in `gradle.ChangeManagedDependency` where\
-        \ the Kotlin string-template variant of `property(...)` is not recognized."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/migratekotlindslbomimport"
-      options:
-      - name: "extraPropertyKey"
-        type: "String"
-        required: false
-      - name: "newArtifactId"
-        type: "String"
-        required: true
-      - name: "newGroupId"
-        type: "String"
-        required: true
-      - name: "newVersion"
-        type: "String"
-        required: false
-      - name: "oldArtifactId"
-        type: "String"
-        required: true
-      - name: "oldGroupId"
-        type: "String"
-        required: true
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.MigrateMessageInterceptorSignatures:
-      name: "org.axonframework.migration.MigrateMessageInterceptorSignatures"
-      description: "Rewrites the method signatures of `MessageHandlerInterceptor`\
-        \ and `MessageDispatchInterceptor` implementations to their AF5 shape: `handle(UnitOfWork,\
-        \ InterceptorChain) -> Object` becomes `interceptOnHandle(M, ProcessingContext,\
-        \ MessageHandlerInterceptorChain<M>) -> MessageStream<?>` (and similarly for\
-        \ the dispatch interceptor). The method **body is left untouched** — the dropped\
-        \ `unitOfWork` / `interceptorChain` references become compile errors, surfacing\
-        \ every call site that needs review. A class-level `// TODO(axon4to5):` comment\
-        \ points to the migration path doc. The message type `M` is read from the\
-        \ `implements` clause; raw implementations fall back to `Message`. Runs after\
-        \ the AF4 -> AF5 FQN renames."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/migratemessageinterceptorsignatures"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.MigrateSequencingPolicyLambda:
-      name: "org.axonframework.migration.MigrateSequencingPolicyLambda"
-      description: "Rewrites single-argument `SequencingPolicy` lambdas (`e -> body`)\
-        \ to the AF5 shape `(e, ctx) -> Optional.ofNullable(body)`. The AF5 `SequencingPolicy.sequenceIdentifierFor`\
-        \ method takes both a message and a `ProcessingContext`, and returns `Optional<Object>`\
-        \ instead of a nullable `Object`. Adds the `java.util.Optional` import. Leaves\
-        \ block-body lambdas, multi-parameter lambdas, and anonymous inner classes\
-        \ alone — those need manual rewriting since the AF4 method name (`getSequenceIdentifierFor`)\
-        \ and the AF5 method name (`sequenceIdentifierFor`) differ."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/migratesequencingpolicylambda"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.MigrateSnapshotTriggerDefinitionToAnnotation:
-      name: "org.axonframework.migration.MigrateSnapshotTriggerDefinitionToAnnotation"
-      description: "Replaces AF4 Spring Boot @Bean methods returning SnapshotTriggerDefinition\
-        \ with the AF5 @Snapshotting annotation on the corresponding aggregate class.\
-        \ EventCountSnapshotTriggerDefinition maps to afterEvents; AggregateLoadTimeSnapshotTriggerDefinition\
-        \ maps to afterSourcingTime. Custom implementations leave a TODO comment for\
-        \ manual review."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/migratesnapshottriggerdefinitiontoannotation"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.RemoveTypeArguments:
-      name: "org.axonframework.migration.RemoveTypeArguments"
-      description: "Removes the generic type arguments (`<...>`) from any usage of\
-        \ the configured fully-qualified type. Preserves the underlying type reference\
-        \ and its surrounding context (variables, parameters, return types, generic\
-        \ bounds, etc.)."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/removetypearguments"
-      options:
-      - name: "fullyQualifiedTypeName"
-        type: "String"
-        required: true
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.ReplaceAggregateLifecycleApply:
-      name: "org.axonframework.migration.ReplaceAggregateLifecycleApply"
-      description: "Replaces every `AggregateLifecycle.apply(X)` (statically imported\
-        \ or via the class) with `eventAppender.append(X)`, injecting an `EventAppender\
-        \ eventAppender` parameter into the enclosing method when one is not already\
-        \ declared. Drops the static `apply` import once no usages remain."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/replaceaggregatelifecycleapply"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.UpgradeAxon4ToAxon5:
-      name: "org.axonframework.migration.UpgradeAxon4ToAxon5"
-      description: "Migrates an Axon Framework 4.x application to free (Apache 2.0)\
-        \ Axon Framework 5. Bumps the Axon Framework dependency versions, applies\
-        \ per-module rename recipes (one per core framework module), and renames Maven\
-        \ coordinates within the `org.axonframework.*` namespace. Does NOT touch features\
-        \ dropped from free AF5 (Axon Server, DLQ, DistributedCommandBus) — see `UpgradeAxon4ToAxoniq5`\
-        \ for the commercial path."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/upgradeaxon4toaxon5"
-      options: []
-      isImperative: false
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.UpgradeJava:
-      name: "org.axonframework.migration.UpgradeJava"
-      description: "Bumps the Java compiler target in pom.xml/build.gradle to the\
-        \ configured LTS (defaults to 21, the Axon Framework 5 minimum). No-op for\
-        \ modules already at or above the target — projects already on a higher Java\
-        \ release are left untouched."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/upgradejava"
-      options:
-      - name: "targetVersion"
-        type: "Integer"
-        required: false
-      isImperative: true
-      artifactId: "rewrite-third-party"
-    org.axonframework.migration.UpgradeKotlin:
-      name: "org.axonframework.migration.UpgradeKotlin"
-      description: "Bumps the `org.jetbrains.kotlin:*` dependency versions and the\
-        \ `kotlin-maven-plugin` to the configured Kotlin line (defaults to \"2.x\"\
-        , the latest Kotlin 2.x). No-op for modules already at or above the target\
-        \ — the underlying upgrade recipes never downgrade. Rejects targets below\
-        \ Kotlin 2.0."
-      docLink: "https://docs.openrewrite.org/recipes/axonframework/migration/upgradekotlin"
-      options:
-      - name: "targetVersion"
-        type: "String"
-        required: false
-      isImperative: true
       artifactId: "rewrite-third-party"
     org.openrewrite.java.camel.migrate.removedExtensions:
       name: "org.openrewrite.java.camel.migrate.removedExtensions"
@@ -42768,7 +42646,7 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
 rewrite-toml:
   artifactId: "rewrite-toml"
-  version: "8.85.0"
+  version: "8.86.0"
   markdownRecipeDescriptors:
     org.openrewrite.toml.ChangeKey:
       name: "org.openrewrite.toml.ChangeKey"
@@ -42927,7 +42805,7 @@ rewrite-toml:
       artifactId: "rewrite-toml"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.85.0"
+  version: "8.86.0"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -43287,7 +43165,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.85.0"
+  version: "8.86.0"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AddCommentToProperty:
       name: "org.openrewrite.yaml.AddCommentToProperty"
