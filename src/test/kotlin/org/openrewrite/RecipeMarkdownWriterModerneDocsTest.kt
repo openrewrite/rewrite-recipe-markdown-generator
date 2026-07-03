@@ -133,17 +133,40 @@ class RecipeMarkdownWriterModerneDocsTest {
 
     @Test
     fun moderneDocsEmitsNpmUsageForJavaScriptRecipe(@TempDir dir: Path) {
-        val recipe = descriptor("org.openrewrite.javascript.FormatFoo", "Format foo", "Formats foo.")
+        // Uses `rewrite-angular` — a real entry in TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES —
+        // so this exercises the registry lookup (rather than the fallback that just prefixes @openrewrite/).
+        // If the mapping is ever removed from the registry, this test starts asserting the fallback
+        // package name, which is the signal we want.
+        val angularOrigin = RecipeOrigin("io.moderne.recipe", "rewrite-angular", "1.0.0", jar)
+            .apply { license = Licenses.Proprietary }
+        val recipe = descriptor(
+            "org.openrewrite.angular.UpgradeToAngular16",
+            "Upgrade to Angular 16", "Migrates Angular 15.x applications to Angular 16.",
+        )
         // isJavaScriptRecipe keys off a `typescript-search://` source URI.
-        val recipeToSource = mapOf(recipe.name to URI.create("typescript-search://rewrite-static-analysis/format"))
-        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, emptySet(), forModerneDocs = true)
-            .writeRecipe(recipe, dir, origin())
+        val recipeToSource = mapOf(recipe.name to URI.create("typescript-search://rewrite-angular/upgrade-to-angular-16"))
+        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, setOf(recipe.name), forModerneDocs = true)
+            .writeRecipe(recipe, dir, angularOrigin)
         val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
 
         // JS recipes get a UsageList with an npm package, not Maven/Gradle coordinates.
         assertThat(out).contains("<UsageList usage={")
-        assertThat(out).contains("\"npmPackage\":")
+        assertThat(out).contains("\"npmPackage\":\"@openrewrite/recipes-angular\"")
         assertThat(out).doesNotContain("\"groupId\":")
+
+        // The RecipeHeader `artifact` chip advertises the same install coordinates as the Usage section,
+        // not the Java Maven coordinates the recipe happens to ship alongside its .jar.
+        assertThat(out).contains("artifact={\"@openrewrite/recipes-angular\"}")
+        assertThat(out).doesNotContain("artifact={\"io.moderne.recipe:rewrite-angular\"}")
+    }
+
+    @Test
+    fun moderneDocsEmitsMavenArtifactForJavaRecipe(@TempDir dir: Path) {
+        // A Java recipe (no typescript-search:// / python-search:// / csharp-search:// source URI) keeps the
+        // groupId:artifactId chip — this is the default and the previous behaviour for every language.
+        val out = generate(singleRecipe(), dir, forModerneDocs = true)
+
+        assertThat(out).contains("artifact={\"org.openrewrite.recipe:rewrite-static-analysis\"}")
     }
 
     @Test

@@ -968,7 +968,12 @@ ${props.toString().trimEnd()}
         val languages = listOf(getSourceLanguage(name))
         // License as plain text (not the markdown-link form the OpenRewrite docs path uses).
         val licenseText = origin.license.name
-        val artifact = "${origin.groupId}:${origin.artifactId}"
+        val artifact = when {
+            isJavaScriptRecipe(recipeDescriptor) -> getNpmPackageName(origin)
+            isPythonRecipe(recipeDescriptor) -> getPipPackageName(origin)
+            isCSharpRecipe(recipeDescriptor) -> getNuGetPackageName(origin)
+            else -> "${origin.groupId}:${origin.artifactId}"
+        }
         val appLink = "https://app.moderne.io/recipes/$name"
         val markdownUrl = MODERNE_DOCS_MARKDOWN_BASE_URL + recipePath + ".md"
 
