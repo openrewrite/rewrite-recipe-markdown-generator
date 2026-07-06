@@ -588,14 +588,20 @@ import RunRecipe from '@site/src/components/RunRecipe';
         // Handle Python recipes
         if (isPythonRecipe(recipeDescriptor)) {
             val pipPackageName = getPipPackageName(origin)
+            val props = StringBuilder()
+            props.appendLine("  recipeName=\"${recipeDescriptor.name}\"")
+            props.appendLine("  displayName=\"${recipeDescriptor.displayNameEscapedMdx()}\"")
+            props.appendLine("  pipPackage=\"$pipPackageName\"")
+            // Pin the pip package to an explicit version matching the Maven artifact version, except for
+            // modules whose pip package is versioned independently (those always install the latest).
+            if (origin.artifactId !in PythonRecipeLoader.INDEPENDENT_PIP_VERSIONING) {
+                props.appendLine("  versionKey=\"${origin.versionPlaceholderKey()}\"")
+            }
             writeln(
                 """
-                <RunRecipe
-                  recipeName="${recipeDescriptor.name}"
-                  displayName="${recipeDescriptor.displayNameEscapedMdx()}"
-                  pipPackage="$pipPackageName"
-                />
-                """.trimIndent()
+<RunRecipe
+${props.toString().trimEnd()}
+/>""".trimIndent()
             )
             return
         }
@@ -1223,7 +1229,14 @@ ${props.toString().trimEnd()}
         // per-ecosystem <RunRecipe>); everything else uses the Maven/Gradle coordinates + CLI options.
         when {
             isJavaScriptRecipe(recipeDescriptor) -> usageMap["npmPackage"] = getNpmPackageName(origin)
-            isPythonRecipe(recipeDescriptor) -> usageMap["pipPackage"] = getPipPackageName(origin)
+            isPythonRecipe(recipeDescriptor) -> {
+                usageMap["pipPackage"] = getPipPackageName(origin)
+                // Pin the pip package to an explicit version matching the Maven artifact version, except
+                // for modules whose pip package is versioned independently (those install the latest).
+                if (origin.artifactId !in PythonRecipeLoader.INDEPENDENT_PIP_VERSIONING) {
+                    usageMap["versionKey"] = origin.versionPlaceholderKey()
+                }
+            }
             isCSharpRecipe(recipeDescriptor) -> usageMap["nugetPackage"] = getNuGetPackageName(origin)
             else -> {
                 val options = recipeDescriptor.options ?: emptyList()
