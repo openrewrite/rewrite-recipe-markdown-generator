@@ -57,7 +57,7 @@ class PythonRecipeLoader(
          * Modules whose pip package uses independent versioning from the Maven artifact.
          * For these, we always install the latest pip version rather than trying to match the Maven version.
          */
-        private val INDEPENDENT_PIP_VERSIONING = setOf(
+        val INDEPENDENT_PIP_VERSIONING = setOf(
             "rewrite-static-analysis-python"
         )
     }

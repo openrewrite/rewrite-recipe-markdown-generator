@@ -161,6 +161,46 @@ class RecipeMarkdownWriterModerneDocsTest {
     }
 
     @Test
+    fun moderneDocsEmitsPinnedPipInstallForPythonRecipe(@TempDir dir: Path) {
+        // Uses `rewrite-migrate-python` — a real entry in PythonRecipeLoader.PYTHON_RECIPE_MODULES — so the
+        // Usage section pins the pip package to the module's version placeholder, matching the Maven version.
+        val pythonOrigin = RecipeOrigin("org.openrewrite.recipe", "rewrite-migrate-python", "0.5.0", jar)
+            .apply { license = Licenses.Proprietary }
+        val recipe = descriptor(
+            "org.openrewrite.python.migrate.UpgradePythonVersion",
+            "Upgrade Python version", "Upgrades the Python version.",
+        )
+        val recipeToSource = mapOf(recipe.name to URI.create("python-search://rewrite-migrate-python/upgrade-python-version"))
+        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, setOf(recipe.name), forModerneDocs = true)
+            .writeRecipe(recipe, dir, pythonOrigin)
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        // Python recipes install from pip with an explicit version, not Maven/Gradle coordinates.
+        assertThat(out).contains("\"pipPackage\":\"openrewrite-migrate-python\"")
+        assertThat(out).contains("\"versionKey\":\"VERSION_ORG_OPENREWRITE_RECIPE_REWRITE_MIGRATE_PYTHON\"")
+        assertThat(out).doesNotContain("\"groupId\":")
+    }
+
+    @Test
+    fun moderneDocsOmitsVersionForIndependentlyVersionedPythonRecipe(@TempDir dir: Path) {
+        // `rewrite-static-analysis-python` is in PythonRecipeLoader.INDEPENDENT_PIP_VERSIONING: its pip package
+        // is versioned independently of the Maven artifact, so the Usage section installs the latest (no version).
+        val pythonOrigin = RecipeOrigin("org.openrewrite.recipe", "rewrite-static-analysis-python", "1.0.0", jar)
+            .apply { license = Licenses.Proprietary }
+        val recipe = descriptor(
+            "org.openrewrite.python.staticanalysis.CodeCleanup",
+            "Code cleanup", "Cleans up Python code.",
+        )
+        val recipeToSource = mapOf(recipe.name to URI.create("python-search://rewrite-static-analysis-python/code-cleanup"))
+        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, setOf(recipe.name), forModerneDocs = true)
+            .writeRecipe(recipe, dir, pythonOrigin)
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        assertThat(out).contains("\"pipPackage\":\"openrewrite-static-analysis\"")
+        assertThat(out).doesNotContain("\"versionKey\":")
+    }
+
+    @Test
     fun moderneDocsEmitsMavenArtifactForJavaRecipe(@TempDir dir: Path) {
         // A Java recipe (no typescript-search:// / python-search:// / csharp-search:// source URI) keeps the
         // groupId:artifactId chip — this is the default and the previous behaviour for every language.
