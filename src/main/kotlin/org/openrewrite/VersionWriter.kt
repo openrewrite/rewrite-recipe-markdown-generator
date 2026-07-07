@@ -15,7 +15,8 @@ class VersionWriter {
         rewriteRecipeBomVersion: String,
         moderneRecipeBomVersion: String,
         gradlePluginVersion: String,
-        mavenPluginVersion: String
+        mavenPluginVersion: String,
+        forModerneDocs: Boolean
     ) {
         val versionsSnippetPath = outputPath.resolve("latest-versions-of-every-openrewrite-module.md")
         Files.newBufferedWriter(versionsSnippetPath, StandardOpenOption.CREATE).useAndApply {
@@ -56,9 +57,12 @@ class VersionWriter {
                 | [**org.openrewrite:rewrite-maven-plugin**](https://github.com/openrewrite/rewrite-maven-plugin)                       | **${mavenLink}** | ${Licenses.Apache2.markdown()} |
                 | [**org.openrewrite:rewrite-gradle-plugin**](https://github.com/openrewrite/rewrite-gradle-plugin)                     | **${gradleLink}** | ${Licenses.Apache2.markdown()} |
                 | [**org.openrewrite.recipe:rewrite-recipe-bom**](https://github.com/openrewrite/rewrite-recipe-bom)                    | **${rewriteRecipeBomLink}** | ${Licenses.Apache2.markdown()} |
-                | [**io.moderne.recipe:moderne-recipe-bom**](https://github.com/moderneinc/moderne-recipe-bom)                          | **${moderneBomLink}** | ${Licenses.Proprietary.markdown()} |
                 """.trimIndent()
             )
+            // The moderne-recipe-bom is proprietary, so it is only listed in the Moderne docs.
+            if (forModerneDocs) {
+                writeln("| [**io.moderne.recipe:moderne-recipe-bom**](https://github.com/moderneinc/moderne-recipe-bom)                          | **${moderneBomLink}** | ${Licenses.Proprietary.markdown()} |")
+            }
             var cliInstallJarPinned = ""
             var cliInstallJarLatest = ""
             var cliInstallPipPinned = ""
@@ -70,7 +74,15 @@ class VersionWriter {
             var cliInstallGoPinned = ""
             var cliInstallGoLatest = ""
             var installRecipes = ""
-            for (origin in recipeOrigins) {
+            // OpenRewrite docs (docs.openrewrite.org) list open-source modules only; proprietary modules
+            // are documented in the Moderne docs (docs.moderne.io). This drops them from the version table,
+            // the per-ecosystem CLI install commands, and the Moderne installation GraphQL mutation below.
+            val modulesToList = if (forModerneDocs) {
+                recipeOrigins
+            } else {
+                recipeOrigins.filterNot { RecipeMarkdownGenerator.isModerneDocsOnly(it) }
+            }
+            for (origin in modulesToList) {
 
                 val versionPlaceholder = "{{${origin.versionPlaceholderKey()}}}"
                 when (origin.artifactId) {

@@ -58,7 +58,7 @@ class RecipeMarkdownGeneratorTest {
             mk("io.moderne.recipe", "recipes-code-quality", "0.1.0"),
             mk("org.openrewrite.recipe", "recipes-go", "0.4.1"),
         )
-        VersionWriter().createLatestVersionsMarkdown(tempDir, origins, "8.x", "2.x", "1.x", "6.x", "5.x")
+        VersionWriter().createLatestVersionsMarkdown(tempDir, origins, "8.x", "2.x", "1.x", "6.x", "5.x", forModerneDocs = true)
         val out = Files.readString(tempDir.resolve("latest-versions-of-every-openrewrite-module.md"))
         assertThat(out).contains("mod config recipes jar install org.openrewrite.recipe:rewrite-spring:{{VERSION_ORG_OPENREWRITE_RECIPE_REWRITE_SPRING}}")
         assertThat(out).contains("mod config recipes jar install org.openrewrite.recipe:rewrite-spring:LATEST")
@@ -77,6 +77,59 @@ class RecipeMarkdownGeneratorTest {
         assertThat(out).contains("mutation seedOpenRewriteArtifacts {")
         assertThat(out).contains("load_org_openrewrite_recipe_rewrite_spring: installRecipesUniversal(")
         assertThat(out).contains("bundle: { maven: { groupId: \"org.openrewrite.recipe\", artifactId: \"rewrite-spring\", version: \"LATEST\" } }")
+
+        // Moderne docs include the proprietary moderne-recipe-bom row.
+        assertThat(out).contains("io.moderne.recipe:moderne-recipe-bom")
+    }
+
+    @Test
+    fun latestVersionsOpenRewriteDocsExcludeProprietaryButKeepMsal(@TempDir tempDir: Path) {
+        fun mk(g: String, a: String, v: String, license: License): RecipeOrigin {
+            val o = RecipeOrigin(g, a, v, URI.create("file:///$a.jar"))
+            o.repositoryUrl = "https://github.com/openrewrite/$a/blob/main/"
+            o.license = license
+            return o
+        }
+        // A mix spanning all three license tiers and every install ecosystem.
+        val origins = listOf(
+            mk("org.openrewrite.recipe", "rewrite-spring", "5.0.0", Licenses.Apache2),        // Apache -> keep
+            mk("org.openrewrite", "rewrite-python", "1.2.3", Licenses.MSAL),                  // MSAL pip -> keep
+            mk("org.openrewrite.recipe", "rewrite-migrate-python", "0.5.0", Licenses.Proprietary), // pip -> drop
+            mk("org.openrewrite", "rewrite-javascript", "0.9.0", Licenses.MSAL),              // MSAL npm -> keep
+            mk("org.openrewrite.recipe", "rewrite-angular", "1.5.0", Licenses.Proprietary),   // npm -> drop
+            mk("io.moderne.recipe", "rewrite-spring", "0.37.0", Licenses.Proprietary),        // jar -> drop
+            mk("org.openrewrite.recipe", "recipes-go", "0.4.1", Licenses.Proprietary),        // go -> drop (whole command)
+        )
+
+        // OpenRewrite docs: proprietary dropped, Apache/MSAL kept.
+        val orDir = tempDir.resolve("openrewrite")
+        Files.createDirectories(orDir)
+        VersionWriter().createLatestVersionsMarkdown(orDir, origins, "8.x", "2.x", "1.x", "6.x", "5.x", forModerneDocs = false)
+        val orOut = Files.readString(orDir.resolve("latest-versions-of-every-openrewrite-module.md"))
+
+        // Kept: Apache jar + both MSAL ecosystem packages.
+        assertThat(orOut).contains("org.openrewrite.recipe:rewrite-spring:")
+        assertThat(orOut).contains("mod config recipes pip install openrewrite==")
+        assertThat(orOut).contains("mod config recipes npm install @openrewrite/rewrite@")
+        // Dropped: every proprietary module, its table row, and the moderne-recipe-bom row.
+        assertThat(orOut).doesNotContain("io.moderne.recipe:")
+        assertThat(orOut).doesNotContain("openrewrite-migrate-python")
+        assertThat(orOut).doesNotContain("angular")
+        // recipes-go was the only Go module, so the whole `go install` command disappears.
+        assertThat(orOut).doesNotContain("mod config recipes go install")
+        assertThat(orOut).doesNotContain("load_io_moderne_recipe_rewrite_spring")
+
+        // Moderne docs: everything present.
+        val modDir = tempDir.resolve("moderne")
+        Files.createDirectories(modDir)
+        VersionWriter().createLatestVersionsMarkdown(modDir, origins, "8.x", "2.x", "1.x", "6.x", "5.x", forModerneDocs = true)
+        val modOut = Files.readString(modDir.resolve("latest-versions-of-every-openrewrite-module.md"))
+
+        assertThat(modOut).contains("io.moderne.recipe:rewrite-spring:")
+        assertThat(modOut).contains("io.moderne.recipe:moderne-recipe-bom")
+        assertThat(modOut).contains("openrewrite-migrate-python")
+        assertThat(modOut).contains("recipes-angular")
+        assertThat(modOut).contains("mod config recipes go install github.com/moderneinc/recipes-go")
     }
 
     @Test
