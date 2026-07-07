@@ -125,9 +125,11 @@ class RecipeMarkdownGenerator : Runnable {
         val recipeLoader = RecipeLoader(recipeClasspath, recipeOrigins)
         recipeLoader.addInfosFromManifests()
 
-        // Write latest-versions-of-every-openrewrite-module.md, for all recipe modules
+        // Write latest-versions-of-every-openrewrite-module.md
         val versionWriter = VersionWriter()
-        // OpenRewrite docs
+        // OpenRewrite docs: createLatestVersionsMarkdown drops proprietary modules from the table and
+        // CLI commands when forModerneDocs = false. latest-versions.js keeps every module regardless so
+        // that no {{VERSION_*}} placeholder referenced elsewhere is ever left dangling.
         versionWriter.createLatestVersionsJs(
             outputPath,
             recipeOrigins.values,
@@ -142,9 +144,10 @@ class RecipeMarkdownGenerator : Runnable {
             rewriteRecipeBomVersion,
             moderneRecipeBomVersion,
             gradlePluginVersion,
-            mavenPluginVersion
+            mavenPluginVersion,
+            forModerneDocs = false
         )
-        // Moderne docs
+        // Moderne docs: ALL recipe modules, including proprietary.
         if (moderneOutputPath != null) {
             versionWriter.createLatestVersionsJs(
                 moderneOutputPath,
@@ -160,7 +163,8 @@ class RecipeMarkdownGenerator : Runnable {
                 rewriteRecipeBomVersion,
                 moderneRecipeBomVersion,
                 gradlePluginVersion,
-                mavenPluginVersion
+                mavenPluginVersion,
+                forModerneDocs = true
             )
         }
 
@@ -412,7 +416,7 @@ class RecipeMarkdownGenerator : Runnable {
         /** Modules whose docs should only appear in Moderne docs, regardless of license. */
         private val MODERNE_DOCS_ONLY_MODULES = setOf("rewrite-devcenter")
 
-        private fun isModerneDocsOnly(origin: RecipeOrigin): Boolean =
+        internal fun isModerneDocsOnly(origin: RecipeOrigin): Boolean =
             origin.license == Licenses.Proprietary || origin.artifactId in MODERNE_DOCS_ONLY_MODULES
 
         // Set of base paths that have both io.moderne and org.openrewrite recipes (conflicts)
