@@ -125,14 +125,10 @@ class RecipeMarkdownGenerator : Runnable {
         val recipeLoader = RecipeLoader(recipeClasspath, recipeOrigins)
         recipeLoader.addInfosFromManifests()
 
-        // The C# recipe modules are NuGet-only: they have no Maven artifact to give them a
-        // RecipeOrigin (and their RPC-derived origins are created later, after the latest-versions
-        // page below has already been written). Synthesize origins here, resolving each package's
-        // latest stable version from NuGet, so the version table and `nuget install` command include
-        // them. Merged after addInfosFromManifests, which would otherwise clear their repositoryUrl
-        // (there is no manifest to read it from). Only needed for Moderne docs — C# modules are
-        // proprietary and excluded from the OpenRewrite docs, and this also keeps the OR-docs-only
-        // path free of NuGet network calls.
+        // Synthesize origins for the NuGet-only C# modules so the version table and `nuget install`
+        // command below include them. Placed after addInfosFromManifests (which would otherwise clear
+        // their repositoryUrl) and gated to Moderne docs, since C# is proprietary and excluded from
+        // the OpenRewrite docs — which also keeps that path free of NuGet network calls.
         if (moderneOutputPath != null) {
             recipeOrigins = recipeOrigins + CSharpRecipeLoader.buildVersionAnchorOrigins(onlyArtifacts.toSet())
         }

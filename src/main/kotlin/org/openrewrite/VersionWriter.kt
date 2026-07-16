@@ -113,9 +113,8 @@ class VersionWriter {
                     }
                 }
 
-                // The Moderne Installation mutation installs from Maven. C# modules are NuGet-only
-                // and have no Maven coordinate, so they are covered by the `nuget install` command
-                // above and omitted here rather than emitting an unresolvable maven bundle.
+                // The Moderne Installation mutation installs from Maven; C# modules have no Maven
+                // coordinate, so they are omitted here (covered by the `nuget install` command above).
                 if (origin.artifactId !in CSharpRecipeLoader.CSHARP_RECIPE_MODULES) {
                     val loadCommand = "load_" + (origin.groupId + '_' + origin.artifactId)
                         .replace('-', '_')
@@ -129,10 +128,8 @@ class VersionWriter {
                       }"""
                 }
 
-                // C# modules are NuGet-only: with no Maven artifact behind them, identify them by
-                // their NuGet package and link to nuget.org, matching the `nuget install` command
-                // below. Every other row is backed by a real Maven artifact, so it keeps its
-                // groupId:artifactId + GitHub links.
+                // C# modules have no Maven artifact, so identify them by their NuGet package and
+                // link to nuget.org, matching the `nuget install` command below.
                 val nugetPackage = CSharpRecipeLoader.CSHARP_RECIPE_MODULES[origin.artifactId]
                 val repoLink: String
                 val releaseLink: String

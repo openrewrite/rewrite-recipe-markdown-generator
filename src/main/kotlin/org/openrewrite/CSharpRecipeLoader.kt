@@ -56,16 +56,13 @@ class CSharpRecipeLoader(
         private val CLASSPATH_BUNDLE = RecipeBundle("classpath", "java-recipes", null, null, null)
 
         /**
-         * Build synthetic [RecipeOrigin]s for the NuGet-only C# recipe modules, resolving each
-         * package's latest stable version from NuGet. Unlike the other ecosystems, C# modules have
-         * no Maven artifact on the classpath to anchor the version table and `nuget install` command,
-         * and the origins created during [loadCSharpRecipes] are built too late — after the
-         * latest-versions page has already been written. Origins are keyed by the same
-         * `csharp-search://<artifactId>` URI that [loadCSharpRecipes] uses, so that (in a full run)
-         * it reuses these instead of creating duplicates.
+         * Build synthetic [RecipeOrigin]s for the NuGet-only C# recipe modules, with each package's
+         * latest stable version resolved from NuGet. Unlike the other ecosystems, C# modules have no
+         * Maven artifact to anchor them in the version table and `nuget install` command, so their
+         * origins must be synthesized before the latest-versions page is written.
          *
-         * @param artifactIds when non-empty, only build origins for these artifactIds (mirrors the
-         *   `--only-artifacts` filter so local runs don't make needless NuGet requests).
+         * @param artifactIds when non-empty, restricts to these artifactIds (mirrors `--only-artifacts`
+         *   so local runs don't make needless NuGet requests).
          */
         @JvmStatic
         fun buildVersionAnchorOrigins(artifactIds: Set<String> = emptySet()): Map<URI, RecipeOrigin> {

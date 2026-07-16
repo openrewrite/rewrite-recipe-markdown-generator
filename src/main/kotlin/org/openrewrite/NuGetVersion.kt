@@ -6,9 +6,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-// The C# recipe modules are published only to NuGet; there is no Maven artifact to anchor their
-// version the way the other ecosystems do. Their latest stable version is resolved from the NuGet
-// "package base address" (flat container) index at doc-generation time.
+// Resolves versions from the NuGet "package base address" (flat container) API.
 // https://learn.microsoft.com/en-us/nuget/api/package-base-address-resource
 private val NUGET_MAPPER = jacksonObjectMapper()
     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
