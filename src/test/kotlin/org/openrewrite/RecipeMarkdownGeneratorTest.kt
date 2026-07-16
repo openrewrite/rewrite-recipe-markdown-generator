@@ -80,6 +80,11 @@ class RecipeMarkdownGeneratorTest {
 
         // Moderne docs include the proprietary moderne-recipe-bom row.
         assertThat(out).contains("io.moderne.recipe:moderne-recipe-bom")
+
+        // C# modules appear in the version table...
+        assertThat(out).contains("[io.moderne.recipe:recipes-code-quality]")
+        // ...but not in the Maven-only GraphQL mutation, since they have no Maven coordinate.
+        assertThat(out).doesNotContain("artifactId: \"recipes-code-quality\"")
     }
 
     @Test

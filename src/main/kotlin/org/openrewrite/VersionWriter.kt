@@ -113,16 +113,21 @@ class VersionWriter {
                     }
                 }
 
-                val loadCommand = "load_" + (origin.groupId + '_' + origin.artifactId)
-                    .replace('-', '_')
-                    .replace('.', '_')
-                //language=graphql
-                installRecipes += """
-                  $loadCommand: installRecipesUniversal(
-                    bundle: { maven: { groupId: "${origin.groupId}", artifactId: "${origin.artifactId}", version: "LATEST" } }
-                  ) {
-                    id
-                  }"""
+                // The Moderne Installation mutation installs from Maven. C# modules are NuGet-only
+                // and have no Maven coordinate, so they are covered by the `nuget install` command
+                // above and omitted here rather than emitting an unresolvable maven bundle.
+                if (origin.artifactId !in CSharpRecipeLoader.CSHARP_RECIPE_MODULES) {
+                    val loadCommand = "load_" + (origin.groupId + '_' + origin.artifactId)
+                        .replace('-', '_')
+                        .replace('.', '_')
+                    //language=graphql
+                    installRecipes += """
+                      $loadCommand: installRecipesUniversal(
+                        bundle: { maven: { groupId: "${origin.groupId}", artifactId: "${origin.artifactId}", version: "LATEST" } }
+                      ) {
+                        id
+                      }"""
+                }
 
                 val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.repositoryUrl})"
                 val releaseLink = "[${origin.version}](${origin.releaseUrl(origin.version)})"

@@ -56,6 +56,37 @@ class CSharpRecipeLoader(
         private val CLASSPATH_BUNDLE = RecipeBundle("classpath", "java-recipes", null, null, null)
 
         /**
+         * Build synthetic [RecipeOrigin]s for the NuGet-only C# recipe modules, resolving each
+         * package's latest stable version from NuGet. Unlike the other ecosystems, C# modules have
+         * no Maven artifact on the classpath to anchor the version table and `nuget install` command,
+         * and the origins created during [loadCSharpRecipes] are built too late — after the
+         * latest-versions page has already been written. Origins are keyed by the same
+         * `csharp-search://<artifactId>` URI that [loadCSharpRecipes] uses, so that (in a full run)
+         * it reuses these instead of creating duplicates.
+         *
+         * @param artifactIds when non-empty, only build origins for these artifactIds (mirrors the
+         *   `--only-artifacts` filter so local runs don't make needless NuGet requests).
+         */
+        @JvmStatic
+        fun buildVersionAnchorOrigins(artifactIds: Set<String> = emptySet()): Map<URI, RecipeOrigin> {
+            val origins = mutableMapOf<URI, RecipeOrigin>()
+            for ((artifactId, nugetPackage) in CSHARP_RECIPE_MODULES) {
+                if (artifactIds.isNotEmpty() && artifactId !in artifactIds) continue
+                val version = latestStableNuGetVersion(nugetPackage)
+                if (version == null) {
+                    System.err.println("Skipping C# version anchor for $artifactId: could not resolve latest stable NuGet version of $nugetPackage")
+                    continue
+                }
+                val uri = URI.create("csharp-search://$artifactId")
+                val origin = RecipeOrigin(CSHARP_GROUP_IDS[artifactId] ?: "io.moderne.recipe", artifactId, version, uri)
+                origin.repositoryUrl = CSHARP_REPO_URLS[artifactId] ?: ""
+                origin.license = Licenses.Proprietary
+                origins[uri] = origin
+            }
+            return origins
+        }
+
+        /**
          * Build a [RecipeMarketplace] populated with Java recipe descriptors so that
          * C# recipes that delegate to Java recipes can be resolved during [CSharpRewriteRpc.prepareRecipe].
          */
