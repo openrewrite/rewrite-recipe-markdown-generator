@@ -129,8 +129,22 @@ class VersionWriter {
                       }"""
                 }
 
-                val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.repositoryUrl})"
-                val releaseLink = "[${origin.version}](${origin.releaseUrl(origin.version)})"
+                // C# modules are NuGet-only — there is no Maven artifact behind the synthetic
+                // `io.moderne.recipe:<artifactId>` coordinate — so identify them by their NuGet
+                // package and link to nuget.org, matching the `nuget install` command below (and the
+                // per-recipe ecosystem-native identity introduced in #350). Every other row is backed
+                // by a real Maven artifact, so it keeps its `groupId:artifactId` + GitHub links.
+                val nugetPackage = CSharpRecipeLoader.CSHARP_RECIPE_MODULES[origin.artifactId]
+                val repoLink: String
+                val releaseLink: String
+                if (nugetPackage != null) {
+                    val packageUrl = "https://www.nuget.org/packages/$nugetPackage"
+                    repoLink = "[$nugetPackage]($packageUrl)"
+                    releaseLink = "[${origin.version}]($packageUrl/${origin.version})"
+                } else {
+                    repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.repositoryUrl})"
+                    releaseLink = "[${origin.version}](${origin.releaseUrl(origin.version)})"
+                }
                 writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${origin.license.markdown()} |")
             }
 
