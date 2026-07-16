@@ -129,11 +129,10 @@ class VersionWriter {
                       }"""
                 }
 
-                // C# modules are NuGet-only — there is no Maven artifact behind the synthetic
-                // `io.moderne.recipe:<artifactId>` coordinate — so identify them by their NuGet
-                // package and link to nuget.org, matching the `nuget install` command below (and the
-                // per-recipe ecosystem-native identity introduced in #350). Every other row is backed
-                // by a real Maven artifact, so it keeps its `groupId:artifactId` + GitHub links.
+                // C# modules are NuGet-only: with no Maven artifact behind them, identify them by
+                // their NuGet package and link to nuget.org, matching the `nuget install` command
+                // below. Every other row is backed by a real Maven artifact, so it keeps its
+                // groupId:artifactId + GitHub links.
                 val nugetPackage = CSharpRecipeLoader.CSHARP_RECIPE_MODULES[origin.artifactId]
                 val repoLink: String
                 val releaseLink: String
