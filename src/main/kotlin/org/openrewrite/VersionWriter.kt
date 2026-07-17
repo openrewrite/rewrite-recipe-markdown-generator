@@ -113,12 +113,22 @@ class VersionWriter {
                     }
                 }
 
-                // The Moderne Installation mutation installs from Maven; C# modules have no Maven
-                // coordinate, so they are omitted here (covered by the `nuget install` command above).
-                if (origin.artifactId !in CSharpRecipeLoader.CSHARP_RECIPE_MODULES) {
-                    val loadCommand = "load_" + (origin.groupId + '_' + origin.artifactId)
-                        .replace('-', '_')
-                        .replace('.', '_')
+                // C# modules have no Maven coordinate, so install them via the `nuget` bundle
+                // variant. `*-*` is the NuGet parallel of Maven `LATEST` (newest published,
+                // prereleases included).
+                val nugetPackage = CSharpRecipeLoader.CSHARP_RECIPE_MODULES[origin.artifactId]
+                val loadCommand = "load_" + (nugetPackage ?: "${origin.groupId}_${origin.artifactId}")
+                    .replace('-', '_')
+                    .replace('.', '_')
+                if (nugetPackage != null) {
+                    //language=graphql
+                    installRecipes += """
+                      $loadCommand: installRecipesUniversal(
+                        bundle: { nuget: { packageName: "$nugetPackage", version: "*-*" } }
+                      ) {
+                        id
+                      }"""
+                } else {
                     //language=graphql
                     installRecipes += """
                       $loadCommand: installRecipesUniversal(
@@ -128,19 +138,14 @@ class VersionWriter {
                       }"""
                 }
 
-                // C# modules have no Maven artifact, so identify them by their NuGet package and
-                // link to nuget.org, matching the `nuget install` command below.
-                val nugetPackage = CSharpRecipeLoader.CSHARP_RECIPE_MODULES[origin.artifactId]
+                // Note that these are links to Github releases, not locations on things like Nuget.org or Maven Central currently
                 val repoLink: String
-                val releaseLink: String
                 if (nugetPackage != null) {
-                    val packageUrl = "https://www.nuget.org/packages/$nugetPackage"
-                    repoLink = "[$nugetPackage]($packageUrl)"
-                    releaseLink = "[${origin.version}]($packageUrl/${origin.version})"
+                    repoLink = "[$nugetPackage](${origin.repositoryUrl})"
                 } else {
                     repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.repositoryUrl})"
-                    releaseLink = "[${origin.version}](${origin.releaseUrl(origin.version)})"
                 }
+                val releaseLink = "[${origin.version}](${origin.releaseUrl(origin.version)})"
                 writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${origin.license.markdown()} |")
             }
 
