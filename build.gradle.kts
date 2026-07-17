@@ -104,8 +104,6 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-android:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-apache:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-circleci:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-codemods:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-codemods-ng:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-compiled-analysis:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-concourse:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm:$rewriteVersion")
