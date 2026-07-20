@@ -113,18 +113,38 @@ class VersionWriter {
                     }
                 }
 
-                val loadCommand = "load_" + (origin.groupId + '_' + origin.artifactId)
+                // C# modules have no Maven coordinate, so install them via the `nuget` bundle
+                // variant. `*-*` is the NuGet parallel of Maven `LATEST` (newest published,
+                // prereleases included).
+                val nugetPackage = CSharpRecipeLoader.CSHARP_RECIPE_MODULES[origin.artifactId]
+                val loadCommand = "load_" + (nugetPackage ?: "${origin.groupId}_${origin.artifactId}")
                     .replace('-', '_')
                     .replace('.', '_')
-                //language=graphql
-                installRecipes += """
-                  $loadCommand: installRecipesUniversal(
-                    bundle: { maven: { groupId: "${origin.groupId}", artifactId: "${origin.artifactId}", version: "LATEST" } }
-                  ) {
-                    id
-                  }"""
+                if (nugetPackage != null) {
+                    //language=graphql
+                    installRecipes += """
+                      $loadCommand: installRecipesUniversal(
+                        bundle: { nuget: { packageName: "$nugetPackage", version: "*-*" } }
+                      ) {
+                        id
+                      }"""
+                } else {
+                    //language=graphql
+                    installRecipes += """
+                      $loadCommand: installRecipesUniversal(
+                        bundle: { maven: { groupId: "${origin.groupId}", artifactId: "${origin.artifactId}", version: "LATEST" } }
+                      ) {
+                        id
+                      }"""
+                }
 
-                val repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.repositoryUrl})"
+                // Note that these are links to Github releases, not locations on things like Nuget.org or Maven Central currently
+                val repoLink: String
+                if (nugetPackage != null) {
+                    repoLink = "[$nugetPackage](${origin.repositoryUrl})"
+                } else {
+                    repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.repositoryUrl})"
+                }
                 val releaseLink = "[${origin.version}](${origin.releaseUrl(origin.version)})"
                 writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${origin.license.markdown()} |")
             }

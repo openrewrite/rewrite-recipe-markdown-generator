@@ -80,6 +80,14 @@ class RecipeMarkdownGeneratorTest {
 
         // Moderne docs include the proprietary moderne-recipe-bom row.
         assertThat(out).contains("io.moderne.recipe:moderne-recipe-bom")
+
+        // C# modules appear in the version table by their NuGet identity, not a fabricated
+        // Maven coordinate, and in the GraphQL mutation via the `nuget` bundle variant rather
+        // than a fabricated Maven one.
+        assertThat(out).contains("[OpenRewrite.Recipes.CSharp.CodeQuality]")
+        assertThat(out).doesNotContain("[io.moderne.recipe:recipes-code-quality]")
+        assertThat(out).doesNotContain("artifactId: \"recipes-code-quality\"")
+        assertThat(out).contains("bundle: { nuget: { packageName: \"OpenRewrite.Recipes.CSharp.CodeQuality\", version: \"*-*\" } }")
     }
 
     @Test
@@ -435,6 +443,7 @@ class RecipeMarkdownGeneratorTest {
             "Test recipe",
             mutableSetOf(),
             java.time.Duration.ZERO,
+            mutableListOf(),
             mutableListOf(),
             mutableListOf(),
             mutableListOf(),
