@@ -63,9 +63,12 @@ class RecipeLoader {
     }
 
     /**
-     * Load recipes from the specified sources and classpath
+     * Load recipes from the specified sources and classpath.
+     *
+     * @param requireAllRecipeSources fail rather than warn when a configured RPC-backed language
+     * (TypeScript, Python, C#, Go) contributes no recipes at all.
      */
-    fun loadRecipes(): RecipeLoadResult {
+    fun loadRecipes(requireAllRecipeSources: Boolean = false): RecipeLoadResult {
         // Load Java/YAML recipes in parallel
         val environmentData = loadEnvironmentDataAsync()
 
@@ -106,12 +109,17 @@ class RecipeLoader {
             }
         }
 
+        // An RPC-backed language whose toolchain is broken yields zero descriptors rather than an
+        // error, so the run stays green while silently omitting every recipe in that language.
+        // Callers that replace their catalog wholesale then delete the corresponding pages.
+        val emptyRecipeSources = mutableListOf<String>()
+
         // Load TypeScript recipes via RPC
         println("\nChecking for TypeScript/JavaScript recipes...")
         val typeScriptLoader = TypeScriptRecipeLoader(recipeOrigins)
         val typeScriptResult = typeScriptLoader.loadTypeScriptRecipes()
         if (typeScriptResult.descriptors.isEmpty() && TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES.isNotEmpty()) {
-            System.err.println("WARNING: 0 TypeScript recipes loaded despite ${TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES.size} module(s) configured. Check that Node.js is installed.")
+            emptyRecipeSources += "TypeScript: 0 recipes from ${TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES.size} configured module(s). Check that Node.js is installed."
         }
 
         // Load Python recipes via RPC
@@ -119,7 +127,7 @@ class RecipeLoader {
         val pythonLoader = PythonRecipeLoader(recipeOrigins)
         val pythonResult = pythonLoader.loadPythonRecipes()
         if (pythonResult.descriptors.isEmpty() && PythonRecipeLoader.PYTHON_RECIPE_MODULES.isNotEmpty()) {
-            System.err.println("WARNING: 0 Python recipes loaded despite ${PythonRecipeLoader.PYTHON_RECIPE_MODULES.size} module(s) configured. Check that Python 3.10+ and pip are installed.")
+            emptyRecipeSources += "Python: 0 recipes from ${PythonRecipeLoader.PYTHON_RECIPE_MODULES.size} configured module(s). Check that Python 3.10+ and pip are installed."
         }
 
         // Load C# recipes via RPC, passing Java descriptors so delegatesTo can resolve
@@ -128,7 +136,7 @@ class RecipeLoader {
         val csharpLoader = CSharpRecipeLoader(recipeOrigins, javaDescriptors, classloader)
         val csharpResult = csharpLoader.loadCSharpRecipes()
         if (csharpResult.descriptors.isEmpty() && CSharpRecipeLoader.CSHARP_RECIPE_MODULES.isNotEmpty()) {
-            System.err.println("WARNING: 0 C# recipes loaded despite ${CSharpRecipeLoader.CSHARP_RECIPE_MODULES.size} module(s) configured. Check that .NET SDK is installed.")
+            emptyRecipeSources += "C#: 0 recipes from ${CSharpRecipeLoader.CSHARP_RECIPE_MODULES.size} configured module(s). Check that the .NET SDK is installed."
         }
 
         // Load Go recipes via RPC, passing Java descriptors so delegatesTo can resolve
@@ -136,8 +144,10 @@ class RecipeLoader {
         val goLoader = GoRecipeLoader(recipeOrigins, javaDescriptors, classloader)
         val goResult = goLoader.loadGoRecipes()
         if (goResult.descriptors.isEmpty() && GoRecipeLoader.GO_RECIPE_MODULES.isNotEmpty()) {
-            System.err.println("WARNING: 0 Go recipes loaded despite ${GoRecipeLoader.GO_RECIPE_MODULES.size} module(s) configured. Check that Go 1.25+ and the rewrite-go-rpc server are installed.")
+            emptyRecipeSources += "Go: 0 recipes from ${GoRecipeLoader.GO_RECIPE_MODULES.size} configured module(s). Check that Go 1.25+ and the rewrite-go-rpc server are installed."
         }
+
+        reportEmptyRecipeSources(emptyRecipeSources, requireAllRecipeSources)
 
         // Merge TypeScript, Python, C#, and Go results with Java/YAML results
         val allDescriptors = environmentData.flatMap { it.recipeDescriptors }.toMutableList()
@@ -302,6 +312,24 @@ class RecipeLoader {
          */
         fun sanitizePathSegment(segment: String): String {
             return segment.lowercase().replace("#", "sharp")
+        }
+
+        /**
+         * Fail — or warn, when the caller opted out — if a configured recipe source contributed
+         * nothing. A broken toolchain surfaces as zero descriptors rather than an exception, and
+         * docs pipelines that replace their catalog wholesale turn that into mass page deletion.
+         */
+        fun reportEmptyRecipeSources(emptyRecipeSources: List<String>, requireAllRecipeSources: Boolean) {
+            if (emptyRecipeSources.isEmpty()) {
+                return
+            }
+            val detail = emptyRecipeSources.joinToString("\n") { "  - $it" }
+            check(!requireAllRecipeSources) {
+                "No recipes loaded from configured source(s):\n$detail\n" +
+                    "Publishing this run would drop every recipe in those languages. Fix the toolchain, " +
+                    "narrow the run with --only-artifacts, or pass --allow-empty-recipe-sources to override."
+            }
+            System.err.println("WARNING: no recipes loaded from configured source(s):\n$detail")
         }
     }
 

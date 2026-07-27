@@ -92,6 +92,14 @@ class RecipeMarkdownGenerator : Runnable {
     )
     var onlyArtifacts: List<String> = emptyList()
 
+    @Option(
+        names = ["--allow-empty-recipe-sources"],
+        description = ["Warn instead of failing when a configured RPC-backed language (TypeScript, " +
+            "Python, C#, Go) contributes no recipes. Use when generating docs on a machine that " +
+            "deliberately lacks one of those toolchains."]
+    )
+    var allowEmptyRecipeSources: Boolean = false
+
     override fun run() {
         // OpenRewrite docs output (open-source recipes only)
         val outputPath = Paths.get(destinationDirectoryName)
@@ -180,8 +188,11 @@ class RecipeMarkdownGenerator : Runnable {
             return
         }
 
-        // Load recipe details into memory
-        val loadResult = recipeLoader.loadRecipes()
+        // Load recipe details into memory. A run restricted to a few artifacts is expected to miss
+        // whole languages, so only a full run insists every configured language contributed recipes.
+        val loadResult = recipeLoader.loadRecipes(
+            requireAllRecipeSources = onlyArtifacts.isEmpty() && !allowEmptyRecipeSources
+        )
         val allRecipeDescriptors = loadResult.allRecipeDescriptors
         val allCategoryDescriptors = loadResult.allCategoryDescriptors
         val allRecipes = loadResult.allRecipes
