@@ -83,6 +83,23 @@ class VersionWriter {
                 recipeOrigins.filterNot { RecipeMarkdownGenerator.isModerneDocsOnly(it) }
             }
             for (origin in modulesToList) {
+                // C# modules have no Maven coordinate, so install them via the `nuget` bundle
+                // variant. `*-*` is the NuGet parallel of Maven `LATEST` (newest published,
+                // prereleases included).
+                val nugetPackage = CSharpRecipeLoader.CSHARP_RECIPE_MODULES[origin.artifactId]
+
+                // Note that these are links to Github releases, not locations on things like Nuget.org or Maven Central currently
+                val repoLink: String
+                if (nugetPackage != null) {
+                    repoLink = "[$nugetPackage](${origin.repositoryUrl})"
+                } else {
+                    repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.repositoryUrl})"
+                }
+                val releaseLink = "[${origin.version}](${origin.releaseUrl(origin.version)})"
+                writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${origin.license.markdown()} |")
+
+                // Modules listed for their version alone ship no recipes to install.
+                if (origin.artifactId in RecipeLoader.VERSION_ONLY_MODULES) continue
 
                 val versionPlaceholder = "{{${origin.versionPlaceholderKey()}}}"
                 when (origin.artifactId) {
@@ -97,7 +114,6 @@ class VersionWriter {
                         cliInstallNpmLatest += "$npmPackage "
                     }
                     in CSharpRecipeLoader.CSHARP_RECIPE_MODULES -> {
-                        val nugetPackage = CSharpRecipeLoader.CSHARP_RECIPE_MODULES.getValue(origin.artifactId)
                         cliInstallNugetPinned += "$nugetPackage@$versionPlaceholder "
                         cliInstallNugetLatest += "$nugetPackage "
                     }
@@ -113,10 +129,6 @@ class VersionWriter {
                     }
                 }
 
-                // C# modules have no Maven coordinate, so install them via the `nuget` bundle
-                // variant. `*-*` is the NuGet parallel of Maven `LATEST` (newest published,
-                // prereleases included).
-                val nugetPackage = CSharpRecipeLoader.CSHARP_RECIPE_MODULES[origin.artifactId]
                 val loadCommand = "load_" + (nugetPackage ?: "${origin.groupId}_${origin.artifactId}")
                     .replace('-', '_')
                     .replace('.', '_')
@@ -137,16 +149,6 @@ class VersionWriter {
                         id
                       }"""
                 }
-
-                // Note that these are links to Github releases, not locations on things like Nuget.org or Maven Central currently
-                val repoLink: String
-                if (nugetPackage != null) {
-                    repoLink = "[$nugetPackage](${origin.repositoryUrl})"
-                } else {
-                    repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.repositoryUrl})"
-                }
-                val releaseLink = "[${origin.version}](${origin.releaseUrl(origin.version)})"
-                writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${origin.license.markdown()} |")
             }
 
             val pinnedInstalls = listOf(

@@ -94,9 +94,9 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-xml:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-yaml:$rewriteVersion")
 
-    // Additional core modules (versions only, recipes not yet included)
-//    "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
-//    "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
+    // Additional core modules; versions only, recipes not included (RecipeLoader.VERSION_ONLY_MODULES)
+    "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
 
     // Recipe modules (org.openrewrite.recipe)
     "recipe"("org.openrewrite.meta:rewrite-analysis:$rewriteVersion")
@@ -200,13 +200,6 @@ tasks.named<JavaExec>("run").configure {
     val moderneTargetDir = layout.buildDirectory.dir("moderne-docs").get().asFile
 
     val latestVersionsOnly = providers.gradleProperty("latestVersionsOnly").getOrElse("").equals("true")
-    if (latestVersionsOnly) {
-        // Additional modules whose versions we want to show, but not (yet) their recipes
-        dependencies {
-            "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
-            "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
-        }
-    }
 
     // Collect all of the dependencies from recipeConf, then stuff them into a string representation
     val recipeModules = recipeConf.resolvedConfiguration.firstLevelModuleDependencies.flatMap { dep ->
