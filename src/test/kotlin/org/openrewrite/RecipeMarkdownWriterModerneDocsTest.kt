@@ -226,20 +226,19 @@ class RecipeMarkdownWriterModerneDocsTest {
     }
 
     @Test
-    fun openRewriteDocsEmitsGoInstallForGoRecipe(@TempDir dir: Path) {
+    fun openRewriteDocsRefuseToRenderGoRecipe(@TempDir dir: Path) {
+        // Go recipes are Moderne proprietary, so RecipeMarkdownGenerator keeps them out of the OpenRewrite
+        // docs. If that filter ever breaks, fail the build rather than publish an open-source page whose
+        // `jar install` command installs nothing.
         val goOrigin = RecipeOrigin("org.openrewrite.recipe", "recipes-go", "0.5.3", jar)
-        val recipe = descriptor(
-            "org.openrewrite.golang.OrderImports",
-            "Order imports", "Orders Go imports.",
-        )
+            .apply { license = Licenses.Proprietary }
+        val recipe = descriptor("org.openrewrite.golang.OrderImports", "Order imports", "Orders Go imports.")
         val recipeToSource = mapOf(recipe.name to URI.create("go-search://recipes-go/${recipe.name}"))
-        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, emptySet(), forModerneDocs = false)
-            .writeRecipe(recipe, dir, goOrigin)
-        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+        val writer = RecipeMarkdownWriter(mutableMapOf(), recipeToSource, emptySet(), forModerneDocs = false)
 
-        assertThat(out).contains("goPackage=\"github.com/moderneinc/recipes-go\"")
-        assertThat(out).contains("versionKey=\"VERSION_ORG_OPENREWRITE_RECIPE_RECIPES_GO\"")
-        assertThat(out).doesNotContain("jar install")
+        assertThatThrownBy { writer.writeRecipe(recipe, dir, goOrigin) }
+            .isInstanceOf(IllegalStateException::class.java)
+            .hasMessageContaining("go-search")
     }
 
     @Test

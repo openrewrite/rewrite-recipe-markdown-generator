@@ -582,14 +582,15 @@ import RunRecipe from '@site/src/components/RunRecipe';
      * Every non-JVM ecosystem stamps its recipes with a `<language>-search://` source URI. Falling through to
      * the Maven/Gradle branch for one of those renders a `jar install` of a metadata-only stub: the command
      * succeeds, installs zero recipes, and the failure only surfaces later when `mod run` cannot find the
-     * recipe. Fail the generation instead, so adding an ecosystem forces a matching branch here.
+     * recipe. Fail the generation instead, so adding an ecosystem forces either a matching branch here or a
+     * filter that keeps its recipes out of these docs entirely.
      */
     private fun requireHandledEcosystem(recipeDescriptor: RecipeDescriptor) {
         val scheme = recipeToSource[recipeDescriptor.name]?.scheme ?: return
         check(!scheme.endsWith("-search")) {
-            "Recipe ${recipeDescriptor.name} has an unhandled '$scheme://' source URI. " +
-                    "Add a branch to RecipeMarkdownWriter for this ecosystem; otherwise its docs would " +
-                    "advertise Maven coordinates that install no recipes."
+            "Recipe ${recipeDescriptor.name} has an unhandled '$scheme://' source URI. Either give this " +
+                    "ecosystem its own branch in RecipeMarkdownWriter, or exclude its recipes from these " +
+                    "docs; otherwise they advertise Maven coordinates that install no recipes."
         }
     }
 
@@ -653,22 +654,9 @@ ${props.toString().trimEnd()}
             return
         }
 
-        // Handle Go recipes
-        if (isGoRecipe(recipeDescriptor)) {
-            val goModuleName = getGoModuleName(origin)
-            writeln(
-                """
-                <RunRecipe
-                  recipeName="${recipeDescriptor.name}"
-                  displayName="${recipeDescriptor.displayNameEscapedMdx()}"
-                  goPackage="$goModuleName"
-                  versionKey="${origin.versionPlaceholderKey()}"
-                />
-                """.trimIndent()
-            )
-            return
-        }
-
+        // Deliberately no Go branch: Go recipes are Moderne proprietary, so RecipeMarkdownGenerator
+        // filters them out of the OpenRewrite docs — the only docs this method writes. Reaching here
+        // with one means that filter has broken, which the check below turns into a build failure.
         requireHandledEcosystem(recipeDescriptor)
 
         val suppressJava = recipeDescriptor.name.contains(".csharp.") ||
@@ -1276,8 +1264,8 @@ ${props.toString().trimEnd()}
             "displayName" to recipeDescriptor.displayName,
         )
 
-        // JS/Python/C#/Go recipes install from their own package managers (matching the markdown path's
-        // per-ecosystem <RunRecipe>); everything else uses the Maven/Gradle coordinates + CLI options.
+        // JS/Python/C#/Go recipes install from their own package managers; everything else uses the
+        // Maven/Gradle coordinates + CLI options.
         when {
             isJavaScriptRecipe(recipeDescriptor) -> usageMap["npmPackage"] = getNpmPackageName(origin)
             isPythonRecipe(recipeDescriptor) -> {
