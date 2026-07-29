@@ -74,6 +74,14 @@ class RecipeMarkdownWriter(
     }
 
     /**
+     * Determines if a recipe is a Go recipe based on its source URI.
+     */
+    private fun isGoRecipe(recipeDescriptor: RecipeDescriptor): Boolean {
+        val recipeSource = recipeToSource[recipeDescriptor.name] ?: return false
+        return recipeSource.toString().startsWith("go-search://")
+    }
+
+    /**
      * Write a recipe to a custom path (for cross-category duplicates).
      * The target language is derived from the first segment of the custom path (e.g., "python" from "python/changemethodname").
      */
@@ -561,6 +569,30 @@ import RunRecipe from '@site/src/components/RunRecipe';
             ?: origin.artifactId
     }
 
+    /**
+     * Gets the Go module path for a Go recipe module.
+     * Uses the single source of truth from GoRecipeLoader.
+     */
+    private fun getGoModuleName(origin: RecipeOrigin): String {
+        return GoRecipeLoader.GO_RECIPE_MODULES[origin.artifactId]
+            ?: origin.artifactId
+    }
+
+    /**
+     * Every non-JVM ecosystem stamps its recipes with a `<language>-search://` source URI. Falling through to
+     * the Maven/Gradle branch for one of those renders a `jar install` of a metadata-only stub: the command
+     * succeeds, installs zero recipes, and the failure only surfaces later when `mod run` cannot find the
+     * recipe. Fail the generation instead, so adding an ecosystem forces a matching branch here.
+     */
+    private fun requireHandledEcosystem(recipeDescriptor: RecipeDescriptor) {
+        val scheme = recipeToSource[recipeDescriptor.name]?.scheme ?: return
+        check(!scheme.endsWith("-search")) {
+            "Recipe ${recipeDescriptor.name} has an unhandled '$scheme://' source URI. " +
+                    "Add a branch to RecipeMarkdownWriter for this ecosystem; otherwise its docs would " +
+                    "advertise Maven coordinates that install no recipes."
+        }
+    }
+
     private fun BufferedWriter.writeUsage(
         recipeDescriptor: RecipeDescriptor,
         origin: RecipeOrigin
@@ -620,6 +652,24 @@ ${props.toString().trimEnd()}
             )
             return
         }
+
+        // Handle Go recipes
+        if (isGoRecipe(recipeDescriptor)) {
+            val goModuleName = getGoModuleName(origin)
+            writeln(
+                """
+                <RunRecipe
+                  recipeName="${recipeDescriptor.name}"
+                  displayName="${recipeDescriptor.displayNameEscapedMdx()}"
+                  goPackage="$goModuleName"
+                  versionKey="${origin.versionPlaceholderKey()}"
+                />
+                """.trimIndent()
+            )
+            return
+        }
+
+        requireHandledEcosystem(recipeDescriptor)
 
         val suppressJava = recipeDescriptor.name.contains(".csharp.") ||
                 recipeDescriptor.name.contains(".dotnet.") ||
@@ -978,6 +1028,7 @@ ${props.toString().trimEnd()}
             isJavaScriptRecipe(recipeDescriptor) -> getNpmPackageName(origin)
             isPythonRecipe(recipeDescriptor) -> getPipPackageName(origin)
             isCSharpRecipe(recipeDescriptor) -> getNuGetPackageName(origin)
+            isGoRecipe(recipeDescriptor) -> getGoModuleName(origin)
             else -> "${origin.groupId}:${origin.artifactId}"
         }
         val appLink = "https://app.moderne.io/recipes/$name"
@@ -1225,7 +1276,7 @@ ${props.toString().trimEnd()}
             "displayName" to recipeDescriptor.displayName,
         )
 
-        // JS/Python/C# recipes install from their own package managers (matching the markdown path's
+        // JS/Python/C#/Go recipes install from their own package managers (matching the markdown path's
         // per-ecosystem <RunRecipe>); everything else uses the Maven/Gradle coordinates + CLI options.
         when {
             isJavaScriptRecipe(recipeDescriptor) -> usageMap["npmPackage"] = getNpmPackageName(origin)
@@ -1238,7 +1289,14 @@ ${props.toString().trimEnd()}
                 }
             }
             isCSharpRecipe(recipeDescriptor) -> usageMap["nugetPackage"] = getNuGetPackageName(origin)
+            isGoRecipe(recipeDescriptor) -> {
+                // Go modules are installed from source by module path, pinned with a vX.Y.Z tag
+                // derived from the Maven artifact version.
+                usageMap["goPackage"] = getGoModuleName(origin)
+                usageMap["versionKey"] = origin.versionPlaceholderKey()
+            }
             else -> {
+                requireHandledEcosystem(recipeDescriptor)
                 val options = recipeDescriptor.options ?: emptyList()
                 val requiresConfiguration = options.any { it.isRequired }
                 usageMap["groupId"] = origin.groupId

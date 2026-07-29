@@ -1,6 +1,7 @@
 package org.openrewrite
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import org.openrewrite.config.OptionDescriptor
@@ -201,9 +202,62 @@ class RecipeMarkdownWriterModerneDocsTest {
     }
 
     @Test
+    fun moderneDocsEmitsGoInstallForGoRecipe(@TempDir dir: Path) {
+        // Uses `recipes-go` — a real entry in GoRecipeLoader.GO_RECIPE_MODULES — so the Usage section installs
+        // the Go module. The Maven artifact of the same name is a metadata-only stub: a `jar install` of it
+        // succeeds while installing zero recipes, which is exactly what this must not render.
+        val goOrigin = RecipeOrigin("org.openrewrite.recipe", "recipes-go", "0.5.3", jar)
+            .apply { license = Licenses.Proprietary }
+        val recipe = descriptor(
+            "org.openrewrite.golang.OrderImports",
+            "Order imports", "Orders Go imports.",
+        )
+        val recipeToSource = mapOf(recipe.name to URI.create("go-search://recipes-go/${recipe.name}"))
+        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, setOf(recipe.name), forModerneDocs = true)
+            .writeRecipe(recipe, dir, goOrigin)
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        assertThat(out).contains("\"goPackage\":\"github.com/moderneinc/recipes-go\"")
+        assertThat(out).contains("\"versionKey\":\"VERSION_ORG_OPENREWRITE_RECIPE_RECIPES_GO\"")
+        assertThat(out).doesNotContain("\"groupId\":")
+        assertThat(out).doesNotContain("\"artifactId\":")
+
+        assertThat(out).contains("artifact={\"github.com/moderneinc/recipes-go\"}")
+    }
+
+    @Test
+    fun openRewriteDocsEmitsGoInstallForGoRecipe(@TempDir dir: Path) {
+        val goOrigin = RecipeOrigin("org.openrewrite.recipe", "recipes-go", "0.5.3", jar)
+        val recipe = descriptor(
+            "org.openrewrite.golang.OrderImports",
+            "Order imports", "Orders Go imports.",
+        )
+        val recipeToSource = mapOf(recipe.name to URI.create("go-search://recipes-go/${recipe.name}"))
+        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, emptySet(), forModerneDocs = false)
+            .writeRecipe(recipe, dir, goOrigin)
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        assertThat(out).contains("goPackage=\"github.com/moderneinc/recipes-go\"")
+        assertThat(out).contains("versionKey=\"VERSION_ORG_OPENREWRITE_RECIPE_RECIPES_GO\"")
+        assertThat(out).doesNotContain("jar install")
+    }
+
+    @Test
+    fun unhandledEcosystemSourceUriFailsRatherThanFallingBackToMavenCoordinates(@TempDir dir: Path) {
+        // A future ecosystem's `*-search://` URI must not silently render Maven coordinates.
+        val recipe = descriptor("org.openrewrite.ruby.OrderRequires", "Order requires", "Orders requires.")
+        val recipeToSource = mapOf(recipe.name to URI.create("ruby-search://recipes-ruby/${recipe.name}"))
+        val writer = RecipeMarkdownWriter(mutableMapOf(), recipeToSource, emptySet(), forModerneDocs = true)
+
+        assertThatThrownBy { writer.writeRecipe(recipe, dir, origin()) }
+            .isInstanceOf(IllegalStateException::class.java)
+            .hasMessageContaining("ruby-search")
+    }
+
+    @Test
     fun moderneDocsEmitsMavenArtifactForJavaRecipe(@TempDir dir: Path) {
-        // A Java recipe (no typescript-search:// / python-search:// / csharp-search:// source URI) keeps the
-        // groupId:artifactId chip — this is the default and the previous behaviour for every language.
+        // A Java recipe (no typescript-search:// / python-search:// / csharp-search:// / go-search:// source
+        // URI) keeps the groupId:artifactId chip — the default and previous behaviour for every language.
         val out = generate(singleRecipe(), dir, forModerneDocs = true)
 
         assertThat(out).contains("artifact={\"org.openrewrite.recipe:rewrite-static-analysis\"}")
