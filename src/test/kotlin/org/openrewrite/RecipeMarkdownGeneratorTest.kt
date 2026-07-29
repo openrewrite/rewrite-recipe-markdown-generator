@@ -57,6 +57,7 @@ class RecipeMarkdownGeneratorTest {
             mk("org.openrewrite", "rewrite-javascript", "0.9.0"),
             mk("io.moderne.recipe", "recipes-code-quality", "0.1.0"),
             mk("org.openrewrite.recipe", "recipes-go", "0.4.1"),
+            mk("org.openrewrite", "rewrite-polyglot", "2.10.11"),
         )
         VersionWriter().createLatestVersionsMarkdown(tempDir, origins, "8.x", "2.x", "1.x", "6.x", "5.x", forModerneDocs = true)
         val out = Files.readString(tempDir.resolve("latest-versions-of-every-openrewrite-module.md"))
@@ -88,6 +89,11 @@ class RecipeMarkdownGeneratorTest {
         assertThat(out).doesNotContain("[io.moderne.recipe:recipes-code-quality]")
         assertThat(out).doesNotContain("artifactId: \"recipes-code-quality\"")
         assertThat(out).contains("bundle: { nuget: { packageName: \"OpenRewrite.Recipes.CSharp.CodeQuality\", version: \"*-*\" } }")
+
+        // Version-only modules keep their table row, but have no recipes to install.
+        assertThat(out).contains("[org.openrewrite:rewrite-polyglot]")
+        assertThat(out).doesNotContain("org.openrewrite:rewrite-polyglot:")
+        assertThat(out).doesNotContain("artifactId: \"rewrite-polyglot\"")
     }
 
     @Test

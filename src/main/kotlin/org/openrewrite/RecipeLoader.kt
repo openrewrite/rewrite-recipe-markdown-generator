@@ -306,6 +306,12 @@ class RecipeLoader {
 
     companion object {
         /**
+         * Modules on the recipe configuration purely so the version table lists them; they ship no
+         * recipes we document, so they are skipped when scanning and left out of install commands.
+         */
+        val VERSION_ONLY_MODULES = setOf("rewrite-polyglot", "rewrite-templating")
+
+        /**
          * Sanitize a category name for use as a URL-safe directory path segment.
          * Replaces special characters that are invalid in URLs/directory names.
          * E.g., "C#" → "csharp", "F#" → "fsharp"
@@ -396,6 +402,7 @@ class RecipeLoader {
     private fun loadEnvironmentDataAsync(): List<EnvironmentData> = runBlocking {
         println("Starting parallel recipe loading...")
         recipeOrigins.entries
+            .filter { it.value.artifactId !in VERSION_ONLY_MODULES }
             .chunked(3)
             .flatMap { batch -> batch.map { recipeOrigin ->
                 async(Dispatchers.IO) {
