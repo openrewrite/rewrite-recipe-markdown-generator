@@ -1,5 +1,6 @@
 package org.openrewrite
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -61,6 +62,19 @@ class RecipeMarkdownWriterModerneDocsTest {
     ).withPreconditions(
         listOf(descriptor("org.openrewrite.java.search.FindFoo", "Find foo", "Finds foo."))
     )
+
+    /**
+     * The top-level `usage={…}` object from the emitted `<UsageList>`. Assertions about a key being
+     * *absent* need this: a bare `doesNotContain("\"groupId\":")` also matches the nested companion-jar
+     * entries, so it would fail for reasons that have nothing to do with what the test is checking.
+     */
+    @Suppress("UNCHECKED_CAST")
+    private fun usageJson(out: String): Map<String, Any?> {
+        val json = out.lineSequence().first { it.startsWith("<UsageList usage={") }
+            .substringAfter("<UsageList usage={")
+            .substringBeforeLast("}>")
+        return jacksonObjectMapper().readValue(json, Map::class.java) as Map<String, Any?>
+    }
 
     private fun generate(
         recipe: RecipeDescriptor,
@@ -183,6 +197,27 @@ class RecipeMarkdownWriterModerneDocsTest {
         // so the jar coordinates ride along, pinned to the same version key.
         assertThat(out).contains("\"groupId\":\"org.openrewrite.recipe\"")
         assertThat(out).contains("\"artifactId\":\"rewrite-migrate-python\"")
+        // ...as do the coordinates of the core language module those jar recipes delegate into.
+        assertThat(out).contains("\"companionJars\":[{\"groupId\":\"org.openrewrite\",\"artifactId\":\"rewrite-python\"")
+        assertThat(out).contains("\"versionKey\":\"VERSION_ORG_OPENREWRITE_REWRITE_PYTHON\"")
+    }
+
+    @Test
+    fun moderneDocsOmitsCoreCompanionJarForRewritePythonsOwnRecipes(@TempDir dir: Path) {
+        // A recipe that ships in rewrite-python already installs rewrite-python; naming it again as a
+        // companion would render the same coordinates twice.
+        val coreOrigin = RecipeOrigin("org.openrewrite", "rewrite-python", "8.88.0", jar)
+        val recipe = descriptor(
+            "org.openrewrite.python.AddDependency",
+            "Add Python dependency", "Adds a dependency to a Python project.",
+        )
+        val recipeToSource = mapOf(recipe.name to URI.create("python-search://rewrite-python/add-dependency"))
+        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, emptySet(), forModerneDocs = true)
+            .writeRecipe(recipe, dir, coreOrigin)
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        assertThat(out).contains("\"pipPackage\":\"openrewrite\"")
+        assertThat(out).doesNotContain("companionJars")
     }
 
     @Test
@@ -204,6 +239,7 @@ class RecipeMarkdownWriterModerneDocsTest {
         assertThat(out).contains("\"groupId\":\"org.openrewrite.recipe\"")
         assertThat(out).contains("\"artifactId\":\"rewrite-migrate-python\"")
         assertThat(out).contains("\"versionKey\":\"VERSION_ORG_OPENREWRITE_RECIPE_REWRITE_MIGRATE_PYTHON\"")
+        assertThat(out).contains("\"companionJars\":[{\"groupId\":\"org.openrewrite\",\"artifactId\":\"rewrite-python\"")
     }
 
     @Test
@@ -224,8 +260,7 @@ class RecipeMarkdownWriterModerneDocsTest {
         val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
 
         assertThat(out).contains("\"pipPackage\":\"openrewrite-migrate-python\"")
-        assertThat(out).doesNotContain("\"groupId\":")
-        assertThat(out).doesNotContain("\"artifactId\":")
+        assertThat(usageJson(out)).doesNotContainKeys("groupId", "artifactId")
     }
 
     @Test
@@ -258,7 +293,7 @@ class RecipeMarkdownWriterModerneDocsTest {
         val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
 
         assertThat(out).contains("\"pipPackage\":\"openrewrite-static-analysis\"")
-        assertThat(out).doesNotContain("\"versionKey\":")
+        assertThat(usageJson(out)).doesNotContainKey("versionKey")
     }
 
     @Test

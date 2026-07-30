@@ -1285,6 +1285,7 @@ ${props.toString().trimEnd()}
                     usageMap["versionKey"] = origin.versionPlaceholderKey()
                 }
                 addDualPublishedJarCoordinates(usageMap, origin)
+                addPythonCoreCompanionJar(usageMap, origin)
             }
             isCSharpRecipe(recipeDescriptor) -> usageMap["nugetPackage"] = getNuGetPackageName(origin)
             isGoRecipe(recipeDescriptor) -> {
@@ -1306,6 +1307,7 @@ ${props.toString().trimEnd()}
                 // that delegate to it, so the pip command belongs alongside the Maven coordinates.
                 if (PythonRecipeLoader.publishesCompanionJar(origin)) {
                     usageMap["pipPackage"] = getPipPackageName(origin)
+                    addPythonCoreCompanionJar(usageMap, origin)
                 }
 
                 // cliOptions shares the per-option example formatting with writeUsage.
@@ -1325,6 +1327,27 @@ ${props.toString().trimEnd()}
         }
 
         return mapper.writeValueAsString(usageMap)
+    }
+
+    /**
+     * Names the core Python language module as a companion install.
+     *
+     * Recipes in `org.openrewrite.python.*` delegate into its `UpgradeDependencyVersion` /
+     * `ChangeDependency` recipes at runtime. The CLI resolves delegates eagerly, so a marketplace
+     * without this module fails the whole run — `IllegalStateException: Remote declared delegatesTo
+     * org.openrewrite.python.UpgradeDependencyVersion but no recipe found in marketplace` — rather than
+     * quietly skipping the step. Recipes that already ship in this module are skipped: for them the
+     * module's own coordinates are the install command.
+     */
+    private fun addPythonCoreCompanionJar(usageMap: MutableMap<String, Any?>, origin: RecipeOrigin) {
+        if (origin.artifactId == PYTHON_CORE_ARTIFACT_ID) return
+        usageMap["companionJars"] = listOf(
+            mapOf(
+                "groupId" to PYTHON_CORE_GROUP_ID,
+                "artifactId" to PYTHON_CORE_ARTIFACT_ID,
+                "versionKey" to RecipeOrigin.versionPlaceholderKey(PYTHON_CORE_GROUP_ID, PYTHON_CORE_ARTIFACT_ID)
+            )
+        )
     }
 
     /**
@@ -1386,6 +1409,10 @@ ${props.toString().trimEnd()}
     companion object {
         // Stateless + thread-safe; one instance for the whole run rather than per writer.
         private val mapper = jacksonObjectMapper()
+
+        // The core Python language module, which every org.openrewrite.python.* recipe delegates into.
+        private const val PYTHON_CORE_GROUP_ID = "org.openrewrite"
+        private const val PYTHON_CORE_ARTIFACT_ID = "rewrite-python"
 
         private const val MODERNE_DOCS_MARKDOWN_BASE_URL =
             "https://raw.githubusercontent.com/moderneinc/moderne-docs/refs/heads/main/docs/user-documentation/recipes/recipe-catalog/"
