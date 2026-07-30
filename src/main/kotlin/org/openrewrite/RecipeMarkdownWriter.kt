@@ -554,10 +554,17 @@ import RunRecipe from '@site/src/components/RunRecipe';
     /**
      * Gets the pip package name for a Python recipe module.
      * Uses the single source of truth from PythonRecipeLoader.
+     *
+     * Unregistered artifacts fail rather than falling back to the artifactId: that fallback published a
+     * `pip install` command for a PyPI package that need not exist.
      */
     private fun getPipPackageName(origin: RecipeOrigin): String {
         return PythonRecipeLoader.PYTHON_RECIPE_MODULES[origin.artifactId]
-            ?: origin.artifactId
+            ?: error(
+                "No pip package configured for artifact ${origin.artifactId}. Register it in " +
+                        "PythonRecipeLoader.PYTHON_RECIPE_MODULES; otherwise its recipe pages advertise a " +
+                        "pip install of a package that may not exist."
+            )
     }
 
     /**
@@ -618,7 +625,9 @@ import RunRecipe from '@site/src/components/RunRecipe';
             return
         }
 
-        // Handle Python recipes
+        // Handle Python recipes. Unlike buildUsageJson this never adds the jar half of a dual-published
+        // module: every such module is Moderne proprietary, so its recipes are filtered out of the
+        // OpenRewrite docs that this method writes.
         if (isPythonRecipe(recipeDescriptor)) {
             val pipPackageName = getPipPackageName(origin)
             val props = StringBuilder()
@@ -1275,6 +1284,7 @@ ${props.toString().trimEnd()}
                 if (origin.artifactId !in PythonRecipeLoader.INDEPENDENT_PIP_VERSIONING) {
                     usageMap["versionKey"] = origin.versionPlaceholderKey()
                 }
+                addDualPublishedJarCoordinates(usageMap, origin)
             }
             isCSharpRecipe(recipeDescriptor) -> usageMap["nugetPackage"] = getNuGetPackageName(origin)
             isGoRecipe(recipeDescriptor) -> {
@@ -1291,6 +1301,12 @@ ${props.toString().trimEnd()}
                 usageMap["artifactId"] = origin.artifactId
                 usageMap["versionKey"] = origin.versionPlaceholderKey()
                 usageMap["requiresConfiguration"] = requiresConfiguration
+                // The jar half of a dual-published Python module lands here, since only the pip half
+                // carries a `python-search://` source URI. Its readers arrive from the pip composites
+                // that delegate to it, so the pip command belongs alongside the Maven coordinates.
+                if (PythonRecipeLoader.publishesCompanionJar(origin)) {
+                    usageMap["pipPackage"] = getPipPackageName(origin)
+                }
 
                 // cliOptions shares the per-option example formatting with writeUsage.
                 val cliOptions = if (requiresConfiguration) {
@@ -1309,6 +1325,21 @@ ${props.toString().trimEnd()}
         }
 
         return mapper.writeValueAsString(usageMap)
+    }
+
+    /**
+     * Adds the Maven coordinates of a dual-published Python module's jar next to its pip package, pinned
+     * to the same version key the pip command already resolves.
+     */
+    private fun addDualPublishedJarCoordinates(usageMap: MutableMap<String, Any?>, origin: RecipeOrigin) {
+        if (!PythonRecipeLoader.publishesCompanionJar(origin)) return
+        check(origin.artifactId !in PythonRecipeLoader.INDEPENDENT_PIP_VERSIONING) {
+            "${origin.artifactId} is both dual-published and independently versioned, so its pip and jar " +
+                    "install commands need different versions — which a single versionKey cannot express."
+        }
+        usageMap["groupId"] = origin.groupId
+        usageMap["artifactId"] = origin.artifactId
+        usageMap["versionKey"] = origin.versionPlaceholderKey()
     }
 
     /**

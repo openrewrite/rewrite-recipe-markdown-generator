@@ -149,16 +149,20 @@ class RecipeLoader {
 
         reportEmptyRecipeSources(emptyRecipeSources, requireAllRecipeSources)
 
-        // Merge TypeScript, Python, C#, and Go results with Java/YAML results
+        // Merge TypeScript, Python, C#, and Go results with Java/YAML results. Sources are merged
+        // first-wins to match the descriptor deduplication below, which keeps the first (jar) descriptor:
+        // putAll would keep the last (RPC) source URI instead, so a recipe name published in both a jar
+        // and a pip/npm/NuGet package would be documented from the jar's descriptor under the other
+        // ecosystem's install instructions.
         val allDescriptors = environmentData.flatMap { it.recipeDescriptors }.toMutableList()
+        for (result in listOf(typeScriptResult.recipeToSource, pythonResult.recipeToSource,
+            csharpResult.recipeToSource, goResult.recipeToSource)) {
+            result.forEach { (name, source) -> recipeToSource.putIfAbsent(name, source) }
+        }
         allDescriptors.addAll(typeScriptResult.descriptors)
-        recipeToSource.putAll(typeScriptResult.recipeToSource)
         allDescriptors.addAll(pythonResult.descriptors)
-        recipeToSource.putAll(pythonResult.recipeToSource)
         allDescriptors.addAll(csharpResult.descriptors)
-        recipeToSource.putAll(csharpResult.recipeToSource)
         allDescriptors.addAll(goResult.descriptors)
-        recipeToSource.putAll(goResult.recipeToSource)
 
         // Deduplicate recipes by name (same recipe may be discovered from multiple JARs
         // when scanJar is called with the full classpath as dependencies)

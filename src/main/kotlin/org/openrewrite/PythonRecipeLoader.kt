@@ -60,6 +60,29 @@ class PythonRecipeLoader(
         val INDEPENDENT_PIP_VERSIONING = setOf(
             "rewrite-static-analysis-python"
         )
+
+        /**
+         * Modules that publish recipes to both PyPI and Maven Central, with no recipe in both halves.
+         * The two are coupled at runtime: `openrewrite-migrate-python`'s `UpgradeToPython3XX` composites
+         * end in an `RpcRecipe` that resolves against the `rewrite-migrate-python` jar, and the jar's
+         * `UpgradePythonVersionTo3XX` recipes are what those composites reach for. Whichever half a
+         * recipe page is generated from, it needs both install commands: install only one and the
+         * delegated steps resolve against nothing, silently skipping their changes.
+         *
+         * A recipe only picks up the second install command when its origin also carries real Maven
+         * coordinates, so a module here that has no published jar still documents pip alone.
+         */
+        val DUAL_PUBLISHED_MODULES = setOf(
+            "rewrite-migrate-python"
+        )
+
+        /**
+         * True when [origin] belongs to a dual-published module that really has a jar to install.
+         * Synthetic origins stand in for pip packages with no Maven artifact and are recognizable by
+         * their `python-search://` jarLocation; a `jar install` of one would install nothing.
+         */
+        fun publishesCompanionJar(origin: RecipeOrigin): Boolean =
+            origin.artifactId in DUAL_PUBLISHED_MODULES && origin.jarLocation.scheme != "python-search"
     }
 
     data class PythonRecipeResult(
