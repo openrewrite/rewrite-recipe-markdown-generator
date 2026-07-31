@@ -64,9 +64,8 @@ class RecipeMarkdownWriterModerneDocsTest {
     )
 
     /**
-     * The top-level `usage={…}` object from the emitted `<UsageList>`. Assertions about a key being
-     * *absent* need this: a bare `doesNotContain("\"groupId\":")` also matches the nested companion-jar
-     * entries, so it would fail for reasons that have nothing to do with what the test is checking.
+     * The top-level `usage={…}` object from the emitted `<UsageList>`. Absence assertions need this, as a
+     * bare `doesNotContain("\"groupId\":")` also matches the nested companion-jar entries.
      */
     @Suppress("UNCHECKED_CAST")
     private fun usageJson(out: String): Map<String, Any?> {
@@ -190,22 +189,18 @@ class RecipeMarkdownWriterModerneDocsTest {
             .writeRecipe(recipe, dir, pythonOrigin)
         val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
 
-        // Python recipes install from pip with an explicit version.
         assertThat(out).contains("\"pipPackage\":\"openrewrite-migrate-python\"")
         assertThat(out).contains("\"versionKey\":\"VERSION_ORG_OPENREWRITE_RECIPE_REWRITE_MIGRATE_PYTHON\"")
-        // `rewrite-migrate-python` is dual-published: its pip composites delegate to jar recipes over RPC,
-        // so the jar coordinates ride along, pinned to the same version key.
+        // `rewrite-migrate-python` is dual-published, so the jar coordinates ride along on the same key,
+        // as do those of the core language module the jar recipes delegate into.
         assertThat(out).contains("\"groupId\":\"org.openrewrite.recipe\"")
         assertThat(out).contains("\"artifactId\":\"rewrite-migrate-python\"")
-        // ...as do the coordinates of the core language module those jar recipes delegate into.
         assertThat(out).contains("\"companionJars\":[{\"groupId\":\"org.openrewrite\",\"artifactId\":\"rewrite-python\"")
         assertThat(out).contains("\"versionKey\":\"VERSION_ORG_OPENREWRITE_REWRITE_PYTHON\"")
     }
 
     @Test
     fun moderneDocsOmitsCoreCompanionJarForRewritePythonsOwnRecipes(@TempDir dir: Path) {
-        // A recipe that ships in rewrite-python already installs rewrite-python; naming it again as a
-        // companion would render the same coordinates twice.
         val coreOrigin = RecipeOrigin("org.openrewrite", "rewrite-python", "8.88.0", jar)
         val recipe = descriptor(
             "org.openrewrite.python.AddDependency",
@@ -222,9 +217,8 @@ class RecipeMarkdownWriterModerneDocsTest {
 
     @Test
     fun moderneDocsEmitsPipInstallForJarSourcedPythonRecipe(@TempDir dir: Path) {
-        // The jar half of `rewrite-migrate-python` is discovered by the JVM loader, so it carries no
-        // `python-search://` source URI. Its page still needs the pip command: readers reach it from the
-        // pip-published `UpgradeToPython3XX` composite that delegates to it (moderne-docs#900).
+        // Discovered by the JVM loader, so no `python-search://` source URI; readers still reach it from
+        // the pip-published `UpgradeToPython3XX` composite that delegates to it (moderne-docs#900).
         val pythonOrigin = RecipeOrigin("org.openrewrite.recipe", "rewrite-migrate-python", "0.10.1", jar)
             .apply { license = Licenses.Proprietary }
         val recipe = descriptor(
@@ -244,8 +238,8 @@ class RecipeMarkdownWriterModerneDocsTest {
 
     @Test
     fun moderneDocsOmitsJarInstallForPythonModuleWithoutMavenArtifact(@TempDir dir: Path) {
-        // PythonRecipeLoader invents an origin for a pip package with no Maven artifact, marking it with a
-        // `python-search://` jarLocation. Advertising a `jar install` for one would install nothing.
+        // PythonRecipeLoader marks origins it invents for pip-only packages with a `python-search://`
+        // jarLocation; a `jar install` of one would install nothing.
         val syntheticOrigin = RecipeOrigin(
             "org.openrewrite.recipe", "rewrite-migrate-python", "0.10.1",
             URI.create("python-search://rewrite-migrate-python")
@@ -265,7 +259,6 @@ class RecipeMarkdownWriterModerneDocsTest {
 
     @Test
     fun unregisteredPipModuleFailsRatherThanGuessingAPackageName(@TempDir dir: Path) {
-        // Falling back to the artifactId published a `pip install` for a PyPI package that need not exist.
         val unknownOrigin = RecipeOrigin("org.openrewrite.recipe", "rewrite-unregistered-python", "1.0.0", jar)
             .apply { license = Licenses.Proprietary }
         val recipe = descriptor("org.openrewrite.python.Unknown", "Unknown", "An unregistered module.")

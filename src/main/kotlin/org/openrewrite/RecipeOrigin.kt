@@ -123,8 +123,8 @@ class RecipeOrigin(
         private val parsePattern = Pattern.compile("([^:]+):([^:]+):([^:]+):(.+)")
 
         /**
-         * The `{{VERSION_…}}` token the docs resolve to a module's version. Exposed for coordinates named
-         * without a [RecipeOrigin] to hand, so the token cannot drift from the instance form.
+         * The `{{VERSION_…}}` token the docs resolve to a module's version, for coordinates named without
+         * a [RecipeOrigin] to hand.
          */
         fun versionPlaceholderKey(groupId: String, artifactId: String) = "VERSION_${groupId}_${artifactId}"
             .uppercase()

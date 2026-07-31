@@ -107,8 +107,7 @@ class VersionWriter {
                         val pipPackage = PythonRecipeLoader.PYTHON_RECIPE_MODULES.getValue(origin.artifactId)
                         cliInstallPipPinned += "$pipPackage==$versionPlaceholder "
                         cliInstallPipLatest += "$pipPackage "
-                        // A dual-published module splits its recipes across the wheel and the jar, so the
-                        // pip command alone installs only half of them.
+                        // Dual-published modules split their recipes across the wheel and the jar.
                         if (PythonRecipeLoader.publishesCompanionJar(origin)) {
                             cliInstallJarPinned += "${origin.groupId}:${origin.artifactId}:$versionPlaceholder "
                             cliInstallJarLatest += "${origin.groupId}:${origin.artifactId}:LATEST "

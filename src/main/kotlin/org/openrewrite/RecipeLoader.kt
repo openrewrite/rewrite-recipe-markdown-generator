@@ -41,6 +41,9 @@ data class RecipeLoadResult(
     val crossCategoryPaths: Map<String, List<String>> = emptyMap()
 )
 
+private fun MutableMap<String, URI>.putAllIfAbsent(sources: Map<String, URI>) =
+    sources.forEach { (name, source) -> putIfAbsent(name, source) }
+
 /**
  * Responsible for loading recipes from JAR files and classpaths
  */
@@ -149,20 +152,17 @@ class RecipeLoader {
 
         reportEmptyRecipeSources(emptyRecipeSources, requireAllRecipeSources)
 
-        // Merge TypeScript, Python, C#, and Go results with Java/YAML results. Sources are merged
-        // first-wins to match the descriptor deduplication below, which keeps the first (jar) descriptor:
-        // putAll would keep the last (RPC) source URI instead, so a recipe name published in both a jar
-        // and a pip/npm/NuGet package would be documented from the jar's descriptor under the other
-        // ecosystem's install instructions.
+        // Merge TypeScript, Python, C#, and Go results with Java/YAML results. Sources merge first-wins
+        // to match the descriptor deduplication below, which keeps the first (jar) descriptor.
         val allDescriptors = environmentData.flatMap { it.recipeDescriptors }.toMutableList()
-        for (result in listOf(typeScriptResult.recipeToSource, pythonResult.recipeToSource,
-            csharpResult.recipeToSource, goResult.recipeToSource)) {
-            result.forEach { (name, source) -> recipeToSource.putIfAbsent(name, source) }
-        }
         allDescriptors.addAll(typeScriptResult.descriptors)
+        recipeToSource.putAllIfAbsent(typeScriptResult.recipeToSource)
         allDescriptors.addAll(pythonResult.descriptors)
+        recipeToSource.putAllIfAbsent(pythonResult.recipeToSource)
         allDescriptors.addAll(csharpResult.descriptors)
+        recipeToSource.putAllIfAbsent(csharpResult.recipeToSource)
         allDescriptors.addAll(goResult.descriptors)
+        recipeToSource.putAllIfAbsent(goResult.recipeToSource)
 
         // Deduplicate recipes by name (same recipe may be discovered from multiple JARs
         // when scanJar is called with the full classpath as dependencies)

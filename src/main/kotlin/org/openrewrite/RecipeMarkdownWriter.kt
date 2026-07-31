@@ -553,10 +553,8 @@ import RunRecipe from '@site/src/components/RunRecipe';
 
     /**
      * Gets the pip package name for a Python recipe module.
-     * Uses the single source of truth from PythonRecipeLoader.
-     *
-     * Unregistered artifacts fail rather than falling back to the artifactId: that fallback published a
-     * `pip install` command for a PyPI package that need not exist.
+     * Uses the single source of truth from PythonRecipeLoader; unregistered artifacts fail rather than
+     * falling back to the artifactId, which named PyPI packages that need not exist.
      */
     private fun getPipPackageName(origin: RecipeOrigin): String {
         return PythonRecipeLoader.PYTHON_RECIPE_MODULES[origin.artifactId]
@@ -626,8 +624,7 @@ import RunRecipe from '@site/src/components/RunRecipe';
         }
 
         // Handle Python recipes. Unlike buildUsageJson this never adds the jar half of a dual-published
-        // module: every such module is Moderne proprietary, so its recipes are filtered out of the
-        // OpenRewrite docs that this method writes.
+        // module: those are all proprietary, so they never reach these OpenRewrite docs.
         if (isPythonRecipe(recipeDescriptor)) {
             val pipPackageName = getPipPackageName(origin)
             val props = StringBuilder()
@@ -1303,8 +1300,7 @@ ${props.toString().trimEnd()}
                 usageMap["versionKey"] = origin.versionPlaceholderKey()
                 usageMap["requiresConfiguration"] = requiresConfiguration
                 // The jar half of a dual-published Python module lands here, since only the pip half
-                // carries a `python-search://` source URI. Its readers arrive from the pip composites
-                // that delegate to it, so the pip command belongs alongside the Maven coordinates.
+                // carries a `python-search://` source URI, yet it too needs the pip command.
                 if (PythonRecipeLoader.publishesCompanionJar(origin)) {
                     usageMap["pipPackage"] = getPipPackageName(origin)
                     addPythonCoreCompanionJar(usageMap, origin)
@@ -1330,14 +1326,9 @@ ${props.toString().trimEnd()}
     }
 
     /**
-     * Names the core Python language module as a companion install.
-     *
-     * Recipes in `org.openrewrite.python.*` delegate into its `UpgradeDependencyVersion` /
-     * `ChangeDependency` recipes at runtime. The CLI resolves delegates eagerly, so a marketplace
-     * without this module fails the whole run — `IllegalStateException: Remote declared delegatesTo
-     * org.openrewrite.python.UpgradeDependencyVersion but no recipe found in marketplace` — rather than
-     * quietly skipping the step. Recipes that already ship in this module are skipped: for them the
-     * module's own coordinates are the install command.
+     * Names the core Python language module as a companion install. Python recipes delegate into its
+     * `UpgradeDependencyVersion` / `ChangeDependency` recipes, and the CLI resolves delegates eagerly, so
+     * a marketplace without it fails the whole run. Recipes shipping in the module itself need no entry.
      */
     private fun addPythonCoreCompanionJar(usageMap: MutableMap<String, Any?>, origin: RecipeOrigin) {
         if (origin.artifactId == PYTHON_CORE_ARTIFACT_ID) return
@@ -1410,7 +1401,6 @@ ${props.toString().trimEnd()}
         // Stateless + thread-safe; one instance for the whole run rather than per writer.
         private val mapper = jacksonObjectMapper()
 
-        // The core Python language module, which every org.openrewrite.python.* recipe delegates into.
         private const val PYTHON_CORE_GROUP_ID = "org.openrewrite"
         private const val PYTHON_CORE_ARTIFACT_ID = "rewrite-python"
 
