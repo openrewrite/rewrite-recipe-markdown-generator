@@ -148,10 +148,9 @@ class RecipeMarkdownGeneratorTest {
 
     @Test
     fun goModulesAreModerneDocsOnlyRegardlessOfManifestLicense() {
-        // Go recipes are Moderne proprietary and must never reach docs.openrewrite.org. The exclusion keys
-        // off the module list rather than the jar manifest, so a mis-stamped License-Url on the (metadata
-        // only) Maven artifact cannot leak a whole ecosystem into the open-source docs.
-        for (artifactId in GoRecipeLoader.GO_RECIPE_MODULES.keys) {
+        // Keys off the module list rather than the jar manifest, so neither a mis-stamped License-Url on
+        // the (metadata only) Maven artifact nor rewrite-go's open-source license leaks a Go recipe here.
+        for (artifactId in GoRecipeLoader.GO_RECIPE_MODULES.keys + "rewrite-go") {
             val origin = RecipeOrigin("org.openrewrite.recipe", artifactId, "0.5.3", URI.create("file:///$artifactId.jar"))
                 .apply { license = Licenses.Apache2 }
             assertThat(RecipeMarkdownGenerator.isModerneDocsOnly(origin))

@@ -9,6 +9,8 @@ This project generates recipe documentation in markdown format for all recipes o
 
 Proprietary recipes (those with a `Proprietary` license or loaded via TypeScript/Python) are written only to the Moderne docs output. Open-source recipes are written to both.
 
+Go recipes are written only to the Moderne docs too, `rewrite-go`'s open-source license notwithstanding, so the whole Go catalog is documented in one place.
+
 ### Changelog
 
 This project also builds up a CHANGELOG to track what has changed over time. The way this works is that, every time
