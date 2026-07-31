@@ -435,9 +435,11 @@ class RecipeMarkdownGenerator : Runnable {
         /**
          * Modules whose docs should only appear in Moderne docs, regardless of license. Go recipe modules
          * are listed structurally rather than relying on their jar manifest: the Maven artifact is only a
-         * version/license carrier, and the recipes themselves are Moderne proprietary.
+         * version/license carrier, and the recipes themselves are Moderne proprietary. `rewrite-go` is
+         * open source, but its recipes belong with the rest of the Go catalog on docs.moderne.io.
          */
-        private val MODERNE_DOCS_ONLY_MODULES = setOf("rewrite-devcenter") + GoRecipeLoader.GO_RECIPE_MODULES.keys
+        private val MODERNE_DOCS_ONLY_MODULES =
+            setOf("rewrite-devcenter", "rewrite-go") + GoRecipeLoader.GO_RECIPE_MODULES.keys
 
         internal fun isModerneDocsOnly(origin: RecipeOrigin): Boolean =
             origin.license == Licenses.Proprietary || origin.artifactId in MODERNE_DOCS_ONLY_MODULES
