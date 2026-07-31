@@ -114,16 +114,22 @@ class RecipeOrigin(
         }
     }
 
-    fun versionPlaceholderKey() = "VERSION_${groupId}_${artifactId}"
-        .uppercase()
-        .replace('-', '_')
-        .replace('.', '_')
+    fun versionPlaceholderKey() = versionPlaceholderKey(groupId, artifactId)
 
     fun issueTrackerUrl() = repositoryUrl.replace(Regex("/blob/main/.*"), "/issues")
     fun releaseUrl(version: String) = repositoryUrl.replace(Regex("/blob/main/.*"), "/releases/tag/${version}")
 
     companion object {
         private val parsePattern = Pattern.compile("([^:]+):([^:]+):([^:]+):(.+)")
+
+        /**
+         * The `{{VERSION_…}}` token the docs resolve to a module's version, for coordinates named without
+         * a [RecipeOrigin] to hand.
+         */
+        fun versionPlaceholderKey(groupId: String, artifactId: String) = "VERSION_${groupId}_${artifactId}"
+            .uppercase()
+            .replace('-', '_')
+            .replace('.', '_')
 
         fun fromString(encoded: String): RecipeOrigin {
             val m = parsePattern.matcher(encoded)

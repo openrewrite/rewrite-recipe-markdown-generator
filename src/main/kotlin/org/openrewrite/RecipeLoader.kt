@@ -41,6 +41,9 @@ data class RecipeLoadResult(
     val crossCategoryPaths: Map<String, List<String>> = emptyMap()
 )
 
+private fun MutableMap<String, URI>.putAllIfAbsent(sources: Map<String, URI>) =
+    sources.forEach { (name, source) -> putIfAbsent(name, source) }
+
 /**
  * Responsible for loading recipes from JAR files and classpaths
  */
@@ -149,16 +152,17 @@ class RecipeLoader {
 
         reportEmptyRecipeSources(emptyRecipeSources, requireAllRecipeSources)
 
-        // Merge TypeScript, Python, C#, and Go results with Java/YAML results
+        // Merge TypeScript, Python, C#, and Go results with Java/YAML results. Sources merge first-wins
+        // to match the descriptor deduplication below, which keeps the first (jar) descriptor.
         val allDescriptors = environmentData.flatMap { it.recipeDescriptors }.toMutableList()
         allDescriptors.addAll(typeScriptResult.descriptors)
-        recipeToSource.putAll(typeScriptResult.recipeToSource)
+        recipeToSource.putAllIfAbsent(typeScriptResult.recipeToSource)
         allDescriptors.addAll(pythonResult.descriptors)
-        recipeToSource.putAll(pythonResult.recipeToSource)
+        recipeToSource.putAllIfAbsent(pythonResult.recipeToSource)
         allDescriptors.addAll(csharpResult.descriptors)
-        recipeToSource.putAll(csharpResult.recipeToSource)
+        recipeToSource.putAllIfAbsent(csharpResult.recipeToSource)
         allDescriptors.addAll(goResult.descriptors)
-        recipeToSource.putAll(goResult.recipeToSource)
+        recipeToSource.putAllIfAbsent(goResult.recipeToSource)
 
         // Deduplicate recipes by name (same recipe may be discovered from multiple JARs
         // when scanJar is called with the full classpath as dependencies)

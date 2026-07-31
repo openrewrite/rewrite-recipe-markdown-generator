@@ -60,6 +60,22 @@ class PythonRecipeLoader(
         val INDEPENDENT_PIP_VERSIONING = setOf(
             "rewrite-static-analysis-python"
         )
+
+        /**
+         * Modules that split their recipes across a PyPI package and a Maven jar, where the pip
+         * composites delegate to jar recipes over RPC. Installing only one half silently skips the
+         * delegated steps, so recipe pages document both install commands.
+         */
+        val DUAL_PUBLISHED_MODULES = setOf(
+            "rewrite-migrate-python"
+        )
+
+        /**
+         * True when [origin] belongs to a dual-published module that really has a jar to install;
+         * synthetic origins for pip-only packages carry a `python-search://` jarLocation.
+         */
+        fun publishesCompanionJar(origin: RecipeOrigin): Boolean =
+            origin.artifactId in DUAL_PUBLISHED_MODULES && origin.jarLocation.scheme != "python-search"
     }
 
     data class PythonRecipeResult(

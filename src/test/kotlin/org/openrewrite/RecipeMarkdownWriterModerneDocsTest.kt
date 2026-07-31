@@ -1,5 +1,6 @@
 package org.openrewrite
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -61,6 +62,18 @@ class RecipeMarkdownWriterModerneDocsTest {
     ).withPreconditions(
         listOf(descriptor("org.openrewrite.java.search.FindFoo", "Find foo", "Finds foo."))
     )
+
+    /**
+     * The top-level `usage={…}` object from the emitted `<UsageList>`. Absence assertions need this, as a
+     * bare `doesNotContain("\"groupId\":")` also matches the nested companion-jar entries.
+     */
+    @Suppress("UNCHECKED_CAST")
+    private fun usageJson(out: String): Map<String, Any?> {
+        val json = out.lineSequence().first { it.startsWith("<UsageList usage={") }
+            .substringAfter("<UsageList usage={")
+            .substringBeforeLast("}>")
+        return jacksonObjectMapper().readValue(json, Map::class.java) as Map<String, Any?>
+    }
 
     private fun generate(
         recipe: RecipeDescriptor,
@@ -176,10 +189,85 @@ class RecipeMarkdownWriterModerneDocsTest {
             .writeRecipe(recipe, dir, pythonOrigin)
         val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
 
-        // Python recipes install from pip with an explicit version, not Maven/Gradle coordinates.
         assertThat(out).contains("\"pipPackage\":\"openrewrite-migrate-python\"")
         assertThat(out).contains("\"versionKey\":\"VERSION_ORG_OPENREWRITE_RECIPE_REWRITE_MIGRATE_PYTHON\"")
-        assertThat(out).doesNotContain("\"groupId\":")
+        // `rewrite-migrate-python` is dual-published, so the jar coordinates ride along on the same key,
+        // as do those of the core language module the jar recipes delegate into.
+        assertThat(out).contains("\"groupId\":\"org.openrewrite.recipe\"")
+        assertThat(out).contains("\"artifactId\":\"rewrite-migrate-python\"")
+        assertThat(out).contains("\"companionJars\":[{\"groupId\":\"org.openrewrite\",\"artifactId\":\"rewrite-python\"")
+        assertThat(out).contains("\"versionKey\":\"VERSION_ORG_OPENREWRITE_REWRITE_PYTHON\"")
+    }
+
+    @Test
+    fun moderneDocsOmitsCoreCompanionJarForRewritePythonsOwnRecipes(@TempDir dir: Path) {
+        val coreOrigin = RecipeOrigin("org.openrewrite", "rewrite-python", "8.88.0", jar)
+        val recipe = descriptor(
+            "org.openrewrite.python.AddDependency",
+            "Add Python dependency", "Adds a dependency to a Python project.",
+        )
+        val recipeToSource = mapOf(recipe.name to URI.create("python-search://rewrite-python/add-dependency"))
+        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, emptySet(), forModerneDocs = true)
+            .writeRecipe(recipe, dir, coreOrigin)
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        assertThat(out).contains("\"pipPackage\":\"openrewrite\"")
+        assertThat(out).doesNotContain("companionJars")
+    }
+
+    @Test
+    fun moderneDocsEmitsPipInstallForJarSourcedPythonRecipe(@TempDir dir: Path) {
+        // Discovered by the JVM loader, so no `python-search://` source URI; readers still reach it from
+        // the pip-published `UpgradeToPython3XX` composite that delegates to it (moderne-docs#900).
+        val pythonOrigin = RecipeOrigin("org.openrewrite.recipe", "rewrite-migrate-python", "0.10.1", jar)
+            .apply { license = Licenses.Proprietary }
+        val recipe = descriptor(
+            "org.openrewrite.python.migrate.UpgradePythonVersionTo314",
+            "Upgrade Python version in project files to 3.14", "Upgrades project files to Python 3.14.",
+        )
+        RecipeMarkdownWriter(mutableMapOf(), emptyMap(), setOf(recipe.name), forModerneDocs = true)
+            .writeRecipe(recipe, dir, pythonOrigin)
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        assertThat(out).contains("\"pipPackage\":\"openrewrite-migrate-python\"")
+        assertThat(out).contains("\"groupId\":\"org.openrewrite.recipe\"")
+        assertThat(out).contains("\"artifactId\":\"rewrite-migrate-python\"")
+        assertThat(out).contains("\"versionKey\":\"VERSION_ORG_OPENREWRITE_RECIPE_REWRITE_MIGRATE_PYTHON\"")
+        assertThat(out).contains("\"companionJars\":[{\"groupId\":\"org.openrewrite\",\"artifactId\":\"rewrite-python\"")
+    }
+
+    @Test
+    fun moderneDocsOmitsJarInstallForPythonModuleWithoutMavenArtifact(@TempDir dir: Path) {
+        // PythonRecipeLoader marks origins it invents for pip-only packages with a `python-search://`
+        // jarLocation; a `jar install` of one would install nothing.
+        val syntheticOrigin = RecipeOrigin(
+            "org.openrewrite.recipe", "rewrite-migrate-python", "0.10.1",
+            URI.create("python-search://rewrite-migrate-python")
+        ).apply { license = Licenses.Proprietary }
+        val recipe = descriptor(
+            "org.openrewrite.python.migrate.UpgradeToPython314",
+            "Upgrade to Python 3.14", "Migrates to Python 3.14.",
+        )
+        val recipeToSource = mapOf(recipe.name to URI.create("python-search://rewrite-migrate-python/upgrade-to-python-314"))
+        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, setOf(recipe.name), forModerneDocs = true)
+            .writeRecipe(recipe, dir, syntheticOrigin)
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        assertThat(out).contains("\"pipPackage\":\"openrewrite-migrate-python\"")
+        assertThat(usageJson(out)).doesNotContainKeys("groupId", "artifactId")
+    }
+
+    @Test
+    fun unregisteredPipModuleFailsRatherThanGuessingAPackageName(@TempDir dir: Path) {
+        val unknownOrigin = RecipeOrigin("org.openrewrite.recipe", "rewrite-unregistered-python", "1.0.0", jar)
+            .apply { license = Licenses.Proprietary }
+        val recipe = descriptor("org.openrewrite.python.Unknown", "Unknown", "An unregistered module.")
+        val recipeToSource = mapOf(recipe.name to URI.create("python-search://rewrite-unregistered-python/unknown"))
+        val writer = RecipeMarkdownWriter(mutableMapOf(), recipeToSource, emptySet(), forModerneDocs = true)
+
+        assertThatThrownBy { writer.writeRecipe(recipe, dir, unknownOrigin) }
+            .isInstanceOf(IllegalStateException::class.java)
+            .hasMessageContaining("rewrite-unregistered-python")
     }
 
     @Test
@@ -198,7 +286,7 @@ class RecipeMarkdownWriterModerneDocsTest {
         val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
 
         assertThat(out).contains("\"pipPackage\":\"openrewrite-static-analysis\"")
-        assertThat(out).doesNotContain("\"versionKey\":")
+        assertThat(usageJson(out)).doesNotContainKey("versionKey")
     }
 
     @Test
