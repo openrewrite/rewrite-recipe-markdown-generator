@@ -253,6 +253,12 @@ import RunRecipe from '@site/src/components/RunRecipe';
             val recipeSource = recipeToSource[recipeDescriptor.name]
             requireNotNull(recipeSource) { "Could not find source URI for recipe ${recipeDescriptor.name}" }
             val githubUrl = origin.githubUrl(recipeDescriptor.name, recipeSource)
+            // Recipe artifacts are distributed through the Code Genome Project, which uses the same path
+            // layout as Maven Central with the group id as a path (dots to slashes).
+            // These listing pages are public, but a plain `curl` can report 404 on a URL a browser opens
+            // fine, so check with an HTML `Accept` header before concluding a link is broken.
+            val codeGenomeUrl =
+                "https://artifacts.codegenomeproject.org/maven/${origin.groupId.replace('.', '/')}/${origin.artifactId}/"
             //language=markdown
             writeln(
                 """
@@ -260,7 +266,7 @@ import RunRecipe from '@site/src/components/RunRecipe';
 
             [GitHub: ${githubUrl.substringAfterLast('/')}]($githubUrl),
             [Issue Tracker](${origin.issueTrackerUrl()}),
-            [Maven Central](https://central.sonatype.com/artifact/${origin.groupId}/${origin.artifactId}/)
+            [Code Genome Project]($codeGenomeUrl)
             """.trimIndent()
             )
 
@@ -281,9 +287,15 @@ import RunRecipe from '@site/src/components/RunRecipe';
     }
 
     private fun BufferedWriter.writeLicense(origin: RecipeOrigin) {
+        // The Code Genome Project gates source-available modules per version, so older releases of a
+        // now-MSAL module can still resolve. The note therefore describes what a personal token gets
+        // rather than claiming the recipe is unavailable.
+        val msalAccessNote = " The Code Genome Project serves source-available modules to Moderne customers " +
+            "only, so a build authenticating with a personal token gets `403 Forbidden` for this module."
         val licenseText = when (origin.license) {
             Licenses.Unknown -> "The license for this recipe is unknown."
-            Licenses.Apache2, Licenses.Proprietary, Licenses.MSAL -> "This recipe is available under the ${origin.license.markdown()}."
+            Licenses.MSAL -> "This recipe is available under the ${origin.license.markdown()}.$msalAccessNote"
+            Licenses.Apache2, Licenses.Proprietary -> "This recipe is available under the ${origin.license.markdown()}."
             else -> "This recipe is available under the ${origin.license.markdown()} License, as defined by the recipe authors."
         }
 

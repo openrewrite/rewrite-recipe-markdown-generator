@@ -91,7 +91,7 @@ class RecipeMarkdownGeneratorTest {
     }
 
     @Test
-    fun latestVersionsOpenRewriteDocsExcludeProprietaryButKeepMsal(@TempDir tempDir: Path) {
+    fun latestVersionsOpenRewriteDocsExcludeProprietaryAndGateMsalMavenInstalls(@TempDir tempDir: Path) {
         fun mk(g: String, a: String, v: String, license: License): RecipeOrigin {
             val o = RecipeOrigin(g, a, v, URI.create("file:///$a.jar"))
             o.repositoryUrl = "https://github.com/openrewrite/$a/blob/main/"
@@ -101,6 +101,10 @@ class RecipeMarkdownGeneratorTest {
         // A mix spanning all three license tiers and every install ecosystem.
         val origins = listOf(
             mk("org.openrewrite.recipe", "rewrite-spring", "5.0.0", Licenses.Apache2),        // Apache -> keep
+            // MSAL jar: still listed in the version table, but dropped from the Maven install paths, since
+            // the Code Genome Project serves source-available modules to Moderne customers only.
+            mk("org.openrewrite.recipe", "rewrite-static-analysis", "2.0.0", Licenses.MSAL),  // MSAL jar -> table only
+            // MSAL pip/npm resolve from PyPI and npm, which have no entitlement gate, so they stay.
             mk("org.openrewrite", "rewrite-python", "1.2.3", Licenses.MSAL),                  // MSAL pip -> keep
             mk("org.openrewrite.recipe", "rewrite-migrate-python", "0.5.0", Licenses.Proprietary), // pip -> drop
             mk("org.openrewrite", "rewrite-javascript", "0.9.0", Licenses.MSAL),              // MSAL npm -> keep
@@ -115,10 +119,16 @@ class RecipeMarkdownGeneratorTest {
         VersionWriter().createLatestVersionsMarkdown(orDir, origins, "8.x", "2.x", "1.x", "6.x", "5.x", forModerneDocs = false)
         val orOut = Files.readString(orDir.resolve("latest-versions-of-every-openrewrite-module.md"))
 
-        // Kept: Apache jar + both MSAL ecosystem packages.
+        // Kept: Apache jar + both MSAL ecosystem packages, which don't resolve through the Code Genome Project.
         assertThat(orOut).contains("org.openrewrite.recipe:rewrite-spring:")
         assertThat(orOut).contains("mod config recipes pip install openrewrite==")
         assertThat(orOut).contains("mod config recipes npm install @openrewrite/rewrite@")
+
+        // MSAL jar: present in the version table, absent from both Maven install paths.
+        assertThat(orOut).contains("[org.openrewrite.recipe:rewrite-static-analysis]")
+        assertThat(orOut).doesNotContain("org.openrewrite.recipe:rewrite-static-analysis:")
+        assertThat(orOut).doesNotContain("load_org_openrewrite_recipe_rewrite_static_analysis")
+        assertThat(orOut).doesNotContain("artifactId: \"rewrite-static-analysis\"")
         // Dropped: every proprietary module, its table row, and the moderne-recipe-bom row.
         assertThat(orOut).doesNotContain("io.moderne.recipe:")
         assertThat(orOut).doesNotContain("openrewrite-migrate-python")
@@ -135,6 +145,9 @@ class RecipeMarkdownGeneratorTest {
 
         assertThat(modOut).contains("io.moderne.recipe:rewrite-spring:")
         assertThat(modOut).contains("io.moderne.recipe:moderne-recipe-bom")
+        // The entitlement gate is docs.openrewrite.org only; Moderne docs keep MSAL jars installable.
+        assertThat(modOut).contains("org.openrewrite.recipe:rewrite-static-analysis:")
+        assertThat(modOut).contains("load_org_openrewrite_recipe_rewrite_static_analysis")
         assertThat(modOut).contains("openrewrite-migrate-python")
         assertThat(modOut).contains("recipes-angular")
         assertThat(modOut).contains("mod config recipes go install github.com/moderneinc/recipes-go")
