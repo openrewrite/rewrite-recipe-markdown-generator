@@ -298,8 +298,8 @@ import RunRecipe from '@site/src/components/RunRecipe';
         // The Code Genome Project gates source-available modules per version, so older releases of a
         // now-MSAL module can still resolve. The note therefore describes what a personal token gets
         // rather than claiming the recipe is unavailable.
-        val msalAccessNote = " The Code Genome Project serves source-available modules to Moderne customers " +
-            "only, so a build authenticating with a personal token gets `403 Forbidden` for this module."
+        val msalAccessNote = " Moderne customers can download precompiled artifacts from The Code Genome Project. " +
+            "For non-commercial use you can build the artifact from source locally."
         val licenseText = when (origin.license) {
             Licenses.Unknown -> "The license for this recipe is unknown."
             Licenses.MSAL -> "This recipe is available under the ${origin.license.markdown()}.$msalAccessNote"
