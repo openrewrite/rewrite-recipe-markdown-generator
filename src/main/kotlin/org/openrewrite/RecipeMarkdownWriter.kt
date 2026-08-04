@@ -295,7 +295,6 @@ import RunRecipe from '@site/src/components/RunRecipe';
     }
 
     private fun BufferedWriter.writeLicense(origin: RecipeOrigin) {
-        // Frames access positively rather than as an error, matching the equivalent notice in rewrite-docs.
         val msalAccessNote = " Moderne customers can download precompiled artifacts from The Code Genome Project. " +
             "For non-commercial use you can build the artifact from source locally."
         val licenseText = when (origin.license) {
