@@ -45,7 +45,7 @@ class VersionWriter {
 
                 OpenRewrite's modules are distributed through the [Code Genome Project](https://artifacts.codegenomeproject.org/maven/org/openrewrite/).
                 Downloads require authentication, so add the repository and credentials to your build to resolve them. See [Configure the Code Genome Project repository](#configure-the-code-genome-project-repository) below.
-                Maven Central remains the default repository for the build plugins and the CLI, and still hosts OpenRewrite's transitive dependencies, so keep it configured alongside.
+                Keep Maven Central configured alongside it, since OpenRewrite's transitive dependencies still resolve from there.
                 Each time a release is made, a bill of materials artifact is also published to correctly align and manage the versions of all published artifacts.
                 The Gradle plugin is published to the [Gradle Plugin Portal](https://plugins.gradle.org/plugin/org.openrewrite.rewrite).
 
