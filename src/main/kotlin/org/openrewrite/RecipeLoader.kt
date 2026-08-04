@@ -41,6 +41,9 @@ data class RecipeLoadResult(
     val crossCategoryPaths: Map<String, List<String>> = emptyMap()
 )
 
+private fun MutableMap<String, URI>.putAllIfAbsent(sources: Map<String, URI>) =
+    sources.forEach { (name, source) -> putIfAbsent(name, source) }
+
 /**
  * Responsible for loading recipes from JAR files and classpaths
  */
@@ -149,16 +152,17 @@ class RecipeLoader {
 
         reportEmptyRecipeSources(emptyRecipeSources, requireAllRecipeSources)
 
-        // Merge TypeScript, Python, C#, and Go results with Java/YAML results
+        // Merge TypeScript, Python, C#, and Go results with Java/YAML results. Sources merge first-wins
+        // to match the descriptor deduplication below, which keeps the first (jar) descriptor.
         val allDescriptors = environmentData.flatMap { it.recipeDescriptors }.toMutableList()
         allDescriptors.addAll(typeScriptResult.descriptors)
-        recipeToSource.putAll(typeScriptResult.recipeToSource)
+        recipeToSource.putAllIfAbsent(typeScriptResult.recipeToSource)
         allDescriptors.addAll(pythonResult.descriptors)
-        recipeToSource.putAll(pythonResult.recipeToSource)
+        recipeToSource.putAllIfAbsent(pythonResult.recipeToSource)
         allDescriptors.addAll(csharpResult.descriptors)
-        recipeToSource.putAll(csharpResult.recipeToSource)
+        recipeToSource.putAllIfAbsent(csharpResult.recipeToSource)
         allDescriptors.addAll(goResult.descriptors)
-        recipeToSource.putAll(goResult.recipeToSource)
+        recipeToSource.putAllIfAbsent(goResult.recipeToSource)
 
         // Deduplicate recipes by name (same recipe may be discovered from multiple JARs
         // when scanJar is called with the full classpath as dependencies)
@@ -306,6 +310,12 @@ class RecipeLoader {
 
     companion object {
         /**
+         * Modules on the recipe configuration purely so the version table lists them; they ship no
+         * recipes we document, so they are skipped when scanning and left out of install commands.
+         */
+        val VERSION_ONLY_MODULES = setOf("rewrite-polyglot", "rewrite-templating")
+
+        /**
          * Sanitize a category name for use as a URL-safe directory path segment.
          * Replaces special characters that are invalid in URLs/directory names.
          * E.g., "C#" → "csharp", "F#" → "fsharp"
@@ -396,6 +406,7 @@ class RecipeLoader {
     private fun loadEnvironmentDataAsync(): List<EnvironmentData> = runBlocking {
         println("Starting parallel recipe loading...")
         recipeOrigins.entries
+            .filter { it.value.artifactId !in VERSION_ONLY_MODULES }
             .chunked(3)
             .flatMap { batch -> batch.map { recipeOrigin ->
                 async(Dispatchers.IO) {

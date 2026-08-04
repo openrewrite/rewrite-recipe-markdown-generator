@@ -57,6 +57,7 @@ class RecipeMarkdownGeneratorTest {
             mk("org.openrewrite", "rewrite-javascript", "0.9.0"),
             mk("io.moderne.recipe", "recipes-code-quality", "0.1.0"),
             mk("org.openrewrite.recipe", "recipes-go", "0.4.1"),
+            mk("org.openrewrite", "rewrite-polyglot", "2.10.11"),
         )
         VersionWriter().createLatestVersionsMarkdown(tempDir, origins, "8.x", "2.x", "1.x", "6.x", "5.x", forModerneDocs = true)
         val out = Files.readString(tempDir.resolve("latest-versions-of-every-openrewrite-module.md"))
@@ -88,6 +89,11 @@ class RecipeMarkdownGeneratorTest {
         assertThat(out).doesNotContain("[io.moderne.recipe:recipes-code-quality]")
         assertThat(out).doesNotContain("artifactId: \"recipes-code-quality\"")
         assertThat(out).contains("bundle: { nuget: { packageName: \"OpenRewrite.Recipes.CSharp.CodeQuality\", version: \"*-*\" } }")
+
+        // Version-only modules keep their table row, but have no recipes to install.
+        assertThat(out).contains("[org.openrewrite:rewrite-polyglot]")
+        assertThat(out).doesNotContain("org.openrewrite:rewrite-polyglot:")
+        assertThat(out).doesNotContain("artifactId: \"rewrite-polyglot\"")
     }
 
     @Test
@@ -151,6 +157,19 @@ class RecipeMarkdownGeneratorTest {
         assertThat(modOut).contains("openrewrite-migrate-python")
         assertThat(modOut).contains("recipes-angular")
         assertThat(modOut).contains("mod config recipes go install github.com/moderneinc/recipes-go")
+    }
+
+    @Test
+    fun goModulesAreModerneDocsOnlyRegardlessOfManifestLicense() {
+        // Keys off the module list rather than the jar manifest, so neither a mis-stamped License-Url on
+        // the (metadata only) Maven artifact nor rewrite-go's open-source license leaks a Go recipe here.
+        for (artifactId in GoRecipeLoader.GO_RECIPE_MODULES.keys + "rewrite-go") {
+            val origin = RecipeOrigin("org.openrewrite.recipe", artifactId, "0.5.3", URI.create("file:///$artifactId.jar"))
+                .apply { license = Licenses.Apache2 }
+            assertThat(RecipeMarkdownGenerator.isModerneDocsOnly(origin))
+                .describedAs("Go module %s must be excluded from the OpenRewrite docs", artifactId)
+                .isTrue()
+        }
     }
 
     @Test

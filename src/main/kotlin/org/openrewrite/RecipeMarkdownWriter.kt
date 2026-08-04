@@ -74,6 +74,14 @@ class RecipeMarkdownWriter(
     }
 
     /**
+     * Determines if a recipe is a Go recipe based on its source URI.
+     */
+    private fun isGoRecipe(recipeDescriptor: RecipeDescriptor): Boolean {
+        val recipeSource = recipeToSource[recipeDescriptor.name] ?: return false
+        return recipeSource.toString().startsWith("go-search://")
+    }
+
+    /**
      * Write a recipe to a custom path (for cross-category duplicates).
      * The target language is derived from the first segment of the custom path (e.g., "python" from "python/changemethodname").
      */
@@ -557,11 +565,16 @@ import RunRecipe from '@site/src/components/RunRecipe';
 
     /**
      * Gets the pip package name for a Python recipe module.
-     * Uses the single source of truth from PythonRecipeLoader.
+     * Uses the single source of truth from PythonRecipeLoader; unregistered artifacts fail rather than
+     * falling back to the artifactId, which named PyPI packages that need not exist.
      */
     private fun getPipPackageName(origin: RecipeOrigin): String {
         return PythonRecipeLoader.PYTHON_RECIPE_MODULES[origin.artifactId]
-            ?: origin.artifactId
+            ?: error(
+                "No pip package configured for artifact ${origin.artifactId}. Register it in " +
+                        "PythonRecipeLoader.PYTHON_RECIPE_MODULES; otherwise its recipe pages advertise a " +
+                        "pip install of a package that may not exist."
+            )
     }
 
     /**
@@ -571,6 +584,31 @@ import RunRecipe from '@site/src/components/RunRecipe';
     private fun getNuGetPackageName(origin: RecipeOrigin): String {
         return CSharpRecipeLoader.CSHARP_RECIPE_MODULES[origin.artifactId]
             ?: origin.artifactId
+    }
+
+    /**
+     * Gets the Go module path for a Go recipe module.
+     * Uses the single source of truth from GoRecipeLoader.
+     */
+    private fun getGoModuleName(origin: RecipeOrigin): String {
+        return GoRecipeLoader.GO_RECIPE_MODULES[origin.artifactId]
+            ?: origin.artifactId
+    }
+
+    /**
+     * Every non-JVM ecosystem stamps its recipes with a `<language>-search://` source URI. Falling through to
+     * the Maven/Gradle branch for one of those renders a `jar install` of a metadata-only stub: the command
+     * succeeds, installs zero recipes, and the failure only surfaces later when `mod run` cannot find the
+     * recipe. Fail the generation instead, so adding an ecosystem forces either a matching branch here or a
+     * filter that keeps its recipes out of these docs entirely.
+     */
+    private fun requireHandledEcosystem(recipeDescriptor: RecipeDescriptor) {
+        val scheme = recipeToSource[recipeDescriptor.name]?.scheme ?: return
+        check(!scheme.endsWith("-search")) {
+            "Recipe ${recipeDescriptor.name} has an unhandled '$scheme://' source URI. Either give this " +
+                    "ecosystem its own branch in RecipeMarkdownWriter, or exclude its recipes from these " +
+                    "docs; otherwise they advertise Maven coordinates that install no recipes."
+        }
     }
 
     private fun BufferedWriter.writeUsage(
@@ -597,7 +635,8 @@ import RunRecipe from '@site/src/components/RunRecipe';
             return
         }
 
-        // Handle Python recipes
+        // Handle Python recipes. Unlike buildUsageJson this never adds the jar half of a dual-published
+        // module: those are all proprietary, so they never reach these OpenRewrite docs.
         if (isPythonRecipe(recipeDescriptor)) {
             val pipPackageName = getPipPackageName(origin)
             val props = StringBuilder()
@@ -632,6 +671,11 @@ ${props.toString().trimEnd()}
             )
             return
         }
+
+        // Deliberately no Go branch: Go recipes are Moderne proprietary, so RecipeMarkdownGenerator
+        // filters them out of the OpenRewrite docs — the only docs this method writes. Reaching here
+        // with one means that filter has broken, which the check below turns into a build failure.
+        requireHandledEcosystem(recipeDescriptor)
 
         val suppressJava = recipeDescriptor.name.contains(".csharp.") ||
                 recipeDescriptor.name.contains(".dotnet.") ||
@@ -990,6 +1034,7 @@ ${props.toString().trimEnd()}
             isJavaScriptRecipe(recipeDescriptor) -> getNpmPackageName(origin)
             isPythonRecipe(recipeDescriptor) -> getPipPackageName(origin)
             isCSharpRecipe(recipeDescriptor) -> getNuGetPackageName(origin)
+            isGoRecipe(recipeDescriptor) -> getGoModuleName(origin)
             else -> "${origin.groupId}:${origin.artifactId}"
         }
         val appLink = "https://app.moderne.io/recipes/$name"
@@ -1237,8 +1282,8 @@ ${props.toString().trimEnd()}
             "displayName" to recipeDescriptor.displayName,
         )
 
-        // JS/Python/C# recipes install from their own package managers (matching the markdown path's
-        // per-ecosystem <RunRecipe>); everything else uses the Maven/Gradle coordinates + CLI options.
+        // JS/Python/C#/Go recipes install from their own package managers; everything else uses the
+        // Maven/Gradle coordinates + CLI options.
         when {
             isJavaScriptRecipe(recipeDescriptor) -> usageMap["npmPackage"] = getNpmPackageName(origin)
             isPythonRecipe(recipeDescriptor) -> {
@@ -1248,15 +1293,30 @@ ${props.toString().trimEnd()}
                 if (origin.artifactId !in PythonRecipeLoader.INDEPENDENT_PIP_VERSIONING) {
                     usageMap["versionKey"] = origin.versionPlaceholderKey()
                 }
+                addDualPublishedJarCoordinates(usageMap, origin)
+                addPythonCoreCompanionJar(usageMap, origin)
             }
             isCSharpRecipe(recipeDescriptor) -> usageMap["nugetPackage"] = getNuGetPackageName(origin)
+            isGoRecipe(recipeDescriptor) -> {
+                // Go modules are installed from source by module path, pinned with a vX.Y.Z tag
+                // derived from the Maven artifact version.
+                usageMap["goPackage"] = getGoModuleName(origin)
+                usageMap["versionKey"] = origin.versionPlaceholderKey()
+            }
             else -> {
+                requireHandledEcosystem(recipeDescriptor)
                 val options = recipeDescriptor.options ?: emptyList()
                 val requiresConfiguration = options.any { it.isRequired }
                 usageMap["groupId"] = origin.groupId
                 usageMap["artifactId"] = origin.artifactId
                 usageMap["versionKey"] = origin.versionPlaceholderKey()
                 usageMap["requiresConfiguration"] = requiresConfiguration
+                // The jar half of a dual-published Python module lands here, since only the pip half
+                // carries a `python-search://` source URI, yet it too needs the pip command.
+                if (PythonRecipeLoader.publishesCompanionJar(origin)) {
+                    usageMap["pipPackage"] = getPipPackageName(origin)
+                    addPythonCoreCompanionJar(usageMap, origin)
+                }
 
                 // cliOptions shares the per-option example formatting with writeUsage.
                 val cliOptions = if (requiresConfiguration) {
@@ -1275,6 +1335,37 @@ ${props.toString().trimEnd()}
         }
 
         return mapper.writeValueAsString(usageMap)
+    }
+
+    /**
+     * Names the core Python language module as a companion install. Python recipes delegate into its
+     * `UpgradeDependencyVersion` / `ChangeDependency` recipes, and the CLI resolves delegates eagerly, so
+     * a marketplace without it fails the whole run. Recipes shipping in the module itself need no entry.
+     */
+    private fun addPythonCoreCompanionJar(usageMap: MutableMap<String, Any?>, origin: RecipeOrigin) {
+        if (origin.artifactId == PYTHON_CORE_ARTIFACT_ID) return
+        usageMap["companionJars"] = listOf(
+            mapOf(
+                "groupId" to PYTHON_CORE_GROUP_ID,
+                "artifactId" to PYTHON_CORE_ARTIFACT_ID,
+                "versionKey" to RecipeOrigin.versionPlaceholderKey(PYTHON_CORE_GROUP_ID, PYTHON_CORE_ARTIFACT_ID)
+            )
+        )
+    }
+
+    /**
+     * Adds the Maven coordinates of a dual-published Python module's jar next to its pip package, pinned
+     * to the same version key the pip command already resolves.
+     */
+    private fun addDualPublishedJarCoordinates(usageMap: MutableMap<String, Any?>, origin: RecipeOrigin) {
+        if (!PythonRecipeLoader.publishesCompanionJar(origin)) return
+        check(origin.artifactId !in PythonRecipeLoader.INDEPENDENT_PIP_VERSIONING) {
+            "${origin.artifactId} is both dual-published and independently versioned, so its pip and jar " +
+                    "install commands need different versions — which a single versionKey cannot express."
+        }
+        usageMap["groupId"] = origin.groupId
+        usageMap["artifactId"] = origin.artifactId
+        usageMap["versionKey"] = origin.versionPlaceholderKey()
     }
 
     /**
@@ -1321,6 +1412,9 @@ ${props.toString().trimEnd()}
     companion object {
         // Stateless + thread-safe; one instance for the whole run rather than per writer.
         private val mapper = jacksonObjectMapper()
+
+        private const val PYTHON_CORE_GROUP_ID = "org.openrewrite"
+        private const val PYTHON_CORE_ARTIFACT_ID = "rewrite-python"
 
         private const val MODERNE_DOCS_MARKDOWN_BASE_URL =
             "https://raw.githubusercontent.com/moderneinc/moderne-docs/refs/heads/main/docs/user-documentation/recipes/recipe-catalog/"

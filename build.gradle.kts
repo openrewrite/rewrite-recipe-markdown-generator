@@ -17,25 +17,30 @@ dependencyCheck {
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
+// Either `latest.release` or `latest.integration`
+val rewriteVersion = "latest.release"
+
+// Each repository here is probed for maven-metadata.xml on every dynamic coordinate below, so one
+// that hosts nothing this build resolves costs a round trip per module.
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url = uri("https://central.sonatype.com/repository/maven-snapshots/") }
-    maven { url = uri("https://maven.diffblue.com/snapshot") }
+    if (rewriteVersion == "latest.integration") {
+        maven { url = uri("https://central.sonatype.com/repository/maven-snapshots/") }
+    }
+    // Hosts org.openrewrite:plugin, which is not on Maven Central.
     gradlePluginPortal()
 }
 
 configurations.all {
     resolutionStrategy {
         cacheChangingModulesFor(0, TimeUnit.SECONDS)
-        cacheDynamicVersionsFor(0, TimeUnit.SECONDS)
+        // Far short of the daily cadence of the scheduled doc builds, so they still see each release.
+        cacheDynamicVersionsFor(1, TimeUnit.HOURS)
     }
 }
 
 val recipeConf = configurations.create("recipe")
-
-// Either `latest.release` or `latest.integration`
-val rewriteVersion = "latest.release"
 
 dependencies {
     // Platform dependencies (BOMs)
@@ -94,9 +99,9 @@ dependencies {
     "recipe"("org.openrewrite:rewrite-xml:$rewriteVersion")
     "recipe"("org.openrewrite:rewrite-yaml:$rewriteVersion")
 
-    // Additional core modules (versions only, recipes not yet included)
-//    "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
-//    "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
+    // Additional core modules; versions only, recipes not included (RecipeLoader.VERSION_ONLY_MODULES)
+    "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
+    "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
 
     // Recipe modules (org.openrewrite.recipe)
     "recipe"("org.openrewrite.meta:rewrite-analysis:$rewriteVersion")
@@ -200,24 +205,22 @@ tasks.named<JavaExec>("run").configure {
     val moderneTargetDir = layout.buildDirectory.dir("moderne-docs").get().asFile
 
     val latestVersionsOnly = providers.gradleProperty("latestVersionsOnly").getOrElse("").equals("true")
-    if (latestVersionsOnly) {
-        // Additional modules whose versions we want to show, but not (yet) their recipes
-        dependencies {
-            "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
-            "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
-        }
-    }
 
     // Collect all of the dependencies from recipeConf, then stuff them into a string representation
-    val recipeModules = recipeConf.resolvedConfiguration.firstLevelModuleDependencies.flatMap { dep ->
-        dep.moduleArtifacts.map { artifact ->
-            "${dep.moduleGroup}:${dep.moduleName}:${dep.moduleVersion}:${artifact.file}"
-        }
+    val firstLevelArtifacts = recipeConf.resolvedConfiguration.firstLevelModuleDependencies.flatMap { dep ->
+        dep.moduleArtifacts.map { artifact -> dep to artifact }
+    }
+    val recipeModules = firstLevelArtifacts.joinToString(";") { (dep, artifact) ->
+        "${dep.moduleGroup}:${dep.moduleName}:${dep.moduleVersion}:${artifact.file}"
+    }
+    // recipeModules doesn't include transitive dependencies, but those are needed to load recipes and their descriptors.
+    // A --latest-versions-only run reads only each recipe module's own MANIFEST.MF, so resolving the transitive
+    // closure there downloads the whole recipe classpath to read nothing from it.
+    val recipeClasspath = if (latestVersionsOnly) {
+        firstLevelArtifacts.map { (_, artifact) -> artifact.file.absolutePath }
+    } else {
+        recipeConf.incoming.files.map { it.absolutePath }
     }.joinToString(";")
-    // recipeModules doesn't include transitive dependencies, but those are needed to load recipes and their descriptors
-    val recipeClasspath = recipeConf.incoming.files.asSequence()
-        .map { it.absolutePath }
-        .joinToString(";")
 
     description = "Writes generated markdown docs to $targetDir and $moderneTargetDir"
     val arguments = mutableListOf(
