@@ -107,7 +107,7 @@ class VersionWriter {
                 // which the Code Genome Project serves to Moderne customers only. Deliberately Maven-only:
                 // pip, npm, NuGet and Go packages come from their own registries with no entitlement gate, so
                 // widening this to every ecosystem would drop commands that work. Affected modules still
-                // appear in the version table, which is a reference rather than something to run.
+                // appear in the version table above, which is a reference rather than something to run.
                 val msalMavenGated = !forModerneDocs && origin.license == Licenses.MSAL
 
                 val versionPlaceholder = "{{${origin.versionPlaceholderKey()}}}"
@@ -116,8 +116,10 @@ class VersionWriter {
                         val pipPackage = PythonRecipeLoader.PYTHON_RECIPE_MODULES.getValue(origin.artifactId)
                         cliInstallPipPinned += "$pipPackage==$versionPlaceholder "
                         cliInstallPipLatest += "$pipPackage "
-                        // Dual-published modules split their recipes across the wheel and the jar.
-                        if (PythonRecipeLoader.publishesCompanionJar(origin)) {
+                        // Dual-published modules split their recipes across the wheel and the jar. The jar
+                        // half is a Maven coordinate, so it carries the same entitlement gate as the plain
+                        // jar installs below; the wheel is unaffected.
+                        if (PythonRecipeLoader.publishesCompanionJar(origin) && !msalMavenGated) {
                             cliInstallJarPinned += "${origin.groupId}:${origin.artifactId}:$versionPlaceholder "
                             cliInstallJarLatest += "${origin.groupId}:${origin.artifactId}:LATEST "
                         }
