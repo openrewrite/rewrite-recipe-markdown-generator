@@ -17,6 +17,10 @@ concurrency:
   group: "ci"
   cancel-in-progress: true
 
+env:
+  ORG_GRADLE_PROJECT_codegenomeUsername: ${{ secrets.CGP_ARTIFACTS_MAVEN_USERNAME }}
+  ORG_GRADLE_PROJECT_codegenomePassword: ${{ secrets.CGP_ARTIFACTS_MAVEN_TOKEN }}
+
 jobs:
   build:
     name: Generate Latest Versions
