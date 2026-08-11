@@ -24,8 +24,6 @@ val rewriteVersion = "latest.release"
 // that hosts nothing this build resolves costs a round trip per module.
 repositories {
     mavenLocal()
-    // First publish target for these groups, so consulted ahead of Maven Central. It rejects
-    // anonymous requests, hence only declared when credentials are set.
     val codegenomeUsername = providers.gradleProperty("codegenomeUsername").getOrElse("")
     val codegenomePassword = providers.gradleProperty("codegenomePassword").getOrElse("")
     if (codegenomeUsername.isNotEmpty() && codegenomePassword.isNotEmpty()) {
