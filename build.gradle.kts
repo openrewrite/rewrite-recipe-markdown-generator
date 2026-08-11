@@ -24,6 +24,22 @@ val rewriteVersion = "latest.release"
 // that hosts nothing this build resolves costs a round trip per module.
 repositories {
     mavenLocal()
+    val codegenomeUsername = providers.gradleProperty("codegenomeUsername").getOrElse("")
+    val codegenomePassword = providers.gradleProperty("codegenomePassword").getOrElse("")
+    if (codegenomeUsername.isNotEmpty() && codegenomePassword.isNotEmpty()) {
+        maven {
+            name = "codegenome"
+            url = uri("https://artifacts.codegenomeproject.org/maven")
+            credentials {
+                username = codegenomeUsername
+                password = codegenomePassword
+            }
+            content {
+                includeGroupAndSubgroups("org.openrewrite")
+                includeGroupAndSubgroups("io.moderne")
+            }
+        }
+    }
     mavenCentral()
     if (rewriteVersion == "latest.integration") {
         maven { url = uri("https://central.sonatype.com/repository/maven-snapshots/") }
