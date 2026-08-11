@@ -19,8 +19,13 @@ import java.net.URI
 class CSharpRecipeLoader(
     private val recipeOrigins: Map<URI, RecipeOrigin>,
     private val javaDescriptors: Collection<RecipeDescriptor> = emptyList(),
-    private val classloader: ClassLoader = CSharpRecipeLoader::class.java.classLoader
+    private val classloader: ClassLoader = CSharpRecipeLoader::class.java.classLoader,
+    onlyArtifacts: Set<String> = emptySet()
 ) {
+
+    /** The [CSHARP_RECIPE_MODULES] this run loads, narrowed by `--only-artifacts`. */
+    val configuredModules: Map<String, String> =
+        CSHARP_RECIPE_MODULES.filterKeys { onlyArtifacts.isEmpty() || it in onlyArtifacts }
 
     companion object {
         /**
@@ -146,14 +151,14 @@ class CSharpRecipeLoader(
      * Loads C# recipes from NuGet packages via RPC.
      */
     fun loadCSharpRecipes(): CSharpRecipeResult {
-        if (CSHARP_RECIPE_MODULES.isEmpty()) {
+        if (configuredModules.isEmpty()) {
             println("No C# recipe modules configured.")
             return CSharpRecipeResult(emptyList(), emptyMap())
         }
 
         data class NuGetPackageInfo(val artifactId: String, val nugetPackageName: String, val version: String?)
 
-        val packagesToLoad = CSHARP_RECIPE_MODULES.map { (artifactId, nugetPackage) ->
+        val packagesToLoad = configuredModules.map { (artifactId, nugetPackage) ->
             val origin = recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
             NuGetPackageInfo(artifactId, nugetPackage, origin?.version)
         }

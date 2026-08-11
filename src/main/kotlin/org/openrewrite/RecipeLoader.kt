@@ -52,8 +52,13 @@ class RecipeLoader {
     val classloader: ClassLoader
     val dependencies: List<Path>
     val recipeOrigins: Map<URI, RecipeOrigin>
+    private val onlyArtifacts: Set<String>
 
-    constructor(recipeClasspath: String, recipeOrigins: Map<URI, RecipeOrigin>) {
+    constructor(
+        recipeClasspath: String,
+        recipeOrigins: Map<URI, RecipeOrigin>,
+        onlyArtifacts: Set<String> = emptySet()
+    ) {
         // Create classloader from classpath
         dependencies = recipeClasspath.split(";")
             .map(Paths::get)
@@ -63,13 +68,15 @@ class RecipeLoader {
             .toTypedArray<URL>()
             .let { URLClassLoader(it) }
         this.recipeOrigins = recipeOrigins
+        this.onlyArtifacts = onlyArtifacts
     }
 
     /**
      * Load recipes from the specified sources and classpath.
      *
-     * @param requireAllRecipeSources fail rather than warn when a configured RPC-backed language
-     * (TypeScript, Python, C#, Go) contributes no recipes at all.
+     * @param requireAllRecipeSources fail rather than warn when an RPC-backed language (TypeScript,
+     * Python, C#, Go) that this run configures contributes no recipes at all. "Configures" is after
+     * `--only-artifacts` narrowing, so a run restricted to one module per language still checks them.
      */
     fun loadRecipes(requireAllRecipeSources: Boolean = false): RecipeLoadResult {
         // Load Java/YAML recipes in parallel
@@ -121,33 +128,33 @@ class RecipeLoader {
         println("\nChecking for TypeScript/JavaScript recipes...")
         val typeScriptLoader = TypeScriptRecipeLoader(recipeOrigins)
         val typeScriptResult = typeScriptLoader.loadTypeScriptRecipes()
-        if (typeScriptResult.descriptors.isEmpty() && TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES.isNotEmpty()) {
-            emptyRecipeSources += "TypeScript: 0 recipes from ${TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES.size} configured module(s). Check that Node.js is installed."
+        if (typeScriptResult.descriptors.isEmpty() && typeScriptLoader.configuredModules.isNotEmpty()) {
+            emptyRecipeSources += "TypeScript: 0 recipes from ${typeScriptLoader.configuredModules.size} configured module(s). Check that Node.js is installed."
         }
 
         // Load Python recipes via RPC
         println("\nChecking for Python recipes...")
-        val pythonLoader = PythonRecipeLoader(recipeOrigins)
+        val pythonLoader = PythonRecipeLoader(recipeOrigins, onlyArtifacts = onlyArtifacts)
         val pythonResult = pythonLoader.loadPythonRecipes()
-        if (pythonResult.descriptors.isEmpty() && PythonRecipeLoader.PYTHON_RECIPE_MODULES.isNotEmpty()) {
-            emptyRecipeSources += "Python: 0 recipes from ${PythonRecipeLoader.PYTHON_RECIPE_MODULES.size} configured module(s). Check that Python 3.10+ and pip are installed."
+        if (pythonResult.descriptors.isEmpty() && pythonLoader.configuredModules.isNotEmpty()) {
+            emptyRecipeSources += "Python: 0 recipes from ${pythonLoader.configuredModules.size} configured module(s). Check that Python 3.10+ and pip are installed."
         }
 
         // Load C# recipes via RPC, passing Java descriptors so delegatesTo can resolve
         println("\nChecking for C# recipes...")
         val javaDescriptors = environmentData.flatMap { it.recipeDescriptors }
-        val csharpLoader = CSharpRecipeLoader(recipeOrigins, javaDescriptors, classloader)
+        val csharpLoader = CSharpRecipeLoader(recipeOrigins, javaDescriptors, classloader, onlyArtifacts)
         val csharpResult = csharpLoader.loadCSharpRecipes()
-        if (csharpResult.descriptors.isEmpty() && CSharpRecipeLoader.CSHARP_RECIPE_MODULES.isNotEmpty()) {
-            emptyRecipeSources += "C#: 0 recipes from ${CSharpRecipeLoader.CSHARP_RECIPE_MODULES.size} configured module(s). Check that the .NET SDK is installed."
+        if (csharpResult.descriptors.isEmpty() && csharpLoader.configuredModules.isNotEmpty()) {
+            emptyRecipeSources += "C#: 0 recipes from ${csharpLoader.configuredModules.size} configured module(s). Check that the .NET SDK is installed."
         }
 
         // Load Go recipes via RPC, passing Java descriptors so delegatesTo can resolve
         println("\nChecking for Go recipes...")
-        val goLoader = GoRecipeLoader(recipeOrigins, javaDescriptors, classloader)
+        val goLoader = GoRecipeLoader(recipeOrigins, javaDescriptors, classloader, onlyArtifacts)
         val goResult = goLoader.loadGoRecipes()
-        if (goResult.descriptors.isEmpty() && GoRecipeLoader.GO_RECIPE_MODULES.isNotEmpty()) {
-            emptyRecipeSources += "Go: 0 recipes from ${GoRecipeLoader.GO_RECIPE_MODULES.size} configured module(s). Check that Go 1.25+ and the rewrite-go-rpc server are installed."
+        if (goResult.descriptors.isEmpty() && goLoader.configuredModules.isNotEmpty()) {
+            emptyRecipeSources += "Go: 0 recipes from ${goLoader.configuredModules.size} configured module(s). Check that Go 1.25+ and the rewrite-go-rpc server are installed."
         }
 
         reportEmptyRecipeSources(emptyRecipeSources, requireAllRecipeSources)
@@ -337,7 +344,7 @@ class RecipeLoader {
             check(!requireAllRecipeSources) {
                 "No recipes loaded from configured source(s):\n$detail\n" +
                     "Publishing this run would drop every recipe in those languages. Fix the toolchain, " +
-                    "narrow the run with --only-artifacts, or pass --allow-empty-recipe-sources to override."
+                    "leave those modules out of --only-artifacts, or pass --allow-empty-recipe-sources to override."
             }
             System.err.println("WARNING: no recipes loaded from configured source(s):\n$detail")
         }
