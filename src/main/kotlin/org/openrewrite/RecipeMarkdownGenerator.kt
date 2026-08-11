@@ -86,8 +86,9 @@ class RecipeMarkdownGenerator : Runnable {
     @Option(
         names = ["--only-artifacts"],
         split = ",",
-        description = ["Restrict recipe loading to these artifactIds (e.g. rewrite-circleci). Greatly " +
-            "speeds up local testing; the full classpath is still resolved for transitive/delegatesTo lookups. " +
+        description = ["Restrict recipe loading to these artifactIds (e.g. rewrite-circleci). Applies to " +
+            "jars and to the RPC-backed TypeScript/Python/C#/Go modules alike. Greatly speeds up local " +
+            "testing; the full classpath is still resolved for transitive/delegatesTo lookups. " +
             "Sub-recipes from artifacts not in the list will have empty links."]
     )
     var onlyArtifacts: List<String> = emptyList()
@@ -123,14 +124,15 @@ class RecipeMarkdownGenerator : Runnable {
         }
 
         var recipeOrigins: Map<URI, RecipeOrigin> = RecipeOrigin.parse(recipeSources)
-        if (onlyArtifacts.isNotEmpty()) {
-            val keep = onlyArtifacts.toSet()
+        val keep = onlyArtifacts.toSet()
+        if (keep.isNotEmpty()) {
+            requireKnownArtifacts(keep, recipeOrigins.values)
             recipeOrigins = recipeOrigins.filterValues { it.artifactId in keep }
             println("Restricting recipe loading to ${recipeOrigins.size} artifact(s) matching $keep")
         }
 
         // Add manifest information
-        val recipeLoader = RecipeLoader(recipeClasspath, recipeOrigins)
+        val recipeLoader = RecipeLoader(recipeClasspath, recipeOrigins, keep)
         recipeLoader.addInfosFromManifests()
 
         // Synthesize origins for the NuGet-only C# modules so the version table and `nuget install`
@@ -138,7 +140,7 @@ class RecipeMarkdownGenerator : Runnable {
         // their repositoryUrl) and gated to Moderne docs, since C# is proprietary and excluded from
         // the OpenRewrite docs — which also keeps that path free of NuGet network calls.
         if (moderneOutputPath != null) {
-            recipeOrigins = recipeOrigins + CSharpRecipeLoader.buildVersionAnchorOrigins(onlyArtifacts.toSet())
+            recipeOrigins = recipeOrigins + CSharpRecipeLoader.buildVersionAnchorOrigins(keep)
         }
 
         // Write latest-versions-of-every-openrewrite-module.md
@@ -188,11 +190,10 @@ class RecipeMarkdownGenerator : Runnable {
             return
         }
 
-        // Load recipe details into memory. A run restricted to a few artifacts is expected to miss
-        // whole languages, so only a full run insists every configured language contributed recipes.
-        val loadResult = recipeLoader.loadRecipes(
-            requireAllRecipeSources = onlyArtifacts.isEmpty() && !allowEmptyRecipeSources
-        )
+        // Load recipe details into memory. `--only-artifacts` narrows the languages a run configures
+        // rather than exempting it from the check, so a run restricted to one module per language
+        // still fails if any of those languages loads nothing.
+        val loadResult = recipeLoader.loadRecipes(requireAllRecipeSources = !allowEmptyRecipeSources)
         val allRecipeDescriptors = loadResult.allRecipeDescriptors
         val allCategoryDescriptors = loadResult.allCategoryDescriptors
         val allRecipes = loadResult.allRecipes
@@ -368,13 +369,19 @@ class RecipeMarkdownGenerator : Runnable {
                 .writeCategories(moderneOutputPath, "recipe-catalog")
         }
 
-        // Create changelog markdown, and update tracking file
-        ChangelogWriter().createRecipeDescriptorsYaml(
-            markdownArtifacts,
-            openSourceRecipeDescriptors.size,
-            rewriteBomVersion,
-            outputPath
-        )
+        // Create changelog markdown, and update tracking file. A run restricted to a few artifacts
+        // saw only a slice of the catalog, so diffing it against the full baseline would report every
+        // other recipe as removed and overwrite recipeDescriptors.yml with that slice.
+        if (keep.isEmpty()) {
+            ChangelogWriter().createRecipeDescriptorsYaml(
+                markdownArtifacts,
+                openSourceRecipeDescriptors.size,
+                rewriteBomVersion,
+                outputPath
+            )
+        } else {
+            println("Skipping the changelog and recipeDescriptors.yml update: --only-artifacts loaded part of the catalog.")
+        }
 
         // Write lists of recipes into various files
         // OpenRewrite docs: open-source recipes only (links use /recipes path)
@@ -432,6 +439,24 @@ class RecipeMarkdownGenerator : Runnable {
 
 
     companion object {
+        /**
+         * Fail on an `--only-artifacts` entry that names neither a jar on the recipe classpath nor an
+         * RPC-backed recipe module. Such an entry filters everything away silently, which would let a
+         * doc-generation check pass while documenting none of the language it meant to cover.
+         */
+        fun requireKnownArtifacts(onlyArtifacts: Set<String>, origins: Collection<RecipeOrigin>) {
+            val known = origins.mapTo(mutableSetOf()) { it.artifactId } +
+                TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES.keys +
+                PythonRecipeLoader.PYTHON_RECIPE_MODULES.keys +
+                CSharpRecipeLoader.CSHARP_RECIPE_MODULES.keys +
+                GoRecipeLoader.GO_RECIPE_MODULES.keys
+            val unknown = onlyArtifacts - known
+            check(unknown.isEmpty()) {
+                "--only-artifacts names unknown artifact(s): ${unknown.sorted().joinToString(", ")}. " +
+                    "Expected a jar on the recipe classpath or an RPC-backed recipe module."
+            }
+        }
+
         /**
          * Modules whose docs should only appear in Moderne docs, regardless of license. Go recipe modules
          * are listed structurally rather than relying on their jar manifest: the Maven artifact is only a

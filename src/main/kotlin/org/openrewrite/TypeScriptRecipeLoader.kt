@@ -41,6 +41,12 @@ class TypeScriptRecipeLoader(
     )
 
     /**
+     * The [TYPESCRIPT_RECIPE_MODULES] this run loads. Unlike the other RPC-backed languages, these
+     * are discovered from [recipeOrigins], which `--only-artifacts` has already narrowed.
+     */
+    val configuredModules: List<RecipeOrigin> = recipeOrigins.values.filter(::hasTypeScriptRecipes)
+
+    /**
      * Detects which recipe modules contain TypeScript recipes by checking if they're
      * registered in the TYPESCRIPT_RECIPE_MODULES map.
      */
@@ -75,7 +81,7 @@ class TypeScriptRecipeLoader(
      * @return A result containing the recipe descriptors and a mapping of recipe names to source URIs
      */
     fun loadTypeScriptRecipes(): TypeScriptRecipeResult {
-        val typeScriptOrigins = recipeOrigins.values.filter { hasTypeScriptRecipes(it) }
+        val typeScriptOrigins = configuredModules
 
         if (typeScriptOrigins.isEmpty()) {
             println("No TypeScript recipe modules detected.")

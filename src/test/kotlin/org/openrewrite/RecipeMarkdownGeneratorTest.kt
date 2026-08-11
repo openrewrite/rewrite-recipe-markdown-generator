@@ -1,6 +1,8 @@
 package org.openrewrite
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
+import org.assertj.core.api.Assertions.assertThatNoException
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -170,6 +172,29 @@ class RecipeMarkdownGeneratorTest {
                 .describedAs("Go module %s must be excluded from the OpenRewrite docs", artifactId)
                 .isTrue()
         }
+    }
+
+    @Test
+    fun onlyArtifactsAcceptsJarsAndRpcBackedModules() {
+        val jar = URI.create("file:///rewrite-java.jar")
+        val origins = listOf(RecipeOrigin("org.openrewrite", "rewrite-java", "8.0.0", jar))
+
+        // One module per language: a jar plus the TypeScript/Python/C#/Go registries.
+        assertThatNoException().isThrownBy {
+            RecipeMarkdownGenerator.requireKnownArtifacts(
+                setOf("rewrite-java", "rewrite-javascript", "rewrite-python", "recipes-csharp-core", "recipes-go"),
+                origins
+            )
+        }
+    }
+
+    @Test
+    fun onlyArtifactsRejectsAnArtifactThatWouldMatchNothing() {
+        // Silently filtering everything away would let a doc-generation check pass without
+        // documenting the language it was pointed at.
+        assertThatIllegalStateException().isThrownBy {
+            RecipeMarkdownGenerator.requireKnownArtifacts(setOf("rewrite-jvaa"), emptyList())
+        }.withMessageContaining("rewrite-jvaa")
     }
 
     @Test

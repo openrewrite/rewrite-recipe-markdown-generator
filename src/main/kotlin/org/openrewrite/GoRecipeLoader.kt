@@ -23,8 +23,13 @@ import java.net.URI
 class GoRecipeLoader(
     private val recipeOrigins: Map<URI, RecipeOrigin>,
     private val javaDescriptors: Collection<RecipeDescriptor> = emptyList(),
-    private val classloader: ClassLoader = GoRecipeLoader::class.java.classLoader
+    private val classloader: ClassLoader = GoRecipeLoader::class.java.classLoader,
+    onlyArtifacts: Set<String> = emptySet()
 ) {
+
+    /** The [GO_RECIPE_MODULES] this run loads, narrowed by `--only-artifacts`. */
+    val configuredModules: Map<String, String> =
+        GO_RECIPE_MODULES.filterKeys { onlyArtifacts.isEmpty() || it in onlyArtifacts }
 
     companion object {
         /** Artifact ID -> Go module path. Add new Go recipe modules here. */
@@ -93,14 +98,14 @@ class GoRecipeLoader(
 
     /** Loads Go recipes from their Go modules via RPC. */
     fun loadGoRecipes(): GoRecipeResult {
-        if (GO_RECIPE_MODULES.isEmpty()) {
+        if (configuredModules.isEmpty()) {
             println("No Go recipe modules configured.")
             return GoRecipeResult(emptyList(), emptyMap())
         }
 
         data class GoPackageInfo(val artifactId: String, val goModule: String, val version: String?)
 
-        val packagesToLoad = GO_RECIPE_MODULES.map { (artifactId, goModule) ->
+        val packagesToLoad = configuredModules.map { (artifactId, goModule) ->
             val origin = recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
             GoPackageInfo(artifactId, goModule, origin?.version)
         }

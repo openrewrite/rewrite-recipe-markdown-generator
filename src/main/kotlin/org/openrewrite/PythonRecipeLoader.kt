@@ -17,8 +17,13 @@ import java.util.concurrent.TimeUnit
  */
 class PythonRecipeLoader(
     private val recipeOrigins: Map<URI, RecipeOrigin>,
-    private val pipPackagesPath: Path? = null
+    private val pipPackagesPath: Path? = null,
+    onlyArtifacts: Set<String> = emptySet()
 ) {
+
+    /** The [PYTHON_RECIPE_MODULES] this run loads, narrowed by `--only-artifacts`. */
+    val configuredModules: Map<String, String> =
+        PYTHON_RECIPE_MODULES.filterKeys { onlyArtifacts.isEmpty() || it in onlyArtifacts }
 
     companion object {
         /**
@@ -106,7 +111,7 @@ class PythonRecipeLoader(
      * @return A result containing the recipe descriptors and a mapping of recipe names to source URIs
      */
     fun loadPythonRecipes(): PythonRecipeResult {
-        if (PYTHON_RECIPE_MODULES.isEmpty()) {
+        if (configuredModules.isEmpty()) {
             println("No Python recipe modules configured.")
             return PythonRecipeResult(emptyList(), emptyMap())
         }
@@ -114,7 +119,7 @@ class PythonRecipeLoader(
         // Build list of packages to load, using version from recipeOrigins when available
         data class PipPackageInfo(val artifactId: String, val pipPackageName: String, val version: String?)
 
-        val packagesToLoad = PYTHON_RECIPE_MODULES.map { (artifactId, pipPackage) ->
+        val packagesToLoad = configuredModules.map { (artifactId, pipPackage) ->
             val origin = recipeOrigins.values.firstOrNull { it.artifactId == artifactId }
             val version = if (artifactId in INDEPENDENT_PIP_VERSIONING) null else origin?.version
             PipPackageInfo(artifactId, pipPackage, version)
