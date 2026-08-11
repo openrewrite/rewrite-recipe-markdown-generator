@@ -26,6 +26,8 @@ env:
   # One module per language. Each is an artifactId as `--only-artifacts` knows it: a jar on the
   # recipe classpath, or a key of the TypeScript/Python/C#/Go registries in the *RecipeLoader classes.
   # The run fails if any of these languages loads no recipes, so a broken toolchain can't pass quietly.
+  # Deliberately not rewrite-go: its Go recipes are written in Java, so listing it would fill golang/
+  # with pages the Go RPC had no part in, and the assertion below would stop proving that path works.
   RECIPE_ARTIFACTS: rewrite-java,rewrite-javascript,rewrite-python,recipes-code-quality,recipes-go
 
 jobs:
