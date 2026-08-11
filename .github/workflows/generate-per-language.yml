@@ -1,0 +1,89 @@
+# Generate docs for one recipe module per language, as a fast stand-in for the full catalog run
+# that only moderneinc/moderne-docs does. Catches breakage in any of the five doc-generation paths
+# without waiting on the ~10k pages a full run writes.
+name: Generate Per Language
+
+on:
+  push:
+    branches:
+      - main
+    tags-ignore:
+      - "*"
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: {}
+  schedule:
+    - cron: 0 5 * * *
+
+concurrency:
+  group: generate-per-language-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  ORG_GRADLE_PROJECT_codegenomeUsername: ${{ secrets.CGP_ARTIFACTS_MAVEN_USERNAME }}
+  ORG_GRADLE_PROJECT_codegenomePassword: ${{ secrets.CGP_ARTIFACTS_MAVEN_TOKEN }}
+  # One module per language. Each is an artifactId as `--only-artifacts` knows it: a jar on the
+  # recipe classpath, or a key of the TypeScript/Python/C#/Go registries in the *RecipeLoader classes.
+  # The run fails if any of these languages loads no recipes, so a broken toolchain can't pass quietly.
+  # Deliberately not rewrite-go: its Go recipes are written in Java, so listing it would fill golang/
+  # with pages the Go RPC had no part in, and the assertion below would stop proving that path works.
+  RECIPE_ARTIFACTS: rewrite-java,rewrite-javascript,rewrite-python,recipes-code-quality,recipes-go
+
+jobs:
+  generate:
+    name: Generate Per Language
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      # Toolchain versions mirror moderneinc/moderne-docs' update-docs.yml, which does the full run.
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '9.0.x'
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.25'        # recipes-go and rewrite-go both require go 1.25 (their go.mod)
+      - name: Build the rewrite-go-rpc server
+        run: |
+          # Hand the RPC server the toolchain setup-go just installed, rather than let it discover the
+          # runner image's older default Go and reject the mismatch (openrewrite/rewrite@bf8ed5e).
+          echo "GOROOT=$(go env GOROOT)" >> "$GITHUB_ENV"
+
+          # rewrite-go-rpc isn't published as a binary, and `go install` names it after its package
+          # dir, so build it, rename it, and put it on PATH for the generator's Go loader to launch.
+          go install github.com/openrewrite/rewrite/rewrite-go/cmd/rpc@latest
+          ln -sf "$(go env GOPATH)/bin/rpc" "$(go env GOPATH)/bin/rewrite-go-rpc"
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+      - uses: gradle/actions/setup-gradle@v5
+
+      - uses: actions/checkout@v7
+      - name: Generate Markdown
+        run: ./gradlew run -PrecipeArtifacts=${{ env.RECIPE_ARTIFACTS }}
+
+      - name: Assert every language produced recipe markdown
+        run: |
+          # The Moderne catalog holds all five languages; the OpenRewrite docs carry only the
+          # open-source ones, so Java is the only language checked in both outputs.
+          missing=""
+          for dir in java javascript python csharp golang; do
+            count=$(find "build/moderne-docs/recipe-catalog/$dir" -name '*.md' 2>/dev/null | wc -l)
+            echo "moderne-docs/recipe-catalog/$dir: $count markdown file(s)"
+            [ "$count" -gt 0 ] || missing="$missing $dir"
+          done
+          count=$(find build/docs/recipes/java -name '*.md' 2>/dev/null | wc -l)
+          echo "docs/recipes/java: $count markdown file(s)"
+          [ "$count" -gt 0 ] || missing="$missing docs/recipes/java"
+          if [ -n "$missing" ]; then
+            echo "::error::No recipe markdown generated for:$missing"
+            exit 1
+          fi
