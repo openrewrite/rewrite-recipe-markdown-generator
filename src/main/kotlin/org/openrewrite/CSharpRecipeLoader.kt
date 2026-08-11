@@ -132,7 +132,7 @@ class CSharpRecipeLoader(
      */
     private fun classpathResolver(): RecipeBundleResolver {
         return object : RecipeBundleResolver {
-            override fun getEcosystem() = CLASSPATH_BUNDLE.packageEcosystem
+            override fun getEcosystem() = "classpath"
 
             override fun resolve(bundle: RecipeBundle): RecipeBundleReader {
                 val loader = org.openrewrite.internal.RecipeLoader(classloader)
