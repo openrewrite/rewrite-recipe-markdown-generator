@@ -6,7 +6,6 @@ plugins {
 
 dependencyCheck {
     analyzers.assemblyEnabled = false
-    suppressionFile = "suppressions.xml"
     scanConfigurations = listOf("runtimeClasspath")
     nvd.apiKey = System.getenv("NVD_API_KEY")
     analyzers.centralEnabled = System.getenv("CENTRAL_ANALYZER_ENABLED").toBoolean()
