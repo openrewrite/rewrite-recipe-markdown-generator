@@ -8,6 +8,7 @@ dependencyCheck {
     analyzers.assemblyEnabled = false
     scanConfigurations = listOf("runtimeClasspath")
     format = System.getenv("DEPENDENCY_CHECK_FORMAT") ?: "HTML"
+    suppressionFile = "suppressions.xml"
     nvd.apiKey = System.getenv("NVD_API_KEY")
     analyzers.centralEnabled = System.getenv("CENTRAL_ANALYZER_ENABLED").toBoolean()
     analyzers.ossIndex.username = System.getenv("OSSINDEX_USERNAME")
