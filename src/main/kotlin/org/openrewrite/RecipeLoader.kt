@@ -320,7 +320,7 @@ class RecipeLoader {
          * Modules on the recipe configuration purely so the version table lists them; they ship no
          * recipes we document, so they are skipped when scanning and left out of install commands.
          */
-        val VERSION_ONLY_MODULES = setOf("rewrite-polyglot", "rewrite-templating")
+        val VERSION_ONLY_MODULES = setOf("rewrite-analysis", "rewrite-polyglot", "rewrite-templating")
 
         /**
          * Sanitize a category name for use as a URL-safe directory path segment.
