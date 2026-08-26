@@ -302,6 +302,10 @@ class RecipeMarkdownGeneratorTest {
             .isEqualTo("apache/camel/somerecipe")
         assertThat(getRecipePath("io.axoniq.framework.migration.UpgradeAxon4ToAxoniq5"))
             .isEqualTo("axoniq/framework/migration/upgradeaxon4toaxoniq5")
+
+        // `sh` is not a root category, so it stays in the path
+        assertThat(getRecipePath("sh.stubborn.contract.migration.MigrateFromSpringCloudContract"))
+            .isEqualTo("sh/stubborn/contract/migration/migratefromspringcloudcontract")
     }
 
     @Test
