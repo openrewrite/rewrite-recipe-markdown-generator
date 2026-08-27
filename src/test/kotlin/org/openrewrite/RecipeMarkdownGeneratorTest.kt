@@ -1,6 +1,7 @@
 package org.openrewrite
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.assertThatNoException
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -406,6 +407,27 @@ class RecipeMarkdownGeneratorTest {
     fun escapeMdxOutsideCodeSpansHandlesMixedContent() {
         assertThat(escapeMdxOutsideCodeSpans("set idType = <ResolvedType>.class via `autodetected(<IdType>.class)`"))
             .isEqualTo("set idType = &lt;ResolvedType>.class via `autodetected(<IdType>.class)`")
+    }
+
+    @Test
+    fun unrecognizedRecipePackageFailsWithActionableMessage() {
+        initializeConflictDetection(emptyList())
+
+        assertThatExceptionOfType(RuntimeException::class.java)
+            .isThrownBy { getRecipePath("net.example.migration.SomeRecipe") }
+            .withMessageContainingAll(
+                "net.example.migration.SomeRecipe",
+                "\"net.example\"",
+                "THIRD_PARTY_RECIPE_PACKAGE_PREFIXES",
+                "src/main/kotlin/org/openrewrite/RecipeMarkdownGenerator.kt"
+            )
+    }
+
+    @Test
+    fun thirdPartyRecipePackagePrefixesAreSorted() {
+        assertThat(RecipeMarkdownGenerator.THIRD_PARTY_RECIPE_PACKAGE_PREFIXES)
+            .isSorted()
+            .doesNotHaveDuplicates()
     }
 
     private fun initializeConflictDetection(recipeNames: List<String>) {
