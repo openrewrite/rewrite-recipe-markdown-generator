@@ -622,6 +622,24 @@ class RecipeMarkdownGenerator : Runnable {
             newLine()
         }
 
+        // Recipes outside org.openrewrite and io.moderne are only documented when their package
+        // prefix is listed here; anything else fails the run rather than landing somewhere
+        // unexpected in the catalog. Keep sorted.
+        internal val THIRD_PARTY_RECIPE_PACKAGE_PREFIXES = listOf(
+            "ai.timefold",
+            "androidx",
+            "com.google",
+            "com.oracle",
+            "io.axoniq",
+            "io.quarkus",
+            "org.apache",
+            "org.axonframework",
+            "org.jetbrains",
+            "sh.stubborn",
+            "software.amazon.awssdk",
+            "tech.picnic",
+        )
+
         // Docusaurus expects that if a file is called "assertj" inside of the folder "assertj" that it's the
         // README for said folder. Due to how generic we've made this recipe name, we need to change it for the
         // docs so that they parse correctly.
@@ -658,23 +676,20 @@ class RecipeMarkdownGenerator : Runnable {
                 recipe.name.startsWith("OpenRewrite.") -> {
                     basePath
                 }
-                recipe.name.startsWith("ai.timefold") ||
-                recipe.name.startsWith("androidx") ||
-                recipe.name.startsWith("com.google") ||
-                recipe.name.startsWith("com.oracle") ||
-                recipe.name.startsWith("io.axoniq") ||
-                recipe.name.startsWith("io.quarkus") ||
-                recipe.name.startsWith("io.quakus") ||
-                recipe.name.startsWith("org.apache") ||
-                recipe.name.startsWith("org.axonframework") ||
-                recipe.name.startsWith("org.jetbrains") ||
-                recipe.name.startsWith("sh.stubborn") ||
-                recipe.name.startsWith("software.amazon.awssdk") ||
-                recipe.name.startsWith("tech.picnic") -> {
+                THIRD_PARTY_RECIPE_PACKAGE_PREFIXES.any {
+                    recipe.name == it || recipe.name.startsWith("$it.")
+                } -> {
                     basePath
                 }
                 else -> {
-                    throw RuntimeException("Recipe package unrecognized: ${recipe.name}")
+                    val suggestedPrefix = recipe.name.split('.').take(2).joinToString(".")
+                    throw RuntimeException(
+                        "Recipe package unrecognized: ${recipe.name}. Recipes outside org.openrewrite " +
+                            "and io.moderne are only documented when their package prefix is on an allow " +
+                            "list. To document this recipe, add \"$suggestedPrefix\" to " +
+                            "THIRD_PARTY_RECIPE_PACKAGE_PREFIXES in " +
+                            "src/main/kotlin/org/openrewrite/RecipeMarkdownGenerator.kt."
+                    )
                 }
             }
         }
