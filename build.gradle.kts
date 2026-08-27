@@ -283,6 +283,10 @@ defaultTasks = mutableListOf("run")
 
 fun latestVersion(arg: String) =
     configurations.detachedConfiguration(dependencies.create(arg))
+        // Detached configurations are not in the configuration container, so the `configurations.all`
+        // block above never sees them; without this they keep Gradle's 24 hour default and a manually
+        // dispatched docs run reports yesterday's BOM and plugin versions.
+        .apply { resolutionStrategy.cacheDynamicVersionsFor(1, TimeUnit.HOURS) }
         .resolvedConfiguration
         .firstLevelModuleDependencies
         .first()
