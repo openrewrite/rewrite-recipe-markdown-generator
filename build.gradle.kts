@@ -155,6 +155,7 @@ dependencies {
     "recipe"("org.openrewrite.recipe:rewrite-nodejs:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-okhttp:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-openapi:$rewriteVersion")
+    "recipe"("org.openrewrite.recipe:rewrite-pmd:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-prethink:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-quarkus:$rewriteVersion")
     "recipe"("org.openrewrite.recipe:rewrite-reactive-streams:$rewriteVersion")
