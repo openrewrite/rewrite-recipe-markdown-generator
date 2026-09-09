@@ -1,6 +1,6 @@
 rewrite-all:
   artifactId: "rewrite-all"
-  version: "1.28.2"
+  version: "1.30.0"
   markdownRecipeDescriptors:
     org.openrewrite.FindCallGraph:
       name: "org.openrewrite.FindCallGraph"
@@ -32,7 +32,7 @@ rewrite-all:
       artifactId: "rewrite-all"
 rewrite-apache:
   artifactId: "rewrite-apache"
-  version: "2.31.0"
+  version: "2.32.0"
   markdownRecipeDescriptors:
     org.openrewrite.apache.ApacheBestPractices:
       name: "org.openrewrite.apache.ApacheBestPractices"
@@ -1165,7 +1165,7 @@ rewrite-cobol:
       artifactId: "rewrite-cobol"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.91.0"
+  version: "8.92.1"
   markdownRecipeDescriptors:
     org.openrewrite.AddToGitignore:
       name: "org.openrewrite.AddToGitignore"
@@ -1607,7 +1607,7 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
-  version: "2.16.0"
+  version: "2.17.0"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CollapseCucumberOptionsTags:
       name: "org.openrewrite.cucumber.jvm.CollapseCucumberOptionsTags"
@@ -1828,7 +1828,7 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
 rewrite-docker:
   artifactId: "rewrite-docker"
-  version: "8.91.0"
+  version: "8.92.1"
   markdownRecipeDescriptors:
     org.openrewrite.docker.AddAptGetCleanup:
       name: "org.openrewrite.docker.AddAptGetCleanup"
@@ -2105,7 +2105,7 @@ rewrite-docker:
       artifactId: "rewrite-docker"
 rewrite-feature-flags:
   artifactId: "rewrite-feature-flags"
-  version: "1.23.2"
+  version: "1.24.0"
   markdownRecipeDescriptors:
     org.openrewrite.featureflags.RemoveBooleanFlag:
       name: "org.openrewrite.featureflags.RemoveBooleanFlag"
@@ -2532,7 +2532,7 @@ rewrite-feature-flags:
       artifactId: "rewrite-feature-flags"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "3.30.0"
+  version: "3.31.0"
   markdownRecipeDescriptors:
     org.openrewrite.github.AddCronTrigger:
       name: "org.openrewrite.github.AddCronTrigger"
@@ -3241,7 +3241,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gitlab:
   artifactId: "rewrite-gitlab"
-  version: "0.24.2"
+  version: "0.25.0"
   markdownRecipeDescriptors:
     org.openrewrite.gitlab.AddArtifactsExpireIn:
       name: "org.openrewrite.gitlab.AddArtifactsExpireIn"
@@ -3550,7 +3550,7 @@ rewrite-gitlab:
       artifactId: "rewrite-gitlab"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.91.0"
+  version: "8.92.1"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -4850,7 +4850,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.91.0"
+  version: "8.92.1"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.AutoFormat:
       name: "org.openrewrite.groovy.format.AutoFormat"
@@ -4886,7 +4886,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.91.0"
+  version: "8.92.1"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -4999,7 +4999,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-hibernate:
   artifactId: "rewrite-hibernate"
-  version: "2.25.1"
+  version: "2.26.0"
   markdownRecipeDescriptors:
     org.openrewrite.hibernate.AddScalarPreferStandardBasicTypes:
       name: "org.openrewrite.hibernate.AddScalarPreferStandardBasicTypes"
@@ -5247,7 +5247,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-jackson:
   artifactId: "rewrite-jackson"
-  version: "1.29.1"
+  version: "1.30.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jackson.AddJsonCreatorToPrivateConstructors:
       name: "org.openrewrite.java.jackson.AddJsonCreatorToPrivateConstructors"
@@ -5719,7 +5719,7 @@ rewrite-jackson:
       artifactId: "rewrite-jackson"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.91.0"
+  version: "8.92.1"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -7019,7 +7019,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "1.61.0"
+  version: "1.62.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.AddDependency:
       name: "org.openrewrite.java.dependencies.AddDependency"
@@ -7474,7 +7474,7 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-javascript:
   artifactId: "rewrite-javascript"
-  version: "8.91.0"
+  version: "8.92.1"
   markdownRecipeDescriptors:
     org.openrewrite.javascript.AddDependency:
       name: "org.openrewrite.javascript.AddDependency"
@@ -7727,7 +7727,7 @@ rewrite-javascript:
       artifactId: "rewrite-javascript"
 rewrite-jenkins:
   artifactId: "rewrite-jenkins"
-  version: "0.37.2"
+  version: "0.38.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3:
       name: "org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3"
@@ -7921,7 +7921,7 @@ rewrite-jenkins:
       artifactId: "rewrite-jenkins"
 rewrite-joda:
   artifactId: "rewrite-joda"
-  version: "0.10.2"
+  version: "0.11.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.joda.time.JodaAbstractInstantToJavaTime:
       name: "org.openrewrite.java.joda.time.JodaAbstractInstantToJavaTime"
@@ -8024,7 +8024,7 @@ rewrite-joda:
       artifactId: "rewrite-joda"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.91.0"
+  version: "8.92.1"
   markdownRecipeDescriptors:
     org.openrewrite.json.AddKeyValue:
       name: "org.openrewrite.json.AddKeyValue"
@@ -8176,7 +8176,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "8.91.0"
+  version: "8.92.1"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -8294,7 +8294,7 @@ rewrite-kotlin:
       artifactId: "rewrite-kotlin"
 rewrite-liberty:
   artifactId: "rewrite-liberty"
-  version: "1.27.0"
+  version: "1.28.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty:
       name: "org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty"
@@ -8402,7 +8402,7 @@ rewrite-liberty:
       artifactId: "rewrite-liberty"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "3.32.1"
+  version: "3.33.0"
   markdownRecipeDescriptors:
     org.apache.logging.log4j.InlineLog4jApiMethods:
       name: "org.apache.logging.log4j.InlineLog4jApiMethods"
@@ -9611,7 +9611,7 @@ rewrite-logging-frameworks:
       artifactId: "rewrite-logging-frameworks"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.91.0"
+  version: "8.92.1"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddAnnotationProcessor:
       name: "org.openrewrite.maven.AddAnnotationProcessor"
@@ -11248,7 +11248,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micrometer:
   artifactId: "rewrite-micrometer"
-  version: "0.30.2"
+  version: "0.31.0"
   markdownRecipeDescriptors:
     org.openrewrite.micrometer.MicrometerBestPractices:
       name: "org.openrewrite.micrometer.MicrometerBestPractices"
@@ -11308,7 +11308,7 @@ rewrite-micrometer:
       artifactId: "rewrite-micrometer"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "2.37.0"
+  version: "2.38.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.AddAnnotationProcessorPath:
       name: "org.openrewrite.java.micronaut.AddAnnotationProcessorPath"
@@ -11671,7 +11671,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "3.43.0"
+  version: "3.44.0"
   markdownRecipeDescriptors:
     com.google.guava.InlineGuavaMethods:
       name: "com.google.guava.InlineGuavaMethods"
@@ -15856,7 +15856,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-netty:
   artifactId: "rewrite-netty"
-  version: "0.12.0"
+  version: "0.13.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.netty.EventLoopGroupToMultiThreadIoEventLoopGroupRecipes:
       name: "org.openrewrite.java.netty.EventLoopGroupToMultiThreadIoEventLoopGroupRecipes"
@@ -15943,7 +15943,7 @@ rewrite-netty:
       artifactId: "rewrite-netty"
 rewrite-okhttp:
   artifactId: "rewrite-okhttp"
-  version: "0.24.2"
+  version: "0.25.0"
   markdownRecipeDescriptors:
     org.openrewrite.okhttp.ReorderRequestBodyCreateArguments:
       name: "org.openrewrite.okhttp.ReorderRequestBodyCreateArguments"
@@ -16024,7 +16024,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-openapi:
   artifactId: "rewrite-openapi"
-  version: "0.33.2"
+  version: "0.34.0"
   markdownRecipeDescriptors:
     org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings:
       name: "org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings"
@@ -16161,9 +16161,110 @@ rewrite-openapi:
       options: []
       isImperative: false
       artifactId: "rewrite-openapi"
+rewrite-pmd:
+  artifactId: "rewrite-pmd"
+  version: "0.1.2"
+  markdownRecipeDescriptors:
+    org.openrewrite.java.pmd.AddPmdRule:
+      name: "org.openrewrite.java.pmd.AddPmdRule"
+      description: "Adds a `<rule ref=\"...\"/>` reference to PMD ruleset XML files\
+        \ that do not have one yet. When the ruleset already pulls in the whole ruleset\
+        \ file the rule lives in, the rule is enabled by removing the `<exclude name=\"\
+        ...\"/>` that was keeping it out rather than by adding a second reference\
+        \ to it."
+      docLink: "https://docs.openrewrite.org/recipes/java/pmd/addpmdrule"
+      options:
+      - name: "rule"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-pmd"
+    org.openrewrite.java.pmd.ModernizePmd:
+      name: "org.openrewrite.java.pmd.ModernizePmd"
+      description: "Bring a PMD ruleset XML file up to date with current PMD, by updating\
+        \ the `<rule>` references and `<exclude>` elements to name each rule as PMD\
+        \ knows it today. This runs both the PMD 6 to 7 migration, which replaces\
+        \ the rules PMD 7 deleted and drops the ones deleted without a successor,\
+        \ and the PMD 7 rule renames, which adopt the current name of each rule PMD\
+        \ renamed within the PMD 7 line. Rules whose replacement requires a judgement\
+        \ call, either because PMD split one rule across several successors or because\
+        \ the successor reports something different, are left alone. The result requires\
+        \ PMD 7.27.0 or later; an earlier PMD 7 fails to load a name that its version\
+        \ does not know yet."
+      docLink: "https://docs.openrewrite.org/recipes/java/pmd/modernizepmd"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-pmd"
+    org.openrewrite.java.pmd.Pmd6to7Migration:
+      name: "org.openrewrite.java.pmd.Pmd6to7Migration"
+      description: "PMD 7 deleted the rules that had been deprecated throughout the\
+        \ PMD 6 line, and PMD refuses to load a ruleset that references a rule it\
+        \ does not know. Update the `<rule>` references and `<exclude>` elements in\
+        \ PMD ruleset XML files to name each deleted rule's successor, and drop the\
+        \ references to rules that were deleted without one. Rules whose behaviour\
+        \ PMD split across several successors, such as `VariableNamingConventions`\
+        \ and the primitive wrapper `*Instantiation` rules, are left alone because\
+        \ picking a single replacement for them requires a judgement call."
+      docLink: "https://docs.openrewrite.org/recipes/java/pmd/pmd6to7migration"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-pmd"
+    org.openrewrite.java.pmd.Pmd7RuleRenames:
+      name: "org.openrewrite.java.pmd.Pmd7RuleRenames"
+      description: "PMD renamed a number of rules during the PMD 7 line, keeping the\
+        \ old name as a deprecated alias that PMD still loads but warns about. Update\
+        \ the `<rule>` references and `<exclude>` elements in PMD ruleset XML files\
+        \ to name each rule's current name, so the ruleset stops emitting deprecation\
+        \ warnings and keeps loading once PMD 8 drops the aliases. Only true renames\
+        \ are applied, meaning the cases where PMD kept the old name as an alias pointing\
+        \ at the new one. Rules PMD deprecated in favour of a *different* rule, such\
+        \ as `AvoidCatchingNPE` in favour of the configurable `AvoidCatchingGenericException`,\
+        \ `GenericsNaming` in favour of `TypeParameterNamingConventions`, `UnnecessaryLocalBeforeReturn`\
+        \ in favour of `VariableCanBeInlined`, `UseObjectForClearerAPI` in favour\
+        \ of `ExcessiveParameterList`, and `CheckSkipResult`, `AvoidLosingExceptionInformation`\
+        \ and `UselessOperationOnImmutable` in favour of `UnusedReturnValue`, are\
+        \ left alone, because the successor reports different things and adopting\
+        \ it is a judgement call rather than a rename. The new names require PMD 7.27.0\
+        \ or later; a ruleset for an earlier PMD 7 fails to load a name that its version\
+        \ does not know yet."
+      docLink: "https://docs.openrewrite.org/recipes/java/pmd/pmd7rulerenames"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-pmd"
+    org.openrewrite.java.pmd.RemovePmdRule:
+      name: "org.openrewrite.java.pmd.RemovePmdRule"
+      description: "Removes both `<rule ref=\"...\"/>` references to a rule and `<exclude\
+        \ name=\"...\"/>` elements naming it from PMD ruleset XML files. Intended\
+        \ for rules that PMD deleted without offering a replacement, since PMD fails\
+        \ to load a ruleset that references a rule it does not know."
+      docLink: "https://docs.openrewrite.org/recipes/java/pmd/removepmdrule"
+      options:
+      - name: "rule"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-pmd"
+    org.openrewrite.java.pmd.ReplacePmdRule:
+      name: "org.openrewrite.java.pmd.ReplacePmdRule"
+      description: "Updates `<rule ref=\"...\"/>` references and `<exclude name=\"\
+        ...\"/>` elements in PMD ruleset XML files to name a rule's replacement. An\
+        \ `<exclude>` is only renamed when the replacement lives in the same ruleset\
+        \ file, because an exclusion can only name a rule from the ruleset its enclosing\
+        \ `<rule>` refers to; when the replacement moved to another ruleset file the\
+        \ exclusion no longer names a rule PMD knows, so it is removed instead."
+      docLink: "https://docs.openrewrite.org/recipes/java/pmd/replacepmdrule"
+      options:
+      - name: "newRule"
+        type: "String"
+        required: true
+      - name: "oldRule"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-pmd"
 rewrite-prethink:
   artifactId: "rewrite-prethink"
-  version: "1.3.0"
+  version: "1.4.0"
   markdownRecipeDescriptors:
     org.openrewrite.prethink.ExportContext:
       name: "org.openrewrite.prethink.ExportContext"
@@ -16240,7 +16341,7 @@ rewrite-prethink:
       artifactId: "rewrite-prethink"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.91.0"
+  version: "8.92.1"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -16404,7 +16505,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "2.35.0"
+  version: "2.36.0"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.AddQuarkusProperty:
       name: "org.openrewrite.quarkus.AddQuarkusProperty"
@@ -16672,7 +16773,7 @@ rewrite-quarkus:
       artifactId: "rewrite-quarkus"
 rewrite-rewrite:
   artifactId: "rewrite-rewrite"
-  version: "0.31.0"
+  version: "0.32.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations:
       name: "org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations"
@@ -17044,7 +17145,7 @@ rewrite-rewrite:
       artifactId: "rewrite-rewrite"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "6.38.0"
+  version: "6.39.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.spring.AddParametersCompilerFlagToGradle:
       name: "org.openrewrite.gradle.spring.AddParametersCompilerFlagToGradle"
@@ -20136,7 +20237,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-spring-to-quarkus:
   artifactId: "rewrite-spring-to-quarkus"
-  version: "0.12.0"
+  version: "0.13.0"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.spring.AddQuarkusMavenPlugin:
       name: "org.openrewrite.quarkus.spring.AddQuarkusMavenPlugin"
@@ -20663,7 +20764,7 @@ rewrite-spring-to-quarkus:
       artifactId: "rewrite-spring-to-quarkus"
 rewrite-static-analysis:
   artifactId: "rewrite-static-analysis"
-  version: "2.42.0"
+  version: "2.43.0"
   markdownRecipeDescriptors:
     org.openrewrite.recipe.rewrite-static-analysis.InlineDeprecatedMethods:
       name: "org.openrewrite.recipe.rewrite-static-analysis.InlineDeprecatedMethods"
@@ -22728,7 +22829,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "3.45.0"
+  version: "3.46.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.archunit.ArchUnit0to1Migration:
       name: "org.openrewrite.java.testing.archunit.ArchUnit0to1Migration"
@@ -25083,7 +25184,7 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
 rewrite-third-party:
   artifactId: "rewrite-third-party"
-  version: "0.46.0"
+  version: "0.47.0"
   markdownRecipeDescriptors:
     ai.timefold.solver.migration.ChangeVersion:
       name: "ai.timefold.solver.migration.ChangeVersion"
@@ -26248,6 +26349,13 @@ rewrite-third-party:
       options: []
       isImperative: false
       artifactId: "rewrite-third-party"
+    io.quarkus.updates.camel.camel422.CamelQuarkusMigrationRecipe:
+      name: "io.quarkus.updates.camel.camel422.CamelQuarkusMigrationRecipe"
+      description: "Migrates `camel 4.21` Quarkus application to `camel 4.22`."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/camel/camel422/camelquarkusmigrationrecipe"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
     io.quarkus.updates.camel.camel44.CamelQuarkusMigrationRecipe:
       name: "io.quarkus.updates.camel.camel44.CamelQuarkusMigrationRecipe"
       description: "Migrates `camel 4.0` quarkus application to `camel 4.4`."
@@ -27394,6 +27502,82 @@ rewrite-third-party:
       options: []
       isImperative: false
       artifactId: "rewrite-third-party"
+    io.quarkus.updates.cxf.cxf316.UpdateAll:
+      name: "io.quarkus.updates.cxf.cxf316.UpdateAll"
+      description: "quarkus-cxf 3.16.0 switched the default HTTP conduit to the Vert.x\
+        \ HttpClient, where hostname-verifier fails at runtime, and deprecated the\
+        \ per client trust-store*/key-store* options in favor of the Quarkus TLS registry.\
+        \ A safe automatic rewrite is not possible for every configuration, so this\
+        \ recipe only adds a deprecation warning comment at the top of the affected\
+        \ properties files and leaves the migration to the user."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/cxf/cxf316/updateall"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.cxf.cxf320.UpdateAll:
+      name: "io.quarkus.updates.cxf.cxf320.UpdateAll"
+      description: "Renames the deprecated client authentication properties quarkus.cxf.client.\"\
+        client-name\".username and quarkus.cxf.client.\"client-name\".password to\
+        \ auth.username and auth.password for quarkus-cxf 3.20.0."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/cxf/cxf320/updateall"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.cxf.cxf322.UpdateAll:
+      name: "io.quarkus.updates.cxf.cxf322.UpdateAll"
+      description: "Removes the quarkus-cxf-rt-transports-http-hc5 extension (asynchronous\
+        \ mode is provided by the Vert.x HttpClient based conduit in io.quarkiverse.cxf:quarkus-cxf)\
+        \ and drops the removed HttpClientHTTPConduitFactory value of *.http-conduit-factory\
+        \ so that the default VertxHttpClientHTTPConduit takes over, for quarkus-cxf\
+        \ 3.22.0. Other http-conduit-factory values such as URLConnectionHTTPConduitFactory\
+        \ stay supported and are left untouched."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/cxf/cxf322/updateall"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.cxf.cxf331.UpdateAll:
+      name: "io.quarkus.updates.cxf.cxf331.UpdateAll"
+      description: "quarkus-cxf 3.31.0 deprecated the per client proxy options (proxy-server,\
+        \ proxy-server-port, proxy-server-type, proxy-username, proxy-password, non-proxy-hosts)\
+        \ in favor of the Quarkus Proxy Registry, with removal announced for 4.0.0.\
+        \ A safe automatic rewrite is not possible for every configuration, so this\
+        \ recipe only adds a deprecation warning comment at the top of the affected\
+        \ properties files and leaves the migration to the user."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/cxf/cxf331/updateall"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.cxf.cxf339.AddQuarkusJacksonIfUsed:
+      name: "io.quarkus.updates.cxf.cxf339.AddQuarkusJacksonIfUsed"
+      description: "Adds io.quarkus:quarkus-jackson to applications that use Jackson\
+        \ types in their sources, because quarkus-cxf stopped pulling quarkus-jackson\
+        \ transitively in 3.39.0. The detection is source based only: the dependency\
+        \ is not added when it is already available directly or transitively through\
+        \ another extension. The update tooling applies this recipe only to projects\
+        \ depending on io.quarkiverse.cxf:quarkus-cxf."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/cxf/cxf339/addquarkusjacksonifused"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.cxf.cxf339.UpdateAll:
+      name: "io.quarkus.updates.cxf.cxf339.UpdateAll"
+      description: "quarkus-cxf 3.39.0 no longer pulls io.quarkus:quarkus-jackson\
+        \ transitively. Adds an explicit quarkus-jackson dependency to applications\
+        \ that use Jackson classes in their sources and do not get the dependency\
+        \ from elsewhere."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/cxf/cxf339/updateall"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.cxf.cxf38.UpdateAll:
+      name: "io.quarkus.updates.cxf.cxf38.UpdateAll"
+      description: "Removes the retired logging extension (its functionality moved\
+        \ to io.quarkiverse.cxf:quarkus-cxf in 2.6.0, configuration properties unchanged)\
+        \ for quarkus-cxf 3.8.0."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/cxf/cxf38/updateall"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
     io.quarkus.updates.minio.minio38.UpdateAll:
       name: "io.quarkus.updates.minio.minio38.UpdateAll"
       description: ""
@@ -27407,6 +27591,22 @@ rewrite-third-party:
       docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/minio/minio38/updateproperties"
       options: []
       isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.quarkiverse.cxf.CommentDeprecatedProperties:
+      name: "io.quarkus.updates.quarkiverse.cxf.CommentDeprecatedProperties"
+      description: "Adds the configured warning comment at the top of every properties\
+        \ file that contains a key matching the configured pattern. The configuration\
+        \ itself is never changed and a file already carrying the comment is left\
+        \ alone."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/quarkiverse/cxf/commentdeprecatedproperties"
+      options:
+      - name: "comment"
+        type: "String"
+        required: true
+      - name: "keyPattern"
+        type: "String"
+        required: true
+      isImperative: true
       artifactId: "rewrite-third-party"
     io.quarkus.updates.quarkiverse.minio.minio38.AdjustURLPropertyValue:
       name: "io.quarkus.updates.quarkiverse.minio.minio38.AdjustURLPropertyValue"
@@ -27432,7 +27632,7 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     org.apache.camel.upgrade.CamelMigrationRecipe:
       name: "org.apache.camel.upgrade.CamelMigrationRecipe"
-      description: "Migrates Apache Camel application to 4.21.0."
+      description: "Migrates Apache Camel application to 4.22.0."
       docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camelmigrationrecipe"
       options: []
       isImperative: false
@@ -27560,6 +27760,21 @@ rewrite-third-party:
       description: "Apache Camel API migration from version 3.20 or higher to 4.0.\
         \ Removal of deprecated APIs, which could be part of the application.properties."
       docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel40/properties/rejectedpolicy"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.camel40.removedDependencies:
+      name: "org.apache.camel.upgrade.camel40.removedDependencies"
+      description: "Remove Camel 3.x dependencies that have been removed in Camel\
+        \ 4.0 with no single direct replacement."
+      docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel40/removeddependencies"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.camel40.renamedDependencies:
+      name: "org.apache.camel.upgrade.camel40.renamedDependencies"
+      description: "Rename removed Camel 3.x dependencies to their Camel 4.0 replacements."
+      docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel40/renameddependencies"
       options: []
       isImperative: false
       artifactId: "rewrite-third-party"
@@ -27779,6 +27994,13 @@ rewrite-third-party:
       options: []
       isImperative: false
       artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.camel413.furyXmlDsl:
+      name: "org.apache.camel.upgrade.camel413.furyXmlDsl"
+      description: "Change dataformat fury to fory in the Camel XML DSL."
+      docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel413/furyxmldsl"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
     org.apache.camel.upgrade.camel414.CamelMigrationRecipe:
       name: "org.apache.camel.upgrade.camel414.CamelMigrationRecipe"
       description: "Migrates `camel 4.13` application to `camel 4.14`."
@@ -27954,9 +28176,10 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     org.apache.camel.upgrade.camel418_3.RenameHeaderInJavaMethod:
       name: "org.apache.camel.upgrade.camel418_3.RenameHeaderInJavaMethod"
-      description: "Renames header references in Message.setHeader() and Message.getHeader()\
-        \ method calls. Only migrates string literals in safe contexts. Does NOT migrate\
-        \ dynamic header names or Map.get() calls."
+      description: "Renames header references in Message.setHeader(), Message.getHeader(),\
+        \ and in the setHeader(), removeHeader() and header() DSL methods. Only migrates\
+        \ string literals in safe contexts. Does NOT migrate dynamic header names\
+        \ or Map.get() calls."
       docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel418_3/renameheaderinjavamethod"
       options:
       - name: "newHeaderName"
@@ -27970,7 +28193,9 @@ rewrite-third-party:
     org.apache.camel.upgrade.camel418_3.RenameHeaderInSimpleExpression:
       name: "org.apache.camel.upgrade.camel418_3.RenameHeaderInSimpleExpression"
       description: "Renames header references in Simple expressions like ${header.oldName}\
-        \ → ${header.newName}. Only migrates expressions inside simple() method calls."
+        \ → ${header.newName}, in every string literal carrying a Simple expression:\
+        \ simple(), log(), endpoint URIs and the like. Only the complete ${header.oldName}\
+        \ placeholder is matched, so plain occurrences of the name are left alone."
       docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel418_3/renameheaderinsimpleexpression"
       options:
       - name: "newHeaderName"
@@ -27984,7 +28209,9 @@ rewrite-third-party:
     org.apache.camel.upgrade.camel418_3.RenameHeaderInXmlDsl:
       name: "org.apache.camel.upgrade.camel418_3.RenameHeaderInXmlDsl"
       description: "Renames header references in XML DSL <setHeader name=\"...\">,\
-        \ <header name=\"...\">, and <removeHeader name=\"...\"> elements."
+        \ <header name=\"...\">, and <removeHeader name=\"...\"> elements, and the\
+        \ ${header.oldName} placeholder wherever it appears in element text (<simple>)\
+        \ or in an attribute value."
       docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel418_3/renameheaderinxmldsl"
       options:
       - name: "newHeaderName"
@@ -27998,7 +28225,8 @@ rewrite-third-party:
     org.apache.camel.upgrade.camel418_3.RenameHeaderInYamlDsl:
       name: "org.apache.camel.upgrade.camel418_3.RenameHeaderInYamlDsl"
       description: "Renames header references in YAML DSL setHeader.name, header.name,\
-        \ and removeHeader.name entries."
+        \ and removeHeader.name entries, and the ${header.oldName} placeholder wherever\
+        \ it appears in a scalar value."
       docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel418_3/renameheaderinyamldsl"
       options:
       - name: "newHeaderName"
@@ -28484,6 +28712,89 @@ rewrite-third-party:
       options: []
       isImperative: false
       artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.camel422.CamelMigrationRecipe:
+      name: "org.apache.camel.upgrade.camel422.CamelMigrationRecipe"
+      description: "Migrates `camel 4.21` application to `camel 4.22`."
+      docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel422/camelmigrationrecipe"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.camel422.migrateAtmosphereWebsocketHeaders:
+      name: "org.apache.camel.upgrade.camel422.migrateAtmosphereWebsocketHeaders"
+      description: "Renames the atmosphere-websocket Exchange header string values\
+        \ from websocket.* to CamelAtmosphereWebsocket*, only when the camel-atmosphere-websocket\
+        \ dependency is present. Symbolic WebsocketConstants references are unaffected\
+        \ and need no migration."
+      docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel422/migrateatmospherewebsocketheaders"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.camel422.migrateAwsApacheClient:
+      name: "org.apache.camel.upgrade.camel422.migrateAwsApacheClient"
+      description: "Migrates software.amazon.awssdk:apache-client to software.amazon.awssdk:apache5-client\
+        \ for projects using Camel AWS components. Explicit versions are set to 2.46.0,\
+        \ the AWS SDK release that made apache5-client the default; BOM-managed dependencies\
+        \ keep their managed version."
+      docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel422/migrateawsapacheclient"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.camel422.migrateAzureCredentialTypes:
+      name: "org.apache.camel.upgrade.camel422.migrateAzureCredentialTypes"
+      description: "Migrates removed component-specific CredentialType enums to the\
+        \ shared org.apache.camel.component.azure.common.CredentialType enum."
+      docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel422/migrateazurecredentialtypes"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.camel422.migrateLangchain4jToolsUris:
+      name: "org.apache.camel.upgrade.camel422.migrateLangchain4jToolsUris"
+      description: "Renames the langchain4j-tools URI scheme to ai-tool on consumer\
+        \ endpoints (tool definition routes) in Java, XML and YAML DSL, and adds the\
+        \ camel-ai-tool dependency. Producer endpoints for direct tool calling are\
+        \ left unchanged and must be migrated to langchain4j-agent manually."
+      docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel422/migratelangchain4jtoolsuris"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.camel422.migrateMinioTypes:
+      name: "org.apache.camel.upgrade.camel422.migrateMinioTypes"
+      description: "Migrates Minio types that were renamed or moved in the minio 8.x\
+        \ to 9.0 upgrade."
+      docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel422/migrateminiotypes"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.camel422.migrateSpringAiToolsDependency:
+      name: "org.apache.camel.upgrade.camel422.migrateSpringAiToolsDependency"
+      description: "Migrates the camel-spring-ai-tools dependency, removed in Camel\
+        \ 4.22, to camel-ai-tool. Route URIs using the spring-ai-tools scheme must\
+        \ be migrated to ai-tool manually."
+      docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel422/migratespringaitoolsdependency"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.camel422.migrateSpringAiToolsUris:
+      name: "org.apache.camel.upgrade.camel422.migrateSpringAiToolsUris"
+      description: "Renames the spring-ai-tools URI scheme to ai-tool in Java, XML\
+        \ and YAML DSL routes, following the removal of the camel-spring-ai-tools\
+        \ component. Applies without a dependency precondition so that projects whose\
+        \ camel-spring-ai-tools dependency was already renamed (manually or by the\
+        \ dependency recipe) still get their routes migrated; the scheme is unique\
+        \ to the removed component."
+      docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel422/migratespringaitoolsuris"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.camel422.removeCamelReactiveExecutorTomcatDependency:
+      name: "org.apache.camel.upgrade.camel422.removeCamelReactiveExecutorTomcatDependency"
+      description: "Removes the camel-reactive-executor-tomcat dependency which was\
+        \ deprecated in Camel 4.22 (functionally identical to the built-in default\
+        \ reactive executor since JDK 17, Camel falls back to it automatically)."
+      docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/camel422/removecamelreactiveexecutortomcatdependency"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
     org.apache.camel.upgrade.camel43.CamelResequenceEIPXmlRecipe:
       name: "org.apache.camel.upgrade.camel43.CamelResequenceEIPXmlRecipe"
       description: "Batch and stream attributes were renamed in Resequence EIP XML\
@@ -28728,6 +29039,9 @@ rewrite-third-party:
         \ groups. Automatically handles Java, XML DSL, and YAML DSL."
       docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/customrecipes/changecomponenturirecipe"
       options:
+      - name: "consumerOnly"
+        type: "Boolean"
+        required: false
       - name: "replacement"
         type: "String"
         required: true
@@ -28750,6 +29064,16 @@ rewrite-third-party:
       - name: "oldPropertyKey"
         type: "String"
         required: true
+      isImperative: true
+      artifactId: "rewrite-third-party"
+    org.apache.camel.upgrade.customRecipes.FindCamelXmlDsl:
+      name: "org.apache.camel.upgrade.customRecipes.FindCamelXmlDsl"
+      description: "Marks XML documents that belong to the Camel XML DSL, so that\
+        \ a recipe operating on XML is not applied to unrelated documents such as\
+        \ Spring bean definitions. A Camel namespace or a Camel context element anywhere\
+        \ in the document is conclusive; otherwise the root element decides."
+      docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/customrecipes/findcamelxmldsl"
+      options: []
       isImperative: true
       artifactId: "rewrite-third-party"
     org.apache.camel.upgrade.customRecipes.LiteralRegexpConverterRecipe:
@@ -28820,7 +29144,8 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
     org.apache.camel.upgrade.customRecipes.ReplacePropertyInComponentYaml:
       name: "org.apache.camel.upgrade.customRecipes.ReplacePropertyInComponentYaml"
-      description: "ARenames property of the component."
+      description: "Renames a property of the component in the YAML DSL, both in the\
+        \ parameters mapping and when the property is inlined in the endpoint uri."
       docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/customrecipes/replacepropertyincomponentyaml"
       options:
       - name: "component"
@@ -28875,6 +29200,9 @@ rewrite-third-party:
         \ with capturing groups."
       docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/customrecipes/internal/changejavacomponenturirecipe"
       options:
+      - name: "consumerOnly"
+        type: "Boolean"
+        required: false
       - name: "replacement"
         type: "String"
         required: true
@@ -28889,6 +29217,9 @@ rewrite-third-party:
         \ with capturing groups."
       docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/customrecipes/internal/changexmlcomponenturirecipe"
       options:
+      - name: "consumerOnly"
+        type: "Boolean"
+        required: false
       - name: "replacement"
         type: "String"
         required: true
@@ -28903,6 +29234,9 @@ rewrite-third-party:
         \ with capturing groups."
       docLink: "https://docs.openrewrite.org/recipes/apache/camel/upgrade/customrecipes/internal/changeyamlcomponenturirecipe"
       options:
+      - name: "consumerOnly"
+        type: "Boolean"
+        required: false
       - name: "replacement"
         type: "String"
         required: true
@@ -38022,7 +38356,7 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
 rewrite-toml:
   artifactId: "rewrite-toml"
-  version: "8.91.0"
+  version: "8.92.1"
   markdownRecipeDescriptors:
     org.openrewrite.toml.ChangeKey:
       name: "org.openrewrite.toml.ChangeKey"
@@ -38181,7 +38515,7 @@ rewrite-toml:
       artifactId: "rewrite-toml"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.91.0"
+  version: "8.92.1"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -38541,7 +38875,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.91.0"
+  version: "8.92.1"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AddCommentToProperty:
       name: "org.openrewrite.yaml.AddCommentToProperty"
