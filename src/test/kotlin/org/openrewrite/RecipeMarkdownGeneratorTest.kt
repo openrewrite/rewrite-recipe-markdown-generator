@@ -176,6 +176,13 @@ class RecipeMarkdownGeneratorTest {
     }
 
     @Test
+    fun rewriteCsharpIsModerneDocsOnlyRegardlessOfManifestLicense() {
+        val origin = RecipeOrigin("org.openrewrite", "rewrite-csharp", "8.92.8", URI.create("file:///rewrite-csharp.jar"))
+            .apply { license = Licenses.Apache2 }
+        assertThat(RecipeMarkdownGenerator.isModerneDocsOnly(origin)).isTrue()
+    }
+
+    @Test
     fun onlyArtifactsAcceptsJarsAndRpcBackedModules() {
         val jar = URI.create("file:///rewrite-java.jar")
         val origins = listOf(RecipeOrigin("org.openrewrite", "rewrite-java", "8.0.0", jar))
