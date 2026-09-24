@@ -3,11 +3,11 @@ package org.openrewrite
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-// The Moderne CLI is published as `io.moderne:moderne-cli`, with stable releases landing in Maven
-// Central. The older `moderne-cli-releases` GitHub repository is no longer updated (it stopped at the
-// 3.x line), so the version is sourced from the Maven metadata instead.
+// The Moderne CLI is published as `io.moderne:moderne-cli` to the Code Genome Project, which the
+// Homebrew formula installs from and which serves this metadata without credentials. Maven Central
+// stopped receiving releases at 4.7.4, and `moderne-cli-releases` on GitHub at 3.57.16.
 private const val STABLE_METADATA_URL =
-    "https://repo1.maven.org/maven2/io/moderne/moderne-cli/maven-metadata.xml"
+    "https://artifacts.codegenomeproject.org/maven/io/moderne/moderne-cli/maven-metadata.xml"
 
 private val RELEASE_TAG = Regex("<release>([^<]+)</release>")
 private val LATEST_TAG = Regex("<latest>([^<]+)</latest>")
