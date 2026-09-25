@@ -42,9 +42,6 @@ repositories {
         }
     }
     mavenCentral()
-    if (rewriteVersion == "latest.integration") {
-        maven { url = uri("https://central.sonatype.com/repository/maven-snapshots/") }
-    }
     // Hosts org.openrewrite:plugin, which is not on Maven Central.
     gradlePluginPortal()
 }
