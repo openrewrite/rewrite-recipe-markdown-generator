@@ -1,6 +1,7 @@
 package org.openrewrite
 
 import java.net.URI
+import java.nio.file.FileSystems
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
@@ -8,6 +9,34 @@ import org.openrewrite.RecipeMarkdownGenerator.Companion.useAndApply
 import org.openrewrite.RecipeMarkdownGenerator.Companion.writeln
 
 class VersionWriter {
+    companion object {
+        /**
+         * Whether [origin]'s jar contains recipes that `mod config recipes jar install` would register. Recipe
+         * builds write `META-INF/rewrite/recipes.csv` into the jar with one row per JVM recipe, each starting
+         * with its `maven` ecosystem. Returns null when there is no manifest to read (a synthetic origin, a
+         * metadata-only stub such as recipes-go, or a jar built before the manifest existed), leaving the
+         * decision to the caller.
+         */
+        internal fun jarShipsRecipes(origin: RecipeOrigin): Boolean? {
+            if (origin.jarLocation.scheme != "file") return null
+            val jar = Path.of(origin.jarLocation)
+            if (!Files.isRegularFile(jar)) return null
+            return try {
+                FileSystems.newFileSystem(jar).use { fs ->
+                    val manifest = fs.getPath("/META-INF/rewrite/recipes.csv")
+                    if (Files.exists(manifest)) {
+                        Files.readAllLines(manifest).drop(1).any { it.startsWith("maven,") }
+                    } else {
+                        null
+                    }
+                }
+            } catch (e: Exception) {
+                println("Warning: Could not read recipe manifest from $jar: ${e.message}")
+                null
+            }
+        }
+    }
+
     fun createLatestVersionsMarkdown(
         outputPath: Path,
         recipeOrigins: Collection<RecipeOrigin>,
@@ -111,38 +140,43 @@ class VersionWriter {
                 val msalMavenGated = !forModerneDocs && origin.license == Licenses.MSAL
 
                 val versionPlaceholder = "{{${origin.versionPlaceholderKey()}}}"
-                when (origin.artifactId) {
+                val hasPackageRegistryInstall = when (origin.artifactId) {
                     in PythonRecipeLoader.PYTHON_RECIPE_MODULES -> {
                         val pipPackage = PythonRecipeLoader.PYTHON_RECIPE_MODULES.getValue(origin.artifactId)
                         cliInstallPipPinned += "$pipPackage==$versionPlaceholder "
                         cliInstallPipLatest += "$pipPackage "
-                        // Dual-published modules split their recipes across the wheel and the jar. The jar
-                        // half is a Maven coordinate, so it carries the same entitlement gate as the plain
-                        // jar installs below; the wheel is unaffected.
-                        if (PythonRecipeLoader.publishesCompanionJar(origin) && !msalMavenGated) {
-                            cliInstallJarPinned += "${origin.groupId}:${origin.artifactId}:$versionPlaceholder "
-                            cliInstallJarLatest += "${origin.groupId}:${origin.artifactId}:LATEST "
-                        }
+                        true
                     }
                     in TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES -> {
                         val npmPackage = TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES.getValue(origin.artifactId)
                         cliInstallNpmPinned += "$npmPackage@$versionPlaceholder "
                         cliInstallNpmLatest += "$npmPackage "
+                        true
                     }
                     in CSharpRecipeLoader.CSHARP_RECIPE_MODULES -> {
                         cliInstallNugetPinned += "$nugetPackage@$versionPlaceholder "
                         cliInstallNugetLatest += "$nugetPackage "
+                        true
                     }
                     in GoRecipeLoader.GO_RECIPE_MODULES -> {
                         // Go modules are installed from source by module path, pinned with a vX.Y.Z tag.
                         val goModule = GoRecipeLoader.GO_RECIPE_MODULES.getValue(origin.artifactId)
                         cliInstallGoPinned += "$goModule@v$versionPlaceholder "
                         cliInstallGoLatest += "$goModule "
+                        true
                     }
-                    else -> if (!msalMavenGated) {
-                        cliInstallJarPinned += "${origin.groupId}:${origin.artifactId}:$versionPlaceholder "
-                        cliInstallJarLatest += "${origin.groupId}:${origin.artifactId}:LATEST "
-                    }
+                    else -> false
+                }
+
+                // A module can publish recipes to a package registry and to its jar at once (rewrite-javascript's
+                // jar holds the Java-side npm dependency recipes), so the jar install is decided independently of
+                // the registry install above. The jar's own recipe manifest is authoritative; when it can't be
+                // read, fall back to the registries, where only a dual-published Python module carries a jar.
+                val installsFromJar = jarShipsRecipes(origin)
+                    ?: (!hasPackageRegistryInstall || PythonRecipeLoader.publishesCompanionJar(origin))
+                if (installsFromJar && !msalMavenGated) {
+                    cliInstallJarPinned += "${origin.groupId}:${origin.artifactId}:$versionPlaceholder "
+                    cliInstallJarLatest += "${origin.groupId}:${origin.artifactId}:LATEST "
                 }
 
                 val loadCommand = "load_" + (nugetPackage ?: "${origin.groupId}_${origin.artifactId}")
