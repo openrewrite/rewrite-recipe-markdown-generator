@@ -417,6 +417,24 @@ class RecipeMarkdownGeneratorTest {
     }
 
     @Test
+    fun escapeOptionDescriptionEscapesTagsInProse() {
+        assertThat(escapeOptionDescription("When true, only <from> endpoints are transformed; <to> endpoints are left unchanged."))
+            .isEqualTo("When true, only &lt;from> endpoints are transformed; &lt;to> endpoints are left unchanged.")
+    }
+
+    @Test
+    fun escapeOptionDescriptionKeepsLineBreaks() {
+        assertThat(escapeOptionDescription("use the pattern: `com.google..* *(..)`.<br/><br/>The pattern\nformat"))
+            .isEqualTo("use the pattern: `com.google..* *(..)`.<br/><br/>The pattern<br />format")
+    }
+
+    @Test
+    fun escapeOptionDescriptionWrapsVariablesAndEscapesPipes() {
+        assertThat(escapeOptionDescription("Use \${1} or `\${2}` for a|b"))
+            .isEqualTo("Use `\${1}` or `\${2}` for a\\|b")
+    }
+
+    @Test
     fun unrecognizedRecipePackageFailsWithActionableMessage() {
         initializeConflictDetection(emptyList())
 
