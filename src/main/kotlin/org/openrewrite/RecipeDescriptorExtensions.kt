@@ -83,6 +83,16 @@ fun escapeMdxOutsideCodeSpans(string: String): String {
     return sb.toString()
 }
 
+// Option descriptions are rendered in a table cell, so line breaks become `<br />`, which some
+// recipe authors also write themselves; those must survive the escaping of other tags.
+fun escapeOptionDescription(description: String): String =
+    escapeMdxOutsideCodeSpans(
+        description.replace(Regex("(?<!`)\\$\\{[^}]+}(?!`)")) { "`${it.value}`" }
+    )
+        .replace(Regex("&lt;(br\\s*/?>)", RegexOption.IGNORE_CASE), "<$1")
+        .replace("\n", "<br />")
+        .replace("|", "\\|")
+
 fun RecipeDescriptor.asYaml(): String {
     val s = StringBuilder()
     s.appendLine("""

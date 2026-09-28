@@ -325,18 +325,7 @@ import RunRecipe from '@site/src/components/RunRecipe';
                 """.trimIndent()
             )
             for (option in recipeDescriptor.options) {
-                var description = if (option.description == null) {
-                    ""
-                } else {
-                    option.description
-                        .replace("\n", "<br />")
-                        .replace("|", "\\|")
-                        // Ensure that anything that matches ${variable} is wrapped in ``
-                        // Otherwise Docusaurus tries to parse it as a variable.
-                        .replace(Regex("(?<!`)\\$\\{[^}]+}(?!`)")) { matchResult ->
-                            "`${matchResult.value}`"
-                        }
-                }
+                var description = option.description?.let(::escapeOptionDescription) ?: ""
                 if (!option.isRequired) {
                     description = "*Optional*. $description"
                 }
