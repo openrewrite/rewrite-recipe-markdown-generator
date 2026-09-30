@@ -14,6 +14,7 @@ import picocli.CommandLine
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.net.URI
+import java.nio.file.FileSystems
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -97,6 +98,45 @@ class RecipeMarkdownGeneratorTest {
         assertThat(out).contains("[org.openrewrite:rewrite-polyglot]")
         assertThat(out).doesNotContain("org.openrewrite:rewrite-polyglot:")
         assertThat(out).doesNotContain("artifactId: \"rewrite-polyglot\"")
+    }
+
+    @Test
+    fun jarInstallFollowsTheJarRecipeManifest(@TempDir tempDir: Path) {
+        fun jar(name: String, recipesCsv: String?): URI {
+            val jar = tempDir.resolve("$name.jar")
+            FileSystems.newFileSystem(jar, mapOf("create" to "true")).use { fs ->
+                val dir = Files.createDirectories(fs.getPath("/META-INF/rewrite"))
+                if (recipesCsv != null) Files.writeString(dir.resolve("recipes.csv"), recipesCsv)
+            }
+            return jar.toUri()
+        }
+        fun mk(g: String, a: String, jarLocation: URI): RecipeOrigin {
+            val o = RecipeOrigin(g, a, "1.0.0", jarLocation)
+            o.repositoryUrl = "https://github.com/openrewrite/$a/blob/main/"
+            o.license = Licenses.Apache2
+            return o
+        }
+        val header = "ecosystem,packageName,name,displayName,description\n"
+        val origins = listOf(
+            // npm module whose jar also carries Java recipes: both installs.
+            mk("org.openrewrite", "rewrite-javascript", jar("rewrite-javascript",
+                header + "maven,org.openrewrite:rewrite-javascript,org.openrewrite.javascript.AddDependency,Add,Add.\n")),
+            // npm module whose jar lists no recipes: npm only.
+            mk("org.openrewrite.recipe", "rewrite-react", jar("rewrite-react", header)),
+            // Metadata-only stub with no manifest: falls back to the registry, so go only.
+            mk("org.openrewrite.recipe", "recipes-go", jar("recipes-go", null)),
+            // Plain jar module is unaffected.
+            mk("org.openrewrite.recipe", "rewrite-spring", jar("rewrite-spring",
+                header + "maven,org.openrewrite.recipe:rewrite-spring,org.openrewrite.java.spring.Foo,Foo,Foo.\n")),
+        )
+        VersionWriter().createLatestVersionsMarkdown(tempDir, origins, "8.x", "2.x", "1.x", "6.x", "5.x", forModerneDocs = true)
+        val out = Files.readString(tempDir.resolve("latest-versions-of-every-openrewrite-module.md"))
+
+        assertThat(out).contains("mod config recipes jar install org.openrewrite:rewrite-javascript:LATEST org.openrewrite.recipe:rewrite-spring:LATEST")
+        assertThat(out).contains("mod config recipes npm install @openrewrite/rewrite @openrewrite/recipes-react")
+        assertThat(out).doesNotContain("org.openrewrite.recipe:rewrite-react:")
+        assertThat(out).doesNotContain("org.openrewrite.recipe:recipes-go:")
+        assertThat(out).contains("mod config recipes go install github.com/moderneinc/recipes-go")
     }
 
     @Test
