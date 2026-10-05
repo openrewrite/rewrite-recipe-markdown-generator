@@ -1,6 +1,6 @@
 plugins {
     application
-    id("org.jetbrains.kotlin.jvm").version("2.3.0")
+    id("org.jetbrains.kotlin.jvm").version("2.4.20")
     id("org.owasp.dependencycheck") version "latest.release"
 }
 
