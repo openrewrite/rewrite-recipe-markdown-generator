@@ -4,6 +4,14 @@ import org.openrewrite.RecipeMarkdownGenerator.Companion.hasConflict
 import org.openrewrite.config.OptionDescriptor
 import org.openrewrite.config.RecipeDescriptor
 
+// These are common in every recipe, so they say nothing about what a particular recipe reports.
+val commonDataTables = setOf(
+    "org.openrewrite.table.SearchResults",
+    "org.openrewrite.table.SourcesFileResults",
+    "org.openrewrite.table.SourcesFileErrors",
+    "org.openrewrite.table.RecipeRunStats"
+)
+
 fun RecipeDescriptor.displayNameEscaped(): String =
     escapeHtml(displayName)
         // Always remove URLs in markdown format [text](url)

@@ -1259,7 +1259,6 @@ ${props.toString().trimEnd()}
 
     /**
      * Build the JSON object for UsageList.
-     * Mirrors writeUsage's logic for determining which props to include.
      */
     private fun buildUsageJson(recipeDescriptor: RecipeDescriptor, origin: RecipeOrigin): String {
         val name = recipeDescriptor.name
@@ -1304,15 +1303,15 @@ ${props.toString().trimEnd()}
                     addPythonCoreCompanionJar(usageMap, origin)
                 }
 
-                // cliOptions shares the per-option example formatting with writeUsage.
-                val cliOptions = if (requiresConfiguration) {
-                    options.filter { it.isRequired || it.example != null }
-                        .joinToString("") { " --recipe-option \"${it.name}=${cliOptionExample(it)}\"" }
-                } else {
-                    ""
-                }
+                // Required options are needed for any run; optional ones are only suggestions, so they're
+                // kept apart for RunRecipe to present separately.
+                val cliOptions = cliOptionFlags(options.filter { it.isRequired })
                 if (cliOptions.isNotEmpty()) {
                     usageMap["cliOptions"] = cliOptions
+                }
+                val optionalCliOptions = cliOptionFlags(options.filter { !it.isRequired && it.example != null })
+                if (optionalCliOptions.isNotEmpty()) {
+                    usageMap["optionalCliOptions"] = optionalCliOptions
                 }
                 if (hasConflict(name)) {
                     usageMap["useFullyQualifiedCliName"] = true
@@ -1320,8 +1319,27 @@ ${props.toString().trimEnd()}
             }
         }
 
+        val dataTables = studyDataTables(recipeDescriptor)
+        if (dataTables.isNotEmpty()) {
+            usageMap["dataTables"] = dataTables
+        }
+
         return mapper.writeValueAsString(usageMap)
     }
+
+    private fun cliOptionFlags(options: List<OptionDescriptor>): String =
+        options.joinToString("") { " --recipe-option \"${it.name}=${cliOptionExample(it)}\"" }
+
+    /**
+     * The simple names `mod study --data-table` accepts, for the tables this recipe itself reports;
+     * the framework's common tables and Maven metadata diagnostics are left out.
+     */
+    private fun studyDataTables(recipeDescriptor: RecipeDescriptor): List<String> =
+        recipeDescriptor.dataTables.orEmpty()
+            .map { it.name }
+            .filter { it !in commonDataTables && it != MAVEN_METADATA_FAILURES_DATA_TABLE }
+            .map { it.substringAfterLast('.') }
+            .distinct()
 
     /**
      * Names the core Python language module as a companion install. Python recipes delegate into its
@@ -1401,6 +1419,8 @@ ${props.toString().trimEnd()}
 
         private const val PYTHON_CORE_GROUP_ID = "org.openrewrite"
         private const val PYTHON_CORE_ARTIFACT_ID = "rewrite-python"
+
+        private const val MAVEN_METADATA_FAILURES_DATA_TABLE = "org.openrewrite.maven.table.MavenMetadataFailures"
 
         private const val MODERNE_DOCS_MARKDOWN_BASE_URL =
             "https://raw.githubusercontent.com/moderneinc/moderne-docs/refs/heads/main/docs/user-documentation/recipes/recipe-catalog/"

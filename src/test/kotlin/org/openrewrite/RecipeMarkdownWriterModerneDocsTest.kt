@@ -5,6 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import org.openrewrite.config.DataTableDescriptor
 import org.openrewrite.config.OptionDescriptor
 import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.config.RecipeExample
@@ -255,6 +256,47 @@ class RecipeMarkdownWriterModerneDocsTest {
 
         assertThat(out).contains("\"pipPackage\":\"openrewrite-migrate-python\"")
         assertThat(usageJson(out)).doesNotContainKeys("groupId", "artifactId")
+    }
+
+    @Test
+    fun moderneDocsSeparatesOptionalCliOptionsAndListsRecipeSpecificDataTables(@TempDir dir: Path) {
+        fun option(name: String, type: String, example: String?, required: Boolean) =
+            OptionDescriptor(name, type, name, "", example, null, required, null)
+        fun table(name: String) = DataTableDescriptor(name, name, name, "", null, emptyList())
+        val recipe = descriptor(
+            "org.openrewrite.java.dependencies.DependencyVulnerabilityCheck",
+            "Find and fix vulnerable dependencies", "Finds and fixes vulnerable dependencies.",
+            options = listOf(
+                option("ruleset", "String", "strict", required = true),
+                option("scope", "String", "runtime", required = false),
+                option("maximumUpgradeDelta", "UpgradeDelta", "patch", required = false),
+                option("cvePattern", "String", null, required = false),
+            )
+        ).withDataTables(
+            listOf(
+                table("org.openrewrite.maven.table.MavenMetadataFailures"),
+                table("org.openrewrite.java.dependencies.table.VulnerabilityReport"),
+                table("org.openrewrite.java.dependencies.table.VulnerabilityReport"),
+                table("org.openrewrite.table.SourcesFileResults"),
+                table("org.openrewrite.table.RecipeRunStats"),
+            )
+        )
+
+        val usage = usageJson(generate(recipe, dir, forModerneDocs = true))
+
+        assertThat(usage["cliOptions"]).isEqualTo(" --recipe-option \"ruleset=strict\"")
+        assertThat(usage["optionalCliOptions"])
+            .isEqualTo(" --recipe-option \"scope=runtime\" --recipe-option \"maximumUpgradeDelta=patch\"")
+        assertThat(usage["dataTables"]).isEqualTo(listOf("VulnerabilityReport"))
+    }
+
+    @Test
+    fun moderneDocsOmitsCliOptionsAndDataTablesWhenRecipeHasNone(@TempDir dir: Path) {
+        val recipe = descriptor("org.openrewrite.java.NoOptions", "No options", "Has no options.")
+            .withDataTables(listOf(DataTableDescriptor("org.openrewrite.table.SearchResults", "", "", "", null, emptyList())))
+
+        assertThat(usageJson(generate(recipe, dir, forModerneDocs = true)))
+            .doesNotContainKeys("cliOptions", "optionalCliOptions", "dataTables")
     }
 
     @Test
