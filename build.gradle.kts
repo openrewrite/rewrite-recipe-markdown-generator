@@ -85,6 +85,10 @@ val recipeConf = configurations.create("recipe") {
 
 dependencies {
     // Platform dependencies (BOMs)
+    // moderne-recipe-bom pins an older rewrite-bom than the recipe modules are resolved at. The language RPCs run the
+    // engine version found here (e.g. the openrewrite pip package for rewrite-python), so keep it at $rewriteVersion
+    // too, or recipe packages built against the newer engine fail to load.
+    implementation(platform("org.openrewrite:rewrite-bom:$rewriteVersion"))
     implementation(platform("io.moderne.recipe:moderne-recipe-bom:latest.release"))
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
 
