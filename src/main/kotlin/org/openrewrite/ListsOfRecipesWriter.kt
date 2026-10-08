@@ -89,12 +89,20 @@ class ListsOfRecipesWriter(
         }
     }
 
+    // These are common in every recipe - so let's not use them when generating the list of recipes with data tables.
+    private val dataTablesToIgnore = setOf(
+        "org.openrewrite.table.SearchResults",
+        "org.openrewrite.table.SourcesFileResults",
+        "org.openrewrite.table.SourcesFileErrors",
+        "org.openrewrite.table.RecipeRunStats"
+    )
+
     fun createRecipesWithDataTables(
         recipeOrigins: Map<URI, RecipeOrigin>,
         recipeToSource: Map<String, URI>
     ) {
         val recipesWithDataTables = allRecipeDescriptors.filter {
-            it.dataTables != null && it.dataTables.any { dataTable -> dataTable.name !in commonDataTables }
+            it.dataTables != null && it.dataTables.any { dataTable -> dataTable.name !in dataTablesToIgnore }
         }
 
         val recipesWithDataTablesPath = outputPath.resolve("recipes-with-data-tables.md")
@@ -130,7 +138,7 @@ class ListsOfRecipesWriter(
                         writeln("\n##### Data tables:\n")
 
                         val filteredDataTables = recipe.dataTables.filter { dataTable ->
-                            dataTable.name !in commonDataTables
+                            dataTable.name !in dataTablesToIgnore
                         }
 
                         for (dataTable in filteredDataTables) {
