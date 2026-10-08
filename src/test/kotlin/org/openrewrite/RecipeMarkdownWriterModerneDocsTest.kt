@@ -269,6 +269,8 @@ class RecipeMarkdownWriterModerneDocsTest {
                 option("scope", "String", "runtime", required = false),
                 option("maximumUpgradeDelta", "UpgradeDelta", "patch", required = false),
                 option("cvePattern", "String", null, required = false),
+                option("overrideTransitive", "Boolean", null, required = false),
+                option("addMarkers", "boolean", "false", required = false),
             )
         )
 
@@ -276,7 +278,10 @@ class RecipeMarkdownWriterModerneDocsTest {
 
         assertThat(usage["cliOptions"]).isEqualTo(" --recipe-option \"ruleset=strict\"")
         assertThat(usage["optionalCliOptions"])
-            .isEqualTo(" --recipe-option \"scope=runtime\" --recipe-option \"maximumUpgradeDelta=patch\"")
+            .isEqualTo(
+                " --recipe-option \"scope=runtime\" --recipe-option \"maximumUpgradeDelta=patch\"" +
+                        " --recipe-option \"overrideTransitive=true\" --recipe-option \"addMarkers=false\""
+            )
     }
 
     @Test

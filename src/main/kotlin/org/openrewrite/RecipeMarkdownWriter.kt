@@ -1305,11 +1305,13 @@ ${props.toString().trimEnd()}
 
                 // Required options are needed for any run; optional ones are only suggestions, so they're
                 // kept apart for RunRecipe to present separately.
-                val cliOptions = cliOptionFlags(options.filter { it.isRequired })
+                val cliOptions = cliOptionFlags(options.filter { it.isRequired }.map { it.name to cliOptionExample(it) })
                 if (cliOptions.isNotEmpty()) {
                     usageMap["cliOptions"] = cliOptions
                 }
-                val optionalCliOptions = cliOptionFlags(options.filter { !it.isRequired && it.example != null })
+                val optionalCliOptions = cliOptionFlags(options.filter { !it.isRequired }.mapNotNull { option ->
+                    optionalCliOptionExample(option)?.let { option.name to it }
+                })
                 if (optionalCliOptions.isNotEmpty()) {
                     usageMap["optionalCliOptions"] = optionalCliOptions
                 }
@@ -1322,8 +1324,15 @@ ${props.toString().trimEnd()}
         return mapper.writeValueAsString(usageMap)
     }
 
-    private fun cliOptionFlags(options: List<OptionDescriptor>): String =
-        options.joinToString("") { " --recipe-option \"${it.name}=${cliOptionExample(it)}\"" }
+    private fun cliOptionFlags(options: List<Pair<String, String?>>): String =
+        options.joinToString("") { (name, value) -> " --recipe-option \"$name=$value\"" }
+
+    /**
+     * Recipe authors rarely give booleans an example, so an unset optional flag falls back to `true`: left
+     * out, these options are off, making `true` the setting worth showing.
+     */
+    private fun optionalCliOptionExample(option: OptionDescriptor): String? =
+        if (option.type.equals("boolean", ignoreCase = true)) option.example ?: "true" else cliOptionExample(option)
 
     /**
      * Names the core Python language module as a companion install. Python recipes delegate into its
