@@ -14,8 +14,7 @@ class VersionWriter {
          * Whether [origin]'s jar contains recipes that `mod config recipes jar install` would register. Recipe
          * builds write `META-INF/rewrite/recipes.csv` into the jar with one row per JVM recipe, each starting
          * with its `maven` ecosystem. Returns null when there is no manifest to read (a synthetic origin, a
-         * metadata-only stub such as recipes-go, or a jar built before the manifest existed), leaving the
-         * decision to the caller.
+         * metadata-only stub, or a jar built before the manifest existed), leaving the decision to the caller.
          */
         internal fun jarShipsRecipes(origin: RecipeOrigin): Boolean? {
             if (origin.jarLocation.scheme != "file") return null

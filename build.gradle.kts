@@ -122,9 +122,6 @@ dependencies {
 
     // Recipe modules not managed by moderne-recipe-bom
     "recipe"("io.moderne.recipe:rewrite-cve-2026-22732:$rewriteVersion")
-    // Go recipes load via the Go RPC at doc-gen time (see GoRecipeLoader); this empty Maven artifact
-    // only anchors the version-table row and the RecipeOrigin the Go recipes are attributed to.
-    "recipe"("org.openrewrite.recipe:recipes-go:$rewriteVersion")
 
 //    "recipe"("org.openrewrite.recipe:rewrite-diffblue:latest.integration") {
 //        exclude(group = "org.openrewrite")

@@ -131,17 +131,20 @@ class RecipeMarkdownGenerator : Runnable {
             println("Restricting recipe loading to ${recipeOrigins.size} artifact(s) matching $keep")
         }
 
+        // Synthesize origins for the NuGet-only C# modules and the Go modules so the version table and
+        // `nuget install` / `go install` commands below include them, and so their RPC loaders install
+        // those same versions. Gated to Moderne docs, since C# and Go are proprietary and excluded from
+        // the OpenRewrite docs. The Gradle `run` task always passes a Moderne docs directory, so the NuGet
+        // and Go module proxy lookups only stay off the network when the generator is invoked without one.
+        if (moderneOutputPath != null) {
+            recipeOrigins = recipeOrigins +
+                CSharpRecipeLoader.buildVersionAnchorOrigins(keep) +
+                GoRecipeLoader.buildVersionAnchorOrigins(keep)
+        }
+
         // Add manifest information
         val recipeLoader = RecipeLoader(recipeClasspath, recipeOrigins, keep)
         recipeLoader.addInfosFromManifests()
-
-        // Synthesize origins for the NuGet-only C# modules so the version table and `nuget install`
-        // command below include them. Placed after addInfosFromManifests (which would otherwise clear
-        // their repositoryUrl) and gated to Moderne docs, since C# is proprietary and excluded from
-        // the OpenRewrite docs — which also keeps that path free of NuGet network calls.
-        if (moderneOutputPath != null) {
-            recipeOrigins = recipeOrigins + CSharpRecipeLoader.buildVersionAnchorOrigins(keep)
-        }
 
         // Write latest-versions-of-every-openrewrite-module.md
         val versionWriter = VersionWriter()
@@ -213,11 +216,6 @@ class RecipeMarkdownGenerator : Runnable {
         // C# recipes are always proprietary
         recipeOrigins.values
             .filter { it.artifactId in CSharpRecipeLoader.CSHARP_RECIPE_MODULES }
-            .forEach { it.license = Licenses.Proprietary }
-
-        // Go recipe modules are always proprietary
-        recipeOrigins.values
-            .filter { it.artifactId in GoRecipeLoader.GO_RECIPE_MODULES }
             .forEach { it.license = Licenses.Proprietary }
 
         println("Found ${allRecipeDescriptors.size} descriptor(s).")
@@ -459,8 +457,8 @@ class RecipeMarkdownGenerator : Runnable {
 
         /**
          * Modules whose docs should only appear in Moderne docs, regardless of license. Go recipe modules
-         * are listed structurally rather than relying on their jar manifest: the Maven artifact is only a
-         * version/license carrier, and the recipes themselves are Moderne proprietary. `rewrite-go` and
+         * are listed structurally rather than relying on their origin's license, since the recipes themselves
+         * are Moderne proprietary. `rewrite-go` and
          * `rewrite-csharp` are source available, but their recipes belong with the rest of the Go and C#
          * catalogs on docs.moderne.io.
          */

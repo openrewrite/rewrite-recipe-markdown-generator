@@ -123,8 +123,8 @@ class RecipeMarkdownGeneratorTest {
                 header + "maven,org.openrewrite:rewrite-javascript,org.openrewrite.javascript.AddDependency,Add,Add.\n")),
             // npm module whose jar lists no recipes: npm only.
             mk("org.openrewrite.recipe", "rewrite-react", jar("rewrite-react", header)),
-            // Metadata-only stub with no manifest: falls back to the registry, so go only.
-            mk("org.openrewrite.recipe", "recipes-go", jar("recipes-go", null)),
+            // Synthesized Go origin with no jar to read: falls back to the registry, so go only.
+            GoRecipeLoader.buildVersionAnchorOrigins { "1.0.0" }.values.single(),
             // Plain jar module is unaffected.
             mk("org.openrewrite.recipe", "rewrite-spring", jar("rewrite-spring",
                 header + "maven,org.openrewrite.recipe:rewrite-spring,org.openrewrite.java.spring.Foo,Foo,Foo.\n")),
@@ -407,10 +407,7 @@ class RecipeMarkdownGeneratorTest {
 
     @Test
     fun findOriginHandlesGoSearchScheme() {
-        val mavenUri = URI.create("file:///recipes-go.jar")
-        val origin = RecipeOrigin("org.openrewrite.recipe", "recipes-go", "0.4.1", mavenUri)
-        origin.license = Licenses.Proprietary
-        val origins = mapOf(mavenUri to origin)
+        val origins = GoRecipeLoader.buildVersionAnchorOrigins { "0.4.1" }
 
         val source = URI.create("go-search://recipes-go/org.openrewrite.golang.codequality.SimplifyBooleanExpression")
         val found = RecipeMarkdownGenerator.findOrigin(source, "org.openrewrite.golang.codequality.SimplifyBooleanExpression", origins)

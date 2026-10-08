@@ -37,7 +37,8 @@ class GoRecipeLoader(
             "recipes-go" to "github.com/moderneinc/recipes-go"
         )
 
-        // Used only to synthesize an origin if a Go module ever lacks a Maven artifact (recipes-go has one).
+        // Go modules publish no Maven artifact; these coordinates only shape the synthesized origin, whose
+        // versionKey (e.g. VERSION_ORG_OPENREWRITE_RECIPE_RECIPES_GO) existing doc pages already reference.
         private val GO_GROUP_IDS = mapOf(
             "recipes-go" to "org.openrewrite.recipe"
         )
@@ -46,6 +47,44 @@ class GoRecipeLoader(
         )
 
         private val CLASSPATH_BUNDLE = RecipeBundle("classpath", "java-recipes", null, null, null)
+
+        /**
+         * Build [RecipeOrigin]s for the Go recipe modules, with each module's latest stable version resolved
+         * from the Go module proxy, so the version table and `go install` command include them.
+         *
+         * @param artifactIds when non-empty, restricts to these artifactIds (mirrors `--only-artifacts`
+         *   so local runs don't make needless proxy requests).
+         */
+        @JvmStatic
+        fun buildVersionAnchorOrigins(
+            artifactIds: Set<String> = emptySet(),
+            latestVersion: (String) -> String? = ::latestStableGoModuleVersion
+        ): Map<URI, RecipeOrigin> {
+            val origins = mutableMapOf<URI, RecipeOrigin>()
+            for ((artifactId, goModule) in GO_RECIPE_MODULES) {
+                if (artifactIds.isNotEmpty() && artifactId !in artifactIds) continue
+                val version = latestVersion(goModule)
+                if (version == null) {
+                    System.err.println("Skipping Go version anchor for $artifactId: could not resolve latest stable version of $goModule from the Go module proxy")
+                    continue
+                }
+                val origin = goOrigin(artifactId, version)
+                origins[origin.jarLocation] = origin
+            }
+            return origins
+        }
+
+        private fun goOrigin(artifactId: String, version: String): RecipeOrigin {
+            val origin = RecipeOrigin(
+                GO_GROUP_IDS[artifactId] ?: "org.openrewrite.recipe",
+                artifactId,
+                version,
+                URI.create("go-search://$artifactId")
+            )
+            origin.repositoryUrl = GO_REPO_URLS[artifactId] ?: ""
+            origin.license = Licenses.Proprietary
+            return origin
+        }
 
         /** Marketplace of Java descriptors so Go recipes that delegate to Java resolve in [GoRewriteRpc.prepareRecipe]. */
         @JvmStatic
@@ -132,7 +171,7 @@ class GoRecipeLoader(
 
             for (pkg in packagesToLoad) {
                 try {
-                    // Go module versions are tagged vX.Y.Z; the Maven origin version is X.Y.Z.
+                    // Go module versions are tagged vX.Y.Z; the origin version is X.Y.Z.
                     val goVersion = pkg.version?.let { if (it.startsWith("v")) it else "v$it" }
                     val versionLabel = goVersion ?: "latest"
                     println("Installing Go recipes from module: ${pkg.goModule}@$versionLabel")
@@ -198,18 +237,12 @@ class GoRecipeLoader(
 
             println("Retrieved ${allDescriptors.size} Go recipe descriptor(s) via RPC")
 
-            // Defensive: synthesize an origin only if a module lacks a Maven artifact (recipes-go has one).
-            val syntheticOrigins = mutableMapOf<URI, RecipeOrigin>()
-            for (pkg in packagesToLoad) {
-                if (recipeOrigins.values.any { it.artifactId == pkg.artifactId }) continue
-                val syntheticUri = URI.create("go-search://${pkg.artifactId}")
-                val groupId = GO_GROUP_IDS[pkg.artifactId] ?: "org.openrewrite.recipe"
-                val origin = RecipeOrigin(groupId, pkg.artifactId, pkg.version ?: "latest", syntheticUri)
-                origin.repositoryUrl = GO_REPO_URLS[pkg.artifactId] ?: ""
-                origin.license = Licenses.Proprietary
-                syntheticOrigins[syntheticUri] = origin
-                println("Created synthetic origin for ${pkg.artifactId} (Go-module-only package)")
-            }
+            // Normally supplied by buildVersionAnchorOrigins; still needed when the proxy was unreachable
+            // or the run writes no Moderne docs, so the loaded recipes have an origin to be attributed to.
+            val syntheticOrigins = packagesToLoad
+                .filter { pkg -> recipeOrigins.values.none { it.artifactId == pkg.artifactId } }
+                .map { goOrigin(it.artifactId, "latest") }
+                .associateBy { it.jarLocation }
 
             return GoRecipeResult(allDescriptors, recipeToSource, syntheticOrigins)
 
