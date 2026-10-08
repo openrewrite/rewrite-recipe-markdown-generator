@@ -60,21 +60,21 @@ configurations.all {
 val recipeBomGroups = setOf("org.openrewrite", "org.openrewrite.meta", "org.openrewrite.recipe", "io.moderne.recipe")
 val nonRecipeBomModules = setOf(
     "org.openrewrite:plugin",
-    "org.openrewrite:rewrite-java-lombok",
-    "org.openrewrite:rewrite-java-test",
     "org.openrewrite:rewrite-test",
     // Deprecated, but still managed by moderne-recipe-bom
     "org.openrewrite.recipe:rewrite-ai-search",
 )
-val javaParserModule = Regex("org\\.openrewrite:rewrite-java-\\d+")
+// Parsers, Lombok support and test harness for rewrite-java
+val javaSupportModule = Regex("org\\.openrewrite:rewrite-java-.+")
+val moderneRecipeBom = "io.moderne.recipe:moderne-recipe-bom:$rewriteVersion"
 
 // Every recipe module managed by the BOM chain, each at $rewriteVersion rather than the version the BOM pins, so the
-// docs show the latest patch release of each module. Resolved lazily, so only tasks that resolve recipeConf fetch POMs.
+// docs show the latest patch release of each module.
 val recipeConf = configurations.create("recipe") {
     withDependencies {
-        bomModules("io.moderne.recipe:moderne-recipe-bom:$rewriteVersion")
+        bomModules(moderneRecipeBom)
             .filter { it.substringBefore(':') in recipeBomGroups }
-            .filterNot { it in nonRecipeBomModules || javaParserModule.matches(it) }
+            .filterNot { it in nonRecipeBomModules || javaSupportModule.matches(it) }
             .forEach { add(project.dependencies.create("$it:$rewriteVersion")) }
     }
 }
@@ -112,12 +112,12 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.14.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    // Recipe modules not managed by moderne-recipe-bom, from which recipeConf derives all others
+    // Recipe modules not managed by moderne-recipe-bom
     "recipe"("io.moderne.recipe:rewrite-cve-2026-22732:$rewriteVersion")
-
     // Go recipes load via the Go RPC at doc-gen time (see GoRecipeLoader); this empty Maven artifact
     // only anchors the version-table row and the RecipeOrigin the Go recipes are attributed to.
     "recipe"("org.openrewrite.recipe:recipes-go:$rewriteVersion")
+
 //    "recipe"("org.openrewrite.recipe:rewrite-diffblue:latest.integration") {
 //        exclude(group = "org.openrewrite")
 //        exclude(group = "org.openrewrite.recipe")
@@ -173,7 +173,7 @@ tasks.named<JavaExec>("run").configure {
         recipeClasspath,
         latestVersion("org.openrewrite:rewrite-bom:$rewriteVersion"),
         latestVersion("org.openrewrite.recipe:rewrite-recipe-bom:$rewriteVersion"),
-        latestVersion("io.moderne.recipe:moderne-recipe-bom:$rewriteVersion"),
+        latestVersion(moderneRecipeBom),
         latestVersion("org.openrewrite:plugin:$rewriteVersion"),
         latestVersion("org.openrewrite.maven:rewrite-maven-plugin:$rewriteVersion"),
         moderneTargetDir.toString()
@@ -215,11 +215,10 @@ fun bomModules(coordinate: String): Set<String> {
     val dependencies = managed.getElementsByTagName("dependency")
     return (0 until dependencies.length).flatMap { i ->
         val dependency = dependencies.item(i) as Element
-        fun child(name: String) = (0 until dependency.childNodes.length).map { dependency.childNodes.item(it) }
-            .firstOrNull { it.nodeName == name }?.textContent?.trim()
+        fun child(name: String) = dependency.getElementsByTagName(name).item(0)?.textContent?.trim()
         val module = "${child("groupId")}:${child("artifactId")}"
         if (child("scope") == "import") bomModules("$module:${child("version")}") else setOf(module)
-    }.toSortedSet()
+    }.toSet()
 }
 
 fun detachedConfiguration(arg: String) =
