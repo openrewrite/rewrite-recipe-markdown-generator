@@ -135,12 +135,15 @@ class RecipeMarkdownGenerator : Runnable {
         val recipeLoader = RecipeLoader(recipeClasspath, recipeOrigins, keep)
         recipeLoader.addInfosFromManifests()
 
-        // Synthesize origins for the NuGet-only C# modules so the version table and `nuget install`
-        // command below include them. Placed after addInfosFromManifests (which would otherwise clear
-        // their repositoryUrl) and gated to Moderne docs, since C# is proprietary and excluded from
-        // the OpenRewrite docs — which also keeps that path free of NuGet network calls.
+        // Synthesize origins for the NuGet-only C# modules and the Go modules so the version table and
+        // `nuget install` / `go install` commands below include them. Placed after addInfosFromManifests
+        // (which would otherwise clear their repositoryUrl) and gated to Moderne docs, since C# and Go are
+        // proprietary and excluded from the OpenRewrite docs — which also keeps that path free of NuGet
+        // and Go module proxy network calls.
         if (moderneOutputPath != null) {
-            recipeOrigins = recipeOrigins + CSharpRecipeLoader.buildVersionAnchorOrigins(keep)
+            recipeOrigins = recipeOrigins +
+                CSharpRecipeLoader.buildVersionAnchorOrigins(keep) +
+                GoRecipeLoader.buildVersionAnchorOrigins(keep)
         }
 
         // Write latest-versions-of-every-openrewrite-module.md
@@ -459,8 +462,8 @@ class RecipeMarkdownGenerator : Runnable {
 
         /**
          * Modules whose docs should only appear in Moderne docs, regardless of license. Go recipe modules
-         * are listed structurally rather than relying on their jar manifest: the Maven artifact is only a
-         * version/license carrier, and the recipes themselves are Moderne proprietary. `rewrite-go` and
+         * are listed structurally rather than relying on their origin's license, since the recipes themselves
+         * are Moderne proprietary. `rewrite-go` and
          * `rewrite-csharp` are source available, but their recipes belong with the rest of the Go and C#
          * catalogs on docs.moderne.io.
          */

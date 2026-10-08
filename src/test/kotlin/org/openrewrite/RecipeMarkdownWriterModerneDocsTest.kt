@@ -25,6 +25,8 @@ class RecipeMarkdownWriterModerneDocsTest {
         RecipeOrigin("org.openrewrite.recipe", "rewrite-static-analysis", "1.0.0", jar)
             .apply { this.license = license }
 
+    private fun goOrigin() = GoRecipeLoader.buildVersionAnchorOrigins { "0.5.3" }.values.single()
+
     private fun example() = RecipeExample().apply {
         description = ""
         parameters = listOf("true")
@@ -291,11 +293,9 @@ class RecipeMarkdownWriterModerneDocsTest {
 
     @Test
     fun moderneDocsEmitsGoInstallForGoRecipe(@TempDir dir: Path) {
-        // Uses `recipes-go` — a real entry in GoRecipeLoader.GO_RECIPE_MODULES — so the Usage section installs
-        // the Go module. The Maven artifact of the same name is a metadata-only stub: a `jar install` of it
-        // succeeds while installing zero recipes, which is exactly what this must not render.
-        val goOrigin = RecipeOrigin("org.openrewrite.recipe", "recipes-go", "0.5.3", jar)
-            .apply { license = Licenses.Proprietary }
+        // Uses the origin GoRecipeLoader synthesizes for `recipes-go`, so the Usage section installs the Go
+        // module by path and keeps the versionKey existing pages reference, with no Maven coordinates to render.
+        val goOrigin = goOrigin()
         val recipe = descriptor(
             "org.openrewrite.golang.OrderImports",
             "Order imports", "Orders Go imports.",
@@ -318,8 +318,7 @@ class RecipeMarkdownWriterModerneDocsTest {
         // Go recipes are Moderne proprietary, so RecipeMarkdownGenerator keeps them out of the OpenRewrite
         // docs. If that filter ever breaks, fail the build rather than publish an open-source page whose
         // `jar install` command installs nothing.
-        val goOrigin = RecipeOrigin("org.openrewrite.recipe", "recipes-go", "0.5.3", jar)
-            .apply { license = Licenses.Proprietary }
+        val goOrigin = goOrigin()
         val recipe = descriptor("org.openrewrite.golang.OrderImports", "Order imports", "Orders Go imports.")
         val recipeToSource = mapOf(recipe.name to URI.create("go-search://recipes-go/${recipe.name}"))
         val writer = RecipeMarkdownWriter(mutableMapOf(), recipeToSource, emptySet(), forModerneDocs = false)
