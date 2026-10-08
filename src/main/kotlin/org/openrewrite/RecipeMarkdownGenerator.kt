@@ -134,7 +134,8 @@ class RecipeMarkdownGenerator : Runnable {
         // Synthesize origins for the NuGet-only C# modules and the Go modules so the version table and
         // `nuget install` / `go install` commands below include them, and so their RPC loaders install
         // those same versions. Gated to Moderne docs, since C# and Go are proprietary and excluded from
-        // the OpenRewrite docs — which also keeps that path free of NuGet and Go module proxy network calls.
+        // the OpenRewrite docs. The Gradle `run` task always passes a Moderne docs directory, so the NuGet
+        // and Go module proxy lookups only stay off the network when the generator is invoked without one.
         if (moderneOutputPath != null) {
             recipeOrigins = recipeOrigins +
                 CSharpRecipeLoader.buildVersionAnchorOrigins(keep) +
