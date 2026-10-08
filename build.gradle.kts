@@ -46,7 +46,11 @@ repositories {
     }
     mavenCentral()
     // Hosts org.openrewrite:plugin, which is not on Maven Central.
-    gradlePluginPortal()
+    gradlePluginPortal {
+        content {
+            includeModule("org.openrewrite", "plugin")
+        }
+    }
 }
 
 configurations.all {
