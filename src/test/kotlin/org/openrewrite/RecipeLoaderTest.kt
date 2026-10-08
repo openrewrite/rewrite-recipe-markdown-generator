@@ -41,6 +41,19 @@ class RecipeLoaderTest {
     }
 
     @Test
+    fun manifestScanLeavesSyntheticOriginsIntact() {
+        // Version anchors join the origins before RecipeLoader so the RPC loaders install the anchored
+        // versions; with no jar behind them, the manifest scan must not clear their repository URL.
+        val anchors = GoRecipeLoader.buildVersionAnchorOrigins { "0.12.1" }
+
+        RecipeLoader("", anchors).addInfosFromManifests()
+
+        val origin = anchors.values.single()
+        assertThat(origin.repositoryUrl).isEqualTo("https://github.com/moderneinc/recipes-go/blob/main/")
+        assertThat(origin.license).isEqualTo(Licenses.Proprietary)
+    }
+
+    @Test
     fun onlyArtifactsNarrowsTheRpcBackedModulesLoaded() {
         val onlyArtifacts = setOf("rewrite-python", "recipes-csharp-core", "recipes-go")
 

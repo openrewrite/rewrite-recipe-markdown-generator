@@ -412,7 +412,7 @@ class RecipeLoader {
      */
     private fun loadEnvironmentDataAsync(): List<EnvironmentData> = runBlocking {
         println("Starting parallel recipe loading...")
-        recipeOrigins.entries
+        jarOrigins().entries
             .filter { it.value.artifactId !in VERSION_ONLY_MODULES }
             .chunked(3)
             .flatMap { batch -> batch.map { recipeOrigin ->
@@ -439,6 +439,9 @@ class RecipeLoader {
                 println("Finished loading all recipes.")
             }
     }
+
+    // Synthetic origins of RPC-only modules (e.g. `go-search://recipes-go`) have no jar to scan or read a manifest from.
+    private fun jarOrigins() = recipeOrigins.filterKeys { it.scheme == "file" }
 
     /**
      * Add license and source information from JAR manifests
@@ -477,7 +480,7 @@ class RecipeLoader {
             }
 
         // Apply manifest information to recipe origins
-        recipeOrigins.forEach { (uri, origin) ->
+        jarOrigins().forEach { (uri, origin) ->
             val license: License? = mfInfos[uri]?.first
             if (license != null && license != Licenses.Unknown) {
                 origin.license = license

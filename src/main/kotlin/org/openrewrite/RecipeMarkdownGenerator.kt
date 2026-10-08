@@ -131,20 +131,19 @@ class RecipeMarkdownGenerator : Runnable {
             println("Restricting recipe loading to ${recipeOrigins.size} artifact(s) matching $keep")
         }
 
-        // Add manifest information
-        val recipeLoader = RecipeLoader(recipeClasspath, recipeOrigins, keep)
-        recipeLoader.addInfosFromManifests()
-
         // Synthesize origins for the NuGet-only C# modules and the Go modules so the version table and
-        // `nuget install` / `go install` commands below include them. Placed after addInfosFromManifests
-        // (which would otherwise clear their repositoryUrl) and gated to Moderne docs, since C# and Go are
-        // proprietary and excluded from the OpenRewrite docs — which also keeps that path free of NuGet
-        // and Go module proxy network calls.
+        // `nuget install` / `go install` commands below include them, and so their RPC loaders install
+        // those same versions. Gated to Moderne docs, since C# and Go are proprietary and excluded from
+        // the OpenRewrite docs — which also keeps that path free of NuGet and Go module proxy network calls.
         if (moderneOutputPath != null) {
             recipeOrigins = recipeOrigins +
                 CSharpRecipeLoader.buildVersionAnchorOrigins(keep) +
                 GoRecipeLoader.buildVersionAnchorOrigins(keep)
         }
+
+        // Add manifest information
+        val recipeLoader = RecipeLoader(recipeClasspath, recipeOrigins, keep)
+        recipeLoader.addInfosFromManifests()
 
         // Write latest-versions-of-every-openrewrite-module.md
         val versionWriter = VersionWriter()
@@ -216,11 +215,6 @@ class RecipeMarkdownGenerator : Runnable {
         // C# recipes are always proprietary
         recipeOrigins.values
             .filter { it.artifactId in CSharpRecipeLoader.CSHARP_RECIPE_MODULES }
-            .forEach { it.license = Licenses.Proprietary }
-
-        // Go recipe modules are always proprietary
-        recipeOrigins.values
-            .filter { it.artifactId in GoRecipeLoader.GO_RECIPE_MODULES }
             .forEach { it.license = Licenses.Proprietary }
 
         println("Found ${allRecipeDescriptors.size} descriptor(s).")
