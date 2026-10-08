@@ -1,3 +1,6 @@
+import javax.xml.parsers.DocumentBuilderFactory
+import org.w3c.dom.Element
+
 plugins {
     application
     id("org.jetbrains.kotlin.jvm").version("2.4.20")
@@ -54,7 +57,27 @@ configurations.all {
     }
 }
 
-val recipeConf = configurations.create("recipe")
+val recipeBomGroups = setOf("org.openrewrite", "org.openrewrite.meta", "org.openrewrite.recipe", "io.moderne.recipe")
+val nonRecipeBomModules = setOf(
+    "org.openrewrite:plugin",
+    "org.openrewrite:rewrite-java-lombok",
+    "org.openrewrite:rewrite-java-test",
+    "org.openrewrite:rewrite-test",
+    // Deprecated, but still managed by moderne-recipe-bom
+    "org.openrewrite.recipe:rewrite-ai-search",
+)
+val javaParserModule = Regex("org\\.openrewrite:rewrite-java-\\d+")
+
+// Every recipe module managed by the BOM chain, each at $rewriteVersion rather than the version the BOM pins, so the
+// docs show the latest patch release of each module. Resolved lazily, so only tasks that resolve recipeConf fetch POMs.
+val recipeConf = configurations.create("recipe") {
+    withDependencies {
+        bomModules("io.moderne.recipe:moderne-recipe-bom:$rewriteVersion")
+            .filter { it.substringBefore(':') in recipeBomGroups }
+            .filterNot { it in nonRecipeBomModules || javaParserModule.matches(it) }
+            .forEach { add(project.dependencies.create("$it:$rewriteVersion")) }
+    }
+}
 
 dependencies {
     // Platform dependencies (BOMs)
@@ -89,110 +112,16 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.14.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    // Recipe configuration dependencies
-    // Note: Not using BOM to show the latest patch versions of individual modules
-
-    // Core rewrite modules (org.openrewrite)
-    "recipe"("org.openrewrite:rewrite-cobol:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-core:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-csharp:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-docker:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-go:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-gradle:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-groovy:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-hcl:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-java:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-javascript:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-json:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-kotlin:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-maven:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-properties:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-protobuf:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-python:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-toml:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-xml:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-yaml:$rewriteVersion")
-
-    // Additional core modules; versions only, recipes not included (RecipeLoader.VERSION_ONLY_MODULES)
-    "recipe"("org.openrewrite:rewrite-polyglot:$rewriteVersion")
-    "recipe"("org.openrewrite:rewrite-templating:$rewriteVersion")
-
-    // Recipe modules (org.openrewrite.recipe)
-    "recipe"("org.openrewrite.meta:rewrite-analysis:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-all:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-android:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-apache:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-circleci:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-compiled-analysis:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-concourse:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-cucumber-jvm:$rewriteVersion")
-//    "recipe"("org.openrewrite.recipe:rewrite-diffblue:latest.integration") {
-//        exclude(group = "org.openrewrite")
-//        exclude(group = "org.openrewrite.recipe")
-//    }
-    "recipe"("org.openrewrite.recipe:rewrite-dotnet:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-feature-flags:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-github-actions:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-gitlab:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-hibernate:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-jackson:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-java-dependencies:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-java-security:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-jenkins:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-joda:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-kubernetes:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-liberty:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-logging-frameworks:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-micrometer:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-micronaut:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-migrate-java:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-migrate-kotlin:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-migrate-python:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-netty:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-nodejs:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-okhttp:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-openapi:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-pmd:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-prethink:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-quarkus:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-reactive-streams:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-rewrite:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-spring:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-spring-to-quarkus:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-sql:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-static-analysis:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-struts:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-terraform:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-testing-frameworks:$rewriteVersion")
-    "recipe"("org.openrewrite.recipe:rewrite-third-party:$rewriteVersion")
+    // Recipe modules not managed by moderne-recipe-bom, from which recipeConf derives all others
+    "recipe"("io.moderne.recipe:rewrite-cve-2026-22732:$rewriteVersion")
 
     // Go recipes load via the Go RPC at doc-gen time (see GoRecipeLoader); this empty Maven artifact
     // only anchors the version-table row and the RecipeOrigin the Go recipes are attributed to.
     "recipe"("org.openrewrite.recipe:recipes-go:$rewriteVersion")
-
-    // Moderne recipe modules (io.moderne.recipe)
-    "recipe"("io.moderne.recipe:recipes-kotlin:$rewriteVersion")
-    "recipe"("io.moderne.recipe:recipes-scala:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-ai:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-angular:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-cryptography:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-cve-2026-22732:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-devcenter:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-dropwizard:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-elastic:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-hibernate:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-java-application-server:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-jasperreports:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-kafka:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-nullability:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-release-metromap:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-program-analysis:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-prethink:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-react:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-spring:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-tapestry:$rewriteVersion")
-    "recipe"("io.moderne.recipe:rewrite-vulncheck:$rewriteVersion")
-    
+//    "recipe"("org.openrewrite.recipe:rewrite-diffblue:latest.integration") {
+//        exclude(group = "org.openrewrite")
+//        exclude(group = "org.openrewrite.recipe")
+//    }
 }
 
 java {
@@ -279,12 +208,29 @@ tasks.named<JavaExec>("run").configure {
 
 defaultTasks = mutableListOf("run")
 
-fun latestVersion(arg: String) =
+/// Returns the `groupId:artifactId` of every module managed by the BOM at [coordinate], following `import`-scoped BOMs.
+fun bomModules(coordinate: String): Set<String> {
+    val managed = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(detachedConfiguration("$coordinate@pom").singleFile)
+        .getElementsByTagName("dependencyManagement").item(0) as? Element ?: return emptySet()
+    val dependencies = managed.getElementsByTagName("dependency")
+    return (0 until dependencies.length).flatMap { i ->
+        val dependency = dependencies.item(i) as Element
+        fun child(name: String) = (0 until dependency.childNodes.length).map { dependency.childNodes.item(it) }
+            .firstOrNull { it.nodeName == name }?.textContent?.trim()
+        val module = "${child("groupId")}:${child("artifactId")}"
+        if (child("scope") == "import") bomModules("$module:${child("version")}") else setOf(module)
+    }.toSortedSet()
+}
+
+fun detachedConfiguration(arg: String) =
     configurations.detachedConfiguration(dependencies.create(arg))
         // Detached configurations are not in the configuration container, so the `configurations.all`
         // block above never sees them; without this they keep Gradle's 24 hour default and a manually
         // dispatched docs run reports yesterday's BOM and plugin versions.
         .apply { resolutionStrategy.cacheDynamicVersionsFor(1, TimeUnit.HOURS) }
+
+fun latestVersion(arg: String) =
+    detachedConfiguration(arg)
         .resolvedConfiguration
         .firstLevelModuleDependencies
         .first()
