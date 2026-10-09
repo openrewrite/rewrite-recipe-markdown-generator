@@ -260,6 +260,41 @@ class RecipeMarkdownWriterModerneDocsTest {
     }
 
     @Test
+    fun moderneDocsSeparatesOptionalCliOptions(@TempDir dir: Path) {
+        fun option(name: String, type: String, example: String?, required: Boolean) =
+            OptionDescriptor(name, type, name, "", example, null, required, null)
+        val recipe = descriptor(
+            "org.openrewrite.java.dependencies.DependencyVulnerabilityCheck",
+            "Find and fix vulnerable dependencies", "Finds and fixes vulnerable dependencies.",
+            options = listOf(
+                option("ruleset", "String", "strict", required = true),
+                option("scope", "String", "runtime", required = false),
+                option("maximumUpgradeDelta", "UpgradeDelta", "patch", required = false),
+                option("cvePattern", "String", null, required = false),
+                option("overrideTransitive", "Boolean", null, required = false),
+                option("addMarkers", "boolean", "false", required = false),
+            )
+        )
+
+        val usage = usageJson(generate(recipe, dir, forModerneDocs = true))
+
+        assertThat(usage["cliOptions"]).isEqualTo(" --recipe-option \"ruleset=strict\"")
+        assertThat(usage["optionalCliOptions"])
+            .isEqualTo(
+                " --recipe-option \"scope=runtime\" --recipe-option \"maximumUpgradeDelta=patch\"" +
+                        " --recipe-option \"overrideTransitive=true\" --recipe-option \"addMarkers=false\""
+            )
+    }
+
+    @Test
+    fun moderneDocsOmitsCliOptionsWhenRecipeHasNone(@TempDir dir: Path) {
+        val recipe = descriptor("org.openrewrite.java.NoOptions", "No options", "Has no options.")
+
+        assertThat(usageJson(generate(recipe, dir, forModerneDocs = true)))
+            .doesNotContainKeys("cliOptions", "optionalCliOptions")
+    }
+
+    @Test
     fun unregisteredPipModuleFailsRatherThanGuessingAPackageName(@TempDir dir: Path) {
         val unknownOrigin = RecipeOrigin("org.openrewrite.recipe", "rewrite-unregistered-python", "1.0.0", jar)
             .apply { license = Licenses.Proprietary }
