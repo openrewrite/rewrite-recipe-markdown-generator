@@ -44,6 +44,9 @@ class RecipeMarkdownWriterModerneDocsTest {
         options, recipeList, emptyList(), emptyList(), emptyList(), listOf(example()), jar
     )
 
+    private fun option(name: String, type: String, example: String?, required: Boolean) =
+        OptionDescriptor(name, type, name, "", example, null, required, null)
+
     private fun singleRecipe() = descriptor(
         "org.openrewrite.java.ReplaceFoo", "Replace `foo`", "Replaces foo with bar.",
         options = listOf(
@@ -262,8 +265,6 @@ class RecipeMarkdownWriterModerneDocsTest {
 
     @Test
     fun moderneDocsSeparatesOptionalCliOptions(@TempDir dir: Path) {
-        fun option(name: String, type: String, example: String?, required: Boolean) =
-            OptionDescriptor(name, type, name, "", example, null, required, null)
         val recipe = descriptor(
             "org.openrewrite.java.dependencies.DependencyVulnerabilityCheck",
             "Find and fix vulnerable dependencies", "Finds and fixes vulnerable dependencies.",
@@ -289,8 +290,6 @@ class RecipeMarkdownWriterModerneDocsTest {
 
     @Test
     fun openRewriteDocsSeparatesOptionalCliOptions(@TempDir dir: Path) {
-        fun option(name: String, type: String, example: String?, required: Boolean) =
-            OptionDescriptor(name, type, name, "", example, null, required, null)
         val recipe = descriptor(
             "org.openrewrite.java.dependencies.DependencyVulnerabilityCheck",
             "Find and fix vulnerable dependencies", "Finds and fixes vulnerable dependencies.",
@@ -478,12 +477,7 @@ class RecipeMarkdownWriterModerneDocsTest {
 
     @Test
     fun openRewriteDocsOutputUnchangedForSingleRecipe(@TempDir dir: Path) {
-        // Proprietary license so writeSourceLinks takes its Moderne-only branch and doesn't require a
-        // source URI lookup (this test only guards that the OpenRewrite path is untouched).
-        val out = generate(
-            singleRecipe(), dir, forModerneDocs = false,
-            license = Licenses.Proprietary, proprietary = setOf("org.openrewrite.java.ReplaceFoo")
-        )
+        val out = generate(singleRecipe(), dir, forModerneDocs = false)
 
         // The OpenRewrite path still renders a markdown H1 and no recipe components.
         assertThat(out).contains("# Replace `foo`")

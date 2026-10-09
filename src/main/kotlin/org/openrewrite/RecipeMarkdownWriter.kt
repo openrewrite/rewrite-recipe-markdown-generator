@@ -753,13 +753,9 @@ ${props.toString().trimEnd()}
             props.appendLine("  requiresConfiguration")
         }
 
-        val cliOptions = requiredCliOptionFlags(recipeDescriptor.options)
-        if (cliOptions.isNotEmpty()) {
-            props.appendLine("  cliOptions={'${escapeJsString(cliOptions)}'}")
-        }
-        val optionalCliOptions = optionalCliOptionFlags(recipeDescriptor.options)
-        if (optionalCliOptions.isNotEmpty()) {
-            props.appendLine("  optionalCliOptions={'${escapeJsString(optionalCliOptions)}'}")
+        // Single quotes in JSX avoid clashing with the double quotes in option values.
+        cliOptionProps(recipeDescriptor.options).forEach { (prop, flags) ->
+            props.appendLine("  $prop={'${escapeJsString(flags)}'}")
         }
 
         if (suppressGradle) {
@@ -1302,14 +1298,7 @@ ${props.toString().trimEnd()}
                     addPythonCoreCompanionJar(usageMap, origin)
                 }
 
-                val cliOptions = requiredCliOptionFlags(options)
-                if (cliOptions.isNotEmpty()) {
-                    usageMap["cliOptions"] = cliOptions
-                }
-                val optionalCliOptions = optionalCliOptionFlags(options)
-                if (optionalCliOptions.isNotEmpty()) {
-                    usageMap["optionalCliOptions"] = optionalCliOptions
-                }
+                usageMap.putAll(cliOptionProps(options))
                 if (hasConflict(name)) {
                     usageMap["useFullyQualifiedCliName"] = true
                 }
@@ -1319,10 +1308,6 @@ ${props.toString().trimEnd()}
         return mapper.writeValueAsString(usageMap)
     }
 
-    /**
-     * Single quotes in JSX avoid clashing with the double quotes in option values; backslashes, single quotes
-     * and newlines are escaped so the JS string literal stays valid.
-     */
     private fun escapeJsString(value: String): String =
         value.replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n")
 
@@ -1330,13 +1315,12 @@ ${props.toString().trimEnd()}
      * Required options are needed for any run; optional ones are only suggestions, so they're kept apart for
      * RunRecipe to present separately.
      */
-    private fun requiredCliOptionFlags(options: List<OptionDescriptor>): String =
-        cliOptionFlags(options.filter { it.isRequired }.map { it.name to cliOptionExample(it) })
-
-    private fun optionalCliOptionFlags(options: List<OptionDescriptor>): String =
-        cliOptionFlags(options.filter { !it.isRequired }.mapNotNull { option ->
+    private fun cliOptionProps(options: List<OptionDescriptor>): Map<String, String> = mapOf(
+        "cliOptions" to cliOptionFlags(options.filter { it.isRequired }.map { it.name to cliOptionExample(it) }),
+        "optionalCliOptions" to cliOptionFlags(options.filter { !it.isRequired }.mapNotNull { option ->
             optionalCliOptionExample(option)?.let { option.name to it }
-        })
+        }),
+    ).filterValues { it.isNotEmpty() }
 
     private fun cliOptionFlags(options: List<Pair<String, String?>>): String =
         options.joinToString("") { (name, value) -> " --recipe-option \"$name=$value\"" }
