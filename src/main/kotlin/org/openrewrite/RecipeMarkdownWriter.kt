@@ -675,8 +675,6 @@ ${props.toString().trimEnd()}
         val requiresDependency = !origin.isFromCoreLibrary()
         val hasDataTables = recipeDescriptor.dataTables != null && recipeDescriptor.dataTables.isNotEmpty()
 
-        var cliOptions = ""
-
         if (requiresConfiguration) {
             val exampleRecipeName =
                 "com.yourorg." + recipeDescriptor.name.substring(recipeDescriptor.name.lastIndexOf('.') + 1) + "Example"
@@ -728,7 +726,6 @@ ${props.toString().trimEnd()}
                 }
                 val isList = option.type == "List" || option.type.startsWith("List<")
                 val ex = cliOptionExample(option)
-                cliOptions += " --recipe-option \"${option.name}=$ex\""
                 if (isList) {
                     writeln("      ${option.name}:")
                     writeln("        - ${ex ?: "TODO"}")
@@ -756,11 +753,13 @@ ${props.toString().trimEnd()}
             props.appendLine("  requiresConfiguration")
         }
 
+        val cliOptions = requiredCliOptionFlags(recipeDescriptor.options)
         if (cliOptions.isNotEmpty()) {
-            // Use single quotes for JSX to avoid issues with double quotes in option values.
-            // Escape backslashes, single quotes, and newlines so the JS string literal is valid.
-            val escaped = cliOptions.replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n")
-            props.appendLine("  cliOptions={'$escaped'}")
+            props.appendLine("  cliOptions={'${escapeJsString(cliOptions)}'}")
+        }
+        val optionalCliOptions = optionalCliOptionFlags(recipeDescriptor.options)
+        if (optionalCliOptions.isNotEmpty()) {
+            props.appendLine("  optionalCliOptions={'${escapeJsString(optionalCliOptions)}'}")
         }
 
         if (suppressGradle) {
@@ -1303,15 +1302,11 @@ ${props.toString().trimEnd()}
                     addPythonCoreCompanionJar(usageMap, origin)
                 }
 
-                // Required options are needed for any run; optional ones are only suggestions, so they're
-                // kept apart for RunRecipe to present separately.
-                val cliOptions = cliOptionFlags(options.filter { it.isRequired }.map { it.name to cliOptionExample(it) })
+                val cliOptions = requiredCliOptionFlags(options)
                 if (cliOptions.isNotEmpty()) {
                     usageMap["cliOptions"] = cliOptions
                 }
-                val optionalCliOptions = cliOptionFlags(options.filter { !it.isRequired }.mapNotNull { option ->
-                    optionalCliOptionExample(option)?.let { option.name to it }
-                })
+                val optionalCliOptions = optionalCliOptionFlags(options)
                 if (optionalCliOptions.isNotEmpty()) {
                     usageMap["optionalCliOptions"] = optionalCliOptions
                 }
@@ -1323,6 +1318,25 @@ ${props.toString().trimEnd()}
 
         return mapper.writeValueAsString(usageMap)
     }
+
+    /**
+     * Single quotes in JSX avoid clashing with the double quotes in option values; backslashes, single quotes
+     * and newlines are escaped so the JS string literal stays valid.
+     */
+    private fun escapeJsString(value: String): String =
+        value.replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n")
+
+    /**
+     * Required options are needed for any run; optional ones are only suggestions, so they're kept apart for
+     * RunRecipe to present separately.
+     */
+    private fun requiredCliOptionFlags(options: List<OptionDescriptor>): String =
+        cliOptionFlags(options.filter { it.isRequired }.map { it.name to cliOptionExample(it) })
+
+    private fun optionalCliOptionFlags(options: List<OptionDescriptor>): String =
+        cliOptionFlags(options.filter { !it.isRequired }.mapNotNull { option ->
+            optionalCliOptionExample(option)?.let { option.name to it }
+        })
 
     private fun cliOptionFlags(options: List<Pair<String, String?>>): String =
         options.joinToString("") { (name, value) -> " --recipe-option \"$name=$value\"" }
