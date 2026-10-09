@@ -44,6 +44,9 @@ class RecipeMarkdownWriterModerneDocsTest {
         options, recipeList, emptyList(), emptyList(), emptyList(), listOf(example()), jar
     )
 
+    private fun option(name: String, type: String, example: String?, required: Boolean) =
+        OptionDescriptor(name, type, name, "", example, null, required, null)
+
     private fun singleRecipe() = descriptor(
         "org.openrewrite.java.ReplaceFoo", "Replace `foo`", "Replaces foo with bar.",
         options = listOf(
@@ -84,7 +87,8 @@ class RecipeMarkdownWriterModerneDocsTest {
         license: License = Licenses.Apache2,
         proprietary: Set<String> = emptySet(),
     ): String {
-        RecipeMarkdownWriter(mutableMapOf(), emptyMap(), proprietary, forModerneDocs)
+        val recipeToSource = mapOf(recipe.name to URI.create("file:///tmp/${recipe.name}.java"))
+        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, proprietary, forModerneDocs)
             .writeRecipe(recipe, dir, origin(license))
         val md = Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow()
         return Files.readString(md)
@@ -261,8 +265,6 @@ class RecipeMarkdownWriterModerneDocsTest {
 
     @Test
     fun moderneDocsSeparatesOptionalCliOptions(@TempDir dir: Path) {
-        fun option(name: String, type: String, example: String?, required: Boolean) =
-            OptionDescriptor(name, type, name, "", example, null, required, null)
         val recipe = descriptor(
             "org.openrewrite.java.dependencies.DependencyVulnerabilityCheck",
             "Find and fix vulnerable dependencies", "Finds and fixes vulnerable dependencies.",
@@ -284,6 +286,36 @@ class RecipeMarkdownWriterModerneDocsTest {
                 " --recipe-option \"scope=runtime\" --recipe-option \"maximumUpgradeDelta=patch\"" +
                         " --recipe-option \"overrideTransitive=true\" --recipe-option \"addMarkers=false\""
             )
+    }
+
+    @Test
+    fun openRewriteDocsSeparatesOptionalCliOptions(@TempDir dir: Path) {
+        val recipe = descriptor(
+            "org.openrewrite.java.dependencies.DependencyVulnerabilityCheck",
+            "Find and fix vulnerable dependencies", "Finds and fixes vulnerable dependencies.",
+            options = listOf(
+                option("ruleset", "String", "strict", required = true),
+                option("scope", "String", "runtime", required = false),
+                option("cvePattern", "String", null, required = false),
+                option("overrideTransitive", "Boolean", null, required = false),
+            )
+        )
+
+        val out = generate(recipe, dir, forModerneDocs = false)
+
+        assertThat(out)
+            .contains("      scope: runtime")
+            .contains("  cliOptions={' --recipe-option \"ruleset=strict\"'}")
+            .contains("  optionalCliOptions={' --recipe-option \"scope=runtime\" --recipe-option \"overrideTransitive=true\"'}")
+    }
+
+    @Test
+    fun openRewriteDocsShowsOptionalCliOptionsWithoutRequiredOptions(@TempDir dir: Path) {
+        val out = generate(singleRecipe(), dir, forModerneDocs = false)
+
+        assertThat(out)
+            .doesNotContain("  cliOptions=")
+            .contains("  optionalCliOptions={' --recipe-option \"includeTestSources=true\"'}")
     }
 
     @Test
@@ -445,12 +477,7 @@ class RecipeMarkdownWriterModerneDocsTest {
 
     @Test
     fun openRewriteDocsOutputUnchangedForSingleRecipe(@TempDir dir: Path) {
-        // Proprietary license so writeSourceLinks takes its Moderne-only branch and doesn't require a
-        // source URI lookup (this test only guards that the OpenRewrite path is untouched).
-        val out = generate(
-            singleRecipe(), dir, forModerneDocs = false,
-            license = Licenses.Proprietary, proprietary = setOf("org.openrewrite.java.ReplaceFoo")
-        )
+        val out = generate(singleRecipe(), dir, forModerneDocs = false)
 
         // The OpenRewrite path still renders a markdown H1 and no recipe components.
         assertThat(out).contains("# Replace `foo`")
