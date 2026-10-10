@@ -1,6 +1,6 @@
 rewrite-all:
   artifactId: "rewrite-all"
-  version: "1.30.1"
+  version: "1.30.2"
   markdownRecipeDescriptors:
     org.openrewrite.FindCallGraph:
       name: "org.openrewrite.FindCallGraph"
@@ -30,9 +30,75 @@ rewrite-all:
       options: []
       isImperative: true
       artifactId: "rewrite-all"
+rewrite-android:
+  artifactId: "rewrite-android"
+  version: "8.93.0"
+  markdownRecipeDescriptors:
+    org.openrewrite.android.UpgradeAndroidGradlePluginVersion:
+      name: "org.openrewrite.android.UpgradeAndroidGradlePluginVersion"
+      description: "Upgrade the Android Gradle Plugin (AGP) version. Handles both\
+        \ the legacy `buildscript { dependencies { classpath 'com.android.tools.build:gradle:...'\
+        \ } }` form (delegating to the upstream `UpgradeDependencyVersion` recipe\
+        \ for full DSL coverage) and the modern `plugins { id(\"com.android.application\"\
+        ) version \"...\" }` form."
+      docLink: "https://docs.openrewrite.org/recipes/android/upgradeandroidgradlepluginversion"
+      options:
+      - name: "newVersion"
+        type: "String"
+        required: true
+      - name: "versionPattern"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-android"
+    org.openrewrite.android.UpgradeCompileSdkVersion:
+      name: "org.openrewrite.android.UpgradeCompileSdkVersion"
+      description: "Sets the `compileSdk` (or legacy `compileSdkVersion`) value in\
+        \ an Android module's `android { }` block. Handles literal int, string form\
+        \ (`'android-N'`), extra-property reference, version-catalog reference (`libs.versions.*.toml`),\
+        \ and `gradle.properties` reference. Will not downgrade an already-newer value."
+      docLink: "https://docs.openrewrite.org/recipes/android/upgradecompilesdkversion"
+      options:
+      - name: "to"
+        type: "Integer"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-android"
+    org.openrewrite.android.UpgradeMinSdkVersion:
+      name: "org.openrewrite.android.UpgradeMinSdkVersion"
+      description: "Sets the `minSdk` (or legacy `minSdkVersion`) value in an Android\
+        \ module's `android { defaultConfig { } }` block. Handles literal int, string\
+        \ form (`'android-N'`), extra-property reference, version-catalog reference\
+        \ (`libs.versions.*.toml`), and `gradle.properties` reference. Will not downgrade\
+        \ an already-newer value."
+      docLink: "https://docs.openrewrite.org/recipes/android/upgrademinsdkversion"
+      options:
+      - name: "to"
+        type: "Integer"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-android"
+    org.openrewrite.android.UpgradeTargetSdkVersion:
+      name: "org.openrewrite.android.UpgradeTargetSdkVersion"
+      description: "Sets the `targetSdk` (or legacy `targetSdkVersion`) value in an\
+        \ Android module's `android { defaultConfig { } }` block. Handles literal\
+        \ int, string form (`'android-N'`), extra-property reference, version-catalog\
+        \ reference (`libs.versions.*.toml`), and `gradle.properties` reference. Will\
+        \ not downgrade an already-newer value, and will not upgrade past `minSdkFloor`\
+        \ if specified."
+      docLink: "https://docs.openrewrite.org/recipes/android/upgradetargetsdkversion"
+      options:
+      - name: "minSdkFloor"
+        type: "Integer"
+        required: false
+      - name: "to"
+        type: "Integer"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-android"
 rewrite-apache:
   artifactId: "rewrite-apache"
-  version: "2.33.0"
+  version: "2.34.0"
   markdownRecipeDescriptors:
     org.openrewrite.apache.ApacheBestPractices:
       name: "org.openrewrite.apache.ApacheBestPractices"
@@ -374,6 +440,26 @@ rewrite-apache:
       description: "Replace any `StringUtils#isEmpty(String)` and `#isNotEmpty(String)`\
         \ with `s == null || s.isEmpty()` and `s != null && !s.isEmpty()`."
       docLink: "https://docs.openrewrite.org/recipes/apache/commons/lang/isnotemptytojdk"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-apache"
+    org.openrewrite.apache.commons.lang.ParameterizeRawStrLookupSubclasses:
+      name: "org.openrewrite.apache.commons.lang.ParameterizeRawStrLookupSubclasses"
+      description: "`org.apache.commons.text.StrLookup` implements `StringLookup`,\
+        \ which extends `UnaryOperator<String>`. Extending it as a raw type erases\
+        \ the inherited `apply(String)` default method, leaving `Function#apply(Object)`\
+        \ unimplemented, so add the `String` type argument."
+      docLink: "https://docs.openrewrite.org/recipes/apache/commons/lang/parameterizerawstrlookupsubclasses"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-apache"
+    org.openrewrite.apache.commons.lang.SystemUtilsIsJavaVersionAtLeastToJavaVersion:
+      name: "org.openrewrite.apache.commons.lang.SystemUtilsIsJavaVersionAtLeastToJavaVersion"
+      description: "Commons Lang 2.x compared Java versions as a `float` such as `1.4f`\
+        \ or an `int` such as `140`; Commons Lang 3.x only accepts a `JavaVersion`.\
+        \ Calls whose argument is not a literal that names a `JavaVersion` constant\
+        \ are left alone."
+      docLink: "https://docs.openrewrite.org/recipes/apache/commons/lang/systemutilsisjavaversionatleasttojavaversion"
       options: []
       isImperative: true
       artifactId: "rewrite-apache"
@@ -1078,94 +1164,9 @@ rewrite-apache:
       options: []
       isImperative: true
       artifactId: "rewrite-apache"
-rewrite-cobol:
-  artifactId: "rewrite-cobol"
-  version: "2.24.0"
-  markdownRecipeDescriptors:
-    org.openrewrite.cobol.cleanup.RemoveWithDebuggingMode:
-      name: "org.openrewrite.cobol.cleanup.RemoveWithDebuggingMode"
-      description: "Remove debugging mode from SOURCE-COMPUTER paragraphs."
-      docLink: "https://docs.openrewrite.org/recipes/cobol/cleanup/removewithdebuggingmode"
-      options:
-      - name: "updateSequenceAreas"
-        type: "Boolean"
-        required: false
-      isImperative: true
-      artifactId: "rewrite-cobol"
-    org.openrewrite.cobol.search.FindCopybook:
-      name: "org.openrewrite.cobol.search.FindCopybook"
-      description: "Find all copy statements with the copybook name."
-      docLink: "https://docs.openrewrite.org/recipes/cobol/search/findcopybook"
-      options:
-      - name: "copybookName"
-        type: "String"
-        required: false
-      - name: "onlyMissingCopybooks"
-        type: "Boolean"
-        required: false
-      isImperative: true
-      artifactId: "rewrite-cobol"
-    org.openrewrite.cobol.search.FindIndicators:
-      name: "org.openrewrite.cobol.search.FindIndicators"
-      description: "Find matching indicators. Currently, this recipe will not mark\
-        \ indicators on copybook code."
-      docLink: "https://docs.openrewrite.org/recipes/cobol/search/findindicators"
-      options:
-      - name: "indicator"
-        type: "String"
-        required: true
-      isImperative: true
-      artifactId: "rewrite-cobol"
-    org.openrewrite.cobol.search.FindReference:
-      name: "org.openrewrite.cobol.search.FindReference"
-      description: "Finds an identifier by an exact match or regex pattern in COBOL,\
-        \ copybooks, and/or JCL."
-      docLink: "https://docs.openrewrite.org/recipes/cobol/search/findreference"
-      options:
-      - name: "exactMatch"
-        type: "Boolean"
-        required: true
-      - name: "searchTerm"
-        type: "String"
-        required: true
-      isImperative: true
-      artifactId: "rewrite-cobol"
-    org.openrewrite.cobol.search.FindRelationships:
-      name: "org.openrewrite.cobol.search.FindRelationships"
-      description: "Build a list of relationships for diagramming and exploration."
-      docLink: "https://docs.openrewrite.org/recipes/cobol/search/findrelationships"
-      options: []
-      isImperative: true
-      artifactId: "rewrite-cobol"
-    org.openrewrite.cobol.search.FindWord:
-      name: "org.openrewrite.cobol.search.FindWord"
-      description: "Search for COBOL words based on a search term."
-      docLink: "https://docs.openrewrite.org/recipes/cobol/search/findword"
-      options:
-      - name: "exactMatch"
-        type: "Boolean"
-        required: true
-      - name: "searchTerm"
-        type: "String"
-        required: true
-      isImperative: true
-      artifactId: "rewrite-cobol"
-    org.openrewrite.jcl.search.FindWord:
-      name: "org.openrewrite.jcl.search.FindWord"
-      description: "Search for JCL words based on a search term."
-      docLink: "https://docs.openrewrite.org/recipes/jcl/search/findword"
-      options:
-      - name: "exactMatch"
-        type: "Boolean"
-        required: true
-      - name: "searchTerm"
-        type: "String"
-        required: true
-      isImperative: true
-      artifactId: "rewrite-cobol"
 rewrite-core:
   artifactId: "rewrite-core"
-  version: "8.92.8"
+  version: "8.93.0"
   markdownRecipeDescriptors:
     org.openrewrite.AddToGitignore:
       name: "org.openrewrite.AddToGitignore"
@@ -1607,7 +1608,7 @@ rewrite-core:
       artifactId: "rewrite-core"
 rewrite-cucumber-jvm:
   artifactId: "rewrite-cucumber-jvm"
-  version: "2.18.0"
+  version: "2.20.0"
   markdownRecipeDescriptors:
     org.openrewrite.cucumber.jvm.CollapseCucumberOptionsTags:
       name: "org.openrewrite.cucumber.jvm.CollapseCucumberOptionsTags"
@@ -1693,12 +1694,44 @@ rewrite-cucumber-jvm:
       options: []
       isImperative: false
       artifactId: "rewrite-cucumber-jvm"
+    org.openrewrite.cucumber.jvm.CucumberRunWithToSuite:
+      name: "org.openrewrite.cucumber.jvm.CucumberRunWithToSuite"
+      description: "Replaces the Cucumber JUnit 4 runner with a JUnit Platform `@Suite`\
+        \ that runs the Cucumber engine. The `@CucumberOptions` become `@ConfigurationParameter`\
+        \ annotations, and the features become `@SelectClasspathResource` selectors\
+        \ where they are on the classpath. The JUnit 4 runner looks for glue in the\
+        \ package of the annotated class by default, and the Cucumber engine in the\
+        \ whole classpath, so that package becomes the explicit glue when none is\
+        \ configured. Class-level setup and teardown methods become `@BeforeSuite`\
+        \ and `@AfterSuite` methods, as a `@Suite` does not run `@BeforeClass` or\
+        \ `@BeforeAll`. A class that extends another class, which may contribute `@CucumberOptions`,\
+        \ or that has an option that cannot be carried over, such as one that refers\
+        \ to a constant, keeps the JUnit 4 runner, with a comment explaining why."
+      docLink: "https://docs.openrewrite.org/recipes/cucumber/jvm/cucumberrunwithtosuite"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-cucumber-jvm"
     org.openrewrite.cucumber.jvm.CucumberToJunitPlatformSuite:
       name: "org.openrewrite.cucumber.jvm.CucumberToJunitPlatformSuite"
-      description: "Migrates Cucumber tests to JUnit test `@Suite`."
+      description: "Migrates Cucumber tests run by the `@Cucumber` annotation or the\
+        \ JUnit 4 `@RunWith(Cucumber.class)` runner to a JUnit Platform `@Suite`,\
+        \ and swaps `cucumber-junit` for `cucumber-junit-platform-engine` 7.x. Each\
+        \ Cucumber-JVM module depends on the `cucumber-core` of its own release, and\
+        \ the engine fails to run against any other, so the rest of the Cucumber-JVM\
+        \ dependencies move to that same 7.x."
       docLink: "https://docs.openrewrite.org/recipes/cucumber/jvm/cucumbertojunitplatformsuite"
       options: []
       isImperative: false
+      artifactId: "rewrite-cucumber-jvm"
+    org.openrewrite.cucumber.jvm.DropStrictAware:
+      name: "org.openrewrite.cucumber.jvm.DropStrictAware"
+      description: "Cucumber-JVM 8.0.0 removed `StrictAware`, which Cucumber-JVM 7\
+        \ only ever called with `setStrict(true)`. Remove it from `implements` along\
+        \ with the `setStrict(boolean)` override, and implement `Plugin` instead when\
+        \ the class implements no other plugin interface."
+      docLink: "https://docs.openrewrite.org/recipes/cucumber/jvm/dropstrictaware"
+      options: []
+      isImperative: true
       artifactId: "rewrite-cucumber-jvm"
     org.openrewrite.cucumber.jvm.DropStrictOption:
       name: "org.openrewrite.cucumber.jvm.DropStrictOption"
@@ -1828,7 +1861,7 @@ rewrite-cucumber-jvm:
       artifactId: "rewrite-cucumber-jvm"
 rewrite-docker:
   artifactId: "rewrite-docker"
-  version: "8.92.8"
+  version: "8.93.0"
   markdownRecipeDescriptors:
     org.openrewrite.docker.AddAptGetCleanup:
       name: "org.openrewrite.docker.AddAptGetCleanup"
@@ -2105,7 +2138,7 @@ rewrite-docker:
       artifactId: "rewrite-docker"
 rewrite-feature-flags:
   artifactId: "rewrite-feature-flags"
-  version: "1.24.1"
+  version: "1.24.2"
   markdownRecipeDescriptors:
     org.openrewrite.featureflags.RemoveBooleanFlag:
       name: "org.openrewrite.featureflags.RemoveBooleanFlag"
@@ -2532,7 +2565,7 @@ rewrite-feature-flags:
       artifactId: "rewrite-feature-flags"
 rewrite-github-actions:
   artifactId: "rewrite-github-actions"
-  version: "3.32.0"
+  version: "3.33.0"
   markdownRecipeDescriptors:
     org.openrewrite.github.AddCronTrigger:
       name: "org.openrewrite.github.AddCronTrigger"
@@ -2797,6 +2830,23 @@ rewrite-github-actions:
       description: "Removes all cron triggers from a workflow."
       docLink: "https://docs.openrewrite.org/recipes/github/removeallcrontriggers"
       options: []
+      isImperative: true
+      artifactId: "rewrite-github-actions"
+    org.openrewrite.github.RemoveRunner:
+      name: "org.openrewrite.github.RemoveRunner"
+      description: "Removes a runner label from the `runs-on` of a job, leaving the\
+        \ remaining runner labels untouched. Both sequences (`runs-on: [self-hosted,\
+        \ linux]`) and the `labels` of a runner group are supported. The runner is\
+        \ never removed when it is the only one left, as a job requires at least one\
+        \ runner."
+      docLink: "https://docs.openrewrite.org/recipes/github/removerunner"
+      options:
+      - name: "jobName"
+        type: "String"
+        required: true
+      - name: "runner"
+        type: "String"
+        required: true
       isImperative: true
       artifactId: "rewrite-github-actions"
     org.openrewrite.github.RemoveUnusedWorkflowDispatchInputs:
@@ -3260,7 +3310,7 @@ rewrite-github-actions:
       artifactId: "rewrite-github-actions"
 rewrite-gitlab:
   artifactId: "rewrite-gitlab"
-  version: "0.25.1"
+  version: "0.25.2"
   markdownRecipeDescriptors:
     org.openrewrite.gitlab.AddArtifactsExpireIn:
       name: "org.openrewrite.gitlab.AddArtifactsExpireIn"
@@ -3569,7 +3619,7 @@ rewrite-gitlab:
       artifactId: "rewrite-gitlab"
 rewrite-gradle:
   artifactId: "rewrite-gradle"
-  version: "8.92.8"
+  version: "8.93.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.AddDependency:
       name: "org.openrewrite.gradle.AddDependency"
@@ -4125,7 +4175,9 @@ rewrite-gradle:
       description: "Downloads a BOM and compares its properties against Gradle ext\
         \ properties. When the BOM defines a higher version for a property, the ext\
         \ property is updated to match (or removed if `removeRedundantOverrides` is\
-        \ enabled)."
+        \ enabled, unless a build script reads it). With `removeRedundantOverrides`,\
+        \ a property whose value refers to an entry of `gradle.properties` is compared\
+        \ by that entry's value."
       docLink: "https://docs.openrewrite.org/recipes/gradle/syncgradleextpropertieswithbom"
       options:
       - name: "artifactId"
@@ -4835,6 +4887,9 @@ rewrite-gradle:
       - name: "groupIdPattern"
         type: "String"
         required: true
+      - name: "onlyDirect"
+        type: "Boolean"
+        required: false
       - name: "version"
         type: "String"
         required: false
@@ -4869,7 +4924,7 @@ rewrite-gradle:
       artifactId: "rewrite-gradle"
 rewrite-groovy:
   artifactId: "rewrite-groovy"
-  version: "8.92.8"
+  version: "8.93.0"
   markdownRecipeDescriptors:
     org.openrewrite.groovy.format.AutoFormat:
       name: "org.openrewrite.groovy.format.AutoFormat"
@@ -4905,7 +4960,7 @@ rewrite-groovy:
       artifactId: "rewrite-groovy"
 rewrite-hcl:
   artifactId: "rewrite-hcl"
-  version: "8.92.8"
+  version: "8.93.0"
   markdownRecipeDescriptors:
     org.openrewrite.hcl.DeleteContent:
       name: "org.openrewrite.hcl.DeleteContent"
@@ -5018,7 +5073,7 @@ rewrite-hcl:
       artifactId: "rewrite-hcl"
 rewrite-hibernate:
   artifactId: "rewrite-hibernate"
-  version: "2.26.1"
+  version: "2.27.0"
   markdownRecipeDescriptors:
     org.openrewrite.hibernate.AddScalarPreferStandardBasicTypes:
       name: "org.openrewrite.hibernate.AddScalarPreferStandardBasicTypes"
@@ -5047,10 +5102,20 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
     org.openrewrite.hibernate.MigrateDialect:
       name: "org.openrewrite.hibernate.MigrateDialect"
-      description: "Migrate all Hibernate version-specific dialect classes to their\
-        \ generic equivalents. Version-specific dialects were deprecated in Hibernate\
-        \ 6.0 and removed in Hibernate 6.2."
+      description: "Migrate Hibernate version-specific dialect classes removed by\
+        \ Hibernate 6.2 to their generic equivalents."
       docLink: "https://docs.openrewrite.org/recipes/hibernate/migratedialect"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-hibernate"
+    org.openrewrite.hibernate.MigrateRemovedDialectsHibernate70:
+      name: "org.openrewrite.hibernate.MigrateRemovedDialectsHibernate70"
+      description: "Hibernate 7.0 removed the remaining version- and storage-specific\
+        \ dialect subclasses that still existed in Hibernate 6.x. The IBM-i (`DB2400*`)\
+        \ variants map to `DB2iDialect`, not the generic `DB2Dialect`; the HANA row/column-store\
+        \ variants and MariaDB 10.6 collapse into the generic `HANADialect` / `MariaDBDialect`,\
+        \ which autodetect behavior from the JDBC connection."
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/migrateremoveddialectshibernate70"
       options: []
       isImperative: false
       artifactId: "rewrite-hibernate"
@@ -5154,8 +5219,8 @@ rewrite-hibernate:
       name: "org.openrewrite.hibernate.MigrateToHypersistenceUtilsHibernate60"
       description: "This recipe will migrate any existing dependencies on `com.vladmihalcea:hibernate-types`\
         \ to `io.hypersistence:hypersistence-utils-hibernate-60`. This migration will\
-        \ include the adjustment from `com.vladmihalcea` to `io.hypersistence.utils`\
-        \ package name."
+        \ include the adjustment from the `com.vladmihalcea.hibernate` and `com.vladmihalcea.spring`\
+        \ packages to `io.hypersistence.utils.hibernate` and `io.hypersistence.utils.spring`."
       docLink: "https://docs.openrewrite.org/recipes/hibernate/migratetohypersistenceutilshibernate60"
       options: []
       isImperative: false
@@ -5198,6 +5263,18 @@ rewrite-hibernate:
         \ making it more strictly typed. This recipe applies the changes required\
         \ to adhere to this change."
       docLink: "https://docs.openrewrite.org/recipes/hibernate/migrateusertype"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-hibernate"
+    org.openrewrite.hibernate.RemoveGeneratedValueStrategyWithGenericGenerator:
+      name: "org.openrewrite.hibernate.RemoveGeneratedValueStrategyWithGenericGenerator"
+      description: "Hibernate 7 rejects `@GeneratedValue(strategy = TABLE|SEQUENCE,\
+        \ generator = \"X\")` when `\"X\"` resolves to a `@GenericGenerator` rather\
+        \ than a `@TableGenerator`/`@SequenceGenerator`, and falls back to a plain\
+        \ JPA generator that looks for a table named `\"X\"`. Dropping the `strategy`\
+        \ attribute keeps the custom generator intact and remains compatible with\
+        \ Hibernate 5."
+      docLink: "https://docs.openrewrite.org/recipes/hibernate/removegeneratedvaluestrategywithgenericgenerator"
       options: []
       isImperative: true
       artifactId: "rewrite-hibernate"
@@ -5266,7 +5343,7 @@ rewrite-hibernate:
       artifactId: "rewrite-hibernate"
 rewrite-jackson:
   artifactId: "rewrite-jackson"
-  version: "1.30.1"
+  version: "1.31.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jackson.AddJsonCreatorToPrivateConstructors:
       name: "org.openrewrite.java.jackson.AddJsonCreatorToPrivateConstructors"
@@ -5406,6 +5483,18 @@ rewrite-jackson:
       options: []
       isImperative: true
       artifactId: "rewrite-jackson"
+    org.openrewrite.java.jackson.ModuleStillOnJackson2:
+      name: "org.openrewrite.java.jackson.ModuleStillOnJackson2"
+      description: "Marks the source files of modules that either do not resolve Jackson\
+        \ 3 yet, or still use Jackson 2 types in their own sources or those of their\
+        \ child modules. Modules that already resolve Jackson 3 and no longer use\
+        \ Jackson 2 types are left unmarked, as any Jackson 2 dependencies they still\
+        \ declare are there on purpose, for instance for generated sources that are\
+        \ not part of the LST."
+      docLink: "https://docs.openrewrite.org/recipes/java/jackson/modulestillonjackson2"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-jackson"
     org.openrewrite.java.jackson.ReadValueUrlToOpenStream:
       name: "org.openrewrite.java.jackson.ReadValueUrlToOpenStream"
       description: "Jackson 3.x removed every `URL`-accepting `readValue` overload\
@@ -5415,6 +5504,16 @@ rewrite-jackson:
         \ is unchanged: `URL.openStream()` declares `IOException`, the same checked\
         \ exception the removed `readValue(URL, ...)` declared."
       docLink: "https://docs.openrewrite.org/recipes/java/jackson/readvalueurltoopenstream"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-jackson"
+    org.openrewrite.java.jackson.RemoveBuiltInModuleBeans:
+      name: "org.openrewrite.java.jackson.RemoveBuiltInModuleBeans"
+      description: "Jackson 3 includes Java time, JDK 8 and parameter name support\
+        \ in databind and removes their module classes. Remove Spring `@Bean` methods\
+        \ that only return a new default instance of one of these modules. Customized,\
+        \ overridden or directly referenced factories are left for manual migration."
+      docLink: "https://docs.openrewrite.org/recipes/java/jackson/removebuiltinmodulebeans"
       options: []
       isImperative: true
       artifactId: "rewrite-jackson"
@@ -5559,7 +5658,9 @@ rewrite-jackson:
     org.openrewrite.java.jackson.UpgradeJackson_2_3_Dependencies:
       name: "org.openrewrite.java.jackson.UpgradeJackson_2_3_Dependencies"
       description: "Upgrade Jackson Maven dependencies from 2.x to 3.x versions and\
-        \ update group IDs."
+        \ update group IDs. Modules that already resolve Jackson 3 and no longer use\
+        \ Jackson 2 types in their sources are left as-is, as any Jackson 2 dependencies\
+        \ they still declare are there on purpose."
       docLink: "https://docs.openrewrite.org/recipes/java/jackson/upgradejackson_2_3_dependencies"
       options: []
       isImperative: false
@@ -5738,7 +5839,7 @@ rewrite-jackson:
       artifactId: "rewrite-jackson"
 rewrite-java:
   artifactId: "rewrite-java"
-  version: "8.92.8"
+  version: "8.93.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.AddApache2LicenseHeader:
       name: "org.openrewrite.java.AddApache2LicenseHeader"
@@ -6935,7 +7036,9 @@ rewrite-java:
         \ in use is the lowest version across every source set of every subproject\
         \ in a repository. For example, the main source set of a project may use Java\
         \ 8 while its test source set uses Java 17; in that case the oldest Java version\
-        \ in use is Java 8."
+        \ in use is Java 8. When the minimum is met, the source files at that oldest\
+        \ Java version are found, along with Gradle build scripts and every non-Java\
+        \ source file (such as `pom.xml`), which have no Java version of their own."
       docLink: "https://docs.openrewrite.org/recipes/java/search/hasminimumjavaversion"
       options:
       - name: "checkTargetCompatibility"
@@ -7038,7 +7141,7 @@ rewrite-java:
       artifactId: "rewrite-java"
 rewrite-java-dependencies:
   artifactId: "rewrite-java-dependencies"
-  version: "1.63.0"
+  version: "1.64.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.dependencies.AddDependency:
       name: "org.openrewrite.java.dependencies.AddDependency"
@@ -7099,6 +7202,9 @@ rewrite-java-dependencies:
       docLink: "https://docs.openrewrite.org/recipes/java/dependencies/changedependency"
       options:
       - name: "changeManagedDependency"
+        type: "Boolean"
+        required: false
+      - name: "changePluginDependencies"
         type: "Boolean"
         required: false
       - name: "newArtifactId"
@@ -7493,15 +7599,15 @@ rewrite-java-dependencies:
       artifactId: "rewrite-java-dependencies"
 rewrite-javascript:
   artifactId: "rewrite-javascript"
-  version: "8.92.8"
+  version: "8.93.0"
   markdownRecipeDescriptors:
     org.openrewrite.javascript.AddDependency:
       name: "org.openrewrite.javascript.AddDependency"
       description: "Add an npm dependency to `package.json` and regenerate the lock\
-        \ file by running the package manager. If the dependency already exists in\
-        \ any scope, the recipe is a no-op. Not safe to use as a precondition: invokes\
-        \ the package manager and publishes per-project state shared with other dependency\
-        \ recipes."
+        \ file natively, without executing the package manager. If the dependency\
+        \ already exists in any scope, the recipe is a no-op. Not safe to use as a\
+        \ precondition: consults the package registry over the network and publishes\
+        \ per-project state shared with other dependency recipes."
       docLink: "https://docs.openrewrite.org/recipes/javascript/adddependency"
       options:
       - name: "packageName"
@@ -7519,9 +7625,9 @@ rewrite-javascript:
       name: "org.openrewrite.javascript.ChangeDependency"
       description: "Renames an npm dependency in `package.json` and optionally updates\
         \ its version constraint. After modifying the package.json, the lock file\
-        \ is regenerated by running the package manager. Not safe to use as a precondition:\
-        \ invokes the package manager and publishes per-project state shared with\
-        \ other dependency recipes."
+        \ is regenerated natively, without executing the package manager. Not safe\
+        \ to use as a precondition: consults the package registry over the network\
+        \ and publishes per-project state shared with other dependency recipes."
       docLink: "https://docs.openrewrite.org/recipes/javascript/changedependency"
       options:
       - name: "newPackageName"
@@ -7541,8 +7647,8 @@ rewrite-javascript:
     org.openrewrite.javascript.RemoveDependency:
       name: "org.openrewrite.javascript.RemoveDependency"
       description: "Remove an npm dependency from `package.json` and regenerate the\
-        \ lock file. If the dependency does not exist in any scope, the recipe is\
-        \ a no-op."
+        \ lock file natively, without executing the package manager. If the dependency\
+        \ does not exist in any scope, the recipe is a no-op."
       docLink: "https://docs.openrewrite.org/recipes/javascript/removedependency"
       options:
       - name: "packageName"
@@ -7556,12 +7662,12 @@ rewrite-javascript:
     org.openrewrite.javascript.UpgradeDependencyVersion:
       name: "org.openrewrite.javascript.UpgradeDependencyVersion"
       description: "Upgrades the version constraint of matching npm dependencies in\
-        \ `package.json` and regenerates the lock file by running the package manager.\
-        \ Matching is by exact package name or glob pattern. v1 uses simple string\
-        \ inequality for the upgrade check (always overwrites). A future version will\
-        \ use semver to skip already-up-to-date constraints. Not safe to use as a\
-        \ precondition: invokes the package manager and publishes per-project state\
-        \ shared with other dependency recipes."
+        \ `package.json` and regenerates the lock file natively, without executing\
+        \ the package manager. Matching is by exact package name or glob pattern.\
+        \ v1 uses simple string inequality for the upgrade check (always overwrites).\
+        \ A future version will use semver to skip already-up-to-date constraints.\
+        \ Not safe to use as a precondition: consults the package registry over the\
+        \ network and publishes per-project state shared with other dependency recipes."
       docLink: "https://docs.openrewrite.org/recipes/javascript/upgradedependencyversion"
       options:
       - name: "newVersion"
@@ -7578,12 +7684,13 @@ rewrite-javascript:
     org.openrewrite.javascript.UpgradeTransitiveDependencyVersion:
       name: "org.openrewrite.javascript.UpgradeTransitiveDependencyVersion"
       description: "Pins or upgrades a transitive npm dependency by adding an override\
-        \ entry to `package.json` and regenerating the lock file. For npm and Bun,\
-        \ adds to the `overrides` field; for Yarn, adds to `resolutions`; for pnpm,\
-        \ adds to `pnpm.overrides`. The override is idempotent — if the entry already\
-        \ exists with the same version, no change is made. Not safe to use as a precondition:\
-        \ invokes the package manager and publishes per-project state shared with\
-        \ other dependency recipes."
+        \ entry to `package.json` and regenerating the lock file natively, without\
+        \ executing the package manager. For npm and Bun, adds to the `overrides`\
+        \ field; for Yarn, adds to `resolutions`; for pnpm, adds to `pnpm.overrides`.\
+        \ The override is idempotent — if the entry already exists with the same version,\
+        \ no change is made. Not safe to use as a precondition: consults the package\
+        \ registry over the network and publishes per-project state shared with other\
+        \ dependency recipes."
       docLink: "https://docs.openrewrite.org/recipes/javascript/upgradetransitivedependencyversion"
       options:
       - name: "dependencyPath"
@@ -7692,9 +7799,10 @@ rewrite-javascript:
       artifactId: "rewrite-javascript"
     org.openrewrite.javascript.migrate.es6.modernize-octal-escape-sequences:
       name: "org.openrewrite.javascript.migrate.es6.modernize-octal-escape-sequences"
-      description: "Convert old-style octal escape sequences (e.g., `\\0`, `\\123`)\
-        \ to modern hex escape sequences (e.g., `\\x00`, `\\x53`) or Unicode escape\
-        \ sequences (e.g., `\\u0000`, `\\u0053`)."
+      description: "Convert legacy octal escape sequences in string literals (e.g.,\
+        \ `\\1`, `\\123`) to hex escape sequences (e.g., `\\x01`, `\\x53`) or Unicode\
+        \ escape sequences (e.g., `\\u0001`, `\\u0053`). The `\\0` escape is left\
+        \ alone unless a digit follows it."
       docLink: "https://docs.openrewrite.org/recipes/javascript/migrate/es6/modernize-octal-escape-sequences"
       options:
       - name: "useUnicodeEscapes"
@@ -7744,9 +7852,19 @@ rewrite-javascript:
         required: false
       isImperative: true
       artifactId: "rewrite-javascript"
+    org.openrewrite.javascript.search.FindVendoredOrBundled:
+      name: "org.openrewrite.javascript.search.FindVendoredOrBundled"
+      description: "Find JavaScript and TypeScript sources that are vendored, bundled\
+        \ or build output, based on their path (`node_modules/`, `bower_components/`,\
+        \ `vendor/`, `dist/`, `*.min.*`, `*.bundle.*`) or a trailing `sourceMappingURL`\
+        \ comment."
+      docLink: "https://docs.openrewrite.org/recipes/javascript/search/findvendoredorbundled"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-javascript"
 rewrite-jenkins:
   artifactId: "rewrite-jenkins"
-  version: "0.38.1"
+  version: "0.38.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3:
       name: "org.openrewrite.java.testing.htmlunit.UpgradeHtmlUnit_3"
@@ -7940,20 +8058,20 @@ rewrite-jenkins:
       artifactId: "rewrite-jenkins"
 rewrite-joda:
   artifactId: "rewrite-joda"
-  version: "0.11.1"
+  version: "0.12.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.joda.time.JodaAbstractInstantToJavaTime:
       name: "org.openrewrite.java.joda.time.JodaAbstractInstantToJavaTime"
       description: "Migrates Joda-Time `AbstractInstant` method calls to their Java\
-        \ time equivalents."
+        \ time equivalents, for both date times and instants."
       docLink: "https://docs.openrewrite.org/recipes/java/joda/time/jodaabstractinstanttojavatime"
       options: []
       isImperative: true
       artifactId: "rewrite-joda"
     org.openrewrite.java.joda.time.JodaDateMidnightToJavaTime:
       name: "org.openrewrite.java.joda.time.JodaDateMidnightToJavaTime"
-      description: "Migrates `org.joda.time.DateMidnight` constructor and `now()`\
-        \ calls to `java.time.LocalDate.now().atStartOfDay(...)`."
+      description: "Migrates `org.joda.time.DateMidnight` constructors and `now()`\
+        \ calls to `java.time.LocalDate.atStartOfDay(...)`."
       docLink: "https://docs.openrewrite.org/recipes/java/joda/time/jodadatemidnighttojavatime"
       options: []
       isImperative: true
@@ -7984,15 +8102,17 @@ rewrite-joda:
       artifactId: "rewrite-joda"
     org.openrewrite.java.joda.time.JodaFormatterToJavaTime:
       name: "org.openrewrite.java.joda.time.JodaFormatterToJavaTime"
-      description: "Migrates Joda-Time `DateTimeFormatter` and `DateTimeFormat` method\
-        \ calls to their Java time equivalents."
+      description: "Migrates Joda-Time `DateTimeFormatter`, `DateTimeFormat` and `ISODateTimeFormat`\
+        \ method calls to their Java time equivalents. Patterns are translated where\
+        \ Joda-Time and `java.time` read a pattern letter differently, and left alone\
+        \ when there is no exact translation."
       docLink: "https://docs.openrewrite.org/recipes/java/joda/time/jodaformattertojavatime"
       options: []
       isImperative: true
       artifactId: "rewrite-joda"
     org.openrewrite.java.joda.time.JodaInstantToJavaTime:
       name: "org.openrewrite.java.joda.time.JodaInstantToJavaTime"
-      description: "Migrates `org.joda.time.Instant` constructor calls to `java.time.Instant.now()`."
+      description: "Migrates `org.joda.time.Instant` constructors and methods to `java.time.Instant`."
       docLink: "https://docs.openrewrite.org/recipes/java/joda/time/jodainstanttojavatime"
       options: []
       isImperative: true
@@ -8021,6 +8141,15 @@ rewrite-joda:
       options: []
       isImperative: true
       artifactId: "rewrite-joda"
+    org.openrewrite.java.joda.time.JodaPropertyToJavaTime:
+      name: "org.openrewrite.java.joda.time.JodaPropertyToJavaTime"
+      description: "Migrates the common uses of Joda-Time properties, such as `dayOfMonth().withMaximumValue()`,\
+        \ `hourOfDay().roundFloorCopy()` and `monthOfYear().getAsText(locale)`, to\
+        \ their `java.time` equivalents."
+      docLink: "https://docs.openrewrite.org/recipes/java/joda/time/jodapropertytojavatime"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-joda"
     org.openrewrite.java.joda.time.JodaTimePeriodToJavaTime:
       name: "org.openrewrite.java.joda.time.JodaTimePeriodToJavaTime"
       description: "Migrates `org.joda.time.Days`, `Hours`, `Minutes`, and `Seconds`\
@@ -8043,7 +8172,7 @@ rewrite-joda:
       artifactId: "rewrite-joda"
 rewrite-json:
   artifactId: "rewrite-json"
-  version: "8.92.8"
+  version: "8.93.0"
   markdownRecipeDescriptors:
     org.openrewrite.json.AddKeyValue:
       name: "org.openrewrite.json.AddKeyValue"
@@ -8195,7 +8324,7 @@ rewrite-json:
       artifactId: "rewrite-json"
 rewrite-kotlin:
   artifactId: "rewrite-kotlin"
-  version: "8.92.8"
+  version: "8.93.0"
   markdownRecipeDescriptors:
     org.openrewrite.kotlin.FindKotlinSources:
       name: "org.openrewrite.kotlin.FindKotlinSources"
@@ -8313,7 +8442,7 @@ rewrite-kotlin:
       artifactId: "rewrite-kotlin"
 rewrite-liberty:
   artifactId: "rewrite-liberty"
-  version: "1.28.1"
+  version: "1.28.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty:
       name: "org.openrewrite.java.liberty.MigrateFromWebSphereToLiberty"
@@ -8421,7 +8550,7 @@ rewrite-liberty:
       artifactId: "rewrite-liberty"
 rewrite-logging-frameworks:
   artifactId: "rewrite-logging-frameworks"
-  version: "3.34.0"
+  version: "3.34.1"
   markdownRecipeDescriptors:
     org.apache.logging.log4j.InlineLog4jApiMethods:
       name: "org.apache.logging.log4j.InlineLog4jApiMethods"
@@ -9643,9 +9772,94 @@ rewrite-logging-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-logging-frameworks"
+rewrite-mainframe:
+  artifactId: "rewrite-mainframe"
+  version: "3.2.1"
+  markdownRecipeDescriptors:
+    org.openrewrite.mainframe.cobol.cleanup.RemoveWithDebuggingMode:
+      name: "org.openrewrite.mainframe.cobol.cleanup.RemoveWithDebuggingMode"
+      description: "Remove debugging mode from SOURCE-COMPUTER paragraphs."
+      docLink: "https://docs.openrewrite.org/recipes/mainframe/cobol/cleanup/removewithdebuggingmode"
+      options:
+      - name: "updateSequenceAreas"
+        type: "Boolean"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-mainframe"
+    org.openrewrite.mainframe.cobol.search.FindCopybook:
+      name: "org.openrewrite.mainframe.cobol.search.FindCopybook"
+      description: "Find all copy statements with the copybook name."
+      docLink: "https://docs.openrewrite.org/recipes/mainframe/cobol/search/findcopybook"
+      options:
+      - name: "copybookName"
+        type: "String"
+        required: false
+      - name: "onlyMissingCopybooks"
+        type: "Boolean"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-mainframe"
+    org.openrewrite.mainframe.cobol.search.FindIndicators:
+      name: "org.openrewrite.mainframe.cobol.search.FindIndicators"
+      description: "Find matching indicators. Currently, this recipe will not mark\
+        \ indicators on copybook code."
+      docLink: "https://docs.openrewrite.org/recipes/mainframe/cobol/search/findindicators"
+      options:
+      - name: "indicator"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-mainframe"
+    org.openrewrite.mainframe.cobol.search.FindReference:
+      name: "org.openrewrite.mainframe.cobol.search.FindReference"
+      description: "Finds an identifier by an exact match or regex pattern in COBOL,\
+        \ copybooks, and/or JCL."
+      docLink: "https://docs.openrewrite.org/recipes/mainframe/cobol/search/findreference"
+      options:
+      - name: "exactMatch"
+        type: "Boolean"
+        required: true
+      - name: "searchTerm"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-mainframe"
+    org.openrewrite.mainframe.cobol.search.FindRelationships:
+      name: "org.openrewrite.mainframe.cobol.search.FindRelationships"
+      description: "Build a list of relationships for diagramming and exploration."
+      docLink: "https://docs.openrewrite.org/recipes/mainframe/cobol/search/findrelationships"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-mainframe"
+    org.openrewrite.mainframe.cobol.search.FindWord:
+      name: "org.openrewrite.mainframe.cobol.search.FindWord"
+      description: "Search for COBOL words based on a search term."
+      docLink: "https://docs.openrewrite.org/recipes/mainframe/cobol/search/findword"
+      options:
+      - name: "exactMatch"
+        type: "Boolean"
+        required: true
+      - name: "searchTerm"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-mainframe"
+    org.openrewrite.mainframe.jcl.search.FindWord:
+      name: "org.openrewrite.mainframe.jcl.search.FindWord"
+      description: "Search for JCL words based on a search term."
+      docLink: "https://docs.openrewrite.org/recipes/mainframe/jcl/search/findword"
+      options:
+      - name: "exactMatch"
+        type: "Boolean"
+        required: true
+      - name: "searchTerm"
+        type: "String"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-mainframe"
 rewrite-maven:
   artifactId: "rewrite-maven"
-  version: "8.92.8"
+  version: "8.93.0"
   markdownRecipeDescriptors:
     org.openrewrite.maven.AddAnnotationProcessor:
       name: "org.openrewrite.maven.AddAnnotationProcessor"
@@ -10038,6 +10252,9 @@ rewrite-maven:
       - name: "changeManagedDependency"
         type: "Boolean"
         required: false
+      - name: "changePluginDependencies"
+        type: "Boolean"
+        required: false
       - name: "newArtifactId"
         type: "String"
         required: false
@@ -10396,13 +10613,25 @@ rewrite-maven:
       options: []
       isImperative: true
       artifactId: "rewrite-maven"
+    org.openrewrite.maven.MigrateToMaven3_10:
+      name: "org.openrewrite.maven.MigrateToMaven3_10"
+      description: "Migrates a project to Maven 3.10. Maven 3.10 rejects some POMs\
+        \ that earlier Maven 3 versions built with a warning, such as POMs with duplicate\
+        \ dependency or plugin declarations. This recipe fixes those POMs and updates\
+        \ an existing Maven wrapper to Maven 3.10."
+      docLink: "https://docs.openrewrite.org/recipes/maven/migratetomaven3_10"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-maven"
     org.openrewrite.maven.MigrateToMaven4:
       name: "org.openrewrite.maven.MigrateToMaven4"
       description: "Migrates Maven POMs from Maven 3 to Maven 4, addressing breaking\
-        \ changes and deprecations. This recipe updates property expressions, lifecycle\
-        \ phases, removes duplicate plugin and dependency declarations, upgrades plugins\
-        \ known to fail under Maven 4, switches repository URLs to HTTPS, and replaces\
-        \ removed properties to ensure compatibility with Maven 4."
+        \ changes and deprecations. This recipe updates property expressions, runs\
+        \ the Maven 3.10 migration (which removes duplicate plugin and dependency\
+        \ declarations and updates an existing Maven wrapper to Maven 3.10), updates\
+        \ lifecycle phases, upgrades plugins known to fail under Maven 4, switches\
+        \ repository URLs to HTTPS, and replaces removed properties to ensure compatibility\
+        \ with Maven 4."
       docLink: "https://docs.openrewrite.org/recipes/maven/migratetomaven4"
       options: []
       isImperative: false
@@ -10714,8 +10943,9 @@ rewrite-maven:
     org.openrewrite.maven.SortDependencies:
       name: "org.openrewrite.maven.SortDependencies"
       description: "Sort dependencies alphabetically by groupId then artifactId. Test-scoped\
-        \ dependencies are sorted after non-test dependencies. Applies to both `<dependencies>`\
-        \ and `<dependencyManagement>` sections."
+        \ dependencies are sorted after non-test dependencies. Imported BOMs retain\
+        \ their original positions. Applies to both `<dependencies>` and `<dependencyManagement>`\
+        \ sections."
       docLink: "https://docs.openrewrite.org/recipes/maven/sortdependencies"
       options: []
       isImperative: true
@@ -11282,7 +11512,7 @@ rewrite-maven:
       artifactId: "rewrite-maven"
 rewrite-micrometer:
   artifactId: "rewrite-micrometer"
-  version: "0.31.1"
+  version: "0.31.2"
   markdownRecipeDescriptors:
     org.openrewrite.micrometer.MicrometerBestPractices:
       name: "org.openrewrite.micrometer.MicrometerBestPractices"
@@ -11342,7 +11572,7 @@ rewrite-micrometer:
       artifactId: "rewrite-micrometer"
 rewrite-micronaut:
   artifactId: "rewrite-micronaut"
-  version: "2.38.1"
+  version: "2.39.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.micronaut.AddAnnotationProcessorPath:
       name: "org.openrewrite.java.micronaut.AddAnnotationProcessorPath"
@@ -11383,6 +11613,22 @@ rewrite-micronaut:
       docLink: "https://docs.openrewrite.org/recipes/java/micronaut/addmicronautretrydependencyifneeded"
       options: []
       isImperative: false
+      artifactId: "rewrite-micronaut"
+    org.openrewrite.java.micronaut.AddMicronautValidationDependencyVersion:
+      name: "org.openrewrite.java.micronaut.AddMicronautValidationDependencyVersion"
+      description: "Supply a compatible version for unmanaged Gradle validation dependencies,\
+        \ reusing the validation version already in use when possible."
+      docLink: "https://docs.openrewrite.org/recipes/java/micronaut/addmicronautvalidationdependencyversion"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-micronaut"
+    org.openrewrite.java.micronaut.AddMicronautValidationProcessor:
+      name: "org.openrewrite.java.micronaut.AddMicronautValidationProcessor"
+      description: "Add the validation annotation processor to each source set that\
+        \ uses validation constraints."
+      docLink: "https://docs.openrewrite.org/recipes/java/micronaut/addmicronautvalidationprocessor"
+      options: []
+      isImperative: true
       artifactId: "rewrite-micronaut"
     org.openrewrite.java.micronaut.AddMicronautWebsocketDependencyIfNeeded:
       name: "org.openrewrite.java.micronaut.AddMicronautWebsocketDependencyIfNeeded"
@@ -11705,7 +11951,7 @@ rewrite-micronaut:
       artifactId: "rewrite-micronaut"
 rewrite-migrate-java:
   artifactId: "rewrite-migrate-java"
-  version: "3.45.0"
+  version: "3.46.0"
   markdownRecipeDescriptors:
     com.google.guava.InlineGuavaMethods:
       name: "com.google.guava.InlineGuavaMethods"
@@ -11755,6 +12001,14 @@ rewrite-migrate-java:
       name: "org.openrewrite.java.jspecify.MigrateFromMicronautAnnotations"
       description: "Migrate from Micronaut Framework annotations to JSpecify."
       docLink: "https://docs.openrewrite.org/recipes/java/jspecify/migratefrommicronautannotations"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.jspecify.MigrateFromSpotBugsAnnotations:
+      name: "org.openrewrite.java.jspecify.MigrateFromSpotBugsAnnotations"
+      description: "Migrate from SpotBugs `edu.umd.cs.findbugs.annotations` annotations\
+        \ to JSpecify."
+      docLink: "https://docs.openrewrite.org/recipes/java/jspecify/migratefromspotbugsannotations"
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
@@ -12482,6 +12736,14 @@ rewrite-migrate-java:
         required: true
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.SimplifySecurityManagerThreadGroup:
+      name: "org.openrewrite.java.migrate.SimplifySecurityManagerThreadGroup"
+      description: "Remove a null SecurityManager local used only by the immediately\
+        \ following thread group conditional."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/simplifysecuritymanagerthreadgroup"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.SunNetSslPackageUnavailable:
       name: "org.openrewrite.java.migrate.SunNetSslPackageUnavailable"
       description: "The internal API `com.sun.net.ssl` is removed. The package was\
@@ -12607,6 +12869,18 @@ rewrite-migrate-java:
         required: true
       isImperative: true
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.UpgradeJavaCiContainerImage:
+      name: "org.openrewrite.java.migrate.UpgradeJavaCiContainerImage"
+      description: "Upgrade cimg/openjdk job containers in GitHub Actions and CircleCI\
+        \ to the target Java version, preserving newer versions and unrelated service\
+        \ images."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/upgradejavacicontainerimage"
+      options:
+      - name: "version"
+        type: "Integer"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.UpgradeJavaVersion:
       name: "org.openrewrite.java.migrate.UpgradeJavaVersion"
       description: "Upgrade build plugin configuration to use the specified Java version.\
@@ -12683,6 +12957,16 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.UpgradeSpringBootParentForJava25:
+      name: "org.openrewrite.java.migrate.UpgradeSpringBootParentForJava25"
+      description: "Upgrade Spring Boot 3 Maven parents to the latest 3.5 release\
+        \ so that Spring's bundled ASM can read Java 25 class files. Stay within Boot\
+        \ 3: crossing from Boot 2 requires a separate Jakarta migration, and newer\
+        \ Boot major versions must not be downgraded."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/upgradespringbootparentforjava25"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.UpgradeToJava17:
       name: "org.openrewrite.java.migrate.UpgradeToJava17"
       description: "This recipe will apply changes commonly needed when migrating\
@@ -12745,6 +13029,18 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.UpgradeUnmodeledMavenJavaVersion:
+      name: "org.openrewrite.java.migrate.UpgradeUnmodeledMavenJavaVersion"
+      description: "Update explicit Java version properties and compiler settings\
+        \ in pom.xml files parsed as XML without a Maven model, for example in a repository\
+        \ built with Gradle. Property references are left intact."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/upgradeunmodeledmavenjavaversion"
+      options:
+      - name: "version"
+        type: "Integer"
+        required: true
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.UseJavaUtilBase64:
       name: "org.openrewrite.java.migrate.UseJavaUtilBase64"
       description: "Prefer `java.util.Base64` instead of using `sun.misc` in Java\
@@ -12776,6 +13072,34 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/wasdevmvnchangeparentartifactid"
       options: []
       isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.awt.JavaAwtAPIs:
+      name: "org.openrewrite.java.migrate.awt.JavaAwtAPIs"
+      description: "Replace calls to AWT and Swing methods deprecated since JDK 1.1\
+        \ with calls to the methods that replaced them, such as `Component#show()`\
+        \ with `Component#setVisible(true)`."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/awt/javaawtapis"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.awt.ReplaceDeprecatedAwtMethod:
+      name: "org.openrewrite.java.migrate.awt.ReplaceDeprecatedAwtMethod"
+      description: "Replace calls to an AWT method deprecated since JDK 1.1 with calls\
+        \ to the method that replaced it. Declarations and `super` calls are left\
+        \ alone: the replacements delegate back to the deprecated methods, so a rewritten\
+        \ `super` call would reach overrides it used to bypass."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/awt/replacedeprecatedawtmethod"
+      options:
+      - name: "booleanArgument"
+        type: "Boolean"
+        required: false
+      - name: "methodPattern"
+        type: "String"
+        required: true
+      - name: "newMethodName"
+        type: "String"
+        required: true
+      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.cobertura.RemoveCoberturaMavenPlugin:
       name: "org.openrewrite.java.migrate.cobertura.RemoveCoberturaMavenPlugin"
@@ -13514,10 +13838,85 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.AddJakartaAnnotationDependency:
+      name: "org.openrewrite.java.migrate.jakarta.AddJakartaAnnotationDependency"
+      description: "Add the migrated API without promoting an explicitly provided\
+        \ or compile-only dependency."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/addjakartaannotationdependency"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.AddJakartaCdiDependency:
+      name: "org.openrewrite.java.migrate.jakarta.AddJakartaCdiDependency"
+      description: "Add the Jakarta CDI API for migrated source without promoting\
+        \ an explicitly provided or compile-only API to a runtime dependency."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/addjakartacdidependency"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.AddJakartaEjbDependency:
+      name: "org.openrewrite.java.migrate.jakarta.AddJakartaEjbDependency"
+      description: "Add the migrated API without promoting an explicitly provided\
+        \ or compile-only dependency."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/addjakartaejbdependency"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.AddJakartaElDependency:
+      name: "org.openrewrite.java.migrate.jakarta.AddJakartaElDependency"
+      description: "Add the migrated API without promoting an explicitly provided\
+        \ or compile-only dependency."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/addjakartaeldependency"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.AddJakartaInjectDependency:
+      name: "org.openrewrite.java.migrate.jakarta.AddJakartaInjectDependency"
+      description: "Add a standalone API only when no explicitly provided API or full\
+        \ platform already supplies it."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/addjakartainjectdependency"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.AddJakartaMailDependency:
+      name: "org.openrewrite.java.migrate.jakarta.AddJakartaMailDependency"
+      description: "Add the migrated API without promoting an explicitly provided\
+        \ or compile-only dependency."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/addjakartamaildependency"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.AddJakartaRestDependency:
+      name: "org.openrewrite.java.migrate.jakarta.AddJakartaRestDependency"
+      description: "Add a standalone API only when no explicitly provided API or full\
+        \ platform already supplies it."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/addjakartarestdependency"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.AddJakartaXmlBindRuntime:
+      name: "org.openrewrite.java.migrate.jakarta.AddJakartaXmlBindRuntime"
+      description: "Add a Jakarta JAXB 3 runtime when a Maven module calls JAXBContext.newInstance\
+        \ and has no explicit JAXB provider or provided Jakarta platform. Java 8's\
+        \ built-in javax provider cannot serve Jakarta calls. Annotation-only modules\
+        \ are left alone and test-only calls receive a test dependency."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/addjakartaxmlbindruntime"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.ApplicationPathWildcardNoLongerAccepted:
       name: "org.openrewrite.java.migrate.jakarta.ApplicationPathWildcardNoLongerAccepted"
       description: "Remove trailing `/*` from `jakarta.ws.rs.ApplicationPath` values."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/applicationpathwildcardnolongeraccepted"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.ChangeJaxbApiDependency:
+      name: "org.openrewrite.java.migrate.jakarta.ChangeJaxbApiDependency"
+      description: "Migrate JAXB API coordinates while preserving the legacy API needed\
+        \ alongside Jakarta JAXB by external Arquillian Recorder 1.x binaries. Recorder\
+        \ modules migrated in the same reactor are excluded."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/changejaxbapidependency"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
@@ -13528,6 +13927,18 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/deprecatedcdiapisremoved40"
       options: []
       isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.DoesNotHaveProvidedApiDependency:
+      name: "org.openrewrite.java.migrate.jakarta.DoesNotHaveProvidedApiDependency"
+      description: "Find build files without an explicitly provided or compile-only\
+        \ API, so adding a compile dependency does not promote a container-provided\
+        \ API to runtime scope."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/doesnothaveprovidedapidependency"
+      options:
+      - name: "coordinates"
+        type: "List"
+        required: true
+      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.EhcacheJavaxToJakarta:
       name: "org.openrewrite.java.migrate.jakarta.EhcacheJavaxToJakarta"
@@ -13584,12 +13995,30 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.HasJettyDependency:
+      name: "org.openrewrite.java.migrate.jakarta.HasJettyDependency"
+      description: "Mark the source set when a Maven or Gradle module depends on servlet\
+        \ or WebSocket artifacts relocated by the Jetty 12 migration. This permits\
+        \ updating the Java baseline in parent build files as well as the module using\
+        \ Jetty."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/hasjettydependency"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.HasNoJakartaAnnotations:
       name: "org.openrewrite.java.migrate.jakarta.HasNoJakartaAnnotations"
       description: "Mark all source as found per `JavaProject` where no Jakarta annotations\
         \ are found. This is useful mostly as a precondition for recipes that require\
         \ Jakarta annotations to be present."
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/hasnojakartaannotations"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.InvocationContextGetConstructor:
+      name: "org.openrewrite.java.migrate.jakarta.InvocationContextGetConstructor"
+      description: "Delegate getConstructor() when a legacy InvocationContext wrapper\
+        \ delegates getMethod()."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/invocationcontextgetconstructor"
       options: []
       isImperative: true
       artifactId: "rewrite-migrate-java"
@@ -13601,6 +14030,14 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/jacksonjavaxtojakarta"
       options: []
       isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.JacksonProviderOverrides:
+      name: "org.openrewrite.java.migrate.jakarta.JacksonProviderOverrides"
+      description: "Add and forward the default view parameter required by Jakarta\
+        \ Jackson providers."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/jacksonprovideroverrides"
+      options: []
+      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.JakartaEE10:
       name: "org.openrewrite.java.migrate.jakarta.JakartaEE10"
@@ -13885,6 +14322,14 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.JavaxRuntimeTypeNamesToJakarta:
+      name: "org.openrewrite.java.migrate.jakarta.JavaxRuntimeTypeNamesToJakarta"
+      description: "Migrate CDI, EJB, Servlet and resource annotation names used for\
+        \ reflective lookup and annotation matching while retaining Java SE type names."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/javaxruntimetypenamestojakarta"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.JavaxSecurityToJakartaSecurity:
       name: "org.openrewrite.java.migrate.jakarta.JavaxSecurityToJakartaSecurity"
       description: "Java EE has been rebranded to Jakarta EE, necessitating a package\
@@ -13987,6 +14432,24 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/javaxxmlwsmigrationtojakartaxmlws"
       options: []
       isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.JerseyLoggingFilterToFeature:
+      name: "org.openrewrite.java.migrate.jakarta.JerseyLoggingFilterToFeature"
+      description: "Replace the removed Jersey `LoggingFilter(Logger, boolean)` constructor\
+        \ when passed directly to JAX-RS `Configurable.register`, preserving the logger\
+        \ and entity logging setting. Other usages require manual migration."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/jerseyloggingfiltertofeature"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.JettyConnectorGetPort:
+      name: "org.openrewrite.java.migrate.jakarta.JettyConnectorGetPort"
+      description: "Jetty 9 moved `getPort()` from `Connector` to `NetworkConnector`.\
+        \ Cast legacy connector receivers to the network connector interface when\
+        \ upgrading Jetty."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/jettyconnectorgetport"
+      options: []
+      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.JettyUpgradeEE10:
       name: "org.openrewrite.java.migrate.jakarta.JettyUpgradeEE10"
@@ -14151,6 +14614,15 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/restassuredjavaxtojakarta"
       options: []
       isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.RetainJaxbApiForArquillianRecorder:
+      name: "org.openrewrite.java.migrate.jakarta.RetainJaxbApiForArquillianRecorder"
+      description: "Retain the legacy JAXB API in Maven modules using Arquillian Recorder\
+        \ 1.x binaries, which still reference javax.xml.bind classes after the application's\
+        \ Jakarta migration."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/retainjaxbapiforarquillianrecorder"
+      options: []
+      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.RetainJaxbApiForJackson:
       name: "org.openrewrite.java.migrate.jakarta.RetainJaxbApiForJackson"
@@ -14349,6 +14821,22 @@ rewrite-migrate-java:
       options: []
       isImperative: false
       artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.UpgradeJavaForJetty12:
+      name: "org.openrewrite.java.migrate.jakarta.UpgradeJavaForJetty12"
+      description: "Update the Java baseline of builds using Jetty to the minimum\
+        \ required by Jetty 12."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/upgradejavaforjetty12"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.UpgradeJettyCoreDependencies:
+      name: "org.openrewrite.java.migrate.jakarta.UpgradeJettyCoreDependencies"
+      description: "Upgrade explicitly declared Jetty core dependencies alongside\
+        \ the relocated servlet dependencies."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/upgradejettycoredependencies"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.UpgradeMavenEjbPluginConfiguration:
       name: "org.openrewrite.java.migrate.jakarta.UpgradeMavenEjbPluginConfiguration"
       description: "Updates the `<ejbVersion>` configuration of `maven-ejb-plugin`\
@@ -14359,6 +14847,14 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/upgrademavenejbpluginconfiguration"
       options: []
       isImperative: true
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.jakarta.WeldToJakarta:
+      name: "org.openrewrite.java.migrate.jakarta.WeldToJakarta"
+      description: "Replace legacy Weld core artifacts and upgrade javax-based Weld\
+        \ implementations to Weld 4, which implements Jakarta CDI 3."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/jakarta/weldtojakarta"
+      options: []
+      isImperative: false
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.jakarta.WsWsocServerContainerDeprecation:
       name: "org.openrewrite.java.migrate.jakarta.WsWsocServerContainerDeprecation"
@@ -14426,6 +14922,29 @@ rewrite-migrate-java:
       docLink: "https://docs.openrewrite.org/recipes/java/migrate/javaee8/servletisrequestedsessionidfromurl"
       options: []
       isImperative: false
+      artifactId: "rewrite-migrate-java"
+    org.openrewrite.java.migrate.javax.AddApiDependencyForImports:
+      name: "org.openrewrite.java.migrate.javax.AddApiDependencyForImports"
+      description: "Add an API dependency to the nearest Maven module importing the\
+        \ package, including imports whose types could not be resolved by the parser\
+        \ because the JDK used to provide them. A module that already has the API\
+        \ in the needed scope, or from a dependency it declares as provided, is left\
+        \ alone."
+      docLink: "https://docs.openrewrite.org/recipes/java/migrate/javax/addapidependencyforimports"
+      options:
+      - name: "artifactId"
+        type: "String"
+        required: true
+      - name: "groupId"
+        type: "String"
+        required: true
+      - name: "packageName"
+        type: "String"
+        required: true
+      - name: "version"
+        type: "String"
+        required: true
+      isImperative: true
       artifactId: "rewrite-migrate-java"
     org.openrewrite.java.migrate.javax.AddColumnAnnotation:
       name: "org.openrewrite.java.migrate.javax.AddColumnAnnotation"
@@ -15966,7 +16485,7 @@ rewrite-migrate-java:
       artifactId: "rewrite-migrate-java"
 rewrite-netty:
   artifactId: "rewrite-netty"
-  version: "0.13.1"
+  version: "0.13.2"
   markdownRecipeDescriptors:
     org.openrewrite.java.netty.EventLoopGroupToMultiThreadIoEventLoopGroupRecipes:
       name: "org.openrewrite.java.netty.EventLoopGroupToMultiThreadIoEventLoopGroupRecipes"
@@ -16053,7 +16572,7 @@ rewrite-netty:
       artifactId: "rewrite-netty"
 rewrite-okhttp:
   artifactId: "rewrite-okhttp"
-  version: "0.25.1"
+  version: "0.25.2"
   markdownRecipeDescriptors:
     org.openrewrite.okhttp.ReorderRequestBodyCreateArguments:
       name: "org.openrewrite.okhttp.ReorderRequestBodyCreateArguments"
@@ -16134,7 +16653,7 @@ rewrite-okhttp:
       artifactId: "rewrite-okhttp"
 rewrite-openapi:
   artifactId: "rewrite-openapi"
-  version: "0.34.1"
+  version: "0.35.0"
   markdownRecipeDescriptors:
     org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings:
       name: "org.openrewrite.openapi.swagger.ConvertApiResponseCodesToStrings"
@@ -16273,7 +16792,7 @@ rewrite-openapi:
       artifactId: "rewrite-openapi"
 rewrite-pmd:
   artifactId: "rewrite-pmd"
-  version: "0.1.3"
+  version: "0.1.4"
   markdownRecipeDescriptors:
     org.openrewrite.java.pmd.AddPmdRule:
       name: "org.openrewrite.java.pmd.AddPmdRule"
@@ -16374,7 +16893,7 @@ rewrite-pmd:
       artifactId: "rewrite-pmd"
 rewrite-prethink:
   artifactId: "rewrite-prethink"
-  version: "1.5.0"
+  version: "1.6.0"
   markdownRecipeDescriptors:
     org.openrewrite.prethink.ExportContext:
       name: "org.openrewrite.prethink.ExportContext"
@@ -16451,7 +16970,7 @@ rewrite-prethink:
       artifactId: "rewrite-prethink"
 rewrite-properties:
   artifactId: "rewrite-properties"
-  version: "8.92.8"
+  version: "8.93.0"
   markdownRecipeDescriptors:
     org.openrewrite.properties.AddProperty:
       name: "org.openrewrite.properties.AddProperty"
@@ -16615,7 +17134,7 @@ rewrite-properties:
       artifactId: "rewrite-properties"
 rewrite-quarkus:
   artifactId: "rewrite-quarkus"
-  version: "2.36.1"
+  version: "2.36.2"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.AddQuarkusProperty:
       name: "org.openrewrite.quarkus.AddQuarkusProperty"
@@ -16883,7 +17402,7 @@ rewrite-quarkus:
       artifactId: "rewrite-quarkus"
 rewrite-rewrite:
   artifactId: "rewrite-rewrite"
-  version: "0.33.0"
+  version: "0.34.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations:
       name: "org.openrewrite.java.jspecify.MigrateFromOpenRewriteAnnotations"
@@ -17253,9 +17772,42 @@ rewrite-rewrite:
       options: []
       isImperative: false
       artifactId: "rewrite-rewrite"
+rewrite-ruby:
+  artifactId: "rewrite-ruby"
+  version: "8.93.0"
+  markdownRecipeDescriptors:
+    org.openrewrite.ruby.migrate.CharacterLiteralToString:
+      name: "org.openrewrite.ruby.migrate.CharacterLiteralToString"
+      description: "In Ruby 1.9 and later, characters are simply strings of length\
+        \ 1. That is, the literal `?A` is the same as the literal `'A'`, and there\
+        \ is really no need for the character literal syntax in new code."
+      docLink: "https://docs.openrewrite.org/recipes/ruby/migrate/characterliteraltostring"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-ruby"
+    org.openrewrite.ruby.migrate.UpgradeToRuby1_9:
+      name: "org.openrewrite.ruby.migrate.UpgradeToRuby1_9"
+      description: "This recipe will apply changes commonly needed when migrating\
+        \ to Ruby 1.9."
+      docLink: "https://docs.openrewrite.org/recipes/ruby/migrate/upgradetoruby1_9"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-ruby"
+rewrite-scala:
+  artifactId: "rewrite-scala"
+  version: "8.93.0"
+  markdownRecipeDescriptors:
+    org.openrewrite.scala.format.AutoFormat:
+      name: "org.openrewrite.scala.format.AutoFormat"
+      description: "Format Scala code using a standard comprehensive set of Scala\
+        \ formatting recipes."
+      docLink: "https://docs.openrewrite.org/recipes/scala/format/autoformat"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-scala"
 rewrite-spring:
   artifactId: "rewrite-spring"
-  version: "6.40.0"
+  version: "6.41.0"
   markdownRecipeDescriptors:
     org.openrewrite.gradle.spring.AddParametersCompilerFlagToGradle:
       name: "org.openrewrite.gradle.spring.AddParametersCompilerFlagToGradle"
@@ -17885,7 +18437,9 @@ rewrite-spring:
       description: "In Spring Boot 2.4, the bootstrap context that loads `bootstrap.yml`\
         \ is [disabled by default](https://docs.spring.io/spring-cloud-config/reference/client.html).\
         \ Its properties should be merged with `application.yml` unless `spring-cloud-starter-bootstrap`\
-        \ is present as a dependency."
+        \ is present as a dependency. Profile-specific `bootstrap-{profile}.yml` files\
+        \ are also merged into their matching `application-{profile}.yml`. A bootstrap\
+        \ file without a matching application file is renamed instead."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/boot2/mergebootstrapyamlwithapplicationyaml"
       options: []
       isImperative: true
@@ -18922,6 +19476,17 @@ rewrite-spring:
       options: []
       isImperative: false
       artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.boot4.AddSpringBootBomForTransitiveDependencyManagement:
+      name: "org.openrewrite.java.spring.boot4.AddSpringBootBomForTransitiveDependencyManagement"
+      description: "Import Spring Boot's BOM ahead of third-party BOMs that still\
+        \ manage an older Spring Boot release."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot4/addspringbootbomfortransitivedependencymanagement"
+      options:
+      - name: "newVersion"
+        type: "String"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-spring"
     org.openrewrite.java.spring.boot4.AddSpringBootStarterDataMongoDbReactiveTest:
       name: "org.openrewrite.java.spring.boot4.AddSpringBootStarterDataMongoDbReactiveTest"
       description: "Adds the dedicated Spring Boot 4.0 reactive Spring Data MongoDB\
@@ -18974,6 +19539,15 @@ rewrite-spring:
         \ annotation style was introduced in jsonschema2pojo 1.3.0, so the plugin\
         \ is upgraded to at least that version first."
       docLink: "https://docs.openrewrite.org/recipes/java/spring/boot4/migratejsonschema2pojotospringboot4"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.boot4.MigrateLiquibasePropertiesApi:
+      name: "org.openrewrite.java.spring.boot4.MigrateLiquibasePropertiesApi"
+      description: "Convert the former String contexts and labels properties to comma-delimited\
+        \ values when passed directly to SpringLiquibase setters, and replace setLabels\
+        \ with setLabelFilter. Already collection-aware code is retained."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot4/migrateliquibasepropertiesapi"
       options: []
       isImperative: true
       artifactId: "rewrite-spring"
@@ -19062,6 +19636,16 @@ rewrite-spring:
       docLink: "https://docs.openrewrite.org/recipes/java/spring/boot4/upgradespringboot_4_0-community-edition"
       options: []
       isImperative: false
+      artifactId: "rewrite-spring"
+    org.openrewrite.java.spring.boot4.UsesSpringBoot:
+      name: "org.openrewrite.java.spring.boot4.UsesSpringBoot"
+      description: "Find every source file of a repository in which some build uses\
+        \ Spring Boot: a Spring Boot dependency, direct or transitive, the Spring\
+        \ Boot Gradle plugin, a Spring Boot parent POM, or an imported `spring-boot-dependencies`\
+        \ BOM. A repository without build files matches."
+      docLink: "https://docs.openrewrite.org/recipes/java/spring/boot4/usesspringboot"
+      options: []
+      isImperative: true
       artifactId: "rewrite-spring"
     org.openrewrite.java.spring.cloud2022.AddLoggingPatternLevelForSleuth:
       name: "org.openrewrite.java.spring.cloud2022.AddLoggingPatternLevelForSleuth"
@@ -20347,7 +20931,7 @@ rewrite-spring:
       artifactId: "rewrite-spring"
 rewrite-spring-to-quarkus:
   artifactId: "rewrite-spring-to-quarkus"
-  version: "0.13.1"
+  version: "0.13.2"
   markdownRecipeDescriptors:
     org.openrewrite.quarkus.spring.AddQuarkusMavenPlugin:
       name: "org.openrewrite.quarkus.spring.AddQuarkusMavenPlugin"
@@ -20874,7 +21458,7 @@ rewrite-spring-to-quarkus:
       artifactId: "rewrite-spring-to-quarkus"
 rewrite-static-analysis:
   artifactId: "rewrite-static-analysis"
-  version: "2.44.0"
+  version: "2.45.0"
   markdownRecipeDescriptors:
     org.openrewrite.recipe.rewrite-static-analysis.InlineDeprecatedMethods:
       name: "org.openrewrite.recipe.rewrite-static-analysis.InlineDeprecatedMethods"
@@ -21355,6 +21939,35 @@ rewrite-static-analysis:
       description: "Adds the `final` modifier keyword to private instance variables\
         \ which are not reassigned."
       docLink: "https://docs.openrewrite.org/recipes/staticanalysis/finalizeprivatefields"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.FindIgnoredCheckReturnValue:
+      name: "org.openrewrite.staticanalysis.FindIgnoredCheckReturnValue"
+      description: "Marks invocations whose result is discarded even though the method\
+        \ is annotated with `@CheckReturnValue`, either directly or through its enclosing\
+        \ class or package. Any annotation named `CheckReturnValue` is recognized,\
+        \ and `@CanIgnoreReturnValue` opts a method or class back out. Ignoring such\
+        \ a result is usually a bug, such as calling a method on an immutable object\
+        \ without using the returned copy. Calls expected to throw, Mockito stubbing\
+        \ and verification, calls on the current instance in custom AssertJ assertion\
+        \ constructors, and code under `@SuppressWarnings(\"CheckReturnValue\")` are\
+        \ not marked."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/findignoredcheckreturnvalue"
+      options:
+      - name: "checkReturnValuePackages"
+        type: "List"
+        required: false
+      isImperative: true
+      artifactId: "rewrite-static-analysis"
+    org.openrewrite.staticanalysis.FindMainWithThrowsClause:
+      name: "org.openrewrite.staticanalysis.FindMainWithThrowsClause"
+      description: "Marks JVM entry-point `main` methods (`public static void main(String[])`\
+        \ or the varargs equivalent) that declare a `throws` clause. Uncaught exceptions\
+        \ from `main` propagate to the JVM's default handler, which just prints the\
+        \ stack trace and returns exit code 1. Handle exceptions explicitly and exit\
+        \ with a meaningful code."
+      docLink: "https://docs.openrewrite.org/recipes/staticanalysis/findmainwiththrowsclause"
       options: []
       isImperative: true
       artifactId: "rewrite-static-analysis"
@@ -22989,7 +23602,7 @@ rewrite-static-analysis:
       artifactId: "rewrite-static-analysis"
 rewrite-testing-frameworks:
   artifactId: "rewrite-testing-frameworks"
-  version: "3.47.0"
+  version: "3.49.0"
   markdownRecipeDescriptors:
     org.openrewrite.java.testing.archunit.ArchUnit0to1Migration:
       name: "org.openrewrite.java.testing.archunit.ArchUnit0to1Migration"
@@ -23519,6 +24132,22 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.assertj.PlaceAssertJDescriptionBeforeAssertion:
+      name: "org.openrewrite.java.testing.assertj.PlaceAssertJDescriptionBeforeAssertion"
+      description: "AssertJ only applies `as(..)`, `describedAs(..)`, `withFailMessage(..)`\
+        \ and `overridingErrorMessage(..)` to assertions that run after them, so when\
+        \ they come last in a chain they are silently ignored. This moves them back\
+        \ past the assertions made on the same assert object, to directly after the\
+        \ call that created it, such as `assertThat(..)` or a navigation like `extracting(..)`.\
+        \ For `assertThatThrownBy(..)` the check that something was thrown has already\
+        \ run by then, so the moved message only applies to the chained checks such\
+        \ as `isInstanceOf(..)`. Note that a moved `withFailMessage(..)` or `overridingErrorMessage(..)`\
+        \ replaces AssertJ's entire failure message, including the expected and actual\
+        \ values."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/assertj/placeassertjdescriptionbeforeassertion"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.assertj.ReturnActual:
       name: "org.openrewrite.java.testing.assertj.ReturnActual"
       description: "Collapse an `assertThat` statement followed by a `return` of the\
@@ -23924,11 +24553,12 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.hamcrest.AddHamcrestIfUsed:
       name: "org.openrewrite.java.testing.hamcrest.AddHamcrestIfUsed"
-      description: "JUnit Jupiter does not include hamcrest as a transitive dependency.\
-        \ If needed, add a direct dependency."
+      description: "JUnit Jupiter does not include Hamcrest as a transitive dependency.\
+        \ Add a direct dependency for existing Hamcrest usage or ExpectedException\
+        \ assertions that generate Hamcrest usage during migration."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/hamcrest/addhamcrestifused"
       options: []
-      isImperative: false
+      isImperative: true
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.hamcrest.AssertThatBooleanToAssertJ:
       name: "org.openrewrite.java.testing.hamcrest.AssertThatBooleanToAssertJ"
@@ -24115,7 +24745,8 @@ rewrite-testing-frameworks:
         \ JUnit Jupiter can be added either with the artifact `junit-jupiter`, or\
         \ both of `junit-jupiter-api` and `junit-jupiter-engine`. This adds `junit-jupiter`\
         \ dependency unless `junit-jupiter-api` or `junit-jupiter-engine` are already\
-        \ present."
+        \ present. Maven projects running dependency analysis receive explicit API,\
+        \ engine and, when used, parameterized-test dependencies."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/junit5/addjupiterdependencies"
       options: []
       isImperative: true
@@ -24136,6 +24767,15 @@ rewrite-testing-frameworks:
       description: "Adds `@BeforeEach`, `@AfterEach`, `@Test` to methods overriding\
         \ superclass methods if the annotations are present on the superclass method."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/junit5/addmissingtestbeforeafterannotations"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.AddMockitoJupiterForRules:
+      name: "org.openrewrite.java.testing.junit5.AddMockitoJupiterForRules"
+      description: "Adds the Mockito Jupiter dependency for annotated MockitoRule\
+        \ and MockitoTestRule fields, matching the project's Mockito version even\
+        \ when Mockito is already up to date."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/junit5/addmockitojupiterforrules"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
@@ -24239,8 +24879,8 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.EnclosedToNested:
       name: "org.openrewrite.java.testing.junit5.EnclosedToNested"
-      description: "Removes the `Enclosed` specification from a class, with `Nested`\
-        \ added to its inner classes by `AddMissingNested`."
+      description: "Replaces the `Enclosed` runner with `@Nested` on its inner test\
+        \ classes, preserving independent static test classes."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/junit5/enclosedtonested"
       options: []
       isImperative: true
@@ -24256,8 +24896,8 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.ExcludeJUnit4UnlessUsingTestcontainers:
       name: "org.openrewrite.java.testing.junit5.ExcludeJUnit4UnlessUsingTestcontainers"
-      description: "Excludes JUnit 4, as it ought not to be necessary in a JUnit 5\
-        \ project, unless Testcontainers is used."
+      description: "Excludes JUnit 4 unless Testcontainers 1.x or Guava testlib requires\
+        \ it at runtime, even when tests use JUnit Jupiter."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/junit5/excludejunit4unlessusingtestcontainers"
       options: []
       isImperative: false
@@ -24267,6 +24907,18 @@ rewrite-testing-frameworks:
       description: "Replace usages of JUnit 4's `@Rule ExpectedException` with JUnit\
         \ 5's `Assertions.assertThrows()`."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/junit5/expectedexceptiontoassertthrows"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.ExpectedSystemExitToCatchSystemExit:
+      name: "org.openrewrite.java.testing.junit5.ExpectedSystemExitToCatchSystemExit"
+      description: "Replaces System Rules' `ExpectedSystemExit` rule with System Stubs'\
+        \ `catchSystemExit(..)`, which runs the rest of the test in a lambda and returns\
+        \ the exit status for an `assertEquals(..)`. Assertions registered through\
+        \ `checkAssertionAfterwards(..)` are inlined after it. Rules that other classes\
+        \ may use, or that set expectations outside of the test method body, get a\
+        \ `TODO` comment instead."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/junit5/expectedsystemexittocatchsystemexit"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
@@ -24375,6 +25027,19 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.MigrateSystemRules:
+      name: "org.openrewrite.java.testing.junit5.MigrateSystemRules"
+      description: "Migrates the JUnit 4 rules of System Rules (`com.github.stefanbirkner:system-rules`)\
+        \ as part of the JUnit 4 to 5 migration. System property rules that only take\
+        \ string literals become JUnit Pioneer annotations; the other system property,\
+        \ environment variable, standard stream and standard input rules become System\
+        \ Stubs `@SystemStub` fields, and `ExpectedSystemExit` becomes System Stubs'\
+        \ `catchSystemExit(..)`. Rules that can not be migrated get a `TODO` comment,\
+        \ and System Rules is only removed once nothing uses it."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/junit5/migratesystemrules"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.MockitoJUnitToMockitoExtension:
       name: "org.openrewrite.java.testing.junit5.MockitoJUnitToMockitoExtension"
       description: "Replaces `MockitoJUnit` rules with `MockitoExtension`."
@@ -24439,6 +25104,38 @@ rewrite-testing-frameworks:
       docLink: "https://docs.openrewrite.org/recipes/java/testing/junit5/staticimports"
       options: []
       isImperative: false
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.SystemPropertyRulesToPioneer:
+      name: "org.openrewrite.java.testing.junit5.SystemPropertyRulesToPioneer"
+      description: "Replaces System Rules' `ProvideSystemProperty`, `ClearSystemProperties`\
+        \ and `RestoreSystemProperties` rules with JUnit Pioneer's `@SetSystemProperty`,\
+        \ `@ClearSystemProperty` and `@RestoreSystemProperties` class annotations.\
+        \ Only rules that take string literals and are not used elsewhere in the test\
+        \ are migrated; `SystemRulesToSystemStubs` handles the rest."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/junit5/systempropertyrulestopioneer"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.SystemRulesDependencies:
+      name: "org.openrewrite.java.testing.junit5.SystemRulesDependencies"
+      description: "Adds System Stubs and JUnit Pioneer where the System Rules migration\
+        \ introduces them, upgrades JUnit Pioneer to 2.x in modules that get its `@RestoreSystemProperties`,\
+        \ and removes System Rules from modules that no longer use it."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/junit5/systemrulesdependencies"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.junit5.SystemRulesToSystemStubs:
+      name: "org.openrewrite.java.testing.junit5.SystemRulesToSystemStubs"
+      description: "Replaces System Rules' `ProvideSystemProperty`, `ClearSystemProperties`,\
+        \ `RestoreSystemProperties`, `SystemOutRule`, `SystemErrRule`, `StandardOutputStreamLog`,\
+        \ `StandardErrorStreamLog`, `DisallowWriteToSystemOut`, `DisallowWriteToSystemErr`\
+        \ and `TextFromStandardInputStream` rules with `@SystemStub` fields of the\
+        \ System Stubs JUnit Jupiter extension. A rule is only migrated when every\
+        \ use of it has a System Stubs equivalent; other rules get a `TODO` comment."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/junit5/systemrulestosystemstubs"
+      options: []
+      isImperative: true
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.junit5.TempDirNonFinal:
       name: "org.openrewrite.java.testing.junit5.TempDirNonFinal"
@@ -24663,6 +25360,16 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.AddJUnit4ReplacingPowerMockModule:
+      name: "org.openrewrite.java.testing.mockito.AddJUnit4ReplacingPowerMockModule"
+      description: "Adds `junit:junit` to modules that use JUnit 4 and depend on `powermock-module-junit4`,\
+        \ which brings JUnit 4 in transitively, so that their tests still compile\
+        \ once the PowerMock dependencies are removed. A module that declares `junit:junit`\
+        \ itself is left as it is."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/addjunit4replacingpowermockmodule"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.AddMockitoExtensionIfAnnotationsUsed:
       name: "org.openrewrite.java.testing.mockito.AddMockitoExtensionIfAnnotationsUsed"
       description: "Adds `@ExtendWith(MockitoExtension.class)` to JUnit 5 tests or\
@@ -24756,6 +25463,45 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.DisableUnsupportedPowerMockTests:
+      name: "org.openrewrite.java.testing.mockito.DisableUnsupportedPowerMockTests"
+      description: "Disables tests that reach into private members through PowerMock,\
+        \ which Mockito deliberately does not support, so that the rest of the repository\
+        \ can migrate. The test is annotated `@Disabled`, `@Ignore` or TestNG's `@Ignore`\
+        \ and recorded in a data table as an action item: rework the test not to depend\
+        \ on private members, then re-enable it. A usage outside a test method, such\
+        \ as in a setup method or a class-level annotation, disables the whole class."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/disableunsupportedpowermocktests"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.ExcludeMockitoAllReplacingPowerMock:
+      name: "org.openrewrite.java.testing.mockito.ExcludeMockitoAllReplacingPowerMock"
+      description: "Excludes `mockito-all` from the dependencies that bring it into\
+        \ a module that depends on the PowerMock Mockito API. `mockito-all` is a 1.x-only\
+        \ uber jar with its own `org.mockito.Mockito`, which shadows the one of the\
+        \ Mockito 3.x that replaces PowerMock wherever it comes first on the classpath,\
+        \ so that `Mockito.mockStatic` and `MockedStatic` do not resolve. The Hamcrest\
+        \ 1.1 and Objenesis classes bundled in `mockito-all` go with it. Only the\
+        \ Maven dependencies declared in the module itself are excluded from, not\
+        \ those it inherits from a parent that does not depend on PowerMock. Where\
+        \ `UpgradeMockitoCoreReplacingPowerMock` runs again in a later cycle, it pairs\
+        \ the exclusion with one of `mockito-core`, which is harmless as the module\
+        \ declares the Mockito that replaces PowerMock."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/excludemockitoallreplacingpowermock"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.FlagUnsupportedPowerMockUsage:
+      name: "org.openrewrite.java.testing.mockito.FlagUnsupportedPowerMockUsage"
+      description: "Adds a comment to PowerMock usages that cannot be migrated to\
+        \ Mockito, such as `MemberModifier.suppress`, `PowerMockito.verifyNew` or\
+        \ stubbing private methods. Repositories with such usage are left on PowerMock\
+        \ by `ReplacePowerMockito`, so these need to be migrated manually first."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/flagunsupportedpowermockusage"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.MockConstructionToTryWithResources:
       name: "org.openrewrite.java.testing.mockito.MockConstructionToTryWithResources"
       description: "Wraps `MockedConstruction` variable declarations that have explicit\
@@ -24835,12 +25581,22 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.ModuleDoesNotDeclareJUnit4:
+      name: "org.openrewrite.java.testing.mockito.ModuleDoesNotDeclareJUnit4"
+      description: "Searches for the sources of modules that do not declare `junit:junit`\
+        \ themselves, whether or not another dependency brings it in. Meant as a precondition:\
+        \ adding a dependency to a Maven module that already declares it upgrades\
+        \ the declared version."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/moduledoesnotdeclarejunit4"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.PowerMockRunnerDelegateToRunWith:
       name: "org.openrewrite.java.testing.mockito.PowerMockRunnerDelegateToRunWith"
       description: "Replaces `@RunWith(PowerMockRunner.class)`. If `@PowerMockRunnerDelegate(X.class)`\
         \ is present, promotes the delegate runner to `@RunWith(X.class)`. Otherwise,\
-        \ replaces it with `@RunWith(MockitoJUnitRunner.class)` when the class uses\
-        \ Mockito annotations like `@Mock`, or removes the `@RunWith(PowerMockRunner.class)`\
+        \ replaces it with `@RunWith(MockitoJUnitRunner.Silent.class)` when the class\
+        \ uses Mockito annotations like `@Mock`, or removes the `@RunWith(PowerMockRunner.class)`\
         \ annotation entirely."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/powermockrunnerdelegatetorunwith"
       options: []
@@ -24858,9 +25614,12 @@ rewrite-testing-frameworks:
     org.openrewrite.java.testing.mockito.PowerMockWhiteboxGetInternalStateToJavaReflection:
       name: "org.openrewrite.java.testing.mockito.PowerMockWhiteboxGetInternalStateToJavaReflection"
       description: "Replace `Whitebox.getInternalState(Object, String)` with `java.lang.reflect.Field`\
-        \ access, casting to the declared result type where needed. The field lookup\
-        \ uses `getDeclaredField` on the target object's class, which differs from\
-        \ PowerMock's class-hierarchy traversal for fields inherited from a superclass."
+        \ access, casting to the declared result type where needed. The field is looked\
+        \ up on the class declaring it, found through the target's declared type and\
+        \ its superclasses, which also covers Mockito spies and mocks; when that class\
+        \ cannot be determined, the target's runtime class is used. A call nested\
+        \ in a larger expression is replaced by `field.get(target)`, with the `Field`\
+        \ declared before the enclosing statement."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/powermockwhiteboxgetinternalstatetojavareflection"
       options: []
       isImperative: true
@@ -24889,19 +25648,35 @@ rewrite-testing-frameworks:
     org.openrewrite.java.testing.mockito.PowerMockWhiteboxInvokeMethodToJavaReflection:
       name: "org.openrewrite.java.testing.mockito.PowerMockWhiteboxInvokeMethodToJavaReflection"
       description: "Replace `Whitebox.invokeMethod(Object, String, ..)` with `java.lang.reflect.Method`\
-        \ lookup and `invoke()`. Parameter types are taken from the unambiguously\
-        \ resolved target method, falling back to each argument's compile-time class."
+        \ lookup and `invoke()`. The method is looked up on the class declaring the\
+        \ unambiguously resolved target method, which also covers Mockito spies and\
+        \ mocks, and its parameter types are taken from that method, falling back\
+        \ to the target's runtime class and each argument's compile-time class. A\
+        \ call nested in a larger expression is replaced by `method.invoke(target,\
+        \ ..)`, with the `Method` declared before the enclosing statement."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/powermockwhiteboxinvokemethodtojavareflection"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.PowerMockWhiteboxSetInternalStateToInjectMocks:
+      name: "org.openrewrite.java.testing.mockito.PowerMockWhiteboxSetInternalStateToInjectMocks"
+      description: "Replaces `Whitebox.setInternalState(objectUnderTest, \"field\"\
+        , mock)` with Mockito's own field injection, annotating the object under test\
+        \ with `@InjectMocks`. Only applies when the value is a `@Mock` or `@Spy`\
+        \ field whose name matches the field being set, so that Mockito injects the\
+        \ same mock the call did; other calls are left to the reflection-based recipe."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/powermockwhiteboxsetinternalstatetoinjectmocks"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.PowerMockWhiteboxSetInternalStateToJavaReflection:
       name: "org.openrewrite.java.testing.mockito.PowerMockWhiteboxSetInternalStateToJavaReflection"
       description: "Replace `Whitebox.setInternalState(Object, String, Object)` and\
-        \ `Whitebox.setInternalState(Object, String, Object, Class)` with `java.lang.reflect.Field`\
-        \ access. The 3-arg overload looks up the field on the target's class; the\
-        \ 4-arg where-overload uses the supplied Class to resolve fields declared\
-        \ on a superclass."
+        \ `Whitebox.setInternalState(Object, String, Object, Class)` (and their `Object[]`\
+        \ overloads) with `java.lang.reflect.Field` access. The 3-arg overload looks\
+        \ up the field on the class declaring it, found through the target's declared\
+        \ type and its superclasses, falling back to the target's runtime class; the\
+        \ 4-arg where-overload uses the supplied Class."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/powermockwhiteboxsetinternalstatetojavareflection"
       options: []
       isImperative: true
@@ -24916,6 +25691,16 @@ rewrite-testing-frameworks:
       options: []
       isImperative: false
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.PowerMockitoDoStubbingTargetToMockito:
+      name: "org.openrewrite.java.testing.mockito.PowerMockitoDoStubbingTargetToMockito"
+      description: "Retargets `PowerMockito`'s `doReturn`, `doThrow`, `doAnswer` and\
+        \ `doNothing` to `Mockito`, except in files that still stub a member by name.\
+        \ There `Stubber.when(Object, String, ...)` has no Mockito counterpart, so\
+        \ the whole chain has to stay on PowerMock to keep compiling."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/powermockitodostubbingtargettomockito"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.PowerMockitoDoStubbingToMockito:
       name: "org.openrewrite.java.testing.mockito.PowerMockitoDoStubbingToMockito"
       description: "Replaces PowerMockito's private method stubbing pattern `doNothing().when(instance,\
@@ -24926,16 +25711,24 @@ rewrite-testing-frameworks:
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.PowerMockitoMockStaticToMockito:
       name: "org.openrewrite.java.testing.mockito.PowerMockitoMockStaticToMockito"
-      description: "Replaces `PowerMockito.mockStatic()` by `Mockito.mockStatic()`.\
-        \ Removes the `@PrepareForTest` annotation."
+      description: "Replaces `PowerMockito.mockStatic()` by `Mockito.mockStatic()`,\
+        \ assigning the resulting `MockedStatic` to a field that is closed after each\
+        \ test, so the static mock stays active for exactly the same part of the test\
+        \ as before. Also migrates `PowerMockito.verifyStatic()` and static stubbing,\
+        \ and removes the `@PrepareForTest` annotation."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/powermockitomockstatictomockito"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.PowerMockitoWhenNewToMockito:
       name: "org.openrewrite.java.testing.mockito.PowerMockitoWhenNewToMockito"
-      description: "Replaces `PowerMockito.whenNew` calls with respective `Mockito.whenConstructed`\
-        \ calls."
+      description: "Replaces `PowerMockito.whenNew(Type.class).with...().thenReturn(instance)`\
+        \ with `Mockito.mockConstructionWithAnswer(Type.class, delegatesTo(instance))`,\
+        \ assigned to a field that is closed after each test. Every `Type` constructed\
+        \ while the mock is active delegates to `instance`, so stubbing and verification\
+        \ on `instance` keep working. Constructor argument matchers are not retained,\
+        \ and when the same type is stubbed more than once in a method, the calls\
+        \ are left unchanged."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/powermockitowhennewtomockito"
       options: []
       isImperative: true
@@ -24970,6 +25763,26 @@ rewrite-testing-frameworks:
         \ from test classes, as these are PowerMock-specific base classes not needed\
         \ with Mockito."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/removepowermockclassextensions"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.RemovePowerMockDependencies:
+      name: "org.openrewrite.java.testing.mockito.RemovePowerMockDependencies"
+      description: "Replaces and then removes the PowerMock dependencies. Usage that\
+        \ cannot be migrated has been commented out by `DisableUnsupportedPowerMockTests`,\
+        \ so no code refers to PowerMock by the time this runs. Leaving PowerMock\
+        \ on the classpath is not an option: it registers its own `MockMaker`, which\
+        \ cannot create the static and construction mocks the migrated tests rely\
+        \ on."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/removepowermockdependencies"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.RemovePowerMockRule:
+      name: "org.openrewrite.java.testing.mockito.RemovePowerMockRule"
+      description: "Removes JUnit 4 `@Rule PowerMockRule` fields, which bootstrap\
+        \ PowerMock like the `PowerMockRunner` does, and are not needed with Mockito."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/removepowermockrule"
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
@@ -25042,8 +25855,28 @@ rewrite-testing-frameworks:
     org.openrewrite.java.testing.mockito.ReplacePowerMockito:
       name: "org.openrewrite.java.testing.mockito.ReplacePowerMockito"
       description: "PowerMockito with raw Mockito; best executed as part of a Mockito\
-        \ upgrade."
+        \ upgrade.\n\nTests that mock, stub or verify private members are disabled\
+        \ rather than migrated. Mockito does not support reaching into private state\
+        \ by design, and a test that depends on it is testing an implementation detail,\
+        \ so the intended follow-up is a review that reworks each one to exercise\
+        \ the type through its public API -- not a like-for-like translation. Each\
+        \ disabled test keeps its original body as a comment for that review, is annotated\
+        \ `@Disabled`, `@Ignore` or TestNG's `@Ignore`, and is listed as an action\
+        \ item in the `PowerMockTestsDisabled` data table. Commenting the body out\
+        \ is what lets the PowerMock dependency be removed, so the rest of the repository\
+        \ moves off PowerMock and its tests keep running: PowerMock registers its\
+        \ own Mockito `MockMaker`, which cannot create the static and construction\
+        \ mocks the migrated tests rely on, so the two cannot share a classpath."
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/replacepowermockito"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.ReplacePowerMockitoUsages:
+      name: "org.openrewrite.java.testing.mockito.ReplacePowerMockitoUsages"
+      description: "Replaces the PowerMock API, runners, rules and annotations used\
+        \ in Java sources with their Mockito counterparts, and PowerMock `Whitebox`\
+        \ with Java reflection. Build files are left unchanged."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/replacepowermockitousages"
       options: []
       isImperative: false
       artifactId: "rewrite-testing-frameworks"
@@ -25064,6 +25897,19 @@ rewrite-testing-frameworks:
       docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/thenthrowcheckedexceptiontoruntimeexception"
       options: []
       isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.mockito.UpgradeMockitoCoreReplacingPowerMock:
+      name: "org.openrewrite.java.testing.mockito.UpgradeMockitoCoreReplacingPowerMock"
+      description: "Upgrades an explicitly declared `mockito-core` to at least the\
+        \ Mockito 3.x that replaces the PowerMock Mockito API. An older `mockito-core`\
+        \ would otherwise take precedence over the one `mockito-inline` depends on,\
+        \ so that `Mockito.mockStatic` and `MockedStatic` do not resolve. `mockito-all`\
+        \ is a 1.x-only uber jar with no 3.x release, so it becomes `mockito-core`\
+        \ first. A declared `mockito-inline` is upgraded as well, as before 3.4 it\
+        \ depends on a `mockito-core` without `Mockito.mockStatic`."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/mockito/upgrademockitocorereplacingpowermock"
+      options: []
+      isImperative: false
       artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.mockito.VerifyZeroToNoMoreInteractions:
       name: "org.openrewrite.java.testing.mockito.VerifyZeroToNoMoreInteractions"
@@ -25332,6 +26178,105 @@ rewrite-testing-frameworks:
       options: []
       isImperative: true
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.wiremock.MigrateContentTypeHeaderCharset:
+      name: "org.openrewrite.java.testing.wiremock.MigrateContentTypeHeaderCharset"
+      description: "WireMock 3's `ContentTypeHeader.charset()` fell back to `UTF_8`\
+        \ when the header was missing or carried no charset, while 4.x returns an\
+        \ `Optional` that is empty in those cases. Append `orElse(StandardCharsets.UTF_8)`\
+        \ so the value stays what it was; reaching for `get()` or `orElse(null)` instead,\
+        \ which is the easy way to make the compiler happy, would turn a missing charset\
+        \ into an exception or a null."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/wiremock/migratecontenttypeheadercharset"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.wiremock.MigrateRequestMethodIsOneOf:
+      name: "org.openrewrite.java.testing.wiremock.MigrateRequestMethodIsOneOf"
+      description: "WireMock 3's `isOneOf` was an instance method answering whether\
+        \ the method was one of those given. In 4.x it is static and builds a matcher\
+        \ instead, so `method.isOneOf(GET, POST)` quietly stops being a boolean. Rewrite\
+        \ it as `RequestMethod.isOneOf(GET, POST).match(method).isExactMatch()`, which\
+        \ asks the same question of the new API."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/wiremock/migraterequestmethodisoneof"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.wiremock.MigrateStubMappingUuidToId:
+      name: "org.openrewrite.java.testing.wiremock.MigrateStubMappingUuidToId"
+      description: "WireMock 3 serialized a stub mapping's identifier as both `id`\
+        \ and `uuid`, but 4.x dropped the redundant `uuid` field. A stub that carries\
+        \ only `uuid` still parses under 4.x, silently getting a randomly generated\
+        \ identifier instead, which breaks anything addressing the stub by id such\
+        \ as `removeStub`, `editStub` or `PUT /__admin/mappings/{id}`. Rename `uuid`\
+        \ to `id`, or drop it where an `id` is already present. Only stub mapping\
+        \ files are considered, meaning JSON below a `mappings` directory holding\
+        \ an object with a `request` or `response` member and a `uuid` holding a UUID."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/wiremock/migratestubmappinguuidtoid"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.wiremock.RemoveDuplicateContentTypeHeader:
+      name: "org.openrewrite.java.testing.wiremock.RemoveDuplicateContentTypeHeader"
+      description: "WireMock 3 ran on Jetty 11, which stripped every `Content-Type`\
+        \ response header but the last, so a stub configured with several of them\
+        \ served only one. WireMock 4 returns all of them, and some clients reject\
+        \ a response carrying more than one. Keep only the last value, which is the\
+        \ one WireMock 3 actually sent. This is a 3 to 4 migration step: run against\
+        \ a project already on 4.x that deliberately serves more than one `Content-Type`,\
+        \ it would drop values that are currently reaching the client."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/wiremock/removeduplicatecontenttypeheader"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.wiremock.RemoveDuplicateContentTypeHeaders:
+      name: "org.openrewrite.java.testing.wiremock.RemoveDuplicateContentTypeHeaders"
+      description: "Collapse duplicate `Content-Type` response headers in both stub\
+        \ files and the Java DSL, but only where the module still depends on WireMock\
+        \ 3.x. Jetty 11 already served a single value there, so dropping the rest\
+        \ changes nothing; against 4.x the extra values really do reach the client,\
+        \ and removing them would."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/wiremock/removeduplicatecontenttypeheaders"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.wiremock.RemoveDuplicateContentTypeStubHeader:
+      name: "org.openrewrite.java.testing.wiremock.RemoveDuplicateContentTypeStubHeader"
+      description: "WireMock 3 ran on Jetty 11, which stripped every `Content-Type`\
+        \ response header but the last, so a stub file listing several of them served\
+        \ only one. WireMock 4 returns all of them, and some clients reject a response\
+        \ carrying more than one. Keep only the last value, which is the one WireMock\
+        \ 3 actually sent. Only JSON below a `mappings` directory is considered, and\
+        \ request header matchers are untouched, since those hold matcher objects\
+        \ rather than plain strings. This is a 3 to 4 migration step: run against\
+        \ a project already on 4.x that deliberately serves more than one `Content-Type`,\
+        \ it would drop values that are currently reaching the client."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/wiremock/removeduplicatecontenttypestubheader"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.wiremock.ReplaceRemovedConstructors:
+      name: "org.openrewrite.java.testing.wiremock.ReplaceRemovedConstructors"
+      description: "WireMock 4 made its primary domain classes immutable, leaving\
+        \ only the canonical all arguments constructor on each and moving everything\
+        \ else behind a builder. Replace the removed convenience constructors of `StubMapping`,\
+        \ `ResponseDefinition`, `RequestPattern` and `WireMock` with the equivalent\
+        \ builder call, and `RequestPattern.everything()` with `RequestPattern.ANYTHING`."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/wiremock/replaceremovedconstructors"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.wiremock.ReplaceSettersWithTransform:
+      name: "org.openrewrite.java.testing.wiremock.ReplaceSettersWithTransform"
+      description: "WireMock 4 made `StubMapping` and `ResponseDefinition` immutable,\
+        \ removing their setters in favour of a builder reached through `transform(Consumer<Builder>)`.\
+        \ Rewrite in place mutation such as `stubMapping.setRequest(pattern);` to\
+        \ `stubMapping = stubMapping.transform(builder -> builder.setRequest(pattern));`,\
+        \ collapsing consecutive setter calls on the same receiver into a single `transform`\
+        \ call."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/wiremock/replacesetterswithtransform"
+      options: []
+      isImperative: true
+      artifactId: "rewrite-testing-frameworks"
     org.openrewrite.java.testing.wiremock.UpgradeWiremockDependencyVersion:
       name: "org.openrewrite.java.testing.wiremock.UpgradeWiremockDependencyVersion"
       description: "Migrate WireMock dependencies from the old `com.github.tomakehurst`\
@@ -25342,9 +26287,20 @@ rewrite-testing-frameworks:
       options: []
       isImperative: false
       artifactId: "rewrite-testing-frameworks"
+    org.openrewrite.java.testing.wiremock.Wiremock3to4Migration:
+      name: "org.openrewrite.java.testing.wiremock.Wiremock3to4Migration"
+      description: "Upgrade WireMock to 4.x, which requires Java 17, ships Jetty 12.1\
+        \ by default, splits JUnit support out into separate modules and makes the\
+        \ primary domain classes immutable. Note that `RequestMethod.GET_OR_HEAD`\
+        \ is a multi method matcher in 4.x rather than a method named `GET_OR_HEAD`,\
+        \ so code reading a name off that particular constant needs a look."
+      docLink: "https://docs.openrewrite.org/recipes/java/testing/wiremock/wiremock3to4migration"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-testing-frameworks"
 rewrite-third-party:
   artifactId: "rewrite-third-party"
-  version: "0.48.0"
+  version: "0.49.0"
   markdownRecipeDescriptors:
     ai.timefold.solver.migration.ChangeVersion:
       name: "ai.timefold.solver.migration.ChangeVersion"
@@ -27041,6 +27997,13 @@ rewrite-third-party:
       options: []
       isImperative: false
       artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus311.WebDependencyLocatorRelocations:
+      name: "io.quarkus.updates.core.quarkus311.WebDependencyLocatorRelocations"
+      description: ""
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus311/webdependencylocatorrelocations"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
     io.quarkus.updates.core.quarkus312.SyncHibernateJpaModelgenVersionWithBOM:
       name: "io.quarkus.updates.core.quarkus312.SyncHibernateJpaModelgenVersionWithBOM"
       description: ""
@@ -27221,6 +28184,14 @@ rewrite-third-party:
       name: "io.quarkus.updates.core.quarkus324.ReplaceOldJpaModelgenAnnotationProcessor"
       description: ""
       docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus324/replaceoldjpamodelgenannotationprocessor"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus325.DevUiSpiRelocations:
+      name: "io.quarkus.updates.core.quarkus325.DevUiSpiRelocations"
+      description: "Rename the Dev UI SPI artifacts quarkus-vertx-http-dev-ui-spi\
+        \ to quarkus-devui-deployment-spi and quarkus-vertx-http-dev-ui-tests to quarkus-devui-test-spi."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus325/devuispirelocations"
       options: []
       isImperative: false
       artifactId: "rewrite-third-party"
@@ -27659,6 +28630,129 @@ rewrite-third-party:
       name: "io.quarkus.updates.core.quarkus39.UpdateConfigRoots"
       description: ""
       docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus39/updateconfigroots"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus40.HibernateORMConfigProperties:
+      name: "io.quarkus.updates.core.quarkus40.HibernateORMConfigProperties"
+      description: "Rename Hibernate ORM configuration properties that were deprecated\
+        \ in Quarkus 3.x and removed in Quarkus 4.0."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus40/hibernateormconfigproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus40.HttpSslConfigProperties:
+      name: "io.quarkus.updates.core.quarkus40.HttpSslConfigProperties"
+      description: "Rename HTTP SSL configuration properties that were deprecated\
+        \ in Quarkus 3.x and removed in Quarkus 4.0."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus40/httpsslconfigproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus40.InfinispanConfigProperties:
+      name: "io.quarkus.updates.core.quarkus40.InfinispanConfigProperties"
+      description: "Rename Infinispan configuration properties that were deprecated\
+        \ in Quarkus 3.x and removed in Quarkus 4.0."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus40/infinispanconfigproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus40.Jackson3Migration:
+      name: "io.quarkus.updates.core.quarkus40.Jackson3Migration"
+      description: "Jackson 3.x uses new package names (tools.jackson instead of com.fasterxml.jackson),\
+        \ new group IDs, and includes various API changes. This recipe applies the\
+        \ OpenRewrite Jackson 2 to 3 migration."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus40/jackson3migration"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus40.JavaVersion21:
+      name: "io.quarkus.updates.core.quarkus40.JavaVersion21"
+      description: "Change maven.compiler.source and maven.compiler.target values\
+        \ to 21."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus40/javaversion21"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus40.KeycloakPolicyEnforcerConfigProperties:
+      name: "io.quarkus.updates.core.quarkus40.KeycloakPolicyEnforcerConfigProperties"
+      description: "Rename Keycloak Policy Enforcer configuration properties that\
+        \ were deprecated in Quarkus 3.x and removed in Quarkus 4.0."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus40/keycloakpolicyenforcerconfigproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus40.KubernetesConfigProperties:
+      name: "io.quarkus.updates.core.quarkus40.KubernetesConfigProperties"
+      description: "Rename Kubernetes configuration properties that were deprecated\
+        \ in Quarkus 3.x and removed in Quarkus 4.0."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus40/kubernetesconfigproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus40.MailerConfigProperties:
+      name: "io.quarkus.updates.core.quarkus40.MailerConfigProperties"
+      description: "Rename Mailer configuration properties that were deprecated in\
+        \ Quarkus 3.x and removed in Quarkus 4.0."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus40/mailerconfigproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus40.MicrometerConfigProperties:
+      name: "io.quarkus.updates.core.quarkus40.MicrometerConfigProperties"
+      description: "Rename Micrometer configuration properties that were deprecated\
+        \ in Quarkus 3.x and removed in Quarkus 4.0."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus40/micrometerconfigproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus40.MiscConfigProperties:
+      name: "io.quarkus.updates.core.quarkus40.MiscConfigProperties"
+      description: "Rename miscellaneous configuration properties that were deprecated\
+        \ in Quarkus 3.x and removed in Quarkus 4.0."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus40/miscconfigproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus40.OidcConfigProperties:
+      name: "io.quarkus.updates.core.quarkus40.OidcConfigProperties"
+      description: "Rename OIDC configuration properties that were deprecated in Quarkus\
+        \ 3.x and removed in Quarkus 4.0."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus40/oidcconfigproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus40.RedisCacheConfigProperties:
+      name: "io.quarkus.updates.core.quarkus40.RedisCacheConfigProperties"
+      description: "Rename Redis Cache configuration properties that were deprecated\
+        \ in Quarkus 3.x and removed in Quarkus 4.0."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus40/rediscacheconfigproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus40.RestClientConfigProperties:
+      name: "io.quarkus.updates.core.quarkus40.RestClientConfigProperties"
+      description: "Rename REST Client configuration properties that were deprecated\
+        \ in Quarkus 3.x and removed in Quarkus 4.0."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus40/restclientconfigproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus40.SmallRyeConfigProperties:
+      name: "io.quarkus.updates.core.quarkus40.SmallRyeConfigProperties"
+      description: "Rename SmallRye configuration properties that were deprecated\
+        \ in Quarkus 3.x and removed in Quarkus 4.0."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus40/smallryeconfigproperties"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    io.quarkus.updates.core.quarkus40.UpgradeToJava21:
+      name: "io.quarkus.updates.core.quarkus40.UpgradeToJava21"
+      description: "This recipe will apply changes commonly needed when migrating\
+        \ to Java 21. Build files will be updated to use Java 21 as the target/source\
+        \ and plugins will be also be upgraded to versions that are compatible with\
+        \ Java 21.\n"
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/updates/core/quarkus40/upgradetojava21"
       options: []
       isImperative: false
       artifactId: "rewrite-third-party"
@@ -29693,6 +30787,13 @@ rewrite-third-party:
       name: "org.openrewrite.quarkus.MigrateToQuarkus_v3_9_0"
       description: "Quarkus update recipes to upgrade your application to 3.9.0."
       docLink: "https://docs.openrewrite.org/recipes/quarkus/migratetoquarkus_v3_9_0"
+      options: []
+      isImperative: false
+      artifactId: "rewrite-third-party"
+    org.openrewrite.quarkus.MigrateToQuarkus_v4_0_0:
+      name: "org.openrewrite.quarkus.MigrateToQuarkus_v4_0_0"
+      description: "Quarkus update recipes to upgrade your application to 4.0.0."
+      docLink: "https://docs.openrewrite.org/recipes/quarkus/migratetoquarkus_v4_0_0"
       options: []
       isImperative: false
       artifactId: "rewrite-third-party"
@@ -38530,7 +39631,7 @@ rewrite-third-party:
       artifactId: "rewrite-third-party"
 rewrite-toml:
   artifactId: "rewrite-toml"
-  version: "8.92.8"
+  version: "8.93.0"
   markdownRecipeDescriptors:
     org.openrewrite.toml.ChangeKey:
       name: "org.openrewrite.toml.ChangeKey"
@@ -38689,7 +39790,7 @@ rewrite-toml:
       artifactId: "rewrite-toml"
 rewrite-xml:
   artifactId: "rewrite-xml"
-  version: "8.92.8"
+  version: "8.93.0"
   markdownRecipeDescriptors:
     org.openrewrite.xml.AddCommentToXmlTag:
       name: "org.openrewrite.xml.AddCommentToXmlTag"
@@ -39049,7 +40150,7 @@ rewrite-xml:
       artifactId: "rewrite-xml"
 rewrite-yaml:
   artifactId: "rewrite-yaml"
-  version: "8.92.8"
+  version: "8.93.0"
   markdownRecipeDescriptors:
     org.openrewrite.yaml.AddCommentToProperty:
       name: "org.openrewrite.yaml.AddCommentToProperty"
