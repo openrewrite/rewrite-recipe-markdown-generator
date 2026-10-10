@@ -146,26 +146,9 @@ class ChangelogWriter {
             changelog.appendText("## Changed Recipes\n")
 
             for (changedRecipe in changedRecipes) {
-                changelog.appendText("\n* [${changedRecipe.name}](${changedRecipe.docLink}) was changed:")
-                changelog.appendText("\n  * Old Options:")
-
-                if (changedRecipe.oldOptions?.isEmpty() == true) {
-                    changelog.appendText("\n    * `None`")
-                } else {
-                    for (oldOption in changedRecipe.oldOptions!!) {
-                        changelog.appendText("\n    * `${oldOption.name}: { type: ${oldOption.type}, required: ${oldOption.required} }`")
-                    }
-                }
-
-                changelog.appendText("\n  * New Options:")
-
-                if (changedRecipe.newOptions?.isEmpty() == true) {
-                    changelog.appendText("\n    * `None`")
-                } else {
-                    for (newOption in changedRecipe.newOptions!!) {
-                        changelog.appendText("\n    * `${newOption.name}: { type: ${newOption.type}, required: ${newOption.required} }`")
-                    }
-                }
+                changelog.appendText("\n[${changedRecipe.name}](${changedRecipe.docLink}) was changed:\n\n")
+                changelog.appendText(optionChangesTable(changedRecipe.oldOptions.orEmpty(), changedRecipe.newOptions.orEmpty()))
+                changelog.appendText("\n")
             }
         }
     }
@@ -278,6 +261,35 @@ class ChangelogWriter {
     }
 
 }
+
+internal fun optionChangesTable(oldOptions: Set<RecipeOption>, newOptions: Set<RecipeOption>): String {
+    val oldByName = oldOptions.associateBy { it.name }
+    val newByName = newOptions.associateBy { it.name }
+    val rows = (oldByName.keys + newByName.keys).sorted().mapNotNull { name ->
+        val old = oldByName[name]
+        val new = newByName[name]
+        when {
+            old == null -> optionRow(name, code(new!!.type), yesNo(new.required), "Added")
+            new == null -> optionRow(name, code(old.type), yesNo(old.required), "Removed")
+            old == new -> null
+            else -> optionRow(
+                name,
+                if (old.type == new.type) code(new.type) else "${code(old.type)} → ${code(new.type)}",
+                if (old.required == new.required) yesNo(new.required) else "${yesNo(old.required)} → ${yesNo(new.required)}",
+                "Changed"
+            )
+        }
+    }
+    return (listOf("| Option | Type | Required | Change |", "| --- | --- | --- | --- |") + rows)
+        .joinToString("\n", postfix = "\n")
+}
+
+private fun optionRow(name: String, type: String, required: String, change: String) =
+    "| ${code(name)} | $type | $required | $change |"
+
+private fun code(text: String) = "`${text.replace("|", "\\|")}`"
+
+private fun yesNo(value: Boolean) = if (value) "Yes" else "No"
 
 data class ChangedRecipe(
     val artifactId: String,
