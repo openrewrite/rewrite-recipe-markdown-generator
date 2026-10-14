@@ -30,7 +30,8 @@ repositories {
     mavenLocal()
     val codegenomeUsername = providers.gradleProperty("codegenomeUsername").getOrElse("")
     val codegenomePassword = providers.gradleProperty("codegenomePassword").getOrElse("")
-    if (codegenomeUsername.isNotEmpty() && codegenomePassword.isNotEmpty()) {
+    val codegenomeConfigured = codegenomeUsername.isNotEmpty() && codegenomePassword.isNotEmpty()
+    if (codegenomeConfigured) {
         maven {
             name = "codegenome"
             url = uri("https://artifacts.codegenomeproject.org/maven")
@@ -45,10 +46,12 @@ repositories {
         }
     }
     mavenCentral()
-    // Hosts org.openrewrite:plugin, which is not on Maven Central.
-    gradlePluginPortal {
-        content {
-            includeModule("org.openrewrite", "plugin")
+    if (!codegenomeConfigured) {
+        // Only for builds without CGP credentials: the portal stopped receiving org.openrewrite:plugin after 7.41.0.
+        gradlePluginPortal {
+            content {
+                includeModule("org.openrewrite", "plugin")
+            }
         }
     }
 }
