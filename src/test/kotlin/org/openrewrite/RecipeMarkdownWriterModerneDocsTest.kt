@@ -1,10 +1,14 @@
 package org.openrewrite
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import org.openrewrite.config.OptionDescriptor
 import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.config.RecipeExample
@@ -473,6 +477,18 @@ class RecipeMarkdownWriterModerneDocsTest {
         assertThat(shortText.trimEnd()).endsWith("</UsageList>")
         // No stale tail bleeding through from the first, longer write.
         assertThat(shortText).doesNotContain("## Examples", "## Definition", "Composite foo")
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = [true, false])
+    fun frontmatterTitleIsNotHtmlEscaped(forModerneDocs: Boolean, @TempDir dir: Path) {
+        val displayName = "Task runners & \"build\" tools <insights> \\ more"
+        val out = generate(descriptor("org.openrewrite.java.AmpFoo", displayName, "Finds foo."), dir, forModerneDocs)
+
+        val frontmatter = out.substringAfter("---\n").substringBefore("\n---\n")
+        val yaml = ObjectMapper(YAMLFactory()).readValue(frontmatter, Map::class.java)
+        assertThat(yaml["title"]).isEqualTo(displayName)
+        assertThat(yaml["sidebar_label"]).isEqualTo(displayName)
     }
 
     @Test
