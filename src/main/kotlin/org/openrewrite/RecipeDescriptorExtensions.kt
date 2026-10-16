@@ -10,6 +10,14 @@ fun RecipeDescriptor.displayNameEscaped(): String =
         .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1")
         .trim() + edition()
 
+// Frontmatter is shown as plain text (sidebar, breadcrumbs, <title>), so it is YAML-quoted rather than HTML-escaped
+fun RecipeDescriptor.displayNameFrontmatter(): String {
+    val title = displayName
+        .replace(Regex("\\[([^]]+)]\\([^)]+\\)"), "$1")
+        .trim() + edition()
+    return "\"" + title.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
+}
+
 fun RecipeDescriptor.displayNameEscapedMdx(): String =
     escapeMdx(displayName)
         // Always remove URLs in markdown format [text](url)
