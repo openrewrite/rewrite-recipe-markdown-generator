@@ -145,7 +145,7 @@ class RecipeMarkdownWriter(
     ) {
         if (forModerneDocs) { writeModerneComponentRecipe(recipeDescriptor, recipeMarkdownPath, origin, crossCategoryNote); return }
 
-        val formattedRecipeTitle = recipeDescriptor.displayNameEscaped()  // For YAML frontmatter (no curly brace escaping)
+        val frontmatterTitle = recipeDescriptor.displayNameFrontmatter()
         val formattedRecipeTitleMdx = recipeDescriptor.displayNameEscapedMdx()  // For MDX content (with curly brace escaping)
         val formattedRecipeDescription = getFormattedRecipeDescription(recipeDescriptor.description)
         val formattedLongRecipeName = recipeDescriptor.name.replace("_".toRegex(), "\\\\_").trim()
@@ -155,8 +155,8 @@ class RecipeMarkdownWriter(
             write(
                 """
 ---
-title: "${formattedRecipeTitle.replace("&#39;", "'")}"
-sidebar_label: "${formattedRecipeTitle.replace("&#39;", "'")}"
+title: $frontmatterTitle
+sidebar_label: $frontmatterTitle
 ---
 
 import Tabs from '@theme/Tabs';
@@ -991,7 +991,7 @@ ${props.toString().trimEnd()}
         @Suppress("UNUSED_PARAMETER") crossCategoryNote: String?
     ) {
         val name = recipeDescriptor.name
-        val title = recipeDescriptor.displayNameEscaped().replace("&#39;", "'")
+        val title = recipeDescriptor.displayNameFrontmatter()
         val isProprietary = isProprietaryRecipe(name)
         val recipePath = getRecipePath(recipeDescriptor)
 
@@ -1033,8 +1033,8 @@ ${props.toString().trimEnd()}
         newRecipeWriter(recipeMarkdownPath).useAndApply {
             //language=markdown
             writeln("---")
-            writeln("title: \"$title\"")
-            writeln("sidebar_label: \"$title\"")
+            writeln("title: $title")
+            writeln("sidebar_label: $title")
             writeln("hide_title: true")
             writeln("---")
             newLine()
