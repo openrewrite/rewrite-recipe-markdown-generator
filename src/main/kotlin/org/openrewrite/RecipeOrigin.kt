@@ -116,6 +116,7 @@ class RecipeOrigin(
 
     fun versionPlaceholderKey() = versionPlaceholderKey(groupId, artifactId)
 
+    fun repositoryTreeUrl() = repositoryUrl.replaceFirst("/blob/", "/tree/")
     fun issueTrackerUrl() = repositoryUrl.replace(Regex("/blob/main/.*"), "/issues")
     fun releaseUrl(version: String) = repositoryUrl.replace(Regex("/blob/main/.*"), "/releases/tag/${version}")
 

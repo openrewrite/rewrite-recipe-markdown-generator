@@ -121,9 +121,9 @@ class VersionWriter {
                 // Note that these are links to Github releases, not locations on things like Nuget.org or Maven Central currently
                 val repoLink: String
                 if (nugetPackage != null) {
-                    repoLink = "[$nugetPackage](${origin.repositoryUrl})"
+                    repoLink = "[$nugetPackage](${origin.repositoryTreeUrl()})"
                 } else {
-                    repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.repositoryUrl})"
+                    repoLink = "[${origin.groupId}:${origin.artifactId}](${origin.repositoryTreeUrl()})"
                 }
                 val releaseLink = "[${origin.version}](${origin.releaseUrl(origin.version)})"
                 writeln("| ${repoLink.padEnd(117)} | ${releaseLink.padEnd(90)} | ${origin.license.markdown()} |")

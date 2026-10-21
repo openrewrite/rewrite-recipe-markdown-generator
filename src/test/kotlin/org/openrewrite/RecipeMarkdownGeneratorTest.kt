@@ -101,6 +101,22 @@ class RecipeMarkdownGeneratorTest {
     }
 
     @Test
+    fun latestVersionsLinkModulesToRepositoryTree(@TempDir tempDir: Path) {
+        // given
+        val origin = RecipeOrigin("org.openrewrite.recipe", "rewrite-spring", "5.0.0", URI.create("file:///rewrite-spring.jar"))
+        origin.repositoryUrl = "https://github.com/openrewrite/rewrite-spring/blob/main/"
+        origin.license = Licenses.Apache2
+
+        // when
+        VersionWriter().createLatestVersionsMarkdown(tempDir, listOf(origin), "8.x", "2.x", "1.x", "6.x", "5.x", forModerneDocs = true)
+
+        // then
+        val out = Files.readString(tempDir.resolve("latest-versions-of-every-openrewrite-module.md"))
+        assertThat(out).contains("[org.openrewrite.recipe:rewrite-spring](https://github.com/openrewrite/rewrite-spring/tree/main/)")
+        assertThat(out).doesNotContain("rewrite-spring/blob/")
+    }
+
+    @Test
     fun jarInstallFollowsTheJarRecipeManifest(@TempDir tempDir: Path) {
         fun jar(name: String, recipesCsv: String?): URI {
             val jar = tempDir.resolve("$name.jar")
