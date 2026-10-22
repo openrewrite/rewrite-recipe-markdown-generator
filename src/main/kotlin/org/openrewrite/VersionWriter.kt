@@ -266,8 +266,16 @@ class VersionWriter {
                 </TabItem>
                 <TabItem value="gradle" label="Gradle">
 
-                Keep Maven Central alongside it. The Code Genome Project hosts only `org/openrewrite` and
-                `io/moderne`, so OpenRewrite's own transitive dependencies still resolve from Maven Central.
+                Keep the credentials out of the build script by putting them in `~/.gradle/gradle.properties`:
+
+                ```properties title="~/.gradle/gradle.properties"
+                codegenomeUsername=USERNAME
+                codegenomePassword=TOKEN
+                ```
+
+                Then declare the repository, keeping Maven Central alongside it. The Code Genome Project hosts
+                only `org/openrewrite` and `io/moderne`, so OpenRewrite's own transitive dependencies still
+                resolve from Maven Central.
 
                 ```kotlin title="build.gradle.kts"
                 repositories {
@@ -275,8 +283,8 @@ class VersionWriter {
                     maven {
                         url = uri("https://artifacts.codegenomeproject.org/maven")
                         credentials {
-                            username = "USERNAME"
-                            password = "TOKEN"
+                            username = providers.gradleProperty("codegenomeUsername").get()
+                            password = providers.gradleProperty("codegenomePassword").get()
                         }
                     }
                 }
@@ -288,8 +296,8 @@ class VersionWriter {
                     maven {
                         url = 'https://artifacts.codegenomeproject.org/maven'
                         credentials {
-                            username = 'USERNAME'
-                            password = 'TOKEN'
+                            username = providers.gradleProperty('codegenomeUsername').get()
+                            password = providers.gradleProperty('codegenomePassword').get()
                         }
                     }
                 }
