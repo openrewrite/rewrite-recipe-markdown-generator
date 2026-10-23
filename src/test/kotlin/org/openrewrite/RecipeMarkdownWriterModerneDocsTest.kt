@@ -454,6 +454,53 @@ class RecipeMarkdownWriterModerneDocsTest {
     }
 
     @Test
+    fun moderneDocsKeepsParagraphsAndAllowedHtmlTagsInDescription(@TempDir dir: Path) {
+        val recipe = descriptor(
+            "org.openrewrite.java.CardsFoo", "Cards foo",
+            """
+            A DevCenter with one card. Compare a < b and {c}.
+
+            **Move to Java 25**<br/>
+            The Java version each repository compiles for.<br/><img src="data:image/svg+xml;base64,PHN2Zz4=" alt="Java 8+ to Completed"><br>
+            `Java 8+` → `Completed`
+            """.trimIndent(),
+        )
+        RecipeMarkdownWriter(mutableMapOf(), emptyMap(), emptySet(), forModerneDocs = true)
+            .writeRecipe(recipe, dir, origin())
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        assertThat(out).contains(
+            """
+            <RecipeHeader.Description>
+
+            A DevCenter with one card. Compare a &lt; b and &#123;c}.
+
+            **Move to Java 25**<br />
+            The Java version each repository compiles for.<br /><img src="data:image/svg+xml;base64,PHN2Zz4=" alt="Java 8+ to Completed" /><br />
+            `Java 8+` → `Completed`
+
+            </RecipeHeader.Description>
+            """.trimIndent()
+        )
+        assertThat(out.substringAfter("<RecipeMeta").substringBefore("/>\n")).doesNotContain("<img")
+    }
+
+    @Test
+    fun moderneDocsEscapesHtmlTagsWithDisallowedAttributes(@TempDir dir: Path) {
+        val recipe = descriptor(
+            "org.openrewrite.java.ImgFoo", "Img foo",
+            "Shows <img src=\"x\" onerror=\"alert(1)\"> and <span>text</span>.",
+        )
+        RecipeMarkdownWriter(mutableMapOf(), emptyMap(), emptySet(), forModerneDocs = true)
+            .writeRecipe(recipe, dir, origin())
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        assertThat(out).contains(
+            "<RecipeHeader.Description>Shows &lt;img src=\"x\" onerror=\"alert(1)\"> and &lt;span>text&lt;/span>.</RecipeHeader.Description>",
+        )
+    }
+
+    @Test
     fun moderneDocsTruncatesStaleContentWhenSamePathWrittenTwice(@TempDir dir: Path) {
         // A recipe's native page and a cross-category duplicate of a different recipe can resolve to the
         // same path. The second (shorter) write must fully replace the first, not leave a stale tail that
