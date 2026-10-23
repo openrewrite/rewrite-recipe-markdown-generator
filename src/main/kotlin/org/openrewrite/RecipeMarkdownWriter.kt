@@ -262,15 +262,11 @@ import RunRecipe from '@site/src/components/RunRecipe';
             requireNotNull(recipeSource) { "Could not find source URI for recipe ${recipeDescriptor.name}" }
             val githubUrl = origin.githubUrl(recipeDescriptor.name, recipeSource)
             // Recipe artifacts are distributed through the Code Genome Project, which uses the same path
-            // layout as Maven Central with the group id as a path (dots to slashes), and lists an npm-only
-            // module under its package name instead.
+            // layout as Maven Central with the group id as a path (dots to slashes).
             // These listing pages are public, but a plain `curl` can report 404 on a URL a browser opens
             // fine, so check with an HTML `Accept` header before concluding a link is broken.
-            val codeGenomeUrl = if (TypeScriptRecipeLoader.isNpmOnly(origin.artifactId)) {
-                "https://artifacts.codegenomeproject.org/npm/${getNpmPackageName(origin)}/"
-            } else {
+            val codeGenomeUrl =
                 "https://artifacts.codegenomeproject.org/maven/${origin.groupId.replace('.', '/')}/${origin.artifactId}/"
-            }
             //language=markdown
             writeln(
                 """

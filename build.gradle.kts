@@ -196,6 +196,9 @@ tasks.named<JavaExec>("run").configure {
         arguments.add("--only-artifacts=$recipeArtifacts")
     }
     args = arguments
+    // The npm-only TypeScript recipe modules are published to the Code Genome Project alone.
+    providers.gradleProperty("codegenomeUsername").orNull?.let { environment("CODEGENOME_USERNAME", it) }
+    providers.gradleProperty("codegenomePassword").orNull?.let { environment("CODEGENOME_PASSWORD", it) }
     doFirst {
         logger.lifecycle("Recipe modules: ")
         logger.lifecycle(recipeModules.replace(";", "\n"))
