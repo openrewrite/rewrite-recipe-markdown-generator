@@ -131,6 +131,10 @@ class RecipeMarkdownGenerator : Runnable {
             println("Restricting recipe loading to ${recipeOrigins.size} artifact(s) matching $keep")
         }
 
+        // Synthesize origins for the npm-only TypeScript modules, which are source available and so
+        // belong in both docs.
+        recipeOrigins = recipeOrigins + TypeScriptRecipeLoader.buildVersionAnchorOrigins(keep)
+
         // Synthesize origins for the NuGet-only C# modules and the Go modules so the version table and
         // `nuget install` / `go install` commands below include them, and so their RPC loaders install
         // those same versions. Gated to Moderne docs, since C# and Go are proprietary and excluded from

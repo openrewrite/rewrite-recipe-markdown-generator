@@ -31,8 +31,52 @@ class TypeScriptRecipeLoader(
             "rewrite-javascript" to "@openrewrite/rewrite",
             "rewrite-nodejs" to "@openrewrite/recipes-nodejs",
             "rewrite-angular" to "@openrewrite/recipes-angular",
-            "rewrite-react" to "@openrewrite/recipes-react"
+            "rewrite-react" to "@openrewrite/recipes-react",
+            "recipes-javascript-code-quality" to "@openrewrite/recipes-code-quality",
+            "recipes-javascript-date-libraries" to "@openrewrite/recipes-date-libraries"
         )
+
+        // moderneinc/recipes-javascript publishes these to npm alone, with no Maven artifact; their
+        // coordinates only shape the synthesized origin, and are distinct from the C# `recipes-code-quality`.
+        private val NPM_ONLY_MODULES = setOf(
+            "recipes-javascript-code-quality",
+            "recipes-javascript-date-libraries"
+        )
+        private const val NPM_ONLY_GROUP_ID = "io.moderne.recipe"
+        private const val NPM_ONLY_REPO_URL = "https://github.com/moderneinc/recipes-javascript/blob/main/"
+
+        fun isNpmOnly(artifactId: String) = artifactId in NPM_ONLY_MODULES
+
+        /**
+         * Build [RecipeOrigin]s for the npm-only TypeScript recipe modules, with each package's version
+         * resolved from the npm registry, so they're loaded and listed in the version table and
+         * `npm install` command like the modules that have a Maven artifact to anchor them.
+         *
+         * @param artifactIds when non-empty, restricts to these artifactIds (mirrors `--only-artifacts`
+         *   so local runs don't make needless registry requests).
+         */
+        @JvmStatic
+        fun buildVersionAnchorOrigins(
+            artifactIds: Set<String> = emptySet(),
+            latestVersion: (String) -> String? = ::latestNpmVersion
+        ): Map<URI, RecipeOrigin> {
+            val origins = mutableMapOf<URI, RecipeOrigin>()
+            for (artifactId in NPM_ONLY_MODULES) {
+                if (artifactIds.isNotEmpty() && artifactId !in artifactIds) continue
+                val npmPackage = TYPESCRIPT_RECIPE_MODULES.getValue(artifactId)
+                val version = latestVersion(npmPackage)
+                if (version == null) {
+                    System.err.println("Skipping TypeScript version anchor for $artifactId: could not resolve the latest version of $npmPackage from the npm registry")
+                    continue
+                }
+                val uri = URI.create("typescript-search://$artifactId")
+                val origin = RecipeOrigin(NPM_ONLY_GROUP_ID, artifactId, version, uri)
+                origin.repositoryUrl = NPM_ONLY_REPO_URL
+                origin.license = Licenses.MSAL
+                origins[uri] = origin
+            }
+            return origins
+        }
     }
 
     data class TypeScriptRecipeResult(

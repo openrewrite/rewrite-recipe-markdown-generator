@@ -185,6 +185,25 @@ class RecipeMarkdownWriterModerneDocsTest {
     }
 
     @Test
+    fun npmOnlyRecipeLinksToItsCodeGenomeNpmListing(@TempDir dir: Path) {
+        val origin = TypeScriptRecipeLoader.buildVersionAnchorOrigins(setOf("recipes-javascript-code-quality")) { "0.3.0" }
+            .values.single()
+        val recipe = descriptor(
+            "org.openrewrite.javascript.migrate.es6.ModernizeToES6",
+            "Upgrade ECMAScript 5 to ECMAScript 6", "Upgrades ECMAScript 5 code to ECMAScript 6 syntax.",
+        )
+        val recipeToSource = mapOf(recipe.name to
+                URI.create("typescript-search://recipes-javascript-code-quality/${recipe.name}"))
+        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, setOf(recipe.name), forModerneDocs = false)
+            .writeRecipe(recipe, dir, origin)
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        assertThat(out).contains("[Code Genome Project](https://artifacts.codegenomeproject.org/npm/@openrewrite/recipes-code-quality/)")
+        assertThat(out).contains("repo:moderneinc/recipes-javascript+org.openrewrite.javascript.migrate.es6.ModernizeToES6")
+        assertThat(out).contains("npmPackage=\"@openrewrite/recipes-code-quality\"")
+    }
+
+    @Test
     fun moderneDocsEmitsPinnedPipInstallForPythonRecipe(@TempDir dir: Path) {
         // Uses `rewrite-migrate-python` — a real entry in PythonRecipeLoader.PYTHON_RECIPE_MODULES — so the
         // Usage section pins the pip package to the module's version placeholder, matching the Maven version.
