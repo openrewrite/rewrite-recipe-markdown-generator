@@ -6,6 +6,7 @@ import org.openrewrite.config.RecipeDescriptor
 import org.openrewrite.javascript.rpc.JavaScriptRewriteRpc
 import org.openrewrite.marketplace.RecipeBundle
 import java.net.URI
+import java.nio.file.Files
 import java.nio.file.Path
 
 /**
@@ -31,8 +32,53 @@ class TypeScriptRecipeLoader(
             "rewrite-javascript" to "@openrewrite/rewrite",
             "rewrite-nodejs" to "@openrewrite/recipes-nodejs",
             "rewrite-angular" to "@openrewrite/recipes-angular",
-            "rewrite-react" to "@openrewrite/recipes-react"
+            "rewrite-react" to "@openrewrite/recipes-react",
+            "recipes-javascript-code-quality" to "@openrewrite/recipes-code-quality",
+            "recipes-javascript-date-libraries" to "@openrewrite/recipes-date-libraries"
         )
+
+        // moderneinc/recipes-javascript publishes these proprietary modules to npm alone, with no Maven
+        // artifact; their coordinates only shape the synthesized origin, and are distinct from the C#
+        // `recipes-code-quality`.
+        private val NPM_ONLY_MODULES = setOf(
+            "recipes-javascript-code-quality",
+            "recipes-javascript-date-libraries"
+        )
+        private const val NPM_ONLY_GROUP_ID = "io.moderne.recipe"
+        private const val NPM_ONLY_REPO_URL = "https://github.com/moderneinc/recipes-javascript/blob/main/"
+
+        internal fun isNpmOnly(artifactId: String) = artifactId in NPM_ONLY_MODULES
+
+        /**
+         * Build [RecipeOrigin]s for the npm-only TypeScript recipe modules, with each package's version
+         * resolved from [CodeGenomeNpm], so they're loaded and listed in the version table and
+         * `npm install` command like the modules that have a Maven artifact to anchor them.
+         *
+         * @param artifactIds when non-empty, restricts to these artifactIds (mirrors `--only-artifacts`
+         *   so local runs don't make needless registry requests).
+         */
+        @JvmStatic
+        fun buildVersionAnchorOrigins(
+            artifactIds: Set<String> = emptySet(),
+            latestVersion: (String) -> String? = CodeGenomeNpm::latestVersion
+        ): Map<URI, RecipeOrigin> {
+            val origins = mutableMapOf<URI, RecipeOrigin>()
+            for (artifactId in NPM_ONLY_MODULES) {
+                if (artifactIds.isNotEmpty() && artifactId !in artifactIds) continue
+                val npmPackage = TYPESCRIPT_RECIPE_MODULES.getValue(artifactId)
+                val version = latestVersion(npmPackage)
+                if (version == null) {
+                    System.err.println("Skipping TypeScript version anchor for $artifactId: could not resolve the latest version of $npmPackage from the Code Genome Project")
+                    continue
+                }
+                val uri = URI.create("typescript-search://$artifactId")
+                val origin = RecipeOrigin(NPM_ONLY_GROUP_ID, artifactId, version, uri)
+                origin.repositoryUrl = NPM_ONLY_REPO_URL
+                origin.license = Licenses.Proprietary
+                origins[uri] = origin
+            }
+            return origins
+        }
     }
 
     data class TypeScriptRecipeResult(
@@ -90,13 +136,15 @@ class TypeScriptRecipeLoader(
 
         println("Found ${typeScriptOrigins.size} module(s) with TypeScript recipes: ${typeScriptOrigins.joinToString { it.artifactId }}")
 
+        // An install dir of its own, so the Code Genome Project credentials in its .npmrc never land in
+        // the working directory, where the RPC would install by default.
+        val installDir = recipeInstallDir ?: Files.createTempDirectory("typescript-recipes")
+        val npmrc = CodeGenomeNpm.writeNpmrc(installDir)
         var rpc: JavaScriptRewriteRpc? = null
         try {
             // Build and start the RPC client
             val builder = JavaScriptRewriteRpc.builder()
-            if (recipeInstallDir != null) {
-                builder.recipeInstallDir(recipeInstallDir)
-            }
+            builder.recipeInstallDir(installDir)
 
             rpc = builder.get()
             println("Started Node.js RPC process for TypeScript recipe loading")
@@ -110,7 +158,12 @@ class TypeScriptRecipeLoader(
                     val packageName = getNpmPackageName(origin)
                     println("Installing TypeScript recipes from npm package: $packageName@${origin.version}")
 
-                    val count = rpc.installRecipes(packageName, origin.version)
+                    val versionSpec = if (isNpmOnly(origin.artifactId)) {
+                        CodeGenomeNpm.tarballUrl(packageName, origin.version)
+                    } else {
+                        origin.version
+                    }
+                    val count = rpc.installRecipes(packageName, versionSpec)
                     println("  Installed $count recipe(s) from $packageName")
 
                     val descriptors = rpc.getMarketplace(RecipeBundle("npm", packageName, null, null, null))
@@ -155,6 +208,7 @@ class TypeScriptRecipeLoader(
             // Cleanup: shutdown the RPC process
             rpc?.shutdown()
             println("Shut down Node.js RPC process")
+            npmrc?.let(Files::deleteIfExists)
         }
     }
 }

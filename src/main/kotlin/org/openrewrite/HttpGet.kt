@@ -9,13 +9,13 @@ internal val LENIENT_JSON_MAPPER = jacksonObjectMapper()
     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
 /**
- * GET [url] and [parse] its body, or return `null` (after logging why) if the request fails, the
- * response is unsuccessful or empty, or [parse] throws.
+ * GET [url] with [headers] and [parse] its body, or return `null` (after logging why) if the request
+ * fails, the response is unsuccessful or empty, or [parse] throws.
  */
-internal fun <T> httpGet(url: String, parse: (String) -> T?): T? {
+internal fun <T> httpGet(url: String, headers: Map<String, String> = emptyMap(), parse: (String) -> T?): T? {
     return try {
         OkHttpClient()
-            .newCall(Request.Builder().url(url).build())
+            .newCall(Request.Builder().url(url).apply { headers.forEach(::header) }.build())
             .execute()
             .use { response ->
                 if (!response.isSuccessful) {

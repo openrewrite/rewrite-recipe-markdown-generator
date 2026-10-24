@@ -117,6 +117,9 @@ class VersionWriter {
                 // variant. `*-*` is the NuGet parallel of Maven `LATEST` (newest published,
                 // prereleases included).
                 val nugetPackage = CSharpRecipeLoader.CSHARP_RECIPE_MODULES[origin.artifactId]
+                // Nor do the npm-only TypeScript modules, which install via the `npm` bundle variant.
+                val npmOnlyPackage = TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES[origin.artifactId]
+                    ?.takeIf { TypeScriptRecipeLoader.isNpmOnly(origin.artifactId) }
 
                 // Note that these are links to Github releases, not locations on things like Nuget.org or Maven Central currently
                 val repoLink: String
@@ -186,6 +189,14 @@ class VersionWriter {
                     installRecipes += """
                       $loadCommand: installRecipesUniversal(
                         bundle: { nuget: { packageName: "$nugetPackage", version: "*-*" } }
+                      ) {
+                        id
+                      }"""
+                } else if (npmOnlyPackage != null) {
+                    //language=graphql
+                    installRecipes += """
+                      $loadCommand: installRecipesUniversal(
+                        bundle: { npm: { packageName: "$npmOnlyPackage", version: "latest" } }
                       ) {
                         id
                       }"""

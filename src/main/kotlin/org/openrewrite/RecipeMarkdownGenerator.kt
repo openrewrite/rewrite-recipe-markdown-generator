@@ -131,13 +131,15 @@ class RecipeMarkdownGenerator : Runnable {
             println("Restricting recipe loading to ${recipeOrigins.size} artifact(s) matching $keep")
         }
 
-        // Synthesize origins for the NuGet-only C# modules and the Go modules so the version table and
-        // `nuget install` / `go install` commands below include them, and so their RPC loaders install
-        // those same versions. Gated to Moderne docs, since C# and Go are proprietary and excluded from
-        // the OpenRewrite docs. The Gradle `run` task always passes a Moderne docs directory, so the NuGet
-        // and Go module proxy lookups only stay off the network when the generator is invoked without one.
+        // Synthesize origins for the npm-only TypeScript modules, the NuGet-only C# modules and the Go
+        // modules so the version table and `npm install` / `nuget install` / `go install` commands below
+        // include them, and so their RPC loaders install those same versions. Gated to Moderne docs, since
+        // these modules are proprietary and excluded from the OpenRewrite docs. The Gradle `run` task always
+        // passes a Moderne docs directory, so the registry lookups only stay off the network when the
+        // generator is invoked without one.
         if (moderneOutputPath != null) {
             recipeOrigins = recipeOrigins +
+                TypeScriptRecipeLoader.buildVersionAnchorOrigins(keep) +
                 CSharpRecipeLoader.buildVersionAnchorOrigins(keep) +
                 GoRecipeLoader.buildVersionAnchorOrigins(keep)
         }
