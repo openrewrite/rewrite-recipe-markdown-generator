@@ -22,7 +22,8 @@ class RecipeMarkdownWriter(
     val recipeContainedBy: MutableMap<String, MutableSet<RecipeDescriptor>>,
     val recipeToSource: Map<String, URI>,
     val proprietaryRecipeNames: Set<String>,
-    val forModerneDocs: Boolean = false
+    val forModerneDocs: Boolean = false,
+    val recipeToOrigin: Map<String, RecipeOrigin> = emptyMap()
 ) {
 
     /**
@@ -1272,7 +1273,10 @@ ${props.toString().trimEnd()}
         // JS/Python/C#/Go recipes install from their own package managers; everything else uses the
         // Maven/Gradle coordinates + CLI options.
         when {
-            isJavaScriptRecipe(recipeDescriptor) -> usageMap["npmPackage"] = getNpmPackageName(origin)
+            isJavaScriptRecipe(recipeDescriptor) -> {
+                usageMap["npmPackage"] = getNpmPackageName(origin)
+                addJavaScriptDelegateCompanionJars(usageMap, recipeDescriptor)
+            }
             isPythonRecipe(recipeDescriptor) -> {
                 usageMap["pipPackage"] = getPipPackageName(origin)
                 // Pin the pip package to an explicit version matching the Maven artifact version, except
@@ -1354,6 +1358,28 @@ ${props.toString().trimEnd()}
             )
         )
     }
+
+    /**
+     * Names the jars a JavaScript recipe delegates into, such as `rewrite-javascript`'s, which holds the
+     * Java-side `UpgradeDependencyVersion` the Angular and React upgrades call. An npm install never brings
+     * in a jar, and the CLI resolves delegates eagerly, so a marketplace without it fails the whole run.
+     */
+    private fun addJavaScriptDelegateCompanionJars(usageMap: MutableMap<String, Any?>, recipeDescriptor: RecipeDescriptor) {
+        val companionJars = delegatedRecipes(recipeDescriptor)
+            .filterNot(::isJavaScriptRecipe)
+            .mapNotNull { recipeToOrigin[it.name] }
+            .filter { it.artifactId in TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES }
+            .distinctBy { it.groupId to it.artifactId }
+            .map { mapOf("groupId" to it.groupId, "artifactId" to it.artifactId, "versionKey" to it.versionPlaceholderKey()) }
+            .toList()
+        if (companionJars.isNotEmpty()) {
+            usageMap["companionJars"] = companionJars
+        }
+    }
+
+    private fun delegatedRecipes(recipeDescriptor: RecipeDescriptor): Sequence<RecipeDescriptor> =
+        (recipeDescriptor.recipeList.orEmpty() + recipeDescriptor.preconditions.orEmpty()).asSequence()
+            .flatMap { sequenceOf(it) + delegatedRecipes(it) }
 
     /**
      * Adds the Maven coordinates of a dual-published Python module's jar next to its pip package, pinned

@@ -260,7 +260,10 @@ class RecipeMarkdownGenerator : Runnable {
         // We use two writers: one for OpenRewrite docs (open-source only), one for Moderne docs (all recipes)
         val recipeMarkdownWriter = RecipeMarkdownWriter(recipeContainedBy, recipeToSource, proprietaryRecipeNames, forModerneDocs = false)
         val moderneRecipeMarkdownWriter = if (moderneRecipeCatalogPath != null) {
-            RecipeMarkdownWriter(recipeContainedBy, recipeToSource, proprietaryRecipeNames, forModerneDocs = true)
+            val recipeToOrigin = allRecipeDescriptors.mapNotNull { recipe ->
+                findOrigin(recipeToSource[recipe.name], recipe.name, recipeOrigins)?.let { recipe.name to it }
+            }.toMap()
+            RecipeMarkdownWriter(recipeContainedBy, recipeToSource, proprietaryRecipeNames, forModerneDocs = true, recipeToOrigin)
         } else null
 
         // Every recipe's natural output path in the Moderne catalog (which lists ALL recipes). A
