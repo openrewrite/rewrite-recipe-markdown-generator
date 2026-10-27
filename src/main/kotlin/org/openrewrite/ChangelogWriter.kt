@@ -17,15 +17,15 @@ class ChangelogWriter {
         markdownArtifacts: TreeMap<String, MarkdownRecipeArtifact>,
         recipeCount: Int,
         rewriteBomVersion: String,
-        outputPath: Path
+        outputPath: Path,
+        recipeDescriptorFile: Path
     ) {
         val mapper = ObjectMapper(YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER))
         mapper.registerKotlinModule()
 
         // Read in the old saved recipes for comparison with the latest release
-        val recipeDescriptorFile = "src/main/resources/recipeDescriptors.yml"
         val oldArtifacts: TreeMap<String, MarkdownRecipeArtifact> =
-            mapper.readValue(Path.of(recipeDescriptorFile).toFile())
+            mapper.readValue(recipeDescriptorFile.toFile())
 
         // Build up all the information to make a changelog
         val newArtifacts = getNewArtifacts(markdownArtifacts, oldArtifacts)
@@ -57,7 +57,7 @@ class ChangelogWriter {
 
         // Now that we've compared the versions and built the changelog,
         // write the latest recipe information to a file for next time
-        mapper.writeValue(File(recipeDescriptorFile), markdownArtifacts)
+        mapper.writeValue(recipeDescriptorFile.toFile(), markdownArtifacts)
     }
 
     private fun buildChangelog(
