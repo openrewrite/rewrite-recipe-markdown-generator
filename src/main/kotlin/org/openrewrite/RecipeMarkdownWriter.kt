@@ -22,7 +22,8 @@ class RecipeMarkdownWriter(
     val recipeContainedBy: MutableMap<String, MutableSet<RecipeDescriptor>>,
     val recipeToSource: Map<String, URI>,
     val proprietaryRecipeNames: Set<String>,
-    val forModerneDocs: Boolean = false
+    val forModerneDocs: Boolean = false,
+    val recipeToOrigin: Map<String, RecipeOrigin> = emptyMap()
 ) {
 
     /**
@@ -1047,7 +1048,7 @@ ${props.toString().trimEnd()}
             // RecipeMeta — always emitted
             writeln("<RecipeMeta")
             writeln("  displayName={${mapper.writeValueAsString(recipeDescriptor.displayName)}}")
-            writeln("  description={${mapper.writeValueAsString(description)}}")
+            writeln("  description={${mapper.writeValueAsString(description.replace(IMG_TAG_REGEX, ""))}}")
             writeln("  fqName={${mapper.writeValueAsString(name)}}")
             writeln("  languages={${mapper.writeValueAsString(languages)}}")
             writeln("  license={${mapper.writeValueAsString(licenseText)}}")
@@ -1122,22 +1123,29 @@ ${props.toString().trimEnd()}
     /**
      * Emit a `<RecipeHeader.Title>` / `<RecipeHeader.Description>` slot with its content as markdown
      * children, blank-line-wrapped so MDX parses it. Already-block markdown (fenced code, lists,
-     * headings) is emitted verbatim; inline prose is collapsed to one line with the JSX-significant
-     * characters escaped. Empty content emits nothing (the component falls back gracefully).
+     * headings) is emitted verbatim; prose split into paragraphs keeps its line breaks, and other
+     * inline prose is collapsed to one line, both with the JSX-significant characters escaped. Empty
+     * content emits nothing (the component falls back gracefully).
      */
     private fun BufferedWriter.emitHeaderSlot(tag: String, text: String) {
         val trimmed = text.trim()
         if (trimmed.isEmpty()) return
         if (HEADER_BLOCK_MARKDOWN_REGEX.containsMatchIn(trimmed)) {
-            writeln("<$tag>")
-            newLine()
-            writeln(trimmed)
-            newLine()
-            writeln("</$tag>")
+            emitBlockHeaderSlot(tag, trimmed)
+        } else if (PARAGRAPH_BREAK_REGEX.containsMatchIn(trimmed)) {
+            emitBlockHeaderSlot(tag, mdxSafeInline(trimmed))
         } else {
             writeln("<$tag>${mdxSafeInline(trimmed.replace("\n", " "))}</$tag>")
         }
         newLine()
+    }
+
+    private fun BufferedWriter.emitBlockHeaderSlot(tag: String, markdown: String) {
+        writeln("<$tag>")
+        newLine()
+        writeln(markdown)
+        newLine()
+        writeln("</$tag>")
     }
 
     /**
@@ -1265,7 +1273,10 @@ ${props.toString().trimEnd()}
         // JS/Python/C#/Go recipes install from their own package managers; everything else uses the
         // Maven/Gradle coordinates + CLI options.
         when {
-            isJavaScriptRecipe(recipeDescriptor) -> usageMap["npmPackage"] = getNpmPackageName(origin)
+            isJavaScriptRecipe(recipeDescriptor) -> {
+                usageMap["npmPackage"] = getNpmPackageName(origin)
+                addJavaScriptDelegateCompanionJars(usageMap, recipeDescriptor)
+            }
             isPythonRecipe(recipeDescriptor) -> {
                 usageMap["pipPackage"] = getPipPackageName(origin)
                 // Pin the pip package to an explicit version matching the Maven artifact version, except
@@ -1349,6 +1360,28 @@ ${props.toString().trimEnd()}
     }
 
     /**
+     * Names the jars a JavaScript recipe delegates into, such as `rewrite-javascript`'s, which holds the
+     * Java-side `UpgradeDependencyVersion` the Angular and React upgrades call. An npm install never brings
+     * in a jar, and the CLI resolves delegates eagerly, so a marketplace without it fails the whole run.
+     */
+    private fun addJavaScriptDelegateCompanionJars(usageMap: MutableMap<String, Any?>, recipeDescriptor: RecipeDescriptor) {
+        val companionJars = delegatedRecipes(recipeDescriptor)
+            .filterNot(::isJavaScriptRecipe)
+            .mapNotNull { recipeToOrigin[it.name] }
+            .filter { it.artifactId in TypeScriptRecipeLoader.TYPESCRIPT_RECIPE_MODULES }
+            .distinctBy { it.groupId to it.artifactId }
+            .map { mapOf("groupId" to it.groupId, "artifactId" to it.artifactId, "versionKey" to it.versionPlaceholderKey()) }
+            .toList()
+        if (companionJars.isNotEmpty()) {
+            usageMap["companionJars"] = companionJars
+        }
+    }
+
+    private fun delegatedRecipes(recipeDescriptor: RecipeDescriptor): Sequence<RecipeDescriptor> =
+        (recipeDescriptor.recipeList.orEmpty() + recipeDescriptor.preconditions.orEmpty()).asSequence()
+            .flatMap { sequenceOf(it) + delegatedRecipes(it) }
+
+    /**
      * Adds the Maven coordinates of a dual-published Python module's jar next to its pip package, pinned
      * to the same version key the pip command already resolves.
      */
@@ -1423,24 +1456,47 @@ ${props.toString().trimEnd()}
         // block, a heading, or a list; otherwise it is treated as inline prose.
         private val HEADER_BLOCK_MARKDOWN_REGEX = Regex("```|(^|\\n)#{1,6}\\s|\\n\\s*[-*+]\\s|\\n\\s*\\d+\\.\\s")
 
+        private val PARAGRAPH_BREAK_REGEX = Regex("\\n\\s*\\n")
+
+        // The `<br>` and `<img>` tags the Moderne platform renders in descriptions, restricted to the
+        // attributes it keeps, so they can pass through as JSX instead of being escaped.
+        private val ALLOWED_HTML_TAG_REGEX = Regex(
+            "<br\\s*/?>|<img((?:\\s+(?:src|srcset|alt|title|width|height|loading)=\"[^\"]*\")*)\\s*/?>",
+            RegexOption.IGNORE_CASE
+        )
+        private val IMG_TAG_REGEX = Regex("<img\\s[^>]*>", RegexOption.IGNORE_CASE)
+
         /**
          * Escape the JSX-significant characters (`<` opens a tag, `{` opens an expression) that fall
          * OUTSIDE inline-code spans, so a plain-prose title/description is safe to embed as inline MDX.
-         * Inside `code` spans MDX leaves them literal, so they are passed through unescaped.
+         * Inside `code` spans MDX leaves them literal, so they are passed through unescaped. Allowed
+         * `<br>` and `<img>` tags are kept, self-closed as JSX requires.
          */
         private fun mdxSafeInline(text: String): String {
             val sb = StringBuilder(text.length)
             var inCode = false
-            for (ch in text) {
+            var i = 0
+            while (i < text.length) {
+                val ch = text[i]
+                val allowedTag = if (!inCode && ch == '<') ALLOWED_HTML_TAG_REGEX.matchAt(text, i) else null
                 when {
+                    allowedTag != null -> {
+                        sb.append(selfClosed(allowedTag))
+                        i = allowedTag.range.last + 1
+                        continue
+                    }
                     ch == '`' -> { inCode = !inCode; sb.append(ch) }
                     !inCode && ch == '<' -> sb.append("&lt;")
                     !inCode && ch == '{' -> sb.append("&#123;")
                     else -> sb.append(ch)
                 }
+                i++
             }
             return sb.toString()
         }
+
+        private fun selfClosed(tag: MatchResult): String =
+            if (tag.value.startsWith("<br", ignoreCase = true)) "<br />" else "<img${tag.groupValues[1]} />"
 
         // CLI/YAML option-example formatting (compiled once instead of per option per recipe).
         private val YAML_SPECIAL_START_REGEX = Regex("^[{}\\[\\],`|=%@*!?-].*")

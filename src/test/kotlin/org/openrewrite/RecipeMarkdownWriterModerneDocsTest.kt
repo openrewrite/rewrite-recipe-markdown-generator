@@ -185,6 +185,77 @@ class RecipeMarkdownWriterModerneDocsTest {
     }
 
     @Test
+    fun moderneDocsEmitsCompanionJarForJavaScriptRecipeDelegatingIntoJar(@TempDir dir: Path) {
+        val angularOrigin = RecipeOrigin("io.moderne.recipe", "rewrite-angular", "1.0.0", jar)
+            .apply { license = Licenses.Proprietary }
+        val javascriptOrigin = RecipeOrigin("org.openrewrite", "rewrite-javascript", "8.90.4", jar)
+        val upgradeDependencyVersion = descriptor(
+            "org.openrewrite.javascript.UpgradeDependencyVersion",
+            "Upgrade npm dependency version", "Upgrades npm dependencies.",
+        )
+        val codeChanges = descriptor(
+            "org.openrewrite.angular.UpgradeToAngular10CodeChanges",
+            "Upgrade to Angular 10 (code changes)", "Changes code.",
+            recipeList = listOf(upgradeDependencyVersion),
+        )
+        val recipe = descriptor(
+            "org.openrewrite.angular.UpgradeToAngular10",
+            "Upgrade to Angular 10", "Migrates Angular 9.x applications to Angular 10.",
+            recipeList = listOf(codeChanges, upgradeDependencyVersion),
+        )
+        val recipeToSource = mapOf(
+            recipe.name to URI.create("typescript-search://rewrite-angular/upgrade-to-angular-10"),
+            codeChanges.name to URI.create("typescript-search://rewrite-angular/upgrade-to-angular-10-code-changes"),
+            upgradeDependencyVersion.name to URI.create("jar:file:/tmp/rewrite-javascript.jar!/META-INF/rewrite/javascript.yml"),
+        )
+        val recipeToOrigin = mapOf(
+            recipe.name to angularOrigin,
+            codeChanges.name to angularOrigin,
+            upgradeDependencyVersion.name to javascriptOrigin,
+        )
+        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, setOf(recipe.name), forModerneDocs = true, recipeToOrigin)
+            .writeRecipe(recipe, dir, angularOrigin)
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        assertThat(usageJson(out)).containsEntry("npmPackage", "@openrewrite/recipes-angular")
+        assertThat(usageJson(out)["companionJars"]).isEqualTo(
+            listOf(
+                mapOf(
+                    "groupId" to "org.openrewrite",
+                    "artifactId" to "rewrite-javascript",
+                    "versionKey" to "VERSION_ORG_OPENREWRITE_REWRITE_JAVASCRIPT"
+                )
+            )
+        )
+    }
+
+    @Test
+    fun moderneDocsOmitsCompanionJarForJavaScriptRecipeWithoutJarDelegates(@TempDir dir: Path) {
+        val reactOrigin = RecipeOrigin("io.moderne.recipe", "rewrite-react", "1.0.0", jar)
+            .apply { license = Licenses.Proprietary }
+        val codeChanges = descriptor(
+            "org.openrewrite.react.RenameUnsafeLifecycleMethods",
+            "Rename unsafe lifecycle methods", "Renames methods.",
+        )
+        val recipe = descriptor(
+            "org.openrewrite.react.UpgradeToReact17",
+            "Upgrade to React 17", "Migrates to React 17.",
+            recipeList = listOf(codeChanges),
+        )
+        val recipeToSource = mapOf(
+            recipe.name to URI.create("typescript-search://rewrite-react/upgrade-to-react-17"),
+            codeChanges.name to URI.create("typescript-search://rewrite-react/rename-unsafe-lifecycle-methods"),
+        )
+        val recipeToOrigin = mapOf(recipe.name to reactOrigin, codeChanges.name to reactOrigin)
+        RecipeMarkdownWriter(mutableMapOf(), recipeToSource, setOf(recipe.name), forModerneDocs = true, recipeToOrigin)
+            .writeRecipe(recipe, dir, reactOrigin)
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        assertThat(usageJson(out)).containsEntry("npmPackage", "@openrewrite/recipes-react")
+        assertThat(usageJson(out)).doesNotContainKey("companionJars")
+    }
+
+    @Test
     fun moderneDocsEmitsPinnedPipInstallForPythonRecipe(@TempDir dir: Path) {
         // Uses `rewrite-migrate-python` — a real entry in PythonRecipeLoader.PYTHON_RECIPE_MODULES — so the
         // Usage section pins the pip package to the module's version placeholder, matching the Maven version.
@@ -450,6 +521,53 @@ class RecipeMarkdownWriterModerneDocsTest {
         // `<` outside code is escaped so MDX doesn't read it as a JSX tag.
         assertThat(out).contains(
             "<RecipeHeader.Description>Use `Map<String>` and see [docs](https://example.com/x). Compare a &lt; b.</RecipeHeader.Description>",
+        )
+    }
+
+    @Test
+    fun moderneDocsKeepsParagraphsAndAllowedHtmlTagsInDescription(@TempDir dir: Path) {
+        val recipe = descriptor(
+            "org.openrewrite.java.CardsFoo", "Cards foo",
+            """
+            A DevCenter with one card. Compare a < b and {c}.
+
+            **Move to Java 25**<br/>
+            The Java version each repository compiles for.<br/><img src="data:image/svg+xml;base64,PHN2Zz4=" alt="Java 8+ to Completed"><br>
+            `Java 8+` → `Completed`
+            """.trimIndent(),
+        )
+        RecipeMarkdownWriter(mutableMapOf(), emptyMap(), emptySet(), forModerneDocs = true)
+            .writeRecipe(recipe, dir, origin())
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        assertThat(out).contains(
+            """
+            <RecipeHeader.Description>
+
+            A DevCenter with one card. Compare a &lt; b and &#123;c}.
+
+            **Move to Java 25**<br />
+            The Java version each repository compiles for.<br /><img src="data:image/svg+xml;base64,PHN2Zz4=" alt="Java 8+ to Completed" /><br />
+            `Java 8+` → `Completed`
+
+            </RecipeHeader.Description>
+            """.trimIndent()
+        )
+        assertThat(out.substringAfter("<RecipeMeta").substringBefore("/>\n")).doesNotContain("<img")
+    }
+
+    @Test
+    fun moderneDocsEscapesHtmlTagsWithDisallowedAttributes(@TempDir dir: Path) {
+        val recipe = descriptor(
+            "org.openrewrite.java.ImgFoo", "Img foo",
+            "Shows <img src=\"x\" onerror=\"alert(1)\"> and <span>text</span>.",
+        )
+        RecipeMarkdownWriter(mutableMapOf(), emptyMap(), emptySet(), forModerneDocs = true)
+            .writeRecipe(recipe, dir, origin())
+        val out = Files.readString(Files.walk(dir).filter { it.toString().endsWith(".md") }.findFirst().orElseThrow())
+
+        assertThat(out).contains(
+            "<RecipeHeader.Description>Shows &lt;img src=\"x\" onerror=\"alert(1)\"> and &lt;span>text&lt;/span>.</RecipeHeader.Description>",
         )
     }
 

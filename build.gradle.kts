@@ -195,6 +195,11 @@ tasks.named<JavaExec>("run").configure {
     if (recipeArtifacts.isNotEmpty()) {
         arguments.add("--only-artifacts=$recipeArtifacts")
     }
+    // -PrecipeDescriptors=../rewrite-docs/docs/changelog/recipeDescriptors.yml writes a changelog against
+    // that baseline and updates it; the rewrite-docs workflow keeps the baseline beside the changelogs.
+    providers.gradleProperty("recipeDescriptors").orNull?.let {
+        arguments.add("--recipe-descriptors=${file(it).absolutePath}")
+    }
     args = arguments
     // The npm-only TypeScript recipe modules are published to the Code Genome Project alone.
     providers.gradleProperty("codegenomeUsername").orNull?.let { environment("CODEGENOME_USERNAME", it) }

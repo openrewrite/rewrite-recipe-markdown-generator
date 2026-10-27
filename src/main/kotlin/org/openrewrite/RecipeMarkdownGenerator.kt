@@ -12,6 +12,7 @@ import java.io.BufferedWriter
 import java.io.IOException
 import java.net.URI
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
 import kotlin.system.exitProcess
@@ -100,6 +101,14 @@ class RecipeMarkdownGenerator : Runnable {
             "deliberately lacks one of those toolchains."]
     )
     var allowEmptyRecipeSources: Boolean = false
+
+    @Option(
+        names = ["--recipe-descriptors"],
+        description = ["The recipeDescriptors.yml the last changelog was generated from. The run writes a " +
+            "changelog of what changed since, then overwrites the file with the current catalog. Without it, " +
+            "no changelog is written."]
+    )
+    var recipeDescriptors: Path? = null
 
     override fun run() {
         // OpenRewrite docs output (open-source recipes only)
@@ -262,7 +271,10 @@ class RecipeMarkdownGenerator : Runnable {
         // We use two writers: one for OpenRewrite docs (open-source only), one for Moderne docs (all recipes)
         val recipeMarkdownWriter = RecipeMarkdownWriter(recipeContainedBy, recipeToSource, proprietaryRecipeNames, forModerneDocs = false)
         val moderneRecipeMarkdownWriter = if (moderneRecipeCatalogPath != null) {
-            RecipeMarkdownWriter(recipeContainedBy, recipeToSource, proprietaryRecipeNames, forModerneDocs = true)
+            val recipeToOrigin = allRecipeDescriptors.mapNotNull { recipe ->
+                findOrigin(recipeToSource[recipe.name], recipe.name, recipeOrigins)?.let { recipe.name to it }
+            }.toMap()
+            RecipeMarkdownWriter(recipeContainedBy, recipeToSource, proprietaryRecipeNames, forModerneDocs = true, recipeToOrigin)
         } else null
 
         // Every recipe's natural output path in the Moderne catalog (which lists ALL recipes). A
@@ -372,15 +384,19 @@ class RecipeMarkdownGenerator : Runnable {
         // Create changelog markdown, and update tracking file. A run restricted to a few artifacts
         // saw only a slice of the catalog, so diffing it against the full baseline would report every
         // other recipe as removed and overwrite recipeDescriptors.yml with that slice.
-        if (keep.isEmpty()) {
+        val baseline = recipeDescriptors
+        if (baseline == null) {
+            println("Skipping the changelog: no --recipe-descriptors to compare against.")
+        } else if (keep.isNotEmpty()) {
+            println("Skipping the changelog and recipeDescriptors.yml update: --only-artifacts loaded part of the catalog.")
+        } else {
             ChangelogWriter().createRecipeDescriptorsYaml(
                 markdownArtifacts,
                 openSourceRecipeDescriptors.size,
                 rewriteBomVersion,
-                outputPath
+                outputPath,
+                baseline
             )
-        } else {
-            println("Skipping the changelog and recipeDescriptors.yml update: --only-artifacts loaded part of the catalog.")
         }
 
         // Write lists of recipes into various files
