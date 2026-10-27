@@ -19,7 +19,7 @@ recipes it just loaded. If there are differences, they are outlined in a CHANGEL
 overwritten with the current catalog for the next run to compare against. Without the property, no changelog is written.
 
 The baseline lives in rewrite-docs, at [`docs/changelog/recipeDescriptors.yml`](https://github.com/openrewrite/rewrite-docs/blob/master/docs/changelog/recipeDescriptors.yml),
-so that the changelog and the baseline it advances are committed together; see [Update rewrite-docs](#update-rewrite-docs).
+beside the changelogs it produces.
 
 ## How docs are published
 
@@ -104,9 +104,7 @@ The nightly workflows already do exactly this, so these copies are only for a lo
 
 ### Update rewrite-docs
 
-The recipe catalog itself is published by the [Update docs workflow](#how-docs-are-published). Its full runs, which the Code Genome Project starts after each release train, pass `-PrecipeDescriptors` and, whenever the catalog changed since the last changelog, commit the changelog, its sidebar entry and the updated baseline to master with the recipe docs, so the next changelog starts where this one ends.
-
-With no pull request to review, such a run fails before pushing anything if a module lost more than half its recipes since the last changelog, since that usually means its language failed to load. When a module really was removed, start the workflow again with `allow-fewer-recipes` checked.
+Nothing to do by hand: the full runs of the [Update docs workflow](https://github.com/openrewrite/rewrite-docs/blob/master/.github/workflows/update-docs.yml) pass `-PrecipeDescriptors` and publish the changelog along with the recipe catalog.
 
 To preview a changelog locally, with all [Prerequisites](#prerequisites) installed and `rewrite-docs` checked out beside this repository:
 
