@@ -101,6 +101,20 @@ class RecipeMarkdownGeneratorTest {
     }
 
     @Test
+    fun latestVersionsInstallNpmOnlyModulesFromNpm(@TempDir tempDir: Path) {
+        val origins = TypeScriptRecipeLoader.buildVersionAnchorOrigins(setOf("recipes-javascript-code-quality")) { "0.3.0" }
+            .values
+
+        VersionWriter().createLatestVersionsMarkdown(tempDir, origins, "8.x", "2.x", "1.x", "6.x", "5.x", forModerneDocs = true)
+
+        val out = Files.readString(tempDir.resolve("latest-versions-of-every-openrewrite-module.md"))
+        assertThat(out).contains("mod config recipes npm install @openrewrite/recipes-code-quality@{{VERSION_IO_MODERNE_RECIPE_RECIPES_JAVASCRIPT_CODE_QUALITY}}")
+        assertThat(out).contains("bundle: { npm: { packageName: \"@openrewrite/recipes-code-quality\", version: \"latest\" } }")
+        assertThat(out).doesNotContain("artifactId: \"recipes-javascript-code-quality\"")
+        assertThat(out).doesNotContain("io.moderne.recipe:recipes-javascript-code-quality:")
+    }
+
+    @Test
     fun latestVersionsLinkModulesToRepositoryTree(@TempDir tempDir: Path) {
         // given
         val origin = RecipeOrigin("org.openrewrite.recipe", "rewrite-spring", "5.0.0", URI.create("file:///rewrite-spring.jar"))

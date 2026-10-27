@@ -13,7 +13,7 @@ private data class GoModuleInfo(@JsonProperty("Version") val version: String = "
  * prerelease or pseudo-version when there is none, so anything with a `-` suffix is rejected.
  */
 fun latestStableGoModuleVersion(modulePath: String): String? =
-    httpGet("https://proxy.golang.org/${escapeGoModulePath(modulePath)}/@latest", ::stableGoModuleVersion)
+    httpGet("https://proxy.golang.org/${escapeGoModulePath(modulePath)}/@latest", parse = ::stableGoModuleVersion)
 
 internal fun stableGoModuleVersion(latestInfoJson: String): String? =
     LENIENT_JSON_MAPPER.readValue<GoModuleInfo>(latestInfoJson).version

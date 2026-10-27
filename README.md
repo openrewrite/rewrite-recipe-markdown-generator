@@ -22,7 +22,7 @@ Only needed for troubleshooting.
 * **Java 21**
 * **Code Genome Project credentials**: `codegenomeUsername` and `codegenomePassword` in `~/.gradle/gradle.properties`, since OpenRewrite and Moderne artifacts are no longer published to Maven Central.
 * For non-Java recipes, which are loaded over RPC:
-  * **Node.js** for TypeScript recipes
+  * **Node.js** for TypeScript recipes, with the proprietary `@openrewrite/recipes-code-quality` and `@openrewrite/recipes-date-libraries` installed from the Code Genome Project's npm registry using the same credentials
   * **Python 3.10+ with `pip`** for Python recipes
   * **.NET SDK** for C# recipes
   * **Go 1.25+ and `rewrite-go-rpc`** for Go recipes: `go install github.com/openrewrite/rewrite/rewrite-go/cmd/rpc@latest`, then `ln -s "$(go env GOPATH)/bin/rpc" "$(go env GOPATH)/bin/rewrite-go-rpc"` with `$(go env GOPATH)/bin` on `PATH`.
