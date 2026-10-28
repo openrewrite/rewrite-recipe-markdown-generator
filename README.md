@@ -1,17 +1,15 @@
 ![Logo](https://github.com/openrewrite/rewrite/raw/main/doc/logo-oss.png)
 
-## What is this?
+## Archived
 
-This project generates the recipe documentation for [docs.openrewrite.org](https://docs.openrewrite.org) and [docs.moderne.io](https://docs.moderne.io):
+This project is no longer maintained. The recipe catalog is moving to the Code Genome Project, so [rewrite-docs](https://github.com/openrewrite/rewrite-docs) and [moderne-docs](https://github.com/moderneinc/moderne-docs) no longer regenerate their recipe pages. rewrite-docs now builds its latest versions page and changelog with its own Gradle tasks.
+
+## What was this?
+
+This project generated the recipe documentation for [docs.openrewrite.org](https://docs.openrewrite.org) and [docs.moderne.io](https://docs.moderne.io):
 
 * **OpenRewrite docs** (`build/docs/`): open-source recipes only, plus the changelog.
 * **Moderne docs** (`build/moderne-docs/`): all recipes, including proprietary ones and the whole Go catalog.
-
-## How docs are published
-
-Nobody needs to run this by hand. The `update-docs.yml` workflows in [rewrite-docs](https://github.com/openrewrite/rewrite-docs/blob/master/.github/workflows/update-docs.yml) and [moderne-docs](https://github.com/moderneinc/moderne-docs/blob/main/.github/workflows/update-docs.yml) check out this repository, run it and push the result. Their nightly runs refresh only the latest versions; the Code Genome Project starts full runs after each release train, which regenerate the catalog and, in rewrite-docs, the changelog.
-
-In this repository, [Generate Latest Versions](.github/workflows/ci.yml) and [Generate Per Language](.github/workflows/generate-per-language.yml) catch breakage without a full run, the latter by generating one recipe module per language.
 
 ## Running locally
 
